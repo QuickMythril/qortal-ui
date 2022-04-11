@@ -16,6 +16,7 @@ class NameRegistration extends LitElement {
         return {
             loading: { type: Boolean },
             names: { type: Array },
+            namesForSale: { type: Array },
             recipientPublicKey: { type: String },
             selectedAddress: { type: Object },
             btnDisable: { type: Boolean },
@@ -83,6 +84,7 @@ class NameRegistration extends LitElement {
         super()
         this.selectedAddress = {}
         this.names = []
+        this.namesForSale = []
         this.recipientPublicKey = ''
         this.btnDisable = false
         this.registerNameLoading = false
@@ -112,6 +114,18 @@ class NameRegistration extends LitElement {
                     </vaadin-grid>
                     ${this.isEmptyArray(this.names) ? html`
                         <span style="color: var(--black);">No names registered by this account!</span>
+                    `: ''}
+                </div>
+
+                <div class="divCard">
+                    <h3 style="margin: 0; margin-bottom: 1em; text-align: center;">Names For Sale</h3>
+                    <vaadin-grid theme="large" id="namesForSaleGrid" ?hidden="${this.isEmptyArray(this.namesForSale)}" aria-label="Names For Sale" .items="${this.namesForSale}" all-rows-visible>
+                        <vaadin-grid-column path="name"></vaadin-grid-column>
+                        <vaadin-grid-column path="owner"></vaadin-grid-column>
+                        <vaadin-grid-column path="salePrice"></vaadin-grid-column>
+                    </vaadin-grid>
+                    ${this.isEmptyArray(this.namesForSale) ? html`
+                        <span style="color: var(--black);">No names currently for sale!</span>
                     `: ''}
                 </div>
 
@@ -193,6 +207,15 @@ class NameRegistration extends LitElement {
             setTimeout(fetchNames, this.config.user.nodeSettings.pingInterval)
         }
 
+        const fetchNamesForSale = () => {
+            parentEpml.request('apiCall', {
+                url: `/names/forsale?limit=0&reverse=true`
+            }).then(res => {
+                setTimeout(() => { this.namesForSale = res }, 1)
+            })
+            setTimeout(fetchNames, this.config.user.nodeSettings.pingInterval)
+        }
+
         let configLoaded = false
 
         parentEpml.ready().then(() => {
@@ -205,6 +228,7 @@ class NameRegistration extends LitElement {
             parentEpml.subscribe('config', c => {
                 if (!configLoaded) {
                     setTimeout(fetchNames, 1)
+                    setTimeout(fetchNamesForSale, 1)
                     configLoaded = true
                 }
                 this.config = JSON.parse(c)
