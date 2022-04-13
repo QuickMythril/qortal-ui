@@ -282,7 +282,10 @@
     "nchange15": "Set Avatar",
     "nchange16": "Need Core Update",
     "nchange17": "Name Already Exists!",
-    "nchange18": "Name Registration Successful!"
+    "nchange18": "Name Registration Successful!",
+    "nsale1": "Names For Sale",
+    "nsale2": "Sale Price",
+    "nsale3": "No names currently for sale!"
   },
   "websitespage": {
     "schange1": "Browse Websites",

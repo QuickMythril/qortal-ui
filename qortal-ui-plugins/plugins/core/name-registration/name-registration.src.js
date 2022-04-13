@@ -21,6 +21,7 @@ class NameRegistration extends LitElement {
         return {
             loading: { type: Boolean },
             names: { type: Array },
+            namesForSale: { type: Array },
             recipientPublicKey: { type: String },
             selectedAddress: { type: Object },
             btnDisable: { type: Boolean },
@@ -88,6 +89,7 @@ class NameRegistration extends LitElement {
         super()
         this.selectedAddress = {}
         this.names = []
+        this.namesForSale = []
         this.recipientPublicKey = ''
         this.btnDisable = false
         this.registerNameLoading = false
@@ -117,6 +119,18 @@ class NameRegistration extends LitElement {
                     </vaadin-grid>
                     ${this.isEmptyArray(this.names) ? html`
                         <span style="color: var(--black);">${translate("registernamepage.nchange8")}</span>
+                    `: ''}
+                </div>
+
+                <div class="divCard">
+                    <h3 style="margin: 0; margin-bottom: 1em; text-align: center;">${translate("registernamepage.nsale1")}</h3>
+                    <vaadin-grid theme="large" id="namesForSaleGrid" ?hidden="${this.isEmptyArray(this.namesForSale)}" aria-label="Names For Sale" .items="${this.namesForSale}" all-rows-visible>
+                        <vaadin-grid-column header="${translate("registernamepage.nchange5")}" path="name"></vaadin-grid-column>
+                        <vaadin-grid-column header="${translate("registernamepage.nchange6")}" path="owner"></vaadin-grid-column>
+                        <vaadin-grid-column header="${translate("registernamepage.nsale2")}" path="salePrice"></vaadin-grid-column>
+                    </vaadin-grid>
+                    ${this.isEmptyArray(this.namesForSale) ? html`
+                        <span style="color: var(--black);">${translate("registernamepage.nsale3")}</span>
                     `: ''}
                 </div>
 
@@ -180,6 +194,15 @@ class NameRegistration extends LitElement {
             setTimeout(fetchNames, this.config.user.nodeSettings.pingInterval)
         }
 
+        const fetchNamesForSale = () => {
+            parentEpml.request('apiCall', {
+                url: `/names/forsale?limit=0&reverse=true`
+            }).then(res => {
+                setTimeout(() => { this.namesForSale = res }, 1)
+            })
+            setTimeout(fetchNames, this.config.user.nodeSettings.pingInterval)
+        }
+
         window.addEventListener("contextmenu", (event) => {
             event.preventDefault()
             this._textMenu(event)
@@ -221,6 +244,7 @@ class NameRegistration extends LitElement {
             parentEpml.subscribe('config', c => {
                 if (!configLoaded) {
                     setTimeout(fetchNames, 1)
+                    setTimeout(fetchNamesForSale, 1)
                     configLoaded = true
                 }
                 this.config = JSON.parse(c)
