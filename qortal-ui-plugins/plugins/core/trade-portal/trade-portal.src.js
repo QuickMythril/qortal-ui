@@ -345,6 +345,10 @@ class TradePortal extends LitElement {
 			background-image: url('/img/qortltc.png');
 		}
 
+		.btc.coinName:before  {
+			background-image: url('/img/qortbtc.png');
+		}
+
 		.doge.coinName:before  {
 			background-image: url('/img/qortdoge.png');
 		}
@@ -440,6 +444,21 @@ class TradePortal extends LitElement {
             coinAmount: this.amountString
         }
 
+        let bitcoin = {
+            name: "BITCOIN",
+            balance: "0",
+            coinCode: "BTC",
+            openOrders: [],
+            openFilteredOrders: [],
+            historicTrades: [],
+            myOrders: [],
+            myHistoricTrades: [],
+            myOfferingOrders: [],
+            openTradeOrders: null,
+            tradeOffersSocketCounter: 1,
+            coinAmount: this.amountString
+        }
+
         let dogecoin = {
             name: "DOGECOIN",
             balance: "0",
@@ -458,6 +477,7 @@ class TradePortal extends LitElement {
         this.listedCoins = new Map()
         this.listedCoins.set("QORTAL", qortal)
         this.listedCoins.set("LITECOIN", litecoin)
+        this.listedCoins.set("BITCOIN", bitcoin)
         this.listedCoins.set("DOGECOIN", dogecoin)
 
         workers.set("QORTAL", {
@@ -466,6 +486,11 @@ class TradePortal extends LitElement {
         })
 
         workers.set("LITECOIN", {
+            tradesConnectedWorker: null,
+            handleStuckTradesConnectedWorker: null
+        })
+
+        workers.set("BITCOIN", {
             tradesConnectedWorker: null,
             handleStuckTradesConnectedWorker: null
         })
@@ -856,6 +881,7 @@ class TradePortal extends LitElement {
 				<h2 style="margin: 0 0 15px 0; line-height: 50px; display: inline;">Qortal ${translate("tradepage.tchange1")} - &nbsp;</h2>
 				<mwc-select outlined id="coinSelectionMenu" label="${translate("tradepage.tchange2")}">
 					<mwc-list-item value="LITECOIN" selected><span class="coinName ltc" style="color: var(--black);">QORT / LTC</span></mwc-list-item>
+					<mwc-list-item value="BITCOIN"><span class="coinName btc" style="color: var(--black);">QORT / BTC</span></mwc-list-item>
 					<mwc-list-item value="DOGECOIN"><span class="coinName doge" style="color: var(--black);">QORT / DOGE</span></mwc-list-item>
 				</mwc-select>
 			</div>
@@ -1014,6 +1040,10 @@ class TradePortal extends LitElement {
             case 'LITECOIN':
                 _url = `/crosschain/ltc/walletbalance?apiKey=${this.getApiKey()}`
                 _body = window.parent.reduxStore.getState().app.selectedAddress.ltcWallet.derivedMasterPublicKey
+                break
+            case 'BITCOIN':
+                _url = `/crosschain/btc/walletbalance?apiKey=${this.getApiKey()}`
+                _body = window.parent.reduxStore.getState().app.selectedAddress.btcWallet.derivedMasterPublicKey
                 break
             case 'DOGECOIN':
                 _url = `/crosschain/doge/walletbalance?apiKey=${this.getApiKey()}`
@@ -1692,6 +1722,9 @@ class TradePortal extends LitElement {
                 case 'LITECOIN':
                     _receivingAddress = this.selectedAddress.ltcWallet.address
                     break
+                case 'BITCOIN':
+                    _receivingAddress = this.selectedAddress.btcWallet.address
+                    break
                 case 'DOGECOIN':
                     _receivingAddress = this.selectedAddress.dogeWallet.address
                     break
@@ -1751,6 +1784,9 @@ class TradePortal extends LitElement {
         switch (this.selectedCoin) {
             case 'LITECOIN':
                 _foreignKey = this.selectedAddress.ltcWallet.derivedMasterPrivateKey
+                break
+            case 'BITCOIN':
+                _foreignKey = this.selectedAddress.btcWallet.derivedMasterPrivateKey
                 break
             case 'DOGECOIN':
                 _foreignKey = this.selectedAddress.dogeWallet.derivedMasterPrivateKey
