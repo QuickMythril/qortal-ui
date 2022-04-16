@@ -567,7 +567,7 @@ class MultiWallet extends LitElement {
         this.btcSatMinFee = 20
         this.btcSatMaxFee = 150
         this.ltcFeePerByte = 30
-        this.ltcSatMinFee = 10
+        this.ltcSatMinFee = 1
         this.ltcSatMaxFee = 100
         this.dogeFeePerByte = 1000
         this.dogeSatMinFee = 100
