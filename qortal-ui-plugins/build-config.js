@@ -74,10 +74,6 @@ const generateForPlugins = () => {
             out: "plugins/core/wallet/wallet-app.js",
         },
         {
-            in: "plugins/core/reward-share/reward-share.src.js",
-            out: "plugins/core/reward-share/reward-share.js",
-        },
-        {
             in: "plugins/core/node-management/node-management.src.js",
             out: "plugins/core/node-management/node-management.js",
         },

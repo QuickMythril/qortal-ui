@@ -27,15 +27,6 @@ parentEpml.ready().then(() => {
             parent: false
         },
         {
-            url: 'reward-share',
-            domain: 'core',
-            page: 'reward-share/index.html',
-            title: 'Reward Share',
-            icon: 'vaadin:share-square',
-            menus: [],
-            parent: false
-        },
-        {
             url: 'name-registration',
             domain: 'core',
             page: 'name-registration/index.html',
