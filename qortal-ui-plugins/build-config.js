@@ -118,10 +118,6 @@ const generateForPlugins = () => {
             out: "plugins/core/messaging/q-chat/q-chat.js",
         },
         {
-            in: "plugins/core/minting/minting-info.src.js",
-            out: "plugins/core/minting/minting-info.js",
-        },
-        {
             in: "plugins/core/puzzles/puzzles.src.js",
             out: "plugins/core/puzzles/puzzles.js",
         }
