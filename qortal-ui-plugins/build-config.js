@@ -98,10 +98,6 @@ const generateForPlugins = () => {
             out: "plugins/core/qdn/browser/browser.js",
         },
         {
-            in: "plugins/core/qdn/data-management/data-management.src.js",
-            out: "plugins/core/qdn/data-management/data-management.js",
-        },
-        {
             in: "plugins/core/messaging/messaging.src.js",
             out: "plugins/core/messaging/messaging.js",
         },

@@ -69,9 +69,6 @@ class SidenavMenu extends connect(store)(LitElement) {
                     <side-menu-item label="${translate("sidemenu.websites")}" href="/app/websites">
                         <vaadin-icon icon="vaadin:desktop" slot="icon"></vaadin-icon>
                     </side-menu-item>
-                    <side-menu-item label="${translate("sidemenu.datamanagement")}" href="/app/data-management">
-                        <vaadin-icon icon="vaadin:database" slot="icon"></vaadin-icon>
-                    </side-menu-item>
                     <side-menu-item label="${translate("sidemenu.qchat")}" href="/app/q-chat">
                         <vaadin-icon icon="vaadin:chat" slot="icon"></vaadin-icon>
                     </side-menu-item>

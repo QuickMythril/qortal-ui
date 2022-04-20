@@ -45,15 +45,6 @@ parentEpml.ready().then(() => {
             parent: false
         },
         {
-            url: 'data-management',
-            domain: 'core',
-            page: 'qdn/data-management/index.html',
-            title: 'Data Management',
-            icon: 'vaadin:database',
-            menus: [],
-            parent: false
-        },
-        {
             url: 'q-chat',
             domain: 'core',
             page: 'messaging/q-chat/index.html',
