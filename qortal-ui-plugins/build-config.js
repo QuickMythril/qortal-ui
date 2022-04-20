@@ -66,10 +66,6 @@ const generateForPlugins = () => {
             out: "plugins/core/main.js",
         },
         {
-            in: "plugins/core/trade-portal/trade-portal.src.js",
-            out: "plugins/core/trade-portal/trade-portal.js",
-        },
-        {
             in: "plugins/core/wallet/wallet-app.src.js",
             out: "plugins/core/wallet/wallet-app.js",
         },

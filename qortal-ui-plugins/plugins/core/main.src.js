@@ -18,15 +18,6 @@ parentEpml.ready().then(() => {
             parent: false
         },
         {
-            url: 'trade-portal',
-            domain: 'core',
-            page: 'trade-portal/index.html',
-            title: 'Trade Portal',
-            icon: 'vaadin:bullets',
-            menus: [],
-            parent: false
-        },
-        {
             url: 'name-registration',
             domain: 'core',
             page: 'name-registration/index.html',
