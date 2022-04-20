@@ -2,8 +2,6 @@ import { LitElement, html, css } from 'lit'
 import { render } from 'lit/html.js'
 import { Epml } from '../../../epml.js'
 
-import './BlockAddress.js'
-
 import '@material/mwc-button'
 import '@material/mwc-dialog'
 import '@material/mwc-icon'
@@ -204,7 +202,6 @@ class ChatScroller extends LitElement {
 
     chatMessageTemplate(messageObj) {
         let avatarImg = '';
-        let blockButton = '';
         if (messageObj.senderName) {
             const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node];
             const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port;
@@ -212,18 +209,11 @@ class ChatScroller extends LitElement {
             avatarImg = `<img src="${avatarUrl}" style="max-width:100%; max-height:100%;" onerror="this.onerror=null; this.src='/img/incognito.png';" />`;
         }
 
-        if (messageObj.sender === this.myAddress) {
-            blockButton = ``
-        } else {
-            blockButton = `<block-address toblockaddress="${messageObj.sender}"></block-address>`
-        }
-
         return `
             <li class="clearfix">
                 <div class="message-data ${messageObj.sender === this.myAddress ? "align-right" : ""}">
                     <span class="message-data-name">${messageObj.senderName ? messageObj.senderName : messageObj.sender}</span>
                     <span class="message-data-time"><message-time timestamp=${messageObj.timestamp}></message-time></span>
-                    <span class="message-data-block">${blockButton}</span>
                 </div>
                 <div class="message-data-avatar" style="width:42px; height:42px; ${messageObj.sender === this.myAddress ? "float:right;" : "float:left;"} margin:3px;">${avatarImg}</div>
                 <div id="messageContent" class="message ${messageObj.sender === this.myAddress ? "my-message float-right" : "other-message float-left"}">${this.emojiPicker.parse(this.escapeHTML(messageObj.decodedMessage))}</div>
