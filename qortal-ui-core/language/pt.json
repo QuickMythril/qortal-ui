@@ -13,7 +13,8 @@
     "croatian": "Croata",
     "portuguese": "Português",
     "hungarian": "Húngaro",
-    "serbian": "Sérvio"
+    "serbian": "Sérvio",
+    "italian": "Italiano"
   },
   "sidemenu": {
     "mintingdetails": "DETALHES DA MINERAÇÃO",
@@ -566,6 +567,20 @@
   "transactions": {
     "amount": "Valor",
     "to": "Para",
-    "declined": "Usuário recusou transação!"
+    "declined": "Usuário recusou transação!",
+    "namedialog1": "Você está registrando o nome abaixo:",
+    "namedialog2": "Ao pressionar confirmar, o nome será registrado!",
+    "groupdialog1": "Você está solicitando para participar do grupo abaixo:",
+    "groupdialog2": "Ao pressionar confirmar, a solicitação de ingresso no grupo será enviada!",
+    "groupdialog3": "Você está pedindo para sair do grupo abaixo:",
+    "groupdialog4": "Ao pressionar confirmar, a solicitação de saída do grupo será enviada!",
+    "groupdialog5": "Você está solicitando a criação do grupo abaixo:",
+    "groupdialog6": "Ao pressionar confirmar, a solicitação de criação de grupo será enviada!",
+    "rewarddialog1": "Você gostaria de criar uma transação de compartilhamento de recompensa, compartilhando",
+    "rewarddialog2": "de suas recompensas de cunhagem com",
+    "rewarddialog3": "Se sim, você precisará salvar a chave abaixo para cunhar. Ele pode ser fornecido a qualquer nó para permitir que seja cunhado em seu nome.",
+    "rewarddialog4": "Ao pressionar confirmar, a recompensa será criada, mas você ainda precisará fornecer a chave acima para um nó para cunhar com a conta.",
+    "rewarddialog5": "Você está removendo uma transação de compartilhamento de recompensa associada à conta:",
+    "rewarddialog6": "Ao pressionar confirmar, o rewardshare será removido e a chave de cunhagem se tornará inválida."
   }
 }

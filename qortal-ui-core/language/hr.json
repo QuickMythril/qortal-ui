@@ -13,7 +13,8 @@
     "croatian": "Hrvatski",
     "portuguese": "Portugalski",
     "hungarian": "Mađarski",
-    "serbian": "Srpski"
+    "serbian": "Srpski",
+    "italian": "Talijanski"
   },
   "sidemenu": {
     "mintingdetails": "DETALJI O MINTANJU",
@@ -566,6 +567,20 @@
   "transactions": {
     "amount": "Iznos",
     "to": "Prema",
-    "declined": "Korisnik je odbio transakciju!"
+    "declined": "Korisnik je odbio transakciju!",
+    "namedialog1": "Registrirate ime ispod:",
+    "namedialog2": "Pritiskom na potvrdi ime će biti registrirano!",
+    "groupdialog1": "Zahtijevate da se pridružite grupi u nastavku:",
+    "groupdialog2": "Pritiskom na potvrdi, bit će poslan zahtjev za pridruživanje grupi!",
+    "groupdialog3": "Zahtijevate da napustite grupu u nastavku:",
+    "groupdialog4": "On pressing confirm, the leave group request will be sent!",
+    "groupdialog5": "Zahtijevate stvaranje grupe u nastavku:",
+    "groupdialog6": "Pritiskom na potvrdi, bit će poslan zahtjev za stvaranje grupe!",
+    "rewarddialog1": "Želite li kreirati transakciju dijeljenja nagrade, dijeleći",
+    "rewarddialog2": "svojih nagrada za kovanje s",
+    "rewarddialog3": "Ako je odgovor da, morat ćete spremiti donji ključ kako biste ga mogli iskovati. Može se dostaviti bilo kojem čvoru kako bi mu se omogućilo kovanje u vaše ime.",
+    "rewarddialog4": "Pritiskom na Potvrdi, bit će stvorena dijeljenje nagrade, ali ćete i dalje morati dostaviti gornji ključ čvoru kako biste mogli kovati s računom.",
+    "rewarddialog5": "Uklanjate transakciju dijeljenja nagrade povezanu s računom:",
+    "rewarddialog6": "Pritiskom na potvrdu, dijeljenje nagrade bit će uklonjeno, a ključ za kovanje postat će nevažeći."
   }
 }
