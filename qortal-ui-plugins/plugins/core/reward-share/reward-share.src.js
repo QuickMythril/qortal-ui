@@ -300,14 +300,6 @@ class RewardShare extends LitElement {
         }
     }
 
-    renderSuccessText() {
-        return html`${translate("rewardsharepage.rchange21")}`
-    }
-
-    renderRemovedText() {
-        return html`${translate("rewardsharepage.rchange22")}`
-    }
-
     renderRemoveRewardShareButton(rewardShareObject) {
         if (rewardShareObject.mintingAccount === this.selectedAddress.address) {
             return html`${translate("rewardsharepage.rchange16")}`
@@ -368,7 +360,6 @@ class RewardShare extends LitElement {
                 this.message = ''
                 let myTransaction = await makeTransactionRequest(lastRef)
                 if (isExisting === true) {
-
                     this.error = true
                     this.message = `Cannot Create Multiple Reward Shares!`
                 } else {
@@ -378,16 +369,14 @@ class RewardShare extends LitElement {
                     getTxnRequestResponse(myTransaction)
                 }
             } else if (accountDetails.address === recipientAddress) {
-
                 if (accountDetails.level >= 1 && accountDetails.level <= 4) {
-
                     this.error = false
                     this.message = ''
                     let myTransaction = await makeTransactionRequest(lastRef)
                     if (isExisting === true) {
-
+                        let err1string = get("rewardsharepage.rchange18")
                         this.error = true
-                        this.message = `${translate("rewardsharepage.rchange18")}`
+                        this.message = `${err1string}`
                     } else {
                         // Send the transaction for confirmation by the user
                         this.error = false
@@ -400,9 +389,9 @@ class RewardShare extends LitElement {
                     this.message = ''
                     let myTransaction = await makeTransactionRequest(lastRef)
                     if (isExisting === true) {
-
+                        let err2string = get("rewardsharepage.rchange19")
                         this.error = true
-                        this.message = `${translate("rewardsharepage.rchange19")}`
+                        this.message = `${err2string}`
                     } else {
                         // Send the transaction for confirmation by the user
                         this.error = false
@@ -410,20 +399,20 @@ class RewardShare extends LitElement {
                         getTxnRequestResponse(myTransaction)
                     }
                 } else {
+                    let err3string = get("rewardsharepage.rchange20")
                     this.error = true
-                    this.message = `${translate("rewardsharepage.rchange20")} ${accountDetails.level}`
+                    this.message = `${err3string} ${accountDetails.level}`
                 }
             } else {
                 //Check for creating reward shares
                 if (accountDetails.level >= 5) {
-
                     this.error = false
                     this.message = ''
                     let myTransaction = await makeTransactionRequest(lastRef)
                     if (isExisting === true) {
-
+                        let err4string = get("rewardsharepage.rchange18")
                         this.error = true
-                        this.message = `${translate("rewardsharepage.rchange18")}`
+                        this.message = `${err4string}`
                     } else {
                         // Send the transaction for confirmation by the user
                         this.error = false
@@ -431,18 +420,20 @@ class RewardShare extends LitElement {
                         getTxnRequestResponse(myTransaction)
                     }
                 } else {
-
                     this.error = true
-                    this.message = `${translate("rewardsharepage.rchange20")} ${accountDetails.level}`
+                    let err5string = get("rewardsharepage.rchange20")
+                    this.message = `${err5string} ${accountDetails.level}`
                 }
             }
         }
 
         // Make Transaction Request
         const makeTransactionRequest = async (lastRef) => {
-
             let mylastRef = lastRef
-
+            let rewarddialog1 = get("transactions.rewarddialog1")
+            let rewarddialog2 = get("transactions.rewarddialog2")
+            let rewarddialog3 = get("transactions.rewarddialog3")
+            let rewarddialog4 = get("transactions.rewarddialog4")
             let myTxnrequest = await parentEpml.request('transaction', {
                 type: 38,
                 nonce: this.selectedAddress.nonce,
@@ -450,6 +441,10 @@ class RewardShare extends LitElement {
                     recipientPublicKey,
                     percentageShare,
                     lastReference: mylastRef,
+                    rewarddialog1: rewarddialog1,
+                    rewarddialog2: rewarddialog2,
+                    rewarddialog3: rewarddialog3,
+                    rewarddialog4: rewarddialog4,
                 }
             })
             return myTxnrequest
@@ -461,7 +456,8 @@ class RewardShare extends LitElement {
                 this.message = txnResponse.message
                 throw new Error(txnResponse)
             } else if (txnResponse.success === true && !txnResponse.data.error) {
-                this.message = this.renderSuccessText()
+                let err6string = get("rewardsharepage.rchange21")
+                this.message = err6string
                 this.error = false
             } else {
                 this.error = true
@@ -501,9 +497,9 @@ class RewardShare extends LitElement {
 
         // Make Transaction Request
         const makeTransactionRequest = async (lastRef) => {
-
             let mylastRef = lastRef
-
+            let rewarddialog5 = get("transactions.rewarddialog5")
+            let rewarddialog6 = get("transactions.rewarddialog6")
             let myTxnrequest = await parentEpml.request('transaction', {
                 type: 381,
                 nonce: this.selectedAddress.nonce,
@@ -512,6 +508,8 @@ class RewardShare extends LitElement {
                     recipient: rewardShareObject.recipient,
                     percentageShare: myPercentageShare,
                     lastReference: mylastRef,
+                    rewarddialog5: rewarddialog5,
+                    rewarddialog6: rewarddialog6,
                 }
             })
             return myTxnrequest
@@ -519,16 +517,14 @@ class RewardShare extends LitElement {
 
         const getTxnRequestResponse = (txnResponse) => {
             if (txnResponse.success === false && txnResponse.message) {
-
                 this.removeRewardShareLoading = false
                 parentEpml.request('showSnackBar', txnResponse.message)
                 throw new Error(txnResponse)
             } else if (txnResponse.success === true && !txnResponse.data.error) {
-
+                let err7tring = get("rewardsharepage.rchange22")
                 this.removeRewardShareLoading = false
-                parentEpml.request('showSnackBar', this.renderRemovedText())
+                parentEpml.request('showSnackBar', `${err7tring}`)
             } else {
-
                 this.removeRewardShareLoading = false
                 parentEpml.request('showSnackBar', txnResponse.data.message)
                 throw new Error(txnResponse)

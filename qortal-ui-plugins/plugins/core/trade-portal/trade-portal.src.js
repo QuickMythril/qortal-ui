@@ -50,11 +50,11 @@ class TradePortal extends LitElement {
 			--mdc-theme-primary: rgb(3, 169, 244);
 			--mdc-theme-secondary: var(--mdc-theme-primary);
 			--mdc-theme-error: rgb(255, 89, 89);
-                        --mdc-text-field-outlined-idle-border-color: var(--txtfieldborder);
+                  --mdc-text-field-outlined-idle-border-color: var(--txtfieldborder);
 			--mdc-text-field-outlined-hover-border-color: var(--txtfieldhoverborder);
 			--mdc-text-field-label-ink-color: var(--black);
 			--mdc-text-field-ink-color: var(--black);
-                        --mdc-select-outlined-idle-border-color: var(--txtfieldborder);
+                  --mdc-select-outlined-idle-border-color: var(--txtfieldborder);
 			--mdc-select-outlined-hover-border-color: var(--txtfieldhoverborder);
 			--mdc-select-label-ink-color: var(--black);
 			--mdc-select-ink-color: var(--black);
@@ -87,7 +87,7 @@ class TradePortal extends LitElement {
 		}
 
 		#tabs-1 {
-			--mdc-tab-height: 50px;
+			--mdc-tab-height: 42px;
 			border-left: 1px solid var(--tradeborder);
 			border-top: 1px solid var(--tradeborder);
 			border-right: 1px solid var(--tradeborder);
@@ -113,7 +113,7 @@ class TradePortal extends LitElement {
 		}
 
 		#tabs-1-content .btn-clear {
-			--mdc-icon-button-size: 40px;
+			--mdc-icon-button-size: 32px;
 			color: var(--black);
 		}
 
@@ -149,7 +149,7 @@ class TradePortal extends LitElement {
 			flex: 0 1 auto;
 			align-items: center;
 			justify-content: center;
-			padding: 0px 15px;
+			padding: 0px 10px;
 			font-size: 16px;
 			color: var(--white);
 			background-color: var(--tradehead);
@@ -160,7 +160,7 @@ class TradePortal extends LitElement {
 		}
 
 		p {
-			margin-bottom: 15px;
+			margin-bottom: 12px;
 		}
 
 		#trade-portal {
@@ -218,9 +218,6 @@ class TradePortal extends LitElement {
 
 		.open-market-container {
 			text-align: center;
-		}
-
-		.buy-sell {
 		}
 
 		.card {
@@ -406,14 +403,6 @@ class TradePortal extends LitElement {
 				justify-items: stretch;
 				align-items: stretch;
 				margin-bottom: 10px;
-			}
-
-			.buy-sell {
-				display: grid;
-				grid-template-columns: 1fr 1fr;
-				grid-auto-rows: max(450px);
-				column-gap: 0.5em;
-				row-gap: 0.4em;
 			}
 
 		}
@@ -1061,7 +1050,7 @@ class TradePortal extends LitElement {
             .then((res) => {
                 if (isNaN(Number(res))) {
                     let snack1string = get("tradepage.tchange30")
-                    parentEpml.request('showSnackBar', `${snack1tring}`)
+                    parentEpml.request('showSnackBar', `${snack1string}`)
                 } else {
                     this.listedCoins.get(this.selectedCoin).balance = (Number(res) / 1e8).toFixed(8)
                 }
@@ -1754,12 +1743,12 @@ class TradePortal extends LitElement {
                 this.isSellLoading = false
                 this.sellBtnDisable = false
                 let snack2string = get("tradepage.tchange20")
-                parentEpml.request('showSnackBar', `${snack2tring}`)
+                parentEpml.request('showSnackBar', `${snack2string}`)
             } else {
                 this.isSellLoading = false
                 this.sellBtnDisable = false
                 let snack3string = get("tradepage.tchange21")
-                parentEpml.request('showSnackBar', `${snack3tring}: ${response.message}`)
+                parentEpml.request('showSnackBar', `${snack3string}: ${response.message}`)
             }
         }
 
@@ -1767,7 +1756,7 @@ class TradePortal extends LitElement {
             this.isSellLoading = false
             this.sellBtnDisable = false
             let snack4string = get("tradepage.tchange22")
-            parentEpml.request('showSnackBar', `${snack4tring}`)
+            parentEpml.request('showSnackBar', `${snack4string}`)
             return false
         } else {
             const res = await makeRequest()
@@ -1813,17 +1802,17 @@ class TradePortal extends LitElement {
                 this.shadowRoot.getElementById('buyTotalInput').value = this.initialAmount
                 this.shadowRoot.getElementById('qortalAtAddress').value = ''
                 let snack5string = get("tradepage.tchange23")
-                parentEpml.request('showSnackBar', `${snack5tring}`)
+                parentEpml.request('showSnackBar', `${snack5string}`)
             } else if (response === false) {
                 this.isBuyLoading = false
                 this.buyBtnDisable = false
                 let snack6string = get("tradepage.tchange24")
-                parentEpml.request('showSnackBar', `${snack6tring}`)
+                parentEpml.request('showSnackBar', `${snack6string}`)
             } else {
                 this.isBuyLoading = false
                 this.buyBtnDisable = false
                 let snack7string = get("tradepage.tchange25")
-                parentEpml.request('showSnackBar', `${snack7tring}: ${response.message}`)
+                parentEpml.request('showSnackBar', `${snack7string}: ${response.message}`)
             }
         }
 
@@ -1850,12 +1839,12 @@ class TradePortal extends LitElement {
                 button.remove()
                 this.cancelBtnDisable = false
                 let snack8string = get("tradepage.tchange26")
-                parentEpml.request('showSnackBar', `${snack8tring}`)
+                parentEpml.request('showSnackBar', `${snack8string}`)
             } else if (response === false) {
                 button.innerHTML = 'CANCEL'
                 this.cancelBtnDisable = false
                 let snack9string = get("tradepage.tchange27")
-                parentEpml.request('showSnackBar', `${snack9tring}`)
+                parentEpml.request('showSnackBar', `${snack9string}`)
             } else {
                 button.innerHTML = 'CANCEL'
                 this.cancelBtnDisable = false
