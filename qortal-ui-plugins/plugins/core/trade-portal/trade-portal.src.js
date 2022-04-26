@@ -350,7 +350,11 @@ class TradePortal extends LitElement {
 			background-image: url('/img/qortdgb.png');
 		}
 
-    .rvn.coinName:before  {
+		.xvg.coinName:before  {
+			background-image: url('/img/qortxvg.png');
+		}
+
+        .rvn.coinName:before  {
 			background-image: url('/img/qortrvn.png');
 		}
 
@@ -467,6 +471,21 @@ class TradePortal extends LitElement {
             coinAmount: this.amountString
         }
 
+        let verge = {
+            name: "VERGE",
+            balance: "0",
+            coinCode: "XVG",
+            openOrders: [],
+            openFilteredOrders: [],
+            historicTrades: [],
+            myOrders: [],
+            myHistoricTrades: [],
+            myOfferingOrders: [],
+            openTradeOrders: null,
+            tradeOffersSocketCounter: 1,
+            coinAmount: this.amountString
+        }
+
         let ravencoin = {
             name: "RAVENCOIN",
             balance: "0",
@@ -487,6 +506,7 @@ class TradePortal extends LitElement {
         this.listedCoins.set("LITECOIN", litecoin)
         this.listedCoins.set("DOGECOIN", dogecoin)
         this.listedCoins.set("DIGIBYTE", digibyte)
+        this.listedCoins.set("VERGE", verge)
         this.listedCoins.set("RAVENCOIN", ravencoin)
 
         workers.set("QORTAL", {
@@ -505,6 +525,11 @@ class TradePortal extends LitElement {
         })
 
         workers.set("DIGIBYTE", {
+            tradesConnectedWorker: null,
+            handleStuckTradesConnectedWorker: null
+        })
+
+        workers.set("VERGE", {
             tradesConnectedWorker: null,
             handleStuckTradesConnectedWorker: null
         })
@@ -897,6 +922,7 @@ class TradePortal extends LitElement {
 					<mwc-list-item value="LITECOIN" selected><span class="coinName ltc" style="color: var(--black);">QORT / LTC</span></mwc-list-item>
 					<mwc-list-item value="DOGECOIN"><span class="coinName doge" style="color: var(--black);">QORT / DOGE</span></mwc-list-item>
 					<mwc-list-item value="DIGIBYTE"><span class="coinName dgb" style="color: var(--black);">QORT / DGB</span></mwc-list-item>
+					<mwc-list-item value="VERGE"><span class="coinName xvg" style="color: var(--black);">QORT / XVG</span></mwc-list-item>
 					<mwc-list-item value="RAVENCOIN"><span class="coinName rvn" style="color: var(--black);">QORT / RVN</span></mwc-list-item>
 				</mwc-select>
 			</div>
@@ -1063,6 +1089,10 @@ class TradePortal extends LitElement {
             case 'DIGIBYTE':
                 _url = `/crosschain/dgb/walletbalance?apiKey=${this.getApiKey()}`
                 _body = window.parent.reduxStore.getState().app.selectedAddress.dgbWallet.derivedMasterPublicKey
+                break
+            case 'VERGE':
+                _url = `/crosschain/xvg/walletbalance?apiKey=${this.getApiKey()}`
+                _body = window.parent.reduxStore.getState().app.selectedAddress.xvgWallet.derivedMasterPublicKey
                 break
             case 'RAVENCOIN':
                 _url = `/crosschain/rvn/walletbalance?apiKey=${this.getApiKey()}`
@@ -1489,6 +1519,49 @@ class TradePortal extends LitElement {
         }
 
         /**
+        * VergeACCTv1 TRADEBOT STATES
+        *  - BOB_WAITING_FOR_AT_CONFIRM
+        *  - BOB_WAITING_FOR_MESSAGE
+        *  - BOB_WAITING_FOR_AT_REDEEM
+        *  - BOB_DONE
+        *  - BOB_REFUNDED
+        *  - ALICE_WAITING_FOR_AT_LOCK
+        *  - ALICE_DONE
+        *  - ALICE_REFUNDING_A
+        *  - ALICE_REFUNDED
+        *
+        * @param {[{}]} states
+        */
+
+        const VergeACCTv1 = (states) => {
+            // Reverse the states
+            states.reverse()
+            states.forEach((state) => {
+                if (state.creatorAddress === this.selectedAddress.address) {
+                    if (state.tradeState == 'BOB_WAITING_FOR_AT_CONFIRM') {
+                        this.changeTradeBotState(state, 'PENDING')
+                    } else if (state.tradeState == 'BOB_WAITING_FOR_MESSAGE') {
+                        this.changeTradeBotState(state, 'LISTED')
+                    } else if (state.tradeState == 'BOB_WAITING_FOR_AT_REDEEM') {
+                        this.changeTradeBotState(state, 'TRADING')
+                    } else if (state.tradeState == 'BOB_DONE') {
+                        this.handleCompletedState(state)
+                    } else if (state.tradeState == 'BOB_REFUNDED') {
+                        this.handleCompletedState(state)
+                    } else if (state.tradeState == 'ALICE_WAITING_FOR_AT_LOCK') {
+                        this.changeTradeBotState(state, 'BUYING')
+                    } else if (state.tradeState == 'ALICE_DONE') {
+                        this.handleCompletedState(state)
+                    } else if (state.tradeState == 'ALICE_REFUNDING_A') {
+                        this.changeTradeBotState(state, 'REFUNDING')
+                    } else if (state.tradeState == 'ALICE_REFUNDED') {
+                        this.handleCompletedState(state)
+                    }
+                }
+            })
+        }
+
+        /**
         * RavencoinACCTv1 TRADEBOT STATES
         *  - BOB_WAITING_FOR_AT_CONFIRM
         *  - BOB_WAITING_FOR_MESSAGE
@@ -1543,6 +1616,9 @@ class TradePortal extends LitElement {
                 break
             case 'DIGIBYTE':
                 DigibyteACCTv1(tradeStates)
+                break
+            case 'VERGE':
+                VergeACCTv1(tradeStates)
                 break
             case 'RAVENCOIN':
                 RavencoinACCTv1(tradeStates)
@@ -1839,6 +1915,9 @@ class TradePortal extends LitElement {
                 case 'DIGIBYTE':
                     _receivingAddress = this.selectedAddress.dgbWallet.address
                     break
+                case 'VERGE':
+                    _receivingAddress = this.selectedAddress.xvgWallet.address
+                    break
                 case 'RAVENCOIN':
                     _receivingAddress = this.selectedAddress.rvnWallet.address
                     break
@@ -1904,6 +1983,9 @@ class TradePortal extends LitElement {
                 break
             case 'DIGIBYTE':
                 _foreignKey = this.selectedAddress.dgbWallet.derivedMasterPrivateKey
+                break
+            case 'VERGE':
+                _foreignKey = this.selectedAddress.xvgWallet.derivedMasterPrivateKey
                 break
             case 'RAVENCOIN':
                 _foreignKey = this.selectedAddress.rvnWallet.derivedMasterPrivateKey
