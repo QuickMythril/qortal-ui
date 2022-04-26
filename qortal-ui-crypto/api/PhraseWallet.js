@@ -138,6 +138,21 @@ export default class PhraseWallet {
             }
         }).createWallet(new Uint8Array(dogeSeed), false, 'DOGE');
 
+        // Create Digibyte HD Wallet 
+        const dgbSeed = [...addrSeed];
+        const dgbWallet = new AltcoinHDWallet({
+            mainnet: {
+                private: 0x0488ADE4,
+                public: 0x0488B21E,
+                prefix: 0x1E
+            },
+            testnet: {
+                private: 0x04358394,
+                public: 0x043587CF,
+                prefix: 0x7E
+            }
+        }).createWallet(new Uint8Array(dgbSeed), false, 'DGB');
+
         // Create Ravencoin HD Wallet 
         const rvnSeed = [...addrSeed];
         const rvnWallet = new AltcoinHDWallet({
@@ -158,6 +173,7 @@ export default class PhraseWallet {
             btcWallet,
             ltcWallet,
             dogeWallet,
+            dgbWallet,
             rvnWallet,
             qoraAddress,
             keyPair: {
