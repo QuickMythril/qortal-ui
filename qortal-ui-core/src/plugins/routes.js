@@ -19,9 +19,12 @@ const deleteTradeOffer = api.deleteTradeOffer
 const cancelAllOffers = api.cancelAllOffers
 const sendBtc = api.sendBtc
 const sendLtc = api.sendLtc
+const sendPpc = api.sendPpc
 const sendDoge = api.sendDoge
 const sendDgb = api.sendDgb
+const sendDash = api.sendDash
 const sendXvg = api.sendXvg
+const sendKmd = api.sendKmd
 const sendRvn = api.sendRvn
 
 export const routes = {
@@ -324,6 +327,19 @@ export const routes = {
 		return response
 	},
 
+	sendPpc: async (req) => {
+		let response
+		try {
+			const res = await sendPpc(req.data)
+			response = res
+		} catch (e) {
+			console.error(e)
+			console.error(e.message)
+			response = e.message
+		}
+		return response
+	},
+
 	sendDoge: async (req) => {
 		let response
 		try {
@@ -350,6 +366,19 @@ export const routes = {
 		return response
 	},
 
+	sendDash: async (req) => {
+		let response
+		try {
+			const res = await sendDash(req.data)
+			response = res
+		} catch (e) {
+			console.error(e)
+			console.error(e.message)
+			response = e.message
+		}
+		return response
+	},
+
 	sendXvg: async (req) => {
 		let response
 		try {
@@ -363,7 +392,20 @@ export const routes = {
 		return response
 	},
 
-  sendRvn: async (req) => {
+	sendKmd: async (req) => {
+		let response
+		try {
+			const res = await sendKmd(req.data)
+			response = res
+		} catch (e) {
+			console.error(e)
+			console.error(e.message)
+			response = e.message
+		}
+		return response
+	},
+
+	sendRvn: async (req) => {
 		let response
 		try {
 			const res = await sendRvn(req.data)

@@ -123,6 +123,21 @@ export default class PhraseWallet {
             }
         }).createWallet(new Uint8Array(ltcSeed), false, 'LTC');
 
+        // Create Peercoin HD Wallet 
+        const ppcSeed = [...addrSeed];
+        const ppcWallet = new AltcoinHDWallet({
+            mainnet: {
+                private: 0x0488ADE4,
+                public: 0x0488B21E,
+                prefix: 0x37
+            },
+            testnet: {
+                private: 0x04358394,
+                public: 0x043587CF,
+                prefix: 0x6F
+            }
+        }).createWallet(new Uint8Array(ppcSeed), false, 'PPC');
+
         // Create Dogecoin HD Wallet 
         const dogeSeed = [...addrSeed];
         const dogeWallet = new AltcoinHDWallet({
@@ -153,6 +168,21 @@ export default class PhraseWallet {
             }
         }).createWallet(new Uint8Array(dgbSeed), false, 'DGB');
 
+        // Create Dash HD Wallet 
+        const dashSeed = [...addrSeed];
+        const dashWallet = new AltcoinHDWallet({
+            mainnet: {
+                private: 0x0488ADE4,
+                public: 0x0488B21E,
+                prefix: 0x4C
+            },
+            testnet: {
+                private: 0x04358394,
+                public: 0x043587CF,
+                prefix: 0x8C
+            }
+        }).createWallet(new Uint8Array(dashSeed), false, 'DASH');
+
         // Create Verge HD Wallet 
         const xvgSeed = [...addrSeed];
         const xvgWallet = new AltcoinHDWallet({
@@ -167,6 +197,21 @@ export default class PhraseWallet {
                 prefix: 0x73
             }
         }).createWallet(new Uint8Array(dgbSeed), false, 'XVG');
+
+        // Create Komodo HD Wallet 
+        const kmdSeed = [...addrSeed];
+        const kmdWallet = new AltcoinHDWallet({
+            mainnet: {
+                private: 0x0488ADE4,
+                public: 0x0488B21E,
+                prefix: 0x3C
+            },
+            testnet: {
+                private: 0x04358394,
+                public: 0x043587CF,
+                prefix: 0
+            }
+        }).createWallet(new Uint8Array(kmdSeed), false, 'KMD');
 
         // Create Ravencoin HD Wallet 
         const rvnSeed = [...addrSeed];
@@ -187,9 +232,12 @@ export default class PhraseWallet {
             address,
             btcWallet,
             ltcWallet,
+            ppcWallet,
             dogeWallet,
             dgbWallet,
+            dashWallet,
             xvgWallet,
+            kmdWallet,
             rvnWallet,
             qoraAddress,
             keyPair: {
