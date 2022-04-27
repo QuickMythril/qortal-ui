@@ -602,9 +602,9 @@ class MultiWallet extends LitElement {
         this.dgbFeePerByte = 100
         this.dgbSatMinFee = 10
         this.dgbSatMaxFee = 1000
-        this.xvgFeePerByte = 100
-        this.xvgSatMinFee = 10
-        this.xvgSatMaxFee = 1000
+        this.xvgFeePerByte = 52000
+        this.xvgSatMinFee = 52000
+        this.xvgSatMaxFee = 52000
         this.rvnFeePerByte = 1125
         this.rvnSatMinFee = 1000
         this.rvnSatMaxFee = 10000
