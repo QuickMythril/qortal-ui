@@ -3641,7 +3641,7 @@ class MultiWallet extends LitElement {
                 vergeAmount: xvgAmount,
                 feePerByte: (this.xvgFeePerByte / 1e8).toFixed(8),
             }
-            const response = await parentEpml.request('sendDgb', opts)
+            const response = await parentEpml.request('sendXvg', opts)
             return response
         }
 
