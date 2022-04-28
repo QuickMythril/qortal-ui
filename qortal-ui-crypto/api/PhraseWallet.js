@@ -213,6 +213,36 @@ export default class PhraseWallet {
             }
         }).createWallet(new Uint8Array(kmdSeed), false, 'KMD');
 
+        // Create Zcash HD Wallet 
+        const zecSeed = [...addrSeed];
+        const zecWallet = new AltcoinHDWallet({
+            mainnet: {
+                private: 0x0488ADE4,
+                public: 0x0488B21E,
+                prefix: 0x1C
+            },
+            testnet: {
+                private: 0x04358394,
+                public: 0x043587CF,
+                prefix: 0
+            }
+        }).createWallet(new Uint8Array(zecSeed), false, 'ZEC');
+
+        // Create BitcoinCash HD Wallet 
+        const bchSeed = [...addrSeed];
+        const bchWallet = new AltcoinHDWallet({
+            mainnet: {
+                private: 0x0488ADE4,
+                public: 0x0488B21E,
+                prefix: 0
+            },
+            testnet: {
+                private: 0x04358394,
+                public: 0x043587CF,
+                prefix: 0x6F
+            }
+        }).createWallet(new Uint8Array(bchSeed), false, 'BCH');
+
         // Create Ravencoin HD Wallet 
         const rvnSeed = [...addrSeed];
         const rvnWallet = new AltcoinHDWallet({
@@ -228,6 +258,21 @@ export default class PhraseWallet {
             }
         }).createWallet(new Uint8Array(rvnSeed), false, 'RVN');
 
+        // Create VerusCoin HD Wallet 
+        const vrscSeed = [...addrSeed];
+        const vrscWallet = new AltcoinHDWallet({
+            mainnet: {
+                private: 0x0488ADE4,
+                public: 0x0488B21E,
+                prefix: 0x3C
+            },
+            testnet: {
+                private: 0x04358394,
+                public: 0x043587CF,
+                prefix: 0
+            }
+        }).createWallet(new Uint8Array(vrscSeed), false, 'VRSC');
+
         this._addresses[nonce] = {
             address,
             btcWallet,
@@ -238,7 +283,10 @@ export default class PhraseWallet {
             dashWallet,
             xvgWallet,
             kmdWallet,
+            zecWallet,
+            bchWallet,
             rvnWallet,
+            vrscWallet,
             qoraAddress,
             keyPair: {
                 publicKey: addrKeyPair.publicKey,

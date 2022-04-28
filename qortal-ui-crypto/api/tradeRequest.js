@@ -172,11 +172,53 @@ export const sendKmd = (requestObject) => {
     })
 }
 
+// Send ZEC 
+export const sendZec = (requestObject) => {
+    const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node];
+
+    return request(`/crosschain/zec/send?apiKey=${myNode.apiKey}`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestObject)
+    })
+}
+
+// Send BCH 
+export const sendBch = (requestObject) => {
+    const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node];
+
+    return request(`/crosschain/bch/send?apiKey=${myNode.apiKey}`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestObject)
+    })
+}
+
 // Send RVN 
 export const sendRvn = (requestObject) => {
     const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node];
 
     return request(`/crosschain/rvn/send?apiKey=${myNode.apiKey}`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestObject)
+    })
+}
+
+// Send VRSC 
+export const sendVrsc = (requestObject) => {
+    const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node];
+
+    return request(`/crosschain/vrsc/send?apiKey=${myNode.apiKey}`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',

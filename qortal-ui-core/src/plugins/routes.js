@@ -25,7 +25,10 @@ const sendDgb = api.sendDgb
 const sendDash = api.sendDash
 const sendXvg = api.sendXvg
 const sendKmd = api.sendKmd
+const sendZec = api.sendZec
+const sendBch = api.sendBch
 const sendRvn = api.sendRvn
+const sendVrsc = api.sendVrsc
 
 export const routes = {
 	hello: async (req) => {
@@ -405,10 +408,49 @@ export const routes = {
 		return response
 	},
 
+	sendZec: async (req) => {
+		let response
+		try {
+			const res = await sendZec(req.data)
+			response = res
+		} catch (e) {
+			console.error(e)
+			console.error(e.message)
+			response = e.message
+		}
+		return response
+	},
+
+	sendBch: async (req) => {
+		let response
+		try {
+			const res = await sendBch(req.data)
+			response = res
+		} catch (e) {
+			console.error(e)
+			console.error(e.message)
+			response = e.message
+		}
+		return response
+	},
+
 	sendRvn: async (req) => {
 		let response
 		try {
 			const res = await sendRvn(req.data)
+			response = res
+		} catch (e) {
+			console.error(e)
+			console.error(e.message)
+			response = e.message
+		}
+		return response
+	},
+
+	sendVrsc: async (req) => {
+		let response
+		try {
+			const res = await sendVrsc(req.data)
 			response = res
 		} catch (e) {
 			console.error(e)
