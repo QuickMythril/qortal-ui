@@ -108,6 +108,21 @@ export default class PhraseWallet {
             }
         }).createWallet(new Uint8Array(btcSeed), false);
 
+        // Create Namecoin HD Wallet 
+        const nmcSeed = [...addrSeed];
+        const nmcWallet = new AltcoinHDWallet({
+            mainnet: {
+                private: 0x0488ADE4,
+                public: 0x0488B21E,
+                prefix: 0x34
+            },
+            testnet: {
+                private: 0x04358394,
+                public: 0x043587CF,
+                prefix: 0x6F
+            }
+        }).createWallet(new Uint8Array(nmcSeed), false, 'NMC');
+
         // Create Litecoin HD Wallet 
         const ltcSeed = [...addrSeed];
         const ltcWallet = new AltcoinHDWallet({
@@ -276,6 +291,7 @@ export default class PhraseWallet {
         this._addresses[nonce] = {
             address,
             btcWallet,
+            nmcWallet,
             ltcWallet,
             ppcWallet,
             dogeWallet,

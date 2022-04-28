@@ -25,7 +25,7 @@ import '@github/time-elements'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
-const coinsNames = ['qort', 'btc', 'ltc', 'ppc', 'doge', 'dgb', 'dash', 'xvg', 'kmd', 'zec', 'bch', 'rvn', 'vrsc']
+const coinsNames = ['qort', 'btc', 'nmc', 'ltc', 'ppc', 'doge', 'dgb', 'dash', 'xvg', 'kmd', 'zec', 'bch', 'rvn', 'vrsc']
 
 class MultiWallet extends LitElement {
     static get properties() {
@@ -42,6 +42,8 @@ class MultiWallet extends LitElement {
             recipient: { type: String },
             btcRecipient: { type: String },
             btcAmount: { type: Number },
+            nmcRecipient: { type: String },
+            nmcAmount: { type: Number },
             ltcRecipient: { type: String },
             ltcAmount: { type: Number },
             ppcRecipient: { type: String },
@@ -71,6 +73,7 @@ class MultiWallet extends LitElement {
             isValidAmount: { type: Boolean },
             balance: { type: Number },
             btcFeePerByte: { type: Number },
+            nmcFeePerByte: { type: Number },
             ltcFeePerByte: { type: Number },
             ppcFeePerByte: { type: Number },
             dogeFeePerByte: { type: Number },
@@ -440,6 +443,10 @@ class MultiWallet extends LitElement {
                 background-image: url('/img/btc.png');
             }
 
+            .nmc .currency-image {
+                background-image: url('/img/nmc.png');
+            }
+
             .ltc .currency-image {
                 background-image: url('/img/ltc.png');
             }
@@ -614,6 +621,7 @@ class MultiWallet extends LitElement {
 
         this.recipient = ''
         this.btcRecipient = ''
+        this.nmcRecipient = ''
         this.ltcRecipient = ''
         this.ppcRecipient = ''
         this.dogeRecipient = ''
@@ -633,6 +641,7 @@ class MultiWallet extends LitElement {
 	this.balance = 0
         this.amount = 0
         this.btcAmount = 0
+        this.nmcAmount = 0
         this.ltcAmount = 0
         this.ppcAmount = 0
         this.dogeAmount = 0
@@ -647,6 +656,9 @@ class MultiWallet extends LitElement {
         this.btcFeePerByte = 100
         this.btcSatMinFee = 20
         this.btcSatMaxFee = 150
+        this.nmcFeePerByte = 1 // fixme
+        this.nmcSatMinFee = 1 // fixme
+        this.nmcSatMaxFee = 1 // fixme
         this.ltcFeePerByte = 30
         this.ltcSatMinFee = 10
         this.ltcSatMaxFee = 100
@@ -697,6 +709,7 @@ class MultiWallet extends LitElement {
 
         this.wallets.get('qort').wallet = window.parent.reduxStore.getState().app.selectedAddress
         this.wallets.get('btc').wallet = window.parent.reduxStore.getState().app.selectedAddress.btcWallet
+        this.wallets.get('nmc').wallet = window.parent.reduxStore.getState().app.selectedAddress.nmcWallet
         this.wallets.get('ltc').wallet = window.parent.reduxStore.getState().app.selectedAddress.ltcWallet
         this.wallets.get('ppc').wallet = window.parent.reduxStore.getState().app.selectedAddress.ppcWallet
         this.wallets.get('doge').wallet = window.parent.reduxStore.getState().app.selectedAddress.dogeWallet
@@ -718,6 +731,7 @@ class MultiWallet extends LitElement {
 
                 this.wallets.get('qort').wallet = selectedAddress
                 this.wallets.get('btc').wallet = window.parent.reduxStore.getState().app.selectedAddress.btcWallet
+                this.wallets.get('nmc').wallet = window.parent.reduxStore.getState().app.selectedAddress.nmcWallet
                 this.wallets.get('ltc').wallet = window.parent.reduxStore.getState().app.selectedAddress.ltcWallet
                 this.wallets.get('ppc').wallet = window.parent.reduxStore.getState().app.selectedAddress.ppcWallet
                 this.wallets.get('doge').wallet = window.parent.reduxStore.getState().app.selectedAddress.dogeWallet
@@ -753,6 +767,10 @@ class MultiWallet extends LitElement {
                         <div coin="btc" class="currency-box btc">
                             <div class="currency-image"></div>
                             <div class="currency-text">Bitcoin</div>
+                        </div>
+                        <div coin="nmc" class="currency-box nmc">
+                            <div class="currency-image"></div>
+                            <div class="currency-text">Namecoin</div>
                         </div>
                         <div coin="ltc" class="currency-box ltc">
                             <div class="currency-image"></div>
@@ -905,6 +923,56 @@ class MultiWallet extends LitElement {
                         <br />
                         <div>
                             <span>${(this.selectedTransaction.totalAmount / 1e8).toFixed(8)} BTC</span>
+                        </div>
+                        <span class="title"> ${translate("walletpage.wchange14")} </span>
+                        <br />
+                        <div><span>${new Date(this.selectedTransaction.timestamp).toString()}</span></div>
+                        <span class="title"> ${translate("walletpage.wchange16")} </span>
+                        <br />
+                        <div>
+                            <span>${this.selectedTransaction.txHash}</span>
+                        </div>
+                    </div>
+                    <mwc-button
+                        slot="primaryAction"
+                        dialogAction="cancel"
+                        class="red"
+                    >
+                    ${translate("general.close")}
+                    </mwc-button>
+                </mwc-dialog>
+
+                <mwc-dialog id="showNmcTransactionDetailsDialog" scrimClickAction="${this.showNmcTransactionDetailsLoading ? '' : 'close'}">
+                    <div style="text-align: center;">
+                        <h1>${translate("walletpage.wchange5")}</h1>
+                        <hr />
+                    </div>
+                    <div id="transactionList">
+                        <span class="title"> ${translate("walletpage.wchange6")} </span>
+                        <br />
+                        <div>
+                            <span>${translate("walletpage.wchange40")}</span>
+                            ${this.selectedTransaction.nmcTxnFlow === 'OUT' ? html`<span class="color-out">${translate("walletpage.wchange7")}</span>` : html`<span class="color-in">${translate("walletpage.wchange8")}</span>`}
+                        </div>
+                        <span class="title"> ${translate("walletpage.wchange9")} </span>
+                        <br />
+                        <div>
+                            <span>${this.selectedTransaction.nmcSender}</span>
+                        </div>
+                         <span class="title"> ${translate("walletpage.wchange10")} </span>
+                        <br />
+                        <div>
+                            <span>${this.selectedTransaction.nmcReceiver}</span>
+                        </div>
+                        <span class="title"> ${translate("walletpage.wchange12")} </span>
+                        <br />
+                        <div>
+                            <span>${(this.selectedTransaction.feeAmount / 1e8).toFixed(8)} NMC</span>
+                        </div>
+                        <span class="title"> ${translate("walletpage.wchange37")} </span>
+                        <br />
+                        <div>
+                            <span>${(this.selectedTransaction.totalAmount / 1e8).toFixed(8)} NMC</span>
                         </div>
                         <span class="title"> ${translate("walletpage.wchange14")} </span>
                         <br />
@@ -1610,6 +1678,80 @@ class MultiWallet extends LitElement {
                                 <vaadin-button ?disabled="${this.btnDisable}" theme="primary medium" style="width: 100%;" @click=${() => this.sendBtc()}>
                                     <vaadin-icon icon="vaadin:arrow-forward" slot="prefix"></vaadin-icon>
                                     ${translate("walletpage.wchange17")} BTC
+                                </vaadin-button>
+                            </div>
+                        </div>
+                    </div>
+                    <mwc-button
+                        slot="primaryAction"
+                        dialogAction="cancel"
+                        class="red"
+                    >
+                    ${translate("general.close")}
+                    </mwc-button>
+                </mwc-dialog>
+
+                <mwc-dialog id="sendNmcDialog">
+                    <div class="send-coin-dialog">
+                        <div style="text-align: center;">
+                            <img src="/img/nmc.png" width="32" height="32">
+                            <h2>${translate("walletpage.wchange17")} NMC</h2>
+                            <hr />
+                        </div>
+                        <p>
+                            <span>From address:</span><br />
+                            <span style="font-weight: bold;">${this.getSelectedWalletAddress()}</span>
+                        </p>
+                        <p>
+                            <span>Available balance:</span><br />
+                            <span style="font-weight: bold;">${this.balanceString}</span>
+                        </p>
+                        <p>
+                            <mwc-textfield
+                                style="width: 100%;"
+                                required
+                                @input="${(e) => { this._checkAmount(e) }}"
+                                id="nmcAmountInput"
+                                label="${translate("walletpage.wchange11")} (NMC)"
+                                type="number"
+                                auto-validate="false"
+                                value="${this.nmcAmount}"
+                            >
+                            </mwc-textfield>
+                        </p>
+                        <p>
+                            <mwc-textfield
+                                style="width: 100%;"
+                                required
+                                id="nmcRecipient"
+                                label="To (address)"
+                                type="text"
+                                value="${this.nmcRecipient}"
+                            >
+                            </mwc-textfield>
+                        </p>
+                        <div style="margin-bottom: 0;">
+                            <p style="margin-bottom: 0;">${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.nmcFeePerByte / 1e8).toFixed(8)} NMC</span><br>${translate("walletpage.wchange25")}</p>
+                            <paper-slider
+                                class="blue"
+                                style="width: 100%;"
+                                pin
+                                @change="${(e) => (this.nmcFeePerByte = e.target.value)}"
+                                id="nmcFeeSlider"
+                                min="${this.nmcSatMinFee}"
+                                max="${this.nmcSatMaxFee}"
+                                value="${this.nmcFeePerByte}"
+                            >
+                            </paper-slider>
+                        </div>
+                        <p style="color: red;">${this.errorMessage}</p>
+                        <p style="color: green;">${this.successMessage}</p>
+                        ${this.sendMoneyLoading ? html` <paper-progress indeterminate style="width: 100%; margin: 4px;"></paper-progress> ` : ''}
+                        <div class="buttons">
+                            <div>
+                                <vaadin-button ?disabled="${this.btnDisable}" theme="primary medium" style="width: 100%;" @click=${() => this.sendNmc()}>
+                                    <vaadin-icon icon="vaadin:arrow-forward" slot="prefix"></vaadin-icon>
+                                    ${translate("walletpage.wchange17")} NMC
                                 </vaadin-button>
                             </div>
                         </div>
@@ -2606,6 +2748,52 @@ class MultiWallet extends LitElement {
             checkSelectedTextAndShowMenu()
         })
 
+        this.shadowRoot.getElementById('nmcAmountInput').addEventListener('contextmenu', (event) => {
+            const getSelectedText = () => {
+                var text = ''
+                if (typeof window.getSelection != 'undefined') {
+                    text = window.getSelection().toString()
+                } else if (typeof this.shadowRoot.selection != 'undefined' && this.shadowRoot.selection.type == 'Text') {
+                    text = this.shadowRoot.selection.createRange().text
+                }
+                return text
+            }
+            const checkSelectedTextAndShowMenu = () => {
+                let selectedText = getSelectedText()
+                if (selectedText && typeof selectedText === 'string') {
+                } else {
+                    this.pasteMenu(event, 'nmcAmountInput')
+                    this.isPasteMenuOpen = true
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+            }
+            checkSelectedTextAndShowMenu()
+        })
+
+        this.shadowRoot.getElementById('nmcRecipient').addEventListener('contextmenu', (event) => {
+            const getSelectedText = () => {
+                var text = ''
+                if (typeof window.getSelection != 'undefined') {
+                    text = window.getSelection().toString()
+                } else if (typeof this.shadowRoot.selection != 'undefined' && this.shadowRoot.selection.type == 'Text') {
+                    text = this.shadowRoot.selection.createRange().text
+                }
+                return text
+            }
+            const checkSelectedTextAndShowMenu = () => {
+                let selectedText = getSelectedText()
+                if (selectedText && typeof selectedText === 'string') {
+                } else {
+                    this.pasteMenu(event, 'nmcRecipient')
+                    this.isPasteMenuOpen = true
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+            }
+            checkSelectedTextAndShowMenu()
+        })
+
         this.shadowRoot.getElementById('ltcAmountInput').addEventListener('contextmenu', (event) => {
             const getSelectedText = () => {
                 var text = ''
@@ -3396,6 +3584,52 @@ class MultiWallet extends LitElement {
         this.showWallet()
     }
 
+    async sendNmc() {
+        const nmcAmount = this.shadowRoot.getElementById('nmcAmountInput').value
+        let nmcRecipient = this.shadowRoot.getElementById('nmcRecipient').value
+        const xprv58 = this.wallets.get(this._selectedWallet).wallet.derivedMasterPrivateKey
+
+        this.sendMoneyLoading = true
+        this.btnDisable = true
+
+        const makeRequest = async () => {
+            const opts = {
+                xprv58: xprv58,
+                receivingAddress: nmcRecipient,
+                namecoinAmount: nmcAmount,
+                feePerByte: (this.nmcFeePerByte / 1e8).toFixed(8),
+            }
+            const response = await parentEpml.request('sendNmc', opts)
+            return response
+        }
+
+        const manageResponse = (response) => {
+            if (response.length === 64) {
+                this.shadowRoot.getElementById('nmcAmountInput').value = 0
+                this.shadowRoot.getElementById('nmcRecipient').value = ''
+                this.errorMessage = ''
+                this.nmcRecipient = ''
+                this.nmcAmount = 0
+                this.successMessage = this.renderSuccessText()
+                this.sendMoneyLoading = false
+                this.btnDisable = false
+            } else if (response === false) {
+                this.errorMessage = this.renderFailText()
+                this.sendMoneyLoading = false
+                this.btnDisable = false
+                throw new Error(txnResponse)
+            } else {
+                this.errorMessage = response.message
+                this.sendMoneyLoading = false
+                this.btnDisable = false
+                throw new Error(response)
+            }
+        }
+        const res = await makeRequest()
+        manageResponse(res)
+        this.showWallet()
+    }
+
     async sendLtc() {
         const ltcAmount = this.shadowRoot.getElementById('ltcAmountInput').value
         const ltcRecipient = this.shadowRoot.getElementById('ltcRecipient').value
@@ -3950,6 +4184,7 @@ class MultiWallet extends LitElement {
                 }
                 break
             case 'btc':
+            case 'nmc':
             case 'ltc':
             case 'ppc':
             case 'doge':
@@ -4007,6 +4242,8 @@ class MultiWallet extends LitElement {
             return html`<vaadin-button theme="primary large" style="width: 75%;" @click=${() => this.openSendQort()}><vaadin-icon icon="vaadin:coin-piles" slot="prefix"></vaadin-icon> ${translate("walletpage.wchange17")} QORT</vaadin-button>`
         } else if ( this._selectedWallet === "btc" ) {
             return html`<vaadin-button theme="primary large" style="width: 75%;" @click=${() => this.openSendBtc()}><vaadin-icon icon="vaadin:coin-piles" slot="prefix"></vaadin-icon> ${translate("walletpage.wchange17")} BTC</vaadin-button>`
+        } else if ( this._selectedWallet === "nmc" ) {
+            return html`<vaadin-button theme="primary large" style="width: 75%;" @click=${() => this.openSendNmc()}><vaadin-icon icon="vaadin:coin-piles" slot="prefix"></vaadin-icon> ${translate("walletpage.wchange17")} NMC</vaadin-button>`
         } else if ( this._selectedWallet === "ltc" ) {
             return html`<vaadin-button theme="primary large" style="width: 75%;" @click=${() => this.openSendLtc()}><vaadin-icon icon="vaadin:coin-piles" slot="prefix"></vaadin-icon> ${translate("walletpage.wchange17")} LTC</vaadin-button>`
         } else if ( this._selectedWallet === "ppc" ) {
@@ -4040,6 +4277,10 @@ class MultiWallet extends LitElement {
 
     openSendBtc() {
         this.shadowRoot.querySelector("#sendBtcDialog").show();
+    }
+
+    openSendNmc() {
+        this.shadowRoot.querySelector("#sendNmcDialog").show();
     }
 
     openSendLtc() {
@@ -4130,6 +4371,15 @@ class MultiWallet extends LitElement {
                 (e) => {
                     let btcItem = this.transactionsGrid.getEventContext(e).item
                     this.showBtcTransactionDetails(btcItem, this.wallets.get(this._selectedWallet).transactions)
+                },
+                { passive: true }
+            )
+        } else if (coin === 'nmc') {
+            this.transactionsGrid.addEventListener(
+                'click',
+                (e) => {
+                    let nmcItem = this.transactionsGrid.getEventContext(e).item
+                    this.showNmcTransactionDetails(nmcItem, this.wallets.get(this._selectedWallet).transactions)
                 },
                 { passive: true }
             )
@@ -4243,6 +4493,8 @@ class MultiWallet extends LitElement {
             render(this.renderQortTransactions(this.wallets.get(this._selectedWallet).transactions, this._selectedWallet), this.transactionsDOM)
         } else if (this._selectedWallet === 'btc') {
             render(this.renderBtcTransactions(this.wallets.get(this._selectedWallet).transactions, this._selectedWallet), this.transactionsDOM)
+        } else if (this._selectedWallet === 'nmc') {
+            render(this.renderNmcTransactions(this.wallets.get(this._selectedWallet).transactions, this._selectedWallet), this.transactionsDOM)
         } else if (this._selectedWallet === 'ltc') {
             render(this.renderLtcTransactions(this.wallets.get(this._selectedWallet).transactions, this._selectedWallet), this.transactionsDOM)
         } else if (this._selectedWallet === 'ppc') {
@@ -4326,6 +4578,71 @@ class MultiWallet extends LitElement {
     }
 
     renderBtcTransactions(transactions, coin) {
+        return html`
+            <div style="padding-left:12px;" ?hidden="${!this.isEmptyArray(transactions)}"><span style="color: var(--black);">${translate("walletpage.wchange38")}</span></div>
+            <vaadin-grid theme="large" id="${coin}TransactionsGrid" ?hidden="${this.isEmptyArray(this.wallets.get(this._selectedWallet).transactions)}" page-size="25" all-rows-visible>
+                <vaadin-grid-column
+                    auto-width
+                    header="${translate("walletpage.wchange41")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`<mwc-icon style="color: #00C851">check</mwc-icon>`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange35")}"
+                    .renderer=${(root, column, data) => {
+                        render(html` ${translate("walletpage.wchange40")} ${data.item.inputs[0].address === this.wallets.get(this._selectedWallet).wallet.address ? html`<span class="color-out">${translate("walletpage.wchange7")}</span>` : html`<span class="color-in">${translate("walletpage.wchange8")}</span>`} `, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange9")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`${data.item.inputs[0].address}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange10")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`${data.item.outputs[0].address}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column auto-width resizable header="${translate("walletpage.wchange16")}" path="txHash"></vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange37")}"
+                    .renderer=${(root, column, data) => {
+                        const amount = (Number(data.item.totalAmount) / 1e8).toFixed(8)
+                        render(html`${amount}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange14")}"
+                    .renderer=${(root, column, data) => {
+                        const time = new Date(data.item.timestamp * 1000)
+                        render(html` <time-ago datetime=${time.toISOString()}> </time-ago> `, root)
+                    }}
+                >
+                </vaadin-grid-column>
+            </vaadin-grid>
+            <div id="pages"></div>
+	`
+    }
+
+    renderNmcTransactions(transactions, coin) {
         return html`
             <div style="padding-left:12px;" ?hidden="${!this.isEmptyArray(transactions)}"><span style="color: var(--black);">${translate("walletpage.wchange38")}</span></div>
             <vaadin-grid theme="large" id="${coin}TransactionsGrid" ?hidden="${this.isEmptyArray(this.wallets.get(this._selectedWallet).transactions)}" page-size="25" all-rows-visible>
@@ -5244,6 +5561,20 @@ class MultiWallet extends LitElement {
                 this.selectedTransaction = { ...transaction, btcTxnFlow, btcSender, btcReceiver }
                 if (this.selectedTransaction.txHash.length != 0) {
                     this.shadowRoot.querySelector('#showBtcTransactionDetailsDialog').show()
+                }
+            }
+        })
+    }
+
+    showNmcTransactionDetails(myTransaction, allTransactions) {
+        allTransactions.forEach((transaction) => {
+            if (myTransaction.txHash === transaction.txHash) {
+                let nmcTxnFlow = myTransaction.inputs[0].address === this.wallets.get(this._selectedWallet).wallet.address ? 'OUT' : 'IN'
+                let nmcSender = myTransaction.inputs[0].address
+                let nmcReceiver = myTransaction.outputs[0].address
+                this.selectedTransaction = { ...transaction, nmcTxnFlow, nmcSender, nmcReceiver }
+                if (this.selectedTransaction.txHash.length != 0) {
+                    this.shadowRoot.querySelector('#showNmcTransactionDetailsDialog').show()
                 }
             }
         })

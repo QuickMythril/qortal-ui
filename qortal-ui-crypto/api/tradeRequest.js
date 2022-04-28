@@ -74,6 +74,20 @@ export const sendBtc = (requestObject) => {
     })
 }
 
+// Send NMC 
+export const sendNmc = (requestObject) => {
+    const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node];
+
+    return request(`/crosschain/nmc/send?apiKey=${myNode.apiKey}`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestObject)
+    })
+}
+
 // Send LTC 
 export const sendLtc = (requestObject) => {
     const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node];

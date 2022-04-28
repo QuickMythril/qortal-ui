@@ -18,6 +18,7 @@ const signTradeBotTxn = api.signTradeBotTxn
 const deleteTradeOffer = api.deleteTradeOffer
 const cancelAllOffers = api.cancelAllOffers
 const sendBtc = api.sendBtc
+const sendNmc = api.sendNmc
 const sendLtc = api.sendLtc
 const sendPpc = api.sendPpc
 const sendDoge = api.sendDoge
@@ -308,6 +309,19 @@ export const routes = {
 		let response
 		try {
 			const res = await sendBtc(req.data)
+			response = res
+		} catch (e) {
+			console.error(e)
+			console.error(e.message)
+			response = e.message
+		}
+		return response
+	},
+
+	sendNmc: async (req) => {
+		let response
+		try {
+			const res = await sendNmc(req.data)
 			response = res
 		} catch (e) {
 			console.error(e)
