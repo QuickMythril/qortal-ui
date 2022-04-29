@@ -108,6 +108,21 @@ export default class PhraseWallet {
             }
         }).createWallet(new Uint8Array(btcSeed), false);
 
+        // Create Namecoin HD Wallet 
+        const nmcSeed = [...addrSeed];
+        const nmcWallet = new AltcoinHDWallet({
+            mainnet: {
+                private: 0x0488ADE4,
+                public: 0x0488B21E,
+                prefix: 0x34
+            },
+            testnet: {
+                private: 0x04358394,
+                public: 0x043587CF,
+                prefix: 0x6F
+            }
+        }).createWallet(new Uint8Array(nmcSeed), false, 'NMC');
+
         // Create Litecoin HD Wallet 
         const ltcSeed = [...addrSeed];
         const ltcWallet = new AltcoinHDWallet({
@@ -138,11 +153,76 @@ export default class PhraseWallet {
             }
         }).createWallet(new Uint8Array(dogeSeed), false, 'DOGE');
 
+        // Create Digibyte HD Wallet 
+        const dgbSeed = [...addrSeed];
+        const dgbWallet = new AltcoinHDWallet({
+            mainnet: {
+                private: 0x0488ADE4,
+                public: 0x0488B21E,
+                prefix: 0x1E
+            },
+            testnet: {
+                private: 0x04358394,
+                public: 0x043587CF,
+                prefix: 0x7E
+            }
+        }).createWallet(new Uint8Array(dgbSeed), false, 'DGB');
+
+        // Create Dash HD Wallet 
+        const dashSeed = [...addrSeed];
+        const dashWallet = new AltcoinHDWallet({
+            mainnet: {
+                private: 0x0488ADE4,
+                public: 0x0488B21E,
+                prefix: 0x4C
+            },
+            testnet: {
+                private: 0x04358394,
+                public: 0x043587CF,
+                prefix: 0x8C
+            }
+        }).createWallet(new Uint8Array(dashSeed), false, 'DASH');
+
+        // Create Firo HD Wallet 
+        const firoSeed = [...addrSeed];
+        const firoWallet = new AltcoinHDWallet({
+            mainnet: {
+                private: 0x0488ADE4,
+                public: 0x0488B21E,
+                prefix: 0x52
+            },
+            testnet: {
+                private: 0x04358394,
+                public: 0x043587CF,
+                prefix: 0x41
+            }
+        }).createWallet(new Uint8Array(firoSeed), false, 'FIRO');
+
+        // Create Ravencoin HD Wallet 
+        const rvnSeed = [...addrSeed];
+        const rvnWallet = new AltcoinHDWallet({
+            mainnet: {
+                private: 0x0488ADE4,
+                public: 0x0488B21E,
+                prefix: 0x3C
+            },
+            testnet: {
+                private: 0x04358394,
+                public: 0x043587CF,
+                prefix: 0x6F
+            }
+        }).createWallet(new Uint8Array(rvnSeed), false, 'RVN');
+
         this._addresses[nonce] = {
             address,
             btcWallet,
+            nmcWallet,
             ltcWallet,
             dogeWallet,
+            dgbWallet,
+            dashWallet,
+            firoWallet,
+            rvnWallet,
             qoraAddress,
             keyPair: {
                 publicKey: addrKeyPair.publicKey,

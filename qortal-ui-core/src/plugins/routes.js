@@ -18,8 +18,13 @@ const signTradeBotTxn = api.signTradeBotTxn
 const deleteTradeOffer = api.deleteTradeOffer
 const cancelAllOffers = api.cancelAllOffers
 const sendBtc = api.sendBtc
+const sendNmc = api.sendNmc
 const sendLtc = api.sendLtc
 const sendDoge = api.sendDoge
+const sendDgb = api.sendDgb
+const sendDash = api.sendDash
+const sendFiro = api.sendFiro
+const sendRvn = api.sendRvn
 
 export const routes = {
 	hello: async (req) => {
@@ -308,6 +313,19 @@ export const routes = {
 		return response
 	},
 
+	sendNmc: async (req) => {
+		let response
+		try {
+			const res = await sendNmc(req.data)
+			response = res
+		} catch (e) {
+			console.error(e)
+			console.error(e.message)
+			response = e.message
+		}
+		return response
+	},
+
 	sendLtc: async (req) => {
 		let response
 		try {
@@ -325,6 +343,58 @@ export const routes = {
 		let response
 		try {
 			const res = await sendDoge(req.data)
+			response = res
+		} catch (e) {
+			console.error(e)
+			console.error(e.message)
+			response = e.message
+		}
+		return response
+	},
+
+	sendDgb: async (req) => {
+		let response
+		try {
+			const res = await sendDgb(req.data)
+			response = res
+		} catch (e) {
+			console.error(e)
+			console.error(e.message)
+			response = e.message
+		}
+		return response
+	},
+
+	sendDash: async (req) => {
+		let response
+		try {
+			const res = await sendDash(req.data)
+			response = res
+		} catch (e) {
+			console.error(e)
+			console.error(e.message)
+			response = e.message
+		}
+		return response
+	},
+
+	sendFiro: async (req) => {
+		let response
+		try {
+			const res = await sendFiro(req.data)
+			response = res
+		} catch (e) {
+			console.error(e)
+			console.error(e.message)
+			response = e.message
+		}
+		return response
+	},
+
+	sendRvn: async (req) => {
+		let response
+		try {
+			const res = await sendRvn(req.data)
 			response = res
 		} catch (e) {
 			console.error(e)
