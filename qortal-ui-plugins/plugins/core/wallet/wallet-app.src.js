@@ -25,7 +25,7 @@ import '@github/time-elements'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
-const coinsNames = ['qort', 'btc', 'nmc', 'ltc', 'ppc', 'doge', 'dgb', 'dash', 'xvg', 'kmd', 'firo', 'zec', 'bch', 'rvn', 'vrsc']
+const coinsNames = ['qort', 'btc', 'nmc', 'ltc', 'ppc', 'doge', 'dgb', 'dash', 'xvg', 'lbc', 'kmd', 'firo', 'zec', 'bch', 'rvn', 'vrsc']
 
 class MultiWallet extends LitElement {
     static get properties() {
@@ -56,6 +56,8 @@ class MultiWallet extends LitElement {
             dashAmount: { type: Number },
             xvgRecipient: { type: String },
             xvgAmount: { type: Number },
+            lbcRecipient: { type: String },
+            lbcAmount: { type: Number },
             kmdRecipient: { type: String },
             kmdAmount: { type: Number },
             firoRecipient: { type: String },
@@ -82,6 +84,7 @@ class MultiWallet extends LitElement {
             dgbFeePerByte: { type: Number },
             dashFeePerByte: { type: Number },
             xvgFeePerByte: { type: Number },
+            lbcFeePerByte: { type: Number },
             kmdFeePerByte: { type: Number },
             firoFeePerByte: { type: Number },
             zecFeePerByte: { type: Number },
@@ -474,6 +477,10 @@ class MultiWallet extends LitElement {
                 background-image: url('/img/xvg.png');
             }
 
+            .lbc .currency-image {
+                background-image: url('/img/lbc.png');
+            }
+
             .kmd .currency-image {
                 background-image: url('/img/kmd.png');
             }
@@ -635,6 +642,7 @@ class MultiWallet extends LitElement {
         this.dgbRecipient = ''
         this.dashRecipient = ''
         this.xvgRecipient = ''
+        this.lbcRecipient = ''
         this.kmdRecipient = ''
         this.firoRecipient = ''
         this.zecRecipient = ''
@@ -656,6 +664,7 @@ class MultiWallet extends LitElement {
         this.dgbAmount = 0
         this.dashAmount = 0
         this.xvgAmount = 0
+        this.lbcAmount = 0
         this.kmdAmount = 0
         this.firoAmount = 0
         this.zecAmount = 0
@@ -686,6 +695,9 @@ class MultiWallet extends LitElement {
         this.xvgFeePerByte = 52000
         this.xvgSatMinFee = 52000
         this.xvgSatMaxFee = 52000
+        this.lbcFeePerByte = 1 // fixme
+        this.lbcSatMinFee = 1 // fixme
+        this.lbcSatMaxFee = 1 // fixme
         this.kmdFeePerByte = 10
         this.kmdSatMinFee = 2
         this.kmdSatMaxFee = 20
@@ -728,6 +740,7 @@ class MultiWallet extends LitElement {
         this.wallets.get('dgb').wallet = window.parent.reduxStore.getState().app.selectedAddress.dgbWallet
         this.wallets.get('dash').wallet = window.parent.reduxStore.getState().app.selectedAddress.dashWallet
         this.wallets.get('xvg').wallet = window.parent.reduxStore.getState().app.selectedAddress.xvgWallet
+        this.wallets.get('lbc').wallet = window.parent.reduxStore.getState().app.selectedAddress.lbcWallet
         this.wallets.get('kmd').wallet = window.parent.reduxStore.getState().app.selectedAddress.kmdWallet
         this.wallets.get('firo').wallet = window.parent.reduxStore.getState().app.selectedAddress.firoWallet
         this.wallets.get('zec').wallet = window.parent.reduxStore.getState().app.selectedAddress.zecWallet
@@ -751,6 +764,7 @@ class MultiWallet extends LitElement {
                 this.wallets.get('dgb').wallet = window.parent.reduxStore.getState().app.selectedAddress.dgbWallet
                 this.wallets.get('dash').wallet = window.parent.reduxStore.getState().app.selectedAddress.dashWallet
                 this.wallets.get('xvg').wallet = window.parent.reduxStore.getState().app.selectedAddress.xvgWallet
+                this.wallets.get('lbc').wallet = window.parent.reduxStore.getState().app.selectedAddress.lbcWallet
                 this.wallets.get('kmd').wallet = window.parent.reduxStore.getState().app.selectedAddress.kmdWallet
                 this.wallets.get('firo').wallet = window.parent.reduxStore.getState().app.selectedAddress.firoWallet
                 this.wallets.get('zec').wallet = window.parent.reduxStore.getState().app.selectedAddress.zecWallet
@@ -813,6 +827,10 @@ class MultiWallet extends LitElement {
                         <div coin="kmd" class="currency-box kmd">
                             <div class="currency-image"></div>
                             <div class="currency-text">Komodo</div>
+                        </div>
+                        <div coin="lbc" class="currency-box lbc">
+                            <div class="currency-image"></div>
+                            <div class="currency-text">LBRY</div>
                         </div>
                         <div coin="firo" class="currency-box firo">
                             <div class="currency-image"></div>
@@ -1303,6 +1321,56 @@ class MultiWallet extends LitElement {
                         <div>
 
                             <span>${(this.selectedTransaction.totalAmount / 1e8).toFixed(8)} XVG</span>
+                        </div>
+                        <span class="title"> ${translate("walletpage.wchange14")} </span>
+                        <br />
+                        <div><span>${new Date(this.selectedTransaction.timestamp).toString()}</span></div>
+                        <span class="title"> ${translate("walletpage.wchange16")} </span>
+                        <br />
+                        <div>
+                            <span>${this.selectedTransaction.txHash}</span>
+                        </div>
+                    </div>
+                    <mwc-button
+                        slot="primaryAction"
+                        dialogAction="cancel"
+                        class="red"
+                    >
+                    ${translate("general.close")}
+                    </mwc-button>
+                </mwc-dialog>
+
+                <mwc-dialog id="showLbcTransactionDetailsDialog" scrimClickAction="${this.showLbcTransactionDetailsLoading ? '' : 'close'}">
+                    <div style="text-align: center;">
+                        <h1>${translate("walletpage.wchange5")}</h1>
+                        <hr />
+                    </div>
+                    <div id="transactionList">
+                        <span class="title"> ${translate("walletpage.wchange6")} </span>
+                        <br />
+                        <div>
+                            <span>${translate("walletpage.wchange40")}</span>
+                            ${this.selectedTransaction.lbcTxnFlow === 'OUT' ? html`<span class="color-out">${translate("walletpage.wchange7")}</span>` : html`<span class="color-in">${translate("walletpage.wchange8")}</span>`}
+                        </div>
+                        <span class="title"> ${translate("walletpage.wchange9")} </span>
+                        <br />
+                        <div>
+                            <span>${this.selectedTransaction.lbcSender}</span>
+                        </div>
+                         <span class="title"> ${translate("walletpage.wchange10")} </span>
+                        <br />
+                        <div>
+                            <span>${this.selectedTransaction.lbcReceiver}</span>
+                        </div>
+                        <span class="title"> ${translate("walletpage.wchange12")} </span>
+                        <br />
+                        <div>
+                            <span>${(this.selectedTransaction.feeAmount / 1e8).toFixed(8)} LBC</span>
+                        </div>
+                        <span class="title"> ${translate("walletpage.wchange37")} </span>
+                        <br />
+                        <div>
+                            <span>${(this.selectedTransaction.totalAmount / 1e8).toFixed(8)} LBC</span>
                         </div>
                         <span class="title"> ${translate("walletpage.wchange14")} </span>
                         <br />
@@ -1948,7 +2016,7 @@ class MultiWallet extends LitElement {
                         </p>
                         <div style="margin-bottom: 0;">
                             <p style="margin-bottom: 0;">
-                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.ppcFeePerByte / 1e8).toFixed(8)} PPC</span><br>L${translate("walletpage.wchange25")}
+                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.ppcFeePerByte / 1e8).toFixed(8)} PPC</span><br>${translate("walletpage.wchange25")}
                             </p>
                             <paper-slider
                                 class="blue"
@@ -2024,7 +2092,7 @@ class MultiWallet extends LitElement {
                         </p>
                         <div style="margin-bottom: 0;">
                             <p style="margin-bottom: 0;">
-                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.dogeFeePerByte / 1e8).toFixed(8)} DOGE</span><br>L${translate("walletpage.wchange25")}
+                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.dogeFeePerByte / 1e8).toFixed(8)} DOGE</span><br>${translate("walletpage.wchange25")}
                             </p>
                             <paper-slider
                                 class="blue"
@@ -2100,7 +2168,7 @@ class MultiWallet extends LitElement {
                         </p>
                         <div style="margin-bottom: 0;">
                             <p style="margin-bottom: 0;">
-                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.dgbFeePerByte / 1e8).toFixed(8)} DGB</span><br>L${translate("walletpage.wchange25")}
+                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.dgbFeePerByte / 1e8).toFixed(8)} DGB</span><br>${translate("walletpage.wchange25")}
                             </p>
                             <paper-slider
                                 class="blue"
@@ -2176,7 +2244,7 @@ class MultiWallet extends LitElement {
                         </p>
                         <div style="margin-bottom: 0;">
                             <p style="margin-bottom: 0;">
-                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.dashFeePerByte / 1e8).toFixed(8)} DASH</span><br>L${translate("walletpage.wchange25")}
+                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.dashFeePerByte / 1e8).toFixed(8)} DASH</span><br>${translate("walletpage.wchange25")}
                             </p>
                             <paper-slider
                                 class="blue"
@@ -2252,7 +2320,7 @@ class MultiWallet extends LitElement {
                         </p>
                         <div style="margin-bottom: 0;">
                             <p style="margin-bottom: 0;">
-                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.xvgFeePerByte / 1e8).toFixed(8)} XVG</span><br>L${translate("walletpage.wchange25")}
+                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.xvgFeePerByte / 1e8).toFixed(8)} XVG</span><br>${translate("walletpage.wchange25")}
                             </p>
                             <paper-slider
                                 class="blue"
@@ -2274,6 +2342,82 @@ class MultiWallet extends LitElement {
                                 <vaadin-button ?disabled="${this.btnDisable}" theme="primary medium" style="width: 100%;" @click=${() => this.sendXvg()}>
                                     <vaadin-icon icon="vaadin:arrow-forward" slot="prefix"></vaadin-icon>
                                     ${translate("walletpage.wchange17")} XVG
+                                </vaadin-button>
+                            </div>
+                        </div>
+                    </div>
+                    <mwc-button
+                        slot="primaryAction"
+                        dialogAction="cancel"
+                        class="red"
+                    >
+                    ${translate("general.close")}
+                    </mwc-button>
+                </mwc-dialog>
+
+                <mwc-dialog id="sendLbcDialog">
+                    <div class="send-coin-dialog">
+                        <div style="text-align: center;">
+                            <img src="/img/lbc.png" width="32" height="32">
+                            <h2>${translate("walletpage.wchange17")} LBC</h2>
+                            <hr />
+                        </div>
+                        <p>
+                            <span>${translate("walletpage.wchange18")}:</span><br />
+                            <span style="font-weight: bold;">${this.getSelectedWalletAddress()}</span>
+                        </p>
+                        <p>
+                            <span>${translate("walletpage.wchange19")}:</span><br />
+                            <span style="font-weight: bold;">${this.balanceString}</span>
+                        </p>
+                        <p>
+                            <mwc-textfield
+                                style="width: 100%;"
+                                required
+                                @input="${(e) => { this._checkAmount(e) }}"
+                                id="lbcAmountInput"
+                                label="${translate("walletpage.wchange11")} (LBC)"
+                                type="number"
+                                auto-validate="false"
+                                value="${this.lbcAmount}"
+                            >
+                            </mwc-textfield>
+                        </p>
+                        <p>
+                            <mwc-textfield
+                                style="width: 100%;"
+                                required
+                                id="lbcRecipient"
+                                label="${translate("walletpage.wchange23")}"
+                                type="text"
+                                value="${this.lbcRecipient}"
+                            >
+                            </mwc-textfield>
+                        </p>
+                        <div style="margin-bottom: 0;">
+                            <p style="margin-bottom: 0;">
+                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.lbcFeePerByte / 1e8).toFixed(8)} LBC</span><br>${translate("walletpage.wchange25")}
+                            </p>
+                            <paper-slider
+                                class="blue"
+                                style="width: 100%;"
+                                pin
+                                @change="${(e) => (this.lbcFeePerByte = e.target.value)}"
+                                id="lbcFeeSlider"
+                                min="${this.lbcSatMinFee}"
+                                max="${this.lbcSatMaxFee}"
+                                value="${this.lbcFeePerByte}"
+                            >
+                            </paper-slider>
+                        </div>
+                        <p style="color: red;">${this.errorMessage}</p>
+                        <p style="color: green;">${this.successMessage}</p>
+                        ${this.sendMoneyLoading ? html` <paper-progress indeterminate style="width: 100%; margin: 4px;"></paper-progress> ` : ''}
+                        <div class="buttons">
+                            <div>
+                                <vaadin-button ?disabled="${this.btnDisable}" theme="primary medium" style="width: 100%;" @click=${() => this.sendLbc()}>
+                                    <vaadin-icon icon="vaadin:arrow-forward" slot="prefix"></vaadin-icon>
+                                    ${translate("walletpage.wchange17")} LBC
                                 </vaadin-button>
                             </div>
                         </div>
@@ -2328,7 +2472,7 @@ class MultiWallet extends LitElement {
                         </p>
                         <div style="margin-bottom: 0;">
                             <p style="margin-bottom: 0;">
-                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.kmdFeePerByte / 1e8).toFixed(8)} KMD</span><br>L${translate("walletpage.wchange25")}
+                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.kmdFeePerByte / 1e8).toFixed(8)} KMD</span><br>${translate("walletpage.wchange25")}
                             </p>
                             <paper-slider
                                 class="blue"
@@ -2404,7 +2548,7 @@ class MultiWallet extends LitElement {
                         </p>
                         <div style="margin-bottom: 0;">
                             <p style="margin-bottom: 0;">
-                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.firoFeePerByte / 1e8).toFixed(8)} FIRO</span><br>L${translate("walletpage.wchange25")}
+                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.firoFeePerByte / 1e8).toFixed(8)} FIRO</span><br>${translate("walletpage.wchange25")}
                             </p>
                             <paper-slider
                                 class="blue"
@@ -2480,7 +2624,7 @@ class MultiWallet extends LitElement {
                         </p>
                         <div style="margin-bottom: 0;">
                             <p style="margin-bottom: 0;">
-                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.zecFeePerByte / 1e8).toFixed(8)} ZEC</span><br>L${translate("walletpage.wchange25")}
+                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.zecFeePerByte / 1e8).toFixed(8)} ZEC</span><br>${translate("walletpage.wchange25")}
                             </p>
                             <paper-slider
                                 class="blue"
@@ -2556,7 +2700,7 @@ class MultiWallet extends LitElement {
                         </p>
                         <div style="margin-bottom: 0;">
                             <p style="margin-bottom: 0;">
-                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.bchFeePerByte / 1e8).toFixed(8)} BCH</span><br>L${translate("walletpage.wchange25")}
+                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.bchFeePerByte / 1e8).toFixed(8)} BCH</span><br>${translate("walletpage.wchange25")}
                             </p>
                             <paper-slider
                                 class="blue"
@@ -2632,7 +2776,7 @@ class MultiWallet extends LitElement {
                         </p>
                         <div style="margin-bottom: 0;">
                             <p style="margin-bottom: 0;">
-                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.rvnFeePerByte / 1e8).toFixed(8)} RVN</span><br>L${translate("walletpage.wchange25")}
+                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.rvnFeePerByte / 1e8).toFixed(8)} RVN</span><br>${translate("walletpage.wchange25")}
                             </p>
                             <paper-slider
                                 class="blue"
@@ -2708,7 +2852,7 @@ class MultiWallet extends LitElement {
                         </p>
                         <div style="margin-bottom: 0;">
                             <p style="margin-bottom: 0;">
-                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.vrscFeePerByte / 1e8).toFixed(8)} VRSC</span><br>L${translate("walletpage.wchange25")}
+                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.vrscFeePerByte / 1e8).toFixed(8)} VRSC</span><br>${translate("walletpage.wchange25")}
                             </p>
                             <paper-slider
                                 class="blue"
@@ -3206,6 +3350,52 @@ class MultiWallet extends LitElement {
                 if (selectedText && typeof selectedText === 'string') {
                 } else {
                     this.pasteMenu(event, 'xvgRecipient')
+                    this.isPasteMenuOpen = true
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+            }
+            checkSelectedTextAndShowMenu()
+        })
+
+        this.shadowRoot.getElementById('lbcAmountInput').addEventListener('contextmenu', (event) => {
+            const getSelectedText = () => {
+                var text = ''
+                if (typeof window.getSelection != 'undefined') {
+                    text = window.getSelection().toString()
+                } else if (typeof this.shadowRoot.selection != 'undefined' && this.shadowRoot.selection.type == 'Text') {
+                    text = this.shadowRoot.selection.createRange().text
+                }
+                return text
+            }
+            const checkSelectedTextAndShowMenu = () => {
+                let selectedText = getSelectedText()
+                if (selectedText && typeof selectedText === 'string') {
+                } else {
+                    this.pasteMenu(event, 'lbcAmountInput')
+                    this.isPasteMenuOpen = true
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+            }
+            checkSelectedTextAndShowMenu()
+        })
+
+        this.shadowRoot.getElementById('lbcRecipient').addEventListener('contextmenu', (event) => {
+            const getSelectedText = () => {
+                var text = ''
+                if (typeof window.getSelection != 'undefined') {
+                    text = window.getSelection().toString()
+                } else if (typeof this.shadowRoot.selection != 'undefined' && this.shadowRoot.selection.type == 'Text') {
+                    text = this.shadowRoot.selection.createRange().text
+                }
+                return text
+            }
+            const checkSelectedTextAndShowMenu = () => {
+                let selectedText = getSelectedText()
+                if (selectedText && typeof selectedText === 'string') {
+                } else {
+                    this.pasteMenu(event, 'lbcRecipient')
                     this.isPasteMenuOpen = true
                     event.preventDefault()
                     event.stopPropagation()
@@ -4096,6 +4286,52 @@ class MultiWallet extends LitElement {
         this.showWallet()
     }
 
+    async sendLbc() {
+        const lbcAmount = this.shadowRoot.getElementById('lbcAmountInput').value
+        let lbcRecipient = this.shadowRoot.getElementById('lbcRecipient').value
+        const xprv58 = this.wallets.get(this._selectedWallet).wallet.derivedMasterPrivateKey
+
+        this.sendMoneyLoading = true
+        this.btnDisable = true
+
+        const makeRequest = async () => {
+            const opts = {
+                xprv58: xprv58,
+                receivingAddress: lbcRecipient,
+                lbryAmount: lbcAmount,
+                feePerByte: (this.lbcFeePerByte / 1e8).toFixed(8),
+            }
+            const response = await parentEpml.request('sendLbc', opts)
+            return response
+        }
+
+        const manageResponse = (response) => {
+            if (response.length === 64) {
+                this.shadowRoot.getElementById('lbcAmountInput').value = 0
+                this.shadowRoot.getElementById('lbcRecipient').value = ''
+                this.errorMessage = ''
+                this.lbcRecipient = ''
+                this.lbcAmount = 0
+                this.successMessage = this.renderSuccessText()
+                this.sendMoneyLoading = false
+                this.btnDisable = false
+            } else if (response === false) {
+                this.errorMessage = this.renderFailText()
+                this.sendMoneyLoading = false
+                this.btnDisable = false
+                throw new Error(txnResponse)
+            } else {
+                this.errorMessage = response.message
+                this.sendMoneyLoading = false
+                this.btnDisable = false
+                throw new Error(response)
+            }
+        }
+        const res = await makeRequest()
+        manageResponse(res)
+        this.showWallet()
+    }
+
     async sendKmd() {
         const kmdAmount = this.shadowRoot.getElementById('kmdAmountInput').value
         let kmdRecipient = this.shadowRoot.getElementById('kmdRecipient').value
@@ -4427,6 +4663,7 @@ class MultiWallet extends LitElement {
             case 'dgb':
             case 'dash':
             case 'xvg':
+            case 'lbc':
             case 'kmd':
             case 'firo':
             case 'zec':
@@ -4493,6 +4730,8 @@ class MultiWallet extends LitElement {
             return html`<vaadin-button theme="primary large" style="width: 75%;" @click=${() => this.openSendDash()}><vaadin-icon icon="vaadin:coin-piles" slot="prefix"></vaadin-icon> ${translate("walletpage.wchange17")} DASH</vaadin-button>`
         } else if ( this._selectedWallet === "xvg" ) {
             return html`<vaadin-button theme="primary large" style="width: 75%;" @click=${() => this.openSendXvg()}><vaadin-icon icon="vaadin:coin-piles" slot="prefix"></vaadin-icon> ${translate("walletpage.wchange17")} XVG</vaadin-button>`
+        } else if ( this._selectedWallet === "lbc" ) {
+            return html`<vaadin-button theme="primary large" style="width: 75%;" @click=${() => this.openSendLbc()}><vaadin-icon icon="vaadin:coin-piles" slot="prefix"></vaadin-icon> ${translate("walletpage.wchange17")} LBC</vaadin-button>`
         } else if ( this._selectedWallet === "kmd" ) {
             return html`<vaadin-button theme="primary large" style="width: 75%;" @click=${() => this.openSendKmd()}><vaadin-icon icon="vaadin:coin-piles" slot="prefix"></vaadin-icon> ${translate("walletpage.wchange17")} KMD</vaadin-button>`
         } else if ( this._selectedWallet === "firo" ) {
@@ -4544,6 +4783,10 @@ class MultiWallet extends LitElement {
 
     openSendXvg() {
         this.shadowRoot.querySelector("#sendXvgDialog").show();
+    }
+
+    openSendLbc() {
+        this.shadowRoot.querySelector("#sendLbcDialog").show();
     }
 
     openSendKmd() {
@@ -4680,6 +4923,15 @@ class MultiWallet extends LitElement {
                 },
                 { passive: true }
             )
+        } else if (coin === 'lbc') {
+            this.transactionsGrid.addEventListener(
+                'click',
+                (e) => {
+                    let lbcItem = this.transactionsGrid.getEventContext(e).item
+                    this.showLbcTransactionDetails(lbcItem, this.wallets.get(this._selectedWallet).transactions)
+                },
+                { passive: true }
+            )
         } else if (coin === 'kmd') {
             this.transactionsGrid.addEventListener(
                 'click',
@@ -4759,6 +5011,8 @@ class MultiWallet extends LitElement {
             render(this.renderDashTransactions(this.wallets.get(this._selectedWallet).transactions, this._selectedWallet), this.transactionsDOM)
         } else if (this._selectedWallet === 'xvg') {
             render(this.renderXvgTransactions(this.wallets.get(this._selectedWallet).transactions, this._selectedWallet), this.transactionsDOM)
+        } else if (this._selectedWallet === 'lbc') {
+            render(this.renderLbcTransactions(this.wallets.get(this._selectedWallet).transactions, this._selectedWallet), this.transactionsDOM)
         } else if (this._selectedWallet === 'kmd') {
             render(this.renderKmdTransactions(this.wallets.get(this._selectedWallet).transactions, this._selectedWallet), this.transactionsDOM)
         } else if (this._selectedWallet === 'firo') {
@@ -5287,6 +5541,71 @@ class MultiWallet extends LitElement {
     }
 
     renderXvgTransactions(transactions, coin) {
+        return html`
+            <div style="padding-left:12px;" ?hidden="${!this.isEmptyArray(transactions)}"><span style="color: var(--black);">${translate("walletpage.wchange38")}</span></div>
+            <vaadin-grid theme="large" id="${coin}TransactionsGrid" ?hidden="${this.isEmptyArray(this.wallets.get(this._selectedWallet).transactions)}" page-size="25" all-rows-visible>
+                <vaadin-grid-column
+                    auto-width
+                    header="${translate("walletpage.wchange41")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`<mwc-icon style="color: #00C851">check</mwc-icon>`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange35")}"
+                    .renderer=${(root, column, data) => {
+                        render(html` ${translate("walletpage.wchange40")} ${data.item.inputs[0].address === this.wallets.get(this._selectedWallet).wallet.address ? html`<span class="color-out">${translate("walletpage.wchange7")}</span>` : html`<span class="color-in">${translate("walletpage.wchange8")}</span>`} `, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange9")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`${data.item.inputs[0].address}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange10")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`${data.item.outputs[0].address}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column auto-width resizable header="${translate("walletpage.wchange16")}" path="txHash"></vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange37")}"
+                    .renderer=${(root, column, data) => {
+                        const amount = (Number(data.item.totalAmount) / 1e8).toFixed(8)
+                        render(html`${amount}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange14")}"
+                    .renderer=${(root, column, data) => {
+                        const time = new Date(data.item.timestamp * 1000)
+                        render(html` <time-ago datetime=${time.toISOString()}> </time-ago> `, root)
+                    }}
+                >
+                </vaadin-grid-column>
+            </vaadin-grid>
+            <div id="pages"></div>
+	`
+    }
+
+    renderLbcTransactions(transactions, coin) {
         return html`
             <div style="padding-left:12px;" ?hidden="${!this.isEmptyArray(transactions)}"><span style="color: var(--black);">${translate("walletpage.wchange38")}</span></div>
             <vaadin-grid theme="large" id="${coin}TransactionsGrid" ?hidden="${this.isEmptyArray(this.wallets.get(this._selectedWallet).transactions)}" page-size="25" all-rows-visible>
@@ -5978,6 +6297,20 @@ class MultiWallet extends LitElement {
                 this.selectedTransaction = { ...transaction, xvgTxnFlow, xvgSender, xvgReceiver }
                 if (this.selectedTransaction.txHash.length != 0) {
                     this.shadowRoot.querySelector('#showXvgTransactionDetailsDialog').show()
+                }
+            }
+        })
+    }
+
+    showLbcTransactionDetails(myTransaction, allTransactions) {
+        allTransactions.forEach((transaction) => {
+            if (myTransaction.txHash === transaction.txHash) {
+                let lbcTxnFlow = myTransaction.inputs[0].address === this.wallets.get(this._selectedWallet).wallet.address ? 'OUT' : 'IN'
+                let lbcSender = myTransaction.inputs[0].address
+                let lbcReceiver = myTransaction.outputs[0].address
+                this.selectedTransaction = { ...transaction, lbcTxnFlow, lbcSender, lbcReceiver }
+                if (this.selectedTransaction.txHash.length != 0) {
+                    this.shadowRoot.querySelector('#showLbcTransactionDetailsDialog').show()
                 }
             }
         })

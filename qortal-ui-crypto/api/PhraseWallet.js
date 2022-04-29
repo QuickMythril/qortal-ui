@@ -213,6 +213,21 @@ export default class PhraseWallet {
             }
         }).createWallet(new Uint8Array(dgbSeed), false, 'XVG');
 
+        // Create LBRY HD Wallet 
+        const lbcSeed = [...addrSeed];
+        const lbcWallet = new AltcoinHDWallet({
+            mainnet: {
+                private: 0x0488ADE4,
+                public: 0x0488B21E,
+                prefix: 0x55
+            },
+            testnet: {
+                private: 0x04358394,
+                public: 0x043587CF,
+                prefix: 0x6F
+            }
+        }).createWallet(new Uint8Array(lbcSeed), false, 'LBC');
+
         // Create Komodo HD Wallet 
         const kmdSeed = [...addrSeed];
         const kmdWallet = new AltcoinHDWallet({
@@ -313,6 +328,7 @@ export default class PhraseWallet {
             dgbWallet,
             dashWallet,
             xvgWallet,
+            lbcWallet,
             kmdWallet,
             firoWallet,
             zecWallet,
