@@ -25,7 +25,7 @@ import '@github/time-elements'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
-const coinsNames = ['qort', 'btc', 'nmc', 'ltc', 'ppc', 'doge', 'dgb', 'dash', 'xvg', 'kmd', 'zec', 'bch', 'rvn', 'vrsc']
+const coinsNames = ['qort', 'btc', 'nmc', 'ltc', 'ppc', 'doge', 'dgb', 'dash', 'xvg', 'kmd', 'firo', 'zec', 'bch', 'rvn', 'vrsc']
 
 class MultiWallet extends LitElement {
     static get properties() {
@@ -58,6 +58,8 @@ class MultiWallet extends LitElement {
             xvgAmount: { type: Number },
             kmdRecipient: { type: String },
             kmdAmount: { type: Number },
+            firoRecipient: { type: String },
+            firoAmount: { type: Number },
             zecRecipient: { type: String },
             zecAmount: { type: Number },
             bchRecipient: { type: String },
@@ -81,6 +83,7 @@ class MultiWallet extends LitElement {
             dashFeePerByte: { type: Number },
             xvgFeePerByte: { type: Number },
             kmdFeePerByte: { type: Number },
+            firoFeePerByte: { type: Number },
             zecFeePerByte: { type: Number },
             bchFeePerByte: { type: Number },
             rvnFeePerByte: { type: Number },
@@ -475,6 +478,10 @@ class MultiWallet extends LitElement {
                 background-image: url('/img/kmd.png');
             }
 
+            .firo .currency-image {
+                background-image: url('/img/firo.png');
+            }
+
             .zec .currency-image {
                 background-image: url('/img/zec.png');
             }
@@ -629,6 +636,7 @@ class MultiWallet extends LitElement {
         this.dashRecipient = ''
         this.xvgRecipient = ''
         this.kmdRecipient = ''
+        this.firoRecipient = ''
         this.zecRecipient = ''
         this.bchRecipient = ''
         this.rvnRecipient = ''
@@ -649,6 +657,7 @@ class MultiWallet extends LitElement {
         this.dashAmount = 0
         this.xvgAmount = 0
         this.kmdAmount = 0
+        this.firoAmount = 0
         this.zecAmount = 0
         this.bchAmount = 0
         this.rvnAmount = 0
@@ -680,6 +689,9 @@ class MultiWallet extends LitElement {
         this.kmdFeePerByte = 10
         this.kmdSatMinFee = 2
         this.kmdSatMaxFee = 20
+        this.firoFeePerByte = 1
+        this.firoSatMinFee = 1
+        this.firoSatMaxFee = 10
         this.zecFeePerByte = 1
         this.zecSatMinFee = 1
         this.zecSatMaxFee = 10
@@ -717,6 +729,7 @@ class MultiWallet extends LitElement {
         this.wallets.get('dash').wallet = window.parent.reduxStore.getState().app.selectedAddress.dashWallet
         this.wallets.get('xvg').wallet = window.parent.reduxStore.getState().app.selectedAddress.xvgWallet
         this.wallets.get('kmd').wallet = window.parent.reduxStore.getState().app.selectedAddress.kmdWallet
+        this.wallets.get('firo').wallet = window.parent.reduxStore.getState().app.selectedAddress.firoWallet
         this.wallets.get('zec').wallet = window.parent.reduxStore.getState().app.selectedAddress.zecWallet
         this.wallets.get('bch').wallet = window.parent.reduxStore.getState().app.selectedAddress.bchWallet
         this.wallets.get('rvn').wallet = window.parent.reduxStore.getState().app.selectedAddress.rvnWallet
@@ -739,6 +752,7 @@ class MultiWallet extends LitElement {
                 this.wallets.get('dash').wallet = window.parent.reduxStore.getState().app.selectedAddress.dashWallet
                 this.wallets.get('xvg').wallet = window.parent.reduxStore.getState().app.selectedAddress.xvgWallet
                 this.wallets.get('kmd').wallet = window.parent.reduxStore.getState().app.selectedAddress.kmdWallet
+                this.wallets.get('firo').wallet = window.parent.reduxStore.getState().app.selectedAddress.firoWallet
                 this.wallets.get('zec').wallet = window.parent.reduxStore.getState().app.selectedAddress.zecWallet
                 this.wallets.get('bch').wallet = window.parent.reduxStore.getState().app.selectedAddress.bchWallet
                 this.wallets.get('rvn').wallet = window.parent.reduxStore.getState().app.selectedAddress.rvnWallet
@@ -799,6 +813,10 @@ class MultiWallet extends LitElement {
                         <div coin="kmd" class="currency-box kmd">
                             <div class="currency-image"></div>
                             <div class="currency-text">Komodo</div>
+                        </div>
+                        <div coin="firo" class="currency-box firo">
+                            <div class="currency-image"></div>
+                            <div class="currency-text">Firo</div>
                         </div>
                         <div coin="zec" class="currency-box zec">
                             <div class="currency-image"></div>
@@ -1335,6 +1353,56 @@ class MultiWallet extends LitElement {
                         <br />
                         <div>
                             <span>${(this.selectedTransaction.totalAmount / 1e8).toFixed(8)} KMD</span>
+                        </div>
+                        <span class="title"> ${translate("walletpage.wchange14")} </span>
+                        <br />
+                        <div><span>${new Date(this.selectedTransaction.timestamp).toString()}</span></div>
+                        <span class="title"> ${translate("walletpage.wchange16")} </span>
+                        <br />
+                        <div>
+                            <span>${this.selectedTransaction.txHash}</span>
+                        </div>
+                    </div>
+                    <mwc-button
+                        slot="primaryAction"
+                        dialogAction="cancel"
+                        class="red"
+                    >
+                    ${translate("general.close")}
+                    </mwc-button>
+                </mwc-dialog>
+
+                <mwc-dialog id="showFiroTransactionDetailsDialog" scrimClickAction="${this.showFiroTransactionDetailsLoading ? '' : 'close'}">
+                    <div style="text-align: center;">
+                        <h1>${translate("walletpage.wchange5")}</h1>
+                        <hr />
+                    </div>
+                    <div id="transactionList">
+                        <span class="title"> ${translate("walletpage.wchange6")} </span>
+                        <br />
+                        <div>
+                            <span>${translate("walletpage.wchange40")}</span>
+                            ${this.selectedTransaction.firoTxnFlow === 'OUT' ? html`<span class="color-out">${translate("walletpage.wchange7")}</span>` : html`<span class="color-in">${translate("walletpage.wchange8")}</span>`}
+                        </div>
+                        <span class="title"> ${translate("walletpage.wchange9")} </span>
+                        <br />
+                        <div>
+                            <span>${this.selectedTransaction.firoSender}</span>
+                        </div>
+                         <span class="title"> ${translate("walletpage.wchange10")} </span>
+                        <br />
+                        <div>
+                            <span>${this.selectedTransaction.firoReceiver}</span>
+                        </div>
+                        <span class="title"> ${translate("walletpage.wchange12")} </span>
+                        <br />
+                        <div>
+                            <span>${(this.selectedTransaction.feeAmount / 1e8).toFixed(8)} FIRO</span>
+                        </div>
+                        <span class="title"> ${translate("walletpage.wchange37")} </span>
+                        <br />
+                        <div>
+                            <span>${(this.selectedTransaction.totalAmount / 1e8).toFixed(8)} FIRO</span>
                         </div>
                         <span class="title"> ${translate("walletpage.wchange14")} </span>
                         <br />
@@ -2295,6 +2363,82 @@ class MultiWallet extends LitElement {
                     </mwc-button>
                 </mwc-dialog>
 
+                <mwc-dialog id="sendFiroDialog">
+                    <div class="send-coin-dialog">
+                        <div style="text-align: center;">
+                            <img src="/img/firo.png" width="32" height="32">
+                            <h2>${translate("walletpage.wchange17")} FIRO</h2>
+                            <hr />
+                        </div>
+                        <p>
+                            <span>${translate("walletpage.wchange18")}:</span><br />
+                            <span style="font-weight: bold;">${this.getSelectedWalletAddress()}</span>
+                        </p>
+                        <p>
+                            <span>${translate("walletpage.wchange19")}:</span><br />
+                            <span style="font-weight: bold;">${this.balanceString}</span>
+                        </p>
+                        <p>
+                            <mwc-textfield
+                                style="width: 100%;"
+                                required
+                                @input="${(e) => { this._checkAmount(e) }}"
+                                id="firoAmountInput"
+                                label="${translate("walletpage.wchange11")} (FIRO)"
+                                type="number"
+                                auto-validate="false"
+                                value="${this.firoAmount}"
+                            >
+                            </mwc-textfield>
+                        </p>
+                        <p>
+                            <mwc-textfield
+                                style="width: 100%;"
+                                required
+                                id="firoRecipient"
+                                label="${translate("walletpage.wchange23")}"
+                                type="text"
+                                value="${this.firoRecipient}"
+                            >
+                            </mwc-textfield>
+                        </p>
+                        <div style="margin-bottom: 0;">
+                            <p style="margin-bottom: 0;">
+                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.firoFeePerByte / 1e8).toFixed(8)} FIRO</span><br>L${translate("walletpage.wchange25")}
+                            </p>
+                            <paper-slider
+                                class="blue"
+                                style="width: 100%;"
+                                pin
+                                @change="${(e) => (this.firoFeePerByte = e.target.value)}"
+                                id="firoFeeSlider"
+                                min="${this.firoSatMinFee}"
+                                max="${this.firoSatMaxFee}"
+                                value="${this.firoFeePerByte}"
+                            >
+                            </paper-slider>
+                        </div>
+                        <p style="color: red;">${this.errorMessage}</p>
+                        <p style="color: green;">${this.successMessage}</p>
+                        ${this.sendMoneyLoading ? html` <paper-progress indeterminate style="width: 100%; margin: 4px;"></paper-progress> ` : ''}
+                        <div class="buttons">
+                            <div>
+                                <vaadin-button ?disabled="${this.btnDisable}" theme="primary medium" style="width: 100%;" @click=${() => this.sendFiro()}>
+                                    <vaadin-icon icon="vaadin:arrow-forward" slot="prefix"></vaadin-icon>
+                                    ${translate("walletpage.wchange17")} FIRO
+                                </vaadin-button>
+                            </div>
+                        </div>
+                    </div>
+                    <mwc-button
+                        slot="primaryAction"
+                        dialogAction="cancel"
+                        class="red"
+                    >
+                    ${translate("general.close")}
+                    </mwc-button>
+                </mwc-dialog>
+
                 <mwc-dialog id="sendZecDialog">
                     <div class="send-coin-dialog">
                         <div style="text-align: center;">
@@ -3108,6 +3252,52 @@ class MultiWallet extends LitElement {
                 if (selectedText && typeof selectedText === 'string') {
                 } else {
                     this.pasteMenu(event, 'kmdRecipient')
+                    this.isPasteMenuOpen = true
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+            }
+            checkSelectedTextAndShowMenu()
+        })
+
+        this.shadowRoot.getElementById('firoAmountInput').addEventListener('contextmenu', (event) => {
+            const getSelectedText = () => {
+                var text = ''
+                if (typeof window.getSelection != 'undefined') {
+                    text = window.getSelection().toString()
+                } else if (typeof this.shadowRoot.selection != 'undefined' && this.shadowRoot.selection.type == 'Text') {
+                    text = this.shadowRoot.selection.createRange().text
+                }
+                return text
+            }
+            const checkSelectedTextAndShowMenu = () => {
+                let selectedText = getSelectedText()
+                if (selectedText && typeof selectedText === 'string') {
+                } else {
+                    this.pasteMenu(event, 'firoAmountInput')
+                    this.isPasteMenuOpen = true
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+            }
+            checkSelectedTextAndShowMenu()
+        })
+
+        this.shadowRoot.getElementById('firoRecipient').addEventListener('contextmenu', (event) => {
+            const getSelectedText = () => {
+                var text = ''
+                if (typeof window.getSelection != 'undefined') {
+                    text = window.getSelection().toString()
+                } else if (typeof this.shadowRoot.selection != 'undefined' && this.shadowRoot.selection.type == 'Text') {
+                    text = this.shadowRoot.selection.createRange().text
+                }
+                return text
+            }
+            const checkSelectedTextAndShowMenu = () => {
+                let selectedText = getSelectedText()
+                if (selectedText && typeof selectedText === 'string') {
+                } else {
+                    this.pasteMenu(event, 'firoRecipient')
                     this.isPasteMenuOpen = true
                     event.preventDefault()
                     event.stopPropagation()
@@ -3952,6 +4142,52 @@ class MultiWallet extends LitElement {
         this.showWallet()
     }
 
+    async sendFiro() {
+        const firoAmount = this.shadowRoot.getElementById('firoAmountInput').value
+        let firoRecipient = this.shadowRoot.getElementById('firoRecipient').value
+        const xprv58 = this.wallets.get(this._selectedWallet).wallet.derivedMasterPrivateKey
+
+        this.sendMoneyLoading = true
+        this.btnDisable = true
+
+        const makeRequest = async () => {
+            const opts = {
+                xprv58: xprv58,
+                receivingAddress: firoRecipient,
+                firoAmount: firoAmount,
+                feePerByte: (this.firoFeePerByte / 1e8).toFixed(8),
+            }
+            const response = await parentEpml.request('sendFiro', opts)
+            return response
+        }
+
+        const manageResponse = (response) => {
+            if (response.length === 64) {
+                this.shadowRoot.getElementById('firoAmountInput').value = 0
+                this.shadowRoot.getElementById('firoRecipient').value = ''
+                this.errorMessage = ''
+                this.firoRecipient = ''
+                this.firoAmount = 0
+                this.successMessage = this.renderSuccessText()
+                this.sendMoneyLoading = false
+                this.btnDisable = false
+            } else if (response === false) {
+                this.errorMessage = this.renderFailText()
+                this.sendMoneyLoading = false
+                this.btnDisable = false
+                throw new Error(txnResponse)
+            } else {
+                this.errorMessage = response.message
+                this.sendMoneyLoading = false
+                this.btnDisable = false
+                throw new Error(response)
+            }
+        }
+        const res = await makeRequest()
+        manageResponse(res)
+        this.showWallet()
+    }
+
     async sendZec() {
         const zecAmount = this.shadowRoot.getElementById('zecAmountInput').value
         let zecRecipient = this.shadowRoot.getElementById('zecRecipient').value
@@ -4192,6 +4428,7 @@ class MultiWallet extends LitElement {
             case 'dash':
             case 'xvg':
             case 'kmd':
+            case 'firo':
             case 'zec':
             case 'bch':
             case 'rvn':
@@ -4258,6 +4495,8 @@ class MultiWallet extends LitElement {
             return html`<vaadin-button theme="primary large" style="width: 75%;" @click=${() => this.openSendXvg()}><vaadin-icon icon="vaadin:coin-piles" slot="prefix"></vaadin-icon> ${translate("walletpage.wchange17")} XVG</vaadin-button>`
         } else if ( this._selectedWallet === "kmd" ) {
             return html`<vaadin-button theme="primary large" style="width: 75%;" @click=${() => this.openSendKmd()}><vaadin-icon icon="vaadin:coin-piles" slot="prefix"></vaadin-icon> ${translate("walletpage.wchange17")} KMD</vaadin-button>`
+        } else if ( this._selectedWallet === "firo" ) {
+            return html`<vaadin-button theme="primary large" style="width: 75%;" @click=${() => this.openSendFiro()}><vaadin-icon icon="vaadin:coin-piles" slot="prefix"></vaadin-icon> ${translate("walletpage.wchange17")} FIRO</vaadin-button>`
         } else if ( this._selectedWallet === "zec" ) {
             return html`<vaadin-button theme="primary large" style="width: 75%;" @click=${() => this.openSendZec()}><vaadin-icon icon="vaadin:coin-piles" slot="prefix"></vaadin-icon> ${translate("walletpage.wchange17")} ZEC</vaadin-button>`
         } else if ( this._selectedWallet === "bch" ) {
@@ -4309,6 +4548,10 @@ class MultiWallet extends LitElement {
 
     openSendKmd() {
         this.shadowRoot.querySelector("#sendKmdDialog").show();
+    }
+
+    openSendFiro() {
+        this.shadowRoot.querySelector("#sendFiroDialog").show();
     }
 
     openSendZec() {
@@ -4446,6 +4689,15 @@ class MultiWallet extends LitElement {
                 },
                 { passive: true }
             )
+        } else if (coin === 'firo') {
+            this.transactionsGrid.addEventListener(
+                'click',
+                (e) => {
+                    let firoItem = this.transactionsGrid.getEventContext(e).item
+                    this.showFiroTransactionDetails(firoItem, this.wallets.get(this._selectedWallet).transactions)
+                },
+                { passive: true }
+            )
         } else if (coin === 'zec') {
             this.transactionsGrid.addEventListener(
                 'click',
@@ -4509,6 +4761,8 @@ class MultiWallet extends LitElement {
             render(this.renderXvgTransactions(this.wallets.get(this._selectedWallet).transactions, this._selectedWallet), this.transactionsDOM)
         } else if (this._selectedWallet === 'kmd') {
             render(this.renderKmdTransactions(this.wallets.get(this._selectedWallet).transactions, this._selectedWallet), this.transactionsDOM)
+        } else if (this._selectedWallet === 'firo') {
+            render(this.renderFiroTransactions(this.wallets.get(this._selectedWallet).transactions, this._selectedWallet), this.transactionsDOM)
         } else if (this._selectedWallet === 'zec') {
             render(this.renderZecTransactions(this.wallets.get(this._selectedWallet).transactions, this._selectedWallet), this.transactionsDOM)
         } else if (this._selectedWallet === 'bch') {
@@ -5162,6 +5416,71 @@ class MultiWallet extends LitElement {
 	`
     }
 
+    renderFiroTransactions(transactions, coin) {
+        return html`
+            <div style="padding-left:12px;" ?hidden="${!this.isEmptyArray(transactions)}"><span style="color: var(--black);">${translate("walletpage.wchange38")}</span></div>
+            <vaadin-grid theme="large" id="${coin}TransactionsGrid" ?hidden="${this.isEmptyArray(this.wallets.get(this._selectedWallet).transactions)}" page-size="25" all-rows-visible>
+                <vaadin-grid-column
+                    auto-width
+                    header="${translate("walletpage.wchange41")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`<mwc-icon style="color: #00C851">check</mwc-icon>`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange35")}"
+                    .renderer=${(root, column, data) => {
+                        render(html` ${translate("walletpage.wchange40")} ${data.item.inputs[0].address === this.wallets.get(this._selectedWallet).wallet.address ? html`<span class="color-out">${translate("walletpage.wchange7")}</span>` : html`<span class="color-in">${translate("walletpage.wchange8")}</span>`} `, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange9")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`${data.item.inputs[0].address}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange10")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`${data.item.outputs[0].address}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column auto-width resizable header="${translate("walletpage.wchange16")}" path="txHash"></vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange37")}"
+                    .renderer=${(root, column, data) => {
+                        const amount = (Number(data.item.totalAmount) / 1e8).toFixed(8)
+                        render(html`${amount}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange14")}"
+                    .renderer=${(root, column, data) => {
+                        const time = new Date(data.item.timestamp * 1000)
+                        render(html` <time-ago datetime=${time.toISOString()}> </time-ago> `, root)
+                    }}
+                >
+                </vaadin-grid-column>
+            </vaadin-grid>
+            <div id="pages"></div>
+	`
+    }
+
     renderZecTransactions(transactions, coin) {
         return html`
             <div style="padding-left:12px;" ?hidden="${!this.isEmptyArray(transactions)}"><span style="color: var(--black);">${translate("walletpage.wchange38")}</span></div>
@@ -5673,6 +5992,20 @@ class MultiWallet extends LitElement {
                 this.selectedTransaction = { ...transaction, kmdTxnFlow, kmdSender, kmdReceiver }
                 if (this.selectedTransaction.txHash.length != 0) {
                     this.shadowRoot.querySelector('#showKmdTransactionDetailsDialog').show()
+                }
+            }
+        })
+    }
+
+    showFiroTransactionDetails(myTransaction, allTransactions) {
+        allTransactions.forEach((transaction) => {
+            if (myTransaction.txHash === transaction.txHash) {
+                let firoTxnFlow = myTransaction.inputs[0].address === this.wallets.get(this._selectedWallet).wallet.address ? 'OUT' : 'IN'
+                let firoSender = myTransaction.inputs[0].address
+                let firoReceiver = myTransaction.outputs[0].address
+                this.selectedTransaction = { ...transaction, firoTxnFlow, firoSender, firoReceiver }
+                if (this.selectedTransaction.txHash.length != 0) {
+                    this.shadowRoot.querySelector('#showFiroTransactionDetailsDialog').show()
                 }
             }
         })

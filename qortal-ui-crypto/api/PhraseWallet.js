@@ -228,6 +228,21 @@ export default class PhraseWallet {
             }
         }).createWallet(new Uint8Array(kmdSeed), false, 'KMD');
 
+        // Create Firo HD Wallet 
+        const firoSeed = [...addrSeed];
+        const firoWallet = new AltcoinHDWallet({
+            mainnet: {
+                private: 0x0488ADE4,
+                public: 0x0488B21E,
+                prefix: 0x52
+            },
+            testnet: {
+                private: 0x04358394,
+                public: 0x043587CF,
+                prefix: 0x41
+            }
+        }).createWallet(new Uint8Array(firoSeed), false, 'FIRO');
+
         // Create Zcash HD Wallet 
         const zecSeed = [...addrSeed];
         const zecWallet = new AltcoinHDWallet({
@@ -299,6 +314,7 @@ export default class PhraseWallet {
             dashWallet,
             xvgWallet,
             kmdWallet,
+            firoWallet,
             zecWallet,
             bchWallet,
             rvnWallet,

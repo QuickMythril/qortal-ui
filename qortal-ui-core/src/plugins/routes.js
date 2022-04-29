@@ -26,6 +26,7 @@ const sendDgb = api.sendDgb
 const sendDash = api.sendDash
 const sendXvg = api.sendXvg
 const sendKmd = api.sendKmd
+const sendFiro = api.sendFiro
 const sendZec = api.sendZec
 const sendBch = api.sendBch
 const sendRvn = api.sendRvn
@@ -413,6 +414,19 @@ export const routes = {
 		let response
 		try {
 			const res = await sendKmd(req.data)
+			response = res
+		} catch (e) {
+			console.error(e)
+			console.error(e.message)
+			response = e.message
+		}
+		return response
+	},
+
+	sendFiro: async (req) => {
+		let response
+		try {
+			const res = await sendFiro(req.data)
 			response = res
 		} catch (e) {
 			console.error(e)
