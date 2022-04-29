@@ -3078,12 +3078,32 @@ class MultiWallet extends LitElement {
         this.shadowRoot.querySelector("#sendBtcDialog").show();
     }
 
+    openSendNmc() {
+        this.shadowRoot.querySelector("#sendNmcDialog").show();
+    }
+
     openSendLtc() {
         this.shadowRoot.querySelector("#sendLtcDialog").show();
     }
 
     openSendDoge() {
         this.shadowRoot.querySelector("#sendDogeDialog").show();
+    }
+
+    openSendDgb() {
+        this.shadowRoot.querySelector("#sendDgbDialog").show();
+    }
+
+    openSendDash() {
+        this.shadowRoot.querySelector("#sendDashDialog").show();
+    }
+
+    openSendFiro() {
+        this.shadowRoot.querySelector("#sendFiroDialog").show();
+    }
+
+    openSendRvn() {
+        this.shadowRoot.querySelector("#sendRvnDialog").show();
     }
 
     changeTheme() {
@@ -3346,6 +3366,71 @@ class MultiWallet extends LitElement {
 	`
     }
 
+    renderNmcTransactions(transactions, coin) {
+        return html`
+            <div style="padding-left:12px;" ?hidden="${!this.isEmptyArray(transactions)}"><span style="color: var(--black);">${translate("walletpage.wchange38")}</span></div>
+            <vaadin-grid theme="large" id="${coin}TransactionsGrid" ?hidden="${this.isEmptyArray(this.wallets.get(this._selectedWallet).transactions)}" page-size="25" all-rows-visible>
+                <vaadin-grid-column
+                    auto-width
+                    header="${translate("walletpage.wchange41")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`<mwc-icon style="color: #00C851">check</mwc-icon>`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange35")}"
+                    .renderer=${(root, column, data) => {
+                        render(html` ${translate("walletpage.wchange40")} ${data.item.inputs[0].address === this.wallets.get(this._selectedWallet).wallet.address ? html`<span class="color-out">${translate("walletpage.wchange7")}</span>` : html`<span class="color-in">${translate("walletpage.wchange8")}</span>`} `, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange9")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`${data.item.inputs[0].address}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange10")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`${data.item.outputs[0].address}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column auto-width resizable header="${translate("walletpage.wchange16")}" path="txHash"></vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange37")}"
+                    .renderer=${(root, column, data) => {
+                        const amount = (Number(data.item.totalAmount) / 1e8).toFixed(8)
+                        render(html`${amount}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange14")}"
+                    .renderer=${(root, column, data) => {
+                        const time = new Date(data.item.timestamp * 1000)
+                        render(html` <time-ago datetime=${time.toISOString()}> </time-ago> `, root)
+                    }}
+                >
+                </vaadin-grid-column>
+            </vaadin-grid>
+            <div id="pages"></div>
+	`
+    }
+
     renderLtcTransactions(transactions, coin) {
         return html`
             <div style="padding-left:12px;" ?hidden="${!this.isEmptyArray(transactions)}"><span style="color: var(--black);">${translate("walletpage.wchange38")}</span></div>
@@ -3412,6 +3497,266 @@ class MultiWallet extends LitElement {
     }
 
     renderDogeTransactions(transactions, coin) {
+        return html`
+            <div style="padding-left:12px;" ?hidden="${!this.isEmptyArray(transactions)}"><span style="color: var(--black);">${translate("walletpage.wchange38")}</span></div>
+            <vaadin-grid theme="large" id="${coin}TransactionsGrid" ?hidden="${this.isEmptyArray(this.wallets.get(this._selectedWallet).transactions)}" page-size="25" all-rows-visible>
+                <vaadin-grid-column
+                    auto-width
+                    header="${translate("walletpage.wchange41")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`<mwc-icon style="color: #00C851">check</mwc-icon>`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange35")}"
+                    .renderer=${(root, column, data) => {
+                        render(html` ${translate("walletpage.wchange40")} ${data.item.inputs[0].address === this.wallets.get(this._selectedWallet).wallet.address ? html`<span class="color-out">${translate("walletpage.wchange7")}</span>` : html`<span class="color-in">${translate("walletpage.wchange8")}</span>`} `, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange9")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`${data.item.inputs[0].address}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange10")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`${data.item.outputs[0].address}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column auto-width resizable header="${translate("walletpage.wchange16")}" path="txHash"></vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange37")}"
+                    .renderer=${(root, column, data) => {
+                        const amount = (Number(data.item.totalAmount) / 1e8).toFixed(8)
+                        render(html`${amount}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange14")}"
+                    .renderer=${(root, column, data) => {
+                        const time = new Date(data.item.timestamp * 1000)
+                        render(html` <time-ago datetime=${time.toISOString()}> </time-ago> `, root)
+                    }}
+                >
+                </vaadin-grid-column>
+            </vaadin-grid>
+            <div id="pages"></div>
+	`
+    }
+
+    renderDgbTransactions(transactions, coin) {
+        return html`
+            <div style="padding-left:12px;" ?hidden="${!this.isEmptyArray(transactions)}"><span style="color: var(--black);">${translate("walletpage.wchange38")}</span></div>
+            <vaadin-grid theme="large" id="${coin}TransactionsGrid" ?hidden="${this.isEmptyArray(this.wallets.get(this._selectedWallet).transactions)}" page-size="25" all-rows-visible>
+                <vaadin-grid-column
+                    auto-width
+                    header="${translate("walletpage.wchange41")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`<mwc-icon style="color: #00C851">check</mwc-icon>`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange35")}"
+                    .renderer=${(root, column, data) => {
+                        render(html` ${translate("walletpage.wchange40")} ${data.item.inputs[0].address === this.wallets.get(this._selectedWallet).wallet.address ? html`<span class="color-out">${translate("walletpage.wchange7")}</span>` : html`<span class="color-in">${translate("walletpage.wchange8")}</span>`} `, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange9")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`${data.item.inputs[0].address}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange10")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`${data.item.outputs[0].address}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column auto-width resizable header="${translate("walletpage.wchange16")}" path="txHash"></vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange37")}"
+                    .renderer=${(root, column, data) => {
+                        const amount = (Number(data.item.totalAmount) / 1e8).toFixed(8)
+                        render(html`${amount}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange14")}"
+                    .renderer=${(root, column, data) => {
+                        const time = new Date(data.item.timestamp * 1000)
+                        render(html` <time-ago datetime=${time.toISOString()}> </time-ago> `, root)
+                    }}
+                >
+                </vaadin-grid-column>
+            </vaadin-grid>
+            <div id="pages"></div>
+	`
+    }
+
+    renderDashTransactions(transactions, coin) {
+        return html`
+            <div style="padding-left:12px;" ?hidden="${!this.isEmptyArray(transactions)}"><span style="color: var(--black);">${translate("walletpage.wchange38")}</span></div>
+            <vaadin-grid theme="large" id="${coin}TransactionsGrid" ?hidden="${this.isEmptyArray(this.wallets.get(this._selectedWallet).transactions)}" page-size="25" all-rows-visible>
+                <vaadin-grid-column
+                    auto-width
+                    header="${translate("walletpage.wchange41")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`<mwc-icon style="color: #00C851">check</mwc-icon>`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange35")}"
+                    .renderer=${(root, column, data) => {
+                        render(html` ${translate("walletpage.wchange40")} ${data.item.inputs[0].address === this.wallets.get(this._selectedWallet).wallet.address ? html`<span class="color-out">${translate("walletpage.wchange7")}</span>` : html`<span class="color-in">${translate("walletpage.wchange8")}</span>`} `, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange9")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`${data.item.inputs[0].address}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange10")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`${data.item.outputs[0].address}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column auto-width resizable header="${translate("walletpage.wchange16")}" path="txHash"></vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange37")}"
+                    .renderer=${(root, column, data) => {
+                        const amount = (Number(data.item.totalAmount) / 1e8).toFixed(8)
+                        render(html`${amount}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange14")}"
+                    .renderer=${(root, column, data) => {
+                        const time = new Date(data.item.timestamp * 1000)
+                        render(html` <time-ago datetime=${time.toISOString()}> </time-ago> `, root)
+                    }}
+                >
+                </vaadin-grid-column>
+            </vaadin-grid>
+            <div id="pages"></div>
+	`
+    }
+
+    renderFiroTransactions(transactions, coin) {
+        return html`
+            <div style="padding-left:12px;" ?hidden="${!this.isEmptyArray(transactions)}"><span style="color: var(--black);">${translate("walletpage.wchange38")}</span></div>
+            <vaadin-grid theme="large" id="${coin}TransactionsGrid" ?hidden="${this.isEmptyArray(this.wallets.get(this._selectedWallet).transactions)}" page-size="25" all-rows-visible>
+                <vaadin-grid-column
+                    auto-width
+                    header="${translate("walletpage.wchange41")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`<mwc-icon style="color: #00C851">check</mwc-icon>`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange35")}"
+                    .renderer=${(root, column, data) => {
+                        render(html` ${translate("walletpage.wchange40")} ${data.item.inputs[0].address === this.wallets.get(this._selectedWallet).wallet.address ? html`<span class="color-out">${translate("walletpage.wchange7")}</span>` : html`<span class="color-in">${translate("walletpage.wchange8")}</span>`} `, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange9")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`${data.item.inputs[0].address}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange10")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`${data.item.outputs[0].address}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column auto-width resizable header="${translate("walletpage.wchange16")}" path="txHash"></vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange37")}"
+                    .renderer=${(root, column, data) => {
+                        const amount = (Number(data.item.totalAmount) / 1e8).toFixed(8)
+                        render(html`${amount}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange14")}"
+                    .renderer=${(root, column, data) => {
+                        const time = new Date(data.item.timestamp * 1000)
+                        render(html` <time-ago datetime=${time.toISOString()}> </time-ago> `, root)
+                    }}
+                >
+                </vaadin-grid-column>
+            </vaadin-grid>
+            <div id="pages"></div>
+	`
+    }
+
+    renderRvnTransactions(transactions, coin) {
         return html`
             <div style="padding-left:12px;" ?hidden="${!this.isEmptyArray(transactions)}"><span style="color: var(--black);">${translate("walletpage.wchange38")}</span></div>
             <vaadin-grid theme="large" id="${coin}TransactionsGrid" ?hidden="${this.isEmptyArray(this.wallets.get(this._selectedWallet).transactions)}" page-size="25" all-rows-visible>
