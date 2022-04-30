@@ -25,6 +25,7 @@ const sendDgb = api.sendDgb
 const sendDash = api.sendDash
 const sendFiro = api.sendFiro
 const sendRvn = api.sendRvn
+const sendQrl = api.sendQrl
 
 export const routes = {
 	hello: async (req) => {
@@ -395,6 +396,19 @@ export const routes = {
 		let response
 		try {
 			const res = await sendRvn(req.data)
+			response = res
+		} catch (e) {
+			console.error(e)
+			console.error(e.message)
+			response = e.message
+		}
+		return response
+	},
+
+	sendQrl: async (req) => {
+		let response
+		try {
+			const res = await sendQrl(req.data)
 			response = res
 		} catch (e) {
 			console.error(e)

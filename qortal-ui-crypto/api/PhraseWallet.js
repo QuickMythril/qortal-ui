@@ -213,6 +213,21 @@ export default class PhraseWallet {
             }
         }).createWallet(new Uint8Array(rvnSeed), false, 'RVN');
 
+        // Create Quantum Resistant Ledger HD Wallet 
+        const qrlSeed = [...addrSeed];
+        const qrlWallet = new AltcoinHDWallet({
+            mainnet: {
+                private: 0x0488ADE4, // fixme
+                public: 0x0488B21E, // fixme
+                prefix: 0 // fixme
+            },
+            testnet: {
+                private: 0x04358394, // fixme
+                public: 0x043587CF, // fixme
+                prefix: 0x6F // fixme
+            }
+        }).createWallet(new Uint8Array(qrlSeed), false, 'QRL');
+
         this._addresses[nonce] = {
             address,
             btcWallet,
@@ -223,6 +238,7 @@ export default class PhraseWallet {
             dashWallet,
             firoWallet,
             rvnWallet,
+            qrlWallet,
             qoraAddress,
             keyPair: {
                 publicKey: addrKeyPair.publicKey,

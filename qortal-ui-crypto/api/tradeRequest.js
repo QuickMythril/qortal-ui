@@ -171,3 +171,17 @@ export const sendRvn = (requestObject) => {
         body: JSON.stringify(requestObject)
     })
 }
+
+// Send QRL 
+export const sendQrl = (requestObject) => {
+    const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node];
+
+    return request(`/crosschain/qrl/send?apiKey=${myNode.apiKey}`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestObject)
+    })
+}
