@@ -106,7 +106,7 @@ export default class PhraseWallet {
                 public: 0x043587CF,
                 prefix: 0x6F
             }
-        }).createWallet(new Uint8Array(btcSeed), false);
+        }).createWallet(new Uint8Array(btcSeed), false, null, 'bc');
 
         // Create Namecoin HD Wallet 
         const nmcSeed = [...addrSeed];
@@ -136,7 +136,7 @@ export default class PhraseWallet {
                 public: 0x043587CF,
                 prefix: 0x6F
             }
-        }).createWallet(new Uint8Array(ltcSeed), false, 'LTC');
+        }).createWallet(new Uint8Array(ltcSeed), false, 'LTC', 'ltc');
 
         // Create Peercoin HD Wallet 
         const ppcSeed = [...addrSeed];
@@ -151,7 +151,7 @@ export default class PhraseWallet {
                 public: 0x043587CF,
                 prefix: 0x6F
             }
-        }).createWallet(new Uint8Array(ppcSeed), false, 'PPC');
+        }).createWallet(new Uint8Array(ppcSeed), false, 'PPC', 'pc');
 
         // Create Dogecoin HD Wallet 
         const dogeSeed = [...addrSeed];
@@ -181,7 +181,7 @@ export default class PhraseWallet {
                 public: 0x043587CF,
                 prefix: 0x7E
             }
-        }).createWallet(new Uint8Array(dgbSeed), false, 'DGB');
+        }).createWallet(new Uint8Array(dgbSeed), false, 'DGB', 'dgb');
 
         // Create Dash HD Wallet 
         const dashSeed = [...addrSeed];

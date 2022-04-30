@@ -5,6 +5,7 @@ import jsSHA from "jssha";
 import RIPEMD160 from '../deps/ripemd160.js'
 import utils from '../deps/utils.js'
 import { EllipticCurve, BigInteger } from './ecbn.js';
+import segwit_addr from '../deps/segwit_addr.js';
 
 
 export default class AltcoinHDWallet {
@@ -189,10 +190,10 @@ export default class AltcoinHDWallet {
         this.xPublicGrandChildKey = ''
 
         /**
-         * Litecoin Legacy Address - Derived from the Grand Child Public Key Hash
+         * Litecoin Address - Derived from the Grand Child Public Key Hash
          */
 
-        this.litecoinLegacyAddress = ''
+        this.litecoinAddress = ''
 
         /**
          * TESTNET Litecoin Legacy Address (Derived from the Grand Child Public Key Hash) - THIS IS TESTNET
@@ -212,7 +213,7 @@ export default class AltcoinHDWallet {
         this.seed = seed
     }
 
-    createWallet(seed, isBIP44, indicator = null) {
+    createWallet(seed, isBIP44, indicator = null, hrp = null) {
 
         // Set Seeed
         this.setSeed(seed)
@@ -242,7 +243,7 @@ export default class AltcoinHDWallet {
         this.generateTestnetMasterPublicKey()
 
         // Generate Child and Grand Child Keys
-        this.generateDerivedChildKeys()
+        this.generateDerivedChildKeys(hrp)
 
         // Return Wallet Object Specification
         return this.returnWallet()
@@ -484,7 +485,7 @@ export default class AltcoinHDWallet {
         this._tmasterPublicKey = Base58.encode(s)
     }
 
-    generateDerivedChildKeys() {
+    generateDerivedChildKeys(hrp = null) {
 
         // SPEC INFO: https://en.bitcoin.it/wiki/BIP_0032#Child_key_derivation_.28CKD.29_functions
         // NOTE: will not be using some of derivations func as the value is known. (So I'd rather shove in the values and rewrite out the derivations later ?)
@@ -684,21 +685,29 @@ export default class AltcoinHDWallet {
             deriveExtendedPublicGrandChildKey(2, 0)
 
             /**
-             * Derive Litecoin Legacy Address
+             * Derive Litecoin Address
              */
 
-                // Append Address Prefix
-            const k = [this.versionBytes.mainnet.prefix].concat(...this.grandChildPublicKeyHash)
+			if(hrp !== null) {
+                // Derive Segwit address using segwit_addr.js
+				this.litecoinAddress = segwit_addr.encode(hrp, 0, this.grandChildPublicKeyHash)
+            }
+            else
+				// Derive Legacy address
+            {
+				// Append Address Prefix
+				const k = [this.versionBytes.mainnet.prefix].concat(...this.grandChildPublicKeyHash)
 
-            // Derive Checksum
-            const _addressCheckSum = new Sha256().process(new Sha256().process(new Uint8Array(k)).finish().result).finish().result
-            const addressCheckSum = _addressCheckSum.slice(0, 4)
+				// Derive Checksum
+				const _addressCheckSum = new Sha256().process(new Sha256().process(new Uint8Array(k)).finish().result).finish().result
+				const addressCheckSum = _addressCheckSum.slice(0, 4)
 
-            // Append CheckSum
-            const _litecoinLegacyAddress = k.concat(...addressCheckSum)
+				// Append CheckSum
+				const _litecoinAddress = k.concat(...addressCheckSum)
 
-            // Convert to Base58
-            this.litecoinLegacyAddress = Base58.encode(_litecoinLegacyAddress)
+				// Convert to Base58
+				this.litecoinAddress = Base58.encode(_litecoinAddress)
+            }
 
 
             /**
@@ -863,7 +872,7 @@ export default class AltcoinHDWallet {
             // derivedPublicChildKey: this.xPublicChildKey,
             // derivedPrivateGrandChildKey: this.xPrivateGrandChildKey,
             // derivedPublicGrandChildKey: this.xPublicGrandChildKey,
-            address: this.litecoinLegacyAddress,
+            address: this.litecoinAddress,
             _taddress: this._tlitecoinLegacyAddress
         }
 
