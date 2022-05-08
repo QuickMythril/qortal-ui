@@ -2,6 +2,8 @@ import { LitElement, html, css } from 'lit'
 import { render } from 'lit/html.js'
 import { Epml } from '../../../epml.js'
 
+import './NameMenu.js'
+
 import '@material/mwc-button'
 import '@material/mwc-dialog'
 import '@material/mwc-icon'
@@ -34,6 +36,8 @@ class ChatScroller extends LitElement {
         * {
             scrollbar-width: thin;
             scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+            --mdc-theme-primary: rgb(3, 169, 244);
+            --mdc-theme-secondary: var(--mdc-theme-primary);
         }
 
         *::-webkit-scrollbar-track {
@@ -46,6 +50,11 @@ class ChatScroller extends LitElement {
             border: 3px solid var(--scrollbarBG);
         }
 
+        a {
+            color: var(--black);
+            text-decoration: none;
+        }
+
         ul {
             list-style: none;
             margin: 0;
@@ -54,7 +63,7 @@ class ChatScroller extends LitElement {
 
         .chat-list {
             overflow-y: auto;
-            height: 91vh;
+            height: 92vh;
             box-sizing: border-box;
         }
 
@@ -64,23 +73,14 @@ class ChatScroller extends LitElement {
 
         .message-data-name {
             color: var(--black);
+            cursor: pointer;
         }
 
         .message-data-time {
             color: #a8aab1;
             font-size: 13px;
             padding-left: 6px;
-        }
-
-        .message-data-block {
-            color: #03a9f4;
-            font-size: 16px;
-            padding-left: 6px;
-        }
-
-        .blockicon {
-            color: #03a9f4;
-            --mdc-icon-size: 16px;
+            padding-bottom: 4px;
         }
 
         .message {
@@ -202,6 +202,7 @@ class ChatScroller extends LitElement {
 
     chatMessageTemplate(messageObj) {
         let avatarImg = '';
+        let nameMenu = '';
         if (messageObj.senderName) {
             const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node];
             const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port;
@@ -209,11 +210,18 @@ class ChatScroller extends LitElement {
             avatarImg = `<img src="${avatarUrl}" style="max-width:100%; max-height:100%;" onerror="this.onerror=null; this.src='/img/incognito.png';" />`;
         }
 
+        if (messageObj.sender === this.myAddress) {
+            nameMenu = `${messageObj.senderName ? messageObj.senderName : messageObj.sender}`
+        } else {
+            nameMenu = `<name-menu toblockaddress="${messageObj.sender}" nametodialog="${messageObj.senderName ? messageObj.senderName : messageObj.sender}"></name-menu>`
+        }
+
         return `
             <li class="clearfix">
                 <div class="message-data ${messageObj.sender === this.myAddress ? "align-right" : ""}">
-                    <span class="message-data-name">${messageObj.senderName ? messageObj.senderName : messageObj.sender}</span>
+                    <span class="message-data-name">${nameMenu}</span>
                     <span class="message-data-time"><message-time timestamp=${messageObj.timestamp}></message-time></span>
+                    </div>
                 </div>
                 <div class="message-data-avatar" style="width:42px; height:42px; ${messageObj.sender === this.myAddress ? "float:right;" : "float:left;"} margin:3px;">${avatarImg}</div>
                 <div id="messageContent" class="message ${messageObj.sender === this.myAddress ? "my-message float-right" : "other-message float-left"}">${this.emojiPicker.parse(this.escapeHTML(messageObj.decodedMessage))}</div>

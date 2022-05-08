@@ -10,6 +10,7 @@ registerTranslateConfig({
 import { escape, unescape } from 'html-escaper';
 import { inputKeyCodes } from '../../utils/keyCodes.js'
 import './ChatScroller.js'
+import './NameMenu.js'
 import './TimeAgo.js'
 import { EmojiPicker } from 'emoji-picker-js';
 import '@polymer/paper-spinner/paper-spinner-lite.js'
@@ -257,9 +258,6 @@ class ChatPage extends LitElement {
         parentEpml.imReady();
     }
 
-    updated(changedProps) {
-    }
-
     changeLanguage() {
         const checkLanguage = localStorage.getItem('qortalLanguage')
 
@@ -357,6 +355,7 @@ class ChatPage extends LitElement {
     */
     chatMessageTemplate(messageObj) {
         let avatarImg = '';
+        let nameMenu = '';
         if (messageObj.senderName) {
             const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node];
             const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port;
@@ -364,10 +363,16 @@ class ChatPage extends LitElement {
             avatarImg = `<img src="${avatarUrl}" style="max-width:100%; max-height:100%;" onerror="this.onerror=null; this.src='/img/incognito.png';" />`;
         }
 
+        if (messageObj.sender === this.myAddress) {
+            nameMenu = `${messageObj.senderName ? messageObj.senderName : messageObj.sender}`
+        } else {
+            nameMenu = `<name-menu toblockaddress="${messageObj.sender}" nametodialog="${messageObj.senderName ? messageObj.senderName : messageObj.sender}"></name-menu>`
+        }
+
         return `
             <li class="clearfix">
                 <div class="message-data ${messageObj.sender === this.selectedAddress.address ? "align-right" : ""}">
-                    <span class="message-data-name">${messageObj.senderName ? messageObj.senderName : messageObj.sender}</span>
+                    <span class="message-data-name">${nameMenu}</span>
                     <span class="message-data-time"><message-time timestamp=${messageObj.timestamp}></message-time></span>
                 </div>
                 <div class="message-data-avatar" style="width:42px; height:42px; ${messageObj.sender === this.selectedAddress.address ? "float:right;" : "float:left;"} margin:3px;">${avatarImg}</div>
@@ -653,7 +658,7 @@ class ChatPage extends LitElement {
             const hashAry = new Uint8Array(window.parent.memory.buffer, hashPtr, 32);
             hashAry.set(chatBytesHash);
 
-            const difficulty = this.balance === 0 ? 14 : 8;
+            const difficulty = this.balance === 0 ? 12 : 8;
             const workBufferLength = 8 * 1024 * 1024;
             const workBufferPtr = window.parent.sbrk(workBufferLength, window.parent.heap);
             let nonce = window.parent.computePow(hashPtr, workBufferPtr, workBufferLength, difficulty);
@@ -689,7 +694,6 @@ class ChatPage extends LitElement {
      * @param { Boolean } isDown 
      */
     setIsUserDown(isDown) {
-
         this.isUserDown = isDown;
     }
 
@@ -781,40 +785,40 @@ class ChatPage extends LitElement {
                 editor.styles = document.createElement('style');
                 editor.styles.setAttribute('type', 'text/css');
                 editor.styles.innerText = `
-                                        html {
-                                            cursor: text;
-                                        }
-                                        body {
-                                                font-size: 1rem;
-                                                line-height: 1.38rem;
-                                                font-weight: 400;
-                                                font-family: "Open Sans", helvetica, sans-serif;
-                                                padding-right: 3px;
-                                                text-align: left;
-                                                white-space: break-spaces;
-                                                word-break: break-word;
-                                                outline: none;
-                                            }
-                                        body[contentEditable=true]:empty:before {
-                                                content: attr(data-placeholder);
-                                                display: block;
-                                                color: rgb(103, 107, 113);
-                                                text-overflow: ellipsis;
-                                                overflow: hidden;
-                                                user-select: none;
-                                                white-space: nowrap;
-                                            }
-                                        body[contentEditable=false]{
-                                                background: rgba(0,0,0,0.1);
-                                            }
-                                        img.emoji {
-                                                width: 1.7em;
-                                                height: 1.5em;
-                                                margin-bottom: -2px;
-                                                vertical-align: bottom;
-                                            }
-                `;
-                editor.content.head.appendChild(editor.styles);
+                    html {
+                        cursor: text;
+                    }
+                    body {
+                        font-size: 1rem;
+                        line-height: 1.38rem;
+                        font-weight: 400;
+                        font-family: "Open Sans", helvetica, sans-serif;
+                        padding-right: 3px;
+                        text-align: left;
+                        white-space: break-spaces;
+                        word-break: break-word;
+                        outline: none;
+                    }
+                    body[contentEditable=true]:empty:before {
+                        content: attr(data-placeholder);
+                        display: block;
+                        color: rgb(103, 107, 113);
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        user-select: none;
+                        white-space: nowrap;
+                   }
+                   body[contentEditable=false]{
+                        background: rgba(0,0,0,0.1);
+                   }
+                   img.emoji {
+                        width: 1.7em;
+                        height: 1.5em;
+                       margin-bottom: -2px;
+                       vertical-align: bottom;
+                   }
+               `;
+               editor.content.head.appendChild(editor.styles);
             };
 
             ChatEditor.prototype.enable = function () {
