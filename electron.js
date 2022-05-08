@@ -1,5 +1,4 @@
 const { app, BrowserWindow, ipcMain, Menu, Notification, Tray, nativeImage, dialog } = require('electron');
-const { autoUpdater } = require('electron-updater');
 const server = require('./server.js');
 const log = require('electron-log');
 const path = require('path');
@@ -8,7 +7,6 @@ const path = require('path');
 
 process.env['APP_PATH'] = app.getAppPath();
 
-autoUpdater.logger = log;
 log.info('App starting...');
 
 const editMenu = Menu.buildFromTemplate([
@@ -106,10 +104,6 @@ if (!isLock) {
 		if (process.platform === 'win32') {
 			app.setAppUserModelId("org.qortal.QortalUI");
 		}
-		autoUpdater.checkForUpdatesAndNotify();
-		setInterval(() => {
-			autoUpdater.checkForUpdatesAndNotify();
-		}, 1000 * 60 * 15)
 	})
 	app.on('window-all-closed', function () {
 		if (process.platform !== 'darwin') {
@@ -126,33 +120,4 @@ if (!isLock) {
 		log.info(app.getVersion());
 		mainWindow.webContents.send('app_version', { version: app.getVersion() });
 	});
-	autoUpdater.on('update-available', () => {
-		const n = new Notification({
-			title: 'Update Available!',
-			body: 'It will be downloaded ⌛️ in the background!'
-		})
-        	n.show();
-	})
-	autoUpdater.on('update-downloaded', (event) => {
-		const dialogOpts = {
-			type: 'info',
-			buttons: ['Restart now', 'Install after close Qortal UI'],
-			title: 'Update available',
-			detail: 'A new Qortal UI version has been downloaded. Click RESTART NOW to apply update, or INSTALL AFTER CLOSE QORTAL UI to install after you quit the UI.'
-		}
-		dialog.showMessageBox(dialogOpts).then((returnValue) => {
-			if (returnValue.response === 0) {
-				autoUpdater.quitAndInstall()
-			} else {
-				return
-			}
-		})
-	})
-	autoUpdater.on('error', (err) => {
-		const n = new Notification({
-			title: 'Error while Updating...',
-			body: err
-		})
-		n.show();
-	})
 }
