@@ -19,8 +19,6 @@ class WebBrowser extends LitElement {
             name: { type: String },
             service: { type: String },
             identifier: { type: String },
-            followedNames: { type: Array },
-            blockedNames: { type: Array },
             theme: { type: String, reflect: true }
         }
     }
@@ -105,29 +103,7 @@ class WebBrowser extends LitElement {
         this.service = urlParams.get('service');
         // FUTURE: add support for identifiers
         this.identifier = null;
-        this.followedNames = []
-        this.blockedNames = []
         this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
-
-        const getFollowedNames = async () => {
-
-            let followedNames = await parentEpml.request('apiCall', {
-                url: `/lists/followedNames?apiKey=${this.getApiKey()}`
-            })
-
-            this.followedNames = followedNames
-            setTimeout(getFollowedNames, this.config.user.nodeSettings.pingInterval)
-        }
-
-        const getBlockedNames = async () => {
-
-            let blockedNames = await parentEpml.request('apiCall', {
-                url: `/lists/blockedNames?apiKey=${this.getApiKey()}`
-            })
-
-            this.blockedNames = blockedNames
-            setTimeout(getBlockedNames, this.config.user.nodeSettings.pingInterval)
-        }
 
         const render = () => {
             const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
@@ -163,8 +139,6 @@ class WebBrowser extends LitElement {
                 this.config = JSON.parse(c)
                 if (!configLoaded) {
                     authorizeAndRender()
-                    setTimeout(getFollowedNames, 1)
-                    setTimeout(getBlockedNames, 1)
                     configLoaded = true
                 }
             })
@@ -188,9 +162,6 @@ class WebBrowser extends LitElement {
 						<mwc-button @click=${() => this.refresh()} title="${translate("browserpage.bchange2")}" class="address-bar-button"><mwc-icon>refresh</mwc-icon></mwc-button>
 						<mwc-button @click=${() => this.goBackToList()} title="${translate("browserpage.bchange3")}" class="address-bar-button"><mwc-icon>home</mwc-icon></mwc-button>
 						<input disabled style="width: 550px; color: var(--black);" id="address" type="text" value="qortal://${this.service.toLowerCase()}/${this.name}"></input>
-						<mwc-button @click=${() => this.delete()} title="${translate("browserpage.bchange4")} ${this.service} ${this.name} ${translate("browserpage.bchange5")}" class="address-bar-button float-right"><mwc-icon>delete</mwc-icon></mwc-button>
-						${this.renderBlockUnblockButton()}
-						${this.renderFollowUnfollowButton()}
 					</div>
 					<div class="iframe-container">
 						<iframe id="browser-iframe" src="${this.url}" sandbox="allow-scripts allow-forms allow-downloads">
@@ -258,38 +229,6 @@ class WebBrowser extends LitElement {
         }
     }
 
-    renderFollowUnfollowButton() {
-        // Only show the follow/unfollow button if we have permission to modify the list on this node
-        if (this.followedNames == null || !Array.isArray(this.followedNames)) {
-            return html``
-        }
-
-        if (this.followedNames.indexOf(this.name) === -1) {
-            // render follow button
-            return html`<mwc-button @click=${() => this.follow()} title="${translate("browserpage.bchange7")} ${this.name}" class="address-bar-button float-right"><mwc-icon>add_to_queue</mwc-icon></mwc-button>`
-        }
-        else {
-            // render unfollow button
-            return html`<mwc-button @click=${() => this.unfollow()} title="${translate("browserpage.bchange8")} ${this.name}" class="address-bar-button float-right"><mwc-icon>remove_from_queue</mwc-icon></mwc-button>`
-        }
-    }
-
-    renderBlockUnblockButton() {
-        // Only show the block/unblock button if we have permission to modify the list on this node
-        if (this.blockedNames == null || !Array.isArray(this.blockedNames)) {
-            return html``
-        }
-
-        if (this.blockedNames.indexOf(this.name) === -1) {
-            // render block button
-            return html`<mwc-button @click=${() => this.block()} title="${translate("browserpage.bchange9")} ${this.name}" class="address-bar-button float-right"><mwc-icon>block</mwc-icon></mwc-button>`
-        }
-        else {
-            // render unblock button
-            return html`<mwc-button @click=${() => this.unblock()} title="${translate("browserpage.bchange10")} ${this.name}" class="address-bar-button float-right"><mwc-icon>radio_button_unchecked</mwc-icon></mwc-button>`
-        }
-    }
-
 
     // Navigation
 
@@ -307,167 +246,6 @@ class WebBrowser extends LitElement {
 
     goBackToList() {
         window.location = "../index.html";
-    }
-
-    follow() {
-        this.followName(this.name);
-    }
-
-    unfollow() {
-        this.unfollowName(this.name);
-    }
-
-    block() {
-        this.blockName(this.name);
-    }
-
-    unblock() {
-        this.unblockName(this.name);
-    }
-
-    delete() {
-        this.deleteCurrentResource();
-    }
-
-
-    async followName(name) {
-        let items = [
-            name
-        ]
-        let namesJsonString = JSON.stringify({ "items": items })
-
-        let ret = await parentEpml.request('apiCall', {
-            url: `/lists/followedNames?apiKey=${this.getApiKey()}`,
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: `${namesJsonString}`
-        })
-
-        if (ret === true) {
-            // Successfully followed - add to local list
-            // Remove it first by filtering the list - doing it this way ensures the UI updates
-            // immediately, as apposed to only adding if it doesn't already exist
-            this.followedNames = this.followedNames.filter(item => item != name);
-            this.followedNames.push(name)
-        }
-        else {
-            let err1string = get("browserpage.bchange11")
-            parentEpml.request('showSnackBar', `${err1string}`)
-        }
-
-        return ret
-    }
-
-    async unfollowName(name) {
-        let items = [
-            name
-        ]
-        let namesJsonString = JSON.stringify({ "items": items })
-
-        let ret = await parentEpml.request('apiCall', {
-            url: `/lists/followedNames?apiKey=${this.getApiKey()}`,
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: `${namesJsonString}`
-        })
-
-        if (ret === true) {
-            // Successfully unfollowed - remove from local list
-            this.followedNames = this.followedNames.filter(item => item != name);
-        }
-        else {
-            let err2string = get("browserpage.bchange12")
-            parentEpml.request('showSnackBar', `${err2string}`)
-        }
-
-        return ret
-    }
-
-    async blockName(name) {
-        let items = [
-            name
-        ]
-        let namesJsonString = JSON.stringify({ "items": items })
-
-        let ret = await parentEpml.request('apiCall', {
-            url: `/lists/blockedNames?apiKey=${this.getApiKey()}`,
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: `${namesJsonString}`
-        })
-
-        if (ret === true) {
-            // Successfully blocked - add to local list
-            // Remove it first by filtering the list - doing it this way ensures the UI updates
-            // immediately, as apposed to only adding if it doesn't already exist
-            this.blockedNames = this.blockedNames.filter(item => item != name);
-            this.blockedNames.push(name)
-        }
-        else {
-            let err3string = get("browserpage.bchange13")
-            parentEpml.request('showSnackBar', `${err3string}`)
-        }
-
-        return ret
-    }
-
-    async unblockName(name) {
-        let items = [
-            name
-        ]
-        let namesJsonString = JSON.stringify({ "items": items })
-
-        let ret = await parentEpml.request('apiCall', {
-            url: `/lists/blockedNames?apiKey=${this.getApiKey()}`,
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: `${namesJsonString}`
-        })
-
-        if (ret === true) {
-            // Successfully unblocked - remove from local list
-            this.blockedNames = this.blockedNames.filter(item => item != name);
-        }
-        else {
-            let err4string = get("browserpage.bchange14")
-            parentEpml.request('showSnackBar', `${err4string}`)
-        }
-
-        return ret
-    }
-
-    async deleteCurrentResource() {
-        if (this.followedNames.indexOf(this.name) != -1) {
-            // Following name - so deleting won't work
-            let err5string = get("browserpage.bchange15")
-            parentEpml.request('showSnackBar', `${err5string}`)
-            return;
-        }
-
-        let identifier = this.identifier == null ? "default" : resource.identifier;
-
-        let ret = await parentEpml.request('apiCall', {
-            url: `/arbitrary/resource/${this.service}/${this.name}/${identifier}?apiKey=${this.getApiKey()}`,
-            method: 'DELETE'
-        })
-
-        if (ret === true) {
-            this.goBackToList();
-        }
-        else {
-            let err6string = get("browserpage.bchange16")
-            parentEpml.request('showSnackBar', `${err6string}`)
-        }
-
-        return ret
     }
 
     _textMenu(event) {

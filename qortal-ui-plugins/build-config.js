@@ -66,16 +66,8 @@ const generateForPlugins = () => {
             out: "plugins/core/main.js",
         },
         {
-            in: "plugins/core/trade-portal/trade-portal.src.js",
-            out: "plugins/core/trade-portal/trade-portal.js",
-        },
-        {
             in: "plugins/core/wallet/wallet-app.src.js",
             out: "plugins/core/wallet/wallet-app.js",
-        },
-        {
-            in: "plugins/core/reward-share/reward-share.src.js",
-            out: "plugins/core/reward-share/reward-share.js",
         },
         {
             in: "plugins/core/node-management/node-management.src.js",
@@ -102,10 +94,6 @@ const generateForPlugins = () => {
             out: "plugins/core/qdn/browser/browser.js",
         },
         {
-            in: "plugins/core/qdn/data-management/data-management.src.js",
-            out: "plugins/core/qdn/data-management/data-management.js",
-        },
-        {
             in: "plugins/core/messaging/messaging.src.js",
             out: "plugins/core/messaging/messaging.js",
         },
@@ -116,10 +104,6 @@ const generateForPlugins = () => {
         {
             in: "plugins/core/messaging/q-chat/q-chat.src.js",
             out: "plugins/core/messaging/q-chat/q-chat.js",
-        },
-        {
-            in: "plugins/core/minting/minting-info.src.js",
-            out: "plugins/core/minting/minting-info.js",
         },
         {
             in: "plugins/core/puzzles/puzzles.src.js",

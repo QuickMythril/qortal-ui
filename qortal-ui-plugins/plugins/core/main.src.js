@@ -9,38 +9,11 @@ parentEpml.ready().then(() => {
     // pluginUrlsConf
     let pluginUrlsConf = [
         {
-            url: 'minting',
-            domain: 'core',
-            page: 'minting/index.html',
-            title: 'Minting Details',
-            icon: 'vaadin:info-circle',
-            menus: [],
-            parent: false
-        },
-        {
             url: 'wallet',
             domain: 'core',
             page: 'wallet/index.html',
             title: 'Wallet',
             icon: 'vaadin:wallet',
-            menus: [],
-            parent: false
-        },
-        {
-            url: 'trade-portal',
-            domain: 'core',
-            page: 'trade-portal/index.html',
-            title: 'Trade Portal',
-            icon: 'vaadin:bullets',
-            menus: [],
-            parent: false
-        },
-        {
-            url: 'reward-share',
-            domain: 'core',
-            page: 'reward-share/index.html',
-            title: 'Reward Share',
-            icon: 'vaadin:share-square',
             menus: [],
             parent: false
         },
@@ -59,15 +32,6 @@ parentEpml.ready().then(() => {
             page: 'qdn/index.html',
             title: 'Websites',
             icon: 'vaadin:desktop',
-            menus: [],
-            parent: false
-        },
-        {
-            url: 'data-management',
-            domain: 'core',
-            page: 'qdn/data-management/index.html',
-            title: 'Data Management',
-            icon: 'vaadin:database',
             menus: [],
             parent: false
         },
