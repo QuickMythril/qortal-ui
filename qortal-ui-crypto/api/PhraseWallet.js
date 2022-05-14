@@ -213,6 +213,21 @@ export default class PhraseWallet {
             }
         }).createWallet(new Uint8Array(firoSeed), false, 'FIRO');
 
+        // Create Raptoreum HD Wallet 
+        const rtmSeed = [...addrSeed];
+        const rtmWallet = new AltcoinHDWallet({
+            mainnet: {
+                private: 0x0488ADE4,
+                public: 0x0488B21E,
+                prefix: 0x3C
+            },
+            testnet: {
+                private: 0x04358394,
+                public: 0x043587CF,
+                prefix: 0x7B
+            }
+        }).createWallet(new Uint8Array(rtmSeed), false, 'RTM');
+
         this._addresses[nonce] = {
             address,
             btcWallet,
@@ -223,6 +238,7 @@ export default class PhraseWallet {
             nmcWallet,
             dashWallet,
             firoWallet,
+            rtmWallet,
             qoraAddress,
             keyPair: {
                 publicKey: addrKeyPair.publicKey,

@@ -26,7 +26,7 @@ import '@github/time-elements'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
-const coinsNames = ['qort', 'btc', 'ltc', 'doge', 'dgb', 'rvn', 'nmc', 'dash', 'firo']
+const coinsNames = ['qort', 'btc', 'ltc', 'doge', 'dgb', 'rvn', 'nmc', 'dash', 'firo', 'rtm']
 
 class MultiWallet extends LitElement {
     static get properties() {
@@ -57,6 +57,8 @@ class MultiWallet extends LitElement {
             dashAmount: { type: Number },
             firoRecipient: { type: String },
             firoAmount: { type: Number },
+            rtmRecipient: { type: String },
+            rtmAmount: { type: Number },
             errorMessage: { type: String },
             successMessage: { type: String },
             sendMoneyLoading: { type: Boolean },
@@ -71,6 +73,7 @@ class MultiWallet extends LitElement {
             nmcFeePerByte: { type: Number },
             dashFeePerByte: { type: Number },
             firoFeePerByte: { type: Number },
+            rtmFeePerByte: { type: Number },
             balanceString: { type: String }
         }
     }
@@ -457,6 +460,10 @@ class MultiWallet extends LitElement {
                 background-image: url('/img/firo.png');
             }
 
+			.rtm .currency-image {
+                background-image: url('/img/rtm.png');
+            }
+
             .card-list {
                 margin-top: 20px;
             }
@@ -624,6 +631,7 @@ class MultiWallet extends LitElement {
 		this.nmcRecipient = ''
 		this.dashRecipient = ''
 		this.firoRecipient = ''
+        this.rtmRecipient = ''
         this.errorMessage = ''
         this.successMessage = ''
         this.sendMoneyLoading = false
@@ -639,6 +647,7 @@ class MultiWallet extends LitElement {
 		this.nmcAmount = 0
 		this.dashAmount = 0
 		this.firoAmount = 0
+        this.rtmAmount = 0
         this.btcFeePerByte = 100
         this.btcSatMinFee = 20
         this.btcSatMaxFee = 150
@@ -663,6 +672,9 @@ class MultiWallet extends LitElement {
         this.firoFeePerByte = 1
         this.firoSatMinFee = 1
         this.firoSatMaxFee = 10
+        this.rtmFeePerByte = 1
+        this.rtmSatMinFee = 1
+        this.rtmSatMaxFee = 10
 
         this.wallets = new Map()
 
@@ -687,6 +699,7 @@ class MultiWallet extends LitElement {
 		this.wallets.get('nmc').wallet = window.parent.reduxStore.getState().app.selectedAddress.nmcWallet
 		this.wallets.get('dash').wallet = window.parent.reduxStore.getState().app.selectedAddress.dashWallet
 		this.wallets.get('firo').wallet = window.parent.reduxStore.getState().app.selectedAddress.firoWallet
+		this.wallets.get('rtm').wallet = window.parent.reduxStore.getState().app.selectedAddress.rtmWallet
 
         this._selectedWallet = 'qort'
 
@@ -704,6 +717,7 @@ class MultiWallet extends LitElement {
                 this.wallets.get('nmc').wallet = window.parent.reduxStore.getState().app.selectedAddress.nmcWallet
                 this.wallets.get('dash').wallet = window.parent.reduxStore.getState().app.selectedAddress.dashWallet
                 this.wallets.get('firo').wallet = window.parent.reduxStore.getState().app.selectedAddress.firoWallet
+                this.wallets.get('rtm').wallet = window.parent.reduxStore.getState().app.selectedAddress.rtmWallet
             })
 
             parentEpml.subscribe('copy_menu_switch', async (value) => {
@@ -756,6 +770,10 @@ class MultiWallet extends LitElement {
                         <div coin="firo" class="currency-box firo">
                             <div class="currency-image"></div>
                             <div class="currency-text">Firo</div>
+                        </div>
+                        <div coin="rtm" class="currency-box rtm">
+                            <div class="currency-image"></div>
+                            <div class="currency-text">Raptoreum</div>
                         </div>
                     </div>
                 </div>
@@ -1214,6 +1232,56 @@ class MultiWallet extends LitElement {
                         <br />
                         <div>
                             <span>${(this.selectedTransaction.totalAmount / 1e8).toFixed(8)} FIRO</span>
+                        </div>
+                        <span class="title"> ${translate("walletpage.wchange14")} </span>
+                        <br />
+                        <div><span>${new Date(this.selectedTransaction.timestamp).toString()}</span></div>
+                        <span class="title"> ${translate("walletpage.wchange16")} </span>
+                        <br />
+                        <div>
+                            <span>${this.selectedTransaction.txHash}</span>
+                        </div>
+                    </div>
+                    <mwc-button
+                        slot="primaryAction"
+                        dialogAction="cancel"
+                        class="red"
+                    >
+                    ${translate("general.close")}
+                    </mwc-button>
+                </mwc-dialog>
+
+				<mwc-dialog id="showRtmTransactionDetailsDialog" scrimClickAction="${this.showRtmTransactionDetailsLoading ? '' : 'close'}">
+                    <div style="text-align: center;">
+                        <h1>${translate("walletpage.wchange5")}</h1>
+                        <hr />
+                    </div>
+                    <div id="transactionList">
+                        <span class="title"> ${translate("walletpage.wchange6")} </span>
+                        <br />
+                        <div>
+                            <span>${translate("walletpage.wchange40")}</span>
+                            ${this.selectedTransaction.rtmTxnFlow === 'OUT' ? html`<span class="color-out">${translate("walletpage.wchange7")}</span>` : html`<span class="color-in">${translate("walletpage.wchange8")}</span>`}
+                        </div>
+                        <span class="title"> ${translate("walletpage.wchange9")} </span>
+                        <br />
+                        <div>
+                            <span>${this.selectedTransaction.rtmSender}</span>
+                        </div>
+                         <span class="title"> ${translate("walletpage.wchange10")} </span>
+                        <br />
+                        <div>
+                            <span>${this.selectedTransaction.rtmReceiver}</span>
+                        </div>
+                        <span class="title"> ${translate("walletpage.wchange12")} </span>
+                        <br />
+                        <div>
+                            <span>${(this.selectedTransaction.feeAmount / 1e8).toFixed(8)} RTM</span>
+                        </div>
+                        <span class="title"> ${translate("walletpage.wchange37")} </span>
+                        <br />
+                        <div>
+                            <span>${(this.selectedTransaction.totalAmount / 1e8).toFixed(8)} RTM</span>
                         </div>
                         <span class="title"> ${translate("walletpage.wchange14")} </span>
                         <br />
@@ -1899,6 +1967,82 @@ class MultiWallet extends LitElement {
                     ${translate("general.close")}
                     </mwc-button>
                 </mwc-dialog>
+
+                <mwc-dialog id="sendRtmDialog">
+                    <div class="send-coin-dialog">
+                        <div style="text-align: center;">
+                            <img src="/img/rtm.png" width="32" height="32">
+                            <h2>${translate("walletpage.wchange17")} RTM</h2>
+                            <hr />
+                        </div>
+                        <p>
+                            <span>${translate("walletpage.wchange18")}:</span><br />
+                            <span style="font-weight: bold;">${this.getSelectedWalletAddress()}</span>
+                        </p>
+                        <p>
+                            <span>${translate("walletpage.wchange19")}:</span><br />
+                            <span style="font-weight: bold;">${this.balanceString}</span>
+                        </p>
+                        <p>
+                            <mwc-textfield
+                                style="width: 100%;"
+                                required
+                                @input="${(e) => { this._checkAmount(e) }}"
+                                id="rtmAmountInput"
+                                label="${translate("walletpage.wchange11")} (RTM)"
+                                type="number"
+                                auto-validate="false"
+                                value="${this.rtmAmount}"
+                            >
+                            </mwc-textfield>
+                        </p>
+                        <p>
+                            <mwc-textfield
+                                style="width: 100%;"
+                                required
+                                id="rtmRecipient"
+                                label="${translate("walletpage.wchange23")}"
+                                type="text"
+                                value="${this.rtmRecipient}"
+                            >
+                            </mwc-textfield>
+                        </p>
+                        <div style="margin-bottom: 0;">
+                            <p style="margin-bottom: 0;">
+                                ${translate("walletpage.wchange24")}: <span style="font-weight: bold;">${(this.rtmFeePerByte / 1e8).toFixed(8)} RTM</span><br>${translate("walletpage.wchange25")}
+                            </p>
+                            <paper-slider
+                                class="blue"
+                                style="width: 100%;"
+                                pin
+                                @change="${(e) => (this.rtmFeePerByte = e.target.value)}"
+                                id="rtmFeeSlider"
+                                min="${this.rtmSatMinFee}"
+                                max="${this.rtmSatMaxFee}"
+                                value="${this.rtmFeePerByte}"
+                            >
+                            </paper-slider>
+                        </div>
+                        ${this.renderClearSuccess()}
+                        ${this.renderClearError()}
+                        ${this.sendMoneyLoading ? html` <paper-progress indeterminate style="width: 100%; margin: 4px;"></paper-progress> ` : ''}
+                        <div class="buttons">
+                            <div>
+                                <vaadin-button ?disabled="${this.btnDisable}" theme="primary medium" style="width: 100%;" @click=${() => this.sendRtm()}>
+                                    <vaadin-icon icon="vaadin:arrow-forward" slot="prefix"></vaadin-icon>
+                                    ${translate("walletpage.wchange17")} RTM
+                                </vaadin-button>
+                            </div>
+                        </div>
+                    </div>
+                    <mwc-button
+                        slot="primaryAction"
+                        @click="${() => this.closeRtmDialog()}"
+                        class="red"
+                    >
+                    ${translate("general.close")}
+                    </mwc-button>
+                </mwc-dialog>
             </div>
         `
     }
@@ -2362,6 +2506,52 @@ class MultiWallet extends LitElement {
             }
             checkSelectedTextAndShowMenu()
         })
+
+		this.shadowRoot.getElementById('rtmAmountInput').addEventListener('contextmenu', (event) => {
+            const getSelectedText = () => {
+                var text = ''
+                if (typeof window.getSelection != 'undefined') {
+                    text = window.getSelection().toString()
+                } else if (typeof this.shadowRoot.selection != 'undefined' && this.shadowRoot.selection.type == 'Text') {
+                    text = this.shadowRoot.selection.createRange().text
+                }
+                return text
+            }
+            const checkSelectedTextAndShowMenu = () => {
+                let selectedText = getSelectedText()
+                if (selectedText && typeof selectedText === 'string') {
+                } else {
+                    this.pasteMenu(event, 'rtmAmountInput')
+                    this.isPasteMenuOpen = true
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+            }
+            checkSelectedTextAndShowMenu()
+        })
+
+        this.shadowRoot.getElementById('rtmRecipient').addEventListener('contextmenu', (event) => {
+            const getSelectedText = () => {
+                var text = ''
+                if (typeof window.getSelection != 'undefined') {
+                    text = window.getSelection().toString()
+                } else if (typeof this.shadowRoot.selection != 'undefined' && this.shadowRoot.selection.type == 'Text') {
+                    text = this.shadowRoot.selection.createRange().text
+                }
+                return text
+            }
+            const checkSelectedTextAndShowMenu = () => {
+                let selectedText = getSelectedText()
+                if (selectedText && typeof selectedText === 'string') {
+                } else {
+                    this.pasteMenu(event, 'rtmRecipient')
+                    this.isPasteMenuOpen = true
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+            }
+            checkSelectedTextAndShowMenu()
+        })
     }
 
     renderClearSuccess() {
@@ -2448,6 +2638,12 @@ class MultiWallet extends LitElement {
 
     closeFiroDialog() {
         this.shadowRoot.querySelector('#sendFiroDialog').close()
+        this.successMessage = ''
+        this.errorMessage = ''
+    }
+
+    closeRtmDialog() {
+        this.shadowRoot.querySelector('#sendRtmDialog').close()
         this.successMessage = ''
         this.errorMessage = ''
     }
@@ -3057,6 +3253,52 @@ class MultiWallet extends LitElement {
         this.showWallet()
     }
 
+	async sendRtm() {
+        const rtmAmount = this.shadowRoot.getElementById('rtmAmountInput').value
+        let rtmRecipient = this.shadowRoot.getElementById('rtmRecipient').value
+        const xprv58 = this.wallets.get(this._selectedWallet).wallet.derivedMasterPrivateKey
+
+        this.sendMoneyLoading = true
+        this.btnDisable = true
+
+        const makeRequest = async () => {
+            const opts = {
+                xprv58: xprv58,
+                receivingAddress: rtmRecipient,
+                raptoreumAmount: rtmAmount,
+                feePerByte: (this.rtmFeePerByte / 1e8).toFixed(8),
+            }
+            const response = await parentEpml.request('sendRtm', opts)
+            return response
+        }
+
+        const manageResponse = (response) => {
+            if (response.length === 64) {
+                this.shadowRoot.getElementById('rtmAmountInput').value = 0
+                this.shadowRoot.getElementById('rtmRecipient').value = ''
+                this.errorMessage = ''
+                this.rtmRecipient = ''
+                this.rtmAmount = 0
+                this.successMessage = this.renderSuccessText()
+                this.sendMoneyLoading = false
+                this.btnDisable = false
+            } else if (response === false) {
+                this.errorMessage = this.renderFailText()
+                this.sendMoneyLoading = false
+                this.btnDisable = false
+                throw new Error(txnResponse)
+            } else {
+                this.errorMessage = response.message
+                this.sendMoneyLoading = false
+                this.btnDisable = false
+                throw new Error(response)
+            }
+        }
+        const res = await makeRequest()
+        manageResponse(res)
+        this.showWallet()
+    }
+
     async showWallet() {
         this.transactionsDOM.hidden = true
         this.loading = true
@@ -3112,6 +3354,7 @@ class MultiWallet extends LitElement {
 			case 'nmc':
 			case 'dash':
 			case 'firo':
+			case 'rtm':
                 const walletName = `${coin}Wallet`
                 parentEpml.request('apiCall', {
                     url: `/crosschain/${coin}/walletbalance?apiKey=${this.getApiKey()}`,
@@ -3172,6 +3415,8 @@ class MultiWallet extends LitElement {
             return html`<vaadin-button theme="primary large" style="width: 75%;" @click=${() => this.openSendDash()}><vaadin-icon icon="vaadin:coin-piles" slot="prefix"></vaadin-icon> ${translate("walletpage.wchange17")} DASH</vaadin-button>`
         } else if ( this._selectedWallet === "firo" ) {
             return html`<vaadin-button theme="primary large" style="width: 75%;" @click=${() => this.openSendFiro()}><vaadin-icon icon="vaadin:coin-piles" slot="prefix"></vaadin-icon> ${translate("walletpage.wchange17")} FIRO</vaadin-button>`
+        } else if ( this._selectedWallet === "rtm" ) {
+            return html`<vaadin-button theme="primary large" style="width: 75%;" @click=${() => this.openSendRtm()}><vaadin-icon icon="vaadin:coin-piles" slot="prefix"></vaadin-icon> ${translate("walletpage.wchange17")} RTM</vaadin-button>`
         } else {
             return html``
         }
@@ -3211,6 +3456,10 @@ class MultiWallet extends LitElement {
 
 	openSendFiro() {
         this.shadowRoot.querySelector("#sendFiroDialog").show();
+    }
+
+	openSendRtm() {
+        this.shadowRoot.querySelector("#sendRtmDialog").show();
     }
 
     changeTheme() {
@@ -3323,6 +3572,15 @@ class MultiWallet extends LitElement {
                 },
                 { passive: true }
             )
+        } else if (coin === 'rtm') {
+            this.transactionsGrid.addEventListener(
+                'click',
+                (e) => {
+                    let rtmItem = this.transactionsGrid.getEventContext(e).item
+                    this.showRtmTransactionDetails(rtmItem, this.wallets.get(this._selectedWallet).transactions)
+                },
+                { passive: true }
+            )
         }
 
         this.pagesControl = this.shadowRoot.querySelector('#pages')
@@ -3348,6 +3606,8 @@ class MultiWallet extends LitElement {
             render(this.renderDashTransactions(this.wallets.get(this._selectedWallet).transactions, this._selectedWallet), this.transactionsDOM)
 		} else if (this._selectedWallet === 'firo') {
             render(this.renderFiroTransactions(this.wallets.get(this._selectedWallet).transactions, this._selectedWallet), this.transactionsDOM)
+		} else if (this._selectedWallet === 'rtm') {
+            render(this.renderRtmTransactions(this.wallets.get(this._selectedWallet).transactions, this._selectedWallet), this.transactionsDOM)
         }
     }
 
@@ -3928,6 +4188,71 @@ class MultiWallet extends LitElement {
 	`
     }
 
+	renderRtmTransactions(transactions, coin) {
+        return html`
+            <div style="padding-left:12px;" ?hidden="${!this.isEmptyArray(transactions)}"><span style="color: var(--black);">${translate("walletpage.wchange38")}</span></div>
+            <vaadin-grid theme="large" id="${coin}TransactionsGrid" ?hidden="${this.isEmptyArray(this.wallets.get(this._selectedWallet).transactions)}" page-size="25" all-rows-visible>
+                <vaadin-grid-column
+                    auto-width
+                    header="${translate("walletpage.wchange41")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`<mwc-icon style="color: #00C851">check</mwc-icon>`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange35")}"
+                    .renderer=${(root, column, data) => {
+                        render(html` ${translate("walletpage.wchange40")} ${data.item.inputs[0].address === this.wallets.get(this._selectedWallet).wallet.address ? html`<span class="color-out">${translate("walletpage.wchange7")}</span>` : html`<span class="color-in">${translate("walletpage.wchange8")}</span>`} `, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange9")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`${data.item.inputs[0].address}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange10")}"
+                    .renderer=${(root, column, data) => {
+                        render(html`${data.item.outputs[0].address}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column auto-width resizable header="${translate("walletpage.wchange16")}" path="txHash"></vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange37")}"
+                    .renderer=${(root, column, data) => {
+                        const amount = (Number(data.item.totalAmount) / 1e8).toFixed(8)
+                        render(html`${amount}`, root)
+                    }}
+                >
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                    auto-width
+                    resizable
+                    header="${translate("walletpage.wchange14")}"
+                    .renderer=${(root, column, data) => {
+                        const time = new Date(data.item.timestamp * 1000)
+                        render(html` <time-ago datetime=${time.toISOString()}> </time-ago> `, root)
+                    }}
+                >
+                </vaadin-grid-column>
+            </vaadin-grid>
+            <div id="pages"></div>
+	`
+    }
+
     async updateItemsFromPage(page, changeWallet = false) {
         if (page === undefined) {
             return
@@ -4165,6 +4490,20 @@ class MultiWallet extends LitElement {
                 this.selectedTransaction = { ...transaction, firoTxnFlow, firoSender, firoReceiver }
                 if (this.selectedTransaction.txHash.length != 0) {
                     this.shadowRoot.querySelector('#showFiroTransactionDetailsDialog').show()
+                }
+            }
+        })
+    }
+
+	showRtmTransactionDetails(myTransaction, allTransactions) {
+        allTransactions.forEach((transaction) => {
+            if (myTransaction.txHash === transaction.txHash) {
+                let rtmTxnFlow = myTransaction.inputs[0].address === this.wallets.get(this._selectedWallet).wallet.address ? 'OUT' : 'IN'
+                let rtmSender = myTransaction.inputs[0].address
+                let rtmReceiver = myTransaction.outputs[0].address
+                this.selectedTransaction = { ...transaction, rtmTxnFlow, rtmSender, rtmReceiver }
+                if (this.selectedTransaction.txHash.length != 0) {
+                    this.shadowRoot.querySelector('#showRtmTransactionDetailsDialog').show()
                 }
             }
         })
