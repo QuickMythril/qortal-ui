@@ -31,7 +31,6 @@
     "publish": "electron-builder -p always"
   },
   "dependencies": {
-    "electron-updater": "4.6.5",
     "electron-log": "4.4.6"
   },
   "devDependencies": {
