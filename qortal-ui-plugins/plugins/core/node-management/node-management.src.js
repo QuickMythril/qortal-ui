@@ -21,19 +21,7 @@ class NodeManagement extends LitElement {
         return {
             loading: { type: Boolean },
             upTime: { type: String },
-            mintingAccounts: { type: Array },
             peers: { type: Array },
-            addMintingAccountLoading: { type: Boolean },
-            removeMintingAccountLoading: { type: Boolean },
-            addPeerLoading: { type: Boolean },
-            confPeerLoading: { type: Boolean },
-            addMintingAccountKey: { type: String },
-            removeMintingAccountKey: { type: String },
-            addPeerMessage: { type: String },
-            confPeerMessage: { type: String },
-            addMintingAccountMessage: { type: String },
-            removeMintingAccountMessage: { type: String },
-            tempMintingAccount: { type: Object },
             nodeConfig: { type: Object },
             nodeDomain: { type: String },
             theme: { type: String, reflect: true }
@@ -126,17 +114,7 @@ class NodeManagement extends LitElement {
     constructor() {
         super();
         this.upTime = "";
-        this.mintingAccounts = [];
         this.peers = [];
-        this.addPeerLoading = false;
-        this.confPeerLoading = false;
-        this.addMintingAccountLoading = false;
-        this.removeMintingAccountLoading = false;
-        this.addMintingAccountKey = "";
-        this.addPeerMessage = "";
-        this.confPeerMessage = "";
-        this.addMintingAccountMessage = "";
-        this.tempMintingAccount = {};
         this.config = {
             user: {
                 node: {},
@@ -152,122 +130,21 @@ class NodeManagement extends LitElement {
 		<div id="node-management-page">
 			<div class="node-card">
 				<h2>${translate("nodepage.nchange1")} ${this.nodeDomain}</h2>
-				<mwc-button style="float:right;" class="red" ?hidden="${(this.upTime === "offline")}" @click=${() => this.stopNode()}><mwc-icon>dangerous</mwc-icon>&nbsp;${translate("nodepage.nchange31")}</mwc-button>
 				<span class="sblack"><br />${translate("nodepage.nchange2")} ${this.upTime}</span>
 				<br /><br />
-				<div id="minting">
-					<div style="min-height:48px; display: flex; padding-bottom: 6px;">
-						<h3 style="margin: 0; flex: 1; padding-top: 8px; display: inline;">${translate("nodepage.nchange3")}</h3>
-						<mwc-button
-							style="float:right;"
-							@click=${() => this.shadowRoot.querySelector("#addMintingAccountDialog").show()}
-						>
-						<mwc-icon>add</mwc-icon>
-						${translate("nodepage.nchange4")}
-						</mwc-button>
-					</div>
-
-					<!-- Add Minting Account Dialog -->
-					<mwc-dialog id="addMintingAccountDialog" scrimClickAction="${this.addMintingAccountLoading ? "" : "close"}">
-						<div>${translate("nodepage.nchange5")}</div>
-						<br />
-						<mwc-textfield
-							?disabled="${this.addMintingAccountLoading}"
-							label="${translate("nodepage.nchange6")}"
-							id="addMintingAccountKey"
-						>
-						</mwc-textfield>
-						<div style="text-align:right; height:36px;" ?hidden=${this.addMintingAccountMessage === ""}>
-							<span ?hidden="${this.addMintingAccountLoading}">
-								${this.addMintingAccountMessage} &nbsp;
-							</span>
-							<span ?hidden="${!this.addMintingAccountLoading}">
-								<!-- loading message -->
-								${translate("nodepage.nchange7")} &nbsp;
-								<paper-spinner-lite
-									style="margin-top:12px;"
-									?active="${this.addMintingAccountLoading}"
-									alt="Adding minting account"
-								>
-								</paper-spinner-lite>
-							</span>
-						</div>
-						<mwc-button
-							?disabled="${this.addMintingAccountLoading}"
-							slot="primaryAction"
-							@click=${this.addMintingAccount}
-						>
-						${translate("nodepage.nchange8")}
-						</mwc-button>
-						<mwc-button
-							?disabled="${this.addMintingAccountLoading}"
-							slot="secondaryAction"
-							dialogAction="cancel"
-							class="red"
-						>
-						${translate("general.close")}
-						</mwc-button>
-					</mwc-dialog>
-
-					<vaadin-grid theme="large" id="mintingAccountsGrid" ?hidden="${this.isEmptyArray(this.mintingAccounts)}" .items="${this.mintingAccounts}" aria-label="Minting Accounts" all-rows-visible>
-						<vaadin-grid-column auto-width header="${translate("nodepage.nchange9")}" path="mintingAccount"></vaadin-grid-column>
-						<vaadin-grid-column auto-width header="${translate("nodepage.nchange10")}" path="recipientAccount"></vaadin-grid-column>
-						<vaadin-grid-column  width="12em" header="${translate("nodepage.nchange11")}" .renderer=${(root, column, data) => {
-							render(html`<mwc-button class="red" ?disabled=${this.removeMintingAccountLoading} @click=${() => this.removeMintingAccount(data.item.publicKey)}><mwc-icon>create</mwc-icon>&nbsp;${translate("nodepage.nchange12")}</mwc-button>`, root)
-						}}></vaadin-grid-column>
-					</vaadin-grid>
-					${this.isEmptyArray(this.mintingAccounts) ? html`<span style="color: var(--black);">${translate("nodepage.nchange13")}</span>` : ""}
-				</div>
-				<br />
 				<div id="peers">
 					<div style="min-height: 48px; display: flex; padding-bottom: 6px;">
 						<h3 style="margin: 0; flex: 1; padding-top: 8px; display: inline;">
 							<span>${translate("nodepage.nchange14")}</span>
 							<span>(${this.peers.length})</span>
 						</h3>
-						<mwc-button @click=${() => this.shadowRoot.querySelector("#addPeerDialog").show()}><mwc-icon>add</mwc-icon>&nbsp;${translate("nodepage.nchange15")}</mwc-button>
 					</div>
-
-					<mwc-dialog id="addPeerDialog" scrimClickAction="${this.addPeerLoading ? "" : "close"}">
-						<div>${translate("nodepage.nchange16")}</div>
-						<br />
-						<mwc-textfield ?disabled="${this.addPeerLoading}" label="${translate("nodepage.nchange17")}" id="addPeerAddress" ></mwc-textfield>
-						<div style="text-align:right; height:36px;" ?hidden=${this.addPeerMessage === ""}>
-							<span ?hidden="${this.addPeerLoading}"> ${this.addPeerMessage} &nbsp;</span>
-							<span ?hidden="${!this.addPeerLoading}">
-								<paper-spinner-lite
-									style="margin-top:12px;"
-									?active="${this.addPeerLoading}"
-									alt="Adding minting account"
-								>
-								</paper-spinner-lite>
-							</span>
-						</div>
-						<mwc-button
-							?disabled="${this.addPeerLoading}"
-							@click="${this.addPeer}"
-							slot="primaryAction"
-						>
-						${translate("nodepage.nchange8")}
-						</mwc-button>
-						<mwc-button
-							slot="secondaryAction"
-							dialogAction="cancel"
-							?disabled="${this.addPeerLoading}"
-							class="red"
-						>
-						${translate("general.close")}
-						</mwc-button>
-					</mwc-dialog>
 
 					<vaadin-grid theme="large" id="peersGrid" ?hidden="${this.isEmptyArray(this.peers)}" .items="${this.peers}" aria-label="Peers" all-rows-visible>
 						<vaadin-grid-column header="${translate("nodepage.nchange18")}" path="address"></vaadin-grid-column>
 						<vaadin-grid-column header="${translate("nodepage.nchange19")}" path="lastHeight"></vaadin-grid-column>
 						<vaadin-grid-column header="${translate("nodepage.nchange20")}" path="version"></vaadin-grid-column>
 						<vaadin-grid-column header="${translate("nodepage.nchange21")}" path="age"></vaadin-grid-column>
-						<vaadin-grid-column  width="12em" header="${translate("nodepage.nchange22")}" .renderer=${(root, column, data) => {
-							render(html`<mwc-button class="red" @click=${() => this.removePeer(data.item.address, data.index)}><mwc-icon>delete</mwc-icon>&nbsp;${translate("nodepage.nchange12")}</mwc-button><mwc-button class="green" @click=${() => this.forceSyncPeer(data.item.address, data.index)}>&nbsp;${translate("nodepage.nchange23")}</mwc-button>`, root)
-						}}></vaadin-grid-column>
 					</vaadin-grid>
 					${this.isEmptyArray(this.peers) ? html`<span style="color: var(--black);">${translate("nodepage.nchange24")}</span>` : ""}
 				</div>
@@ -281,9 +158,6 @@ class NodeManagement extends LitElement {
 
         this.changeTheme()
         this.changeLanguage()
-
-        // Call updateMintingAccounts
-        this.updateMintingAccounts()
 
         window.addEventListener("contextmenu", (event) => {
             event.preventDefault();
@@ -375,7 +249,6 @@ class NodeManagement extends LitElement {
                 if (!configLoaded) {
                     setTimeout(getNodeUpTime, 1);
                     setTimeout(updatePeers, 1);
-                    setTimeout(this.updateMintingAccounts, 1);
                     setTimeout(getNodeConfig, 1);
                     configLoaded = true;
                 }
@@ -409,108 +282,8 @@ class NodeManagement extends LitElement {
         }
     }
 
-    renderErr1Text() {
-        return html`${translate("nodepage.nchange27")}`
-    }
-
-    renderErr2Text() {
-        return html`${translate("nodepage.nchange28")}`
-    }
-
-    forceSyncPeer(peerAddress, rowIndex) {
-        parentEpml
-            .request("apiCall", {
-                url: `/admin/forcesync?apiKey=${this.getApiKey()}`,
-                method: "POST",
-                body: peerAddress,
-            })
-            .then((res) => {
-                let err3string = get("nodepage.nchange25")
-                parentEpml.request('showSnackBar', `${err3string}` + peerAddress);
-            });
-    }
-
-    removePeer(peerAddress, rowIndex) {
-        parentEpml
-            .request("apiCall", {
-                url: `/peers?apiKey=${this.getApiKey()}`,
-                method: "DELETE",
-                body: peerAddress,
-            })
-            .then((res) => {
-                let err4string = get("nodepage.nchange26")
-                parentEpml.request('showSnackBar', `${err4string}` + peerAddress);
-                this.peers.splice(rowIndex, 1);
-            });
-    }
-
-    stopNode() {
-        parentEpml
-            .request("apiCall", {
-                url: `/admin/stop?apiKey=${this.getApiKey()}`,
-                method: "GET"
-            })
-            .then((res) => {
-				let err7string = get("nodepage.nchange32")
-                parentEpml.request('showSnackBar', `${err7string}`);
-            });
-    }
-
     onPageNavigation(pageUrl) {
         parentEpml.request("setPageUrl", pageUrl);
-    }
-
-    addPeer(e) {
-        this.addPeerLoading = true;
-        const addPeerAddress = this.shadowRoot.querySelector("#addPeerAddress")
-            .value;
-
-        parentEpml
-            .request("apiCall", {
-                url: `/peers?apiKey=${this.getApiKey()}`,
-                method: "POST",
-                body: addPeerAddress,
-            })
-            .then((res) => {
-                this.addPeerMessage = res.message;
-                this.addPeerLoading = false;
-            });
-    }
-
-    addMintingAccount(e) {
-        this.addMintingAccountLoading = true;
-        this.addMintingAccountMessage = "Loading...";
-
-        this.addMintingAccountKey = this.shadowRoot.querySelector(
-            "#addMintingAccountKey"
-        ).value;
-
-        parentEpml
-            .request("apiCall", {
-                url: `/admin/mintingaccounts?apiKey=${this.getApiKey()}`,
-                method: "POST",
-                body: this.addMintingAccountKey,
-            })
-            .then((res) => {
-                if (res === true) {
-                    this.updateMintingAccounts();
-                    this.addMintingAccountKey = "";
-                    this.addMintingAccountMessage = this.renderErr1Text();
-                    this.addMintingAccountLoading = false;
-                } else {
-                    this.addMintingAccountKey = "";
-                    this.addMintingAccountMessage = this.renderErr2Text(); // Corrected an error here thanks to crow (-_-)
-                    this.addMintingAccountLoading = false;
-                }
-            });
-    }
-
-    updateMintingAccounts() {
-        parentEpml.request("apiCall", {
-            url: `/admin/mintingaccounts`,
-        }).then((res) => {
-            setTimeout(() => this.mintingAccounts = res, 1);
-        });
     }
 
     _textMenu(event) {
@@ -538,27 +311,6 @@ class NodeManagement extends LitElement {
         }
 
         checkSelectedTextAndShowMenu()
-    }
-
-    removeMintingAccount(publicKey) {
-        this.removeMintingAccountLoading = true;
-
-        parentEpml.request("apiCall", {
-            url: `/admin/mintingaccounts?apiKey=${this.getApiKey()}`,
-            method: "DELETE",
-            body: publicKey,
-        }).then((res) => {
-            if (res === true) {
-                this.updateMintingAccounts();
-                this.removeMintingAccountLoading = false;
-                let err5string = get("nodepage.nchange29")
-                parentEpml.request('showSnackBar', `${err5string}`);
-            } else {
-                this.removeMintingAccountLoading = false;
-                let err6string = get("nodepage.nchange30")
-                parentEpml.request('showSnackBar', `${err6string}`);
-            }
-        });
     }
 
     getApiKey() {

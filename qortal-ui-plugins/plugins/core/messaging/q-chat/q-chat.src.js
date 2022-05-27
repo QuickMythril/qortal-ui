@@ -32,9 +32,7 @@ class Chat extends LitElement {
             btnDisable: { type: Boolean },
             isLoading: { type: Boolean },
             balance: { type: Number },
-            theme: { type: String, reflect: true },
-            blockedUsers: { type: Array },
-            blockedUserList: { type: Array }
+            theme: { type: String, reflect: true }
         }
     }
 
@@ -86,16 +84,6 @@ class Chat extends LitElement {
                 float: left;
                 height: 100vh;
                 overflow-y: hidden;
-                border-right: 3px #ddd solid;
-            }
-
-            .people-list .blockedusers {
-                position: absolute;
-                bottom: 0;
-                width: 20vw;
-                height: 60px;
-                background: var(--white);
-                border-top: 1px solid var(--border);
                 border-right: 3px #ddd solid;
             }
 
@@ -322,8 +310,6 @@ class Chat extends LitElement {
         this.showNewMesssageBar = this.showNewMesssageBar.bind(this)
         this.hideNewMesssageBar = this.hideNewMesssageBar.bind(this)
         this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
-        this.blockedUsers = []
-        this.blockedUserList = []
     }
 
     render() {
@@ -336,11 +322,6 @@ class Chat extends LitElement {
                     <ul class="list">
                         ${this.isEmptyArray(this.chatHeads) ? this.renderLoadingText() : this.renderChatHead(this.chatHeads)}
                     </ul>
-                    <div class="blockedusers">
-                        <div class="center">
-                            <mwc-button raised label="${translate("chatpage.cchange3")}" icon="person_off" @click=${() => this.shadowRoot.querySelector('#blockedUserDialog').show()}></mwc-button>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="chat">
@@ -383,33 +364,6 @@ class Chat extends LitElement {
                     ${translate("general.close")}
                    </mwc-button>
                 </mwc-dialog>
-
-                <!-- Blocked User Dialog -->
-                <mwc-dialog id="blockedUserDialog">
-                    <div style="text-align:center">
-                        <h1>${translate("chatpage.cchange10")}</h1>
-                        <hr>
-                        <br>
-                    </div>
-                    <vaadin-grid theme="compact" id="blockedGrid" ?hidden="${this.isEmptyArray(this.blockedUserList)}" aria-label="Blocked List" .items="${this.blockedUserList}" all-rows-visible>
-                        <vaadin-grid-column auto-width header="${translate("chatpage.cchange11")}" path="name"></vaadin-grid-column>
-                        <vaadin-grid-column auto-width header="${translate("chatpage.cchange12")}" path="owner"></vaadin-grid-column>
-                        <vaadin-grid-column width="10rem" flex-grow="0" header="${translate("chatpage.cchange13")}" .renderer=${(root, column, data) => {
-                            render(html`${this.renderUnblockButton(data.item)}`, root);
-                        }}>
-                        </vaadin-grid-column>
-                    </vaadin-grid>
-                    ${this.isEmptyArray(this.blockedUserList) ? html`
-                        <span style="color: var(--black); text-align: center;">${translate("chatpage.cchange14")}</span>
-                    `: ''}
-                    <mwc-button
-                        slot="primaryAction"
-                        dialogAction="cancel"
-                        class="red"
-                    >
-                    ${translate("general.close")}
-                   </mwc-button>
-                </mwc-dialog>
             </div>
   
         `
@@ -419,20 +373,6 @@ class Chat extends LitElement {
 
         this.changeLanguage()
         this.changeTheme()
-        this.getChatBlockedList()
-
-        setInterval(() => {
-            this.blockedUserList = JSON.parse(localStorage.getItem("ChatBlockedAddresses") || "[]")
-        }, 1000)
-
-        const getBlockedUsers = async () => {
-            let blockedUsers = await parentEpml.request('apiCall', {
-                url: `/lists/blockedAddresses?apiKey=${this.getApiKey()}`
-            })
-
-            this.blockedUsers = blockedUsers
-            setTimeout(getBlockedUsers, 60000)
-        }
 
         const stopKeyEventPropagation = (e) => {
             e.stopPropagation();
@@ -516,7 +456,6 @@ class Chat extends LitElement {
             })
             parentEpml.subscribe('config', c => {
                 if (!configLoaded) {
-                    setTimeout(getBlockedUsers, 1)
                     configLoaded = true
                 }
                 this.config = JSON.parse(c)
@@ -547,82 +486,6 @@ class Chat extends LitElement {
 
     renderSendText() {
         return html`${translate("chatpage.cchange9")}`
-    }
-
-    getChatBlockedList() {
-        const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
-        const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-        const blockedAddressesUrl = `${nodeUrl}/lists/blockedAddresses?apiKey=${this.getApiKey()}`
-        const err1string = 'No regitered name'
-
-        localStorage.removeItem("ChatBlockedAddresses")
-
-        var obj = [];
-
-        fetch(blockedAddressesUrl).then(response => {
-            return response.json()
-        }).then(data => {
-            return data.map(item => {
-                const noName = {
-                    name: err1string,
-                    owner: item
-                }
-                fetch(`${nodeUrl}/names/address/${item}?limit=0&reverse=true`).then(res => {
-                    return res.json()
-                }).then(jsonRes => {
-                    if(jsonRes.length) {
-                        jsonRes.map (item => {
-                            obj.push(item)
-                        })
-                    } else {
-                        obj.push(noName)
-                    }
-                    localStorage.setItem("ChatBlockedAddresses", JSON.stringify(obj))
-                })
-            })
-        })
-    }
-
-    async unblockUser(websiteObj) {
-        let owner = websiteObj.owner
-
-        let items = [
-            owner
-        ]
-
-        let ownersJsonString = JSON.stringify({ "items": items })
-
-        let ret = await parentEpml.request('apiCall', {
-            url: `/lists/blockedAddresses?apiKey=${this.getApiKey()}`,
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: `${ownersJsonString}`
-        })
-
-        if (ret === true) {
-            this.blockedUsers = this.blockedUsers.filter(item => item != owner)
-            this.getChatBlockedList()
-            this.blockedUserList = JSON.parse(localStorage.getItem("ChatBlockedAddresses") || "[]")
-            let err2string = get("chatpage.cchange16")
-            snackbar.add({
-                labelText: `${err2string}`,
-                dismiss: true
-            })
-        }
-        else {
-            let err3string = get("chatpage.cchange17")
-            snackbar.add({
-                labelText: `${err3string}`,
-                dismiss: true
-            })
-        }
-        return ret
-    }
-
-    renderUnblockButton(websiteObj) {
-        return html`<mwc-button dense unelevated label="${translate("chatpage.cchange18")}" icon="person_remove" @click="${() => this.unblockUser(websiteObj)}"></mwc-button>`
     }
 
     changeTheme() {
