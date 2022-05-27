@@ -452,7 +452,7 @@ class TradePortal extends LitElement {
             openTradeOrders: null,
             tradeOffersSocketCounter: 1,
             coinAmount: this.amountString,
-            tradeFee: "~0.0005"
+            tradeFee: "~0.0001"
         }
 
         let litecoin = {
