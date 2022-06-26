@@ -27,7 +27,7 @@ import '@github/time-elements'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
-const coinsNames = ['qort', 'btc', 'ltc', 'doge', 'dgb', 'rvn']
+const coinsNames = ['qort', 'btc', 'ltc', 'doge', 'dgb', 'rvn', 'nmc', 'dvc', 'ppc', 'dash', 'cloak', 'xvg', 'pivx', 'lbc', 'kmd', 'firo', 'part', 'bch', 'btg', 'vrsc', 'bsv', 'ghost', 'circ', 'rtm']
 
 class MultiWallet extends LitElement {
     static get properties() {
@@ -50,8 +50,44 @@ class MultiWallet extends LitElement {
             dogeAmount: { type: Number },
             dgbRecipient: { type: String },
             dgbAmount: { type: Number },
-		rvnRecipient: { type: String },
+            rvnRecipient: { type: String },
             rvnAmount: { type: Number },
+            nmcRecipient: { type: String },
+            nmcAmount: { type: Number },
+            dvcRecipient: { type: String },
+            dvcAmount: { type: Number },
+            ppcRecipient: { type: String },
+            ppcAmount: { type: Number },
+            dashRecipient: { type: String },
+            dashAmount: { type: Number },
+            cloakRecipient: { type: String },
+            cloakAmount: { type: Number },
+            xvgRecipient: { type: String },
+            xvgAmount: { type: Number },
+            pivxRecipient: { type: String },
+            pivxAmount: { type: Number },
+            lbcRecipient: { type: String },
+            lbcAmount: { type: Number },
+            kmdRecipient: { type: String },
+            kmdAmount: { type: Number },
+            firoRecipient: { type: String },
+            firoAmount: { type: Number },
+            partRecipient: { type: String },
+            partAmount: { type: Number },
+            bchRecipient: { type: String },
+            bchAmount: { type: Number },
+            btgRecipient: { type: String },
+            btgAmount: { type: Number },
+            vrscRecipient: { type: String },
+            vrscAmount: { type: Number },
+            bsvRecipient: { type: String },
+            bsvAmount: { type: Number },
+            ghostRecipient: { type: String },
+            ghostAmount: { type: Number },
+            circRecipient: { type: String },
+            circAmount: { type: Number },
+            rtmRecipient: { type: String },
+            rtmAmount: { type: Number },
             errorMessage: { type: String },
             successMessage: { type: String },
             sendMoneyLoading: { type: Boolean },
@@ -62,7 +98,25 @@ class MultiWallet extends LitElement {
             ltcFeePerByte: { type: Number },
             dogeFeePerByte: { type: Number },
             dgbFeePerByte: { type: Number },
-		rvnFeePerByte: { type: Number },
+            rvnFeePerByte: { type: Number },
+            nmcFeePerByte: { type: Number },
+            dvcFeePerByte: { type: Number },
+            ppcFeePerByte: { type: Number },
+            dashFeePerByte: { type: Number },
+            cloakFeePerByte: { type: Number },
+            xvgFeePerByte: { type: Number },
+            pivxFeePerByte: { type: Number },
+            lbcFeePerByte: { type: Number },
+            kmdFeePerByte: { type: Number },
+            firoFeePerByte: { type: Number },
+            partFeePerByte: { type: Number },
+            bchFeePerByte: { type: Number },
+            btgFeePerByte: { type: Number },
+            vrscFeePerByte: { type: Number },
+            bsvFeePerByte: { type: Number },
+            ghostFeePerByte: { type: Number },
+            circFeePerByte: { type: Number },
+            rtmFeePerByte: { type: Number },
             balanceString: { type: String }
         }
     }
@@ -384,8 +438,8 @@ class MultiWallet extends LitElement {
 
             .currency-image {
                 display: inline-block;
-                height: 42px;
-                width: 42px;
+                height: 21px;
+                width: 21px;
                 background-repeat: no-repeat;
                 background-size: cover;
                 border-radius: 3px;
@@ -435,6 +489,78 @@ class MultiWallet extends LitElement {
 
 			.rvn .currency-image {
                 background-image: url('/img/rvn.png');
+            }
+
+			.nmc .currency-image {
+                background-image: url('/img/nmc.png');
+            }
+
+			.dvc .currency-image {
+                background-image: url('/img/dvc.png');
+            }
+
+			.ppc .currency-image {
+                background-image: url('/img/ppc.png');
+            }
+
+			.dash .currency-image {
+                background-image: url('/img/dash.png');
+            }
+
+			.cloak .currency-image {
+                background-image: url('/img/cloak.png');
+            }
+
+			.xvg .currency-image {
+                background-image: url('/img/xvg.png');
+            }
+
+			.pivx .currency-image {
+                background-image: url('/img/pivx.png');
+            }
+
+			.lbc .currency-image {
+                background-image: url('/img/lbc.png');
+            }
+
+			.kmd .currency-image {
+                background-image: url('/img/kmd.png');
+            }
+
+			.firo .currency-image {
+                background-image: url('/img/firo.png');
+            }
+
+			.part .currency-image {
+                background-image: url('/img/part.png');
+            }
+
+			.bch .currency-image {
+                background-image: url('/img/bch.png');
+            }
+
+			.btg .currency-image {
+                background-image: url('/img/btg.png');
+            }
+
+			.vrsc .currency-image {
+                background-image: url('/img/vrsc.png');
+            }
+
+			.bsv .currency-image {
+                background-image: url('/img/bsv.png');
+            }
+
+			.ghost .currency-image {
+                background-image: url('/img/ghost.png');
+            }
+
+			.circ .currency-image {
+                background-image: url('/img/circ.png');
+            }
+
+			.rtm .currency-image {
+                background-image: url('/img/rtm.png');
             }
 
             .card-list {
@@ -606,18 +732,54 @@ class MultiWallet extends LitElement {
         this.dogeRecipient = ''
         this.dgbRecipient = ''
         this.rvnRecipient = ''
+        this.nmcRecipient = ''
+        this.dvcRecipient = ''
+        this.ppcRecipient = ''
+        this.dashRecipient = ''
+        this.cloakRecipient = ''
+        this.xvgRecipient = ''
+        this.pivxRecipient = ''
+        this.lbcRecipient = ''
+        this.kmdRecipient = ''
+        this.firoRecipient = ''
+        this.partRecipient = ''
+        this.bchRecipient = ''
+        this.btgRecipient = ''
+        this.vrscRecipient = ''
+        this.bsvRecipient = ''
+        this.ghostRecipient = ''
+        this.circRecipient = ''
+        this.rtmRecipient = ''
         this.errorMessage = ''
         this.successMessage = ''
         this.sendMoneyLoading = false
         this.isValidAmount = false
         this.btnDisable = false
-	  this.balance = 0
+        this.balance = 0
         this.amount = 0
         this.btcAmount = 0
         this.ltcAmount = 0
         this.dogeAmount = 0
         this.dgbAmount = 0
         this.rvnAmount = 0
+        this.nmcAmount = 0
+        this.dvcAmount = 0
+        this.ppcAmount = 0
+        this.dashAmount = 0
+        this.cloakAmount = 0
+        this.xvgAmount = 0
+        this.pivxAmount = 0
+        this.lbcAmount = 0
+        this.kmdAmount = 0
+        this.firoAmount = 0
+        this.partAmount = 0
+        this.bchAmount = 0
+        this.btgAmount = 0
+        this.vrscAmount = 0
+        this.bsvAmount = 0
+        this.ghostAmount = 0
+        this.circAmount = 0
+        this.rtmAmount = 0
         this.btcFeePerByte = 100
         this.btcSatMinFee = 20
         this.btcSatMaxFee = 150
@@ -633,6 +795,60 @@ class MultiWallet extends LitElement {
         this.rvnFeePerByte = 1125
         this.rvnSatMinFee = 1000
         this.rvnSatMaxFee = 10000
+        this.nmcFeePerByte = 5
+        this.nmcSatMinFee = 1
+        this.nmcSatMaxFee = 10
+        this.dvcFeePerByte = 5
+        this.dvcSatMinFee = 1
+        this.dvcSatMaxFee = 10
+        this.ppcFeePerByte = 5
+        this.ppcSatMinFee = 1
+        this.ppcSatMaxFee = 10
+        this.dashFeePerByte = 5
+        this.dashSatMinFee = 1
+        this.dashSatMaxFee = 10
+        this.cloakFeePerByte = 5
+        this.cloakSatMinFee = 1
+        this.cloakSatMaxFee = 10
+        this.xvgFeePerByte = 5
+        this.xvgSatMinFee = 1
+        this.xvgSatMaxFee = 10
+        this.pivxFeePerByte = 5
+        this.pivxSatMinFee = 1
+        this.pivxSatMaxFee = 10
+        this.lbcFeePerByte = 5
+        this.lbcSatMinFee = 1
+        this.lbcSatMaxFee = 10
+        this.kmdFeePerByte = 5
+        this.kmdSatMinFee = 1
+        this.kmdSatMaxFee = 10
+        this.firoFeePerByte = 5
+        this.firoSatMinFee = 1
+        this.firoSatMaxFee = 10
+        this.partFeePerByte = 5
+        this.partSatMinFee = 1
+        this.partSatMaxFee = 10
+        this.bchFeePerByte = 5
+        this.bchSatMinFee = 1
+        this.bchSatMaxFee = 10
+        this.btgFeePerByte = 5
+        this.btgSatMinFee = 1
+        this.btgSatMaxFee = 10
+        this.vrscFeePerByte = 5
+        this.vrscSatMinFee = 1
+        this.vrscSatMaxFee = 10
+        this.bsvFeePerByte = 5
+        this.bsvSatMinFee = 1
+        this.bsvSatMaxFee = 10
+        this.ghostFeePerByte = 5
+        this.ghostSatMinFee = 1
+        this.ghostSatMaxFee = 10
+        this.circFeePerByte = 5
+        this.circSatMinFee = 1
+        this.circSatMaxFee = 10
+        this.rtmFeePerByte = 5
+        this.rtmSatMinFee = 1
+        this.rtmSatMaxFee = 10
 
         this.wallets = new Map()
 
@@ -654,6 +870,24 @@ class MultiWallet extends LitElement {
         this.wallets.get('doge').wallet = window.parent.reduxStore.getState().app.selectedAddress.dogeWallet
         this.wallets.get('dgb').wallet = window.parent.reduxStore.getState().app.selectedAddress.dgbWallet
         this.wallets.get('rvn').wallet = window.parent.reduxStore.getState().app.selectedAddress.rvnWallet
+        this.wallets.get('nmc').wallet = window.parent.reduxStore.getState().app.selectedAddress.nmcWallet
+        this.wallets.get('dvc').wallet = window.parent.reduxStore.getState().app.selectedAddress.dvcWallet
+        this.wallets.get('ppc').wallet = window.parent.reduxStore.getState().app.selectedAddress.ppcWallet
+        this.wallets.get('dash').wallet = window.parent.reduxStore.getState().app.selectedAddress.dashWallet
+        this.wallets.get('cloak').wallet = window.parent.reduxStore.getState().app.selectedAddress.cloakWallet
+        this.wallets.get('xvg').wallet = window.parent.reduxStore.getState().app.selectedAddress.xvgWallet
+        this.wallets.get('pivx').wallet = window.parent.reduxStore.getState().app.selectedAddress.pivxWallet
+        this.wallets.get('lbc').wallet = window.parent.reduxStore.getState().app.selectedAddress.lbcWallet
+        this.wallets.get('kmd').wallet = window.parent.reduxStore.getState().app.selectedAddress.kmdWallet
+        this.wallets.get('firo').wallet = window.parent.reduxStore.getState().app.selectedAddress.firoWallet
+        this.wallets.get('part').wallet = window.parent.reduxStore.getState().app.selectedAddress.partWallet
+        this.wallets.get('bch').wallet = window.parent.reduxStore.getState().app.selectedAddress.bchWallet
+        this.wallets.get('btg').wallet = window.parent.reduxStore.getState().app.selectedAddress.btgWallet
+        this.wallets.get('vrsc').wallet = window.parent.reduxStore.getState().app.selectedAddress.vrscWallet
+        this.wallets.get('bsv').wallet = window.parent.reduxStore.getState().app.selectedAddress.bsvWallet
+        this.wallets.get('ghost').wallet = window.parent.reduxStore.getState().app.selectedAddress.ghostWallet
+        this.wallets.get('circ').wallet = window.parent.reduxStore.getState().app.selectedAddress.circWallet
+        this.wallets.get('rtm').wallet = window.parent.reduxStore.getState().app.selectedAddress.rtmWallet
 
         this._selectedWallet = 'qort'
 
@@ -668,6 +902,24 @@ class MultiWallet extends LitElement {
                 this.wallets.get('doge').wallet = window.parent.reduxStore.getState().app.selectedAddress.dogeWallet
                 this.wallets.get('dgb').wallet = window.parent.reduxStore.getState().app.selectedAddress.dgbWallet
                 this.wallets.get('rvn').wallet = window.parent.reduxStore.getState().app.selectedAddress.rvnWallet
+                this.wallets.get('nmc').wallet = window.parent.reduxStore.getState().app.selectedAddress.nmcWallet
+                this.wallets.get('dvc').wallet = window.parent.reduxStore.getState().app.selectedAddress.dvcWallet
+                this.wallets.get('ppc').wallet = window.parent.reduxStore.getState().app.selectedAddress.ppcWallet
+                this.wallets.get('dash').wallet = window.parent.reduxStore.getState().app.selectedAddress.dashWallet
+                this.wallets.get('cloak').wallet = window.parent.reduxStore.getState().app.selectedAddress.cloakWallet
+                this.wallets.get('xvg').wallet = window.parent.reduxStore.getState().app.selectedAddress.xvgWallet
+                this.wallets.get('pivx').wallet = window.parent.reduxStore.getState().app.selectedAddress.pivxWallet
+                this.wallets.get('lbc').wallet = window.parent.reduxStore.getState().app.selectedAddress.lbcWallet
+                this.wallets.get('kmd').wallet = window.parent.reduxStore.getState().app.selectedAddress.kmdWallet
+                this.wallets.get('firo').wallet = window.parent.reduxStore.getState().app.selectedAddress.firoWallet
+                this.wallets.get('part').wallet = window.parent.reduxStore.getState().app.selectedAddress.partWallet
+                this.wallets.get('bch').wallet = window.parent.reduxStore.getState().app.selectedAddress.bchWallet
+                this.wallets.get('btg').wallet = window.parent.reduxStore.getState().app.selectedAddress.btgWallet
+                this.wallets.get('vrsc').wallet = window.parent.reduxStore.getState().app.selectedAddress.vrscWallet
+                this.wallets.get('bsv').wallet = window.parent.reduxStore.getState().app.selectedAddress.bsvWallet
+                this.wallets.get('ghost').wallet = window.parent.reduxStore.getState().app.selectedAddress.ghostWallet
+                this.wallets.get('circ').wallet = window.parent.reduxStore.getState().app.selectedAddress.circWallet
+                this.wallets.get('rtm').wallet = window.parent.reduxStore.getState().app.selectedAddress.rtmWallet
             })
 
             parentEpml.subscribe('copy_menu_switch', async (value) => {
@@ -705,9 +957,81 @@ class MultiWallet extends LitElement {
                             <div class="currency-image"></div>
                             <div class="currency-text">Digibyte</div>
                         </div>
-				<div coin="rvn" class="currency-box rvn">
+                        <div coin="rvn" class="currency-box rvn">
                             <div class="currency-image"></div>
                             <div class="currency-text">Ravencoin</div>
+                        </div>
+                        <div coin="nmc" class="currency-box nmc">
+                            <div class="currency-image"></div>
+                            <div class="currency-text">Namecoin</div>
+                        </div>
+                        <div coin="dvc" class="currency-box dvc">
+                            <div class="currency-image"></div>
+                            <div class="currency-text">Devcoin</div>
+                        </div>
+                        <div coin="ppc" class="currency-box ppc">
+                            <div class="currency-image"></div>
+                            <div class="currency-text">Peercoin</div>
+                        </div>
+                        <div coin="dash" class="currency-box dash">
+                            <div class="currency-image"></div>
+                            <div class="currency-text">Dash</div>
+                        </div>
+                        <div coin="cloak" class="currency-box cloak">
+                            <div class="currency-image"></div>
+                            <div class="currency-text">CloakCoin</div>
+                        </div>
+                        <div coin="xvg" class="currency-box xvg">
+                            <div class="currency-image"></div>
+                            <div class="currency-text">Verge</div>
+                        </div>
+                        <div coin="pivx" class="currency-box pivx">
+                            <div class="currency-image"></div>
+                            <div class="currency-text">PIVX</div>
+                        </div>
+                        <div coin="lbc" class="currency-box lbc">
+                            <div class="currency-image"></div>
+                            <div class="currency-text">LBRY Credits</div>
+                        </div>
+                        <div coin="kmd" class="currency-box kmd">
+                            <div class="currency-image"></div>
+                            <div class="currency-text">Komodo</div>
+                        </div>
+                        <div coin="firo" class="currency-box firo">
+                            <div class="currency-image"></div>
+                            <div class="currency-text">Firo</div>
+                        </div>
+                        <div coin="part" class="currency-box part">
+                            <div class="currency-image"></div>
+                            <div class="currency-text">Particl</div>
+                        </div>
+                        <div coin="bch" class="currency-box bch">
+                            <div class="currency-image"></div>
+                            <div class="currency-text">Bitcoin Cash</div>
+                        </div>
+                        <div coin="btg" class="currency-box btg">
+                            <div class="currency-image"></div>
+                            <div class="currency-text">Bitcoin Gold</div>
+                        </div>
+                        <div coin="vrsc" class="currency-box vrsc">
+                            <div class="currency-image"></div>
+                            <div class="currency-text">VerusCoin</div>
+                        </div>
+                        <div coin="bsv" class="currency-box bsv">
+                            <div class="currency-image"></div>
+                            <div class="currency-text">Bitcoin SV</div>
+                        </div>
+                        <div coin="ghost" class="currency-box ghost">
+                            <div class="currency-image"></div>
+                            <div class="currency-text">Ghost</div>
+                        </div>
+                        <div coin="circ" class="currency-box circ">
+                            <div class="currency-image"></div>
+                            <div class="currency-text">Circcash</div>
+                        </div>
+                        <div coin="rtm" class="currency-box rtm">
+                            <div class="currency-image"></div>
+                            <div class="currency-text">Raptoreum</div>
                         </div>
                     </div>
                 </div>
@@ -2395,6 +2719,24 @@ class MultiWallet extends LitElement {
             case 'doge':
             case 'dgb':
 			case 'rvn':
+			case 'nmc':
+			case 'dvc':
+			case 'ppc':
+			case 'dash':
+			case 'cloak':
+			case 'xvg':
+			case 'pivx':
+			case 'lbc':
+			case 'kmd':
+			case 'firo':
+			case 'part':
+			case 'bch':
+			case 'btg':
+			case 'vrsc':
+			case 'bsv':
+			case 'ghost':
+			case 'circ':
+			case 'rtm':
                 const walletName = `${coin}Wallet`
                 parentEpml.request('apiCall', {
                     url: `/crosschain/${coin}/walletbalance?apiKey=${this.getApiKey()}`,
