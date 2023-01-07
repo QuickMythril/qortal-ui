@@ -47,6 +47,9 @@ class AppView extends connect(store)(LitElement) {
             botDgbWallet: { type: String },
             botRvnWallet: { type: String },
             botArrrWallet: { type: String },
+            botNmcWallet: { type: String },
+            botDashWallet: { type: String },
+            botFiroWallet: { type: String },
             arrrWalletAddress: { type: String },
             qortWalletBalance: { type: Number },
             btcWalletBalance: { type: Number },
@@ -55,54 +58,81 @@ class AppView extends connect(store)(LitElement) {
             dgbWalletBalance: { type: Number },
             rvnWalletBalance: { type: Number },
             arrrWalletBalance: { type: Number },
+            nmcWalletBalance: { type: Number },
+            dashWalletBalance: { type: Number },
+            firoWalletBalance: { type: Number },
             tradesOpenBtcQortal: { type: Array },
             tradesOpenLtcQortal: { type: Array },
             tradesOpenDogeQortal: { type: Array },
             tradesOpenDgbQortal: { type: Array },
             tradesOpenRvnQortal: { type: Array },
             tradesOpenArrrQortal: { type: Array },
+            tradesOpenNmcQortal: { type: Array },
+            tradesOpenDashQortal: { type: Array },
+            tradesOpenFiroQortal: { type: Array },
             tradeBotBtcBook: { type: Array },
             tradeBotLtcBook: { type: Array },
             tradeBotDogeBook: { type: Array },
             tradeBotDgbBook: { type: Array },
             tradeBotRvnBook: { type: Array },
             tradeBotArrrBook: { type: Array },
+            tradeBotNmcBook: { type: Array },
+            tradeBotDashBook: { type: Array },
+            tradeBotFiroBook: { type: Array },
             tradeBotBtcAt: { type: Array },
             tradeBotLtcAt: { type: Array },
             tradeBotDogeAt: { type: Array },
             tradeBotDgbAt: { type: Array },
             tradeBotRvnAt: { type: Array },
             tradeBotArrrAt: { type: Array },
+            tradeBotNmcAt: { type: Array },
+            tradeBotDashAt: { type: Array },
+            tradeBotFiroAt: { type: Array },
             tradeBotAvailableBtcQortal: { type: Array },
             tradeBotAvailableLtcQortal: { type: Array },
             tradeBotAvailableDogeQortal: { type: Array },
             tradeBotAvailableDgbQortal: { type: Array },
             tradeBotAvailableRvnQortal: { type: Array },
             tradeBotAvailableArrrQortal: { type: Array },
+            tradeBotAvailableNmcQortal: { type: Array },
+            tradeBotAvailableDashQortal: { type: Array },
+            tradeBotAvailableFiroQortal: { type: Array },
             checkBtcAlice: { type: String },
             checkLtcAlice: { type: String },
             checkDogeAlice: { type: String },
             checkDgbAlice: { type: String },
             checkRvnAlice: { type: String },
             checkArrrAlice: { type: String },
+            checkNmcAlice: { type: String },
+            checkDashAlice: { type: String },
+            checkFiroAlice: { type: String },
             reAddBtcAmount: { type: Number },
             reAddLtcAmount: { type: Number },
             reAddDogeAmount: { type: Number },
             reAddDgbAmount: { type: Number },
             reAddRvnAmount: { type: Number },
             reAddArrrAmount: { type: Number },
+            reAddNmcAmount: { type: Number },
+            reAddDashAmount: { type: Number },
+            reAddFiroAmount: { type: Number },
             reAddBtcPrice: { type: Number },
             reAddLtcPrice: { type: Number },
             reAddDogePrice: { type: Number },
             reAddDgbPrice: { type: Number },
             reAddRvnPrice: { type: Number },
             reAddArrrPrice: { type: Number },
+            reAddNmcPrice: { type: Number },
+            reAddDashPrice: { type: Number },
+            reAddFiroPrice: { type: Number },
             botBtcBuyAtAddress: { type: String },
             botLtcBuyAtAddress: { type: String },
             botDogeBuyAtAddress: { type: String },
             botDgbBuyAtAddress: { type: String },
             botRvnBuyAtAddress: { type: String },
             botArrrBuyAtAddress: { type: String },
+            botNmcBuyAtAddress: { type: String },
+            botDashBuyAtAddress: { type: String },
+            botFiroBuyAtAddress: { type: String },
             balanceTicker: { type: String }
         }
     }
@@ -289,6 +319,24 @@ class AppView extends connect(store)(LitElement) {
                     opacity: 0;
                 }
 
+                .nmc {
+                    animation: animate8 4s 44s 1 ease-in-out ;
+                    color: var(--black);
+                    opacity: 0;
+                }
+
+                .dash {
+                    animation: animate9 4s 50s 1 ease-in-out ;
+                    color: var(--black);
+                    opacity: 0;
+                }
+
+                .firo {
+                    animation: animate10 4s 56s 1 ease-in-out ;
+                    color: var(--black);
+                    opacity: 0;
+                }
+
                 @keyframes animate1 {
                     0%,100% { opacity: 0; }
                     50% { opacity: 10; }
@@ -323,6 +371,21 @@ class AppView extends connect(store)(LitElement) {
                     0%,100% { opacity: 0; }
                     50% { opacity: 10; }
                 }
+
+                @keyframes animate8 {
+                    0%,100% { opacity: 0; }
+                    50% { opacity: 10; }
+                }
+
+                @keyframes animate9 {
+                    0%,100% { opacity: 0; }
+                    50% { opacity: 10; }
+                }
+
+                @keyframes animate10 {
+                    0%,100% { opacity: 0; }
+                    50% { opacity: 10; }
+                }
             `
         ]
     }
@@ -342,6 +405,9 @@ class AppView extends connect(store)(LitElement) {
         this.botDgbWallet = ''
         this.botRvnWallet = ''
         this.botArrrWallet = ''
+        this.botNmcWallet = ''
+        this.botDashWallet = ''
+        this.botFiroWallet = ''
         this.arrrWalletAddress = ''
         this.qortWalletBalance = 0
         this.btcWalletBalance = 0
@@ -350,54 +416,81 @@ class AppView extends connect(store)(LitElement) {
         this.dgbWalletBalance = 0
         this.rvnWalletBalance = 0
         this.arrrWalletBalance = 0
+        this.nmcWalletBalance = 0
+        this.dashWalletBalance = 0
+        this.firoWalletBalance = 0
         this.tradesOpenBtcQortal = []
         this.tradesOpenLtcQortal = []
         this.tradesOpenDogeQortal = []
         this.tradesOpenDgbQortal = []
         this.tradesOpenRvnQortal = []
         this.tradesOpenArrrQortal = []
+        this.tradesOpenNmcQortal = []
+        this.tradesOpenDashQortal = []
+        this.tradesOpenFiroQortal = []
         this.tradeBotBtcBook = []
         this.tradeBotLtcBook = []
         this.tradeBotDogeBook = []
         this.tradeBotDgbBook = []
         this.tradeBotRvnBook = []
         this.tradeBotArrrBook = []
+        this.tradeBotNmcBook = []
+        this.tradeBotDashBook = []
+        this.tradeBotFiroBook = []
         this.tradeBotBtcAt = []
         this.tradeBotLtcAt = []
         this.tradeBotDogeAt = []
         this.tradeBotDgbAt = []
         this.tradeBotRvnAt = []
         this.tradeBotArrrAt = []
+        this.tradeBotNmcAt = []
+        this.tradeBotDashAt = []
+        this.tradeBotFiroAt = []
         this.tradeBotAvailableBtcQortal = []
         this.tradeBotAvailableLtcQortal = []
         this.tradeBotAvailableDogeQortal = []
         this.tradeBotAvailableDgbQortal = []
         this.tradeBotAvailableRvnQortal = []
         this.tradeBotAvailableArrrQortal = []
+        this.tradeBotAvailableNmcQortal = []
+        this.tradeBotAvailableDashQortal = []
+        this.tradeBotAvailableFiroQortal = []
         this.checkBtcAlice = ''
         this.checkLtcAlice = ''
         this.checkDogeAlice = ''
         this.checkDgbAlice = ''
         this.checkRvnAlice = ''
         this.checkArrrAlice = ''
+        this.checkNmcAlice = ''
+        this.checkDashAlice = ''
+        this.checkFiroAlice = ''
         this.reAddBtcAmount = 0
         this.reAddLtcAmount = 0
         this.reAddDogeAmount = 0
         this.reAddDgbAmount = 0
         this.reAddRvnAmount = 0
         this.reAddArrrAmount = 0
+        this.reAddNmcAmount = 0
+        this.reAddDashAmount = 0
+        this.reAddFiroAmount = 0
         this.reAddBtcPrice = 0
         this.reAddLtcPrice = 0
         this.reAddDogePrice = 0
         this.reAddDgbPrice = 0
         this.reAddRvnPrice = 0
         this.reAddArrrPrice = 0
+        this.reAddNmcPrice = 0
+        this.reAddDashPrice = 0
+        this.reAddFiroPrice = 0
         this.botBtcBuyAtAddress = ''
         this.botLtcBuyAtAddress = ''
         this.botDogeBuyAtAddress = ''
         this.botDgbBuyAtAddress = ''
         this.botRvnBuyAtAddress = ''
         this.botArrrBuyAtAddress = ''
+        this.botNmcBuyAtAddress = ''
+        this.botDashBuyAtAddress = ''
+        this.botFiroBuyAtAddress = ''
         this.balanceTicker = html`
             <div id="balances">
                 <div class="balancelist"></div>
@@ -512,6 +605,9 @@ class AppView extends connect(store)(LitElement) {
         this.botDgbWallet = store.getState().app.selectedAddress.dgbWallet.address
         this.botRvnWallet = store.getState().app.selectedAddress.rvnWallet.address
         this.botArrrWallet = store.getState().app.selectedAddress.arrrWallet.address
+        this.botNmcWallet = store.getState().app.selectedAddress.nmcWallet.address
+        this.botDashWallet = store.getState().app.selectedAddress.dashWallet.address
+        this.botFiroWallet = store.getState().app.selectedAddress.firoWallet.address
 
         await this.getAllBalances()
 
@@ -521,6 +617,9 @@ class AppView extends connect(store)(LitElement) {
         await this.botDgbTradebook()
         await this.botRvnTradebook()
         await this.botArrrTradebook()
+        await this.botNmcTradebook()
+        await this.botDashTradebook()
+        await this.botFiroTradebook()
 
         window.addEventListener('storage', async () => {
             this.tradeBotBtcBook = JSON.parse(localStorage.getItem(this.botBtcWallet) || "[]")
@@ -529,6 +628,9 @@ class AppView extends connect(store)(LitElement) {
             this.tradeBotDgbBook = JSON.parse(localStorage.getItem(this.botDgbWallet) || "[]")
             this.tradeBotRvnBook = JSON.parse(localStorage.getItem(this.botRvnWallet) || "[]")
             this.tradeBotArrrBook = JSON.parse(localStorage.getItem(this.botArrrWallet) || "[]")
+            this.tradeBotNmcBook = JSON.parse(localStorage.getItem(this.botNmcWallet) || "[]")
+            this.tradeBotDashBook = JSON.parse(localStorage.getItem(this.botDashWallet) || "[]")
+            this.tradeBotFiroBook = JSON.parse(localStorage.getItem(this.botFiroWallet) || "[]")
         })
 
         this.renderBalances()
@@ -1379,6 +1481,429 @@ class AppView extends connect(store)(LitElement) {
             }
         }
 
+        const getOpenTradesNMC = async () => {
+            let timerNMC
+
+            if (this.isEmptyArray(this.tradeBotNmcBook) === true) {
+                clearTimeout(timerNMC)
+                timerNMC = setTimeout(getOpenTradesNMC, 150000)
+            } else {
+                await this.updateNmcWalletBalance()
+                const tradesOpenNmcQortalUrl = `${nodeAppUrl}/crosschain/tradeoffers?foreignBlockchain=NAMECOIN&limit=0`
+
+                const tradesOpenNmcQortal = await fetch(tradesOpenNmcQortalUrl).then(response => {
+                    return response.json()
+                })
+
+                this.tradesOpenNmcQortal = tradesOpenNmcQortal.map(item => {
+                    const expiryTime = item.creatorPresenceExpiry
+                    if (Number(expiryTime) > Date.now()) {
+                        const calcedPrice = parseFloat(item.expectedForeignAmount) / parseFloat(item.qortAmount)
+                        const roundedPrice = (Math.round(parseFloat(calcedPrice) * 1e8) / 1e8).toFixed(8)
+                        return {
+                            qortAmount: item.qortAmount,
+                            price: roundedPrice,
+                            foreignAmount: item.expectedForeignAmount,
+                            qortalCreator: item.qortalCreator,
+                            qortalAtAddress: item.qortalAtAddress
+                        }
+                    }
+                }).filter(item => !!item)
+
+                await appDelay(1000)
+                filterMyBotPriceTradesNMC()
+                setTimeout(getOpenTradesNMC, 150000)
+            }
+        }
+
+        const filterMyBotPriceTradesNMC = async () => {
+            const tradeBotNmcUrl = `${nodeAppUrl}/crosschain/tradebot?foreignBlockchain=NAMECOIN&apiKey=${this.getApiKey()}`
+
+            const tradeBotNmcAt = await fetch(tradeBotNmcUrl).then(response => {
+                return response.json()
+            })
+
+            this.tradeBotNmcAt = tradeBotNmcAt
+
+            await appDelay(1000)
+
+            this.tradeBotAvailableNmcQortal = this.tradesOpenNmcQortal.map(item => {
+                const listprice = parseFloat(item.price)
+                const listamount = parseFloat(item.qortAmount)
+                const checkprice = parseFloat(this.tradeBotNmcBook[0].botNmcPrice)
+                const checkamount = parseFloat(this.tradeBotNmcBook[0].botNmcQortAmount)
+                if (Number(listprice) <= Number(checkprice) && Number(listamount) <= Number(checkamount)) {
+                    return {
+                        qortAmount: item.qortAmount,
+                        price: item.price,
+                        foreignAmount: item.foreignAmount,
+                        qortalCreator: item.qortalCreator,
+                        qortalAtAddress: item.qortalAtAddress
+                    }
+                }
+            }).filter(item => !!item)
+
+            this.tradeBotAvailableNmcQortal.sort((a, b) => parseFloat(a.price) - parseFloat(b.price))
+
+            if (this.isEmptyArray(this.tradeBotAvailableNmcQortal) === true) {
+                return
+            } else {
+                this.checkNmcAlice = this.tradeBotAvailableNmcQortal[0].qortalAtAddress
+            }
+
+            await appDelay(1000)
+
+            if (this.tradeBotNmcAt.some(item => item.atAddress === this.checkNmcAlice)) {
+                return
+            } else {
+                this.tradeBotAvailableNmcQortal = this.tradeBotAvailableNmcQortal
+            }
+
+            await appDelay(1000)
+
+            if (this.isEmptyArray(this.tradeBotAvailableNmcQortal) === true) {
+                return
+            } else {
+                const botnmcprice = this.round(parseFloat(this.tradeBotNmcBook[0].botNmcPrice))
+                const changenmcamount = parseFloat(this.tradeBotNmcBook[0].botNmcQortAmount)
+                const reducenmcamount = parseFloat(this.tradeBotAvailableNmcQortal[0].qortAmount)
+                const tradenmcataddress = this.tradeBotAvailableNmcQortal[0].qortalAtAddress
+                const newnmcamount = this.round(parseFloat(changenmcamount - reducenmcamount))
+
+                this.reAddNmcAmount = this.round(parseFloat(this.tradeBotNmcBook[0].botNmcQortAmount))
+                this.reAddNmcPrice = this.round(parseFloat(this.tradeBotNmcBook[0].botNmcPrice))
+
+                localStorage.removeItem(this.botNmcWallet)
+                localStorage.setItem(this.botNmcWallet, "")
+
+                var oldNmcTradebook = JSON.parse(localStorage.getItem(this.botNmcWallet) || "[]")
+
+                const newNmcTradebookItem = {
+                    botNmcQortAmount: newnmcamount,
+                    botNmcPrice: botnmcprice
+                }
+
+                oldNmcTradebook.push(newNmcTradebookItem)
+
+                localStorage.setItem(this.botNmcWallet, JSON.stringify(oldNmcTradebook))
+
+                this.tradeBotNmcBook = JSON.parse(localStorage.getItem(this.botNmcWallet) || "[]")
+
+                this.botNmcBuyAtAddress = tradenmcataddress
+
+                await appDelay(1000)
+
+                this.buyNmcAction()
+
+                if (this.isEmptyArray(this.tradeBotNmcBook) === true) {
+                    return
+                } else {
+                    const botamount = parseFloat(this.tradeBotNmcBook[0].botNmcQortAmount)
+
+                    if (Number(botamount) === 0) {
+                        this.removeBotNMCTradebook()
+                    } else {
+                        this.tradeBotNmcBook = this.tradeBotNmcBook
+                    }
+                }
+
+                if (this.isEmptyArray(this.tradeBotNmcBook) === true) {
+                    return
+                } else {
+                    const checkBotNmcFunds = this.round(parseFloat(this.tradeBotNmcBook[0].botNmcQortAmount) * parseFloat(this.tradeBotNmcBook[0].botNmcPrice))
+                    const myBotNmcFunds = this.round(parseFloat(this.nmcWalletBalance))
+
+                    if (Number(myBotNmcFunds) < Number(checkBotNmcFunds)) {
+                        this.removeBotNMCTradebook()
+                    } else {
+                        this.tradeBotNmcBook = this.tradeBotNmcBook
+                    }
+                }
+            }
+        }
+
+        const getOpenTradesDASH = async () => {
+            let timerDASH
+
+            if (this.isEmptyArray(this.tradeBotDashBook) === true) {
+                clearTimeout(timerDASH)
+                timerDASH = setTimeout(getOpenTradesDASH, 150000)
+            } else {
+                await this.updateDashWalletBalance()
+                const tradesOpenDashQortalUrl = `${nodeAppUrl}/crosschain/tradeoffers?foreignBlockchain=DASH&limit=0`
+
+                const tradesOpenDashQortal = await fetch(tradesOpenDashQortalUrl).then(response => {
+                    return response.json()
+                })
+
+                this.tradesOpenDashQortal = tradesOpenDashQortal.map(item => {
+                    const expiryTime = item.creatorPresenceExpiry
+                    if (Number(expiryTime) > Date.now()) {
+                        const calcedPrice = parseFloat(item.expectedForeignAmount) / parseFloat(item.qortAmount)
+                        const roundedPrice = (Math.round(parseFloat(calcedPrice) * 1e8) / 1e8).toFixed(8)
+                        return {
+                            qortAmount: item.qortAmount,
+                            price: roundedPrice,
+                            foreignAmount: item.expectedForeignAmount,
+                            qortalCreator: item.qortalCreator,
+                            qortalAtAddress: item.qortalAtAddress
+                        }
+                    }
+                }).filter(item => !!item)
+
+                await appDelay(1000)
+                filterMyBotPriceTradesDASH()
+                setTimeout(getOpenTradesDASH, 150000)
+            }
+        }
+
+        const filterMyBotPriceTradesDASH = async () => {
+            const tradeBotDashUrl = `${nodeAppUrl}/crosschain/tradebot?foreignBlockchain=DASH&apiKey=${this.getApiKey()}`
+
+            const tradeBotDashAt = await fetch(tradeBotDashUrl).then(response => {
+                return response.json()
+            })
+
+            this.tradeBotDashAt = tradeBotDashAt
+
+            await appDelay(1000)
+
+            this.tradeBotAvailableDashQortal = this.tradesOpenDashQortal.map(item => {
+                const listprice = parseFloat(item.price)
+                const listamount = parseFloat(item.qortAmount)
+                const checkprice = parseFloat(this.tradeBotDashBook[0].botDashPrice)
+                const checkamount = parseFloat(this.tradeBotDashBook[0].botDashQortAmount)
+                if (Number(listprice) <= Number(checkprice) && Number(listamount) <= Number(checkamount)) {
+                    return {
+                        qortAmount: item.qortAmount,
+                        price: item.price,
+                        foreignAmount: item.foreignAmount,
+                        qortalCreator: item.qortalCreator,
+                        qortalAtAddress: item.qortalAtAddress
+                    }
+                }
+            }).filter(item => !!item)
+
+            this.tradeBotAvailableDashQortal.sort((a, b) => parseFloat(a.price) - parseFloat(b.price))
+
+            if (this.isEmptyArray(this.tradeBotAvailableDashQortal) === true) {
+                return
+            } else {
+                this.checkDashAlice = this.tradeBotAvailableDashQortal[0].qortalAtAddress
+            }
+
+            await appDelay(1000)
+
+            if (this.tradeBotDashAt.some(item => item.atAddress === this.checkDashAlice)) {
+                return
+            } else {
+                this.tradeBotAvailableDashQortal = this.tradeBotAvailableDashQortal
+            }
+
+            await appDelay(1000)
+
+            if (this.isEmptyArray(this.tradeBotAvailableDashQortal) === true) {
+                return
+            } else {
+                const botdashprice = this.round(parseFloat(this.tradeBotDashBook[0].botDashPrice))
+                const changedashamount = parseFloat(this.tradeBotDashBook[0].botDashQortAmount)
+                const reducedashamount = parseFloat(this.tradeBotAvailableDashQortal[0].qortAmount)
+                const tradedashataddress = this.tradeBotAvailableDashQortal[0].qortalAtAddress
+                const newdashamount = this.round(parseFloat(changedashamount - reducedashamount))
+
+                this.reAddDashAmount = this.round(parseFloat(this.tradeBotDashBook[0].botDashQortAmount))
+                this.reAddDashPrice = this.round(parseFloat(this.tradeBotDashBook[0].botDashPrice))
+
+                localStorage.removeItem(this.botDashWallet)
+                localStorage.setItem(this.botDashWallet, "")
+
+                var oldDashTradebook = JSON.parse(localStorage.getItem(this.botDashWallet) || "[]")
+
+                const newDashTradebookItem = {
+                    botDashQortAmount: newdashamount,
+                    botDashPrice: botdashprice
+                }
+
+                oldDashTradebook.push(newDashTradebookItem)
+
+                localStorage.setItem(this.botDashWallet, JSON.stringify(oldDashTradebook))
+
+                this.tradeBotDashBook = JSON.parse(localStorage.getItem(this.botDashWallet) || "[]")
+
+                this.botDashBuyAtAddress = tradedashataddress
+
+                await appDelay(1000)
+
+                this.buyDashAction()
+
+                if (this.isEmptyArray(this.tradeBotDashBook) === true) {
+                    return
+                } else {
+                    const botamount = parseFloat(this.tradeBotDashBook[0].botDashQortAmount)
+
+                    if (Number(botamount) === 0) {
+                        this.removeBotDASHTradebook()
+                    } else {
+                        this.tradeBotDashBook = this.tradeBotDashBook
+                    }
+                }
+
+                if (this.isEmptyArray(this.tradeBotDashBook) === true) {
+                    return
+                } else {
+                    const checkBotDashFunds = this.round(parseFloat(this.tradeBotDashBook[0].botDashQortAmount) * parseFloat(this.tradeBotDashBook[0].botDashPrice))
+                    const myBotDashFunds = this.round(parseFloat(this.dashWalletBalance))
+
+                    if (Number(myBotDashFunds) < Number(checkBotDashFunds)) {
+                        this.removeBotDASHTradebook()
+                    } else {
+                        this.tradeBotDashBook = this.tradeBotDashBook
+                    }
+                }
+            }
+        }
+
+        const getOpenTradesFIRO = async () => {
+            let timerFIRO
+
+            if (this.isEmptyArray(this.tradeBotFiroBook) === true) {
+                clearTimeout(timerFIRO)
+                timerFIRO = setTimeout(getOpenTradesFIRO, 150000)
+            } else {
+                await this.updateFiroWalletBalance()
+                const tradesOpenFiroQortalUrl = `${nodeAppUrl}/crosschain/tradeoffers?foreignBlockchain=FIRO&limit=0`
+
+                const tradesOpenFiroQortal = await fetch(tradesOpenFiroQortalUrl).then(response => {
+                    return response.json()
+                })
+
+                this.tradesOpenFiroQortal = tradesOpenFiroQortal.map(item => {
+                    const expiryTime = item.creatorPresenceExpiry
+                    if (Number(expiryTime) > Date.now()) {
+                        const calcedPrice = parseFloat(item.expectedForeignAmount) / parseFloat(item.qortAmount)
+                        const roundedPrice = (Math.round(parseFloat(calcedPrice) * 1e8) / 1e8).toFixed(8)
+                        return {
+                            qortAmount: item.qortAmount,
+                            price: roundedPrice,
+                            foreignAmount: item.expectedForeignAmount,
+                            qortalCreator: item.qortalCreator,
+                            qortalAtAddress: item.qortalAtAddress
+                        }
+                    }
+                }).filter(item => !!item)
+
+                await appDelay(1000)
+                filterMyBotPriceTradesFIRO()
+                setTimeout(getOpenTradesFIRO, 150000)
+            }
+        }
+
+        const filterMyBotPriceTradesFIRO = async () => {
+            const tradeBotFiroUrl = `${nodeAppUrl}/crosschain/tradebot?foreignBlockchain=FIRO&apiKey=${this.getApiKey()}`
+
+            const tradeBotFiroAt = await fetch(tradeBotFiroUrl).then(response => {
+                return response.json()
+            })
+
+            this.tradeBotFiroAt = tradeBotFiroAt
+
+            await appDelay(1000)
+
+            this.tradeBotAvailableFiroQortal = this.tradesOpenFiroQortal.map(item => {
+                const listprice = parseFloat(item.price)
+                const listamount = parseFloat(item.qortAmount)
+                const checkprice = parseFloat(this.tradeBotFiroBook[0].botFiroPrice)
+                const checkamount = parseFloat(this.tradeBotFiroBook[0].botFiroQortAmount)
+                if (Number(listprice) <= Number(checkprice) && Number(listamount) <= Number(checkamount)) {
+                    return {
+                        qortAmount: item.qortAmount,
+                        price: item.price,
+                        foreignAmount: item.foreignAmount,
+                        qortalCreator: item.qortalCreator,
+                        qortalAtAddress: item.qortalAtAddress
+                    }
+                }
+            }).filter(item => !!item)
+
+            this.tradeBotAvailableFiroQortal.sort((a, b) => parseFloat(a.price) - parseFloat(b.price))
+
+            if (this.isEmptyArray(this.tradeBotAvailableFiroQortal) === true) {
+                return
+            } else {
+                this.checkFiroAlice = this.tradeBotAvailableFiroQortal[0].qortalAtAddress
+            }
+
+            await appDelay(1000)
+
+            if (this.tradeBotFiroAt.some(item => item.atAddress === this.checkFiroAlice)) {
+                return
+            } else {
+                this.tradeBotAvailableFiroQortal = this.tradeBotAvailableFiroQortal
+            }
+
+            await appDelay(1000)
+
+            if (this.isEmptyArray(this.tradeBotAvailableFiroQortal) === true) {
+                return
+            } else {
+                const botfiroprice = this.round(parseFloat(this.tradeBotFiroBook[0].botFiroPrice))
+                const changefiroamount = parseFloat(this.tradeBotFiroBook[0].botFiroQortAmount)
+                const reducefiroamount = parseFloat(this.tradeBotAvailableFiroQortal[0].qortAmount)
+                const tradefiroataddress = this.tradeBotAvailableFiroQortal[0].qortalAtAddress
+                const newfiroamount = this.round(parseFloat(changefiroamount - reducefiroamount))
+
+                this.reAddFiroAmount = this.round(parseFloat(this.tradeBotFiroBook[0].botFiroQortAmount))
+                this.reAddFiroPrice = this.round(parseFloat(this.tradeBotFiroBook[0].botFiroPrice))
+
+                localStorage.removeItem(this.botFiroWallet)
+                localStorage.setItem(this.botFiroWallet, "")
+
+                var oldFiroTradebook = JSON.parse(localStorage.getItem(this.botFiroWallet) || "[]")
+
+                const newFiroTradebookItem = {
+                    botFiroQortAmount: newfiroamount,
+                    botFiroPrice: botfiroprice
+                }
+
+                oldFiroTradebook.push(newFiroTradebookItem)
+
+                localStorage.setItem(this.botFiroWallet, JSON.stringify(oldFiroTradebook))
+
+                this.tradeBotFiroBook = JSON.parse(localStorage.getItem(this.botFiroWallet) || "[]")
+
+                this.botFiroBuyAtAddress = tradefiroataddress
+
+                await appDelay(1000)
+
+                this.buyFiroAction()
+
+                if (this.isEmptyArray(this.tradeBotFiroBook) === true) {
+                    return
+                } else {
+                    const botamount = parseFloat(this.tradeBotFiroBook[0].botFiroQortAmount)
+
+                    if (Number(botamount) === 0) {
+                        this.removeBotFIROTradebook()
+                    } else {
+                        this.tradeBotFiroBook = this.tradeBotFiroBook
+                    }
+                }
+
+                if (this.isEmptyArray(this.tradeBotFiroBook) === true) {
+                    return
+                } else {
+                    const checkBotFiroFunds = this.round(parseFloat(this.tradeBotFiroBook[0].botFiroQortAmount) * parseFloat(this.tradeBotFiroBook[0].botFiroPrice))
+                    const myBotFiroFunds = this.round(parseFloat(this.firoWalletBalance))
+
+                    if (Number(myBotFiroFunds) < Number(checkBotFiroFunds)) {
+                        this.removeBotFIROTradebook()
+                    } else {
+                        this.tradeBotFiroBook = this.tradeBotFiroBook
+                    }
+                }
+            }
+        }
+
         await getOpenTradesBTC()
         await appDelay(1000)
         await getOpenTradesLTC()
@@ -1390,6 +1915,12 @@ class AppView extends connect(store)(LitElement) {
         await getOpenTradesRVN()
         await appDelay(1000)
         await getOpenTradesARRR()
+        await appDelay(1000)
+        await getOpenTradesNMC()
+        await appDelay(1000)
+        await getOpenTradesDASH()
+        await appDelay(1000)
+        await getOpenTradesFIRO()
     }
 
     async getNodeType() {
@@ -1526,6 +2057,9 @@ class AppView extends connect(store)(LitElement) {
         await this.updateRvnWalletBalance()
         await this.fetchArrrWalletAddress()
         await this.updateArrrWalletBalance()
+        await this.updateNmcWalletBalance()
+        await this.updateDashWalletBalance()
+        await this.updateFiroWalletBalance()
         this.getAllBalancesLoading = false
     }
 
@@ -1548,6 +2082,9 @@ class AppView extends connect(store)(LitElement) {
                     <span class="balanceinfo dgb">DGB ${translate("general.balance")}: ${this.dgbWalletBalance}</span>
                     <span class="balanceinfo rvn">RVN ${translate("general.balance")}: ${this.rvnWalletBalance}</span>
                     <span class="balanceinfo arrr">ARRR ${translate("general.balance")}: ${this.arrrWalletBalance}</span>
+                    <span class="balanceinfo nmc">NMC ${translate("general.balance")}: ${this.nmcWalletBalance}</span>
+                    <span class="balanceinfo dash">DASH ${translate("general.balance")}: ${this.dashWalletBalance}</span>
+                    <span class="balanceinfo firo">FIRO ${translate("general.balance")}: ${this.firoWalletBalance}</span>
                 </div>
             </div>
         `
@@ -1677,6 +2214,57 @@ class AppView extends connect(store)(LitElement) {
         })
     }
 
+    async updateNmcWalletBalance() {
+        let _url = `/crosschain/nmc/walletbalance?apiKey=${this.getApiKey()}`
+        let _body = store.getState().app.selectedAddress.nmcWallet.derivedMasterPublicKey
+
+        await parentEpml.request('apiCall', {
+            url: _url,
+            method: 'POST',
+            body: _body,
+        }).then((res) => {
+            if (isNaN(Number(res))) {
+                //...
+            } else {
+                this.nmcWalletBalance = (Number(res) / 1e8).toFixed(8)
+            }
+        })
+    }
+
+    async updateDashWalletBalance() {
+        let _url = `/crosschain/dash/walletbalance?apiKey=${this.getApiKey()}`
+        let _body = store.getState().app.selectedAddress.dashWallet.derivedMasterPublicKey
+
+        await parentEpml.request('apiCall', {
+            url: _url,
+            method: 'POST',
+            body: _body,
+        }).then((res) => {
+            if (isNaN(Number(res))) {
+                //...
+            } else {
+                this.dashWalletBalance = (Number(res) / 1e8).toFixed(8)
+            }
+        })
+    }
+
+    async updateFiroWalletBalance() {
+        let _url = `/crosschain/firo/walletbalance?apiKey=${this.getApiKey()}`
+        let _body = store.getState().app.selectedAddress.firoWallet.derivedMasterPublicKey
+
+        await parentEpml.request('apiCall', {
+            url: _url,
+            method: 'POST',
+            body: _body,
+        }).then((res) => {
+            if (isNaN(Number(res))) {
+                //...
+            } else {
+                this.firoWalletBalance = (Number(res) / 1e8).toFixed(8)
+            }
+        })
+    }
+
     botBtcTradebook() {
         if (localStorage.getItem(this.botBtcWallet) === null) {
             localStorage.setItem(this.botBtcWallet, "")
@@ -1743,6 +2331,30 @@ class AppView extends connect(store)(LitElement) {
             localStorage.setItem(this.botArrrWallet, "")
         } else {
             this.tradeBotArrrBook = JSON.parse(localStorage.getItem(this.botArrrWallet) || "[]")
+        }
+    }
+
+    botNmcTradebook() {
+        if (localStorage.getItem(this.botNmcWallet) === null) {
+            localStorage.setItem(this.botNmcWallet, "")
+        } else {
+            this.tradeBotNmcBook = JSON.parse(localStorage.getItem(this.botNmcWallet) || "[]")
+        }
+    }
+
+    botDashTradebook() {
+        if (localStorage.getItem(this.botDashWallet) === null) {
+            localStorage.setItem(this.botDashWallet, "")
+        } else {
+            this.tradeBotDashBook = JSON.parse(localStorage.getItem(this.botDashWallet) || "[]")
+        }
+    }
+
+    botFiroTradebook() {
+        if (localStorage.getItem(this.botFiroWallet) === null) {
+            localStorage.setItem(this.botFiroWallet, "")
+        } else {
+            this.tradeBotFiroBook = JSON.parse(localStorage.getItem(this.botFiroWallet) || "[]")
         }
     }
 
@@ -2085,6 +2697,180 @@ class AppView extends connect(store)(LitElement) {
                 localStorage.setItem(this.botArrrWallet, JSON.stringify(oldArrrTradebook))
 
                 this.tradeBotArrrBook = JSON.parse(localStorage.getItem(this.botArrrWallet) || "[]")
+
+                let snack7string = get("tradepage.tchange25")
+                parentEpml.request('showSnackBar', `${snack7string}: ${response.message}`)
+            }
+        }
+        const res = await makeRequest()
+        manageResponse(res)
+    }
+
+    async buyNmcAction() {
+        const makeRequest = async () => {
+            const response = await parentEpml.request('tradeBotRespondRequest', {
+                atAddress: this.botNmcBuyAtAddress,
+                foreignKey: store.getState().app.selectedAddress.nmcWallet.derivedMasterPrivateKey,
+                receivingAddress: store.getState().app.selectedAddress.address,
+            })
+            return response
+        }
+
+        const manageResponse = (response) => {
+            if (response === true) {
+                let snack5string = get("tradepage.tchange23")
+                parentEpml.request('showSnackBar', `${snack5string}`)
+            } else if (response === false) {
+                localStorage.removeItem(this.botNmcWallet)
+                localStorage.setItem(this.botNmcWallet, "")
+
+                var oldNmcTradebook = JSON.parse(localStorage.getItem(this.botNmcWallet) || "[]")
+
+                const newNmcTradebookItem = {
+                    botNmcQortAmount: this.reAddNmcAmount,
+                    botNmcPrice: this.reAddNmcPrice
+                }
+
+                oldNmcTradebook.push(newNmcTradebookItem)
+
+                localStorage.setItem(this.botNmcWallet, JSON.stringify(oldNmcTradebook))
+
+                this.tradeBotNmcBook = JSON.parse(localStorage.getItem(this.botNmcWallet) || "[]")
+
+                let snack6string = get("tradepage.tchange24")
+                parentEpml.request('showSnackBar', `${snack6string}`)
+            } else {
+                localStorage.removeItem(this.botNmcWallet)
+                localStorage.setItem(this.botNmcWallet, "")
+
+                var oldNmcTradebook = JSON.parse(localStorage.getItem(this.botNmcWallet) || "[]")
+
+                const newNmcTradebookItem = {
+                    botNmcQortAmount: this.reAddNmcAmount,
+                    botNmcPrice: this.reAddNmcPrice
+                }
+
+                oldNmcTradebook.push(newNmcTradebookItem)
+
+                localStorage.setItem(this.botNmcWallet, JSON.stringify(oldNmcTradebook))
+
+                this.tradeBotNmcBook = JSON.parse(localStorage.getItem(this.botNmcWallet) || "[]")
+
+                let snack7string = get("tradepage.tchange25")
+                parentEpml.request('showSnackBar', `${snack7string}: ${response.message}`)
+            }
+        }
+        const res = await makeRequest()
+        manageResponse(res)
+    }
+
+    async buyDashAction() {
+        const makeRequest = async () => {
+            const response = await parentEpml.request('tradeBotRespondRequest', {
+                atAddress: this.botDashBuyAtAddress,
+                foreignKey: store.getState().app.selectedAddress.dashWallet.derivedMasterPrivateKey,
+                receivingAddress: store.getState().app.selectedAddress.address,
+            })
+            return response
+        }
+
+        const manageResponse = (response) => {
+            if (response === true) {
+                let snack5string = get("tradepage.tchange23")
+                parentEpml.request('showSnackBar', `${snack5string}`)
+            } else if (response === false) {
+                localStorage.removeItem(this.botDashWallet)
+                localStorage.setItem(this.botDashWallet, "")
+
+                var oldDashTradebook = JSON.parse(localStorage.getItem(this.botDashWallet) || "[]")
+
+                const newDashTradebookItem = {
+                    botDashQortAmount: this.reAddDashAmount,
+                    botDashPrice: this.reAddDashPrice
+                }
+
+                oldDashTradebook.push(newDashTradebookItem)
+
+                localStorage.setItem(this.botDashWallet, JSON.stringify(oldDashTradebook))
+
+                this.tradeBotDashBook = JSON.parse(localStorage.getItem(this.botDashWallet) || "[]")
+
+                let snack6string = get("tradepage.tchange24")
+                parentEpml.request('showSnackBar', `${snack6string}`)
+            } else {
+                localStorage.removeItem(this.botDashWallet)
+                localStorage.setItem(this.botDashWallet, "")
+
+                var oldDashTradebook = JSON.parse(localStorage.getItem(this.botDashWallet) || "[]")
+
+                const newDashTradebookItem = {
+                    botDashQortAmount: this.reAddDashAmount,
+                    botDashPrice: this.reAddDashPrice
+                }
+
+                oldDashTradebook.push(newDashTradebookItem)
+
+                localStorage.setItem(this.botDashWallet, JSON.stringify(oldDashTradebook))
+
+                this.tradeBotDashBook = JSON.parse(localStorage.getItem(this.botDashWallet) || "[]")
+
+                let snack7string = get("tradepage.tchange25")
+                parentEpml.request('showSnackBar', `${snack7string}: ${response.message}`)
+            }
+        }
+        const res = await makeRequest()
+        manageResponse(res)
+    }
+
+    async buyFiroAction() {
+        const makeRequest = async () => {
+            const response = await parentEpml.request('tradeBotRespondRequest', {
+                atAddress: this.botFiroBuyAtAddress,
+                foreignKey: store.getState().app.selectedAddress.firoWallet.derivedMasterPrivateKey,
+                receivingAddress: store.getState().app.selectedAddress.address,
+            })
+            return response
+        }
+
+        const manageResponse = (response) => {
+            if (response === true) {
+                let snack5string = get("tradepage.tchange23")
+                parentEpml.request('showSnackBar', `${snack5string}`)
+            } else if (response === false) {
+                localStorage.removeItem(this.botFiroWallet)
+                localStorage.setItem(this.botFiroWallet, "")
+
+                var oldFiroTradebook = JSON.parse(localStorage.getItem(this.botFiroWallet) || "[]")
+
+                const newFiroTradebookItem = {
+                    botFiroQortAmount: this.reAddFiroAmount,
+                    botFiroPrice: this.reAddFiroPrice
+                }
+
+                oldFiroTradebook.push(newFiroTradebookItem)
+
+                localStorage.setItem(this.botFiroWallet, JSON.stringify(oldFiroTradebook))
+
+                this.tradeBotFiroBook = JSON.parse(localStorage.getItem(this.botFiroWallet) || "[]")
+
+                let snack6string = get("tradepage.tchange24")
+                parentEpml.request('showSnackBar', `${snack6string}`)
+            } else {
+                localStorage.removeItem(this.botFiroWallet)
+                localStorage.setItem(this.botFiroWallet, "")
+
+                var oldFiroTradebook = JSON.parse(localStorage.getItem(this.botFiroWallet) || "[]")
+
+                const newFiroTradebookItem = {
+                    botFiroQortAmount: this.reAddFiroAmount,
+                    botFiroPrice: this.reAddFiroPrice
+                }
+
+                oldFiroTradebook.push(newFiroTradebookItem)
+
+                localStorage.setItem(this.botFiroWallet, JSON.stringify(oldFiroTradebook))
+
+                this.tradeBotFiroBook = JSON.parse(localStorage.getItem(this.botFiroWallet) || "[]")
 
                 let snack7string = get("tradepage.tchange25")
                 parentEpml.request('showSnackBar', `${snack7string}: ${response.message}`)
