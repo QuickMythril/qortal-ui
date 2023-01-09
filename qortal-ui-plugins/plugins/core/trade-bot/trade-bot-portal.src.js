@@ -55,6 +55,9 @@ class TradeBotPortal extends LitElement {
             dgbWallet: { type: String },
             rvnWallet: { type: String },
             arrrWallet: { type: String },
+            nmcWallet: { type: String },
+            dashWallet: { type: String },
+            firoWallet: { type: String },
             arrrWalletAddress: { type: String },
             qortbtc: { type: Number },
             qortltc: { type: Number },
@@ -62,18 +65,27 @@ class TradeBotPortal extends LitElement {
             qortdgb: { type: Number },
             qortrvn: { type: Number },
             qortarrr: { type: Number },
+            qortnmc: { type: Number },
+            qortdash: { type: Number },
+            qortfiro: { type: Number },
             btcqort: { type: Number },
             ltcqort: { type: Number },
             dogeqort: { type: Number },
             dgbqort: { type: Number },
             rvnqort: { type: Number },
             arrrqort: { type: Number },
+            nmcqort: { type: Number },
+            dashqort: { type: Number },
+            firoqort: { type: Number },
             tradeBotBtcBook: { type: Array },
             tradeBotLtcBook: { type: Array },
             tradeBotDogeBook: { type: Array },
             tradeBotDgbBook: { type: Array },
             tradeBotRvnBook: { type: Array },
-            tradeBotArrrBook: { type: Array }
+            tradeBotArrrBook: { type: Array },
+            tradeBotNmcBook: { type: Array },
+            tradeBotDashBook: { type: Array },
+            tradeBotFiroBook: { type: Array }
         }
     }
 
@@ -493,8 +505,17 @@ class TradeBotPortal extends LitElement {
 		.rvn.coinName:before  {
 			background-image: url('/img/qortrvn.png');
 		}
-            .arrr.coinName:before  {
+		.arrr.coinName:before  {
 			background-image: url('/img/qortarrr.png');
+		}
+		.nmc.coinName:before  {
+			background-image: url('/img/qortnmc.png');
+		}
+		.dash.coinName:before  {
+			background-image: url('/img/qortdash.png');
+		}
+		.firo.coinName:before  {
+			background-image: url('/img/qortfiro.png');
 		}
 		.coinName {
 			display: inline-block;
@@ -677,7 +698,7 @@ class TradeBotPortal extends LitElement {
             tradeFee: "~0.0005"
         }
 
-	  let ravencoin = {
+        let ravencoin = {
             name: "RAVENCOIN",
             balance: "0",
             coinCode: "RVN",
@@ -711,6 +732,57 @@ class TradeBotPortal extends LitElement {
             tradeFee: "~0.0002"
         }
 
+        let namecoin = {
+            name: "NAMECOIN",
+            balance: "0",
+            coinCode: "NMC",
+            openOrders: [],
+            openFilteredOrders: [],
+            historicTrades: [],
+            myOrders: [],
+            myHistoricTrades: [],
+            myOfferingOrders: [],
+            myGridBoughtItems: [],
+            openTradeOrders: null,
+            tradeOffersSocketCounter: 1,
+            coinAmount: this.amountString,
+            tradeFee: "~0.005"
+        }
+
+        let dash = {
+            name: "DASH",
+            balance: "0",
+            coinCode: "DASH",
+            openOrders: [],
+            openFilteredOrders: [],
+            historicTrades: [],
+            myOrders: [],
+            myHistoricTrades: [],
+            myOfferingOrders: [],
+            myGridBoughtItems: [],
+            openTradeOrders: null,
+            tradeOffersSocketCounter: 1,
+            coinAmount: this.amountString,
+            tradeFee: "~0.000015"
+        }
+
+        let firo = {
+            name: "FIRO",
+            balance: "0",
+            coinCode: "FIRO",
+            openOrders: [],
+            openFilteredOrders: [],
+            historicTrades: [],
+            myOrders: [],
+            myHistoricTrades: [],
+            myOfferingOrders: [],
+            myGridBoughtItems: [],
+            openTradeOrders: null,
+            tradeOffersSocketCounter: 1,
+            coinAmount: this.amountString,
+            tradeFee: "~0.000015"
+        }
+
         this.listedCoins = new Map()
         this.listedCoins.set("QORTAL", qortal)
         this.listedCoins.set("BITCOIN", bitcoin)
@@ -719,6 +791,9 @@ class TradeBotPortal extends LitElement {
         this.listedCoins.set("DIGIBYTE", digibyte)
         this.listedCoins.set("RAVENCOIN", ravencoin)
         this.listedCoins.set("PIRATECHAIN", piratechain)
+        this.listedCoins.set("NAMECOIN", namecoin)
+        this.listedCoins.set("DASH", dash)
+        this.listedCoins.set("FIRO", firo)
 
         workers.set("QORTAL", {
             tradesConnectedWorker: null,
@@ -745,12 +820,27 @@ class TradeBotPortal extends LitElement {
             handleStuckTradesConnectedWorker: null
         })
 
-	  workers.set("RAVENCOIN", {
+        workers.set("RAVENCOIN", {
             tradesConnectedWorker: null,
             handleStuckTradesConnectedWorker: null
         })
 
         workers.set("PIRATECHAIN", {
+            tradesConnectedWorker: null,
+            handleStuckTradesConnectedWorker: null
+        })
+
+        workers.set("NAMECOIN", {
+            tradesConnectedWorker: null,
+            handleStuckTradesConnectedWorker: null
+        })
+
+        workers.set("DASH", {
+            tradesConnectedWorker: null,
+            handleStuckTradesConnectedWorker: null
+        })
+
+        workers.set("FIRO", {
             tradesConnectedWorker: null,
             handleStuckTradesConnectedWorker: null
         })
@@ -781,24 +871,36 @@ class TradeBotPortal extends LitElement {
         this.rvnWallet = ''
         this.arrrWallet = ''
         this.arrrWalletAddress = ''
+        this.nmcWallet = ''
+        this.dashWallet = ''
+        this.firoWallet = ''
         this.qortbtc = 0
         this.qortltc = 0
         this.qortdoge = 0
         this.qortdgb = 0
         this.qortrvn = 0
         this.qortarrr = 0
+        this.qortnmc = 0
+        this.qortdash = 0
+        this.qortfiro = 0
         this.btcqort = 0
         this.ltcqort = 0
         this.dogeqort = 0
         this.dgbqort = 0
         this.rvnqort = 0
         this.arrrqort = 0
+        this.nmcqort = 0
+        this.dashqort = 0
+        this.firoqort = 0
         this.tradeBotBtcBook = []
         this.tradeBotLtcBook = []
         this.tradeBotDogeBook = []
         this.tradeBotDgbBook = []
         this.tradeBotRvnBook = []
         this.tradeBotArrrBook = []
+        this.tradeBotNmcBook = []
+        this.tradeBotDashBook = []
+        this.tradeBotFiroBook = []
     }
 
     openTradesTemplate() {
@@ -1429,6 +1531,204 @@ class TradeBotPortal extends LitElement {
         `
     }
 
+    tradeBotNMCTemplate() {
+        return html`
+		<div class="trade-bot-container">
+			<div class="box-bot">
+				<header><span>${translate("tradepage.tchange39")} ${this.listedCoins.get(this.selectedCoin).coinCode} ==> QORT</span></header>
+				<div class="border-wrapper">
+					<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="tradeBotNMCGrid" aria-label="Auto Buy NMC" ?hidden="${this.isEmptyArray(this.tradeBotNmcBook)}" .items="${this.tradeBotNmcBook}">
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("tradepage.tchange8")} (QORT)"
+							.renderer=${(root, column, data) => {
+								render(html`<span>${data.item.botNmcQortAmount}</span>`, root)
+							}}
+						>
+						</vaadin-grid-column>
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("tradepage.tchange9")} (${this.listedCoins.get(this.selectedCoin).coinCode})"
+							.renderer=${(root, column, data) => {
+								render(html`<span>${data.item.botNmcPrice}</span>`, root)
+							}}
+						>
+						</vaadin-grid-column>
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("tradepage.tchange10")} (${this.listedCoins.get(this.selectedCoin).coinCode})"
+							.renderer=${(root, column, data) => {
+								const totalCoins = this.round(parseFloat(data.item.botNmcQortAmount) * parseFloat(data.item.botNmcPrice))
+								const myBotFunds = this.round(parseFloat(this.listedCoins.get(this.selectedCoin).balance))
+								if (Number(myBotFunds) > Number(totalCoins)) {
+									this.autoBuyBotDisable = false
+									render(html`<span style="color: rgba(55, 160, 51);">${totalCoins}</span>`, root)
+                                                } else {
+									this.autoBuyBotDisable = true
+									render(html`<span style="color: rgba(255, 89, 89);">${totalCoins}</span>`, root)
+                                                }
+							}}
+						>
+						</vaadin-grid-column>
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("nodepage.nchange11")}"
+							.renderer=${(root, column, data) => {
+								render(html`<mwc-button class="red" @click=${() => this.removeNMCTradebook()}><mwc-icon>delete</mwc-icon>&nbsp;${translate("nodepage.nchange12")}</mwc-button>`, root)
+							}}
+						>
+						</vaadin-grid-column>
+					</vaadin-grid>
+					${this.isEmptyArray(this.tradeBotNmcBook) ? html`
+						<mwc-button class="trade-bot-button" style="width: 25%;" raised @click="${() => this.addAutoBuyAction()}">
+							${translate("tradepage.tchange38")} ${translate("tradepage.tchange39")}
+						</mwc-button>
+					`: ''}
+				</div>
+				${this.autoBuyBotDisable ? html`
+					<div style="margin-top: 15px;">${this.renderBotWarning()}</div>
+				`: ''}
+			</div>
+		</div>
+        `
+    }
+
+    tradeBotDASHTemplate() {
+        return html`
+		<div class="trade-bot-container">
+			<div class="box-bot">
+				<header><span>${translate("tradepage.tchange39")} ${this.listedCoins.get(this.selectedCoin).coinCode} ==> QORT</span></header>
+				<div class="border-wrapper">
+					<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="tradeBotDASHGrid" aria-label="Auto Buy DASH" ?hidden="${this.isEmptyArray(this.tradeBotDashBook)}" .items="${this.tradeBotDashBook}">
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("tradepage.tchange8")} (QORT)"
+							.renderer=${(root, column, data) => {
+								render(html`<span>${data.item.botDashQortAmount}</span>`, root)
+							}}
+						>
+						</vaadin-grid-column>
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("tradepage.tchange9")} (${this.listedCoins.get(this.selectedCoin).coinCode})"
+							.renderer=${(root, column, data) => {
+								render(html`<span>${data.item.botDashPrice}</span>`, root)
+							}}
+						>
+						</vaadin-grid-column>
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("tradepage.tchange10")} (${this.listedCoins.get(this.selectedCoin).coinCode})"
+							.renderer=${(root, column, data) => {
+								const totalCoins = this.round(parseFloat(data.item.botDashQortAmount) * parseFloat(data.item.botDashPrice))
+								const myBotFunds = this.round(parseFloat(this.listedCoins.get(this.selectedCoin).balance))
+								if (Number(myBotFunds) > Number(totalCoins)) {
+									this.autoBuyBotDisable = false
+									render(html`<span style="color: rgba(55, 160, 51);">${totalCoins}</span>`, root)
+                                                } else {
+									this.autoBuyBotDisable = true
+									render(html`<span style="color: rgba(255, 89, 89);">${totalCoins}</span>`, root)
+                                                }
+							}}
+						>
+						</vaadin-grid-column>
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("nodepage.nchange11")}"
+							.renderer=${(root, column, data) => {
+								render(html`<mwc-button class="red" @click=${() => this.removeDASHTradebook()}><mwc-icon>delete</mwc-icon>&nbsp;${translate("nodepage.nchange12")}</mwc-button>`, root)
+							}}
+						>
+						</vaadin-grid-column>
+					</vaadin-grid>
+					${this.isEmptyArray(this.tradeBotDashBook) ? html`
+						<mwc-button class="trade-bot-button" style="width: 25%;" raised @click="${() => this.addAutoBuyAction()}">
+							${translate("tradepage.tchange38")} ${translate("tradepage.tchange39")}
+						</mwc-button>
+					`: ''}
+				</div>
+				${this.autoBuyBotDisable ? html`
+					<div style="margin-top: 15px;">${this.renderBotWarning()}</div>
+				`: ''}
+			</div>
+		</div>
+        `
+    }
+
+    tradeBotFIROTemplate() {
+        return html`
+		<div class="trade-bot-container">
+			<div class="box-bot">
+				<header><span>${translate("tradepage.tchange39")} ${this.listedCoins.get(this.selectedCoin).coinCode} ==> QORT</span></header>
+				<div class="border-wrapper">
+					<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="tradeBotFIROGrid" aria-label="Auto Buy FIRO" ?hidden="${this.isEmptyArray(this.tradeBotFiroBook)}" .items="${this.tradeBotFiroBook}">
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("tradepage.tchange8")} (QORT)"
+							.renderer=${(root, column, data) => {
+								render(html`<span>${data.item.botFiroQortAmount}</span>`, root)
+							}}
+						>
+						</vaadin-grid-column>
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("tradepage.tchange9")} (${this.listedCoins.get(this.selectedCoin).coinCode})"
+							.renderer=${(root, column, data) => {
+								render(html`<span>${data.item.botFiroPrice}</span>`, root)
+							}}
+						>
+						</vaadin-grid-column>
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("tradepage.tchange10")} (${this.listedCoins.get(this.selectedCoin).coinCode})"
+							.renderer=${(root, column, data) => {
+								const totalCoins = this.round(parseFloat(data.item.botFiroQortAmount) * parseFloat(data.item.botFiroPrice))
+								const myBotFunds = this.round(parseFloat(this.listedCoins.get(this.selectedCoin).balance))
+								if (Number(myBotFunds) > Number(totalCoins)) {
+									this.autoBuyBotDisable = false
+									render(html`<span style="color: rgba(55, 160, 51);">${totalCoins}</span>`, root)
+                                                } else {
+									this.autoBuyBotDisable = true
+									render(html`<span style="color: rgba(255, 89, 89);">${totalCoins}</span>`, root)
+                                                }
+							}}
+						>
+						</vaadin-grid-column>
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("nodepage.nchange11")}"
+							.renderer=${(root, column, data) => {
+								render(html`<mwc-button class="red" @click=${() => this.removeFIROTradebook()}><mwc-icon>delete</mwc-icon>&nbsp;${translate("nodepage.nchange12")}</mwc-button>`, root)
+							}}
+						>
+						</vaadin-grid-column>
+					</vaadin-grid>
+					${this.isEmptyArray(this.tradeBotFiroBook) ? html`
+						<mwc-button class="trade-bot-button" style="width: 25%;" raised @click="${() => this.addAutoBuyAction()}">
+							${translate("tradepage.tchange38")} ${translate("tradepage.tchange39")}
+						</mwc-button>
+					`: ''}
+				</div>
+				${this.autoBuyBotDisable ? html`
+					<div style="margin-top: 15px;">${this.renderBotWarning()}</div>
+				`: ''}
+			</div>
+		</div>
+        `
+    }
+
     render() {
         return html`
 		<div id="trade-portal-page">
@@ -1442,7 +1742,10 @@ class TradeBotPortal extends LitElement {
 					<mwc-list-item value="DOGECOIN"><span class="coinName doge" style="color: var(--black);">DOGE / QORT</span></mwc-list-item>
 					<mwc-list-item value="DIGIBYTE"><span class="coinName dgb" style="color: var(--black);">DGB / QORT</span></mwc-list-item>
 					<mwc-list-item value="RAVENCOIN"><span class="coinName rvn" style="color: var(--black);">RVN / QORT</span></mwc-list-item>
-                              <mwc-list-item value="PIRATECHAIN"><span class="coinName arrr" style="color: var(--black);">ARRR / QORT</span></mwc-list-item>
+					<mwc-list-item value="PIRATECHAIN"><span class="coinName arrr" style="color: var(--black);">ARRR / QORT</span></mwc-list-item>
+					<mwc-list-item value="NAMECOIN"><span class="coinName nmc" style="color: var(--black);">NMC / QORT</span></mwc-list-item>
+					<mwc-list-item value="DASH"><span class="coinName dash" style="color: var(--black);">DASH / QORT</span></mwc-list-item>
+					<mwc-list-item value="FIRO"><span class="coinName firo" style="color: var(--black);">FIRO / QORT</span></mwc-list-item>
 				</mwc-select>
 			</div>
 			<div></div>
@@ -1924,6 +2227,231 @@ class TradeBotPortal extends LitElement {
 			</div>
 			<mwc-button slot="primaryAction" dialogAction="cancel" class="cancel">${translate("general.close")}</mwc-button>
 		</mwc-dialog>
+
+		<mwc-dialog style="background: var(--white);" id="tradeBotNMCAddDialog">
+			<div class="trade-bot-container" style="display:${this.showGetWalletBance ? 'inline' : 'none'}">
+                      <h2 style="color: var(--black);">${this.renderFetchText()} <paper-spinner-lite active></paper-spinner-lite></h2>
+                  </div>
+			<div class="card-bot" style="display:${this.showAddAutoBuy ? 'flex' : 'none'}">
+				<div style="text-align: center;">
+					<h1>${this.listedCoins.get(this.selectedCoin).coinCode} ==> QORT</h1>
+					<hr>
+				</div>
+				<div style="display: inline;">
+                              <div style="display:${this.autoBuyWarning ? 'inline' : 'none'}">${this.renderWarning()}</div>
+					<mwc-icon-button class="btn-clear-bot" title="${translate("tradepage.tchange15")}" icon="clear_all" @click="${() => this.clearTradeBotForm()}"></mwc-icon-button>
+				</div>
+				<span class="tab-text">${translate("tradepage.tchange8")} (QORT)*</span>
+				<p>
+					<mwc-textfield
+						style="width: 100%; color: var(--black);"
+						id="autoBuyNMCQortAmountInput"
+						required
+						label=""
+						placeholder="0.0000000"
+						type="number"
+						@input="${(e) => { this.checkTradeBotAmount(e) }}"
+						auto-validate="false"
+						outlined
+						value="${this.initialAmount}"
+					>
+					</mwc-textfield>
+				</p>
+				<span class="tab-text">${translate("tradepage.tchange14")} (${this.listedCoins.get(this.selectedCoin).coinCode})*</span>
+				<p>
+					<mwc-textfield
+						style="width: 100%; color: var(--black);"
+						id="autoBuyNMCPriceInput"
+						required
+						label=""
+						placeholder="0.00000000"
+						type="number"
+						@input="${(e) => { this.checkTradeBotAmount(e) }}"
+						auto-validate="false"
+						outlined
+						value="${this.initialAmount}"
+					>
+					</mwc-textfield>
+				</p>
+				<span class="tab-text">${translate("tradepage.tchange10")} (${this.listedCoins.get(this.selectedCoin).coinCode})*</span>
+				<p>
+					<mwc-textfield
+						style="width: 100%; color: var(--black);"
+						id="autoBuyNMCTotalInput"
+						required
+						readOnly
+						label=""
+						placeholder="0.0000000"
+						type="number"
+						auto-validate="false"
+						outlined
+						value="${this.initialAmount}"
+					>
+					</mwc-textfield>
+				</p>
+				<span class="amt-text">
+					<span class="balance-text">${translate("tradepage.tchange16")}: ${this.listedCoins.get(this.selectedCoin).balance} ${this.listedCoins.get(this.selectedCoin).coinCode}</span>
+				</span>
+				<div class="buttons">
+					<div>
+						<mwc-button class="buy-button" ?disabled="${this.autoBuyBtnDisable}" style="width:100%;" raised @click="${() => this.checkTradeBotValues()}">
+							${translate("tradepage.tchange38")} ${this.listedCoins.get(this.selectedCoin).coinCode} ${translate("tradepage.tchange39")}
+						</mwc-button>
+					</div>
+				</div>
+			</div>
+			<mwc-button slot="primaryAction" dialogAction="cancel" class="cancel">${translate("general.close")}</mwc-button>
+		</mwc-dialog>
+
+		<mwc-dialog style="background: var(--white);" id="tradeBotDASHAddDialog">
+			<div class="trade-bot-container" style="display:${this.showGetWalletBance ? 'inline' : 'none'}">
+                      <h2 style="color: var(--black);">${this.renderFetchText()} <paper-spinner-lite active></paper-spinner-lite></h2>
+                  </div>
+			<div class="card-bot" style="display:${this.showAddAutoBuy ? 'flex' : 'none'}">
+				<div style="text-align: center;">
+					<h1>${this.listedCoins.get(this.selectedCoin).coinCode} ==> QORT</h1>
+					<hr>
+				</div>
+				<div style="display: inline;">
+                              <div style="display:${this.autoBuyWarning ? 'inline' : 'none'}">${this.renderWarning()}</div>
+					<mwc-icon-button class="btn-clear-bot" title="${translate("tradepage.tchange15")}" icon="clear_all" @click="${() => this.clearTradeBotForm()}"></mwc-icon-button>
+				</div>
+				<span class="tab-text">${translate("tradepage.tchange8")} (QORT)*</span>
+				<p>
+					<mwc-textfield
+						style="width: 100%; color: var(--black);"
+						id="autoBuyDASHQortAmountInput"
+						required
+						label=""
+						placeholder="0.0000000"
+						type="number"
+						@input="${(e) => { this.checkTradeBotAmount(e) }}"
+						auto-validate="false"
+						outlined
+						value="${this.initialAmount}"
+					>
+					</mwc-textfield>
+				</p>
+				<span class="tab-text">${translate("tradepage.tchange14")} (${this.listedCoins.get(this.selectedCoin).coinCode})*</span>
+				<p>
+					<mwc-textfield
+						style="width: 100%; color: var(--black);"
+						id="autoBuyDASHPriceInput"
+						required
+						label=""
+						placeholder="0.00000000"
+						type="number"
+						@input="${(e) => { this.checkTradeBotAmount(e) }}"
+						auto-validate="false"
+						outlined
+						value="${this.initialAmount}"
+					>
+					</mwc-textfield>
+				</p>
+				<span class="tab-text">${translate("tradepage.tchange10")} (${this.listedCoins.get(this.selectedCoin).coinCode})*</span>
+				<p>
+					<mwc-textfield
+						style="width: 100%; color: var(--black);"
+						id="autoBuyDASHTotalInput"
+						required
+						readOnly
+						label=""
+						placeholder="0.0000000"
+						type="number"
+						auto-validate="false"
+						outlined
+						value="${this.initialAmount}"
+					>
+					</mwc-textfield>
+				</p>
+				<span class="amt-text">
+					<span class="balance-text">${translate("tradepage.tchange16")}: ${this.listedCoins.get(this.selectedCoin).balance} ${this.listedCoins.get(this.selectedCoin).coinCode}</span>
+				</span>
+				<div class="buttons">
+					<div>
+						<mwc-button class="buy-button" ?disabled="${this.autoBuyBtnDisable}" style="width:100%;" raised @click="${() => this.checkTradeBotValues()}">
+							${translate("tradepage.tchange38")} ${this.listedCoins.get(this.selectedCoin).coinCode} ${translate("tradepage.tchange39")}
+						</mwc-button>
+					</div>
+				</div>
+			</div>
+			<mwc-button slot="primaryAction" dialogAction="cancel" class="cancel">${translate("general.close")}</mwc-button>
+		</mwc-dialog>
+
+		<mwc-dialog style="background: var(--white);" id="tradeBotFIROAddDialog">
+			<div class="trade-bot-container" style="display:${this.showGetWalletBance ? 'inline' : 'none'}">
+                      <h2 style="color: var(--black);">${this.renderFetchText()} <paper-spinner-lite active></paper-spinner-lite></h2>
+                  </div>
+			<div class="card-bot" style="display:${this.showAddAutoBuy ? 'flex' : 'none'}">
+				<div style="text-align: center;">
+					<h1>${this.listedCoins.get(this.selectedCoin).coinCode} ==> QORT</h1>
+					<hr>
+				</div>
+				<div style="display: inline;">
+                              <div style="display:${this.autoBuyWarning ? 'inline' : 'none'}">${this.renderWarning()}</div>
+					<mwc-icon-button class="btn-clear-bot" title="${translate("tradepage.tchange15")}" icon="clear_all" @click="${() => this.clearTradeBotForm()}"></mwc-icon-button>
+				</div>
+				<span class="tab-text">${translate("tradepage.tchange8")} (QORT)*</span>
+				<p>
+					<mwc-textfield
+						style="width: 100%; color: var(--black);"
+						id="autoBuyFIROQortAmountInput"
+						required
+						label=""
+						placeholder="0.0000000"
+						type="number"
+						@input="${(e) => { this.checkTradeBotAmount(e) }}"
+						auto-validate="false"
+						outlined
+						value="${this.initialAmount}"
+					>
+					</mwc-textfield>
+				</p>
+				<span class="tab-text">${translate("tradepage.tchange14")} (${this.listedCoins.get(this.selectedCoin).coinCode})*</span>
+				<p>
+					<mwc-textfield
+						style="width: 100%; color: var(--black);"
+						id="autoBuyFIROPriceInput"
+						required
+						label=""
+						placeholder="0.00000000"
+						type="number"
+						@input="${(e) => { this.checkTradeBotAmount(e) }}"
+						auto-validate="false"
+						outlined
+						value="${this.initialAmount}"
+					>
+					</mwc-textfield>
+				</p>
+				<span class="tab-text">${translate("tradepage.tchange10")} (${this.listedCoins.get(this.selectedCoin).coinCode})*</span>
+				<p>
+					<mwc-textfield
+						style="width: 100%; color: var(--black);"
+						id="autoBuyFIROTotalInput"
+						required
+						readOnly
+						label=""
+						placeholder="0.0000000"
+						type="number"
+						auto-validate="false"
+						outlined
+						value="${this.initialAmount}"
+					>
+					</mwc-textfield>
+				</p>
+				<span class="amt-text">
+					<span class="balance-text">${translate("tradepage.tchange16")}: ${this.listedCoins.get(this.selectedCoin).balance} ${this.listedCoins.get(this.selectedCoin).coinCode}</span>
+				</span>
+				<div class="buttons">
+					<div>
+						<mwc-button class="buy-button" ?disabled="${this.autoBuyBtnDisable}" style="width:100%;" raised @click="${() => this.checkTradeBotValues()}">
+							${translate("tradepage.tchange38")} ${this.listedCoins.get(this.selectedCoin).coinCode} ${translate("tradepage.tchange39")}
+						</mwc-button>
+					</div>
+				</div>
+			</div>
+			<mwc-button slot="primaryAction" dialogAction="cancel" class="cancel">${translate("general.close")}</mwc-button>
+		</mwc-dialog>
         `
     }
 
@@ -1992,6 +2520,27 @@ class TradeBotPortal extends LitElement {
             setTimeout(getQortArrrPrice, 300000)
         }
 
+        const getQortNmcPrice = () => {
+            parentEpml.request("apiCall", { url: `/crosschain/price/NAMECOIN?inverse=true` }).then((res) => {
+                setTimeout(() => { this.qortnmc = (Number(res) / 1e8).toFixed(8) }, 1)
+            })
+            setTimeout(getQortNmcPrice, 300000)
+        }
+
+        const getQortDashPrice = () => {
+            parentEpml.request("apiCall", { url: `/crosschain/price/DASH?inverse=true` }).then((res) => {
+                setTimeout(() => { this.qortdash = (Number(res) / 1e8).toFixed(8) }, 1)
+            })
+            setTimeout(getQortDashPrice, 300000)
+        }
+
+        const getQortFiroPrice = () => {
+            parentEpml.request("apiCall", { url: `/crosschain/price/FIRO?inverse=true` }).then((res) => {
+                setTimeout(() => { this.qortfiro = (Number(res) / 1e8).toFixed(8) }, 1)
+            })
+            setTimeout(getQortFiroPrice, 300000)
+        }
+
         window.addEventListener('contextmenu', (event) => {
             event.preventDefault()
             this._textMenu(event)},
@@ -2010,6 +2559,9 @@ class TradeBotPortal extends LitElement {
             this.tradeBotDgbBook = JSON.parse(localStorage.getItem(this.dgbWallet) || "[]")
             this.tradeBotRvnBook = JSON.parse(localStorage.getItem(this.rvnWallet) || "[]")
             this.tradeBotArrrBook = JSON.parse(localStorage.getItem(this.arrrWallet) || "[]")
+            this.tradeBotNmcBook = JSON.parse(localStorage.getItem(this.nmcWallet) || "[]")
+            this.tradeBotDashBook = JSON.parse(localStorage.getItem(this.dashWallet) || "[]")
+            this.tradeBotFiroBook = JSON.parse(localStorage.getItem(this.firoWallet) || "[]")
             const checkLanguage = localStorage.getItem('qortalLanguage')
             const checkTheme = localStorage.getItem('qortalTheme')
 
@@ -2029,6 +2581,9 @@ class TradeBotPortal extends LitElement {
         this.dgbWallet = window.parent.reduxStore.getState().app.selectedAddress.dgbWallet.address
         this.rvnWallet = window.parent.reduxStore.getState().app.selectedAddress.rvnWallet.address
         this.arrrWallet = window.parent.reduxStore.getState().app.selectedAddress.arrrWallet.address
+        this.nmcWallet = window.parent.reduxStore.getState().app.selectedAddress.nmcWallet.address
+        this.dashWallet = window.parent.reduxStore.getState().app.selectedAddress.dashWallet.address
+        this.firoWallet = window.parent.reduxStore.getState().app.selectedAddress.firoWallet.address
 
         let configLoaded = false
 
@@ -2045,6 +2600,9 @@ class TradeBotPortal extends LitElement {
                 this.dgbWallet = window.parent.reduxStore.getState().app.selectedAddress.dgbWallet.address
                 this.rvnWallet = window.parent.reduxStore.getState().app.selectedAddress.rvnWallet.address
                 this.arrrWallet = window.parent.reduxStore.getState().app.selectedAddress.arrrWallet.address
+                this.nmcWallet = window.parent.reduxStore.getState().app.selectedAddress.nmcWallet.address
+                this.dashWallet = window.parent.reduxStore.getState().app.selectedAddress.dashWallet.address
+                this.firoWallet = window.parent.reduxStore.getState().app.selectedAddress.firoWallet.address
 
                 this.updateAccountBalance()
             })
@@ -2057,6 +2615,9 @@ class TradeBotPortal extends LitElement {
                     setTimeout(getQortDgbPrice, 1)
                     setTimeout(getQortRvnPrice, 1)
                     setTimeout(getQortArrrPrice, 1)
+                    setTimeout(getQortNmcPrice, 1)
+                    setTimeout(getQortDashPrice, 1)
+                    setTimeout(getQortFiroPrice, 1)
                     configLoaded = true
                 }
                 this.config = JSON.parse(c)
@@ -2081,6 +2642,9 @@ class TradeBotPortal extends LitElement {
         this.dgbTradebook()
         this.rvnTradebook()
         this.arrrTradebook()
+        this.nmcTradebook()
+        this.dashTradebook()
+        this.firoTradebook()
     }
 
     changeTheme() {
@@ -2132,6 +2696,15 @@ class TradeBotPortal extends LitElement {
             case "ARRR":
                 return html`${this.tradeBotARRRTemplate()}`
                 break
+            case "NMC":
+                return html`${this.tradeBotNMCTemplate()}`
+                break
+            case "DASH":
+                return html`${this.tradeBotDASHTemplate()}`
+                break
+            case "FIRO":
+                return html`${this.tradeBotFIROTemplate()}`
+                break
             default:
                 break
         }
@@ -2156,6 +2729,15 @@ class TradeBotPortal extends LitElement {
                 break
             case "ARRR":
                 this.qortRatio = this.qortarrr
+                break
+            case "NMC":
+                this.qortRatio = this.qortnmc
+                break
+            case "DASH":
+                this.qortRatio = this.qortdash
+                break
+            case "FIRO":
+                this.qortRatio = this.qortfiro
                 break
             default:
                 break
@@ -2206,6 +2788,27 @@ class TradeBotPortal extends LitElement {
                 this.arrrqort = (Number(res) / 1e8).toFixed(8)
             })
             return html`${this.arrrqort}`
+        } else if (this.listedCoins.get(this.selectedCoin).coinCode === "NMC") {
+            parentEpml.request('apiCall', {
+                url: `/crosschain/price/NAMECOIN?inverse=false`
+            }).then((res) => {
+                this.nmcqort = (Number(res) / 1e8).toFixed(8)
+            })
+            return html`${this.nmcqort}`
+        } else if (this.listedCoins.get(this.selectedCoin).coinCode === "DASH") {
+            parentEpml.request('apiCall', {
+                url: `/crosschain/price/DASH?inverse=false`
+            }).then((res) => {
+                this.dashqort = (Number(res) / 1e8).toFixed(8)
+            })
+            return html`${this.dashqort}`
+        } else if (this.listedCoins.get(this.selectedCoin).coinCode === "FIRO") {
+            parentEpml.request('apiCall', {
+                url: `/crosschain/price/FIRO?inverse=false`
+            }).then((res) => {
+                this.firoqort = (Number(res) / 1e8).toFixed(8)
+            })
+            return html`${this.firoqort}`
         }
     }
 
@@ -2229,14 +2832,26 @@ class TradeBotPortal extends LitElement {
             case 'DIGIBYTE':
                 _url = `/crosschain/dgb/walletbalance?apiKey=${this.getApiKey()}`
                 _body = window.parent.reduxStore.getState().app.selectedAddress.dgbWallet.derivedMasterPublicKey
-		    break
-		case 'RAVENCOIN':
+                break
+            case 'RAVENCOIN':
                 _url = `/crosschain/rvn/walletbalance?apiKey=${this.getApiKey()}`
                 _body = window.parent.reduxStore.getState().app.selectedAddress.rvnWallet.derivedMasterPublicKey
                 break
             case 'PIRATECHAIN':
                 _url = `/crosschain/arrr/walletbalance?apiKey=${this.getApiKey()}`
                 _body = window.parent.reduxStore.getState().app.selectedAddress.arrrWallet.seed58
+                break
+            case 'NAMECOIN':
+                _url = `/crosschain/nmc/walletbalance?apiKey=${this.getApiKey()}`
+                _body = window.parent.reduxStore.getState().app.selectedAddress.nmcWallet.derivedMasterPublicKey
+                break
+            case 'DASH':
+                _url = `/crosschain/dash/walletbalance?apiKey=${this.getApiKey()}`
+                _body = window.parent.reduxStore.getState().app.selectedAddress.dashWallet.derivedMasterPublicKey
+                break
+            case 'FIRO':
+                _url = `/crosschain/firo/walletbalance?apiKey=${this.getApiKey()}`
+                _body = window.parent.reduxStore.getState().app.selectedAddress.firoWallet.derivedMasterPublicKey
                 break
             default:
                 break
@@ -2299,12 +2914,21 @@ class TradeBotPortal extends LitElement {
                 break
             case 'DIGIBYTE':
                 tradesUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=DIGIBYTE&minimumTimestamp=1597310000000&limit=0&reverse=true`
-		    break
-		case 'RAVENCOIN':
+                break
+            case 'RAVENCOIN':
                 tradesUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=RAVENCOIN&minimumTimestamp=1597310000000&limit=0&reverse=true`
                 break
             case 'PIRATECHAIN':
                 tradesUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=PIRATECHAIN&minimumTimestamp=1597310000000&limit=0&reverse=true`
+                break
+            case 'NAMECOIN':
+                tradesUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=NAMECOIN&minimumTimestamp=1597310000000&limit=0&reverse=true`
+                break
+            case 'DASH':
+                tradesUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=DASH&minimumTimestamp=1597310000000&limit=0&reverse=true`
+                break
+            case 'FIRO':
+                tradesUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=FIRO&minimumTimestamp=1597310000000&limit=0&reverse=true`
                 break
             default:
                 break
@@ -2619,6 +3243,150 @@ class TradeBotPortal extends LitElement {
         parentEpml.request('showSnackBar', `${arrrstring}`)
     }
 
+    nmcTradebook() {
+        if (localStorage.getItem(this.nmcWallet) === null) {
+            localStorage.setItem(this.nmcWallet, "")
+        } else {
+            this.tradeBotNmcBook = JSON.parse(localStorage.getItem(this.nmcWallet) || "[]")
+        }
+    }
+
+    addToNMCTradebook() {
+        const addBotNmcQortAmount = this.shadowRoot.getElementById('autoBuyNMCQortAmountInput').value
+        const addBotNmcPrice = this.shadowRoot.getElementById('autoBuyNMCPriceInput').value
+        const addNmcQortAmount = this.round(parseFloat(addBotNmcQortAmount))
+        const addNmcPrice = this.round(parseFloat(addBotNmcPrice))
+
+        var oldNmcTradebook = JSON.parse(localStorage.getItem(this.nmcWallet) || "[]")
+
+        const newNmcTradebookItem = {
+            botNmcQortAmount: addNmcQortAmount,
+            botNmcPrice: addNmcPrice
+        }
+
+        oldNmcTradebook.push(newNmcTradebookItem)
+
+        localStorage.setItem(this.nmcWallet, JSON.stringify(oldNmcTradebook))
+
+        let nmctradebookstring = get("tradepage.tchange44")
+        parentEpml.request('showSnackBar', `${nmctradebookstring}`)
+
+        this.closeNMCTradebookDialog()
+        this.tradeBotNmcBook = JSON.parse(localStorage.getItem(this.nmcWallet) || "[]")
+    }
+
+    closeNMCTradebookDialog() {
+        this.shadowRoot.querySelector('#tradeBotNMCAddDialog').close()
+        this.clearTradeBotForm()
+    }
+
+    removeNMCTradebook() {
+        localStorage.removeItem(this.nmcWallet)
+        localStorage.setItem(this.nmcWallet, "")
+        this.tradeBotNmcBook = JSON.parse(localStorage.getItem(this.nmcWallet) || "[]")
+
+        this.autoBuyBotDisable = false
+
+        let nmcstring = get("tradepage.tchange41")
+        parentEpml.request('showSnackBar', `${nmcstring}`)
+    }
+
+    dashTradebook() {
+        if (localStorage.getItem(this.dashWallet) === null) {
+            localStorage.setItem(this.dashWallet, "")
+        } else {
+            this.tradeBotDashBook = JSON.parse(localStorage.getItem(this.dashWallet) || "[]")
+        }
+    }
+
+    addToDASHTradebook() {
+        const addBotDashQortAmount = this.shadowRoot.getElementById('autoBuyDASHQortAmountInput').value
+        const addBotDashPrice = this.shadowRoot.getElementById('autoBuyDASHPriceInput').value
+        const addDashQortAmount = this.round(parseFloat(addBotDashQortAmount))
+        const addDashPrice = this.round(parseFloat(addBotDashPrice))
+
+        var oldDashTradebook = JSON.parse(localStorage.getItem(this.dashWallet) || "[]")
+
+        const newDashTradebookItem = {
+            botDashQortAmount: addDashQortAmount,
+            botDashPrice: addDashPrice
+        }
+
+        oldDashTradebook.push(newDashTradebookItem)
+
+        localStorage.setItem(this.dashWallet, JSON.stringify(oldDashTradebook))
+
+        let dashtradebookstring = get("tradepage.tchange44")
+        parentEpml.request('showSnackBar', `${dashtradebookstring}`)
+
+        this.closeDASHTradebookDialog()
+        this.tradeBotDashBook = JSON.parse(localStorage.getItem(this.dashWallet) || "[]")
+    }
+
+    closeDASHTradebookDialog() {
+        this.shadowRoot.querySelector('#tradeBotDASHAddDialog').close()
+        this.clearTradeBotForm()
+    }
+
+    removeDASHTradebook() {
+        localStorage.removeItem(this.dashWallet)
+        localStorage.setItem(this.dashWallet, "")
+        this.tradeBotDashBook = JSON.parse(localStorage.getItem(this.dashWallet) || "[]")
+
+        this.autoBuyBotDisable = false
+
+        let dashstring = get("tradepage.tchange41")
+        parentEpml.request('showSnackBar', `${dashstring}`)
+    }
+
+    firoTradebook() {
+        if (localStorage.getItem(this.firoWallet) === null) {
+            localStorage.setItem(this.firoWallet, "")
+        } else {
+            this.tradeBotFiroBook = JSON.parse(localStorage.getItem(this.firoWallet) || "[]")
+        }
+    }
+
+    addToFIROTradebook() {
+        const addBotFiroQortAmount = this.shadowRoot.getElementById('autoBuyFIROQortAmountInput').value
+        const addBotFiroPrice = this.shadowRoot.getElementById('autoBuyFIROPriceInput').value
+        const addFiroQortAmount = this.round(parseFloat(addBotFiroQortAmount))
+        const addFiroPrice = this.round(parseFloat(addBotFiroPrice))
+
+        var oldFiroTradebook = JSON.parse(localStorage.getItem(this.firoWallet) || "[]")
+
+        const newFiroTradebookItem = {
+            botFiroQortAmount: addFiroQortAmount,
+            botFiroPrice: addFiroPrice
+        }
+
+        oldFiroTradebook.push(newFiroTradebookItem)
+
+        localStorage.setItem(this.firoWallet, JSON.stringify(oldFiroTradebook))
+
+        let firotradebookstring = get("tradepage.tchange44")
+        parentEpml.request('showSnackBar', `${firotradebookstring}`)
+
+        this.closeFIROTradebookDialog()
+        this.tradeBotFiroBook = JSON.parse(localStorage.getItem(this.firoWallet) || "[]")
+    }
+
+    closeFIROTradebookDialog() {
+        this.shadowRoot.querySelector('#tradeBotFIROAddDialog').close()
+        this.clearTradeBotForm()
+    }
+
+    removeFIROTradebook() {
+        localStorage.removeItem(this.firoWallet)
+        localStorage.setItem(this.firoWallet, "")
+        this.tradeBotFiroBook = JSON.parse(localStorage.getItem(this.firoWallet) || "[]")
+
+        this.autoBuyBotDisable = false
+
+        let firostring = get("tradepage.tchange41")
+        parentEpml.request('showSnackBar', `${firostring}`)
+    }
+
     async setForeignCoin(coin,beingInitialized) {
         let _this = this
         this.selectedCoin = coin
@@ -2707,6 +3475,15 @@ class TradeBotPortal extends LitElement {
                 break
             case "ARRR":
                 this.addToARRRTradebook()
+                break
+            case "NMC":
+                this.addToNMCTradebook()
+                break
+            case "DASH":
+                this.addToDASHTradebook()
+                break
+            case "FIRO":
+                this.addToFIROTradebook()
                 break
             default:
                 break
@@ -2952,6 +3729,57 @@ class TradeBotPortal extends LitElement {
             })
         }
 
+        const NamecoinACCTv1 = (states) => {
+            states.reverse()
+            states.forEach((state) => {
+                if (state.creatorAddress === this.selectedAddress.address) {
+                    if (state.tradeState == 'ALICE_WAITING_FOR_AT_LOCK') {
+                        this.changeTradeBotState(state, 'BUYING')
+                    } else if (state.tradeState == 'ALICE_DONE') {
+                        this.handleCompletedState(state)
+                    } else if (state.tradeState == 'ALICE_REFUNDING_A') {
+                        this.changeTradeBotState(state, 'REFUNDING')
+                    } else if (state.tradeState == 'ALICE_REFUNDED') {
+                        this.handleCompletedState(state)
+                    }
+                }
+            })
+        }
+
+        const DashACCTv1 = (states) => {
+            states.reverse()
+            states.forEach((state) => {
+                if (state.creatorAddress === this.selectedAddress.address) {
+                    if (state.tradeState == 'ALICE_WAITING_FOR_AT_LOCK') {
+                        this.changeTradeBotState(state, 'BUYING')
+                    } else if (state.tradeState == 'ALICE_DONE') {
+                        this.handleCompletedState(state)
+                    } else if (state.tradeState == 'ALICE_REFUNDING_A') {
+                        this.changeTradeBotState(state, 'REFUNDING')
+                    } else if (state.tradeState == 'ALICE_REFUNDED') {
+                        this.handleCompletedState(state)
+                    }
+                }
+            })
+        }
+
+        const FiroACCTv1 = (states) => {
+            states.reverse()
+            states.forEach((state) => {
+                if (state.creatorAddress === this.selectedAddress.address) {
+                    if (state.tradeState == 'ALICE_WAITING_FOR_AT_LOCK') {
+                        this.changeTradeBotState(state, 'BUYING')
+                    } else if (state.tradeState == 'ALICE_DONE') {
+                        this.handleCompletedState(state)
+                    } else if (state.tradeState == 'ALICE_REFUNDING_A') {
+                        this.changeTradeBotState(state, 'REFUNDING')
+                    } else if (state.tradeState == 'ALICE_REFUNDED') {
+                        this.handleCompletedState(state)
+                    }
+                }
+            })
+        }
+
         switch (this.selectedCoin) {
             case 'BITCOIN':
                 BitcoinACCTv1(tradeStates)
@@ -2970,6 +3798,15 @@ class TradeBotPortal extends LitElement {
                 break
             case 'PIRATECHAIN':
                 PirateChainACCTv1(tradeStates)
+                break
+            case 'NAMECOIN':
+                NamecoinACCTv1(tradeStates)
+                break
+            case 'DASH':
+                DashACCTv1(tradeStates)
+                break
+            case 'FIRO':
+                FiroACCTv1(tradeStates)
                 break
             default:
                 break
