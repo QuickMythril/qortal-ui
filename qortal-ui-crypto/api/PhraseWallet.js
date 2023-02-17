@@ -106,7 +106,7 @@ export default class PhraseWallet {
 				public: 0x043587CF,
 				prefix: 0x6F
 			}
-		}).createWallet(new Uint8Array(btcSeed), false);
+		}).createWallet(new Uint8Array(btcSeed), false, null, 'bc');
 
 		// Create Litecoin HD Wallet 
 		const ltcSeed = [...addrSeed];
@@ -121,7 +121,7 @@ export default class PhraseWallet {
 				public: 0x043587CF,
 				prefix: 0x6F
 			}
-		}).createWallet(new Uint8Array(ltcSeed), false, 'LTC');
+		}).createWallet(new Uint8Array(ltcSeed), false, 'LTC', 'ltc');
 
 		// Create Dogecoin HD Wallet 
 		const dogeSeed = [...addrSeed];
@@ -136,7 +136,7 @@ export default class PhraseWallet {
 				public: 0x043587CF,
 				prefix: 0x71
 			}
-		}).createWallet(new Uint8Array(dogeSeed), false, 'DOGE');
+		}).createWallet(new Uint8Array(dogeSeed), false, 'DOGE', null);
 
 		// Create Digibyte HD Wallet 
 		const dgbSeed = [...addrSeed];
@@ -151,7 +151,7 @@ export default class PhraseWallet {
 				public: 0x043587CF,
 				prefix: 0x7E
 			}
-		}).createWallet(new Uint8Array(dgbSeed), false, 'DGB');
+		}).createWallet(new Uint8Array(dgbSeed), false, 'DGB', 'dgb');
 
 		// Create Ravencoin HD Wallet 
 		const rvnSeed = [...addrSeed];
@@ -166,7 +166,7 @@ export default class PhraseWallet {
 				public: 0x043587CF,
 				prefix: 0x6F
 			}
-		}).createWallet(new Uint8Array(rvnSeed), false, 'RVN');
+		}).createWallet(new Uint8Array(rvnSeed), false, 'RVN', null);
 
 		// Create Pirate Chain HD Wallet 
 		const arrrSeed = [...addrSeed];
@@ -181,7 +181,7 @@ export default class PhraseWallet {
 				public: 0x043587CF,
 				prefix: [0x14, 0x51]
 			}
-		}).createWallet(new Uint8Array(arrrSeed), false, 'ARRR');
+		}).createWallet(new Uint8Array(arrrSeed), false, 'ARRR', null);
 
 		this._addresses[nonce] = {
 			address,

@@ -363,6 +363,14 @@ class MultiWallet extends LitElement {
                 margin: 4px 0 20px;
             }
 
+            .wallet-bech32-address {
+                display: flex;
+                align-items: center;
+                font-size: 18px;
+                color: var(--black);
+                margin: 4px 0 20px;
+            }
+
             .wallet-balance {
                 display: inline-block;
                 font-weight: 600;
@@ -553,7 +561,7 @@ class MultiWallet extends LitElement {
             }
 
             .qrcode-pos {
-                margin-top: -175px;
+                margin-top: -90px;
                 float: right;
             }
 
@@ -826,6 +834,25 @@ class MultiWallet extends LitElement {
                             >
                             </button-icon-copy>
                         </div>
+                        <div class="qrcode-pos" ?hidden="${this.getSelectedWalletAddress().length < 1}">
+                            <qortal-qrcode-generator data="${this.getSelectedWalletAddress()}" mode="octet" format="html" auto></qortal-qrcode-generator>
+                        </div>
+                        ${this.getSelectedWalletBech32Address() == '' ? '' : 'Bech32'}
+                        <div class="wallet-bech32-address">
+                            <span>${this.getSelectedWalletBech32Address()}</span>
+                            <button-icon-copy
+                                ?hidden="${this.getSelectedWalletBech32Address() == ''}"
+                                title="${translate("walletpage.wchange3")}"
+                                onSuccessMessage="${translate("walletpage.wchange4")}"
+                                onErrorMessage="${translate("walletpage.wchange39")}"
+                                textToCopy=${this.getSelectedWalletBech32Address()}
+                                buttonSize="28px"
+                                iconSize="16px"
+                                color="var(--copybutton)"
+                                offsetLeft="4px"
+                            >
+                            </button-icon-copy>
+                        </div>
                         <span class="wallet-balance">
                             ${this.balanceString}
                         </span>
@@ -839,9 +866,6 @@ class MultiWallet extends LitElement {
                     </div>
                     <div class="unused-pos" ?hidden="${this.getSelectedWalletAddress().length < 1}">
                         ${this.renderUnusedAddressButton()}
-                    </div>
-                    <div class="qrcode-pos" ?hidden="${this.getSelectedWalletAddress().length < 1}">
-                        <qortal-qrcode-generator data="${this.getSelectedWalletAddress()}" mode="octet" format="html" auto></qortal-qrcode-generator>
                     </div>
                     <div id="transactions">
                         ${this.loading ? html`<paper-spinner-lite style="display: block; margin: 5px auto;" active></paper-spinner-lite>` : ''}
@@ -5039,6 +5063,18 @@ class MultiWallet extends LitElement {
             default:
                 // Use locally derived address
                 return this.wallets.get(this._selectedWallet).wallet.address
+        }
+    }
+
+    getSelectedWalletBech32Address() {
+        switch (this._selectedWallet) {
+            case "btc":
+            case "ltc":
+            case "dgb":
+                return this.wallets.get(this._selectedWallet).wallet.bech32Address
+
+            default:
+                return ''
         }
     }
 
