@@ -18,21 +18,25 @@ class ExportKeys extends connect(store)(LitElement) {
             dogePMK: { type: String },
             dgbPMK: { type: String },
             rvnPMK: { type: String },
+            ghostPMK: { type: String },
             btcWALLET: { type: String },
             ltcWALLET: { type: String },
             dogeWALLET: { type: String },
             dgbWALLET: { type: String },
             rvnWALLET: { type: String },
+            ghostWALLET: { type: String },
             btcName: { type: String },
             ltcName: { type: String },
             dogeName: { type: String },
             dgbName: { type: String },
             rvnName: { type: String },
+            ghostName: { type: String },
             btcShort: { type: String },
             ltcShort: { type: String },
             dogeShort: { type: String },
             dgbShort: { type: String },
             rvnShort: { type: String },
+            ghostShort: { type: String },
             dWalletAddress: { type: String },
             dPrivateKey: { type: String },
             dCoinName: { type: String },
@@ -134,6 +138,10 @@ class ExportKeys extends connect(store)(LitElement) {
         this.rvnWALLET = store.getState().app.selectedAddress.rvnWallet.address
         this.rvnName = 'Ravencoin'
         this.rvnShort = 'rvn'
+        this.ghostPMK = store.getState().app.selectedAddress.ghostWallet.derivedMasterPrivateKey
+        this.ghostWALLET = store.getState().app.selectedAddress.ghostWallet.address
+        this.ghostName = 'Ghost'
+        this.ghostShort = 'ghost'
         this.dWalletAddress = ''
         this.dPrivateKey = ''
         this.dCoinName = ''
@@ -179,6 +187,12 @@ class ExportKeys extends connect(store)(LitElement) {
                                 <img src="/img/rvn.png" style="width: 32px; height: 32px;">&nbsp;&nbsp;${this.rvnWALLET}<br>
                             </div>
                             <div @click=${() => this.checkForPmkDownload(this.rvnWALLET, this.rvnPMK, this.rvnName, this.rvnShort)} class="export-button"> ${translate("settings.exp2")} </div>
+                        </div>
+                        <div class="content-box">
+                            <div style="display: flex; align-items: center; justify-content: center;">
+                                <img src="/img/ghost.png" style="width: 32px; height: 32px;">&nbsp;&nbsp;${this.ghostWALLET}<br>
+                            </div>
+                            <div @click=${() => this.checkForPmkDownload(this.ghostWALLET, this.ghostPMK, this.ghostName, this.ghostShort)} class="export-button"> ${translate("settings.exp2")} </div>
                         </div>
                     </div>
                 </div>
