@@ -35,6 +35,7 @@ const sendDoge = api.sendDoge;
 const sendDgb = api.sendDgb;
 const sendRvn = api.sendRvn;
 const sendArrr = api.sendArrr;
+const sendGhost = api.sendGhost;
 
 export const routes = {
 	hello: async (req) => {
@@ -430,5 +431,18 @@ export const routes = {
 			response = e.message
 		}
 		return response
+	},
+
+	sendGhost: async (req) => {
+		let response;
+		try {
+			const res = await sendGhost(req.data);
+			response = res;
+		} catch (e) {
+			console.error(e);
+			console.error(e.message);
+			response = e.message;
+		}
+		return response;
 	},
 };

@@ -183,6 +183,21 @@ export default class PhraseWallet {
 			}
 		}).createWallet(new Uint8Array(arrrSeed), false, 'ARRR');
 
+		// Create Ghost HD Wallet 
+		const ghostSeed = [...addrSeed];
+		const ghostWallet = new AltcoinHDWallet({
+			mainnet: {
+				private: 0x8E8EA8EA,
+				public: 0x68DF7CBD,
+				prefix: 0x26
+			},
+			testnet: {
+				private: 0x04889478,
+				public: 0xE1427800,
+				prefix: 0x4B
+			}
+		}).createWallet(new Uint8Array(ghostSeed), false, 'GHOST');
+
 		this._addresses[nonce] = {
 			address,
 			btcWallet,
@@ -191,6 +206,7 @@ export default class PhraseWallet {
 			dgbWallet,
 			rvnWallet,
 			arrrWallet,
+			ghostWallet,
 			qoraAddress,
 			keyPair: {
 				publicKey: addrKeyPair.publicKey,

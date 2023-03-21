@@ -138,3 +138,17 @@ export const sendArrr = (requestObject) => {
 		body: JSON.stringify(requestObject)
 	})
 }
+
+// Send GHOST 
+export const sendGhost = (requestObject) => {
+	const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+
+	return request(`/crosschain/ghost/send?apiKey=${myNode.apiKey}`, {
+		method: 'POST',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(requestObject)
+	})
+}
