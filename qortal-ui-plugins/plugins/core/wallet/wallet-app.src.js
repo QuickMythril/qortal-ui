@@ -733,9 +733,9 @@ class MultiWallet extends LitElement {
         this.rvnFeePerByte = 1125
         this.rvnSatMinFee = 1000
         this.rvnSatMaxFee = 10000
-        this.ghostFeePerByte = 10 // GhostToDo - Confirm fees
-        this.ghostSatMinFee = 1 // GhostToDo - Confirm fees
-        this.ghostSatMaxFee = 100 // GhostToDo - Confirm fees
+        this.ghostFeePerByte = 250 // GhostToDo - Confirm fees
+        this.ghostSatMinFee = 150 // GhostToDo - Confirm fees
+        this.ghostSatMaxFee = 1000 // GhostToDo - Confirm fees
 
         this.wallets = new Map()
 
@@ -4477,12 +4477,12 @@ class MultiWallet extends LitElement {
     }
 
     calculateGhostAll() {
-        if (this.balance < 0.05100000) { // GhostToDo - Confirm fees
+        if (this.balance < 0.00135000) { // GhostToDo - Confirm fees
             let not_enough_string = get("walletpage.wchange26")
             parentEpml.request('showSnackBar', `${not_enough_string}`)
         } else {
-            this.ghostAmount = (this.balance - 0.05000000).toFixed(8) // GhostToDo - Confirm fees
-            this.ghostFeePerByte = 10 // GhostToDo - Confirm fees
+            this.ghostAmount = (this.balance - 0.00125000).toFixed(8) // GhostToDo - Confirm fees
+            this.ghostFeePerByte = 250 // GhostToDo - Confirm fees
         }
     }
 
