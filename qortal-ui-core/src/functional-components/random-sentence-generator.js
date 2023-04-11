@@ -3,6 +3,7 @@
 'use strict'
 import { LitElement, html, css } from 'lit'
 import * as WORDLISTS from './wordlists.js'
+import { Sha256 } from 'asmcrypto.js'
 
 class RandomSentenceGenerator extends LitElement {
 	static get properties() {
@@ -146,6 +147,45 @@ class RandomSentenceGenerator extends LitElement {
 		})
 		this.templateEntropy = Math.floor(Math.log(entropy) / Math.log(8))
 		return final.join(' ')
+	}
+
+	generateBip39(bits) {
+		if (bits < 128 || bits > 256 || bits % 32 !== 0) {
+		  throw new Error('Invalid number of bits. Must be between 128 and 256 and a multiple of 32.')
+		}
+		const crypto = window.crypto || window.msCrypto
+
+		if (crypto) {
+			const initialEntropy = new Uint8Array(bits / 8)
+			crypto.getRandomValues(initialEntropy)
+
+			const checksumBits = bits / 32
+			const sha256Instance = new Sha256()
+			const hash = sha256Instance.process(initialEntropy).finish().result
+			const totalBits = bits + checksumBits
+			const totalWords = totalBits / 11
+
+			let bitArray = []
+        	for (let i = 0; i < initialEntropy.length * 8; i++) {
+            	bitArray.push((initialEntropy[Math.floor(i / 8)] >> (7 - (i % 8))) & 1)
+        	}
+        	for (let i = 0; i < checksumBits; i++) {
+            	bitArray.push((hash[Math.floor(i / 8)] >> (7 - (i % 8))) & 1)
+        	}
+
+        	let seedPhrase = []
+			for (let i = 0; i < totalWords; i++) {
+				const startBit = i * 11
+				const bitsToExtract = bitArray.slice(startBit, startBit + 11)
+				const wordIndex = parseInt(bitsToExtract.join(''), 2)
+				seedPhrase.push(this._wordlists['bip39english'][wordIndex])
+
+			}
+
+			this.parsedString = seedPhrase.join(' ')
+		} else {
+			throw new Error('Secure RNG not found. Unable to generate a BIP-39 compatible sentence.')
+		}
 	}
 
 	render() {
