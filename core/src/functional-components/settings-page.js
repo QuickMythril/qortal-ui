@@ -20,7 +20,7 @@ let settingsDialog
 class SettingsPage extends connect(store)(LitElement) {
     static get properties() {
         return {
-            lastSelected: { type: Number },
+            defaultNodeIndex: { type: Number },
             nodeConfig: { type: Object },
             theme: { type: String, reflect: true }
         }
@@ -84,6 +84,7 @@ class SettingsPage extends connect(store)(LitElement) {
         super()
         this.nodeConfig = {}
         this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
+        this.defaultNodeIndex = localStorage.getItem('defaultNodeIndex') ? parseInt(localStorage.getItem('defaultNodeIndex')) : 0
     }
 
     render() {
@@ -97,7 +98,7 @@ class SettingsPage extends connect(store)(LitElement) {
                 <div style="min-height: 250px; min-width: 500px; box-sizing: border-box; position: relative;">
                     <mwc-select icon="link" id="nodeSelect" label="${translate("settings.nodeurl")}" index="0" @selected="${(e) => this.nodeSelected(e)}" style="min-width: 130px; max-width:100%; width:100%;">
                         ${this.nodeConfig.knownNodes.map((n, index) => html`
-                            <mwc-list-item value="${index}">
+                            <mwc-list-item ?selected=${(index !== 0 && index === this.defaultNodeIndex)} value="${index}">
                                 <span class="name">${n.name}</span>
                                 <span>${n.protocol + '://' + n.domain + ':' + n.port}</span>
                             </mwc-list-item>
@@ -184,7 +185,7 @@ class SettingsPage extends connect(store)(LitElement) {
     }
 
     firstUpdated() {
-        // ...
+        store.dispatch(doSetNode(this.defaultNodeIndex))
     }
 
     show() {
@@ -217,6 +218,7 @@ class SettingsPage extends connect(store)(LitElement) {
         var renewNodes = [];
         renewNodes.push(obj1,obj2)
         localStorage.setItem('myQortalNodes', JSON.stringify(renewNodes))
+        localStorage.setItem('defaultNodeIndex', 0)
 
         let snack1string = get("settings.snack1")
         snackbar.add({
@@ -225,6 +227,7 @@ class SettingsPage extends connect(store)(LitElement) {
         })
 
         store.dispatch(doLoadNodeConfig())
+        store.dispatch(doSetNode(0))
     }
 
     nodeSelected(e) {
@@ -235,6 +238,7 @@ class SettingsPage extends connect(store)(LitElement) {
         const index = parseInt(selectedNodeIndex)
         if (isNaN(index)) return
 
+        localStorage.setItem('defaultNodeIndex', selectedNodeIndex)
         store.dispatch(doSetNode(selectedNodeIndex))
 
         let snack2string = get("settings.snack2")
