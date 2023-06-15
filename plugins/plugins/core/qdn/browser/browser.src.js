@@ -401,6 +401,20 @@ class WebBrowser extends LitElement {
 		return joinFee
 	}
 
+	async unitVoteFee() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
+		const url = `${nodeUrl}/transactions/unitfee?txType=VOTE_ON_POLL`
+		const response = await fetch(url)
+		if (!response.ok) {
+			throw new Error('Error when fetching vote fee');
+		}
+
+		const data = await response.json()
+		const joinFee = (Number(data) / 1e8).toFixed(8)
+		return joinFee
+	}
+
 	async deployAtFee() {
 		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
@@ -478,6 +492,59 @@ class WebBrowser extends LitElement {
 		}
 		const groupRes = await validateReceiver()
 		return groupRes
+
+	}
+
+	async _voteOnPoll(pollName, optionIndex) {
+		const voteFeeInput = await this.unitVoteFee()
+		const getLastRef = async () => {
+			let myRef = await parentEpml.request('apiCall', {
+				type: 'api',
+				url: `/addresses/lastreference/${this.selectedAddress.address}`
+			})
+			return myRef
+		};
+
+		const validateReceiver = async () => {
+			let lastRef = await getLastRef();
+			let myTransaction = await makeTransactionRequest(lastRef)
+			const res = getTxnRequestResponse(myTransaction)
+			return res
+		}
+
+		const makeTransactionRequest = async (lastRef) => {
+			let votedialog1 = "You are requesting to vote on the poll below:" // get("transactions.groupdialog7")
+			let votedialog2 = "On pressing confirm, the vote request will be sent!" // get("transactions.groupdialog8")
+			let myTxnrequest = await parentEpml.request('transaction', {
+				type: 9,
+				nonce: this.selectedAddress.nonce,
+				params: {
+					fee: voteFeeInput,
+					voterAddress: this.selectedAddress.address,
+					rPollName: pollName,
+					rOptionIndex: optionIndex,
+					lastReference: lastRef,
+					votedialog1: votedialog1,
+					votedialog2: votedialog2
+				},
+				apiVersion: 2
+			})
+			return myTxnrequest
+		}
+
+		const getTxnRequestResponse = (txnResponse) => {
+			if (txnResponse.success === false && txnResponse.message) {
+				throw new Error(txnResponse.message)
+			} else if (txnResponse.success === true && !txnResponse.data.error) {
+				return txnResponse.data
+			} else if (txnResponse.data && txnResponse.data.message) {
+				throw new Error(txnResponse.data.message)
+			} else {
+				throw new Error('Server error. Could not perform action.')
+			}
+		}
+		const voteRes = await validateReceiver()
+		return voteRes
 
 	}
 
@@ -2629,6 +2696,66 @@ class WebBrowser extends LitElement {
 						}
 						break
 					}
+				}
+
+				case actions.VOTE_ON_POLL: {
+					const requiredFields = ['pollName', 'optionIndex'];
+					const missingFields = [];
+
+					requiredFields.forEach((field) => {
+						if (!data[field]) {
+							missingFields.push(field);
+						}
+					});
+
+					if (missingFields.length > 0) {
+						const missingFieldsString = missingFields.join(', ');
+						const errorMsg = `Missing fields: ${missingFieldsString}`
+						let data = {};
+						data['error'] = errorMsg;
+						response = JSON.stringify(data);
+						break
+					}
+					const pollName = data.pollName;
+					const optionIndex = data.optionIndex;
+
+
+					let pollInfo = null
+					try {
+						pollInfo = await parentEpml.request("apiCall", {
+							type: "api",
+							url: `/polls/${pollName}`,
+						});
+					} catch (error) {
+						const errorMsg = (error && error.message) || 'Poll not found';
+						let obj = {};
+						obj['error'] = errorMsg;
+						response = JSON.stringify(obj);
+						break
+					}
+
+					if (!pollInfo || pollInfo.error) {
+						const errorMsg = (pollInfo && pollInfo.message) || 'Poll not found';
+						let obj = {};
+						obj['error'] = errorMsg;
+						response = JSON.stringify(obj);
+						break
+					}
+
+					try {
+						this.loader.show();
+						const resVoteOnPoll = await this._voteOnPoll(pollName, optionIndex)
+						response = JSON.stringify(resVoteOnPoll);
+					} catch (error) {
+						const obj = {};
+						const errorMsg = error.message || 'Failed to vote on the poll.';
+						obj['error'] = errorMsg;
+						response = JSON.stringify(obj);
+					} finally {
+						this.loader.hide();
+					}
+
+					break;
 				}
 
 				default:
