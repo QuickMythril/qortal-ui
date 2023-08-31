@@ -11,6 +11,7 @@ import { generateSaveWalletData } from './storeWallet.js'
 
 import publicKeyToAddress from './wallet/publicKeyToAddress.js'
 import AltcoinHDWallet from "./bitcoin/AltcoinHDWallet"
+import EthcoinHDWallet from "./bitcoin/EthcoinHDWallet"
 
 export default class PhraseWallet {
 	constructor(seed, walletVersion) {
@@ -183,6 +184,21 @@ export default class PhraseWallet {
 			}
 		}).createWallet(new Uint8Array(arrrSeed), false, 'ARRR');
 
+		// Create Ethereum HD Wallet 
+		const ethSeed = [...addrSeed];
+		const ethWallet = new EthcoinHDWallet({
+			mainnet: {
+				private: 0,
+				public: 0,
+				prefix: "0x"
+			},
+			testnet: {
+				private: 0,
+				public: 0,
+				prefix: "0x"
+			}
+		}).createWallet(new Uint8Array(ethSeed), false, 'ETH');
+
 		this._addresses[nonce] = {
 			address,
 			btcWallet,
@@ -191,6 +207,7 @@ export default class PhraseWallet {
 			dgbWallet,
 			rvnWallet,
 			arrrWallet,
+			ethWallet,
 			qoraAddress,
 			keyPair: {
 				publicKey: addrKeyPair.publicKey,

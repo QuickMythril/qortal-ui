@@ -37,7 +37,7 @@ import '@vaadin/password-field'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
-const coinsNames = ['qort', 'btc', 'ltc', 'doge', 'dgb', 'rvn', 'arrr']
+const coinsNames = ['qort', 'btc', 'ltc', 'doge', 'dgb', 'rvn', 'arrr', 'eth']
 
 class MultiWallet extends LitElement {
     static get properties() {
@@ -519,6 +519,10 @@ class MultiWallet extends LitElement {
                 background-image: url('/img/arrr.png');
             }
 
+            .eth .currency-image {
+                background-image: url('/img/eth.png');
+            }
+
             .card-list {
                 margin-top: 20px;
             }
@@ -850,6 +854,7 @@ class MultiWallet extends LitElement {
         this.wallets.get('dgb').wallet = window.parent.reduxStore.getState().app.selectedAddress.dgbWallet
         this.wallets.get('rvn').wallet = window.parent.reduxStore.getState().app.selectedAddress.rvnWallet
         this.wallets.get('arrr').wallet = window.parent.reduxStore.getState().app.selectedAddress.arrrWallet
+        this.wallets.get('eth').wallet = window.parent.reduxStore.getState().app.selectedAddress.ethWallet
 
         this._selectedWallet = 'qort'
 
@@ -865,6 +870,7 @@ class MultiWallet extends LitElement {
                 this.wallets.get('dgb').wallet = window.parent.reduxStore.getState().app.selectedAddress.dgbWallet
                 this.wallets.get('rvn').wallet = window.parent.reduxStore.getState().app.selectedAddress.rvnWallet
                 this.wallets.get('arrr').wallet = window.parent.reduxStore.getState().app.selectedAddress.arrrWallet
+                this.wallets.get('eth').wallet = window.parent.reduxStore.getState().app.selectedAddress.ethWallet
             })
         })
     }
@@ -901,6 +907,9 @@ class MultiWallet extends LitElement {
                     </mwc-tab>
                     <mwc-tab label="Pirate Chain" hasImageIcon minWidth @click="${(e) => this.tabWalletArrr()}">
                         <img slot="icon" width="24px" height="24px" src="/img/arrr.png">
+                    </mwc-tab>
+                    <mwc-tab label="Ethereum" hasImageIcon minWidth @click="${(e) => this.tabWalletEth()}">
+                        <img slot="icon" width="24px" height="24px" src="/img/eth.png">
                     </mwc-tab>
                 </mwc-tab-bar>
 
@@ -3137,6 +3146,11 @@ class MultiWallet extends LitElement {
 
     tabWalletArrr() {
         this._selectedWallet = 'arrr'
+        this.showWallet()
+    }
+
+    tabWalletEth() {
+        this._selectedWallet = 'eth'
         this.showWallet()
     }
 
