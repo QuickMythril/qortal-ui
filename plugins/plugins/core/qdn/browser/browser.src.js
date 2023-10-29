@@ -2106,7 +2106,7 @@ class WebBrowser extends LitElement {
 								break
 						}
 						response = JSON.stringify(userWallet);
-						return;
+						break;
 					} else if (res3.action === 'reject') {
 						response = '{"error": "User declined request"}';
 					}
