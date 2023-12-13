@@ -183,6 +183,51 @@ export default class PhraseWallet {
 			}
 		}).createWallet(new Uint8Array(arrrSeed), false, 'ARRR');
 
+		// Create Namecoin HD Wallet
+		const nmcSeed = [...addrSeed];
+		const nmcWallet = new AltcoinHDWallet({
+			mainnet: {
+				private: 0x0488ADE4,
+				public: 0x0488B21E,
+				prefix: 0x34
+			},
+			testnet: {
+				private: 0x04358394,
+				public: 0x043587CF,
+				prefix: 0x6F
+			}
+		}).createWallet(new Uint8Array(nmcSeed), false, 'NMC');
+
+		// Create Dash HD Wallet
+		const dashSeed = [...addrSeed];
+		const dashWallet = new AltcoinHDWallet({
+			mainnet: {
+				private: 0x0488ADE4,
+				public: 0x0488B21E,
+				prefix: 0x4C
+			},
+			testnet: {
+				private: 0x04358394,
+				public: 0x043587CF,
+				prefix: 0x8C
+			}
+		}).createWallet(new Uint8Array(dashSeed), false, 'DASH');
+
+		// Create Firo HD Wallet
+		const firoSeed = [...addrSeed];
+		const firoWallet = new AltcoinHDWallet({
+			mainnet: {
+				private: 0x0488ADE4,
+				public: 0x0488B21E,
+				prefix: 0x52
+			},
+			testnet: {
+				private: 0x04358394,
+				public: 0x043587CF,
+				prefix: 0x41
+			}
+		}).createWallet(new Uint8Array(firoSeed), false, 'FIRO');
+
 		this._addresses[nonce] = {
 			address,
 			btcWallet,
@@ -191,6 +236,9 @@ export default class PhraseWallet {
 			dgbWallet,
 			rvnWallet,
 			arrrWallet,
+			nmcWallet,
+			dashWallet,
+			firoWallet,
 			qoraAddress,
 			keyPair: {
 				publicKey: addrKeyPair.publicKey,

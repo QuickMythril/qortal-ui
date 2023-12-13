@@ -20,12 +20,18 @@ class UserInfoView extends connect(store)(LitElement) {
             isLoadingBoughtTradesDGB: { type: Boolean },
             isLoadingBoughtTradesRVN: { type: Boolean },
             isLoadingBoughtTradesARRR: { type: Boolean },
+            isLoadingBoughtTradesNMC: { type: Boolean },
+            isLoadingBoughtTradesDASH: { type: Boolean },
+            isLoadingBoughtTradesFIRO: { type: Boolean },
             isLoadingSoldTradesBTC: { type: Boolean },
             isLoadingSoldTradesLTC: { type: Boolean },
             isLoadingSoldTradesDOGE: { type: Boolean },
             isLoadingSoldTradesDGB: { type: Boolean },
             isLoadingSoldTradesRVN: { type: Boolean },
             isLoadingSoldTradesARRR: { type: Boolean },
+            isLoadingSoldTradesNMC: { type: Boolean },
+            isLoadingSoldTradesDASH: { type: Boolean },
+            isLoadingSoldTradesFIRO: { type: Boolean },
             isLoadingCompleteInfo: { type: Boolean },
             infoAccountName: { type: String },
             imageUrl: { type: String },
@@ -40,12 +46,18 @@ class UserInfoView extends connect(store)(LitElement) {
             explorerBoughtDGBTrades: { type: Array },
             explorerBoughtRVNTrades: { type: Array },
             explorerBoughtARRRTrades: { type: Array },
+            explorerBoughtNMCTrades: { type: Array },
+            explorerBoughtDASHTrades: { type: Array },
+            explorerBoughtFIROTrades: { type: Array },
             explorerSoldBTCTrades: { type: Array },
             explorerSoldLTCTrades: { type: Array },
             explorerSoldDOGETrades: { type: Array },
             explorerSoldDGBTrades: { type: Array },
             explorerSoldRVNTrades: { type: Array },
             explorerSoldARRRTrades: { type: Array },
+            explorerSoldNMCTrades: { type: Array },
+            explorerSoldDASHTrades: { type: Array },
+            explorerSoldFIROTrades: { type: Array },
             allPayments: { type: Array },
             slicedArray: { type: Array },
             allReceivedPayments: { type: Array },
@@ -481,12 +493,18 @@ class UserInfoView extends connect(store)(LitElement) {
         this.isLoadingBoughtTradesDGB = false
         this.isLoadingBoughtTradesRVN = false
         this.isLoadingBoughtTradesARRR = false
+        this.isLoadingBoughtTradesNMC = false
+        this.isLoadingBoughtTradesDASH = false
+        this.isLoadingBoughtTradesFIRO = false
         this.isLoadingSoldTradesBTC = false
         this.isLoadingSoldTradesLTC = false
         this.isLoadingSoldTradesDOGE = false
         this.isLoadingSoldTradesDGB = false
         this.isLoadingSoldTradesRVN = false
         this.isLoadingSoldTradesARRR = false
+        this.isLoadingSoldTradesNMC = false
+        this.isLoadingSoldTradesDASH = false
+        this.isLoadingSoldTradesFIRO = false
         this.isLoadingCompleteInfo = false
         this.explorerBoughtBTCTrades = []
         this.explorerBoughtLTCTrades = []
@@ -494,12 +512,18 @@ class UserInfoView extends connect(store)(LitElement) {
         this.explorerBoughtDGBTrades = []
         this.explorerBoughtRVNTrades = []
         this.explorerBoughtARRRTrades = []
+        this.explorerBoughtNMCTrades = []
+        this.explorerBoughtDASHTrades = []
+        this.explorerBoughtFIROTrades = []
         this.explorerSoldBTCTrades = []
         this.explorerSoldLTCTrades = []
         this.explorerSoldDOGETrades = []
         this.explorerSoldDGBTrades = []
         this.explorerSoldRVNTrades = []
         this.explorerSoldARRRTrades = []
+        this.explorerSoldNMCTrades = []
+        this.explorerSoldDASHTrades = []
+        this.explorerSoldFIROTrades = []
         this.allPayments = []
         this.slicedArray = []
         this.allReceivedPayments = []
@@ -798,6 +822,147 @@ class UserInfoView extends connect(store)(LitElement) {
         `
     }
 
+    boughtNMCTemplate() {
+        return html`
+		<div class="explorer-trades">
+			<div class="box">
+				<header>${translate("explorerpage.exp10")} (NMC)</header>
+				<div class="border-wrapper">
+					<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingBoughtTradesNMC ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate("login.loading")}</span></div>
+					<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="explorerNMCTradesGrid" aria-label="Explorer Bought With NMC" ?hidden="${this.isEmptyArray(this.explorerBoughtNMCTrades)}" .items="${this.explorerBoughtNMCTrades}">
+						<vaadin-grid-column
+							width="170px"
+							flex-grow="0"
+							header="${translate("tradepage.tchange11")}"
+							.renderer=${(root, column, data) => {
+								const dateString = new Date(data.item.timestamp).toLocaleDateString()
+								render(html`${dateString}`, root)
+							}}
+						>
+						</vaadin-grid-column>
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("tradepage.tchange9")} (NMC)"
+							.renderer=${(root, column, data) => {
+								const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
+								render(html`${price}`, root)
+							}}
+						>
+						</vaadin-grid-column>
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("tradepage.tchange8")} (QORT)"
+                                          path="qortAmount"
+						>
+						</vaadin-grid-column>
+					</vaadin-grid>
+                              <div style="display:${this.isLoadingBoughtTradesNMC ? 'none' : ''}; padding: 10px;">
+						${this.isEmptyArray(this.explorerBoughtNMCTrades) ? html`
+							<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("explorerpage.exp12")}</span>
+						`: ''}
+					</div>
+				</div>
+			</div>
+		</div>
+        `
+    }
+
+    boughtDASHTemplate() {
+        return html`
+		<div class="explorer-trades">
+			<div class="box">
+				<header>${translate("explorerpage.exp10")} (DASH)</header>
+				<div class="border-wrapper">
+					<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingBoughtTradesDASH ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate("login.loading")}</span></div>
+					<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="explorerDASHTradesGrid" aria-label="Explorer Bought With DASH" ?hidden="${this.isEmptyArray(this.explorerBoughtDASHTrades)}" .items="${this.explorerBoughtDASHTrades}">
+						<vaadin-grid-column
+							width="170px"
+							flex-grow="0"
+							header="${translate("tradepage.tchange11")}"
+							.renderer=${(root, column, data) => {
+								const dateString = new Date(data.item.timestamp).toLocaleDateString()
+								render(html`${dateString}`, root)
+							}}
+						>
+						</vaadin-grid-column>
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("tradepage.tchange9")} (DASH)"
+							.renderer=${(root, column, data) => {
+								const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
+								render(html`${price}`, root)
+							}}
+						>
+						</vaadin-grid-column>
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("tradepage.tchange8")} (QORT)"
+                                          path="qortAmount"
+						>
+						</vaadin-grid-column>
+					</vaadin-grid>
+                              <div style="display:${this.isLoadingBoughtTradesDASH ? 'none' : ''}; padding: 10px;">
+						${this.isEmptyArray(this.explorerBoughtDASHTrades) ? html`
+							<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("explorerpage.exp12")}</span>
+						`: ''}
+					</div>
+				</div>
+			</div>
+		</div>
+        `
+    }
+
+    boughtFIROTemplate() {
+        return html`
+		<div class="explorer-trades">
+			<div class="box">
+				<header>${translate("explorerpage.exp10")} (FIRO)</header>
+				<div class="border-wrapper">
+					<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingBoughtTradesFIRO ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate("login.loading")}</span></div>
+					<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="explorerFIROTradesGrid" aria-label="Explorer Bought With FIRO" ?hidden="${this.isEmptyArray(this.explorerBoughtFIROTrades)}" .items="${this.explorerBoughtFIROTrades}">
+						<vaadin-grid-column
+							width="170px"
+							flex-grow="0"
+							header="${translate("tradepage.tchange11")}"
+							.renderer=${(root, column, data) => {
+								const dateString = new Date(data.item.timestamp).toLocaleDateString()
+								render(html`${dateString}`, root)
+							}}
+						>
+						</vaadin-grid-column>
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("tradepage.tchange9")} (FIRO)"
+							.renderer=${(root, column, data) => {
+								const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
+								render(html`${price}`, root)
+							}}
+						>
+						</vaadin-grid-column>
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("tradepage.tchange8")} (QORT)"
+                                          path="qortAmount"
+						>
+						</vaadin-grid-column>
+					</vaadin-grid>
+                              <div style="display:${this.isLoadingBoughtTradesFIRO ? 'none' : ''}; padding: 10px;">
+						${this.isEmptyArray(this.explorerBoughtFIROTrades) ? html`
+							<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("explorerpage.exp12")}</span>
+						`: ''}
+					</div>
+				</div>
+			</div>
+		</div>
+        `
+    }
+
     soldBTCTemplate() {
         return html`
 		<div class="explorer-trades">
@@ -1080,6 +1245,147 @@ class UserInfoView extends connect(store)(LitElement) {
         `
     }
 
+    soldNMCTemplate() {
+        return html`
+		<div class="explorer-trades">
+			<div class="box">
+				<header>${translate("explorerpage.exp11")} (NMC)</header>
+				<div class="border-wrapper">
+					<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingSoldTradesNMC ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate("login.loading")}</span></div>
+					<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="explorerNMCTradesGrid" aria-label="Explorer Sold With NMC" ?hidden="${this.isEmptyArray(this.explorerSoldNMCTrades)}" .items="${this.explorerSoldNMCTrades}">
+						<vaadin-grid-column
+							width="170px"
+							flex-grow="0"
+							header="${translate("tradepage.tchange11")}"
+							.renderer=${(root, column, data) => {
+								const dateString = new Date(data.item.timestamp).toLocaleDateString()
+								render(html`${dateString}`, root)
+							}}
+						>
+						</vaadin-grid-column>
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("tradepage.tchange9")} (NMC)"
+							.renderer=${(root, column, data) => {
+								const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
+								render(html`${price}`, root)
+							}}
+						>
+						</vaadin-grid-column>
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("tradepage.tchange8")} (QORT)"
+                                          path="qortAmount"
+						>
+						</vaadin-grid-column>
+					</vaadin-grid>
+                              <div style="display:${this.isLoadingSoldTradesNMC ? 'none' : ''}; padding: 10px;">
+						${this.isEmptyArray(this.explorerSoldNMCTrades) ? html`
+							<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("explorerpage.exp13")}</span>
+						`: ''}
+					</div>
+				</div>
+			</div>
+		</div>
+        `
+    }
+
+    soldDASHTemplate() {
+        return html`
+		<div class="explorer-trades">
+			<div class="box">
+				<header>${translate("explorerpage.exp11")} (DASH)</header>
+				<div class="border-wrapper">
+					<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingSoldTradesDASH ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate("login.loading")}</span></div>
+					<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="explorerDASHTradesGrid" aria-label="Explorer Sold With DASH" ?hidden="${this.isEmptyArray(this.explorerSoldDASHTrades)}" .items="${this.explorerSoldDASHTrades}">
+						<vaadin-grid-column
+							width="170px"
+							flex-grow="0"
+							header="${translate("tradepage.tchange11")}"
+							.renderer=${(root, column, data) => {
+								const dateString = new Date(data.item.timestamp).toLocaleDateString()
+								render(html`${dateString}`, root)
+							}}
+						>
+						</vaadin-grid-column>
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("tradepage.tchange9")} (DASH)"
+							.renderer=${(root, column, data) => {
+								const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
+								render(html`${price}`, root)
+							}}
+						>
+						</vaadin-grid-column>
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("tradepage.tchange8")} (QORT)"
+                                          path="qortAmount"
+						>
+						</vaadin-grid-column>
+					</vaadin-grid>
+                              <div style="display:${this.isLoadingSoldTradesDASH ? 'none' : ''}; padding: 10px;">
+						${this.isEmptyArray(this.explorerSoldDASHTrades) ? html`
+							<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("explorerpage.exp13")}</span>
+						`: ''}
+					</div>
+				</div>
+			</div>
+		</div>
+        `
+    }
+
+    soldFIROTemplate() {
+        return html`
+		<div class="explorer-trades">
+			<div class="box">
+				<header>${translate("explorerpage.exp11")} (FIRO)</header>
+				<div class="border-wrapper">
+					<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingSoldTradesFIRO ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate("login.loading")}</span></div>
+					<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="explorerFIROTradesGrid" aria-label="Explorer Sold With FIRO" ?hidden="${this.isEmptyArray(this.explorerSoldFIROTrades)}" .items="${this.explorerSoldFIROTrades}">
+						<vaadin-grid-column
+							width="170px"
+							flex-grow="0"
+							header="${translate("tradepage.tchange11")}"
+							.renderer=${(root, column, data) => {
+								const dateString = new Date(data.item.timestamp).toLocaleDateString()
+								render(html`${dateString}`, root)
+							}}
+						>
+						</vaadin-grid-column>
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("tradepage.tchange9")} (FIRO)"
+							.renderer=${(root, column, data) => {
+								const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
+								render(html`${price}`, root)
+							}}
+						>
+						</vaadin-grid-column>
+						<vaadin-grid-column
+							auto-width
+							resizable
+							header="${translate("tradepage.tchange8")} (QORT)"
+                                          path="qortAmount"
+						>
+						</vaadin-grid-column>
+					</vaadin-grid>
+                              <div style="display:${this.isLoadingSoldTradesFIRO ? 'none' : ''}; padding: 10px;">
+						${this.isEmptyArray(this.explorerSoldFIROTrades) ? html`
+							<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("explorerpage.exp13")}</span>
+						`: ''}
+					</div>
+				</div>
+			</div>
+		</div>
+        `
+    }
+
     render() {
         return html`
             <paper-dialog class="full-info-wrapper" id="userFullInfoDialog" modal>
@@ -1254,14 +1560,17 @@ class UserInfoView extends connect(store)(LitElement) {
                     <div id="first-explorer-section">
                         ${this.boughtBTCTemplate()}
                         ${this.boughtLTCTemplate()}
+                        ${this.boughtDOGETemplate()}
                     </div>
                     <div id="second-explorer-section">
-                        ${this.boughtDOGETemplate()}
                         ${this.boughtDGBTemplate()}
-                    </div>
-                    <div id="third-explorer-section">
                         ${this.boughtRVNTemplate()}
                         ${this.boughtARRRTemplate()}
+                    </div>
+                    <div id="third-explorer-section">
+                        ${this.boughtNMCTemplate()}
+                        ${this.boughtDASHTemplate()}
+                        ${this.boughtFIROTemplate()}
                     </div>
                 </div>
                 <div class="buttons">
@@ -1274,14 +1583,17 @@ class UserInfoView extends connect(store)(LitElement) {
                     <div id="first-explorer-section">
                         ${this.soldBTCTemplate()}
                         ${this.soldLTCTemplate()}
+                        ${this.soldDOGETemplate()}
                     </div>
                     <div id="second-explorer-section">
-                        ${this.soldDOGETemplate()}
                         ${this.soldDGBTemplate()}
-                    </div>
-                    <div id="third-explorer-section">
                         ${this.soldRVNTemplate()}
                         ${this.soldARRRTemplate()}
+                    </div>
+                    <div id="third-explorer-section">
+                        ${this.soldNMCTemplate()}
+                        ${this.soldDASHTemplate()}
+                        ${this.soldFIROTemplate()}
                     </div>
                 </div>
                 <div class="buttons">
@@ -1710,6 +2022,72 @@ class UserInfoView extends connect(store)(LitElement) {
         }).filter(item => !!item)
     }
 
+    async getBoughtNMCGridItems() {
+        const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
+        const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
+        const tradesBoughtNMCUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=NAMECOIN&minimumTimestamp=1597310000000&limit=0&reverse=true`
+        const myNMCAddress = this.displayAddress
+
+        const boughtNMCTradesAll = await fetch(tradesBoughtNMCUrl).then(response => {
+           return response.json()
+        })
+
+        this.explorerBoughtNMCTrades = boughtNMCTradesAll.map(item => {
+            const searchAddress = item.buyerReceivingAddress
+            if (searchAddress == myNMCAddress) {
+                return {
+                    timestamp: item.tradeTimestamp,
+                    foreignAmount: item.foreignAmount,
+                    qortAmount: item.qortAmount
+                }
+            }
+        }).filter(item => !!item)
+    }
+
+    async getBoughtDASHGridItems() {
+        const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
+        const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
+        const tradesBoughtDASHUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=DASH&minimumTimestamp=1597310000000&limit=0&reverse=true`
+        const myDASHAddress = this.displayAddress
+
+        const boughtDASHTradesAll = await fetch(tradesBoughtDASHUrl).then(response => {
+           return response.json()
+        })
+
+        this.explorerBoughtDASHTrades = boughtDASHTradesAll.map(item => {
+            const searchAddress = item.buyerReceivingAddress
+            if (searchAddress == myDASHAddress) {
+                return {
+                    timestamp: item.tradeTimestamp,
+                    foreignAmount: item.foreignAmount,
+                    qortAmount: item.qortAmount
+                }
+            }
+        }).filter(item => !!item)
+    }
+
+    async getBoughtFIROGridItems() {
+        const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
+        const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
+        const tradesBoughtFIROUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=FIRO&minimumTimestamp=1597310000000&limit=0&reverse=true`
+        const myFIROAddress = this.displayAddress
+
+        const boughtFIROTradesAll = await fetch(tradesBoughtFIROUrl).then(response => {
+           return response.json()
+        })
+
+        this.explorerBoughtFIROTrades = boughtFIROTradesAll.map(item => {
+            const searchAddress = item.buyerReceivingAddress
+            if (searchAddress == myFIROAddress) {
+                return {
+                    timestamp: item.tradeTimestamp,
+                    foreignAmount: item.foreignAmount,
+                    qortAmount: item.qortAmount
+                }
+            }
+        }).filter(item => !!item)
+    }
+
     async getSoldBTCGridItems() {
         const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
         const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
@@ -1842,6 +2220,72 @@ class UserInfoView extends connect(store)(LitElement) {
         }).filter(item => !!item)
     }
 
+    async getSoldNMCGridItems() {
+        const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
+        const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
+        const tradesSoldNMCUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=NAMECOIN&minimumTimestamp=1597310000000&limit=0&reverse=true`
+        const myNMCAddress = this.displayAddress
+
+        const soldNMCTradesAll = await fetch(tradesSoldNMCUrl).then(response => {
+           return response.json()
+        })
+
+        this.explorerSoldNMCTrades = soldNMCTradesAll.map(item => {
+            const searchAddress = item.sellerAddress
+            if (searchAddress == myNMCAddress) {
+                return {
+                    timestamp: item.tradeTimestamp,
+                    foreignAmount: item.foreignAmount,
+                    qortAmount: item.qortAmount
+                }
+            }
+        }).filter(item => !!item)
+    }
+
+    async getSoldDASHGridItems() {
+        const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
+        const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
+        const tradesSoldDASHUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=DASH&minimumTimestamp=1597310000000&limit=0&reverse=true`
+        const myDASHAddress = this.displayAddress
+
+        const soldDASHTradesAll = await fetch(tradesSoldDASHUrl).then(response => {
+           return response.json()
+        })
+
+        this.explorerSoldDASHTrades = soldDASHTradesAll.map(item => {
+            const searchAddress = item.sellerAddress
+            if (searchAddress == myDASHAddress) {
+                return {
+                    timestamp: item.tradeTimestamp,
+                    foreignAmount: item.foreignAmount,
+                    qortAmount: item.qortAmount
+                }
+            }
+        }).filter(item => !!item)
+    }
+
+    async getSoldFIROGridItems() {
+        const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
+        const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
+        const tradesSoldFIROUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=FIRO&minimumTimestamp=1597310000000&limit=0&reverse=true`
+        const myFIROAddress = this.displayAddress
+
+        const soldFIROTradesAll = await fetch(tradesSoldFIROUrl).then(response => {
+           return response.json()
+        })
+
+        this.explorerSoldFIROTrades = soldFIROTradesAll.map(item => {
+            const searchAddress = item.sellerAddress
+            if (searchAddress == myFIROAddress) {
+                return {
+                    timestamp: item.tradeTimestamp,
+                    foreignAmount: item.foreignAmount,
+                    qortAmount: item.qortAmount
+                }
+            }
+        }).filter(item => !!item)
+    }
+
     openTrades() {
         this.shadowRoot.getElementById('userTrades').open()
         this.shadowRoot.getElementById('userFullInfoDialog').close()
@@ -1855,12 +2299,18 @@ class UserInfoView extends connect(store)(LitElement) {
         this.explorerBoughtDGBTrades = []
         this.explorerBoughtRVNTrades = []
         this.explorerBoughtARRRTrades = []
+        this.explorerBoughtNMCTrades = []
+        this.explorerBoughtDASHTrades = []
+        this.explorerBoughtFIROTrades = []
         this.isLoadingBoughtTradesBTC = true
         this.isLoadingBoughtTradesLTC = true
         this.isLoadingBoughtTradesDOGE = true
         this.isLoadingBoughtTradesDGB = true
         this.isLoadingBoughtTradesRVN = true
         this.isLoadingBoughtTradesARRR = true
+        this.isLoadingBoughtTradesNMC = true
+        this.isLoadingBoughtTradesDASH = true
+        this.isLoadingBoughtTradesFIRO = true
         await this.getBoughtBTCGridItems()
         this.isLoadingBoughtTradesBTC = false
         await this.getBoughtLTCGridItems()
@@ -1873,6 +2323,12 @@ class UserInfoView extends connect(store)(LitElement) {
         this.isLoadingBoughtTradesRVN = false
         await this.getBoughtARRRGridItems()
         this.isLoadingBoughtTradesARRR = false
+        await this.getBoughtNMCGridItems()
+        this.isLoadingBoughtTradesNMC = false
+        await this.getBoughtDASHGridItems()
+        this.isLoadingBoughtTradesDASH = false
+        await this.getBoughtFIROGridItems()
+        this.isLoadingBoughtTradesFIRO = false
     }
 
     async openUserSoldDialog() {
@@ -1883,12 +2339,18 @@ class UserInfoView extends connect(store)(LitElement) {
         this.explorerSoldDGBTrades = []
         this.explorerSoldRVNTrades = []
         this.explorerSoldARRRTrades = []
+        this.explorerSoldNMCTrades = []
+        this.explorerSoldDASHTrades = []
+        this.explorerSoldFIROTrades = []
         this.isLoadingSoldTradesBTC = true
         this.isLoadingSoldTradesLTC = true
         this.isLoadingSoldTradesDOGE = true
         this.isLoadingSoldTradesDGB = true
         this.isLoadingSoldTradesRVN = true
         this.isLoadingSoldTradesARRR = true
+        this.isLoadingSoldTradesNMC = true
+        this.isLoadingSoldTradesDASH = true
+        this.isLoadingSoldTradesFIRO = true
         await this.getSoldBTCGridItems()
         this.isLoadingSoldTradesBTC = false
         await this.getSoldLTCGridItems()
@@ -1901,6 +2363,12 @@ class UserInfoView extends connect(store)(LitElement) {
         this.isLoadingSoldTradesRVN = false
         await this.getSoldARRRGridItems()
         this.isLoadingSoldTradesARRR = false
+        await this.getSoldNMCGridItems()
+        this.isLoadingSoldTradesNMC = false
+        await this.getSoldDASHGridItems()
+        this.isLoadingSoldTradesDASH = false
+        await this.getSoldFIROGridItems()
+        this.isLoadingSoldTradesFIRO = false
     }
 
     closeErrorDialog() {

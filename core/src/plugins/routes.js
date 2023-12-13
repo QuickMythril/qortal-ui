@@ -32,6 +32,9 @@ const sendDoge = api.sendDoge
 const sendDgb = api.sendDgb
 const sendRvn = api.sendRvn
 const sendArrr = api.sendArrr
+const sendNmc = api.sendNmc
+const sendDash = api.sendDash
+const sendFiro = api.sendFiro
 
 export const routes = {
 	registerUrl: async (req) => {
@@ -466,6 +469,45 @@ export const routes = {
 		let response
 		try {
 			const res = await sendArrr(req.data)
+			response = res
+		} catch (e) {
+			console.error(e)
+			console.error(e.message)
+			response = e.message
+		}
+		return response
+	},
+
+	sendNmc: async (req) => {
+		let response
+		try {
+			const res = await sendNmc(req.data)
+			response = res
+		} catch (e) {
+			console.error(e)
+			console.error(e.message)
+			response = e.message
+		}
+		return response
+	},
+
+	sendDash: async (req) => {
+		let response
+		try {
+			const res = await sendDash(req.data)
+			response = res
+		} catch (e) {
+			console.error(e)
+			console.error(e.message)
+			response = e.message
+		}
+		return response
+	},
+
+	sendFiro: async (req) => {
+		let response
+		try {
+			const res = await sendFiro(req.data)
 			response = res
 		} catch (e) {
 			console.error(e)

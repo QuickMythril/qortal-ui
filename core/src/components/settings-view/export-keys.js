@@ -24,24 +24,36 @@ class ExportKeys extends connect(store)(LitElement) {
             dgbPMK: { type: String },
             rvnPMK: { type: String },
             arrrPMK: { type: String },
+            nmcPMK: { type: String },
+            dashPMK: { type: String },
+            firoPMK: { type: String },
             btcWALLET: { type: String },
             ltcWALLET: { type: String },
             dogeWALLET: { type: String },
             dgbWALLET: { type: String },
             rvnWALLET: { type: String },
             arrrWALLET: { type: String },
+            nmcWALLET: { type: String },
+            dashWALLET: { type: String },
+            firoWALLET: { type: String },
             btcName: { type: String },
             ltcName: { type: String },
             dogeName: { type: String },
             dgbName: { type: String },
             rvnName: { type: String },
             arrrName: { type: String },
+            nmcName: { type: String },
+            dashName: { type: String },
+            firoName: { type: String },
             btcShort: { type: String },
             ltcShort: { type: String },
             dogeShort: { type: String },
             dgbShort: { type: String },
             rvnShort: { type: String },
             arrrShort: { type: String },
+            nmcShort: { type: String },
+            dashShort: { type: String },
+            firoShort: { type: String },
             enableArrr: { type: Boolean },
             dWalletAddress: { type: String },
             dPrivateKey: { type: String },
@@ -148,6 +160,18 @@ class ExportKeys extends connect(store)(LitElement) {
         this.arrrWALLET = ''
         this.arrrName = 'Pirate Chain'
         this.arrrShort = 'arrr'
+        this.nmcPMK = store.getState().app.selectedAddress.nmcWallet.derivedMasterPrivateKey
+        this.nmcWALLET = store.getState().app.selectedAddress.nmcWallet.address
+        this.nmcName = 'Namecoin'
+        this.nmcShort = 'nmc'
+        this.dashPMK = store.getState().app.selectedAddress.dashWallet.derivedMasterPrivateKey
+        this.dashWALLET = store.getState().app.selectedAddress.dashWallet.address
+        this.dashName = 'Dash'
+        this.dashShort = 'dash'
+        this.firoPMK = store.getState().app.selectedAddress.firoWallet.derivedMasterPrivateKey
+        this.firoWALLET = store.getState().app.selectedAddress.firoWallet.address
+        this.firoName = 'Firo'
+        this.firoShort = 'firo'
         this.enableArrr = false
         this.dWalletAddress = ''
         this.dPrivateKey = ''
@@ -200,6 +224,24 @@ class ExportKeys extends connect(store)(LitElement) {
                                 <img src="/img/arrr.png" style="width: 32px; height: 32px;">&nbsp;&nbsp;${this.arrrWALLET}<br>
                             </div>
                             <div @click=${() => this.checkForPmkDownload(this.arrrWALLET, this.arrrPMK, this.arrrName, this.arrrShort)} class="export-button"> ${translate("settings.exp2")} </div>
+                        </div>
+                        <div class="content-box">
+                            <div style="display: flex; align-items: center; justify-content: center;">
+                                <img src="/img/nmc.png" style="width: 32px; height: 32px;">&nbsp;&nbsp;${this.nmcWALLET}<br>
+                            </div>
+                            <div @click=${() => this.checkForPmkDownload(this.nmcWALLET, this.nmcPMK, this.nmcName, this.nmcShort)} class="export-button"> ${translate("settings.exp2")} </div>
+                        </div>
+                        <div class="content-box">
+                            <div style="display: flex; align-items: center; justify-content: center;">
+                                <img src="/img/dash.png" style="width: 32px; height: 32px;">&nbsp;&nbsp;${this.dashWALLET}<br>
+                            </div>
+                            <div @click=${() => this.checkForPmkDownload(this.dashWALLET, this.dashPMK, this.dashName, this.dashShort)} class="export-button"> ${translate("settings.exp2")} </div>
+                        </div>
+                        <div class="content-box">
+                            <div style="display: flex; align-items: center; justify-content: center;">
+                                <img src="/img/firo.png" style="width: 32px; height: 32px;">&nbsp;&nbsp;${this.firoWALLET}<br>
+                            </div>
+                            <div @click=${() => this.checkForPmkDownload(this.firoWALLET, this.firoPMK, this.firoName, this.firoShort)} class="export-button"> ${translate("settings.exp2")} </div>
                         </div>
                     </div>
                 </div>

@@ -51,6 +51,9 @@ class WebBrowser extends LitElement {
 			dogeFeePerByte: { type: Number },
 			dgbFeePerByte: { type: Number },
 			rvnFeePerByte: { type: Number },
+			nmcFeePerByte: { type: Number },
+			dashFeePerByte: { type: Number },
+			firoFeePerByte: { type: Number },
 			arrrWalletAddress: { type: String },
 			theme: { type: String, reflect: true }
 		}
@@ -229,6 +232,9 @@ class WebBrowser extends LitElement {
 		this.dogeFeePerByte = 0.00001000
 		this.dgbFeePerByte = 0.00000010
 		this.rvnFeePerByte = 0.00001125
+		this.nmcFeePerByte = 0.00000150
+		this.dashFeePerByte = 0.00000010
+		this.firoFeePerByte = 0.00000010
 		this.arrrWalletAddress = ''
 
 		let configLoaded = false
@@ -245,6 +251,9 @@ class WebBrowser extends LitElement {
 				this.dgbWallet = window.parent.reduxStore.getState().app.selectedAddress.dgbWallet
 				this.rvnWallet = window.parent.reduxStore.getState().app.selectedAddress.rvnWallet
 				this.arrrWallet = window.parent.reduxStore.getState().app.selectedAddress.arrrWallet
+				this.nmcWallet = window.parent.reduxStore.getState().app.selectedAddress.nmcWallet
+				this.dashWallet = window.parent.reduxStore.getState().app.selectedAddress.dashWallet
+				this.firoWallet = window.parent.reduxStore.getState().app.selectedAddress.firoWallet
 			})
 			parentEpml.subscribe('config', (c) => {
 				this.config = JSON.parse(c)
@@ -768,6 +777,9 @@ class WebBrowser extends LitElement {
 		this.dgbWallet = window.parent.reduxStore.getState().app.selectedAddress.dgbWallet
 		this.rvnWallet = window.parent.reduxStore.getState().app.selectedAddress.rvnWallet
 		this.arrrWallet = window.parent.reduxStore.getState().app.selectedAddress.arrrWallet
+		this.nmcWallet = window.parent.reduxStore.getState().app.selectedAddress.nmcWallet
+		this.dashWallet = window.parent.reduxStore.getState().app.selectedAddress.dashWallet
+		this.firoWallet = window.parent.reduxStore.getState().app.selectedAddress.firoWallet
 
 		window.addEventListener('storage', () => {
 			const checkLanguage = localStorage.getItem('qortalLanguage')
@@ -2355,6 +2367,18 @@ class WebBrowser extends LitElement {
 							case 'ARRR':
 								userWallet['address'] = arrrAddress
 								break
+							case 'NMC':
+								userWallet['address'] = window.parent.reduxStore.getState().app.selectedAddress.nmcWallet.address
+								userWallet['publickey'] = window.parent.reduxStore.getState().app.selectedAddress.nmcWallet.derivedMasterPublicKey
+								break
+							case 'DASH':
+								userWallet['address'] = window.parent.reduxStore.getState().app.selectedAddress.dashWallet.address
+								userWallet['publickey'] = window.parent.reduxStore.getState().app.selectedAddress.dashWallet.derivedMasterPublicKey
+								break
+							case 'FIRO':
+								userWallet['address'] = window.parent.reduxStore.getState().app.selectedAddress.firoWallet.address
+								userWallet['publickey'] = window.parent.reduxStore.getState().app.selectedAddress.firoWallet.derivedMasterPublicKey
+								break
 							default:
 								break
 						}
@@ -2384,7 +2408,7 @@ class WebBrowser extends LitElement {
 						response = JSON.stringify(data)
 						break
 					}
-					// Params: data.coin (QORT / BTC / LTC / DOGE / DGB / RVN / ARRR)
+					// Params: data.coin (QORT / BTC / LTC / DOGE / DGB / RVN / ARRR / NMC / DASH / FIRO)
 					// TODO: prompt user to share wallet balance. If they confirm, call `GET /crosschain/:coin/walletbalance`, or for QORT, call `GET /addresses/balance/:address`
 					// then set the response string from the core to the `response` variable (defined above)
 					// If they decline, send back JSON that includes an `error` key, such as `{"error": "User declined request"}`
@@ -2442,6 +2466,18 @@ class WebBrowser extends LitElement {
 								case 'ARRR':
 									_url = `/crosschain/arrr/walletbalance?apiKey=${this.getApiKey()}`
 									_body = window.parent.reduxStore.getState().app.selectedAddress.arrrWallet.seed58
+									break
+								case 'NMC':
+									_url = `/crosschain/nmc/walletbalance?apiKey=${this.getApiKey()}`
+									_body = window.parent.reduxStore.getState().app.selectedAddress.nmcWallet.derivedMasterPublicKey
+									break
+								case 'DASH':
+									_url = `/crosschain/dash/walletbalance?apiKey=${this.getApiKey()}`
+									_body = window.parent.reduxStore.getState().app.selectedAddress.dashWallet.derivedMasterPublicKey
+									break
+								case 'FIRO':
+									_url = `/crosschain/firo/walletbalance?apiKey=${this.getApiKey()}`
+									_body = window.parent.reduxStore.getState().app.selectedAddress.firoWallet.derivedMasterPublicKey
 									break
 								default:
 									break
@@ -3424,6 +3460,330 @@ class WebBrowser extends LitElement {
 								let pleaseMsg = get("walletpage.wchange44")
 								showErrorAndWait("TRANSACTION_FAILED", errorMsg, pleaseMsg)
 								throw new Error(response)
+							} else {
+								this.loader.hide()
+								let errorMsg = response.message
+								let pleaseMsg = get("walletpage.wchange44")
+								showErrorAndWait("TRANSACTION_FAILED", errorMsg, pleaseMsg)
+								throw new Error(response)
+							}
+						}
+
+						try {
+							const res = await makeRequest()
+							manageResponse(res)
+						} catch (error) {
+							console.error(error)
+							response = '{"error": "Request could not be fulfilled"}'
+						} finally {
+							this.loader.hide()
+						}
+						break
+					} else if (checkCoin === "NMC") {
+						this.loader.show()
+						const amount = Number(data.amount)
+						const recipient = data.destinationAddress
+						const coin = data.coin
+						const xprv58 = this.nmcWallet.derivedMasterPrivateKey
+						const feePerByte = data.fee ? data.fee : this.nmcFeePerByte
+
+						const nmcWalletBalance = await parentEpml.request('apiCall', {
+							url: `/crosschain/nmc/walletbalance?apiKey=${this.getApiKey()}`,
+							method: 'POST',
+							body: `${this.nmcWallet.derivedMasterPublicKey}`
+						})
+
+						if (isNaN(Number(nmcWalletBalance))) {
+							this.loader.hide()
+							let errorMsg = "Failed to Fetch NMC Balance. Try again!"
+							let failedMsg = get("walletpage.wchange33") + " NMC " + get("general.balance")
+							let pleaseMsg = get("walletpage.wchange44")
+							showErrorAndWait("FAILED_FETCH", failedMsg, pleaseMsg)
+							let obj = {}
+							obj['error'] = errorMsg
+							response = JSON.stringify(obj)
+							break
+						}
+
+						const nmcWalletBalanceDecimals = Number(nmcWalletBalance)
+						const nmcAmountDecimals = Number(amount) * QORT_DECIMALS
+						const balance = (Number(nmcWalletBalance) / 1e8).toFixed(8)
+						const fee = feePerByte * 500 // default 0.00075000
+
+						if (nmcAmountDecimals + (fee * QORT_DECIMALS) > nmcWalletBalanceDecimals) {
+							this.loader.hide()
+							let errorMsg = "Insufficient Funds!"
+							let failedMsg = get("walletpage.wchange26")
+							let pleaseMsg = get("walletpage.wchange44")
+							showErrorAndWait("INSUFFICIENT_FUNDS", failedMsg, pleaseMsg)
+							let obj = {}
+							obj['error'] = errorMsg
+							response = JSON.stringify(obj)
+							break
+						}
+
+						this.loader.hide()
+
+						const processPayment = await showModalAndWait(
+							actions.SEND_COIN,
+							{
+								amount,
+								recipient,
+								coin,
+								balance,
+								fee
+							}
+						)
+
+						if (processPayment.action === 'reject') {
+							let errorMsg = "User declined request"
+							let myMsg1 = get("transactions.declined")
+							let myMsg2 = get("walletpage.wchange44")
+							showErrorAndWait("DECLINED_REQUEST", myMsg1, myMsg2)
+							response = '{"error": "User declined request"}'
+							break
+						}
+
+						this.loader.show()
+
+						const makeRequest = async () => {
+							const opts = {
+								xprv58: xprv58,
+								receivingAddress: recipient,
+								nmccoinAmount: amount,
+								feePerByte: feePerByte * QORT_DECIMALS
+							}
+							const response = await parentEpml.request('sendNmc', opts)
+							return response
+						}
+
+						const manageResponse = (response) => {
+							if (response.length === 64) {
+								this.loader.hide()
+								let successMsg = get("walletpage.wchange30")
+								let patientMsg = get("walletpage.wchange43")
+								showErrorAndWait("TRANSACTION_SUCCESS", successMsg, patientMsg)
+							} else if (response === false) {
+								this.loader.hide()
+								let errorMsg = get("walletpage.wchange31")
+								let pleaseMsg = get("walletpage.wchange44")
+								showErrorAndWait("TRANSACTION_FAILED", errorMsg, pleaseMsg)
+							} else {
+								this.loader.hide()
+								let errorMsg = response.message
+								let pleaseMsg = get("walletpage.wchange44")
+								showErrorAndWait("TRANSACTION_FAILED", errorMsg, pleaseMsg)
+								throw new Error(response)
+							}
+						}
+
+						try {
+							const res = await makeRequest()
+							manageResponse(res)
+						} catch (error) {
+							console.error(error)
+							response = '{"error": "Request could not be fulfilled"}'
+						} finally {
+							this.loader.hide()
+						}
+						break
+					} else if (checkCoin === "DASH") {
+						this.loader.show()
+						const amount = Number(data.amount)
+						const recipient = data.destinationAddress
+						const coin = data.coin
+						const xprv58 = this.dashWallet.derivedMasterPrivateKey
+						const feePerByte = data.fee ? data.fee : this.dashFeePerByte
+
+						const dashWalletBalance = await parentEpml.request('apiCall', {
+							url: `/crosschain/dash/walletbalance?apiKey=${this.getApiKey()}`,
+							method: 'POST',
+							body: `${this.dashWallet.derivedMasterPublicKey}`
+						})
+
+						if (isNaN(Number(dashWalletBalance))) {
+							this.loader.hide()
+							let errorMsg = "Failed to Fetch DASH Balance. Try again!"
+							let failedMsg = get("walletpage.wchange33") + " DASH " + get("general.balance")
+							let pleaseMsg = get("walletpage.wchange44")
+							showErrorAndWait("FAILED_FETCH", failedMsg, pleaseMsg)
+							let obj = {}
+							obj['error'] = errorMsg
+							response = JSON.stringify(obj)
+							break
+						}
+
+						const dashWalletBalanceDecimals = Number(dashWalletBalance)
+						const dashAmountDecimals = Number(amount) * QORT_DECIMALS
+						const balance = (Number(dashWalletBalance) / 1e8).toFixed(8)
+						const fee = feePerByte * 500 // default 0.00500000
+
+						if (dashAmountDecimals + (fee * QORT_DECIMALS) > dashWalletBalanceDecimals) {
+							this.loader.hide()
+							let errorMsg = "Insufficient Funds!"
+							let failedMsg = get("walletpage.wchange26")
+							let pleaseMsg = get("walletpage.wchange44")
+							showErrorAndWait("INSUFFICIENT_FUNDS", failedMsg, pleaseMsg)
+							let obj = {}
+							obj['error'] = errorMsg
+							response = JSON.stringify(obj)
+							break
+						}
+
+						this.loader.hide()
+
+						const processPayment = await showModalAndWait(
+							actions.SEND_COIN,
+							{
+								amount,
+								recipient,
+								coin,
+								balance,
+								fee
+							}
+						)
+
+						if (processPayment.action === 'reject') {
+							let errorMsg = "User declined request"
+							let myMsg1 = get("transactions.declined")
+							let myMsg2 = get("walletpage.wchange44")
+							showErrorAndWait("DECLINED_REQUEST", myMsg1, myMsg2)
+							response = '{"error": "User declined request"}'
+							break
+						}
+
+						this.loader.show()
+
+						const makeRequest = async () => {
+							const opts = {
+								xprv58: xprv58,
+								receivingAddress: recipient,
+								dashcoinAmount: amount,
+								feePerByte: feePerByte * QORT_DECIMALS
+							}
+							const response = await parentEpml.request('sendDash', opts)
+							return response
+						}
+
+						const manageResponse = (response) => {
+							if (response.length === 64) {
+								this.loader.hide()
+								let successMsg = get("walletpage.wchange30")
+								let patientMsg = get("walletpage.wchange43")
+								showErrorAndWait("TRANSACTION_SUCCESS", successMsg, patientMsg)
+							} else if (response === false) {
+								this.loader.hide()
+								let errorMsg = get("walletpage.wchange31")
+								let pleaseMsg = get("walletpage.wchange44")
+								showErrorAndWait("TRANSACTION_FAILED", errorMsg, pleaseMsg)
+							} else {
+								this.loader.hide()
+								let errorMsg = response.message
+								let pleaseMsg = get("walletpage.wchange44")
+								showErrorAndWait("TRANSACTION_FAILED", errorMsg, pleaseMsg)
+								throw new Error(response)
+							}
+						}
+
+						try {
+							const res = await makeRequest()
+							manageResponse(res)
+						} catch (error) {
+							console.error(error)
+							response = '{"error": "Request could not be fulfilled"}'
+						} finally {
+							this.loader.hide()
+						}
+						break
+					} else if (checkCoin === "FIRO") {
+						this.loader.show()
+						const amount = Number(data.amount)
+						const recipient = data.destinationAddress
+						const coin = data.coin
+						const xprv58 = this.firoWallet.derivedMasterPrivateKey
+						const feePerByte = data.fee ? data.fee : this.firoFeePerByte
+
+						const firoWalletBalance = await parentEpml.request('apiCall', {
+							url: `/crosschain/firo/walletbalance?apiKey=${this.getApiKey()}`,
+							method: 'POST',
+							body: `${this.firoWallet.derivedMasterPublicKey}`
+						})
+
+						if (isNaN(Number(firoWalletBalance))) {
+							this.loader.hide()
+							let errorMsg = "Failed to Fetch FIRO Balance. Try again!"
+							let failedMsg = get("walletpage.wchange33") + " FIRO " + get("general.balance")
+							let pleaseMsg = get("walletpage.wchange44")
+							showErrorAndWait("FAILED_FETCH", failedMsg, pleaseMsg)
+							let obj = {}
+							obj['error'] = errorMsg
+							response = JSON.stringify(obj)
+							break
+						}
+
+						const firoWalletBalanceDecimals = Number(firoWalletBalance)
+						const firoAmountDecimals = Number(amount) * QORT_DECIMALS
+						const balance = (Number(firoWalletBalance) / 1e8).toFixed(8)
+						const fee = feePerByte * 500 // default 0.00500000
+
+						if (firoAmountDecimals + (fee * QORT_DECIMALS) > firoWalletBalanceDecimals) {
+							this.loader.hide()
+							let errorMsg = "Insufficient Funds!"
+							let failedMsg = get("walletpage.wchange26")
+							let pleaseMsg = get("walletpage.wchange44")
+							showErrorAndWait("INSUFFICIENT_FUNDS", failedMsg, pleaseMsg)
+							let obj = {}
+							obj['error'] = errorMsg
+							response = JSON.stringify(obj)
+							break
+						}
+
+						this.loader.hide()
+
+						const processPayment = await showModalAndWait(
+							actions.SEND_COIN,
+							{
+								amount,
+								recipient,
+								coin,
+								balance,
+								fee
+							}
+						)
+
+						if (processPayment.action === 'reject') {
+							let errorMsg = "User declined request"
+							let myMsg1 = get("transactions.declined")
+							let myMsg2 = get("walletpage.wchange44")
+							showErrorAndWait("DECLINED_REQUEST", myMsg1, myMsg2)
+							response = '{"error": "User declined request"}'
+							break
+						}
+
+						this.loader.show()
+
+						const makeRequest = async () => {
+							const opts = {
+								xprv58: xprv58,
+								receivingAddress: recipient,
+								firocoinAmount: amount,
+								feePerByte: feePerByte * QORT_DECIMALS
+							}
+							const response = await parentEpml.request('sendFiro', opts)
+							return response
+						}
+
+						const manageResponse = (response) => {
+							if (response.length === 64) {
+								this.loader.hide()
+								let successMsg = get("walletpage.wchange30")
+								let patientMsg = get("walletpage.wchange43")
+								showErrorAndWait("TRANSACTION_SUCCESS", successMsg, patientMsg)
+							} else if (response === false) {
+								this.loader.hide()
+								let errorMsg = get("walletpage.wchange31")
+								let pleaseMsg = get("walletpage.wchange44")
+								showErrorAndWait("TRANSACTION_FAILED", errorMsg, pleaseMsg)
 							} else {
 								this.loader.hide()
 								let errorMsg = response.message

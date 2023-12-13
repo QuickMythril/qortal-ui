@@ -211,6 +211,81 @@ class CoinBalancesController extends connect(store)(LitElement) {
         })
     }
 
+    async updateNmcWalletBalance() {
+        let _url = `/crosschain/nmc/walletbalance?apiKey=${this.myNode.apiKey}`
+        let _body = store.getState().app.selectedAddress.nmcWallet.derivedMasterPublicKey
+
+        await parentEpml.request('apiCall', {
+            url: _url,
+            method: 'POST',
+            body: _body,
+        }).then((res) => {
+            if (isNaN(Number(res))) {
+                //...
+            } else {
+                this.nmcWalletBalance = (Number(res) / 1e8).toFixed(8)
+                store.dispatch(
+                    setCoinBalances({
+                        type: 'nmc',
+                        fullValue: Number(res)
+                    })
+                );
+            }
+        }).catch(()=> {
+            console.log('error')
+        })
+    }
+
+    async updateDashWalletBalance() {
+        let _url = `/crosschain/dash/walletbalance?apiKey=${this.myNode.apiKey}`
+        let _body = store.getState().app.selectedAddress.dashWallet.derivedMasterPublicKey
+
+        await parentEpml.request('apiCall', {
+            url: _url,
+            method: 'POST',
+            body: _body,
+        }).then((res) => {
+            if (isNaN(Number(res))) {
+                //...
+            } else {
+                this.dashWalletBalance = (Number(res) / 1e8).toFixed(8)
+                store.dispatch(
+                    setCoinBalances({
+                        type: 'dash',
+                        fullValue: Number(res)
+                    })
+                );
+            }
+        }).catch(()=> {
+            console.log('error')
+        })
+    }
+
+    async updateFiroWalletBalance() {
+        let _url = `/crosschain/firo/walletbalance?apiKey=${this.myNode.apiKey}`
+        let _body = store.getState().app.selectedAddress.firoWallet.derivedMasterPublicKey
+
+        await parentEpml.request('apiCall', {
+            url: _url,
+            method: 'POST',
+            body: _body,
+        }).then((res) => {
+            if (isNaN(Number(res))) {
+                //...
+            } else {
+                this.firoWalletBalance = (Number(res) / 1e8).toFixed(8)
+                store.dispatch(
+                    setCoinBalances({
+                        type: 'firo',
+                        fullValue: Number(res)
+                    })
+                );
+            }
+        }).catch(()=> {
+            console.log('error')
+        })
+    }
+
     _updateCoinList(event) {
         const copyCoinList = {...this.coinList}
         const coin = event.detail
@@ -230,6 +305,12 @@ class CoinBalancesController extends connect(store)(LitElement) {
                     this.updateRvnWalletBalance()
                 }else if(coin === 'arrr'){
                     this.updateArrrWalletBalance()
+                } else if(coin === 'nmc'){
+                    this.updateNmcWalletBalance()
+                } else if(coin === 'dash'){
+                    this.updateDashWalletBalance()
+                } else if(coin === 'firo'){
+                    this.updateFiroWalletBalance()
                 }
             } catch (error) {
 
@@ -259,6 +340,12 @@ class CoinBalancesController extends connect(store)(LitElement) {
                     await this.updateRvnWalletBalance()
                 }else if(coin === 'arrr'){
                     await this.updateArrrWalletBalance()
+                } else if(coin === 'nmc'){
+                    await this.updateNmcWalletBalance()
+                } else if(coin === 'dash'){
+                    await this.updateDashWalletBalance()
+                } else if(coin === 'firo'){
+                    await this.updateFiroWalletBalance()
                 }
             })
 

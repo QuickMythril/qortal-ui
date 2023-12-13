@@ -43,7 +43,7 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 		this.myNode = this.getMyNode();
 		this.tagline = '';
 		this.bio = '';
-		this.walletList = ['btc', 'ltc', 'doge', 'dgb', 'rvn', 'arrr'];
+		this.walletList = ['btc', 'ltc', 'doge', 'dgb', 'rvn', 'arrr', 'nmc', 'dash', 'firo'];
 		let wallets = {};
 		this.walletList.forEach((item) => {
 			wallets[item] = '';
@@ -67,6 +67,12 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 			window.parent.reduxStore.getState().app.selectedAddress.dgbWallet;
 		this.walletsUi.get('rvn').wallet =
 			window.parent.reduxStore.getState().app.selectedAddress.rvnWallet;
+		this.walletsUi.get('nmc').wallet =
+			window.parent.reduxStore.getState().app.selectedAddress.nmcWallet;
+		this.walletsUi.get('dash').wallet =
+			window.parent.reduxStore.getState().app.selectedAddress.dashWallet;
+		this.walletsUi.get('firo').wallet =
+			window.parent.reduxStore.getState().app.selectedAddress.firoWallet;
 		this.hasFetchedArrr = false;
 		this.isOpenCustomDataModal = false;
 		this.customData = {};
