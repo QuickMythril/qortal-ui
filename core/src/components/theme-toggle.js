@@ -3,6 +3,7 @@ import {translate} from '../../translate/index.js'
 import '@polymer/paper-icon-button/paper-icon-button.js'
 import '@polymer/iron-icons/image-icons.js'
 import '@polymer/iron-icons/iron-icons.js'
+import '@polymer/iron-icons/maps-icons.js'
 
 class ThemeToggle extends LitElement {
 	static get properties() {
@@ -60,6 +61,14 @@ class ThemeToggle extends LitElement {
 				-ms-transform: rotate(120deg);
 				transform: rotate(120deg);
 			}
+
+			.pirate-mode {
+				display: none;
+			}
+
+			:host([theme="pirate"]) .pirate-mode {
+				display: inline-block;
+			}
 		`
 	]
 
@@ -68,6 +77,7 @@ class ThemeToggle extends LitElement {
 			<div style="display: inline;">
 				<paper-icon-button class="light-mode" icon="image:wb-sunny" @click=${() => this.toggleTheme()} title="${translate("info.inf18")}"></paper-icon-button>
 				<paper-icon-button class="dark-mode" icon="image:brightness-3" @click=${() => this.toggleTheme()} title="${translate("info.inf17")}"></paper-icon-button>
+				<paper-icon-button class="pirate-mode" icon="maps:local-parking" @click=${() => this.toggleTheme()} title="ARRR!"></paper-icon-button>
 			</div>
 		`
 	}
@@ -83,6 +93,9 @@ class ThemeToggle extends LitElement {
 				this.theme = 'dark';
         		break;
 			case 'dark':
+				this.theme = 'pirate';
+        		break;
+			case 'pirate':
 				this.theme = 'light';
         		break;
 			default:
