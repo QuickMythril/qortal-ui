@@ -1,5 +1,5 @@
 import {css, html, LitElement} from 'lit'
-import {svgMoon, svgSun} from '../../assets/js/svg.js'
+import {svgMoon, svgSun, svgPirate} from '../../assets/js/svg.js'
 
 class QortThemeToggle extends LitElement {
   static get properties() {
@@ -75,6 +75,18 @@ class QortThemeToggle extends LitElement {
       :host([theme="dark"]) .moon {
         display: inline-block;
       }
+
+      .pirate {
+        display: none;
+      }
+
+      .pirate svg {
+        transform: scale(0.5);
+      }
+
+      :host([theme="pirate"]) .pirate {
+        display: inline-block;
+      }
     `
   ];
 
@@ -84,6 +96,7 @@ class QortThemeToggle extends LitElement {
       <div class="icon">
         <span class="sun">${svgSun}</span>
         <span class="moon">${svgMoon}</span>
+        <span class="pirate">${svgPirate}</span>
       </div>
     `;
   }
@@ -99,6 +112,9 @@ class QortThemeToggle extends LitElement {
 				this.theme = 'dark';
         break;
 			case 'dark':
+				this.theme = 'pirate';
+        break;
+			case 'pirate':
 				this.theme = 'light';
         break;
 			default:
