@@ -1,17 +1,17 @@
-require('events').EventEmitter.defaultMaxListeners = 0;
-const path = require('path');
-const { nodeResolve } = require('@rollup/plugin-node-resolve');
-const progress = require('rollup-plugin-progress');
-const replace = require('@rollup/plugin-replace');
-const globals = require('rollup-plugin-node-globals');
-const commonjs = require('@rollup/plugin-commonjs');
-const alias = require('@rollup/plugin-alias');
-const terser = require('@rollup/plugin-terser');
-const babel = require('@rollup/plugin-babel');
-const webWorkerLoader = require('@qortal/rollup-plugin-web-worker-loader');
+require('events').EventEmitter.defaultMaxListeners = 0
 
+const path = require('path')
+const { nodeResolve } = require('@rollup/plugin-node-resolve')
+const progress = require('rollup-plugin-progress')
+const replace = require('@rollup/plugin-replace')
+const globals = require('rollup-plugin-node-globals')
+const commonjs = require('@rollup/plugin-commonjs')
+const alias = require('@rollup/plugin-alias')
+const terser = require('@rollup/plugin-terser')
+const babel = require('@rollup/plugin-babel')
+const webWorkerLoader = require('@qortal/rollup-plugin-web-worker-loader')
 
-const aliases = {};
+const aliases = {}
 
 const generateRollupConfig = (inputFile, outputFile) => {
 	return {
@@ -59,8 +59,8 @@ const generateRollupConfig = (inputFile, outputFile) => {
 			file: outputFile,
 			format: 'umd',
 		},
-	};
-};
+	}
+}
 
 const generateForPlugins = () => {
 	return [
@@ -133,8 +133,8 @@ const generateForPlugins = () => {
 			out: 'plugins/core/messaging/chain-messaging/chain-messaging.js',
 		},
 		{
-			in: 'plugins/core/messaging/q-chat/q-chat.src.js',
-			out: 'plugins/core/messaging/q-chat/q-chat.js',
+			in: 'plugins/core/q-chat/q-chat.src.js',
+			out: 'plugins/core/q-chat/q-chat.js',
 		},
 		{
 			in: 'plugins/core/minting/minting-info.src.js',
@@ -160,8 +160,8 @@ const generateForPlugins = () => {
 		return generateRollupConfig(
 			path.join(__dirname, file.in),
 			path.join(__dirname, file.out)
-		);
-	});
-};
+		)
+	})
+}
 
-module.exports = generateForPlugins;
+module.exports = generateForPlugins

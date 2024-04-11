@@ -1,5 +1,5 @@
-import {parentEpml} from './connect.js';
-import './streams/streams.js';
+import { parentEpml } from './connect.js'
+import './streams/streams.js'
 
 let config = {}
 let haveRegisteredNodeManagement = false
@@ -98,7 +98,7 @@ parentEpml.ready().then(() => {
 		{
 			url: 'q-chat',
 			domain: 'core',
-			page: 'messaging/q-chat/index.html',
+			page: 'q-chat/index.html',
 			title: 'Q-Chat',
 			icon: 'vaadin:chat',
 			mwcicon: 'forum',

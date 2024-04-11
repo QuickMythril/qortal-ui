@@ -1,51 +1,52 @@
-import {css, html, LitElement} from 'lit'
+import { css, html, LitElement } from 'lit'
 
 import './time-elements/index.js'
 
 class TimeAgo extends LitElement {
-    static get properties() {
-        return {
-            selectedAddress: { type: Object },
-            config: { type: Object },
-            timestamp: { type: Number },
-            format: { type: String, reflect: true },
-            timeIso: { type: String }
-        }
-    }
+	static get properties() {
+		return {
+			selectedAddress: { type: Object },
+			config: { type: Object },
+			timestamp: { type: Number },
+			format: { type: String, reflect: true },
+			timeIso: { type: String }
+		}
+	}
 
-    static get styles() {
-        return css``
-    }
+	static get styles() {
+		return css``
+	}
 
-    updated(changedProps) {
-        changedProps.forEach((OldProp, name) => {
-            if (name === 'timeIso' || name === 'timestamp') {
-                this.renderTime(this.timestamp)
-            }
-        });
+	constructor() {
+		super()
+		this.timestamp = 0
+		this.timeIso = ''
+		this.format = ''
+	}
 
-        this.shadowRoot.querySelector('time-ago').setAttribute('title', '')
-    }
+	render() {
+		return html`
+			<time-ago datetime=${this.timeIso} format=${this.format}></time-ago>
+		`
+	}
 
-    constructor() {
-        super()
-        this.timestamp = 0
-        this.timeIso = ''
-        this.format = ''
-    }
+	firstUpdated() {
+		// ...
+	}
 
-    render() {
-        return html`
-            <time-ago datetime=${this.timeIso} format=${this.format}> </time-ago>
-        `
-    }
+	updated(changedProps) {
+		changedProps.forEach((OldProp, name) => {
+			if (name === 'timeIso' || name === 'timestamp') {
+				this.renderTime(this.timestamp)
+			}
+		})
 
-    renderTime(timestamp) {
-        timestamp === undefined ? this.timeIso = '' : this.timeIso = new Date(timestamp).toISOString()
-    }
+		this.shadowRoot.querySelector('time-ago').setAttribute('title', '')
+	}
 
-    firstUpdated() {
-    }
+	renderTime(timestamp) {
+		timestamp === undefined ? this.timeIso = '' : this.timeIso = new Date(timestamp).toISOString()
+	}
 }
 
 window.customElements.define('message-time', TimeAgo)
