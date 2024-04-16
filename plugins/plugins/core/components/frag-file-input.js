@@ -3,6 +3,9 @@ import { fragFileInputStyles } from './plugins-css'
 import '@material/mwc-button'
 import '@material/mwc-icon'
 
+// Multi language support
+import { translate } from '../../../../core/translate'
+
 class FragFileInput extends LitElement {
 	static get properties() {
 		return {
@@ -44,9 +47,9 @@ class FragFileInput extends LitElement {
 			e.stopPropagation()
 		}
 
-			;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-				this._dropArea.addEventListener(eventName, preventDefaults, false)
-			})
+		;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+			this._dropArea.addEventListener(eventName, preventDefaults, false)
+		})
 
 		const highlight = e => {
 			this._dropArea.classList.add('highlight')
@@ -56,11 +59,11 @@ class FragFileInput extends LitElement {
 			this._dropArea.classList.remove('highlight')
 		}
 
-		['dragenter', 'dragover'].forEach(eventName => {
+		;['dragenter', 'dragover'].forEach(eventName => {
 			this._dropArea.addEventListener(eventName, highlight, false)
 		})
 
-		['dragleave', 'drop'].forEach(eventName => {
+		;['dragleave', 'drop'].forEach(eventName => {
 			this._dropArea.addEventListener(eventName, unhighlight, false)
 		})
 
