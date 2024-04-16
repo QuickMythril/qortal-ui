@@ -1,20 +1,15 @@
-import { css, html, LitElement } from 'lit'
-import { Epml } from '../../../epml'
-import { getUserNameFromAddress } from '../../utils/getUserNameFromAddress'
+import { html, LitElement } from 'lit'
+import { getUserNameFromAddress } from '../../utils/functions'
 import { chatRightPanelStyles } from './plugins-css'
-
 import './WrapperModal'
 import './TipUser'
 import './UserInfo'
-
 import '@material/mwc-button'
 import '@material/mwc-dialog'
 import '@material/mwc-icon'
 import '@polymer/paper-spinner/paper-spinner-lite.js'
 import '@polymer/paper-progress/paper-progress.js'
 import '@vaadin/button'
-
-const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
 class ChatRightPanel extends LitElement {
 	static get properties() {
@@ -64,7 +59,6 @@ class ChatRightPanel extends LitElement {
 
 	render() {
 		const owner = this.groupAdmin.filter((admin) => admin.address === this.leaveGroupObj.owner)
-
 		return html`
 			<div class="container">
 				<div class="close-row" style="margin-top: 15px">
@@ -182,6 +176,21 @@ class ChatRightPanel extends LitElement {
 			this.getMoreMembers(this.leaveGroupObj.groupId)
 		}
 	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
+	}
 }
 
-customElements.define("chat-right-panel", ChatRightPanel)
+window.customElements.define("chat-right-panel", ChatRightPanel)

@@ -1,10 +1,11 @@
 import { html, LitElement } from 'lit'
 import { Epml } from '../../../epml'
-import { get, translate } from '../../../../core/translate'
 import { tipUserStyles } from './plugins-css'
-
 import '@polymer/paper-progress/paper-progress.js'
 import '@vaadin/button'
+
+// Multi language support
+import { get, translate } from '../../../../core/translate'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
@@ -264,6 +265,21 @@ export class TipUser extends LitElement {
 
 		await validateReceiver(recipient)
 	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
+	}
 }
 
-customElements.define('tip-user', TipUser)
+window.customElements.define('tip-user', TipUser)

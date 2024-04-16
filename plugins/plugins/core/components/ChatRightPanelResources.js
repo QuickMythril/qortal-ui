@@ -1,21 +1,21 @@
-import { css, html, LitElement } from 'lit'
+import { html, LitElement } from 'lit'
 import { Epml } from '../../../epml'
-import { get, translate } from '../../../../core/translate'
-import { generateIdFromAddresses } from '../../utils/id-generation'
+import { generateIdFromAddresses } from '../../utils/functions'
 import { chatRightPanelResourcesStyles, imageParentStyles } from './plugins-css'
-
 import './WrapperModal'
 import './TipUser'
 import './UserInfo'
 import './ChatImage'
 import './ReusableImage'
-
 import '@material/mwc-button'
 import '@material/mwc-dialog'
 import '@material/mwc-icon'
 import '@polymer/paper-spinner/paper-spinner-lite.js'
 import '@polymer/paper-progress/paper-progress.js'
 import '@vaadin/button'
+
+// Multi language support
+import { get, translate } from '../../../../core/translate'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
@@ -197,9 +197,24 @@ class ChatRightPanelResources extends LitElement {
 	selectMyImages(e) {
 		this.onlyMyImages = !e.target.checked
 	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
+	}
 }
 
-customElements.define('chat-right-panel-resources', ChatRightPanelResources)
+window.customElements.define('chat-right-panel-resources', ChatRightPanelResources)
 
 class ImageParent extends LitElement {
 	static get properties() {
@@ -318,6 +333,20 @@ class ImageParent extends LitElement {
 		this.isImgLoaded = true
 		this.requestUpdate()
 	}
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
+	}
 }
 
-customElements.define('image-parent', ImageParent)
+window.customElements.define('image-parent', ImageParent)

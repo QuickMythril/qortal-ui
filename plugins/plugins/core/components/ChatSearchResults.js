@@ -1,9 +1,10 @@
 import { html, LitElement } from 'lit'
-import { translate } from '../../../../core/translate'
 import { chatSearchResultsStyles } from './plugins-css'
-
 import '@vaadin/icon'
 import '@vaadin/icons'
+
+// Multi language support
+import { translate } from '../../../../core/translate'
 
 export class ChatSearchResults extends LitElement {
 	static get properties() {
@@ -18,6 +19,10 @@ export class ChatSearchResults extends LitElement {
 
 	static get styles() {
 		return [chatSearchResultsStyles]
+	}
+
+	constructor() {
+		super()
 	}
 
 	render() {
@@ -54,6 +59,25 @@ export class ChatSearchResults extends LitElement {
 			</div>
 		`
 	}
+
+	firstUpdated() {
+		// ...
+	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
+	}
 }
 
-customElements.define('chat-search-results', ChatSearchResults)
+window.customElements.define('chat-search-results', ChatSearchResults)

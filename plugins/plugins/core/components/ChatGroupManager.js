@@ -1,20 +1,20 @@
-import { css, html, LitElement } from 'lit'
+import { html, LitElement } from 'lit'
 import { Epml } from '../../../epml'
-import { get } from '../../../../core/translate'
 import { chatGroupsManagerStyles } from './plugins-css'
-
 import './WrapperModal'
 import './TipUser'
 import './UserInfo'
 import './ChatImage'
 import './ReusableImage'
-
 import '@material/mwc-button'
 import '@material/mwc-dialog'
 import '@material/mwc-icon'
 import '@polymer/paper-spinner/paper-spinner-lite.js'
 import '@polymer/paper-progress/paper-progress.js'
 import '@vaadin/button'
+
+// Multi language support
+import { get } from '../../../../core/translate'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
@@ -157,6 +157,21 @@ class ChatGroupsManager extends LitElement {
 	selectMyImages(e) {
 		this.onlyMyImages = !e.target.checked
 	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
+	}
 }
 
-customElements.define('chat-groups-manager', ChatGroupsManager)
+window.customElements.define('chat-groups-manager', ChatGroupsManager)

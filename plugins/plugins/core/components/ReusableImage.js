@@ -1,13 +1,13 @@
-import { css, html, LitElement } from 'lit'
-import { translate } from '../../../../core/translate'
-import { RequestQueueWithPromise } from '../../utils/queue'
+import { html, LitElement } from 'lit'
+import { RequestQueueWithPromise } from '../../utils/classes'
 import { reusableImageStyles } from './plugins-css'
-
 import axios from 'axios'
-
 import '@material/mwc-dialog'
 import '@material/mwc-list/mwc-list-item.js'
 import '@material/mwc-menu'
+
+// Multi language support
+import { translate } from '../../../../core/translate'
 
 const requestQueue = new RequestQueueWithPromise(5)
 const requestQueue2 = new RequestQueueWithPromise(5)
@@ -245,6 +245,21 @@ export class ResuableImage extends LitElement {
 		contextMenu.style.left = `${adjustedX}px`
 
 		contextMenu.open = true
+	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
 	}
 }
 

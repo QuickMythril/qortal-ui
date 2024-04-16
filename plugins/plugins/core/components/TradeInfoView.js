@@ -1,13 +1,10 @@
 import { html, LitElement } from 'lit'
-import { Epml } from '../../../epml'
-import { get, translate } from '../../../../core/translate'
 import { tradeInfoViewStyles } from './plugins-css'
-
 import './TraderInfoView'
-
 import '@polymer/paper-dialog/paper-dialog.js'
 
-const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
+// Multi language support
+import { get, translate } from '../../../../core/translate'
 
 class TradeInfoView extends LitElement {
 	static get properties() {
@@ -117,6 +114,10 @@ class TradeInfoView extends LitElement {
 			</paper-dialog>
 			<trader-info-view></trader-info-view>
 		`
+	}
+
+	firstUpdated() {
+		// ...
 	}
 
 	async openTradeInfo(seller, buyer, qortAmount, foreignAmount, ata, time, coin) {
@@ -248,6 +249,17 @@ class TradeInfoView extends LitElement {
 		} else {
 			return html`<span class="red">${translate("general.no")}</span>`
 		}
+	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
 	}
 
 	round(number) {

@@ -1,5 +1,5 @@
-import { css, html, LitElement } from 'lit'
-
+import { html, LitElement } from 'lit'
+import { snackQueueStyles } from './plugins-css'
 import '@material/mwc-snackbar'
 
 let queueElement
@@ -22,7 +22,7 @@ class SnackQueue extends LitElement {
 	}
 
 	static get styles() {
-		return css``
+		return [snackQueueStyles]
 	}
 
 	constructor() {
@@ -66,6 +66,21 @@ class SnackQueue extends LitElement {
 	add(item) {
 		this._queue.push(item)
 		this._shift()
+	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
 	}
 }
 

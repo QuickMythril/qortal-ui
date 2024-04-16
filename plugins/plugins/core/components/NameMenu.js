@@ -1,16 +1,16 @@
-import { css, html, LitElement } from 'lit'
+import { html, LitElement } from 'lit'
 import { Epml } from '../../../epml'
-import { get, translate } from '../../../../core/translate'
 import { nameMenuStyles } from './plugins-css'
-
-import snackbar from './snackbar.js'
-
+import snackbar from './snackbar'
 import '@material/mwc-button'
 import '@material/mwc-dialog'
 import '@material/mwc-icon'
 import '@material/mwc-snackbar'
 import '@polymer/paper-tooltip/paper-tooltip.js'
 import '@polymer/paper-spinner/paper-spinner-lite.js'
+
+// Multi language support
+import { get, translate } from '../../../../core/translate'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
@@ -457,14 +457,19 @@ class NameMenu extends LitElement {
 		if (e.keyCode === 13 && !e.shiftKey) this._sendMessage()
 	}
 
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
 	isEmptyArray(arr) {
 		if (!arr) { return true }
 		return arr.length === 0
 	}
 
-	getApiKey() {
-		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
-		return myNode.apiKey
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
 	}
 }
 

@@ -3,6 +3,5 @@ self.addEventListener('message', async e => {
 		return a.timestamp
 		- b.timestamp
 	})
-
 	postMessage(response)
 })

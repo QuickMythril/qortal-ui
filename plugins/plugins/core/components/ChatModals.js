@@ -1,12 +1,12 @@
-import { css, html, LitElement } from 'lit'
+import { html, LitElement } from 'lit'
 import { Epml } from '../../../epml'
-import { get, translate } from '../../../../core/translate'
 import { chatModalsStyles } from './plugins-css'
-
-import snackbar from './snackbar.js'
-
+import snackbar from './snackbar'
 import '@material/mwc-button'
 import '@material/mwc-dialog'
+
+// Multi language support
+import { get, translate } from '../../../../core/translate'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
@@ -110,7 +110,6 @@ class ChatModals extends LitElement {
 	}
 
 	// Send Private Message
-
 	_sendMessage() {
 		this.isLoading = true
 
@@ -274,11 +273,6 @@ class ChatModals extends LitElement {
 		if (e.keyCode === 13 && !e.shiftKey) this._sendMessage()
 	}
 
-	getApiKey() {
-		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
-		return myNode.apiKey
-	}
-
 	getChatBlockedList() {
 		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
@@ -366,6 +360,21 @@ class ChatModals extends LitElement {
 
 		return ret
 	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
+	}
 }
 
-customElements.define('chat-modals', ChatModals)
+window.customElements.define('chat-modals', ChatModals)

@@ -1,6 +1,5 @@
-import { css, html, LitElement } from 'lit'
+import { html, LitElement } from 'lit'
 import { qortalQrcodeGeneratorStyles } from './plugins-css'
-
 import QRCode from './QRCode'
 
 export class QortalQrcodeGenerator extends LitElement {
@@ -40,6 +39,10 @@ export class QortalQrcodeGenerator extends LitElement {
 
 	render() {
 		return html`<div id="qrCodeContainer">${this.qrcode ? this.qrcode : ''}</div>`
+	}
+
+	firstUpdated() {
+		// ...
 	}
 
 	validateParams() {
@@ -178,6 +181,21 @@ export class QortalQrcodeGenerator extends LitElement {
 		if ((changedProperties.has('auto') || changedProperties.has('data') || changedProperties.has('ecclevel') || changedProperties.has('mask') || changedProperties.has('mode') || changedProperties.has('version')) && this.auto) {
 			this.generateQRCode()
 		}
+	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
 	}
 }
 

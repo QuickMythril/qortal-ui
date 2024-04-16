@@ -1,16 +1,14 @@
-import { css, html, LitElement } from 'lit'
+import { html, LitElement } from 'lit'
 import { render } from 'lit/html.js'
-import { Epml } from '../../../epml'
-import { get, translate } from '../../../../core/translate'
 import { traderInfoViewStyles } from './plugins-css'
-
 import '@material/mwc-button'
 import '@material/mwc-icon'
 import '@polymer/paper-dialog/paper-dialog.js'
 import '@vaadin/grid'
 import '@vaadin/grid/vaadin-grid-sorter'
 
-const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
+// Multi language support
+import { get, translate } from '../../../../core/translate'
 
 class TraderInfoView extends LitElement {
 	static get properties() {
@@ -118,6 +116,290 @@ class TraderInfoView extends LitElement {
 		this.txamount = ''
 		this.txfee = ''
 		this.txblockHeight = ''
+	}
+
+	render() {
+		return html`
+			<paper-dialog class="full-info-wrapper" id="userFullInfoDialog" modal>
+				<div class="full-info-logo">${this.avatarFullImage()}</div>
+				<h3>${this.infoAccountName}</h3>
+				<p style="color: var(--black);"><b>${this.displayAddress}</b></p>
+				<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingCompleteInfo ? 'block' : 'none'}">
+					<div class="loading"></div>
+					<span style="color: var(--black);">${translate("login.loading")}</span>
+				</div>
+				<div class="data-info" style="display:${this.isLoadingCompleteInfo ? 'none' : ''}">
+					<ul>
+						<li>
+							<span class="data-items">${translate("mintingpage.mchange27")}</span> ${this.displayLevel}
+						</li>
+						<li>
+							<span class="data-items">${translate("walletprofile.blocksminted")}</span> ${this.addressResult.blocksMinted + this.addressResult.blocksMintedAdjustment}
+						</li>
+						<li>
+							<span class="data-items">${translate("explorerpage.exp15")}</span> ${this.startMintTime}
+						</li>
+						<li>
+							<span class="data-items">${translate("general.balance")}</span> ${this.displayBalance} QORT
+						</li>
+						<li>
+							<span class="data-items">${translate("explorerpage.exp6")}</span> ${this.founderStatus()}
+						</li>
+					</ul>
+				</div>
+				<div class="data-info" style="display:${this.isLoadingCompleteInfo ? 'none' : ''}">
+					<ul>
+						<li>
+							<span class="data-items">${translate("explorerpage.exp18")}</span> ${this.allPayments.length}
+						</li>
+						<li>
+							<span class="data-items">${translate("explorerpage.exp19")}</span> ${this.allSendPayments.length}
+						</li>
+						<li>
+							<span class="data-items">QORT ${translate("explorerpage.exp19")}</span> ${this.totalSent.toFixed(0)} QORT
+						</li>
+						<li>
+							<span class="data-items">${translate("explorerpage.exp20")}</span> ${this.allReceivedPayments.length}
+						</li>
+						<li>
+							<span class="data-items">QORT ${translate("explorerpage.exp20")}</span> ${this.totalReceived.toFixed(0)} QORT
+						</li>
+					</ul>
+				</div>
+				<div class="explorer-trades">
+					<div class="box-info">
+						<header>${translate("explorerpage.exp22")}</header>
+						<div class="border-wrapper">
+							<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingCompleteInfo ? 'block' : 'none'}">
+								<div class="loading"></div>
+								<span style="color: var(--black);">${translate("login.loading")}</span>
+							</div>
+							<vaadin-grid theme="compact" id="lastQortPaymentsGrid" ?hidden="${this.isEmptyArray(this.slicedArray)}" .items="${this.slicedArray}">
+								<vaadin-grid-column
+									auto-width
+									header="${translate("walletpage.wchange35")}"
+									.renderer=${(root, column, data) => {
+										render(html`${translate("walletpage.wchange40")} ${data.item.creatorAddress === this.displayAddress ?
+											html`
+												<span class="color-out">${translate("walletpage.wchange7")}</span>
+											`
+											: html`
+												<span class="color-in">${translate("walletpage.wchange8")}</span>
+											`
+										} `, root)
+									}}
+								>
+								</vaadin-grid-column>
+								<vaadin-grid-column auto-width header="${translate("walletpage.wchange11")}" path="amount"></vaadin-grid-column>
+								<vaadin-grid-column
+									auto-width
+									header="${translate("walletpage.wchange14")}"
+									.renderer=${(root, column, data) => {
+										const dateString = new Date(data.item.timestamp).toLocaleDateString()
+										render(html`${dateString}`, root)
+									}}
+								>
+								</vaadin-grid-column>
+								<vaadin-grid-column
+									auto-width
+									resizable
+									header="${translate("explorerpage.exp7")}"
+									.renderer=${(root, column, data) => {
+										render(html`
+											<span @click="${() => this.showPaymentDetails(data)}">
+												<mwc-icon class="btn-info">info</mwc-icon>
+											</span>
+										`, root)
+									}}
+								>
+								</vaadin-grid-column>
+							</vaadin-grid>
+							${this.isEmptyArray(this.slicedArray) ? html`
+								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("walletpage.wchange38")}</span>
+							`: ''}
+						</div>
+					</div>
+				</div>
+				<div>
+					<span class="paybutton">
+						<mwc-button class='green' @click=${() => this.showAllPayments()}>${translate("explorerpage.exp23")}</mwc-button>
+					</span>
+					<span class="buttons">
+						<mwc-button @click=${() => this.openTrades()}>${translate("explorerpage.exp21")}</mwc-button>
+						<mwc-button class='decline' @click=${() => this.closeCompleteInfoDialog()} dialog-dismiss>${translate("general.close")}</mwc-button>
+					</span>
+				</div>
+			</paper-dialog>
+			<paper-dialog style="background: var(--white); border: 1px solid var(--black); border-radius: 5px;" id="showAllPaymentsDialog" modal>
+				<div style="text-align: center; color: var(--black);">
+					<h1>${translate("explorerpage.exp17")}</h1>
+					<hr />
+				</div>
+				<div class="explorer-trades">
+					<div class="box-info-full">
+						<header>${translate("explorerpage.exp17")}</header>
+						<div class="border-wrapper">
+							<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingCompleteInfo ? 'block' : 'none'}">
+								<div class="loading"></div>
+								<span style="color: var(--black);">${translate("login.loading")}</span>
+							</div>
+							<vaadin-grid theme="compact" id="allQortPaymentsGrid" ?hidden="${this.isEmptyArray(this.allPayments)}" .items="${this.allPayments}">
+								<vaadin-grid-column
+									auto-width
+									header="${translate("walletpage.wchange35")}"
+									.renderer=${(root, column, data) => {
+										render(html`${translate("walletpage.wchange40")} ${data.item.creatorAddress === this.displayAddress ?
+											html`
+												<span class="color-out">${translate("walletpage.wchange7")}</span>
+											`
+											: html`
+												<span class="color-in">${translate("walletpage.wchange8")}</span>
+											`
+										} `, root)
+									}}
+								>
+								</vaadin-grid-column>
+								<vaadin-grid-column auto-width header="${translate("walletpage.wchange11")}" path="amount"></vaadin-grid-column>
+								<vaadin-grid-column
+									auto-width
+									header="${translate("walletpage.wchange14")}"
+									.renderer=${(root, column, data) => {
+										const dateString = new Date(data.item.timestamp).toLocaleDateString()
+										render(html`${dateString}`, root)
+									}}
+								>
+								</vaadin-grid-column>
+								<vaadin-grid-column
+									auto-width
+									resizable
+									header="${translate("explorerpage.exp7")}"
+									.renderer=${(root, column, data) => {
+										render(html`
+											<span @click="${() => this.showPaymentDetails(data)}">
+												<mwc-icon class="btn-info">info</mwc-icon>
+											</span>
+										`, root)
+									}}
+								>
+								</vaadin-grid-column>
+							</vaadin-grid>
+							${this.isEmptyArray(this.allPayments) ? html`
+								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("walletpage.wchange38")}</span>
+							`: ''}
+						</div>
+					</div>
+				</div>
+				<div>
+					<span class="buttons">
+						<mwc-button class='decline' @click=${() => this.closeShowAllPaymentsDialog()} dialog-dismiss>${translate("general.close")}</mwc-button>
+					</span>
+				</div>
+			</paper-dialog>
+			<paper-dialog style="background: var(--white); border: 1px solid var(--black); border-radius: 5px;" id="userErrorDialog" modal>
+				<div class="card-container">
+					<img class="badge" src="/img/notfound.png" />
+					<h2>${translate("explorerpage.exp4")}</h2>
+					<h4>${translate("explorerpage.exp5")}</h4>
+				</div>
+				<div class="buttons">
+					<mwc-button class='decline' @click=${() => this.closeErrorDialog()} dialog-dismiss>${translate("general.close")}</mwc-button>
+				</div>
+			</paper-dialog>
+			<paper-dialog style="background: var(--white); border: 1px solid var(--black); border-radius: 5px;" id="userTrades" modal>
+				<div class="card-container-button">
+					<mwc-button dense unelevated label="${translate("explorerpage.exp8")}" @click=${() => this.openUserBoughtDialog()}></mwc-button><br><br>
+					<mwc-button dense unelevated label="${translate("explorerpage.exp9")}" @click=${() => this.openUserSoldDialog()}></mwc-button><br><br>
+				</div>
+				<div class="buttons">
+					<mwc-button class='decline' @click=${() => this.closeTrades()} dialog-dismiss>${translate("general.close")}</mwc-button>
+				</div>
+			</paper-dialog>
+			<paper-dialog style="background: var(--white); border: 1px solid var(--black); border-radius: 5px;" id="userBoughtDialog">
+				<div class="card-explorer-container">
+					<div id="first-explorer-section">
+						${this.boughtBTCTemplate()}
+						${this.boughtLTCTemplate()}
+					</div>
+					<div id="second-explorer-section">
+						${this.boughtDOGETemplate()}
+						${this.boughtDGBTemplate()}
+					</div>
+					<div id="third-explorer-section">
+						${this.boughtRVNTemplate()}
+						${this.boughtARRRTemplate()}
+					</div>
+				</div>
+				<div class="buttons">
+					<mwc-button class='decline' @click=${() => this.closeBoughtDialog()} dialog-dismiss>${translate("general.close")}</mwc-button>
+				</div>
+			</paper-dialog>
+			<paper-dialog style="background: var(--white); border: 1px solid var(--black); border-radius: 5px; overflow: auto;" id="userSoldDialog">
+				<div class="card-explorer-container">
+					<div id="first-explorer-section">
+						${this.soldBTCTemplate()}
+						${this.soldLTCTemplate()}
+					</div>
+					<div id="second-explorer-section">
+						${this.soldDOGETemplate()}
+						${this.soldDGBTemplate()}
+					</div>
+					<div id="third-explorer-section">
+						${this.soldRVNTemplate()}
+						${this.soldARRRTemplate()}
+					</div>
+				</div>
+				<div class="buttons">
+					<mwc-button class='decline' @click=${() => this.closeSoldDialog()} dialog-dismiss>${translate("general.close")}</mwc-button>
+				</div>
+			</paper-dialog>
+			<paper-dialog style="background: var(--white); border: 1px solid var(--black); border-radius: 5px;" id="showTxDetailsDialog" modal>
+				<div style="text-align: center; color: var(--black);">
+					<h1>${translate("walletpage.wchange5")}</h1>
+					<hr />
+				</div>
+				<div id="transactionList">
+					<span class="title"> ${translate("walletpage.wchange6")} </span>
+					<br />
+					<div>
+						<span>
+							${translate("walletpage.wchange40")} ${this.txcreatorAddress === this.displayAddress ?
+								html`
+									<span class="color-out">${translate("walletpage.wchange7")}</span>
+								`
+								: html`
+									<span class="color-in">${translate("walletpage.wchange8")}</span>
+								`
+							}
+						</span>
+					</div>
+					<span class="title">${translate("walletpage.wchange9")}</span>
+					<br />
+					<div><span>${this.txcreatorAddress}</span></div>
+					<span class="title">${translate("walletpage.wchange10")}</span>
+					<br />
+					<div><span>${this.txrecipient}</span></div>
+					<span class="title">${translate("walletpage.wchange12")}</span>
+					<br />
+					<div><span>${this.txfee} QORT</span></div>
+					<span class="title">${translate("walletpage.wchange37")}</span>
+					<br />
+					<div><span>${this.txamount} QORT</span></div>
+					<span class="title">${translate("walletpage.wchange13")}</span>
+					<br />
+					<div><span>${this.txblockHeight}</span></div>
+					<span class="title"> ${translate("walletpage.wchange14")} </span>
+					<br />
+					<div><span>${new Date(this.txtimestamp).toString()}</span></div>
+				</div>
+				<div class="buttons">
+					<mwc-button class='decline' @click=${() => this.closeSoldDialog()} dialog-dismiss>${translate("general.close")}</mwc-button>
+				</div>
+			</paper-dialog>
+		`
+	}
+
+	firstUpdated() {
+		// ...
 	}
 
 	boughtBTCTemplate() {
@@ -781,286 +1063,6 @@ class TraderInfoView extends LitElement {
 		`
 	}
 
-	render() {
-		return html`
-			<paper-dialog class="full-info-wrapper" id="userFullInfoDialog" modal>
-				<div class="full-info-logo">${this.avatarFullImage()}</div>
-				<h3>${this.infoAccountName}</h3>
-				<p style="color: var(--black);"><b>${this.displayAddress}</b></p>
-				<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingCompleteInfo ? 'block' : 'none'}">
-					<div class="loading"></div>
-					<span style="color: var(--black);">${translate("login.loading")}</span>
-				</div>
-				<div class="data-info" style="display:${this.isLoadingCompleteInfo ? 'none' : ''}">
-					<ul>
-						<li>
-							<span class="data-items">${translate("mintingpage.mchange27")}</span> ${this.displayLevel}
-						</li>
-						<li>
-							<span class="data-items">${translate("walletprofile.blocksminted")}</span> ${this.addressResult.blocksMinted + this.addressResult.blocksMintedAdjustment}
-						</li>
-						<li>
-							<span class="data-items">${translate("explorerpage.exp15")}</span> ${this.startMintTime}
-						</li>
-						<li>
-							<span class="data-items">${translate("general.balance")}</span> ${this.displayBalance} QORT
-						</li>
-						<li>
-							<span class="data-items">${translate("explorerpage.exp6")}</span> ${this.founderStatus()}
-						</li>
-					</ul>
-				</div>
-				<div class="data-info" style="display:${this.isLoadingCompleteInfo ? 'none' : ''}">
-					<ul>
-						<li>
-							<span class="data-items">${translate("explorerpage.exp18")}</span> ${this.allPayments.length}
-						</li>
-						<li>
-							<span class="data-items">${translate("explorerpage.exp19")}</span> ${this.allSendPayments.length}
-						</li>
-						<li>
-							<span class="data-items">QORT ${translate("explorerpage.exp19")}</span> ${this.totalSent.toFixed(0)} QORT
-						</li>
-						<li>
-							<span class="data-items">${translate("explorerpage.exp20")}</span> ${this.allReceivedPayments.length}
-						</li>
-						<li>
-							<span class="data-items">QORT ${translate("explorerpage.exp20")}</span> ${this.totalReceived.toFixed(0)} QORT
-						</li>
-					</ul>
-				</div>
-				<div class="explorer-trades">
-					<div class="box-info">
-						<header>${translate("explorerpage.exp22")}</header>
-						<div class="border-wrapper">
-							<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingCompleteInfo ? 'block' : 'none'}">
-								<div class="loading"></div>
-								<span style="color: var(--black);">${translate("login.loading")}</span>
-							</div>
-							<vaadin-grid theme="compact" id="lastQortPaymentsGrid" ?hidden="${this.isEmptyArray(this.slicedArray)}" .items="${this.slicedArray}">
-								<vaadin-grid-column
-									auto-width
-									header="${translate("walletpage.wchange35")}"
-									.renderer=${(root, column, data) => {
-										render(html`${translate("walletpage.wchange40")} ${data.item.creatorAddress === this.displayAddress ?
-											html`
-												<span class="color-out">${translate("walletpage.wchange7")}</span>
-											`
-											: html`
-												<span class="color-in">${translate("walletpage.wchange8")}</span>
-											`
-										} `, root)
-									}}
-								>
-								</vaadin-grid-column>
-								<vaadin-grid-column auto-width header="${translate("walletpage.wchange11")}" path="amount"></vaadin-grid-column>
-								<vaadin-grid-column
-									auto-width
-									header="${translate("walletpage.wchange14")}"
-									.renderer=${(root, column, data) => {
-										const dateString = new Date(data.item.timestamp).toLocaleDateString()
-										render(html`${dateString}`, root)
-									}}
-								>
-								</vaadin-grid-column>
-								<vaadin-grid-column
-									auto-width
-									resizable
-									header="${translate("explorerpage.exp7")}"
-									.renderer=${(root, column, data) => {
-										render(html`
-											<span @click="${() => this.showPaymentDetails(data)}">
-												<mwc-icon class="btn-info">info</mwc-icon>
-											</span>
-										`, root)
-									}}
-								>
-								</vaadin-grid-column>
-							</vaadin-grid>
-							${this.isEmptyArray(this.slicedArray) ? html`
-								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("walletpage.wchange38")}</span>
-							`: ''}
-						</div>
-					</div>
-				</div>
-				<div>
-					<span class="paybutton">
-						<mwc-button class='green' @click=${() => this.showAllPayments()}>${translate("explorerpage.exp23")}</mwc-button>
-					</span>
-					<span class="buttons">
-						<mwc-button @click=${() => this.openTrades()}>${translate("explorerpage.exp21")}</mwc-button>
-						<mwc-button class='decline' @click=${() => this.closeCompleteInfoDialog()} dialog-dismiss>${translate("general.close")}</mwc-button>
-					</span>
-				</div>
-			</paper-dialog>
-			<paper-dialog style="background: var(--white); border: 1px solid var(--black); border-radius: 5px;" id="showAllPaymentsDialog" modal>
-				<div style="text-align: center; color: var(--black);">
-					<h1>${translate("explorerpage.exp17")}</h1>
-					<hr />
-				</div>
-				<div class="explorer-trades">
-					<div class="box-info-full">
-						<header>${translate("explorerpage.exp17")}</header>
-						<div class="border-wrapper">
-							<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingCompleteInfo ? 'block' : 'none'}">
-								<div class="loading"></div>
-								<span style="color: var(--black);">${translate("login.loading")}</span>
-							</div>
-							<vaadin-grid theme="compact" id="allQortPaymentsGrid" ?hidden="${this.isEmptyArray(this.allPayments)}" .items="${this.allPayments}">
-								<vaadin-grid-column
-									auto-width
-									header="${translate("walletpage.wchange35")}"
-									.renderer=${(root, column, data) => {
-										render(html`${translate("walletpage.wchange40")} ${data.item.creatorAddress === this.displayAddress ?
-											html`
-												<span class="color-out">${translate("walletpage.wchange7")}</span>
-											`
-											: html`
-												<span class="color-in">${translate("walletpage.wchange8")}</span>
-											`
-										} `, root)
-									}}
-								>
-								</vaadin-grid-column>
-								<vaadin-grid-column auto-width header="${translate("walletpage.wchange11")}" path="amount"></vaadin-grid-column>
-								<vaadin-grid-column
-									auto-width
-									header="${translate("walletpage.wchange14")}"
-									.renderer=${(root, column, data) => {
-										const dateString = new Date(data.item.timestamp).toLocaleDateString()
-										render(html`${dateString}`, root)
-									}}
-								>
-								</vaadin-grid-column>
-								<vaadin-grid-column
-									auto-width
-									resizable
-									header="${translate("explorerpage.exp7")}"
-									.renderer=${(root, column, data) => {
-										render(html`
-											<span @click="${() => this.showPaymentDetails(data)}">
-												<mwc-icon class="btn-info">info</mwc-icon>
-											</span>
-										`, root)
-									}}
-								>
-								</vaadin-grid-column>
-							</vaadin-grid>
-							${this.isEmptyArray(this.allPayments) ? html`
-								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("walletpage.wchange38")}</span>
-							`: ''}
-						</div>
-					</div>
-				</div>
-				<div>
-					<span class="buttons">
-						<mwc-button class='decline' @click=${() => this.closeShowAllPaymentsDialog()} dialog-dismiss>${translate("general.close")}</mwc-button>
-					</span>
-				</div>
-			</paper-dialog>
-			<paper-dialog style="background: var(--white); border: 1px solid var(--black); border-radius: 5px;" id="userErrorDialog" modal>
-				<div class="card-container">
-					<img class="badge" src="/img/notfound.png" />
-					<h2>${translate("explorerpage.exp4")}</h2>
-					<h4>${translate("explorerpage.exp5")}</h4>
-				</div>
-				<div class="buttons">
-					<mwc-button class='decline' @click=${() => this.closeErrorDialog()} dialog-dismiss>${translate("general.close")}</mwc-button>
-				</div>
-			</paper-dialog>
-			<paper-dialog style="background: var(--white); border: 1px solid var(--black); border-radius: 5px;" id="userTrades" modal>
-				<div class="card-container-button">
-					<mwc-button dense unelevated label="${translate("explorerpage.exp8")}" @click=${() => this.openUserBoughtDialog()}></mwc-button><br><br>
-					<mwc-button dense unelevated label="${translate("explorerpage.exp9")}" @click=${() => this.openUserSoldDialog()}></mwc-button><br><br>
-				</div>
-				<div class="buttons">
-					<mwc-button class='decline' @click=${() => this.closeTrades()} dialog-dismiss>${translate("general.close")}</mwc-button>
-				</div>
-			</paper-dialog>
-			<paper-dialog style="background: var(--white); border: 1px solid var(--black); border-radius: 5px;" id="userBoughtDialog">
-				<div class="card-explorer-container">
-					<div id="first-explorer-section">
-						${this.boughtBTCTemplate()}
-						${this.boughtLTCTemplate()}
-					</div>
-					<div id="second-explorer-section">
-						${this.boughtDOGETemplate()}
-						${this.boughtDGBTemplate()}
-					</div>
-					<div id="third-explorer-section">
-						${this.boughtRVNTemplate()}
-						${this.boughtARRRTemplate()}
-					</div>
-				</div>
-				<div class="buttons">
-					<mwc-button class='decline' @click=${() => this.closeBoughtDialog()} dialog-dismiss>${translate("general.close")}</mwc-button>
-				</div>
-			</paper-dialog>
-			<paper-dialog style="background: var(--white); border: 1px solid var(--black); border-radius: 5px; overflow: auto;" id="userSoldDialog">
-				<div class="card-explorer-container">
-					<div id="first-explorer-section">
-						${this.soldBTCTemplate()}
-						${this.soldLTCTemplate()}
-					</div>
-					<div id="second-explorer-section">
-						${this.soldDOGETemplate()}
-						${this.soldDGBTemplate()}
-					</div>
-					<div id="third-explorer-section">
-						${this.soldRVNTemplate()}
-						${this.soldARRRTemplate()}
-					</div>
-				</div>
-				<div class="buttons">
-					<mwc-button class='decline' @click=${() => this.closeSoldDialog()} dialog-dismiss>${translate("general.close")}</mwc-button>
-				</div>
-			</paper-dialog>
-			<paper-dialog style="background: var(--white); border: 1px solid var(--black); border-radius: 5px;" id="showTxDetailsDialog" modal>
-				<div style="text-align: center; color: var(--black);">
-					<h1>${translate("walletpage.wchange5")}</h1>
-					<hr />
-				</div>
-				<div id="transactionList">
-					<span class="title"> ${translate("walletpage.wchange6")} </span>
-					<br />
-					<div>
-						<span>
-							${translate("walletpage.wchange40")} ${this.txcreatorAddress === this.displayAddress ?
-								html`
-									<span class="color-out">${translate("walletpage.wchange7")}</span>
-								`
-								: html`
-									<span class="color-in">${translate("walletpage.wchange8")}</span>
-								`
-							}
-						</span>
-					</div>
-					<span class="title">${translate("walletpage.wchange9")}</span>
-					<br />
-					<div><span>${this.txcreatorAddress}</span></div>
-					<span class="title">${translate("walletpage.wchange10")}</span>
-					<br />
-					<div><span>${this.txrecipient}</span></div>
-					<span class="title">${translate("walletpage.wchange12")}</span>
-					<br />
-					<div><span>${this.txfee} QORT</span></div>
-					<span class="title">${translate("walletpage.wchange37")}</span>
-					<br />
-					<div><span>${this.txamount} QORT</span></div>
-					<span class="title">${translate("walletpage.wchange13")}</span>
-					<br />
-					<div><span>${this.txblockHeight}</span></div>
-					<span class="title"> ${translate("walletpage.wchange14")} </span>
-					<br />
-					<div><span>${new Date(this.txtimestamp).toString()}</span></div>
-				</div>
-				<div class="buttons">
-					<mwc-button class='decline' @click=${() => this.closeSoldDialog()} dialog-dismiss>${translate("general.close")}</mwc-button>
-				</div>
-			</paper-dialog>
-		`
-	}
-
 	openTraderInfo(traderData) {
 		if (traderData.startsWith('Q') && traderData.length == 34) {
 			this.getAddressUserResult(traderData)
@@ -1649,11 +1651,14 @@ class TraderInfoView extends LitElement {
 		this.shadowRoot.getElementById('showAllPaymentsDialog').close()
 	}
 
-	isEmptyArray(arr) {
-		if (!arr) {
-			return true
-		}
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
 
+	isEmptyArray(arr) {
+		if (!arr) { return true }
 		return arr.length === 0
 	}
 

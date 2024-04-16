@@ -1,28 +1,23 @@
 import { html, LitElement, } from 'lit'
 import { repeat } from 'lit/directives/repeat.js'
 import { unsafeHTML } from 'lit/directives/unsafe-html.js'
-import { get, translate } from '../../../../core/translate'
 import { Epml } from '../../../epml'
-import { cropAddress } from '../../utils/cropAddress'
-import { roundToNearestDecimal } from '../../utils/roundToNearestDecimal'
+import { cropAddress, roundToNearestDecimal } from '../../utils/functions'
 import { generateHTML } from '@tiptap/core'
 import { chatLimit, totalMsgCount } from './ChatPage'
 import { chatStyles } from './plugins-css'
-
 import isElectron from 'is-electron'
 import axios from 'axios'
 import Highlight from '@tiptap/extension-highlight'
 import ShortUniqueId from 'short-unique-id'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
-
 import './ChatModals'
 import './LevelFounder'
 import './NameMenu'
 import './UserInfo'
 import './WrapperModal'
 import './ChatImage'
-
 import '@material/mwc-button'
 import '@material/mwc-dialog'
 import '@material/mwc-icon'
@@ -30,11 +25,14 @@ import '@vaadin/icon'
 import '@vaadin/icons'
 import '@vaadin/tooltip'
 
+// Multi language support
+import { get, translate } from '../../../../core/translate'
+
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
-let toggledMessage = {}
-
 const uid = new ShortUniqueId()
+
+let toggledMessage = {}
 
 const extractComponents = async (url) => {
 	if (!url.startsWith('qortal://')) {
@@ -166,8 +164,8 @@ function processText(input) {
 													? 'desktop_mac'
 													: 'open_in_browser',
 											menus: [],
-											parent: false,
-										},
+											parent: false
+										}
 									})
 								)
 							} catch (error) {
@@ -394,21 +392,25 @@ class ChatScroller extends LitElement {
 			this.sendMessage({
 				type: 'reaction',
 				editedMessageObj: toggledMessage,
-				reaction: selection.emoji,
+				reaction: selection.emoji
 			})
 		})
+
 		this.viewElement = this.shadowRoot.getElementById('viewElement')
 		this.upObserverElement = this.shadowRoot.getElementById('upObserver')
 		this.downObserverElement = this.shadowRoot.getElementById('downObserver')
+
 		this.bottomObserverForFetchingMessages = this.shadowRoot.getElementById(
 			'bottomObserverForFetchingMessages'
 		)
+
 		// Intialize Observers
 		this.upElementObserver()
 		this.downElementObserver()
 		this.bottomObserver()
 
 		this.clearConsole()
+
 		setInterval(() => {
 			this.clearConsole()
 		}, 60000)
@@ -449,39 +451,38 @@ class ChatScroller extends LitElement {
 		} else {
 			this.messagesToRender.push({
 				messages: [newMessage],
-				...newMessage,
+				...newMessage
 			})
 		}
+
 		this.clearLoaders()
 		this.requestUpdate()
 	}
 
 	async newListMessages(newMessages, count) {
 		let data = []
+
 		const copy = [...newMessages]
+
 		copy.forEach((newMessage) => {
 			const lastGroupedMessage = data[data.length - 1]
 
-			if (
-				this.shouldGroupWithLastMessage(newMessage, lastGroupedMessage)
-			) {
+			if (this.shouldGroupWithLastMessage(newMessage, lastGroupedMessage)) {
 				lastGroupedMessage.messages.push(newMessage)
 			} else {
 				data.push({
 					messages: [newMessage],
-					...newMessage,
+					...newMessage
 				})
 			}
 		})
 
-		// const getCount = await parentEpml.request('apiCall', {
-		//     type: 'api',
-		//     url: `/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${this._chatId}&limit=${chatLimit}&reverse=true&before=${scrollElement.messageObj.timestamp}&haschatreference=false&encoding=BASE64`
-		// })
 		this.messagesToRender = data
+
 		if (count > 0) {
 			this.disableAddingNewMessages = true
 		}
+
 		this.clearLoaders()
 		this.requestUpdate()
 		await this.updateComplete
@@ -489,9 +490,11 @@ class ChatScroller extends LitElement {
 
 	async newListMessagesUnreadMessages(newMessages, message, lastReadMessageTimestamp, count) {
 		let data = []
+
 		const copy = [...newMessages]
 
-		let dividerPlaced = false // To ensure the divider is added only once
+		// To ensure the divider is added only once
+		let dividerPlaced = false
 
 		// Start from the end of the list (newest messages)
 		for (let i = copy.length - 1; i >= 0; i--) {
@@ -501,38 +504,42 @@ class ChatScroller extends LitElement {
 			newMessage.isDivider = false
 
 			// Check if this is the message before which the divider should be placed
-			if (
-				!dividerPlaced &&
-				newMessage.timestamp <= lastReadMessageTimestamp
-			) {
+			if (!dividerPlaced && newMessage.timestamp <= lastReadMessageTimestamp) {
 				newMessage.isDivider = true
-				dividerPlaced = true // Ensure the divider is only added once
-				break // Exit once the divider is placed
+
+				// Ensure the divider is only added once
+				dividerPlaced = true
+
+				// Exit once the divider is placed
+				break
 			}
 		}
 
 		copy.forEach((newMessage) => {
 			const lastGroupedMessage = data[data.length - 1]
 
-			if (
-				this.shouldGroupWithLastMessage(newMessage, lastGroupedMessage)
-			) {
+			if (this.shouldGroupWithLastMessage(newMessage, lastGroupedMessage)) {
 				lastGroupedMessage.messages.push(newMessage)
 			} else {
 				data.push({
 					messages: [newMessage],
-					...newMessage,
+					...newMessage
 				})
 			}
 		})
+
 		if (count > 0) {
 			this.disableAddingNewMessages = true
 		}
+
 		this.messagesToRender = data
 		this.clearLoaders()
 		this.requestUpdate()
+
 		await this.updateComplete
+
 		const findElement = this.shadowRoot.getElementById('unread-divider-id')
+
 		if (findElement) {
 			findElement.scrollIntoView({ behavior: 'auto', block: 'center' })
 		}
@@ -547,14 +554,12 @@ class ChatScroller extends LitElement {
 		for (const newMessage of newMessages) {
 			const lastGroupedMessage = copy[copy.length - 1]
 
-			if (
-				this.shouldGroupWithLastMessage(newMessage, lastGroupedMessage)
-			) {
+			if (this.shouldGroupWithLastMessage(newMessage, lastGroupedMessage)) {
 				lastGroupedMessage.messages.push(newMessage)
 			} else {
 				copy.push({
 					messages: [newMessage],
-					...newMessage,
+					...newMessage
 				})
 			}
 		}
@@ -564,19 +569,15 @@ class ChatScroller extends LitElement {
 			(acc, group) => acc + group.messages.length,
 			0
 		)
+
 		while (totalMessagesCount > totalMsgCount && copy.length) {
-			if (
-				newMessages.length < chatLimit &&
-				type !== 'newComingInAuto' &&
-				type !== 'initial'
-			) {
+			if (newMessages.length < chatLimit && type !== 'newComingInAuto' && type !== 'initial') {
 				this.disableAddingNewMessages = false
 			}
+
 			const firstGroup = copy[0]
-			if (
-				firstGroup.messages.length <=
-				totalMessagesCount - totalMsgCount
-			) {
+
+			if (firstGroup.messages.length <= totalMessagesCount - totalMsgCount) {
 				// If removing the whole first group achieves the goal, remove it
 				totalMessagesCount -= firstGroup.messages.length
 				copy.shift()
@@ -587,8 +588,10 @@ class ChatScroller extends LitElement {
 				totalMessagesCount = totalMsgCount
 			}
 		}
+
 		this.messagesToRender = copy
 		this.requestUpdate()
+
 		await this.updateComplete
 
 		if (type === 'initial') {
@@ -599,7 +602,8 @@ class ChatScroller extends LitElement {
 	}
 
 	async prependOldMessages(oldMessages) {
-		if (!this.messagesToRender) this.messagesToRender = [] // Ensure it's initialized
+		// Ensure it's initialized
+		if (!this.messagesToRender) this.messagesToRender = []
 
 		let currentMessageGroup = null
 		let previousMessage = null
@@ -613,7 +617,7 @@ class ChatScroller extends LitElement {
 				currentMessageGroup = {
 					id: message.signature,
 					messages: [message],
-					...message,
+					...message
 				}
 			} else {
 				// Add to the current group
@@ -635,6 +639,7 @@ class ChatScroller extends LitElement {
 		while (totalMessagesCount > totalMsgCount && this.messagesToRender.length) {
 			this.disableAddingNewMessages = true
 			const lastGroup = this.messagesToRender[this.messagesToRender.length - 1]
+
 			if (lastGroup.messages.length <= totalMessagesCount - totalMsgCount) {
 				// If removing the whole last group achieves the goal, remove it
 				totalMessagesCount -= lastGroup.messages.length
@@ -646,13 +651,19 @@ class ChatScroller extends LitElement {
 				totalMessagesCount = totalMsgCount
 			}
 		}
+
 		this.clearLoaders()
 		this.requestUpdate()
+
+		await this.updateComplete
 	}
 
 	async replaceMessagesWithUpdate(updatedMessages) {
 		const viewElement = this.shadowRoot.querySelector('#viewElement')
-		if (!viewElement) return // Ensure the element exists
+
+		// Ensure the element exists
+		if (!viewElement) return
+
 		const isUserAtBottom = viewElement.scrollTop + viewElement.clientHeight === viewElement.scrollHeight
 
 		// Using map to return a new array, rather than mutating the old one
@@ -667,7 +678,7 @@ class ChatScroller extends LitElement {
 			// Return a new group object with updated messages
 			return {
 				...group,
-				messages: updatedGroupMessages,
+				messages: updatedGroupMessages
 			}
 		})
 
@@ -692,8 +703,10 @@ class ChatScroller extends LitElement {
 		let previousScrollHeight
 
 		const viewElement = this.shadowRoot.querySelector('#viewElement')
+
 		previousScrollTop = viewElement.scrollTop
 		previousScrollHeight = viewElement.scrollHeight
+
 		for (let group of this.messagesToRender) {
 			for (let i = 0; i < group.messages.length; i++) {
 				const update = updatedMessagesArray.find(
@@ -710,9 +723,13 @@ class ChatScroller extends LitElement {
 				}
 			}
 		}
+
 		this.requestUpdate()
+
 		const newScrollHeight = viewElement.scrollHeight
+
 		viewElement.scrollTop = previousScrollTop + (newScrollHeight - previousScrollHeight)
+
 		this.clearUpdateMessageHashmap()
 		this.clearLoaders()
 	}
@@ -892,7 +909,7 @@ class ChatScroller extends LitElement {
 		const options = {
 			root: this.viewElement,
 			rootMargin: '0px',
-			threshold: 1,
+			threshold: 1
 		}
 		const observer = new IntersectionObserver(
 			this._upObserverhandler,
@@ -903,29 +920,51 @@ class ChatScroller extends LitElement {
 
 	downElementObserver() {
 		const options = {}
+
 		// identify an element to observe
 		const elementToObserve = this.downObserverElement
+
 		// passing it a callback function
 		const observer = new IntersectionObserver(
 			this._downObserverHandler,
 			options
 		)
+
 		// call `observe()` on that MutationObserver instance,
 		// passing it the element to observe, and the options object
 		observer.observe(elementToObserve)
 	}
+
 	bottomObserver() {
 		const options = {}
+
 		// identify an element to observe
 		const elementToObserve = this.bottomObserverForFetchingMessages
+
 		// passing it a callback function
 		const observer = new IntersectionObserver(
 			this.__bottomObserverForFetchingMessagesHandler,
 			options
 		)
+
 		// call `observe()` on that MutationObserver instance,
 		// passing it the element to observe, and the options object
 		observer.observe(elementToObserve)
+	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
 	}
 }
 
@@ -1513,11 +1552,13 @@ class MessageTemplate extends LitElement {
 
 	firstUpdated() {
 		const autoSeeChatList = window.parent.reduxStore.getState().app.autoLoadImageChats
+
 		if (autoSeeChatList.includes(this.chatId) || this.listSeenMessages.includes(this.messageObj.signature)) {
 			this.viewImage = true
 		}
 
 		const tooltips = this.shadowRoot.querySelectorAll('vaadin-tooltip')
+
 		tooltips.forEach((tooltip) => {
 			const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay')
 			overlay.shadowRoot.getElementById('overlay').style.cssText =
@@ -1525,7 +1566,9 @@ class MessageTemplate extends LitElement {
 			overlay.shadowRoot.getElementById('content').style.cssText =
 				'background-color: var(--reactions-tooltip-bg); color: var(--chat-bubble-msg-color); text-align: center; padding: 20px 10px; border-radius: 8px; font-family: Roboto, sans-serif; letter-spacing: 0.3px; font-weight: 300; font-size: 13.5px; transition: all 0.3s ease-in-out;'
 		})
+
 		this.clearConsole()
+
 		setInterval(() => {
 			this.clearConsole()
 		}, 60000)
@@ -1560,15 +1603,14 @@ class MessageTemplate extends LitElement {
 	async downloadAttachment(attachment) {
 		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
+
 		try {
 			axios.get(
 				`${nodeUrl}/arbitrary/QCHAT_ATTACHMENT/${attachment.name}/${attachment.identifier}`,
 				{ responseType: 'blob' }
 			).then((response) => {
 				let filename = attachment.attachmentName
-				let blob = new Blob([response.data], {
-					type: 'application/octet-stream',
-				})
+				let blob = new Blob([response.data], { type: 'application/octet-stream' })
 				this.saveFileToDisk(blob, filename)
 			})
 		} catch (error) {
@@ -1580,12 +1622,9 @@ class MessageTemplate extends LitElement {
 		try {
 			const fileHandle = await self.showSaveFilePicker({
 				suggestedName: fileName,
-				types: [
-					{
-						description: 'File',
-					},
-				],
+				types: [{ description: 'File' }]
 			})
+
 			const writeFile = async (fileHandle, contents) => {
 				const writable = await fileHandle.createWritable()
 				await writable.write(contents)
@@ -1643,11 +1682,25 @@ class MessageTemplate extends LitElement {
 
 	clearConsole() {
 		if (!isElectron()) {
-			/* empty */
 		} else {
 			console.clear()
 			window.parent.electronAPI.clearCache()
 		}
+	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
 	}
 }
 
@@ -1676,7 +1729,7 @@ class ChatMenu extends LitElement {
 			setOpenPrivateMessage: { attribute: false },
 			setOpenTipUser: { attribute: false },
 			setUserName: { attribute: false },
-			gif: { type: Boolean },
+			gif: { type: Boolean }
 		}
 	}
 
@@ -1773,6 +1826,10 @@ class ChatMenu extends LitElement {
 		`
 	}
 
+	firstUpdated() {
+		// ...
+	}
+
 	// Copy address to clipboard
 	async copyToClipboard(text) {
 		try {
@@ -1832,6 +1889,21 @@ class ChatMenu extends LitElement {
 		} catch (error) {
 			/* empty */
 		}
+	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
 	}
 }
 

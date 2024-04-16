@@ -1,16 +1,15 @@
-import { css, html, LitElement } from 'lit'
+import { html, LitElement } from 'lit'
 import { Epml } from '../../../epml'
-import { get, registerTranslateConfig, translate, use } from '../../../../core/translate'
 import { chatWelcomePageStyles } from './plugins-css'
-
 import isElectron from 'is-electron'
-
 import '@material/mwc-icon'
 import '@material/mwc-button'
 import '@material/mwc-dialog'
 import '@polymer/paper-spinner/paper-spinner-lite.js'
 import '@vaadin/grid'
 
+// Multi language support
+import { get, registerTranslateConfig, translate, use } from '../../../../core/translate'
 registerTranslateConfig({
 	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
 })
@@ -89,11 +88,6 @@ class ChatWelcomePage extends LitElement {
 		this.changeTheme()
 		this.changeLanguage()
 
-		this.clearConsole()
-		setInterval(() => {
-			this.clearConsole()
-		}, 60000)
-
 		const stopKeyEventPropagation = (e) => {
 			e.stopPropagation()
 			return false
@@ -136,6 +130,12 @@ class ChatWelcomePage extends LitElement {
 		})
 
 		parentEpml.imReady()
+
+		this.clearConsole()
+
+		setInterval(() => {
+			this.clearConsole()
+		}, 60000)
 	}
 
 	clearConsole() {
@@ -319,9 +319,19 @@ class ChatWelcomePage extends LitElement {
 		if (e.keyCode === 13 && !e.shiftKey) this._sendMessage()
 	}
 
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
 	isEmptyArray(arr) {
 		if (!arr) { return true }
 		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
 	}
 }
 

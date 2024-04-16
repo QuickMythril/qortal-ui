@@ -1,6 +1,8 @@
-import { css, html, LitElement } from 'lit'
-import { translate } from '../../../../core/translate'
+import { html, LitElement } from 'lit'
 import { imageComponentStyles } from './plugins-css'
+
+// Multi language support
+import { translate } from '../../../../core/translate'
 
 export class ImageComponent extends LitElement {
 	static get properties() {
@@ -98,6 +100,25 @@ export class ImageComponent extends LitElement {
 			await this._fetchImage()
 		}
 	}
+
+	firstUpdated() {
+		// ...
+	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
+	}
 }
 
-customElements.define('image-component', ImageComponent)
+window.customElements.define('image-component', ImageComponent)

@@ -1,4 +1,4 @@
-import { Sha256 } from 'asmcrypto.js';
+import { Sha256 } from 'asmcrypto.js'
 
 const nacl = {}
 
@@ -2730,9 +2730,9 @@ class Curve25519 {
 	}
 }
 
-const base58Instant = new Base58();
+const base58Instant = new Base58()
 
-const curve25519Instance = new Curve25519();
+const curve25519Instance = new Curve25519()
 
 self.addEventListener('message', async (e) => {
 	try {
@@ -2742,45 +2742,39 @@ self.addEventListener('message', async (e) => {
 				e.data.isReceipient,
 				e.data._publicKey,
 				e.data.privateKey
-			);
-		});
-		postMessage(decodeMsgs);
+			)
+		})
+		postMessage(decodeMsgs)
 	} catch (error) {
-		console.log('error', error);
+		console.log('error', error)
 		postMessage({
 			type: 'error',
-			message: error.message || 'An error occurred',
-		});
+			message: error.message || 'An error occurred'
+		})
 	}
-});
+})
 
 const decode = (string) => {
-	const binaryString = atob(string);
-	const binaryLength = binaryString.length;
-	const bytes = new Uint8Array(binaryLength);
+	const binaryString = atob(string)
+	const binaryLength = binaryString.length
+	const bytes = new Uint8Array(binaryLength)
 
 	for (let i = 0; i < binaryLength; i++) {
-		bytes[i] = binaryString.charCodeAt(i);
+		bytes[i] = binaryString.charCodeAt(i)
 	}
 
-	const decoder = new TextDecoder();
-	const decodedString = decoder.decode(bytes);
-	return decodedString;
-};
+	const decoder = new TextDecoder()
+	const decodedString = decoder.decode(bytes)
+	return decodedString
+}
 
-export const decryptChatMessageBase64 = (
-	encryptedMessage,
-	privateKey,
-	recipientPublicKey,
-	lastReference
-) => {
-
-	let _encryptedMessage = atob(encryptedMessage);
-	const binaryLength = _encryptedMessage.length;
-	const bytes = new Uint8Array(binaryLength);
+export const decryptChatMessageBase64 = (encryptedMessage, privateKey, recipientPublicKey, lastReference) => {
+	let _encryptedMessage = atob(encryptedMessage)
+	const binaryLength = _encryptedMessage.length
+	const bytes = new Uint8Array(binaryLength)
 
 	for (let i = 0; i < binaryLength; i++) {
-		bytes[i] = _encryptedMessage.charCodeAt(i);
+		bytes[i] = _encryptedMessage.charCodeAt(i)
 	}
 
 	let _base58RecipientPublic = recipientPublicKey
@@ -2791,88 +2785,81 @@ export const decryptChatMessageBase64 = (
 		_base58RecipientPublic = recipientPublicKey
 	}
 
-	const _base58RecipientPublicKey =
-		_base58RecipientPublic instanceof Uint8Array
+	const _base58RecipientPublicKey = _base58RecipientPublic instanceof Uint8Array
 			? base58Instant.encode(_base58RecipientPublic)
-			: _base58RecipientPublic;
-	const _recipientPublicKey = base58Instant.decode(_base58RecipientPublicKey);
-	const _lastReference =
-		lastReference instanceof Uint8Array
-			? lastReference
-			: base58Instant.decode(lastReference);
+			: _base58RecipientPublic
 
-	const convertedPrivateKey = curve25519Instance.convertSecretKey(privateKey);
-	const convertedPublicKey = curve25519Instance.convertPublicKey(_recipientPublicKey);
-	const sharedSecret = new Uint8Array(32);
+	const _recipientPublicKey = base58Instant.decode(_base58RecipientPublicKey)
+
+	const _lastReference = lastReference instanceof Uint8Array
+			? lastReference
+			: base58Instant.decode(lastReference)
+
+	const convertedPrivateKey = curve25519Instance.convertSecretKey(privateKey)
+	const convertedPublicKey = curve25519Instance.convertPublicKey(_recipientPublicKey)
+	const sharedSecret = new Uint8Array(32)
+
 	nacl.lowlevel.crypto_scalarmult(
 		sharedSecret,
 		convertedPrivateKey,
 		convertedPublicKey
-	);
+	)
 
 	const _chatEncryptionSeed = new Sha256()
 		.process(sharedSecret)
-		.finish().result;
+		.finish().result
+
 	const _decryptedMessage = nacl.secretbox.open(
 		bytes,
 		_lastReference.slice(0, 24),
 		_chatEncryptionSeed
-	);
+	)
 
 	if (_decryptedMessage === false) {
-		return _decryptedMessage;
+		return _decryptedMessage
 	}
-	return new TextDecoder('utf-8').decode(_decryptedMessage);
-};
 
-const decodeMessage = (
-	encodedMessageObj,
-	isReceipient,
-	_publicKey,
-	privateKey
-) => {
-	let isReceipientVar;
-	let _publicKeyVar;
+	return new TextDecoder('utf-8').decode(_decryptedMessage)
+}
+
+const decodeMessage = (encodedMessageObj, isReceipient, _publicKey, privateKey) => {
+	let isReceipientVar
+	let _publicKeyVar
+
 	try {
-		isReceipientVar = isReceipient;
-		_publicKeyVar = _publicKey;
+		isReceipientVar = isReceipient
+		_publicKeyVar = _publicKey
 	} catch (error) {
-		isReceipientVar = isReceipient;
-		_publicKeyVar = _publicKey;
+		isReceipientVar = isReceipient
+		_publicKeyVar = _publicKey
 	}
 
-	let decodedMessageObj = {};
+	let decodedMessageObj = {}
 
 	if (isReceipientVar === true) {
 		// direct chat
-		if (
-			encodedMessageObj.isEncrypted === true &&
-			_publicKeyVar.hasPubKey === true &&
-			encodedMessageObj.data
-		) {
+		if (encodedMessageObj.isEncrypted === true && _publicKeyVar.hasPubKey === true && encodedMessageObj.data) {
 			let decodedMessage = decryptChatMessageBase64(
 				encodedMessageObj.data,
 				privateKey,
 				_publicKeyVar,
 				encodedMessageObj.reference
-			);
-			decodedMessageObj = { ...encodedMessageObj, decodedMessage };
-		} else if (
-			encodedMessageObj.isEncrypted === false &&
-			encodedMessageObj.data
-		) {
-			let decodedMessage = decode(encodedMessageObj.data);
-			decodedMessageObj = { ...encodedMessageObj, decodedMessage };
+			)
+			decodedMessageObj = { ...encodedMessageObj, decodedMessage }
+		} else if (encodedMessageObj.isEncrypted === false && encodedMessageObj.data) {
+			let decodedMessage = decode(encodedMessageObj.data)
+			decodedMessageObj = { ...encodedMessageObj, decodedMessage }
 		} else {
 			decodedMessageObj = {
 				...encodedMessageObj,
-				decodedMessage: 'Cannot Decrypt Message!',
-			};
+				decodedMessage: 'Cannot Decrypt Message!'
+			}
 		}
 	} else {
 		// group chat
-		let decodedMessage = decode(encodedMessageObj.data);
-		decodedMessageObj = { ...encodedMessageObj, decodedMessage };
+		let decodedMessage = decode(encodedMessageObj.data)
+		decodedMessageObj = { ...encodedMessageObj, decodedMessage }
 	}
-	return decodedMessageObj;
-};
+
+	return decodedMessageObj
+}

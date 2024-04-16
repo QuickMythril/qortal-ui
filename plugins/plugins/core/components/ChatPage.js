@@ -3,18 +3,12 @@ import { ifDefined } from 'lit/directives/if-defined.js'
 import { unsafeHTML } from 'lit/directives/unsafe-html.js'
 import { animate } from '@lit-labs/motion'
 import { Epml } from '../../../epml'
-import { get, translate } from '../../../../core/translate'
 import { Editor, Extension, generateHTML } from '@tiptap/core'
 import { escape } from 'html-escaper'
-import { inputKeyCodes } from '../../utils/keyCodes'
-import { replaceMessagesEdited } from '../../utils/replace-messages-edited'
-import { publishData } from '../../utils/publish-image'
+import { inputKeyCodes, replaceMessagesEdited, generateIdFromAddresses } from '../../utils/functions'
+import { publishData, modalHelper, RequestQueue } from '../../utils/classes'
 import { EmojiPicker } from 'emoji-picker-js'
-import { RequestQueue } from '../../utils/queue'
-import { modalHelper } from '../../utils/publish-modal'
-import { generateIdFromAddresses } from '../../utils/id-generation'
 import { chatpageStyles } from './plugins-css'
-
 import localForage from 'localforage'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
@@ -26,7 +20,6 @@ import WebWorkerSortMessages from 'web-worker:./webworkerSortMessages.js'
 import WebWorkerDecodeMessages from 'web-worker:./webworkerDecodeMessages.js'
 import ShortUniqueId from 'short-unique-id'
 import Compressor from 'compressorjs'
-
 import './ChatScroller'
 import './LevelFounder'
 import './NameMenu'
@@ -41,18 +34,20 @@ import './ChatGroupSettings'
 import './ChatRightPanel'
 import './ChatRightPanelResources'
 import './ChatSearchResults'
-
 import '@material/mwc-button'
 import '@material/mwc-dialog'
 import '@material/mwc-icon'
 import '@polymer/paper-dialog/paper-dialog.js'
 import '@polymer/paper-spinner/paper-spinner-lite.js'
 
-const chatLastSeen = localForage.createInstance({
-	name: "chat-last-seen"
-})
+// Multi language support
+import { get, translate } from '../../../../core/translate'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
+
+const chatLastSeen = localForage.createInstance({
+	name: 'chat-last-seen'
+})
 
 export const queue = new RequestQueue()
 export const chatLimit = 20
@@ -1998,7 +1993,6 @@ class ChatPage extends LitElement {
 	}
 
 	// set replied to message in chat editor
-
 	setRepliedToMessageObj(messageObj) {
 		this.editor.commands.focus('end')
 		this.repliedToMessageObj = { ...messageObj }
@@ -2007,7 +2001,6 @@ class ChatPage extends LitElement {
 	}
 
 	// set edited message in chat editor
-
 	setEditedMessageObj(messageObj) {
 		this.editor.commands.focus('end')
 		this.editedMessageObj = { ...messageObj }
@@ -2032,7 +2025,6 @@ class ChatPage extends LitElement {
 	* @property id or index
 	* @property sender and other info..
 	*/
-
 	async renderNewMessage(newMessage) {
 		if (newMessage.chatReference) {
 			this.messagesRendered = {
@@ -3286,9 +3278,19 @@ class ChatPage extends LitElement {
 		parentEpml.request('openFramePasteMenu', eventObject)
 	}
 
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
 	isEmptyArray(arr) {
 		if (!arr) { return true }
 		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
 	}
 }
 

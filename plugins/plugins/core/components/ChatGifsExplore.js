@@ -1,9 +1,10 @@
 import { html, LitElement } from 'lit'
 import { Epml } from '../../../epml'
-import { get, translate } from '../../../../core/translate'
 import { chatGifsExploreStyles } from './plugins-css'
-
 import '@material/mwc-icon'
+
+// Multi language support
+import { get, translate } from '../../../../core/translate'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
@@ -21,7 +22,9 @@ class ChatGifsExplore extends LitElement {
 		}
 	}
 
-	static styles = [chatGifsExploreStyles]
+	static get styles() {
+		return [chatGifsExploreStyles]
+	}
 
 	constructor() {
 		super();
@@ -144,11 +147,6 @@ class ChatGifsExplore extends LitElement {
 		}
 	}
 
-	getApiKey() {
-		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
-		return myNode.apiKey
-	}
-
 	async searchCollections() {
 		this.isSearched = true
 
@@ -172,6 +170,21 @@ class ChatGifsExplore extends LitElement {
 		} finally {
 			this.isLoading = false
 		}
+	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
 	}
 }
 

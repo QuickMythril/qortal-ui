@@ -1,10 +1,7 @@
-import { css, html, LitElement } from 'lit'
+import { html, LitElement } from 'lit'
 import { Epml } from '../../../epml'
-import { get, translate } from '../../../../core/translate'
 import { chatGroupStyles } from './plugins-css'
-
 import './WrapperModal'
-
 import '@material/mwc-button'
 import '@material/mwc-dialog'
 import '@material/mwc-icon'
@@ -14,6 +11,9 @@ import '@vaadin/grid'
 import '@vaadin/grid/vaadin-grid-filter-column.js'
 import '@vaadin/tabs'
 import '@vaadin/tabs/theme/material/vaadin-tabs.js'
+
+// Multi language support
+import { get, translate } from '../../../../core/translate'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
@@ -249,6 +249,21 @@ class ChatGroupsManagement extends LitElement {
 			</vaadin-horizontal-layout>
 		`
 	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
+	}
 }
 
-customElements.define('chat-groups-management', ChatGroupsManagement)
+window.customElements.define('chat-groups-management', ChatGroupsManagement)

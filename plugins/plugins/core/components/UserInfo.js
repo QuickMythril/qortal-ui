@@ -1,10 +1,11 @@
 import { html, LitElement } from 'lit'
-import { translate } from '../../../../core/translate'
-import { cropAddress } from '../../utils/cropAddress'
+import { cropAddress } from '../../utils/functions'
 import { userInfoStyles } from './plugins-css'
-
 import '@polymer/paper-progress/paper-progress.js'
 import '@vaadin/button'
+
+// Multi language support
+import { translate } from '../../../../core/translate'
 
 export class UserInfo extends LitElement {
 	static get properties() {
@@ -87,6 +88,10 @@ export class UserInfo extends LitElement {
 		`
 	}
 
+	firstUpdated() {
+		// ...
+	}
+
 	createImage(imageUrl) {
 		const imageHTMLRes = new Image()
 
@@ -120,6 +125,21 @@ export class UserInfo extends LitElement {
 			window.parent.dispatchEvent(customEvent)
 		} catch (error) { /* empty */ }
 	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
+	}
 }
 
-customElements.define('user-info', UserInfo)
+window.customElements.define('user-info', UserInfo)

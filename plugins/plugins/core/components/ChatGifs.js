@@ -1,18 +1,17 @@
 import { html, LitElement } from 'lit'
 import { Epml } from '../../../epml'
-import { publishData } from '../../utils/publish-image'
-import { bytesToMegabytes } from '../../../utils/bytesToMegabytes'
-import { get, translate } from '../../../../core/translate'
+import { publishData } from '../../utils/classes'
+import { bytesToMegabytes } from '../../../utils/functions'
 import { gifExplorerStyles } from './plugins-css'
-
 import * as zip from '@zip.js/zip.js'
 import ShortUniqueId from 'short-unique-id'
-
 import './ChatGifsExplore'
 import './ImageComponent'
-
 import '@material/mwc-icon'
 import '@vaadin/tooltip'
+
+// Multi language support
+import { get, translate } from '../../../../core/translate'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
@@ -37,7 +36,9 @@ class ChatGifs extends LitElement {
 		}
 	}
 
-	static styles = [gifExplorerStyles]
+	static get styles() {
+		return [gifExplorerStyles]
+	}
 
 	constructor() {
 		super();
@@ -512,11 +513,6 @@ class ChatGifs extends LitElement {
 		} catch (error) { }
 	}
 
-	getApiKey() {
-		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
-		return myNode.apiKey
-	}
-
 	async getMoreExploreGifs() {
 		try {
 			const getAllGifCollections = await parentEpml.request('apiCall', {
@@ -906,6 +902,21 @@ class ChatGifs extends LitElement {
 		parentEpml.request('showSnackBar', get('gifs.gchange21'))
 		this.isSubscribed = false
 		this.mySubscribedCollections = await this.getSavedCollections()
+	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
 	}
 }
 

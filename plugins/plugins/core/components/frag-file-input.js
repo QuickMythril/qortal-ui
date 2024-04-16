@@ -1,7 +1,5 @@
-import { css, html, LitElement } from 'lit'
-import { translate } from '../../../../core/translate'
+import { html, LitElement } from 'lit'
 import { fragFileInputStyles } from './plugins-css'
-
 import '@material/mwc-button'
 import '@material/mwc-icon'
 
@@ -86,6 +84,21 @@ class FragFileInput extends LitElement {
 		}
 
 		fr['readAs' + this.readAs](file)
+	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
 	}
 }
 

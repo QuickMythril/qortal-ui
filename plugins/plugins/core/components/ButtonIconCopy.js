@@ -1,6 +1,6 @@
 import { html, LitElement } from 'lit'
 import { Epml } from '../../../epml'
-
+import { buttonIconCopyStyles } from './plugins-css'
 import '@material/mwc-icon-button'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
@@ -18,6 +18,10 @@ class ButtonIconCopy extends LitElement {
 			offsetLeft: { type: String },
 			offsetRight: { type: String }
 		}
+	}
+
+	static get styles() {
+		return [buttonIconCopyStyles]
 	}
 
 	constructor() {
@@ -45,6 +49,10 @@ class ButtonIconCopy extends LitElement {
 		`
 	}
 
+	firstUpdated() {
+		// ...
+	}
+
 	connectedCallback() {
 		super.connectedCallback()
 		this.style.setProperty('--mdc-icon-button-size', this.buttonSize)
@@ -62,6 +70,21 @@ class ButtonIconCopy extends LitElement {
 			parentEpml.request('showSnackBar', this.onErrorMessage)
 			console.error('Copy to clipboard error:', err)
 		}
+	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
 	}
 }
 

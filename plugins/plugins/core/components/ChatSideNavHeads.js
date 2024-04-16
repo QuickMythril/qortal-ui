@@ -1,7 +1,6 @@
-import { css, html, LitElement } from 'lit'
+import { html, LitElement } from 'lit'
 import { Epml } from '../../../epml'
 import { chatSideNavHeadsStyles } from './plugins-css'
-
 import '@material/mwc-icon'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
@@ -160,6 +159,21 @@ class ChatSideNavHeads extends LitElement {
 
 	onPageNavigation(pageUrl) {
 		parentEpml.request('setPageUrl', pageUrl)
+	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
 	}
 }
 

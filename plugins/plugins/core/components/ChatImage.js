@@ -1,17 +1,17 @@
-import { css, html, LitElement } from 'lit'
+import { html, LitElement } from 'lit'
 import { Epml } from '../../../epml'
-import { get, translate } from '../../../../core/translate'
-import { RequestQueueWithPromise } from '../../utils/queue'
+import { RequestQueueWithPromise } from '../../utils/classes'
 import { chatImageStyles } from './plugins-css'
-
 import axios from 'axios'
-
 import '@material/mwc-list/mwc-list-item.js'
 import '@material/mwc-menu'
 
-const requestQueue = new RequestQueueWithPromise(5)
+// Multi language support
+import { get, translate } from '../../../../core/translate'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
+
+const requestQueue = new RequestQueueWithPromise(5)
 
 export class ChatImage extends LitElement {
 	static get properties() {
@@ -251,6 +251,21 @@ export class ChatImage extends LitElement {
 			}
 		}, 100)
 	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
+	}
 }
 
-customElements.define('chat-image', ChatImage)
+window.customElements.define('chat-image', ChatImage)

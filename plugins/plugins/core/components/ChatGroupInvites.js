@@ -1,14 +1,14 @@
-import { css, html, LitElement } from 'lit'
+import { html, LitElement } from 'lit'
 import { Epml } from '../../../epml'
-import { translate } from '../../../../core/translate'
 import { chatGroupStyles } from './plugins-css'
-
 import './WrapperModal'
-
 import '@material/mwc-button'
 import '@material/mwc-dialog'
 import '@material/mwc-icon'
 import '@polymer/paper-spinner/paper-spinner-lite.js'
+
+// Multi language support
+import { translate } from '../../../../core/translate'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
@@ -45,8 +45,6 @@ class ChatGroupInvites extends LitElement {
 	}
 
 	render() {
-		console.log("leaveGroupObj", this.leaveGroupObj)
-
 		return html`
 			<vaadin-icon @click=${() => {this.isOpenLeaveModal = true}} class="top-bar-icon" style="margin: 0px 20px" icon="vaadin:users" slot="icon"></vaadin-icon>
 			<wrapper-modal
@@ -281,6 +279,21 @@ class ChatGroupInvites extends LitElement {
 
 		await validateReceiver()
 	}
+
+	// Standard functions
+	getApiKey() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return myNode.apiKey
+	}
+
+	isEmptyArray(arr) {
+		if (!arr) { return true }
+		return arr.length === 0
+	}
+
+	round(number) {
+		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
+	}
 }
 
-customElements.define("chat-right-panel", ChatGroupInvites)
+window.customElements.define('chat-group-invites', ChatGroupInvites)
