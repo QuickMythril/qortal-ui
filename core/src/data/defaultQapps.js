@@ -3,7 +3,7 @@ export const defaultQappsTabs = [
         "url": "myapp",
         "domain": "core",
         "page": "qdn/browser/index.html?name=Q-Support&service=APP",
-        "title": "Q-Tube",
+        "title": "Q-Support",
         "icon": "vaadin:external-browser",
         "mwcicon": "apps",
         "pluginNumber": "plugin-04tlGdLkkd",
