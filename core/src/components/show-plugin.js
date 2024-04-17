@@ -18,7 +18,7 @@ import '@polymer/iron-icons/iron-icons.js'
 import '@polymer/paper-dialog/paper-dialog.js'
 import '@vaadin/grid'
 import '@vaadin/text-field'
-import '../custom-elements/frag-file-input.js'
+import '../functional-components/frag-file-input.js'
 import {defaultQappsTabs} from '../data/defaultQapps.js'
 
 registerTranslateConfig({

@@ -7,7 +7,7 @@ import {doLogin, doSelectAddress} from '../../redux/app/app-actions.js'
 import {doRemoveWallet, doStoreWallet} from '../../redux/user/user-actions.js'
 import {createWallet} from '../../../../crypto/api/createWallet.js'
 import snackbar from '../../functional-components/snackbar.js'
-import '../../custom-elements/frag-file-input.js'
+import '../../functional-components/frag-file-input.js'
 import ripple from '../../functional-components/loading-ripple.js'
 
 import '@material/mwc-button'
