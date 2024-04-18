@@ -12,6 +12,7 @@ import '@polymer/paper-progress/paper-progress.js'
 
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../../core/translate'
+
 registerTranslateConfig({
 	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
 })
@@ -177,7 +178,7 @@ class PublishData extends LitElement {
 						<div style="margin:0; margin-top:20px;">
 							<h3 style="margin:0; padding:8px 0; text-transform: capitalize; color: var(--black);">${translate("publishpage.pchange1")} / ${translate("publishpage.pchange2")} ${this.category}</h3>
 							<p style="font-style: italic; font-size: 14px; color: var(--black);" ?hidden="${this.portForwardingEnabled}">${translate("publishpage.pchange3")}</p>
-							<p style="font-style: italic; font-size: 14px; color: var(--black);">(500 KB max.)</p>
+							<p style="font-style: italic; font-size: 14px; color: var(--black);">${this.renderUploadSize()}</p>
 						</div>
 					</paper-card>
 					<!-- TODO: adapt this dropdown to list all names on the account. Right now it's hardcoded to a single name -->
@@ -304,6 +305,14 @@ class PublishData extends LitElement {
 		}, 60000)
 	}
 
+	renderUploadSize() {
+		if (this.service === 'THUMBNAIL') {
+			return html`(500 KB max.)`
+		} else {
+			return html`(500 MB max.)`
+		}
+	}
+
 	clearConsole() {
 		if (!isElectron()) {
 		} else {
@@ -342,25 +351,23 @@ class PublishData extends LitElement {
 	renderUploadField() {
 		if (this.uploadType === "file") {
 			return html`
-                <p>
-                    <input style="width: 100%; background: var(--white); color: var(--black)" id="file" type="file">
-                </p>
-            `
-		}
-		else if (this.uploadType === "zip") {
+				<p>
+					<input style="width: 100%; background: var(--white); color: var(--black)" id="file" type="file">
+				</p>
+			`
+		} else if (this.uploadType === "zip") {
 			return html`
-                <p>
-                    <span class="upload-text">${translate("publishpage.pchange12")}:</span><br />
-                    <input style="color: var(--black)" id="file" type="file" accept=".zip">
-                </p>
-            `
-		}
-		else {
+				<p>
+					<span class="upload-text">${translate("publishpage.pchange12")}:</span><br />
+					<input style="color: var(--black)" id="file" type="file" accept=".zip">
+				</p>
+			`
+		} else {
 			return html`
-                <p>
-                    <mwc-textfield style="width:100%;" label="${translate("publishpage.pchange13")}" id="path" type="text" value="${this.path}"></mwc-textfield>
-                </p>
-            `
+				<p>
+					<mwc-textfield style="width:100%;" label="${translate("publishpage.pchange13")}" id="path" type="text" value="${this.path}"></mwc-textfield>
+				</p>
+			`
 		}
 	}
 
@@ -389,8 +396,7 @@ class PublishData extends LitElement {
 
 		if (this.uploadType === "file" || this.uploadType === "zip") {
 			file = this.shadowRoot.getElementById('file').files[0]
-		}
-		else if (this.uploadType === "path") {
+		} else if (this.uploadType === "path") {
 			path = this.shadowRoot.getElementById('path').value
 		}
 
