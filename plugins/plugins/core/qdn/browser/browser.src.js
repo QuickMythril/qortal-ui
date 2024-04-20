@@ -962,7 +962,7 @@ class WebBrowser extends LitElement {
 					try {
 						pollInfo = await parentEpml.request("apiCall", {
 							type: "api",
-							url: `/polls/${pollName}`
+							url: `/polls/${encodeURIComponent(pollName)}`
 						})
 					} catch (error) {
 						const errorMsg = (error && error.message) || 'Poll not found'
