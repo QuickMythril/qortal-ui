@@ -2054,7 +2054,7 @@ class TabAvatar extends connect(store)(LitElement) {
 		if (this.appname) {
 			const tabAvatarNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
 			const tabAvatarNodeUrl = tabAvatarNode.protocol + '://' + tabAvatarNode.domain + ':' + tabAvatarNode.port
-			const tabAvatarUrl = `${tabNodeUrl}/arbitrary/THUMBNAIL/${this.appname}/qortal_avatar?async=true`
+			const tabAvatarUrl = `${tabAvatarNodeUrl}/arbitrary/THUMBNAIL/${this.appname}/qortal_avatar?async=true`
 
 			tabAvatarImg = this.createImage(tabAvatarUrl)
 		}
