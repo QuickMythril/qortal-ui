@@ -308,6 +308,8 @@ class PublishData extends LitElement {
 	renderUploadSize() {
 		if (this.service === 'THUMBNAIL') {
 			return html`(500 KB max.)`
+		} else if (this.service === 'APP') {
+			return html`(50 MB max.)`
 		} else {
 			return html`(500 MB max.)`
 		}
