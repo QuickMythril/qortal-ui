@@ -63,7 +63,7 @@ class FriendsFeed extends connect(store)(LitElement) {
 						return html`
 							<feed-item
 								.resource=${item}
-								appName=${'Q-Blog'}
+								appName=${'QM-Blog'}
 								link=${item.link}
 							>
 							</feed-item>

@@ -581,7 +581,7 @@ class WebBrowser extends LitElement {
 					if (frame && frame.dataset.id) {
 						tabId = frame.dataset.id
 					}
-					if (data.name === 'Q-Mail') {
+					if ((data.name === 'QM-Mail') || (data.name === 'Q-Mail')) {
 						localStorage.setItem("Q-Mail-last-visited", Date.now())
 					}
 					window.parent.reduxStore.dispatch(window.parent.reduxAction.addTabInfo({

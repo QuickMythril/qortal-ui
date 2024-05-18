@@ -90,7 +90,7 @@ export class FriendItemActions extends connect(store)(LitElement) {
 					<div
 						class="send-message-button"
 						@click="${() => {
-							const query = `?service=APP&name=Q-Mail/to/${this.name}`;
+							const query = `?service=APP&name=QM-Mail/to/${this.name}`;
 							store.dispatch(
 								setNewTab({
 									url: `qdn/browser/index.html${query}`,
@@ -99,7 +99,7 @@ export class FriendItemActions extends connect(store)(LitElement) {
 										url: 'myapp',
 										domain: 'core',
 										page: `qdn/browser/index.html${query}`,
-										title: 'Q-Mail',
+										title: 'QM-Mail',
 										icon: 'vaadin:mailbox',
 										mwcicon: 'mail_outline',
 										menus: [],

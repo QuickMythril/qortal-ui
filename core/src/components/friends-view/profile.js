@@ -276,7 +276,7 @@ class ProfileQdn extends connect(store)(LitElement) {
 									<div
 										class="send-message-button"
 										@click="${() => {
-											const query = `?service=APP&name=Q-Mail/to/${this.nameVisiting}`;
+											const query = `?service=APP&name=QM-Mail/to/${this.nameVisiting}`;
 											store.dispatch(
 												setNewTab({
 													url: `qdn/browser/index.html${query}`,
@@ -285,7 +285,7 @@ class ProfileQdn extends connect(store)(LitElement) {
 														url: 'myapp',
 														domain: 'core',
 														page: `qdn/browser/index.html${query}`,
-														title: 'Q-Mail',
+														title: 'QM-Mail',
 														icon: 'vaadin:mailbox',
 														mwcicon: 'mail_outline',
 														menus: [],

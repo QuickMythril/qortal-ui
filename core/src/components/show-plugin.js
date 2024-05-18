@@ -1492,13 +1492,25 @@ class NavBar extends connect(store)(LitElement) {
 			this.mwcIcon = ''
 			this.pluginName = this.shadowRoot.getElementById('pluginNameInput').value
 
-			if (this.pluginName === 'Q-Blog') {
-				this.mwcIcon = 'rss_feed'
-			} else if (this.pluginName === 'Q-Mail') {
-				this.mwcIcon = 'mail'
-			} else {
-				this.mwcIcon = 'apps'
-			}
+			if ((this.pluginName === "QM-Blog") || (this.pluginName === "Q-Blog")) {
+                this.mwcIcon = 'rss_feed'
+            } else if ((this.pluginName === "QM-Bump") || (this.pluginName === "Ear-Bump")) {
+                this.mwcIcon = 'radio'
+            } else if ((this.pluginName === "QM-Fund") || (this.pluginName === "Q-Fund")) {
+                this.mwcIcon = 'diversity_2'
+            } else if ((this.pluginName === "QM-Mail") || (this.pluginName === "Q-Mail")) {
+                this.mwcIcon = 'mail'
+            } else if ((this.pluginName === "QM-Share") || (this.pluginName === "Q-Share")) {
+                this.mwcIcon = 'volunteer_activism'
+            } else if ((this.pluginName === "QM-Shop") || (this.pluginName === "Q-Shop")) {
+                this.mwcIcon = 'add_business'
+            } else if ((this.pluginName === "QM-Support") || (this.pluginName === "Q-Support")) {
+                this.mwcIcon = 'live_help'
+            } else if ((this.pluginName === "QM-Tube") || (this.pluginName === "Q-Tube")) {
+                this.mwcIcon = 'camera_enhance'
+            } else {
+                this.mwcIcon = 'apps'
+            }
 
 			var oldMenuPlugs = JSON.parse(localStorage.getItem('myMenuPlugs') || '[]')
 
