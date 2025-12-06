@@ -2383,7 +2383,7 @@ class MultiWallet extends LitElement {
 		this.pageButtonsHidden = false
 		this.visitedTab = value
 		this.searchOffset = 0
-		this.searchLimit = 10
+		this.searchLimit = this.currentPageSize
 		this.counter = 1
 		await this.renderNewDom()
 	}
@@ -2631,7 +2631,7 @@ class MultiWallet extends LitElement {
 		this._selectedWallet = 'qort'
 		this.visitedTab = 0
 		this.searchOffset = 0
-		this.searchLimit = 10
+		this.searchLimit = this.currentPageSize
 		this.pageButtonsHidden = false
 		this.showNewQortWallet()
 	}
