@@ -77,6 +77,8 @@ class NameSwitcher extends connect(store)(LitElement) {
 				--mdc-theme-on-surface: var(--black);
 				color: var(--black);
 				background: var(--sidetopbar);
+				--mdc-list-side-padding: 12px;
+				--mdc-list-item-graphic-margin: 12px;
 			}
 
 			.list-name {
@@ -84,6 +86,10 @@ class NameSwitcher extends connect(store)(LitElement) {
 				align-items: center;
 				gap: 10px;
 				color: var(--black);
+				--mdc-ripple-color: var(--mdc-theme-primary, #4caf50);
+				--mdc-ripple-press-opacity: 0.18;
+				--mdc-ripple-hover-opacity: 0.12;
+				--mdc-ripple-focus-opacity: 0.16;
 			}
 
 			.list-name-row {
@@ -106,6 +112,11 @@ class NameSwitcher extends connect(store)(LitElement) {
 				width: 100%;
 				height: 100%;
 				object-fit: cover;
+			}
+
+			.check-icon {
+				margin-left: auto;
+				color: var(--mdc-theme-primary, #4caf50);
 			}
 		`
 	}
@@ -169,10 +180,10 @@ class NameSwitcher extends connect(store)(LitElement) {
 
 	renderAvatar(url, fallbackChar = '') {
 		if (url) {
-			return html`<img src="${url}" @error=${(e) => { e.target.replaceWith(html`<mwc-icon>account_circle</mwc-icon>`) }} />`
+			return html`<img src="${url}" @error=${(e) => { e.target.replaceWith(html`<mwc-icon>person</mwc-icon>`) }} />`
 		}
 
-		return html`<mwc-icon>account_circle</mwc-icon>`
+		return html`<mwc-icon>person</mwc-icon>`
 	}
 
 	render() {
@@ -202,6 +213,9 @@ class NameSwitcher extends connect(store)(LitElement) {
 										${entry?.name ? this.renderAvatar(this.avatarUrlFor(entry.name)) : html`<mwc-icon>account_circle</mwc-icon>`}
 									</span>
 									<span>${entry?.name || ''}</span>
+									${entry?.name === this.accountInfo?.activeName ? html`
+										<mwc-icon class="check-icon">check</mwc-icon>
+									` : null}
 								</span>
 							</mwc-list-item>
 						`)}
