@@ -81,6 +81,7 @@ const INITIAL_STATE = {
 		names: [],
 		allNames: [],
 		primaryName: '',
+		activeName: '',
 		addressInfo: {}
 	},
 	url: '',

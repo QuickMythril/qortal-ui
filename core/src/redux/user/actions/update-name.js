@@ -41,7 +41,14 @@ export const doUpdateAccountName = (address, expectedName, awaitingConfirm) => {
 				const allNames = Array.isArray(namesRes) ? namesRes : []
 				const primaryName = primaryRes?.name || ''
 				const orderedNames = prioritizePrimary(primaryName, allNames)
+				const stateActive = state?.app?.accountInfo?.activeName || state?.user?.accountInfo?.activeName || ''
 				const displayName = primaryName || (allNames[0]?.name || expectedName || '')
+				let activeName = stateActive
+
+				if (!activeName || (allNames.length > 0 && !allNames.find(n => n?.name === activeName))) {
+					activeName = primaryName || orderedNames[0]?.name || ''
+				}
+
 				const isLoaded = Boolean(primaryName || allNames.length > 0)
 				const status = isLoaded ? UPDATE_NAME_STATUSES.LOADED : (awaitingConfirm ? UPDATE_NAME_STATUSES.DOES_NOT_EXIST : UPDATE_NAME_STATUSES.WAITING_FOR_CONFIRM)
 
@@ -50,7 +57,8 @@ export const doUpdateAccountName = (address, expectedName, awaitingConfirm) => {
 					name: displayName,
 					primaryName,
 					allNames,
-					names: orderedNames
+					names: orderedNames,
+					activeName
 				}
 
 				dispatch(updateAccountInfo(nextAccountInfo))

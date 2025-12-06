@@ -13,7 +13,8 @@ const DEFAULT_INITIAL_STATE = {
 	hasClaimedAirdrop: false,
 	accountInfo: {
 		primaryName: '',
-		allNames: []
+		allNames: [],
+		activeName: ''
 	},
 	notifications: {
 		q_chat: {}

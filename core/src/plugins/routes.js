@@ -64,6 +64,8 @@ export const routes = {
 		const address = incoming?.addressInfo?.address
 		let primaryName = incoming.primaryName || ''
 		let allNames = Array.isArray(incoming.allNames) ? incoming.allNames : (Array.isArray(incoming.names) ? incoming.names : [])
+		const existingActive = store.getState().app.accountInfo.activeName || ''
+		let activeName = incoming.activeName || existingActive || ''
 
 		if (address) {
 			try {
@@ -79,6 +81,10 @@ export const routes = {
 			}
 		}
 
+		if (!activeName || (Array.isArray(allNames) && allNames.length > 0 && !allNames.find(n => n?.name === activeName))) {
+			activeName = primaryName || allNames[0]?.name || ''
+		}
+
 		const nextAccountInfo = {
 			...incoming,
 			primaryName: primaryName || '',
@@ -86,7 +92,8 @@ export const routes = {
 			names: prioritizePrimary(
 				primaryName,
 				(Array.isArray(incoming.names) && incoming.names.length > 0 ? incoming.names : (allNames || []))
-			)
+			),
+			activeName
 		}
 
 		store.dispatch(doUpdateAccountInfo(nextAccountInfo))

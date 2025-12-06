@@ -12,11 +12,11 @@
   - [x] "Prefer primary in name helpers": Update `getUserNameFromAddress` / `getNameInfo` to prefer `/names/primary` for others and fall back to `/names/address`.
   - [x] "Validate names per core rules": Add client-side checks for length (3–40 bytes UTF-8), data length (≤4000 bytes), normalization/sanitization (Unicode normalize/sanitize), and reject address-like names before building/sending tx.
 
-- [ ] Redux/accountInfo shape
+- [x] Redux/accountInfo shape
   - [x] "Store primaryName/allNames in accountInfo": Extend `app.accountInfo` to include `primaryName` and `allNames`; default from `/names/primary` and `/names/address`.
   - [x] "Update name polling to set primary/all": Update `core/src/redux/user/actions/update-name.js` polling to set `primaryName`, `allNames`, and `nameStatus`.
   - [x] "Keep names array backward compatible": Keep backward compatibility: populate legacy `names` array from `allNames` with `primaryName` first.
-  - [ ] "Add activeName selection": Persist an `activeName` in state (alongside accountInfo; default primary or first name) to represent the user-selected name when multiple exist.
+  - [x] "Add activeName selection": Persist an `activeName` in state (alongside accountInfo; default primary or first name) to represent the user-selected name when multiple exist.
 
 - [ ] Surfaces that assume a single name (use primaryName with fallback)
   - [ ] "Update chat UI name usage": Chat UI components (`ChatPage.js`, `ChatRightPanelResources`, `ChatGroupManager`, `ChatGifs`, `q-chat`, placeholders) use `primaryName || names[0]?.name || address`.
