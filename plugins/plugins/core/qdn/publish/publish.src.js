@@ -117,6 +117,8 @@ class PublishData extends LitElement {
 				if (allNames.length) {
 					this.names = allNames.map(n => n.name || n)
 					this.selectedName = activeOrPrimary || this.names[0] || ''
+					this.name = this.selectedName
+					this.fetchResourceMetadata()
 					return
 				}
 
@@ -134,6 +136,10 @@ class PublishData extends LitElement {
 				}
 				this.names = namesList
 				this.selectedName = primaryName || namesList[0] || ''
+				this.name = this.selectedName
+				if (this.selectedName) {
+					this.fetchResourceMetadata()
+				}
 			} catch (error) {
 				console.error(error)
 				this.names = []
@@ -739,12 +745,25 @@ class PublishData extends LitElement {
 
 			setTimeout(() => {
 				this.metadata = res
-				if (this.metadata != null && this.metadata.category != null) {
-					this.shadowRoot.getElementById('category').value = this.metadata.category
-				}
-				else {
-					this.shadowRoot.getElementById('category').value = ''
-				}
+				const titleField = this.shadowRoot.getElementById('title')
+				const descField = this.shadowRoot.getElementById('description')
+				const categoryField = this.shadowRoot.getElementById('category')
+				const tagFields = [
+					this.shadowRoot.getElementById('tag1'),
+					this.shadowRoot.getElementById('tag2'),
+					this.shadowRoot.getElementById('tag3'),
+					this.shadowRoot.getElementById('tag4'),
+					this.shadowRoot.getElementById('tag5')
+				]
+
+				if (titleField) titleField.value = (this.metadata && this.metadata.title) ? this.metadata.title : ''
+				if (descField) descField.value = (this.metadata && this.metadata.description) ? this.metadata.description : ''
+				if (categoryField) categoryField.value = (this.metadata && this.metadata.category) ? this.metadata.category : ''
+
+				const tags = (this.metadata && Array.isArray(this.metadata.tags)) ? this.metadata.tags : []
+				tagFields.forEach((field, idx) => {
+					if (field) field.value = tags[idx] || ''
+				})
 			}, 1)
 		})
 	}
