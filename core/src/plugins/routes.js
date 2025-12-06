@@ -45,6 +45,15 @@ const sendCoin = async (coin, req) => {
 	return response
 }
 
+const prioritizePrimary = (primaryName, names = []) => {
+	if (!primaryName) return names
+	const idx = names.findIndex(item => item?.name === primaryName)
+	if (idx <= 0) return names
+	const primaryEntry = names[idx]
+	const remaining = names.slice(0, idx).concat(names.slice(idx + 1))
+	return [primaryEntry, ...remaining]
+}
+
 export const routes = {
 	registerUrl: async (req) => {
 		store.dispatch(doAddPluginUrl(req.data))
@@ -74,7 +83,10 @@ export const routes = {
 			...incoming,
 			primaryName: primaryName || '',
 			allNames: allNames || [],
-			names: Array.isArray(incoming.names) && incoming.names.length > 0 ? incoming.names : (allNames || [])
+			names: prioritizePrimary(
+				primaryName,
+				(Array.isArray(incoming.names) && incoming.names.length > 0 ? incoming.names : (allNames || []))
+			)
 		}
 
 		store.dispatch(doUpdateAccountInfo(nextAccountInfo))

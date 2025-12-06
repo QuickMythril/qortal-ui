@@ -6,6 +6,15 @@ const GET_NAME_URL = 'names/address/'
 const GET_PRIMARY_NAME_URL = 'names/primary/'
 const CHECK_NAME_INTERVAL = 1000 * 10 // Every 10 seconds
 
+const prioritizePrimary = (primaryName, names = []) => {
+	if (!primaryName) return names
+	const idx = names.findIndex(item => item?.name === primaryName)
+	if (idx <= 0) return names
+	const primaryEntry = names[idx]
+	const remaining = names.slice(0, idx).concat(names.slice(idx + 1))
+	return [primaryEntry, ...remaining]
+}
+
 export const UPDATE_NAME_STATUSES = {
 	LOADING: 'LOADING',
 	LOADED: 'LOADED',
@@ -31,6 +40,7 @@ export const doUpdateAccountName = (address, expectedName, awaitingConfirm) => {
 			.then(([primaryRes, namesRes]) => {
 				const allNames = Array.isArray(namesRes) ? namesRes : []
 				const primaryName = primaryRes?.name || ''
+				const orderedNames = prioritizePrimary(primaryName, allNames)
 				const displayName = primaryName || (allNames[0]?.name || expectedName || '')
 				const isLoaded = Boolean(primaryName || allNames.length > 0)
 				const status = isLoaded ? UPDATE_NAME_STATUSES.LOADED : (awaitingConfirm ? UPDATE_NAME_STATUSES.DOES_NOT_EXIST : UPDATE_NAME_STATUSES.WAITING_FOR_CONFIRM)
@@ -40,7 +50,7 @@ export const doUpdateAccountName = (address, expectedName, awaitingConfirm) => {
 					name: displayName,
 					primaryName,
 					allNames,
-					names: allNames
+					names: orderedNames
 				}
 
 				dispatch(updateAccountInfo(nextAccountInfo))

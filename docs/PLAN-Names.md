@@ -15,7 +15,7 @@
 - [ ] Redux/accountInfo shape
   - [x] "Store primaryName/allNames in accountInfo": Extend `app.accountInfo` to include `primaryName` and `allNames`; default from `/names/primary` and `/names/address`.
   - [x] "Update name polling to set primary/all": Update `core/src/redux/user/actions/update-name.js` polling to set `primaryName`, `allNames`, and `nameStatus`.
-  - [ ] "Keep names array backward compatible": Keep backward compatibility: populate legacy `names` array from `allNames` with `primaryName` first.
+  - [x] "Keep names array backward compatible": Keep backward compatibility: populate legacy `names` array from `allNames` with `primaryName` first.
   - [ ] "Add activeName selection": Persist an `activeName` in state (alongside accountInfo; default primary or first name) to represent the user-selected name when multiple exist.
 
 - [ ] Surfaces that assume a single name (use primaryName with fallback)
