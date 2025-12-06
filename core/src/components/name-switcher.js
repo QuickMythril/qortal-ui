@@ -178,12 +178,22 @@ class NameSwitcher extends connect(store)(LitElement) {
 		store.dispatch(doUpdateUserAccountInfo(nextAccountInfo))
 	}
 
-	renderAvatar(url, fallbackChar = '') {
+	renderAvatar(url) {
 		if (url) {
-			return html`<img src="${url}" @error=${(e) => { e.target.replaceWith(html`<mwc-icon>person</mwc-icon>`) }} />`
+			return html`<img src="${url}" @error=${(e) => this.handleAvatarError(e)} />`
 		}
 
 		return html`<mwc-icon>person</mwc-icon>`
+	}
+
+	handleAvatarError(e) {
+		try {
+			const icon = document.createElement('mwc-icon')
+			icon.textContent = 'person'
+			e.target.replaceWith(icon)
+		} catch (err) {
+			// Silent fallback
+		}
 	}
 
 	render() {

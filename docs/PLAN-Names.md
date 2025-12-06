@@ -48,7 +48,7 @@
 
 - [ ] Active name selection + overrides
   - [x] "Add active name selector UI": Provide a UI control to pick an active name from `allNames` and persist it.
-  - [ ] "Use active name in my-name contexts": Update internal consumers of the user name (chat metadata, publish defaults, avatars, app filters) to use `activeName || primaryName`.
+  - [x] "Use active name in my-name contexts": Update internal consumers of the user name (chat metadata, publish defaults, avatars, app filters) to use `activeName || primaryName`.
   - [ ] "Override qortalRequest name responses": For `GET_PRIMARY_NAME`, return `activeName` if set; for `GET_ACCOUNT_NAMES`, order names with `activeName` first.
 
 - [ ] Validation and smoke tests
