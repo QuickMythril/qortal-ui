@@ -53,7 +53,8 @@ class NameRegistration extends LitElement {
 			toCancelSellName: { type: String },
 			toUpdateName: { type: String },
 			errorMessage: { type: String },
-			successMessage: { type: String }
+			successMessage: { type: String },
+			primaryName: { type: String }
 		}
 	}
 
@@ -82,6 +83,7 @@ class NameRegistration extends LitElement {
 		this.toCancelSellName = ''
 		this.errorMessage = ''
 		this.successMessage = ''
+		this.primaryName = ''
 	}
 
 	_validateNameRules(name, data) {
@@ -392,22 +394,25 @@ class NameRegistration extends LitElement {
 		const fetchNames = async () => {
 			this.isLoading = true
 			try {
-				const [primaryRes, namesRes] = await Promise.all([
-					parentEpml.request('apiCall', { url: `/names/primary/${this.selectedAddress.address}` }).catch(() => ({})),
-					parentEpml.request('apiCall', { url: `/names/address/${this.selectedAddress.address}?limit=0&reverse=true` }).catch(() => [])
-				])
+			const [primaryRes, namesRes] = await Promise.all([
+				parentEpml.request('apiCall', { url: `/names/primary/${this.selectedAddress.address}` }).catch(() => ({})),
+				parentEpml.request('apiCall', { url: `/names/address/${this.selectedAddress.address}?limit=0&reverse=true` }).catch(() => [])
+			])
 
-				let names = Array.isArray(namesRes) ? namesRes : []
-				const primaryName = (primaryRes && primaryRes.name) ? primaryRes.name : ''
-				if (primaryName && names.length) {
-					const idx = names.findIndex(n => n.name === primaryName)
-					if (idx > 0) {
-						const [primaryEntry] = names.splice(idx, 1)
-						names.unshift(primaryEntry)
-					}
+			let names = Array.isArray(namesRes) ? namesRes : []
+			const primaryName = (primaryRes && primaryRes.name) ? primaryRes.name : ''
+			if (primaryName && names.length) {
+				const idx = names.findIndex(n => n.name === primaryName)
+				if (idx > 0) {
+					const [primaryEntry] = names.splice(idx, 1)
+					names.unshift(primaryEntry)
 				}
+			}
 
-				setTimeout(() => { this.names = names }, 1)
+			setTimeout(() => {
+				this.primaryName = primaryName || (names[0] && names[0].name) || ''
+				this.names = names
+			}, 1)
 			} catch (error) {
 				console.error(error)
 				setTimeout(() => { this.names = [] }, 1)
@@ -579,10 +584,9 @@ class NameRegistration extends LitElement {
 	}
 
 	renderPrimaryNameSection() {
-		if (!this.primaryName || this.isEmptyArray(this.names)) {
-			return html`<span style="color: var(--black);">${translate("registernamepage.nchange8")}</span>`
-		}
-		const primaryEntry = this.names.find(n => n.name === this.primaryName) || this.names[0]
+		const primaryEntry = this.primaryName
+			? this.names.find(n => n.name === this.primaryName)
+			: (this.names[0] || null)
 		if (!primaryEntry) {
 			return html`<span style="color: var(--black);">${translate("registernamepage.nchange8")}</span>`
 		}
