@@ -173,8 +173,10 @@ class ChatWelcomePage extends LitElement {
 
 	syncAddressAndName() {
 		try {
-			const state = window?.parent?.reduxStore?.getState?.()
-			const selected = state?.app?.selectedAddress || {}
+			const state = (window && window.parent && window.parent.reduxStore && typeof window.parent.reduxStore.getState === 'function')
+				? window.parent.reduxStore.getState()
+				: {}
+			const selected = (state.app && state.app.selectedAddress) ? state.app.selectedAddress : {}
 			this.myAddress = {
 				...selected,
 				address: selected.address || this.selectedAddress || ''
