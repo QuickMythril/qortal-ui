@@ -50,6 +50,7 @@ class LoginSection extends connect(store)(LitElement) {
 			nodeConfig: { type: Object },
 			names: { type: Array },
 			namesAvatar: { type: String },
+			walletAvatars: { type: Object },
 			theme: { type: String, reflect: true }
 		}
 	}
@@ -70,6 +71,7 @@ class LoginSection extends connect(store)(LitElement) {
 		this.saveInBrowser = false
 		this.names = []
 		this.namesAvatar = ''
+		this.walletAvatars = {}
 		this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
 
 		this.loginOptions = [
@@ -138,6 +140,30 @@ class LoginSection extends connect(store)(LitElement) {
 					width: auto;
 					height: 60px;
 					display: block;
+				}
+
+				.wallet .wallet-name-row {
+					display: flex;
+					align-items: center;
+					gap: 10px;
+				}
+
+				.wallet .wallet-avatar {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					min-width: 32px;
+				}
+
+				.wallet .wallet-avatar-img {
+					width: 32px;
+					height: 32px;
+					border-radius: 25%;
+				}
+
+				.wallet .wallet-avatar-icon {
+					color: var(--black);
+					--mdc-icon-size: 32px;
 				}
 
 				.wallet .wallet-details p {
@@ -274,7 +300,12 @@ class LoginSection extends connect(store)(LitElement) {
 										<div class="selectWallet" @click=${() => this.selectWallet(wallet[1])}>
 											<paper-ripple></paper-ripple>
 											<div class='wallet-details'>
-												<p class='walletName'><span style="color: var(--black);">${translate("login.name")}</span>${wallet[1].name || "No saved name"}</p>
+												<div class="wallet-name-row">
+													<div class="wallet-avatar">
+														${this.getWalletAvatarTemplate(wallet[1].address0)}
+													</div>
+													<p class='walletName'><span style="color: var(--black);">${translate("login.name")}</span>${wallet[1].name || "No saved name"}</p>
+												</div>
 												<p class="walletAddress"><span style="color: var(--black);">${translate("login.address")}</span>${wallet[1].address0}</p>
 											</div>
 										</div>
@@ -377,6 +408,12 @@ class LoginSection extends connect(store)(LitElement) {
 		})
 	}
 
+	updated(changedProperties) {
+		if (changedProperties.has('wallets')) {
+			this.preloadWalletAvatars()
+		}
+	}
+
 	renderBackText() {
 		return html`${translate("general.back")}`
 	}
@@ -455,6 +492,72 @@ class LoginSection extends connect(store)(LitElement) {
 		`
 	}
 
+	preloadWalletAvatars() {
+		if (!this.wallets) { return }
+		Object.values(this.wallets).forEach((wallet) => {
+			if (!wallet?.address0) { return }
+			this.loadWalletAvatar(wallet.address0)
+		})
+	}
+
+	getWalletAvatarTemplate(address) {
+		if (!address) {
+			return html`<mwc-icon class="wallet-avatar-icon">account_circle</mwc-icon>`
+		}
+
+		const cachedAvatar = this.walletAvatars[address]
+		if (cachedAvatar !== undefined && cachedAvatar !== null) {
+			return cachedAvatar
+		}
+
+		// Trigger load once; a null value prevents duplicate fetches.
+		if (cachedAvatar === undefined) {
+			this.walletAvatars = { ...this.walletAvatars, [address]: null }
+			this.loadWalletAvatar(address)
+		}
+
+		return html`<mwc-icon class="wallet-avatar-icon">account_circle</mwc-icon>`
+	}
+
+	async loadWalletAvatar(address) {
+		try {
+			const avatarNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
+			if (!avatarNode) { throw new Error('No node available for avatar lookup') }
+			const avatarUrl = `${avatarNode.protocol}://${avatarNode.domain}:${avatarNode.port}`
+			const namesUrl = `${avatarUrl}/names/address/${address}?limit=0&reverse=true`
+
+			let fetchedNames = []
+			try {
+				fetchedNames = await fetch(namesUrl).then(response => response.json())
+			} catch (error) {
+				fetchedNames = []
+			}
+
+			const primaryUrl = `${avatarUrl}/names/primary/${address}`
+			const primaryRes = await fetch(primaryUrl).then(r => r.json()).catch(() => ({}))
+			const displayName = primaryRes?.name || (fetchedNames[0]?.name || '')
+
+			if (!displayName) {
+				this.walletAvatars = {
+					...this.walletAvatars,
+					[address]: html`<mwc-icon class="wallet-avatar-icon">account_circle</mwc-icon>`
+				}
+				return
+			}
+
+			const url = `${avatarUrl}/arbitrary/THUMBNAIL/${displayName}/qortal_avatar?async=true`
+			this.walletAvatars = {
+				...this.walletAvatars,
+				[address]: html`<img class="wallet-avatar-img" src="${url}" onerror="this.src='/img/incognito.png';" />`
+			}
+		} catch (error) {
+			this.walletAvatars = {
+				...this.walletAvatars,
+				[address]: html`<mwc-icon class="wallet-avatar-icon">account_circle</mwc-icon>`
+			}
+		}
+	}
+
 	selectWallet(wallet) {
 		this.selectedWallet = wallet
 		this.selectedPage = 'unlockStored'
@@ -482,8 +585,9 @@ class LoginSection extends connect(store)(LitElement) {
 	stateChanged(state) {
 		this.loggedIn = state.app.loggedIn
 		this.wallets = state.user.storedWallets
-		this.hasStoredWallets = this.wallets.length > 0
+		this.hasStoredWallets = Object.keys(this.wallets || {}).length > 0
 		this.nodeConfig = state.app.nodeConfig
+		this.preloadWalletAvatars()
 	}
 
 	seedListener(e) {
