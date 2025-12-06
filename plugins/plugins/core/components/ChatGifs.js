@@ -462,7 +462,7 @@ class ChatGifs extends LitElement {
 	}
 
 	async structureCollections(gifCollections) {
-		const userName = getMyNameFromStore({ allowAddressFallback: false })
+		const userName = getMyNameFromStore({ allowAddressFallback: false, allowActiveName: false })
 
 		if (!userName) {
 			return
@@ -583,7 +583,7 @@ class ChatGifs extends LitElement {
 	}
 
 	async getMyGifCollections() {
-		this.myAccountName = getMyNameFromStore({ allowAddressFallback: false })
+		this.myAccountName = getMyNameFromStore({ allowAddressFallback: false, allowActiveName: false })
 
 		if (this.myAccountName) {
 			const getMyGifCollections = await parentEpml.request('apiCall', {
@@ -695,7 +695,7 @@ class ChatGifs extends LitElement {
 			this.setGifsLoading(true)
 			this.isLoading = true
 
-			const userName = getMyNameFromStore({ allowAddressFallback: false })
+			const userName = getMyNameFromStore({ allowAddressFallback: false, allowActiveName: false })
 
 			const doesNameExist = await parentEpml.request('apiCall', {
 				url: `/arbitrary/metadata/GIF_REPOSITORY/${userName}/${this.newCollectionName}?apiKey=${this.getApiKey()}`

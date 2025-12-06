@@ -10,7 +10,7 @@ import '@vaadin/button'
 
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../core/translate'
-import { pickDisplayName, avatarFallbackChar } from '../../../../core/src/utils/name'
+import { pickDisplayName, pickDisplayNameOrAddress, avatarFallbackChar } from '../../../../core/src/utils/name'
 
 registerTranslateConfig({
 	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())

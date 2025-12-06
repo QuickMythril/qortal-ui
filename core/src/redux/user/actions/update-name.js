@@ -33,7 +33,7 @@ export const doUpdateAccountName = (address, expectedName, awaitingConfirm) => {
 		const config = state.config
 		const node = config.coin.node.api
 		const primaryUrl = `${node.url + node.tail + GET_PRIMARY_NAME_URL}${address}`
-		const namesUrl = `${node.url + node.tail + GET_NAME_URL}${address}?limit=0&reverse=true`
+		const namesUrl = `${node.url + node.tail + GET_NAME_URL}${address}?limit=0&reverse=false`
 
 		return Promise.all([fetch(primaryUrl), fetch(namesUrl)])
 			.then(responses => Promise.all(responses.map(res => res.json())))

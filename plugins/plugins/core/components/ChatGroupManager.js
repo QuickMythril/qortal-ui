@@ -73,7 +73,7 @@ class ChatGroupsManager extends LitElement {
 		this.successMessage = ''
 		this.groups = []
 		this.viewImage = false
-		this.myName = getMyNameFromStore()
+		this.myName = getMyNameFromStore({ allowActiveName: false })
 		this.myAddress = window.parent.reduxStore.getState().app.selectedAddress.address
 		this.autoView = false
 		this.onlyMyImages = true

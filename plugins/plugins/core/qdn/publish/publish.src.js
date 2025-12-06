@@ -119,7 +119,9 @@ class PublishData extends LitElement {
 				const parentStore = window.parent && window.parent.reduxStore
 				const state = parentStore && typeof parentStore.getState === 'function' ? parentStore.getState() : {}
 				const accountInfo = (state && state.app && state.app.accountInfo) ? state.app.accountInfo : {}
-				const activeOrPrimary = accountInfo.activeName || accountInfo.primaryName || ''
+				// Use active first, then primary, then first name
+				const firstName = Array.isArray(accountInfo.names) && accountInfo.names[0] ? (accountInfo.names[0].name || accountInfo.names[0]) : ''
+				const activeOrPrimary = accountInfo.activeName || accountInfo.primaryName || firstName || ''
 				const allNames = Array.isArray(accountInfo.allNames) && accountInfo.allNames.length ? accountInfo.allNames : accountInfo.names || []
 
 				if (allNames.length) {

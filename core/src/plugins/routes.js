@@ -71,7 +71,7 @@ export const routes = {
 			try {
 				const [primaryRes, namesRes] = await Promise.all([
 					api.request(`/names/primary/${address}`),
-					api.request(`/names/address/${address}?limit=0&reverse=true`)
+					api.request(`/names/address/${address}?limit=0&reverse=false`)
 				])
 
 				if (primaryRes && primaryRes.name) primaryName = primaryRes.name

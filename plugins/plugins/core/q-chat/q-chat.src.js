@@ -762,7 +762,7 @@ class Chat extends LitElement {
 					}
 				}
 
-				const myName = getMyNameFromStore()
+					const myName = getMyNameFromStore({ allowActiveName: false })
 				if (myName !== undefined && this.loggedInUserName !== myName) {
 					this.loggedInUserName = myName
 				}

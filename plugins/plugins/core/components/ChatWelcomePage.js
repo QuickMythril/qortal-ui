@@ -181,7 +181,7 @@ class ChatWelcomePage extends LitElement {
 				...selected,
 				address: selected.address || this.selectedAddress || ''
 			}
-			const name = getMyNameFromStore({ allowAddressFallback: false })
+			const name = getMyNameFromStore({ allowAddressFallback: false, allowActiveName: false })
 			this.displayName = name && name !== this.myAddress.address ? name : 'No registered name'
 		} catch (error) {
 			console.error('Failed to sync address/name for welcome page', error)

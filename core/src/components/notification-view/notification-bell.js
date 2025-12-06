@@ -5,7 +5,7 @@ import { setNewTab } from '../../redux/app/app-actions'
 import { routes } from '../../plugins/routes'
 import { notificationBellStyles } from '../../styles/core-css'
 import config from '../../notifications/config'
-import { pickDisplayName } from '../../utils/name'
+import { pickDisplayNameOrAddress } from '../../utils/name'
 import '../../../../plugins/plugins/core/components/TimeAgo'
 import '@material/mwc-icon'
 import '@polymer/paper-icon-button/paper-icon-button'
@@ -152,7 +152,7 @@ class NotificationBell extends connect(store)(LitElement) {
 
 				try {
 					const address = window.parent.reduxStore.getState().app?.selectedAddress?.address;
-					const name = pickDisplayName(window.parent.reduxStore.getState().app?.accountInfo)
+					const name = pickDisplayNameOrAddress(window.parent.reduxStore.getState().app?.accountInfo)
 
 					if (!name || !address) return
 

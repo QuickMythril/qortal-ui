@@ -53,7 +53,7 @@ class ChatTextEditor extends LitElement {
 		this.sendMessageFunc = this.sendMessageFunc.bind(this)
 		this.iframeHeight = 42
 		this.chatMessageSize = 0
-		this.userName = getMyNameFromStore()
+		this.userName = getMyNameFromStore({ allowActiveName: false })
 		this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
 		this.editor = null
 		this.messageQueue = []
@@ -245,7 +245,7 @@ class ChatTextEditor extends LitElement {
 	}
 
 	preventUserSendingImage(e) {
-		this.userName = getMyNameFromStore()
+		this.userName = getMyNameFromStore({ allowActiveName: false })
 		if (!this.userName) {
 			e.preventDefault()
 			parentEpml.request('showSnackBar', get("chatpage.cchange27"))

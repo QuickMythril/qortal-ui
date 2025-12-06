@@ -73,7 +73,7 @@ class ChatRightPanelResources extends LitElement {
 		this.successMessage = ''
 		this.images = []
 		this.viewImage = false
-		this.myName = getMyNameFromStore()
+		this.myName = getMyNameFromStore({ allowActiveName: false })
 		this.myAddress = window.parent.reduxStore.getState().app.selectedAddress.address
 		this.autoView = false
 		this.onlyMyImages = true
@@ -114,7 +114,7 @@ class ChatRightPanelResources extends LitElement {
 
 	async getMoreImages(reset) {
 		try {
-			this.myName = getMyNameFromStore()
+			this.myName = getMyNameFromStore({ allowActiveName: false })
 			if (reset) {
 				this.images = []
 			}

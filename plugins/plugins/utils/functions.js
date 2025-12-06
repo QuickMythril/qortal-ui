@@ -94,11 +94,12 @@ export const getAllUserNames = async (address) => {
 
 export const getMyNameFromStore = (opts = {}) => {
 	const allowAddressFallback = opts.allowAddressFallback !== false
+	const allowActiveName = opts.allowActiveName !== false
 	try {
 		const state = window?.parent?.reduxStore?.getState?.()
 		const info = state?.app?.accountInfo || {}
 		const address = info?.addressInfo?.address || ''
-		const name = info?.activeName || info?.primaryName || info?.names?.[0]?.name || ''
+		const name = (allowActiveName ? info?.activeName : '') || info?.primaryName || info?.names?.[0]?.name || ''
 
 		if (name) return name
 		return allowAddressFallback ? address : ''
