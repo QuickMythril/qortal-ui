@@ -107,7 +107,7 @@ class ProfileQdn extends connect(store)(LitElement) {
 						}}
 						style="user-select:none;cursor:pointer"
 					>
-						account_circle
+						person
 					</mwc-icon>
 					<vaadin-tooltip
 						for="profile-icon"
@@ -155,31 +155,24 @@ class ProfileQdn extends connect(store)(LitElement) {
 						</div>
 					</popover-component>
 				`
-				: this.error ? html`
-					<div style="user-select:none;cursor:pointer;opacity:0.5" id="profile-error">
-						<avatar-component
-							.resource=${{
-								name: this.name,
-								service: 'THUMBNAIL',
-								identifier: 'qortal_avatar'
-							}}
-							name=${this.name}
-						></avatar-component>
-					</div>
-					<vaadin-tooltip
-						for="profile-error"
-						position="bottom"
-						hover-delay=${200}
-						hide-delay=${1}
+					: this.error ? html`
+						<mwc-icon id="profile-error" style="user-select:none;cursor:pointer;opacity:0.5">
+							person
+						</mwc-icon>
+						<vaadin-tooltip
+							for="profile-error"
+							position="bottom"
+							hover-delay=${200}
+							hide-delay=${1}
 						text=${translate('profile.profile19')}
 					></vaadin-tooltip>
 				`
 				: html`
-					<div
-						style="user-select:none;cursor:pointer"
-						@click=${() => {
-							if (this.resourceExists && this.profileData) {
-								this.editContent = this.profileData;
+						<div
+							style="user-select:none;cursor:pointer"
+							@click=${() => {
+								if (this.resourceExists && this.profileData) {
+									this.editContent = this.profileData;
 							} else if (this.resourceExists && !this.profileData) {
 								return;
 							}
@@ -187,22 +180,17 @@ class ProfileQdn extends connect(store)(LitElement) {
 								this.profileDataVisiting = this.profileData;
 								this.nameVisiting = this.name;
 								this.dialogOpenedProfile = true;
-							} else {
-								this.isOpenProfileModalUpdate = !this.isOpenProfileModalUpdate;
-							}
-						}}
-					>
-						<avatar-component
-							.resource=${{
-								name: this.name,
-								service: 'THUMBNAIL',
-								identifier: 'qortal_avatar'
+								} else {
+									this.isOpenProfileModalUpdate = !this.isOpenProfileModalUpdate;
+								}
 							}}
-							name=${this.name}
-						></avatar-component>
-					</div>
-				`
-			}
+						>
+							<mwc-icon style="color: var(--black);">
+								person
+							</mwc-icon>
+						</div>
+					`
+				}
 			<profile-modal-update
 				?isOpen=${this.isOpenProfileModalUpdate}
 				.setIsOpen=${(val) => {
