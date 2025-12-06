@@ -79,6 +79,8 @@ const INITIAL_STATE = {
 	registeredUrls: [],
 	accountInfo: {
 		names: [],
+		allNames: [],
+		primaryName: '',
 		addressInfo: {}
 	},
 	url: '',
@@ -173,7 +175,10 @@ export default (state = INITIAL_STATE, action) => {
 		case ACCOUNT_INFO:
 			return {
 				...state,
-				accountInfo: action.payload
+				accountInfo: {
+					...state.accountInfo,
+					...action.payload
+				}
 			}
 
 		case LOAD_NODE_CONFIG:

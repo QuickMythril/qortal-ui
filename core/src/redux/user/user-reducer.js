@@ -12,7 +12,8 @@ const DEFAULT_INITIAL_STATE = {
 	storedWallets: {},
 	hasClaimedAirdrop: false,
 	accountInfo: {
-		// nameStatus: ''
+		primaryName: '',
+		allNames: []
 	},
 	notifications: {
 		q_chat: {}

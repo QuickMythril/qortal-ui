@@ -51,7 +51,33 @@ export const routes = {
 	},
 
 	setAccountInfo: async (req) => {
-		store.dispatch(doUpdateAccountInfo(req.data))
+		const incoming = req?.data || {}
+		const address = incoming?.addressInfo?.address
+		let primaryName = incoming.primaryName || ''
+		let allNames = Array.isArray(incoming.allNames) ? incoming.allNames : (Array.isArray(incoming.names) ? incoming.names : [])
+
+		if (address) {
+			try {
+				const [primaryRes, namesRes] = await Promise.all([
+					api.request(`/names/primary/${address}`),
+					api.request(`/names/address/${address}?limit=0&reverse=true`)
+				])
+
+				if (primaryRes?.name) primaryName = primaryRes.name
+				if (Array.isArray(namesRes)) allNames = namesRes
+			} catch (error) {
+				console.error('Failed to load account names', error)
+			}
+		}
+
+		const nextAccountInfo = {
+			...incoming,
+			primaryName: primaryName || '',
+			allNames: allNames || [],
+			names: Array.isArray(incoming.names) && incoming.names.length > 0 ? incoming.names : (allNames || [])
+		}
+
+		store.dispatch(doUpdateAccountInfo(nextAccountInfo))
 	},
 
 	getAccountInfo: async (req) => {
