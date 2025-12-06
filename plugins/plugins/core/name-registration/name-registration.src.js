@@ -443,10 +443,10 @@ class NameRegistration extends LitElement {
 		const fetchNames = async () => {
 			this.isLoading = true
 			try {
-			const [primaryRes, namesRes] = await Promise.all([
-				parentEpml.request('apiCall', { url: `/names/primary/${this.selectedAddress.address}` }).catch(() => ({})),
-				parentEpml.request('apiCall', { url: `/names/address/${this.selectedAddress.address}?limit=0&reverse=true` }).catch(() => [])
-			])
+				const [primaryRes, namesRes] = await Promise.all([
+					parentEpml.request('apiCall', { url: `/names/primary/${this.selectedAddress.address}` }).catch(() => ({})),
+					parentEpml.request('apiCall', { url: `/names/address/${this.selectedAddress.address}?limit=0&reverse=false` }).catch(() => [])
+				])
 
 			let names = Array.isArray(namesRes) ? namesRes : []
 			const primaryName = (primaryRes && primaryRes.name) ? primaryRes.name : ''

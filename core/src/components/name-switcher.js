@@ -23,6 +23,10 @@ class NameSwitcher extends connect(store)(LitElement) {
 				display: inline-block;
 			}
 
+			.anchor {
+				position: relative;
+			}
+
 			.switcher {
 				display: flex;
 				align-items: center;
@@ -70,8 +74,8 @@ class NameSwitcher extends connect(store)(LitElement) {
 				--mdc-menu-max-height: 60vh;
 				--mdc-menu-min-width: 220px;
 				--mdc-theme-surface: var(--sidetopbar);
-				--mdc-theme-on-surface: var(--nav-text-color);
-				color: var(--nav-text-color);
+				--mdc-theme-on-surface: var(--black);
+				color: var(--black);
 				background: var(--sidetopbar);
 			}
 
@@ -79,12 +83,18 @@ class NameSwitcher extends connect(store)(LitElement) {
 				display: flex;
 				align-items: center;
 				gap: 10px;
-				color: var(--nav-text-color);
+				color: var(--black);
+			}
+
+			.list-name-row {
+				display: flex;
+				align-items: center;
+				gap: 10px;
 			}
 
 			.list-avatar {
-				width: 28px;
-				height: 28px;
+				width: 24px;
+				height: 24px;
 				border-radius: 50%;
 				overflow: hidden;
 				display: flex;
@@ -128,26 +138,19 @@ class NameSwitcher extends connect(store)(LitElement) {
 
 	get namesList() {
 		const allNames = Array.isArray(this.accountInfo?.allNames) ? this.accountInfo.allNames : []
-		const active = this.accountInfo?.activeName || ''
 
 		if (!allNames.length) return []
 
-		const reordered = [...allNames]
-		if (active) {
-			const idx = reordered.findIndex(item => item?.name === active)
-			if (idx > 0) {
-				const [activeEntry] = reordered.splice(idx, 1)
-				reordered.unshift(activeEntry)
-			}
-		}
-
-		return reordered
+		return [...allNames]
 	}
 
 	openMenu() {
 		const menu = this.shadowRoot.getElementById('name-menu')
+		const anchor = this.shadowRoot.getElementById('switcher-button')
 		if (!menu) return
-		menu.anchor = this.shadowRoot.getElementById('switcher-button')
+		if (anchor) {
+			menu.anchorElement = anchor
+		}
 		menu.open = true
 	}
 
@@ -166,7 +169,7 @@ class NameSwitcher extends connect(store)(LitElement) {
 
 	renderAvatar(url, fallbackChar = '') {
 		if (url) {
-			return html`<img src="${url}" @error=${(e) => { e.target.style.display = 'none' }} />`
+			return html`<img src="${url}" @error=${(e) => { e.target.replaceWith(html`<mwc-icon>account_circle</mwc-icon>`) }} />`
 		}
 
 		return html`<mwc-icon>account_circle</mwc-icon>`
@@ -174,36 +177,38 @@ class NameSwitcher extends connect(store)(LitElement) {
 
 	render() {
 		return html`
-			<div class="switcher" id="switcher-button" @click=${() => this.openMenu()}>
-				<div class="avatar">
-					${this.renderAvatar(this.activeAvatarUrl)}
+			<div class="anchor">
+				<div class="switcher" id="switcher-button" @click=${() => this.openMenu()}>
+					<div class="avatar">
+						${this.renderAvatar(this.activeAvatarUrl)}
+					</div>
+					<div class="name">${this.displayName}</div>
 				</div>
-				<div class="name">${this.displayName}</div>
-			</div>
 
-			<mwc-menu
-				id="name-menu"
-				@closed=${() => { this.isMenuOpen = false }}
-				.anchor=${this.shadowRoot?.getElementById('switcher-button')}
-			>
-					${this.namesList.length === 0 ? html`
-						<mwc-list-item disabled>${pickAddress(this.accountInfo) || 'No Registered Name'}</mwc-list-item>
-					` : this.namesList.map((entry) => html`
-						<mwc-list-item
-							class="list-name"
-							?selected=${entry?.name === this.accountInfo?.activeName}
-							twoline
-							@click=${() => this.handleSelect(entry?.name)}
-						>
-							<span slot="graphic" class="list-avatar">
-								${entry?.name ? this.renderAvatar(this.avatarUrlFor(entry.name)) : html`<mwc-icon>account_circle</mwc-icon>`}
-							</span>
-							<span>${entry?.name || ''}</span>
-						</mwc-list-item>
-					`)}
-				</mwc-menu>
-			`
-		}
+				<mwc-menu
+					id="name-menu"
+					@closed=${() => { this.isMenuOpen = false }}
+				>
+						${this.namesList.length === 0 ? html`
+							<mwc-list-item disabled>${pickAddress(this.accountInfo) || 'No Registered Name'}</mwc-list-item>
+						` : this.namesList.map((entry) => html`
+							<mwc-list-item
+								class="list-name"
+								?selected=${entry?.name === this.accountInfo?.activeName}
+								@click=${() => this.handleSelect(entry?.name)}
+							>
+								<span class="list-name-row">
+									<span class="list-avatar">
+										${entry?.name ? this.renderAvatar(this.avatarUrlFor(entry.name)) : html`<mwc-icon>account_circle</mwc-icon>`}
+									</span>
+									<span>${entry?.name || ''}</span>
+								</span>
+							</mwc-list-item>
+						`)}
+					</mwc-menu>
+			</div>
+		`
+	}
 
 	avatarUrlFor(name) {
 		const node = this.nodeConfig?.knownNodes?.[this.nodeConfig?.node]
