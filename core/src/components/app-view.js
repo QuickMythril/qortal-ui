@@ -24,6 +24,7 @@ import './friends-view/core-sync-status'
 import './friends-view/friends-side-panel-parent'
 import './friends-view/profile'
 import './friends-view/save-settings-qdn'
+import './name-switcher'
 import './logout-view/logout-view'
 import './notification-view/notification-bell'
 import './notification-view/notification-bell-general'
@@ -278,6 +279,7 @@ class AppView extends connect(store)(LitElement) {
 							</div>
 							<div style="display:flex;align-items:center;gap:20px">
 								<beginner-checklist></beginner-checklist>
+								<name-switcher></name-switcher>
 								<profile-qdn></profile-qdn>
 								<friends-side-panel-parent></friends-side-panel-parent>
 								<notification-bell></notification-bell>
