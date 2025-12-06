@@ -380,7 +380,7 @@ class TradePortal extends LitElement {
 					<div style="padding-left: 20px; padding-top: 15px;">
 						${this.chartShowCoin()}
 					</div>
-					<div style="padding-left: 10px; padding-top: 12px;">
+					<div style="padding-left: 10px; padding-top: 15px;">
 						<mwc-button dense unelevated @click=${() => this.toggleShowNames()}>
 							${this.showNames ? 'Show Addresses' : 'Show Names'}
 						</mwc-button>
