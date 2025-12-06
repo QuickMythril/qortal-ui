@@ -460,51 +460,78 @@ class WebBrowser extends LitElement {
 				}
 					break
 
-				case actions.GET_PRIMARY_NAME: {
-					const address = (data && data.address) || (this.selectedAddress && this.selectedAddress.address)
-					if (!address) {
-						response = JSON.stringify({ error: "Missing address" })
-						break
-					}
-					try {
-						const res = await parentEpml.request('apiCall', {
-							type: 'api',
-							url: `/names/primary/${address}`
-						})
-						if (res && res.name) {
-							response = JSON.stringify({ name: res.name })
-						} else {
-							response = JSON.stringify({ name: "" })
+					case actions.GET_PRIMARY_NAME: {
+						const address = (data && data.address) || (this.selectedAddress && this.selectedAddress.address)
+						if (!address) {
+							response = JSON.stringify({ error: "Missing address" })
+							break
 						}
-					} catch (error) {
-						const errMsg = (error && error.message) ? error.message : "Unable to fetch primary name"
-						response = JSON.stringify({ error: errMsg })
-					}
-				}
-					break
+						try {
+								const state = window && window.parent && window.parent.reduxStore && typeof window.parent.reduxStore.getState === 'function'
+									? window.parent.reduxStore.getState()
+									: {}
+								const accountInfo = (state && state.app && state.app.accountInfo) ? state.app.accountInfo : {}
+								const activeName = accountInfo && accountInfo.activeName ? accountInfo.activeName : ''
+								const primaryFromState = accountInfo && accountInfo.primaryName ? accountInfo.primaryName : ''
 
-				case actions.GET_ACCOUNT_NAMES: {
-					const address = (data && data.address) || (this.selectedAddress && this.selectedAddress.address)
-					if (!address) {
-						response = JSON.stringify({ error: "Missing address" })
+							if (activeName) {
+								response = JSON.stringify({ name: activeName })
+								break
+							}
+
+							const res = await parentEpml.request('apiCall', {
+								type: 'api',
+								url: `/names/primary/${address}`
+							})
+								const primaryName = (res && res.name) ? res.name : (primaryFromState || '')
+								response = JSON.stringify({ name: primaryName })
+							} catch (error) {
+								const errMsg = (error && error.message) ? error.message : "Unable to fetch primary name"
+								response = JSON.stringify({ error: errMsg })
+							}
+					}
 						break
-					}
-					try {
-						const res = await parentEpml.request('apiCall', {
-							type: 'api',
-							url: `/names/address/${address}?limit=0&reverse=true`
-						})
-						if (Array.isArray(res)) {
-							const names = res.map(item => item.name)
-							response = JSON.stringify(names)
-						} else {
-							response = JSON.stringify([])
+
+					case actions.GET_ACCOUNT_NAMES: {
+						const address = (data && data.address) || (this.selectedAddress && this.selectedAddress.address)
+						if (!address) {
+							response = JSON.stringify({ error: "Missing address" })
+							break
 						}
-						} catch (error) {
-							const errMsg = (error && error.message) ? error.message : "Unable to fetch account names"
-							response = JSON.stringify({ error: errMsg })
+						try {
+								const state = window && window.parent && window.parent.reduxStore && typeof window.parent.reduxStore.getState === 'function'
+									? window.parent.reduxStore.getState()
+									: {}
+								const accountInfo = (state && state.app && state.app.accountInfo) ? state.app.accountInfo : {}
+								const activeName = accountInfo && accountInfo.activeName ? accountInfo.activeName : ''
+								let names = Array.isArray(accountInfo && accountInfo.allNames) ? accountInfo.allNames : []
+
+							if (!names.length) {
+								const res = await parentEpml.request('apiCall', {
+									type: 'api',
+									url: `/names/address/${address}?limit=0&reverse=false`
+								})
+								if (Array.isArray(res)) {
+									names = res
+								}
+							}
+
+								let namesList = Array.isArray(names) ? names.map(item => (item && item.name) ? item.name : item) : []
+
+							if (activeName) {
+								const idx = namesList.findIndex(n => n === activeName)
+								if (idx > 0) {
+									const [activeEntry] = namesList.splice(idx, 1)
+									namesList.unshift(activeEntry)
+								}
+							}
+
+							response = JSON.stringify(namesList)
+							} catch (error) {
+								const errMsg = (error && error.message) ? error.message : "Unable to fetch account names"
+								response = JSON.stringify({ error: errMsg })
+							}
 						}
-					}
 					break
 
 				case actions.ENCRYPT_DATA: {
