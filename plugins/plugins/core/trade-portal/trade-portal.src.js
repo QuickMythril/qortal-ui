@@ -13,6 +13,7 @@ import chartsarrr from './charts/arrr-charts'
 import Base58 from '../../../../crypto/api/deps/Base58'
 import '../components/TradeInfoView'
 import '../components/TraderInfoView'
+import { getUserNameFromAddress } from '../../utils/functions'
 import '@material/mwc-button'
 import '@material/mwc-textfield'
 import '@material/mwc-icon'
@@ -91,13 +92,14 @@ class TradePortal extends LitElement {
 			tradeStorageData: { type: String },
 			tradeLockScreenPass: { type: String },
 			tradeLockScreenSet: { type: String },
-			tradeLockPass: { type: String },
-			tradeLockSet: { type: String },
-			myTradeLockScreenPass: { type: String },
-			myTradeLockScreenSet: { type: String },
-			tradeHelperMessage: { type: String }
+				tradeLockPass: { type: String },
+				tradeLockSet: { type: String },
+				myTradeLockScreenPass: { type: String },
+				myTradeLockScreenSet: { type: String },
+				tradeHelperMessage: { type: String },
+				showNames: { type: Boolean }
+			}
 		}
-	}
 
 	static get styles() {
 		return [tradePortalStyles]
@@ -309,7 +311,55 @@ class TradePortal extends LitElement {
 		this.myTradeLockScreenPass = ''
 		this.myTradeLockScreenSet = ''
 		this.tradeHelperMessage = ''
+		this.showNames = this.loadShowNamesPreference()
+		this.nameCache = new Map()
 		this.pingCoinBalancesController = this.pingCoinBalancesController.bind(this)
+	}
+
+	loadShowNamesPreference() {
+		const pref = localStorage.getItem('tradePortalShowNames')
+		if (pref === 'false') return false
+		return true
+	}
+
+	toggleShowNames() {
+		this.showNames = !this.showNames
+		localStorage.setItem('tradePortalShowNames', this.showNames ? 'true' : 'false')
+		if (this.showNames) {
+			this.ensureOpenOrderNames(this.listedCoins.get(this.selectedCoin).openFilteredOrders)
+		}
+		this.requestUpdate()
+	}
+
+	async ensureOpenOrderNames(openOrders) {
+		if (!this.showNames || !Array.isArray(openOrders)) return
+		const addresses = new Set()
+		openOrders.forEach(order => {
+			if (order.qortalCreator) addresses.add(order.qortalCreator)
+			if (order.qortalCreatorTradeAddress) addresses.add(order.qortalCreatorTradeAddress)
+		})
+		const toFetch = Array.from(addresses).filter(addr => addr && !this.nameCache.has(addr))
+		if (toFetch.length === 0) return
+
+		try {
+			const results = await Promise.all(toFetch.map(async (addr) => {
+				const name = await getUserNameFromAddress(addr)
+				return { addr, name: name || addr }
+			}))
+			results.forEach(({ addr, name }) => this.nameCache.set(addr, name))
+			this.requestUpdate()
+		} catch (error) {
+			console.error('Failed to fetch names for open orders', error)
+		}
+	}
+
+	getDisplayIdentity(address) {
+		if (!address) return ''
+		if (!this.showNames) return address
+		const cached = this.nameCache.get(address)
+		if (cached) return cached
+		this.ensureOpenOrderNames(this.listedCoins.get(this.selectedCoin).openFilteredOrders)
+		return address
 	}
 
 	render() {
@@ -330,6 +380,11 @@ class TradePortal extends LitElement {
 					</div>
 					<div style="padding-left: 20px; padding-top: 15px;">
 						${this.chartShowCoin()}
+					</div>
+					<div style="padding-left: 10px; padding-top: 12px;">
+						<mwc-button dense unelevated @click=${() => this.toggleShowNames()}>
+							${this.showNames ? 'Show Addresses' : 'Show Names'}
+						</mwc-button>
 					</div>
 					<div style="padding-left: 10px; padding-top: 12px; color: var(--black);">
 						${this.renderTradeLockButton()}
@@ -767,15 +822,15 @@ class TradePortal extends LitElement {
 							<div class="loading"></div>
 							<span style="color: var(--black);">${translate("login.loading")}</span>
 						</div>
-						<vaadin-grid
-							multi-sort="true"
-							theme="compact column-borders row-stripes"
-							wrap-cell-content
-							id="openOrdersGrid"
-							aria-label="Open Orders"
-							.items="${this.listedCoins.get(this.selectedCoin).openFilteredOrders}"
-						>
-						${this.coinGridSelection()}
+							<vaadin-grid
+								multi-sort="true"
+								theme="compact column-borders row-stripes"
+								wrap-cell-content
+								id="openOrdersGrid"
+								aria-label="Open Orders"
+								.items="${this.listedCoins.get(this.selectedCoin).openFilteredOrders}"
+							>
+							${this.coinGridSelection()}
 							<vaadin-grid-column
 								auto-width
 								resizable
@@ -806,16 +861,16 @@ class TradePortal extends LitElement {
 								}}
 							>
 							</vaadin-grid-column>
-							<vaadin-grid-column
-								auto-width
-								resizable
-								header="${translate("tradepage.tchange13")}"
-								id="qortalCreatorColumn"
-								.renderer=${(root, column, data) => {
-									render(html`<span style="cursor: pointer;" @click="${() => this.clickHandler(data)}">${data.item.qortalCreator}</span>`, root)
-								}}
-							>
-							</vaadin-grid-column>
+								<vaadin-grid-column
+									auto-width
+									resizable
+									header="${translate("tradepage.tchange13")}"
+									id="qortalCreatorColumn"
+									.renderer=${(root, column, data) => {
+										render(html`<span style="cursor: pointer;" @click="${() => this.clickHandler(data)}">${this.getDisplayIdentity(data.item.qortalCreator)}</span>`, root)
+									}}
+								>
+								</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
@@ -2698,10 +2753,10 @@ class TradePortal extends LitElement {
 				case 'TRADE_BOT':
 					if (!message.isRestarted) this.processTradeBotStates(JSON.parse(message.data))
 					return null
-				case 'PRESENCE':
-					this.tradesPresenceCleaned = []
-					this.listedCoins.get(message.data.relatedCoin).openOrders = message.data.offers
-					this.tradesPresenceCleaned = message.data.filteredOffers
+					case 'PRESENCE':
+						this.tradesPresenceCleaned = []
+						this.listedCoins.get(message.data.relatedCoin).openOrders = message.data.offers
+						this.tradesPresenceCleaned = message.data.filteredOffers
 
 					const filterPresenceList = () => {
 						this.blockedTradesList.forEach(item => {
@@ -2712,12 +2767,13 @@ class TradePortal extends LitElement {
 						})
 					}
 
-					filterPresenceList()
-					this.listedCoins.get(message.data.relatedCoin).openFilteredOrders = this.tradesPresenceCleaned
-					this.reRenderOpenFilteredOrders()
-					if( this.selectedCoin != 'PIRATECHAIN') {
-						this.reSelectOpenOrders()
-					}
+						filterPresenceList()
+						this.listedCoins.get(message.data.relatedCoin).openFilteredOrders = this.tradesPresenceCleaned
+						this.ensureOpenOrderNames(this.listedCoins.get(message.data.relatedCoin).openFilteredOrders)
+						this.reRenderOpenFilteredOrders()
+						if( this.selectedCoin != 'PIRATECHAIN') {
+							this.reSelectOpenOrders()
+						}
 					return null
 				default:
 					break
