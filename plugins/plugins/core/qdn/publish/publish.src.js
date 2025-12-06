@@ -430,6 +430,11 @@ class PublishData extends LitElement {
 			registeredName = this.name
 		}
 
+		const availableNames = Array.isArray(this.names) ? this.names : []
+		if (!availableNames.includes(registeredName)) {
+			registeredName = availableNames[0] || registeredName
+		}
+
 		let file
 		let path
 
@@ -484,6 +489,7 @@ class PublishData extends LitElement {
 	async publishData(registeredName, path, file, service, identifier, preview, fee) {
 		this.loading = true
 		this.btnDisable = true
+		const ownedNames = Array.isArray(this.names) ? this.names : []
 
 		const validateName = async (receiverName) => {
 			return await parentEpml.request('apiCall', {
@@ -515,6 +521,10 @@ class PublishData extends LitElement {
 		}
 
 		const validate = async () => {
+			if (!ownedNames.includes(registeredName)) {
+				throw new Error(get("publishpage.pchange14"))
+			}
+
 			let validNameRes = await validateName(registeredName)
 
 			if (validNameRes.error) {

@@ -28,7 +28,7 @@
   - [x] "Populate publish dropdown with allNames": In `qdn/publish/publish.src.js`, populate dropdown with `allNames` (default `activeName || primaryName`).
   - [x] "Remove single-name TODO in publish": Remove hardcoded single-option TODO; show all owned names.
   - [x] "Validate selected publish name ownership": Validate selected name is in `allNames`; fall back to `activeName || primaryName` if none selected.
-  - [ ] "Use primary/all names in other publish flows": Other publish flows using `myRegisteredName` load from `activeName || primaryName` and surface `allNames` where relevant.
+  - [x] "Use primary/all names in other publish flows": Other publish flows using `myRegisteredName` load from `activeName || primaryName` and surface `allNames` where relevant.
 
 - [ ] Other-user lookups aligned to primary name
   - [ ] "Update lookup helpers to use /names/primary": Update chat/UI lookup helpers (`ChatPage#getName`, `functions.js#getUserNameFromAddress`, `classes.js#getNameInfo`, user-info/address book) to use `/names/primary/<address>` first, then `/names/address`, then address.
