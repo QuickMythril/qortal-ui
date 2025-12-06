@@ -436,11 +436,12 @@ class LoginSection extends connect(store)(LitElement) {
 				if (this.isEmptyArray(this.names)) {
 					this.namesAvatar = html`<mwc-icon id='accountIcon' style="padding-bottom: 24px; color: var(--black);">account_circle</mwc-icon>`
 				} else {
-					const url = `${avatarUrl}/arbitrary/THUMBNAIL/${this.names[0].name}/qortal_avatar?async=true`
+					const displayName = this.names[0].name
+					const url = `${avatarUrl}/arbitrary/THUMBNAIL/${displayName}/qortal_avatar?async=true`
 					this.namesAvatar = html`
 						<img style="width: 48px; height: 48px; border-radius: 25%; padding-bottom: 16px;" src="${url}" onerror="this.src='/img/incognito.png';" />
 						<br>
-						<span style="font-size:16px; font-weight: 400; font-family: 'Roboto Mono', monospace; color: var(--black);">${this.names[0].name}</span>
+						<span style="font-size:16px; font-weight: 400; font-family: 'Roboto Mono', monospace; color: var(--black);">${displayName}</span>
 						<br>
 					`
 				}
