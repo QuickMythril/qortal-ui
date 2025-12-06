@@ -433,10 +433,12 @@ class LoginSection extends connect(store)(LitElement) {
 				return response.json()
 			}).then(data => {
 				this.names = data
-				if (this.isEmptyArray(this.names)) {
+				const primaryUrl = `${avatarUrl}/names/primary/${renderAddress}`
+				const primaryRes = await fetch(primaryUrl).then(r => r.json()).catch(() => ({}))
+				const displayName = primaryRes?.name || (this.names[0]?.name || '')
+				if (!displayName) {
 					this.namesAvatar = html`<mwc-icon id='accountIcon' style="padding-bottom: 24px; color: var(--black);">account_circle</mwc-icon>`
 				} else {
-					const displayName = this.names[0].name
 					const url = `${avatarUrl}/arbitrary/THUMBNAIL/${displayName}/qortal_avatar?async=true`
 					this.namesAvatar = html`
 						<img style="width: 48px; height: 48px; border-radius: 25%; padding-bottom: 16px;" src="${url}" onerror="this.src='/img/incognito.png';" />
