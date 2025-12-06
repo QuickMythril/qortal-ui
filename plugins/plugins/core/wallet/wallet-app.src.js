@@ -34,6 +34,7 @@ import '@vaadin/tabsheet'
 
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../core/translate'
+import { getUserNameFromAddress } from '../../utils/functions'
 registerTranslateConfig({
 	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
 })
@@ -134,7 +135,8 @@ class MultiWallet extends LitElement {
 			searchOffset: { type: Number },
 			searchLimit: { type: Number },
 			counter: { type: Number },
-			pageButtonsHidden: { type: Boolean }
+			pageButtonsHidden: { type: Boolean },
+			showNames: { type: Boolean }
 		}
 	}
 
@@ -247,6 +249,8 @@ class MultiWallet extends LitElement {
 		this.searchLimit = 10
 		this.counter = 1
 		this.pageButtonsHidden = false
+		this.showNames = this.loadShowNamesPreference()
+		this.nameCache = new Map()
 		this.wallets = new Map()
 
 		let coinProp = {
@@ -300,6 +304,55 @@ class MultiWallet extends LitElement {
 		})
 
 		this.pingCoinBalancesController = this.pingCoinBalancesController.bind(this)
+	}
+
+	loadShowNamesPreference() {
+		const pref = localStorage.getItem('walletTxShowNames')
+		if (pref === 'false') return false
+		return true
+	}
+
+	toggleShowNames() {
+		this.showNames = !this.showNames
+		localStorage.setItem('walletTxShowNames', this.showNames ? 'true' : 'false')
+		if (this.showNames) {
+			this.ensureNamesForTransactions(this.wallets.get('qort').transactions)
+		}
+	}
+
+	async ensureNamesForTransactions(transactions) {
+		if (!this.showNames || !Array.isArray(transactions)) return
+		const addresses = new Set()
+		transactions.forEach(tx => {
+			if (tx.creatorAddress) addresses.add(tx.creatorAddress)
+			if (tx.recipient) addresses.add(tx.recipient)
+			if (tx.atAddress) addresses.add(tx.atAddress)
+			if (tx.aTAddress) addresses.add(tx.aTAddress)
+		})
+		const toFetch = Array.from(addresses).filter(addr => addr && !this.nameCache.has(addr))
+		if (toFetch.length === 0) return
+
+		try {
+			const results = await Promise.all(toFetch.map(async (addr) => {
+				const name = await getUserNameFromAddress(addr)
+				return { addr, name: name || addr }
+			}))
+			results.forEach(({ addr, name }) => {
+				this.nameCache.set(addr, name)
+			})
+			this.requestUpdate()
+		} catch (error) {
+			console.error('Failed to fetch names for transactions', error)
+		}
+	}
+
+	getDisplayIdentity(address) {
+		if (!address) return ''
+		if (!this.showNames) return address
+		const cached = this.nameCache.get(address)
+		if (cached) return cached
+		this.ensureNamesForTransactions(this.wallets.get('qort').transactions)
+		return address
 	}
 
 	refreshWallet() {
@@ -4989,6 +5042,7 @@ class MultiWallet extends LitElement {
 	renderQortTransactions(transactions, coin) {
 		const requiredConfirmations = 3
 		const currentBlockHeight = window.parent.reduxStore.getState().app.blockInfo.height
+		this.ensureNamesForTransactions(this.wallets.get('qort').transactions)
 		if (Array.isArray(transactions)) {
 			transactions = transactions.map(tx => {
 				tx.confirmations = (currentBlockHeight - (tx.blockHeight - 1)) || ''
@@ -5034,21 +5088,23 @@ class MultiWallet extends LitElement {
 				>
 				</vaadin-grid-column>
 				<vaadin-grid-column
-					auto-width
-					header="${translate("walletpage.wchange9")}"
-					.renderer=${(root, column, data) => {
-						render(html`${data.item.type === 'AT' ? html`${data.item.atAddress}` : html`${data.item.creatorAddress}`}`, root)
-					}}
-				>
-				</vaadin-grid-column>
-				<vaadin-grid-column
-					auto-width
-					header="${translate("walletpage.wchange10")}"
-					.renderer=${(root, column, data) => {
-						render(html`${data.item.type === 'DEPLOY_AT' ? html`${data.item.aTAddress}` : html`${data.item.recipient}`}`, root)
-					}}
-				>
-				</vaadin-grid-column>
+						auto-width
+						header="${translate("walletpage.wchange9")}"
+						.renderer=${(root, column, data) => {
+							const address = data.item.type === 'AT' ? data.item.atAddress : data.item.creatorAddress
+							render(html`${this.getDisplayIdentity(address)}`, root)
+						}}
+					>
+					</vaadin-grid-column>
+					<vaadin-grid-column
+						auto-width
+						header="${translate("walletpage.wchange10")}"
+						.renderer=${(root, column, data) => {
+							const address = data.item.type === 'DEPLOY_AT' ? data.item.aTAddress : data.item.recipient
+							render(html`${this.getDisplayIdentity(address)}`, root)
+						}}
+					>
+					</vaadin-grid-column>
 				<vaadin-grid-column auto-width header="${translate("walletpage.wchange36")}" path="fee"></vaadin-grid-column>
 				<vaadin-grid-column auto-width header="${translate("walletpage.wchange11")}" path="amount"></vaadin-grid-column>
 				<vaadin-grid-column
@@ -5063,20 +5119,23 @@ class MultiWallet extends LitElement {
 				>
 				</vaadin-grid-column>
 			</vaadin-grid>
-			<div style="margin-top: 10px;">
-				<vaadin-button theme="primary small" style="cursor: pointer;" ?hidden="${this.pageButtonsHidden}" @click=${() => this.goBackwardTX()}>
-					<< <span style="text-transform: uppercase; font-size: 14px;">${translate("general.back")}</span>
-				</vaadin-button>
-				<span style="color: var(--black); font-size: 16px; font-weight: 600;">&nbsp;${translate("general.page")} ${this.counter}&nbsp;</span>
-				<vaadin-button theme="primary small" style="cursor: pointer;" ?hidden="${this.wallets.get(this._selectedWallet).transactions.length < 10 || this.pageButtonsHidden}" @click=${() => this.goForwardTX()}>
-					<span style="text-transform: uppercase; font-size: 14px;">${translate("general.next")}</span> >>
-				</vaadin-button>
-				<div style="float: right;">
-					<vaadin-button theme="primary small" style="cursor: pointer;" @click=${() => this.showAllTX()}>
-						<span style="text-transform: uppercase; font-size: 14px;">${translate("general.view")} ${translate("general.all")}</span>
+				<div style="margin-top: 10px;">
+					<vaadin-button theme="primary small" style="cursor: pointer;" ?hidden="${this.pageButtonsHidden}" @click=${() => this.goBackwardTX()}>
+						<< <span style="text-transform: uppercase; font-size: 14px;">${translate("general.back")}</span>
 					</vaadin-button>
+					<span style="color: var(--black); font-size: 16px; font-weight: 600;">&nbsp;${translate("general.page")} ${this.counter}&nbsp;</span>
+					<vaadin-button theme="primary small" style="cursor: pointer;" ?hidden="${this.wallets.get(this._selectedWallet).transactions.length < 10 || this.pageButtonsHidden}" @click=${() => this.goForwardTX()}>
+						<span style="text-transform: uppercase; font-size: 14px;">${translate("general.next")}</span> >>
+					</vaadin-button>
+					<div style="float: right;">
+						<vaadin-button theme="primary small" style="cursor: pointer; margin-right: 8px;" @click=${() => this.toggleShowNames()}>
+							<span style="text-transform: uppercase; font-size: 14px;">${this.showNames ? 'Show Addresses' : 'Show Names'}</span>
+						</vaadin-button>
+						<vaadin-button theme="primary small" style="cursor: pointer;" @click=${() => this.showAllTX()}>
+							<span style="text-transform: uppercase; font-size: 14px;">${translate("general.view")} ${translate("general.all")}</span>
+						</vaadin-button>
+					</div>
 				</div>
-			</div>
 		`
 	}
 
