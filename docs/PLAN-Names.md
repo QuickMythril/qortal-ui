@@ -2,9 +2,9 @@
 
 - [ ] Expose name endpoints to apps (qortalRequest)
   - [x] "Add primary/account name actions": Add `GET_PRIMARY_NAME` and `GET_ACCOUNT_NAMES` to `plugins/plugins/core/components/qdn-action-constants.js` and `qdn-action-types.js`.
-  - [ ] "Handle name actions in browser bridge": Implement handlers in `plugins/plugins/core/qdn/browser/browser.src.js`:
-    - [ ] "Add GET_PRIMARY_NAME handler": `GET_PRIMARY_NAME`: call `/names/primary/<address>` (payload or selected address) via `parentEpml.request('apiCall', …)` and return `{ name }` or `''`.
-    - [ ] "Add GET_ACCOUNT_NAMES handler": `GET_ACCOUNT_NAMES`: call `/names/address/<address>?limit=0&reverse=true` and return array of names.
+  - [x] "Handle name actions in browser bridge": Implement handlers in `plugins/plugins/core/qdn/browser/browser.src.js`:
+    - [x] "Add GET_PRIMARY_NAME handler": `GET_PRIMARY_NAME`: call `/names/primary/<address>` (payload or selected address) via `parentEpml.request('apiCall', …)` and return `{ name }` or `''`.
+    - [x] "Add GET_ACCOUNT_NAMES handler": `GET_ACCOUNT_NAMES`: call `/names/address/<address>?limit=0&reverse=true` and return array of names.
   - [ ] "Expose name actions in SHOW_ACTIONS": Update any app-facing lists (e.g., `SHOW_ACTIONS`) to include the new actions.
 
 - [ ] Core helpers for primary + all names

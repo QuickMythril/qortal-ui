@@ -460,6 +460,51 @@ class WebBrowser extends LitElement {
 				}
 					break
 
+				case actions.GET_PRIMARY_NAME: {
+					const address = data?.address || this.selectedAddress?.address
+					if (!address) {
+						response = JSON.stringify({ error: "Missing address" })
+						break
+					}
+					try {
+						const res = await parentEpml.request('apiCall', {
+							type: 'api',
+							url: `/names/primary/${address}`
+						})
+						if (res?.name) {
+							response = JSON.stringify({ name: res.name })
+						} else {
+							response = JSON.stringify({ name: "" })
+						}
+					} catch (error) {
+						response = JSON.stringify({ error: error?.message || "Unable to fetch primary name" })
+					}
+				}
+					break
+
+				case actions.GET_ACCOUNT_NAMES: {
+					const address = data?.address || this.selectedAddress?.address
+					if (!address) {
+						response = JSON.stringify({ error: "Missing address" })
+						break
+					}
+					try {
+						const res = await parentEpml.request('apiCall', {
+							type: 'api',
+							url: `/names/address/${address}?limit=0&reverse=true`
+						})
+						if (Array.isArray(res)) {
+							const names = res.map(item => item.name)
+							response = JSON.stringify(names)
+						} else {
+							response = JSON.stringify([])
+						}
+					} catch (error) {
+						response = JSON.stringify({ error: error?.message || "Unable to fetch account names" })
+					}
+				}
+					break
+
 				case actions.ENCRYPT_DATA: {
 					try {
 						let dataSentBack = {}
