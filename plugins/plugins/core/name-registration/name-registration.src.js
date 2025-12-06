@@ -18,6 +18,7 @@ import '@vaadin/icon'
 import '@vaadin/icons'
 import '@vaadin/text-field'
 import { Buffer } from 'buffer'
+import { mapNameErrorMessage } from '../../utils/functions'
 
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../core/translate'
@@ -808,7 +809,7 @@ class NameRegistration extends LitElement {
 				getTxnRequestResponse(myTransaction)
 			} else {
 				this.error = true
-				this.message = this.renderFailText()
+				this.message = mapNameErrorMessage(nameInfo.message) || this.renderFailText()
 			}
 		}
 
@@ -833,14 +834,14 @@ class NameRegistration extends LitElement {
 		const getTxnRequestResponse = (txnResponse) => {
 			if (txnResponse.success === false && txnResponse.message) {
 				this.error = true
-				this.message = txnResponse.message
+				this.message = mapNameErrorMessage(txnResponse.message)
 				throw new Error(txnResponse)
 			} else if (txnResponse.success === true && !txnResponse.data.error) {
 				this.message = this.renderSuccessText()
 				this.error = false
 			} else {
 				this.error = true
-				this.message = txnResponse.data.message
+				this.message = mapNameErrorMessage(txnResponse.data.message)
 				throw new Error(txnResponse)
 			}
 		}
@@ -892,7 +893,7 @@ class NameRegistration extends LitElement {
 				getTxnRequestResponse(myTransaction)
 			} else {
 				this.error = true
-				this.message = this.renderFailText()
+				this.message = mapNameErrorMessage(nameInfo.message) || this.renderFailText()
 			}
 		}
 
@@ -925,14 +926,14 @@ class NameRegistration extends LitElement {
 		const getTxnRequestResponse = (txnResponse) => {
 			if (txnResponse.success === false && txnResponse.message) {
 				this.error = true
-				this.message = txnResponse.message
+				this.message = mapNameErrorMessage(txnResponse.message)
 				throw new Error(txnResponse)
 			} else if (txnResponse.success === true && !txnResponse.data.error) {
 				this.message = this.renderSuccessUpdateText()
 				this.error = false
 			} else {
 				this.error = true
-				this.message = txnResponse.data.message
+				this.message = mapNameErrorMessage(txnResponse.data.message)
 				throw new Error(txnResponse)
 			}
 		}

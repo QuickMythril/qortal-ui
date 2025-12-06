@@ -108,6 +108,12 @@ export const getMyNameFromStore = (opts = {}) => {
 	}
 }
 
+export const mapNameErrorMessage = (msg) => {
+	if (!msg) return 'Name request failed'
+	if (msg.includes('TEMPORARY_DISABLED')) return 'Name registration is temporarily disabled'
+	return msg
+}
+
 export const replaceMessagesEdited = async ({ decodedMessages, parentEpml, isReceipient, decodeMessageFunc, _publicKey, symKeys, addToUpdateMessageHashmap }) => {
 	const MAX_CONCURRENT_REQUESTS = 5 // Maximum number of concurrent requests
 
