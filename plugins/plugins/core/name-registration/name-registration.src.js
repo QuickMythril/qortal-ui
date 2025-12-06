@@ -119,37 +119,12 @@ class NameRegistration extends LitElement {
 				<p style="margin: 4px 0; color: var(--black); font-size: 13px;">
 					Note: the Core primary name is fixed; the UI will let you pick an active name later for display without changing your primary.
 				</p>
-				<div class="divCard">
-					<h3 style="margin: 0; margin-bottom: 1em; text-align: center;">${translate("registernamepage.nchange3")}</h3>
-					<vaadin-grid theme="large" id="namesGrid" ?hidden="${this.isEmptyArray(this.names)}" aria-label="Names" .items="${this.names}" all-rows-visible>
-						<vaadin-grid-column width="5rem" flex-grow="0" header="${translate("registernamepage.nchange4")}" .renderer=${(root, column, data) => {
-						render(html`${this.renderAvatar(data.item)}`, root)
-						}}></vaadin-grid-column>
-						<vaadin-grid-column header="${translate("registernamepage.nchange5")}" path="name"></vaadin-grid-column>
-						<vaadin-grid-column header="${translate("registernamepage.nchange6")}" path="owner"></vaadin-grid-column>
-						<vaadin-grid-column width="14rem" flex-grow="0" header="${translate("registernamepage.nchange7")}" .renderer=${(root, column, data) => {
-						render(html`${this.renderAvatarButton(data.item)}`, root)
-						}}></vaadin-grid-column>
-						<vaadin-grid-column width="14rem" flex-grow="0" .renderer=${(root, column, data) => {
-						render(html`${this.renderUpdateNameButton(data.item)}`, root)
-						}}></vaadin-grid-column>
-						<vaadin-grid-column width="14rem" flex-grow="0" .renderer=${(root, column, data) => {
-						if (this.marketSellNames.some(e => e.owner === this.selectedAddress.address)) {
-						render(html`${this.renderCancelSellNameButton(data.item)}`, root)
-						} else {
-						render(html`${this.renderSellNameButton(data.item)}`, root)
-						}
-						}}></vaadin-grid-column>
-					</vaadin-grid>
-					${(this.isEmptyArray(this.names) && !this.isLoading) ? html`
-					<span style="color: var(--black);">${translate("registernamepage.nchange8")}</span>
-					`: ''}
-					${this.isLoading ? html`
-					<div class="spinner">
-						<paper-spinner-lite active></paper-spinner-lite>
+					<div class="divCard">
+						<h3 style="margin: 0; margin-bottom: 0.5em; text-align: center;">Primary Name</h3>
+						${this.renderPrimaryNameSection()}
+						<h3 style="margin: 1.5em 0 0.5em 0; text-align: center;">Additional Names</h3>
+						${this.renderAdditionalNamesSection()}
 					</div>
-					` : ''}
-				</div>
 				<mwc-dialog id="registerNameDialog" scrimClickAction="${this.registerNameLoading ? '' : 'close'}">
 					<div style="text-align:center">
 						<h1>${translate("registernamepage.nchange9")}</h1>
@@ -601,6 +576,61 @@ class NameRegistration extends LitElement {
 
 	renderFailText() {
 		return html`${translate('registernamepage.nchange17')}`
+	}
+
+	renderPrimaryNameSection() {
+		if (!this.primaryName || this.isEmptyArray(this.names)) {
+			return html`<span style="color: var(--black);">${translate("registernamepage.nchange8")}</span>`
+		}
+		const primaryEntry = this.names.find(n => n.name === this.primaryName) || this.names[0]
+		if (!primaryEntry) {
+			return html`<span style="color: var(--black);">${translate("registernamepage.nchange8")}</span>`
+		}
+		return html`
+			<vaadin-grid theme="large" aria-label="Primary Name" .items="${[primaryEntry]}" all-rows-visible>
+				${this.renderNameColumns()}
+			</vaadin-grid>
+		`
+	}
+
+	renderAdditionalNamesSection() {
+		const additional = this.names.filter(n => n.name !== this.primaryName)
+		if (this.isEmptyArray(additional)) {
+			return html`<span style="color: var(--black);">${translate("registernamepage.nchange8")}</span>`
+		}
+		return html`
+			<vaadin-grid theme="large" aria-label="Additional Names" .items="${additional}" all-rows-visible>
+				${this.renderNameColumns()}
+			</vaadin-grid>
+		`
+	}
+
+	renderNameColumns() {
+		return html`
+			<vaadin-grid-column width="5rem" flex-grow="0" header="${translate("registernamepage.nchange4")}" .renderer=${(root, column, data) => {
+				render(html`${this.renderAvatar(data.item)}`, root)
+			}}></vaadin-grid-column>
+			<vaadin-grid-column header="${translate("registernamepage.nchange5")}" path="name"></vaadin-grid-column>
+			<vaadin-grid-column header="${translate("registernamepage.nchange6")}" path="owner"></vaadin-grid-column>
+			<vaadin-grid-column width="14rem" flex-grow="0" header="${translate("registernamepage.nchange7")}" .renderer=${(root, column, data) => {
+				render(html`${this.renderAvatarButton(data.item)}`, root)
+			}}></vaadin-grid-column>
+			<vaadin-grid-column width="14rem" flex-grow="0" .renderer=${(root, column, data) => {
+				render(html`${this.renderUpdateNameButton(data.item)}`, root)
+			}}></vaadin-grid-column>
+			<vaadin-grid-column width="14rem" flex-grow="0" .renderer=${(root, column, data) => {
+				const isPrimaryName = data.item.name === this.primaryName
+				const hasMultipleNames = (this.names || []).length > 1
+				const primaryBlocked = isPrimaryName && hasMultipleNames
+				if (this.marketSellNames.some(e => e.owner === this.selectedAddress.address)) {
+					render(html`${this.renderCancelSellNameButton(data.item)}`, root)
+				} else if (primaryBlocked) {
+					render(html`<mwc-button class="green" disabled title="Primary name cannot be sold while you have other names"><mwc-icon>sell</mwc-icon>&nbsp;${translate('registernamepage.nchange19')}</mwc-button>`, root)
+				} else {
+					render(html`${this.renderSellNameButton(data.item)}`, root)
+				}
+			}}></vaadin-grid-column>
+		`
 	}
 
 	renderAvatar(nameObj) {
