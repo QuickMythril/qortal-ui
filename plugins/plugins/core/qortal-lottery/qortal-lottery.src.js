@@ -2,6 +2,7 @@ import { html, LitElement } from 'lit'
 import { render } from 'lit/html.js'
 import { Epml } from '../../../epml'
 import { qortalLotteryStyles } from '../components/plugins-css'
+import { getUserNameFromAddress } from '../../utils/functions'
 import isElectron from 'is-electron'
 import '@material/mwc-button'
 import '@material/mwc-dialog'
@@ -406,28 +407,17 @@ class QortalLottery extends LitElement {
 						const tstartblock = item2.blockHeight
 						const tdescription = item2.description
 						parentEpml.request('apiCall', {
-							url: `/names/address/${twinner}?limit=0&reverse=true`
+							url: `/names/primary/${twinner}`
 						}).then(res => {
-							if (res.length) {
-								const winName = res[0].name
-								const obj = {
-									description: tdescription,
-									startblock: tstartblock,
-									endblock: tendblock,
-									winner: winName,
-									jackpot: tjackpot
-								}
-								prepareClosedLotteriesArray.push(obj)
-							} else {
-								const obj = {
-									description: tdescription,
-									startblock: tstartblock,
-									endblock: tendblock,
-									winner: twinner,
-									jackpot: tjackpot
-								}
-								prepareClosedLotteriesArray.push(obj)
+							const winName = res?.name || ''
+							const obj = {
+								description: tdescription,
+								startblock: tstartblock,
+								endblock: tendblock,
+								winner: winName || twinner,
+								jackpot: tjackpot
 							}
+							prepareClosedLotteriesArray.push(obj)
 						})
 					})
 				})
@@ -740,19 +730,8 @@ class QortalLottery extends LitElement {
 		}
 
 		const getName = async (recipient) => {
-			try {
-				const getNames = await parentEpml.request("apiCall", {
-					type: "api",
-					url: `/names/address/${recipient}`,
-				})
-				if (getNames?.length > 0) {
-					return getNames[0].name
-				} else {
-					return ''
-				}
-			} catch (error) {
-				return ""
-			}
+			const resolved = await getUserNameFromAddress(recipient)
+			return resolved || ''
 		}
 
 		const makeTransactionRequest = async (receiver, lastRef) => {

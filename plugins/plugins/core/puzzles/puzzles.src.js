@@ -16,6 +16,7 @@ import '@vaadin/grid'
 
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../core/translate'
+import { getUserNameFromAddress } from '../../utils/functions'
 registerTranslateConfig({
 	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
 })
@@ -187,13 +188,8 @@ class Puzzles extends LitElement {
 		}
 
 		const getName = async (memberAddress) => {
-			let _names = await parentEpml.request('apiCall', {
-				url: `/names/address/${memberAddress}`
-			})
-
-			if (_names.length === 0) return ''
-
-			return _names[0].name
+			const resolved = await getUserNameFromAddress(memberAddress)
+			return resolved || ''
 		}
 
 		const getNameInfo = async (name) => {

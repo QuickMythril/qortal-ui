@@ -1,6 +1,7 @@
 import { html, LitElement } from 'lit'
 import { render } from 'lit/html.js'
 import { traderInfoViewStyles } from './plugins-css'
+import { getUserNameFromAddress } from '../../utils/functions'
 import '@material/mwc-button'
 import '@material/mwc-icon'
 import '@polymer/paper-dialog/paper-dialog.js'
@@ -1139,22 +1140,10 @@ class TraderInfoView extends LitElement {
 	async getAddressUserAvatar(avatarAddress) {
 		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-		const nameUrl = `${nodeUrl}/names/address/${avatarAddress}?limit=0&reverse=true`
+		const resolvedName = await getUserNameFromAddress(avatarAddress)
 
-		await fetch(nameUrl).then(res => {
-			return res.json()
-		}).then(jsonRes => {
-			if (jsonRes.length) {
-				jsonRes.map(item => {
-					this.infoAccountName = item.name
-					this.imageName = item.name
-				})
-			} else {
-				this.infoAccountName = get("chatpage.cchange15")
-				this.imageName = avatarAddress
-			}
-		})
-
+		this.infoAccountName = resolvedName || get("chatpage.cchange15")
+		this.imageName = resolvedName || avatarAddress
 		this.imageUrl = `${nodeUrl}/arbitrary/THUMBNAIL/${this.imageName}/qortal_avatar?async=true}`
 	}
 

@@ -1,5 +1,6 @@
 import { html, LitElement } from 'lit'
 import { tradeInfoViewStyles } from './plugins-css'
+import { getUserNameFromAddress } from '../../utils/functions'
 import './TraderInfoView'
 import '@polymer/paper-dialog/paper-dialog.js'
 
@@ -184,22 +185,10 @@ class TradeInfoView extends LitElement {
 		this.infoSellerName = ''
 		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-		const sellerNameUrl = `${nodeUrl}/names/address/${seller}?limit=0&reverse=true`
+		const sellerName = await getUserNameFromAddress(seller)
 
-		await fetch(sellerNameUrl).then(res => {
-			return res.json()
-		}).then(jsonRes => {
-			if (jsonRes.length) {
-				jsonRes.map(item => {
-					this.infoSellerName = item.name
-					this.sellerImageName = item.name
-				})
-			} else {
-				this.infoSellerName = get("chatpage.cchange15")
-				this.sellerImageName = seller
-			}
-		})
-
+		this.infoSellerName = sellerName || get("chatpage.cchange15")
+		this.sellerImageName = sellerName || seller
 		this.sellerImage = `${nodeUrl}/arbitrary/THUMBNAIL/${this.sellerImageName}/qortal_avatar?async=true}`
 	}
 
@@ -208,22 +197,10 @@ class TradeInfoView extends LitElement {
 		this.infoBuyerName = ''
 		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-		const buyerNameUrl = `${nodeUrl}/names/address/${buyer}?limit=0&reverse=true`
+		const buyerName = await getUserNameFromAddress(buyer)
 
-		await fetch(buyerNameUrl).then(res => {
-			return res.json()
-		}).then(jsonRes => {
-			if (jsonRes.length) {
-				jsonRes.map(item => {
-					this.infoBuyerName = item.name
-					this.buyerImageName = item.name
-				})
-			} else {
-				this.infoBuyerName = get("chatpage.cchange15")
-				this.buyerImageName = seller
-			}
-		})
-
+		this.infoBuyerName = buyerName || get("chatpage.cchange15")
+		this.buyerImageName = buyerName || buyer
 		this.buyerImage = `${nodeUrl}/arbitrary/THUMBNAIL/${this.buyerImageName}/qortal_avatar?async=true`
 	}
 

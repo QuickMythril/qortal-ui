@@ -21,14 +21,14 @@
 - [ ] Surfaces that assume a single name (use primaryName with fallback)
   - [x] "Update chat UI name usage": Chat UI components (`ChatPage.js`, `ChatRightPanelResources`, `ChatGroupManager`, `ChatGifs`, `q-chat`, placeholders) use `activeName || primaryName || names[0]?.name || address`.
   - [x] "Update profile/avatar name usage": Profile/avatars (`wallet-profile.js`, `overview-page.src.js`, `settings account-view.js`, `user-info-view.js`, `qortal-info-view.js`, notification bell) use `activeName || primaryName || names[0]?.name || address`; when avatar image fails or name is missing, show first letter fallback (preserve original casing/character) and keep incognito as last resort; when name+address are shown together and no name exists, display “No registered name”.
-  - [ ] "Update trade/tip/info name usage": Trade/tip/info (`TipUser.js`, `TradeInfoView.js`, `TraderInfoView.js`, `sponsorship-list`, `puzzles`, `qortal-lottery`, `group-management`) use primaryName.
-  - [ ] "Use primary name for avatar URLs": Avatar URL builders use `primaryName` when present.
+  - [x] "Update trade/tip/info name usage": Trade/tip/info (`TipUser.js`, `TradeInfoView.js`, `TraderInfoView.js`, `sponsorship-list`, `puzzles`, `qortal-lottery`, `group-management`) use `activeName || primaryName || names[0]?.name || address`.
+  - [ ] "Use active name for avatar URLs": Avatar URL builders use `activeName || primaryName` when present.
 
 - [ ] Publishing flows (support multiple names + ownership validation)
-  - [ ] "Populate publish dropdown with allNames": In `qdn/publish/publish.src.js`, populate dropdown with `allNames` (default `primaryName`).
+  - [ ] "Populate publish dropdown with allNames": In `qdn/publish/publish.src.js`, populate dropdown with `allNames` (default `activeName || primaryName`).
   - [ ] "Remove single-name TODO in publish": Remove hardcoded single-option TODO; show all owned names.
-  - [ ] "Validate selected publish name ownership": Validate selected name is in `allNames`; fall back to `primaryName` if none selected.
-  - [ ] "Use primary/all names in other publish flows": Other publish flows using `myRegisteredName` load from `primaryName` and surface `allNames` where relevant.
+  - [ ] "Validate selected publish name ownership": Validate selected name is in `allNames`; fall back to `activeName || primaryName` if none selected.
+  - [ ] "Use primary/all names in other publish flows": Other publish flows using `myRegisteredName` load from `activeName || primaryName` and surface `allNames` where relevant.
 
 - [ ] Other-user lookups aligned to primary name
   - [ ] "Update lookup helpers to use /names/primary": Update chat/UI lookup helpers (`ChatPage#getName`, `functions.js#getUserNameFromAddress`, `classes.js#getNameInfo`, user-info/address book) to use `/names/primary/<address>` first, then `/names/address`, then address.
@@ -47,8 +47,8 @@
   - [ ] "Explain primary/active differences": Add UX copy (e.g., in Name Registration plugin) explaining core primary rules and how UI activeName differs.
 
 - [ ] Validation and smoke tests
-  - [ ] "Test publish modal with multiple names": Publish modal shows all owned names, defaults to primary, rejects non-owned name.
-  - [ ] "Check chat/avatar name display": Chat headers/placeholders and avatars show primary names consistently.
+  - [ ] "Test publish modal with multiple names": Publish modal shows all owned names, defaults to active/primary, rejects non-owned name.
+  - [ ] "Check chat/avatar name display": Chat headers/placeholders and avatars show active/primary names consistently.
   - [ ] "Verify name registration polling results": Name registration polling populates `primaryName` + `allNames`.
   - [ ] "Test qortalRequest name actions": qortalRequest responds to `GET_PRIMARY_NAME`/`GET_ACCOUNT_NAMES` with expected data.
 

@@ -23,6 +23,7 @@ import '@vaadin/text-field'
 
 // Multi language support
 import {get, registerTranslateConfig, translate, use} from '../../../../core/translate'
+import { getUserNameFromAddress } from '../../utils/functions'
 
 registerTranslateConfig({
 	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
@@ -1897,49 +1898,29 @@ class GroupManagement extends LitElement {
 
 	async getMyName() {
 		const myAddress = window.parent.reduxStore.getState().app.selectedAddress.address
-		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-		const nameUrl = `${nodeUrl}/names/address/${myAddress}?limit=0&reverse=true`
-
 		this.myName = ''
-
 		this.haveName = false
 
-		await fetch(nameUrl).then(res => {
-			return res.json()
-		}).then(jsonRes => {
-			if (jsonRes.length) {
-				jsonRes.map(item => {
-					this.myName = item.name
-					this.haveName = true
-				})
-			} else {
-				this.haveName = false
-			}
-		})
+		const resolved = await getUserNameFromAddress(myAddress)
+		if (resolved) {
+			this.myName = resolved
+			this.haveName = true
+		} else {
+			this.haveName = false
+		}
 	}
 
 	async getGoName(goAddress) {
-		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-		const goNameUrl = `${nodeUrl}/names/address/${goAddress}?limit=0&reverse=true`
-
 		this.goName = ''
-
 		this.haveGoName = false
 
-		await fetch(goNameUrl).then(res => {
-			return res.json()
-		}).then(jsonRes => {
-			if (jsonRes.length) {
-				jsonRes.map(item => {
-					this.goName = item.name
-					this.haveGoName = true
-				})
-			} else {
-				this.haveGoName = false
-			}
-		})
+		const resolved = await getUserNameFromAddress(goAddress)
+		if (resolved) {
+			this.goName = resolved
+			this.haveGoName = true
+		} else {
+			this.haveGoName = false
+		}
 	}
 
 	renderAvatarButton() {

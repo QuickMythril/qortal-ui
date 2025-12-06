@@ -270,7 +270,6 @@ class ImageParent extends LitElement {
 		this.isImgLoaded = false
 		this.images = []
 		this.viewImage = false
-		this.myName = window.parent.reduxStore.getState().app.accountInfo.names[0].name
 	}
 
 	render() {

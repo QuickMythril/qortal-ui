@@ -1,6 +1,7 @@
 import { html, LitElement } from 'lit'
 import { Epml } from '../../../epml'
 import { tipUserStyles } from './plugins-css'
+import { getUserNameFromAddress } from '../../utils/functions'
 import '@polymer/paper-progress/paper-progress.js'
 import '@vaadin/button'
 
@@ -180,25 +181,12 @@ export class TipUser extends LitElement {
 			return window.parent.validateAddress(receiverAddress)
 		}
 
-		const getName = async (recipient) => {
-			try {
-				const getNames = await parentEpml.request("apiCall", {
-					type: "api",
-					url: `/names/address/${recipient}`
-				})
-
-				return getNames?.length > 0 ? getNames[0].name : ''
-			} catch (error) {
-				return ''
-			}
-		}
-
 		const makeTransactionRequest = async (receiver, lastRef) => {
 			const dialogAmount = get("transactions.amount")
 			const dialogAddress = get("login.address")
 			const dialogName = get("login.name")
 			const dialogTo = get("transactions.to")
-			const recipientName = await getName(receiver)
+			const recipientName = await getUserNameFromAddress(receiver)
 
 			return await parentEpml.request('transaction', {
 				type: 2,
