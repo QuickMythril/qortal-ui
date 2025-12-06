@@ -247,7 +247,7 @@ class MultiWallet extends LitElement {
 		this.bookPiratechainAddress = ''
 		this.visitedTab = 0
 		this.searchOffset = 0
-		this.searchLimit = 10
+		this.searchLimit = this.currentPageSize
 		this.counter = 1
 		this.pageButtonsHidden = false
 		this.showNames = this.loadShowNamesPreference()
@@ -334,13 +334,18 @@ class MultiWallet extends LitElement {
 	changePageSize(size) {
 		if (![10, 25, 50, 100].includes(size)) return
 		this.currentPageSize = size
+		this.searchLimit = size
+		this.searchOffset = 0
+		this.counter = 1
+		this.pageButtonsHidden = false
 		localStorage.setItem('walletTxPageSize', String(size))
 		if (this.transactionsGrid) {
 			this.transactionsGrid.pageSize = size
 		}
 		this.pages = null
-		this.counter = 1
 		this.updateItemsFromPage(1, true)
+		this.renderNewDom()
+		this.requestUpdate()
 	}
 
 	async ensureNamesForTransactions(transactions) {
@@ -4376,22 +4381,22 @@ class MultiWallet extends LitElement {
 	goBackwardTX() {
 		if (this.searchOffset === 0) {
 			this.pageButtonsHidden = false
-			this.searchLimit = 10
+			this.searchLimit = this.currentPageSize
 			this.counter = 1
 		} else {
 			this.pageButtonsHidden = false
-			this.searchLimit = 10
-			this.counter = this.searchOffset / 10
-			this.searchOffset = this.searchOffset - 10
+			this.searchLimit = this.currentPageSize
+			this.counter = this.searchOffset / this.searchLimit
+			this.searchOffset = this.searchOffset - this.searchLimit
 			this.renderNewDom()
 		}
 	}
 
 	goForwardTX() {
 		this.pageButtonsHidden = false
-		this.searchLimit = 10
-		this.searchOffset = this.searchOffset + 10
-		this.counter = (this.searchOffset / 10) + 1
+		this.searchLimit = this.currentPageSize
+		this.searchOffset = this.searchOffset + this.searchLimit
+		this.counter = (this.searchOffset / this.searchLimit) + 1
 		this.renderNewDom()
 	}
 
@@ -4594,11 +4599,11 @@ class MultiWallet extends LitElement {
 						&txType=PRESENCE
 					`
 				})
-				if (this._selectedWallet == coin) {
-					if (this.visitedTab === 0) {
-						this.wallets.get(coin).transactions = pendingAllTxsQort.concat(allTxsQort)
-					} else if (this.visitedTab === 1) {
-						this.wallets.get(coin).transactions = pendingPaymentTxsQort.concat(paymentTxsQort)
+					if (this._selectedWallet == coin) {
+						if (this.visitedTab === 0) {
+							this.wallets.get(coin).transactions = pendingAllTxsQort.concat(allTxsQort)
+						} else if (this.visitedTab === 1) {
+							this.wallets.get(coin).transactions = pendingPaymentTxsQort.concat(paymentTxsQort)
 					} else if (this.visitedTab === 2) {
 						this.wallets.get(coin).transactions = pendingArbitraryTxsQort.concat(arbitraryTxsQort)
 					} else if (this.visitedTab === 3) {
@@ -4613,11 +4618,14 @@ class MultiWallet extends LitElement {
 						this.wallets.get(coin).transactions = pendingPollTxsQort.concat(pollTxsQort)
 					} else if (this.visitedTab === 8) {
 						this.wallets.get(coin).transactions = pendingRewardshareTxsQort.concat(rewardshareTxsQort)
-					} else if (this.visitedTab === 9) {
-						this.wallets.get(coin).transactions = pendingMiscTxsQort.concat(miscTxsQort)
+						} else if (this.visitedTab === 9) {
+							this.wallets.get(coin).transactions = pendingMiscTxsQort.concat(miscTxsQort)
+						}
+						if (this.showNames) {
+							this.ensureNamesForTransactions(this.wallets.get(coin).transactions)
+						}
 					}
-				}
-				break
+					break
 			case 'btc':
 			case 'ltc':
 			case 'doge':
