@@ -1108,10 +1108,24 @@ export const publishData = async ({
 export async function getNameInfo(address) {
 	const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 	const nodeUrl = `${myNode.protocol}://${myNode.domain}:${myNode.port}`
+
+	// Try primary first
+	try {
+		const primaryRes = await fetch(`${nodeUrl}/names/primary/${address}`)
+		if (primaryRes.ok) {
+			const primaryData = await primaryRes.json()
+			if (primaryData?.name) {
+				return primaryData.name
+			}
+		}
+	} catch (e) {
+		// fall through to names/address
+	}
+
 	const response = await fetch(`${nodeUrl}/names/address/` + address)
 	const nameData = await response.json()
 
-	if (nameData.length > 0) {
+	if (Array.isArray(nameData) && nameData.length > 0) {
 		return nameData[0].name
 	} else {
 		return ""

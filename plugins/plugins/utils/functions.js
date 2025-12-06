@@ -41,6 +41,9 @@ export const blocksNeed = (level) => {
 
 export const getUserNameFromAddress = async (address) => {
 	try {
+		const primary = await getPrimaryName(address)
+		if (primary) return primary
+
 		const getNames = await parentEpml.request("apiCall", {
 			type: "api",
 			url: `/names/address/${address}`

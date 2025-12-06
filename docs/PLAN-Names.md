@@ -1,15 +1,15 @@
 ## Plan: bring Hub name features into Qortal UI (checklist)
 
-- [ ] Expose name endpoints to apps (qortalRequest)
+- [x] Expose name endpoints to apps (qortalRequest)
   - [x] "Add primary/account name actions": Add `GET_PRIMARY_NAME` and `GET_ACCOUNT_NAMES` to `plugins/plugins/core/components/qdn-action-constants.js` and `qdn-action-types.js`.
   - [x] "Handle name actions in browser bridge": Implement handlers in `plugins/plugins/core/qdn/browser/browser.src.js`:
     - [x] "Add GET_PRIMARY_NAME handler": `GET_PRIMARY_NAME`: call `/names/primary/<address>` (payload or selected address) via `parentEpml.request('apiCall', …)` and return `{ name }` or `''`.
     - [x] "Add GET_ACCOUNT_NAMES handler": `GET_ACCOUNT_NAMES`: call `/names/address/<address>?limit=0&reverse=true` and return array of names.
-  - [ ] "Expose name actions in SHOW_ACTIONS": Update any app-facing lists (e.g., `SHOW_ACTIONS`) to include the new actions.
+  - [x] "Expose name actions in SHOW_ACTIONS": Update any app-facing lists (e.g., `SHOW_ACTIONS`) to include the new actions.
 
 - [ ] Core helpers for primary + all names
   - [x] "Implement getPrimaryName/getAllUserNames": Add utilities: `getPrimaryName(address)` -> `/names/primary/<address>`; `getAllUserNames(address)` -> `/names/address/<address>?limit=0&reverse=true`.
-  - [ ] "Prefer primary in name helpers": Update `getUserNameFromAddress` / `getNameInfo` to prefer `/names/primary` for others and fall back to `/names/address`.
+  - [x] "Prefer primary in name helpers": Update `getUserNameFromAddress` / `getNameInfo` to prefer `/names/primary` for others and fall back to `/names/address`.
   - [ ] "Validate names per core rules": Add client-side checks for length (3–40 bytes UTF-8), data length (≤4000 bytes), normalization/sanitization (Unicode normalize/sanitize), and reject address-like names before building/sending tx.
 
 - [ ] Redux/accountInfo shape
