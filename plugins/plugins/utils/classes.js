@@ -1113,7 +1113,7 @@ export async function getNameInfo(address) {
 		const primaryRes = await fetch(`${nodeUrl}/names/primary/${address}`)
 		if (primaryRes.ok) {
 			const primaryData = await primaryRes.json()
-			if (primaryData?.name) {
+			if (primaryData && primaryData.name) {
 				return primaryData.name
 			}
 		}

@@ -108,7 +108,9 @@ class PublishData extends LitElement {
 
 		const fetchNames = async () => {
 			try {
-				const accountInfo = window.parent.reduxStore?.getState?.().app?.accountInfo || {}
+				const parentStore = window.parent && window.parent.reduxStore
+				const state = parentStore && typeof parentStore.getState === 'function' ? parentStore.getState() : {}
+				const accountInfo = (state && state.app && state.app.accountInfo) ? state.app.accountInfo : {}
 				const activeOrPrimary = accountInfo.activeName || accountInfo.primaryName || ''
 				const allNames = Array.isArray(accountInfo.allNames) && accountInfo.allNames.length ? accountInfo.allNames : accountInfo.names || []
 
@@ -121,7 +123,7 @@ class PublishData extends LitElement {
 				const primaryRes = await parentEpml.request('apiCall', { url: `/names/primary/${this.selectedAddress.address}` }).catch(() => ({}))
 				const namesRes = await parentEpml.request('apiCall', { url: `/names/address/${this.selectedAddress.address}?limit=0&reverse=true` }).catch(() => [])
 
-				const primaryName = primaryRes?.name || ''
+				const primaryName = primaryRes && primaryRes.name ? primaryRes.name : ''
 				const namesList = Array.isArray(namesRes) ? namesRes.map(n => n.name || n) : []
 				if (primaryName && namesList.length) {
 					const idx = namesList.findIndex(n => n === primaryName)

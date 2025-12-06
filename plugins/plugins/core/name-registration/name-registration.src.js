@@ -423,7 +423,7 @@ class NameRegistration extends LitElement {
 				])
 
 				let names = Array.isArray(namesRes) ? namesRes : []
-				const primaryName = primaryRes?.name || ''
+				const primaryName = (primaryRes && primaryRes.name) ? primaryRes.name : ''
 				if (primaryName && names.length) {
 					const idx = names.findIndex(n => n.name === primaryName)
 					if (idx > 0) {

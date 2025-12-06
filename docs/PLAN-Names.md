@@ -34,25 +34,25 @@
   - [x] "Update lookup helpers to use /names/primary": Update chat/UI lookup helpers (`ChatPage#getName`, `functions.js#getUserNameFromAddress`, `classes.js#getNameInfo`, user-info/address book) to use `/names/primary/<address>` first, then `/names/address`, then address.
   - [x] "Preserve name fallbacks": Preserve fallbacks (“No registered name” or address) and avoid empty string returns.
 
-- [ ] Polling/refresh cadence
+- [x] Polling/refresh cadence
   - [x] "Poll /names/primary after registration": Switch register-name polling to `/names/primary`; also refresh `allNames`.
   - [x] "Refresh primary/all names on intervals": Ensure intervals (publish modal `pingInterval`, update-name 10s) update both `primaryName` and `allNames` in Redux.
   - [x] "Handle lite-node primary fallback": Gracefully handle `/names/primary` unauthorized on lite nodes and fall back to `/names/address`.
 
-- [ ] Compatibility and guards
+- [x] Compatibility and guards
   - [x] "Fallback to names/address if primary unavailable": Fallback to `/names/address` if `/names/primary` is unavailable.
   - [x] "Keep legacy names array populated": Keep `accountInfo.names` populated for legacy consumers while adding `primaryName`/`allNames`.
   - [x] "Do not attempt core primary switch": Keep `activeName` UI-only; do not try to change core primary when multiple names exist due to core restrictions.
   - [x] "Handle TEMPORARY_DISABLED/name errors": Surface core errors such as `TEMPORARY_DISABLED`, name length/data length, normalization, address-like name rejections clearly in UI.
   - [x] "Explain primary/active differences": Add UX copy (e.g., in Name Registration plugin) explaining core primary rules and how UI activeName differs.
 
+- [ ] Active name selection + overrides
+  - [ ] "Add active name selector UI": Provide a UI control to pick an active name from `allNames` and persist it.
+  - [ ] "Use active name in my-name contexts": Update internal consumers of the user name (chat metadata, publish defaults, avatars, app filters) to use `activeName || primaryName`.
+  - [ ] "Override qortalRequest name responses": For `GET_PRIMARY_NAME`, return `activeName` if set; for `GET_ACCOUNT_NAMES`, order names with `activeName` first.
+
 - [ ] Validation and smoke tests
   - [ ] "Test publish modal with multiple names": Publish modal shows all owned names, defaults to active/primary, rejects non-owned name.
   - [ ] "Check chat/avatar name display": Chat headers/placeholders and avatars show active/primary names consistently.
   - [ ] "Verify name registration polling results": Name registration polling populates `primaryName` + `allNames`.
   - [ ] "Test qortalRequest name actions": qortalRequest responds to `GET_PRIMARY_NAME`/`GET_ACCOUNT_NAMES` with expected data.
-
-- [ ] Active name selection + overrides
-  - [ ] "Add active name selector UI": Provide a UI control to pick an active name from `allNames` and persist it.
-  - [ ] "Use active name in my-name contexts": Update internal consumers of the user name (chat metadata, publish defaults, avatars, app filters) to use `activeName || primaryName`.
-  - [ ] "Override qortalRequest name responses": For `GET_PRIMARY_NAME`, return `activeName` if set; for `GET_ACCOUNT_NAMES`, order names with `activeName` first.

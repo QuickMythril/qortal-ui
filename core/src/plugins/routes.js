@@ -47,7 +47,7 @@ const sendCoin = async (coin, req) => {
 
 const prioritizePrimary = (primaryName, names = []) => {
 	if (!primaryName) return names
-	const idx = names.findIndex(item => item?.name === primaryName)
+	const idx = names.findIndex(item => item && item.name === primaryName)
 	if (idx <= 0) return names
 	const primaryEntry = names[idx]
 	const remaining = names.slice(0, idx).concat(names.slice(idx + 1))
@@ -60,8 +60,8 @@ export const routes = {
 	},
 
 	setAccountInfo: async (req) => {
-		const incoming = req?.data || {}
-		const address = incoming?.addressInfo?.address
+		const incoming = (req && req.data) || {}
+		const address = incoming.addressInfo && incoming.addressInfo.address
 		let primaryName = incoming.primaryName || ''
 		let allNames = Array.isArray(incoming.allNames) ? incoming.allNames : (Array.isArray(incoming.names) ? incoming.names : [])
 		const existingActive = store.getState().app.accountInfo.activeName || ''
@@ -74,15 +74,15 @@ export const routes = {
 					api.request(`/names/address/${address}?limit=0&reverse=true`)
 				])
 
-				if (primaryRes?.name) primaryName = primaryRes.name
+				if (primaryRes && primaryRes.name) primaryName = primaryRes.name
 				if (Array.isArray(namesRes)) allNames = namesRes
 			} catch (error) {
 				console.error('Failed to load account names', error)
 			}
 		}
 
-		if (!activeName || (Array.isArray(allNames) && allNames.length > 0 && !allNames.find(n => n?.name === activeName))) {
-			activeName = primaryName || allNames[0]?.name || ''
+		if (!activeName || (Array.isArray(allNames) && allNames.length > 0 && !allNames.find(n => n && n.name === activeName))) {
+			activeName = primaryName || (allNames[0] && allNames[0].name) || ''
 		}
 
 		const nextAccountInfo = {

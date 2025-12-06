@@ -461,7 +461,7 @@ class WebBrowser extends LitElement {
 					break
 
 				case actions.GET_PRIMARY_NAME: {
-					const address = data?.address || this.selectedAddress?.address
+					const address = (data && data.address) || (this.selectedAddress && this.selectedAddress.address)
 					if (!address) {
 						response = JSON.stringify({ error: "Missing address" })
 						break
@@ -471,19 +471,20 @@ class WebBrowser extends LitElement {
 							type: 'api',
 							url: `/names/primary/${address}`
 						})
-						if (res?.name) {
+						if (res && res.name) {
 							response = JSON.stringify({ name: res.name })
 						} else {
 							response = JSON.stringify({ name: "" })
 						}
 					} catch (error) {
-						response = JSON.stringify({ error: error?.message || "Unable to fetch primary name" })
+						const errMsg = (error && error.message) ? error.message : "Unable to fetch primary name"
+						response = JSON.stringify({ error: errMsg })
 					}
 				}
 					break
 
 				case actions.GET_ACCOUNT_NAMES: {
-					const address = data?.address || this.selectedAddress?.address
+					const address = (data && data.address) || (this.selectedAddress && this.selectedAddress.address)
 					if (!address) {
 						response = JSON.stringify({ error: "Missing address" })
 						break
@@ -499,10 +500,11 @@ class WebBrowser extends LitElement {
 						} else {
 							response = JSON.stringify([])
 						}
-					} catch (error) {
-						response = JSON.stringify({ error: error?.message || "Unable to fetch account names" })
+						} catch (error) {
+							const errMsg = (error && error.message) ? error.message : "Unable to fetch account names"
+							response = JSON.stringify({ error: errMsg })
+						}
 					}
-				}
 					break
 
 				case actions.ENCRYPT_DATA: {
