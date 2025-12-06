@@ -10,6 +10,7 @@ import '@vaadin/button'
 
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../core/translate'
+import { pickDisplayName, avatarFallbackChar } from '../../../../core/src/utils/name'
 
 registerTranslateConfig({
 	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
@@ -62,6 +63,8 @@ class OverviewPage extends LitElement {
 		this.listAccounts = []
 		this.check1 = false
 		this.check2 = false
+		this.displayName = pickDisplayName(this.accountInfo)
+		this.avatarError = false
 	}
 
 	render() {
@@ -86,7 +89,7 @@ class OverviewPage extends LitElement {
 								</div>
 								<div class="card-body pt-0 pt-md-4">
 									<div class="text-center pt-0 mt-md-3">
-										<h2>${this.accountInfo.names.length !== 0 ? this.accountInfo.names[0].name : ''}</h2>
+										<h2>${this.displayName || get('chatpage.cchange15')}</h2>
 										<div class="h3 font-weight-400">
 											${this.accountInfo.addressInfo.address}
 										</div>
@@ -227,6 +230,8 @@ class OverviewPage extends LitElement {
 	async refreshItems() {
 		this.nodeConfig = window.parent.reduxStore.getState().app.nodeConfig
 		this.accountInfo = window.parent.reduxStore.getState().app.accountInfo
+		this.displayName = pickDisplayName(this.accountInfo)
+		this.avatarError = false
 
 		await this.getNodeInfo()
 		await this.getCoreInfo()
@@ -308,14 +313,32 @@ class OverviewPage extends LitElement {
 	}
 
 	getAvatar() {
-		if (this.accountInfo.names.length === 0) {
-			return html`<img class="rounded-circle" src="/img/incognito.png">`
-		} else {
-			const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
-			const avatarUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-			const url = `${avatarUrl}/arbitrary/THUMBNAIL/${this.accountInfo.names[0].name}/qortal_avatar?async=true}`
-			return html`<img class="rounded-circle" src="${url}" onerror="this.src='/img/incognito.png';" />`
+		const fallbackChar = avatarFallbackChar(this.accountInfo)
+		const defaultImg = '/img/incognito.png'
+
+		if (!this.displayName && !fallbackChar) {
+			return html`<img class="rounded-circle" src="${defaultImg}">`
 		}
+
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		const avatarUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
+		const url = this.displayName ? `${avatarUrl}/arbitrary/THUMBNAIL/${this.displayName}/qortal_avatar?async=true` : ''
+
+		return html`
+			<div style="width: 180px; height: 180px;">
+				${this.displayName ? html`
+					<img class="rounded-circle" src="${url}" ?hidden=${this.avatarError} @error=${() => { this.avatarError = true }}>
+				` : null}
+				${(this.avatarError || !this.displayName) && fallbackChar ? html`
+					<div class="rounded-circle" style="width:180px; height:180px; display:flex; align-items:center; justify-content:center; background: var(--paper-grey-200, #e0e0e0); color: var(--black); font-size:72px;">
+						${fallbackChar}
+					</div>
+				` : null}
+				${(!fallbackChar && (this.avatarError || !this.displayName)) ? html`
+					<img class="rounded-circle" src="${defaultImg}">
+				` : null}
+			</div>
+		`
 	}
 
 	async getNodeInfo() {

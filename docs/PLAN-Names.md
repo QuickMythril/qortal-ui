@@ -20,7 +20,7 @@
 
 - [ ] Surfaces that assume a single name (use primaryName with fallback)
   - [x] "Update chat UI name usage": Chat UI components (`ChatPage.js`, `ChatRightPanelResources`, `ChatGroupManager`, `ChatGifs`, `q-chat`, placeholders) use `activeName || primaryName || names[0]?.name || address`.
-  - [ ] "Update profile/avatar name usage": Profile/avatars (`wallet-profile.js`, `overview-page.src.js`, `settings account-view.js`, `user-info-view.js`, `qortal-info-view.js`, notification bell) use primaryName.
+  - [x] "Update profile/avatar name usage": Profile/avatars (`wallet-profile.js`, `overview-page.src.js`, `settings account-view.js`, `user-info-view.js`, `qortal-info-view.js`, notification bell) use `activeName || primaryName || names[0]?.name || address`; when avatar image fails or name is missing, show first letter fallback (preserve original casing/character) and keep incognito as last resort; when name+address are shown together and no name exists, display “No registered name”.
   - [ ] "Update trade/tip/info name usage": Trade/tip/info (`TipUser.js`, `TradeInfoView.js`, `TraderInfoView.js`, `sponsorship-list`, `puzzles`, `qortal-lottery`, `group-management`) use primaryName.
   - [ ] "Use primary name for avatar URLs": Avatar URL builders use `primaryName` when present.
 

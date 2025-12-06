@@ -2,6 +2,7 @@ import { html, LitElement } from 'lit'
 import { connect } from 'pwa-helpers'
 import { store } from '../store'
 import { walletProfileStyles } from '../styles/core-css'
+import { pickDisplayName, avatarFallbackChar } from '../utils/name'
 
 // Multi language support
 import { translate } from '../../translate'
@@ -28,6 +29,8 @@ class WalletProfile extends connect(store)(LitElement) {
 			names: [],
 			addressInfo: {}
 		}
+		this.displayName = pickDisplayName(this.accountInfo)
+		this.avatarError = false
 		this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
 	}
 
@@ -40,7 +43,7 @@ class WalletProfile extends connect(store)(LitElement) {
 						&nbsp;&nbsp;&nbsp;
 						<div id="inline-block-child">
 							<div>
-								${this.accountInfo.names.length !== 0 ? this.accountInfo.names[0].name : ''}
+								${this.displayName || translate("chatpage.cchange15")}
 							</div>
                             				<div>
 								${this.accountInfo.addressInfo ? html`
@@ -63,21 +66,38 @@ class WalletProfile extends connect(store)(LitElement) {
 	}
 
 	getAvatar() {
-		if (this.accountInfo.names.length === 0) {
+		const fallbackChar = avatarFallbackChar(this.accountInfo)
+		if (!this.displayName && !fallbackChar) {
 			return html`<img class="round-fullinfo" src="/img/incognito.png">`
-		} else {
-			const avatarNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-			const avatarUrl = avatarNode.protocol + '://' + avatarNode.domain + ':' + avatarNode.port
-			const url = `${avatarUrl}/arbitrary/THUMBNAIL/${this.accountInfo.names[0].name}/qortal_avatar?async=true`
-
-			return html`<img class="round-fullinfo" src="${url}" onerror="this.src='/img/incognito.png';" />`
 		}
+
+		const avatarNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
+		const avatarUrl = avatarNode.protocol + '://' + avatarNode.domain + ':' + avatarNode.port
+		const url = this.displayName ? `${avatarUrl}/arbitrary/THUMBNAIL/${this.displayName}/qortal_avatar?async=true` : ''
+
+		return html`
+			<div style="position: relative; width: 120px; height: 120px;">
+				${this.displayName ? html`
+					<img class="round-fullinfo" src="${url}" ?hidden=${this.avatarError} @error=${() => { this.avatarError = true }} />
+				` : null}
+				${(this.avatarError || !this.displayName) && fallbackChar ? html`
+					<div class="round-fullinfo" style="display:flex; align-items:center; justify-content:center; background: var(--paper-grey-200, #e0e0e0); color: var(--black); font-size:48px;">
+						${fallbackChar}
+					</div>
+				` : null}
+				${(!fallbackChar && (this.avatarError || !this.displayName)) ? html`
+					<img class="round-fullinfo" src="/img/incognito.png">
+				` : null}
+			</div>
+		`
 	}
 
 	stateChanged(state) {
 		this.wallet = state.app.wallet
 		this.nodeConfig = state.app.nodeConfig
 		this.accountInfo = state.app.accountInfo
+		this.displayName = pickDisplayName(this.accountInfo)
+		this.avatarError = false
 	}
 }
 

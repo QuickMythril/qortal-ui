@@ -2,6 +2,7 @@ import { html, LitElement } from 'lit'
 import { connect } from 'pwa-helpers'
 import { store } from '../../store'
 import { accountViewStyles } from '../../styles/core-css'
+import { pickDisplayName, avatarFallbackChar } from '../../utils/name'
 
 // Multi language support
 import { get, translate } from '../../../translate'
@@ -23,6 +24,8 @@ class AccountView extends connect(store)(LitElement) {
 		super()
 		this.accountInfo = store.getState().app.accountInfo
 		this.switchAvatar = ''
+		this.displayName = pickDisplayName(this.accountInfo)
+		this.avatarError = false
 		this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
 	}
 
@@ -32,7 +35,7 @@ class AccountView extends connect(store)(LitElement) {
 				<div class="center-box">
 					<div class="img-icon">${this.getAvatar()}</div>
 					<span id="accountName">
-						${this.accountInfo.names.length !== 0 ? this.accountInfo.names[0].name : get("chatpage.cchange15")}
+						${this.displayName || get("chatpage.cchange15")}
 					</span>
 					<div class="content-box">
 						<span class="title">${translate("settings.address")}: </span>
@@ -55,29 +58,33 @@ class AccountView extends connect(store)(LitElement) {
 	}
 
 	getAvatar() {
-		if (this.switchAvatar === 'light') {
-			if (this.accountInfo.names.length === 0) {
-				return html`<img src="/img/noavatar_light.png" style="width:150px; height:150px; border-radius: 25%;">`
-			} else {
-				const avatarName = this.accountInfo.names[0].name
-				const avatarNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-				const avatarUrl = avatarNode.protocol + '://' + avatarNode.domain + ':' + avatarNode.port
-				const url = `${avatarUrl}/arbitrary/THUMBNAIL/${avatarName}/qortal_avatar?async=true`
+		const fallbackChar = avatarFallbackChar(this.accountInfo)
+		const isLight = this.switchAvatar === 'light'
+		const defaultImg = isLight ? '/img/noavatar_light.png' : '/img/noavatar_dark.png'
 
-				return html`<img src="${url}" style="width:150px; height:150px; border-radius: 25%;" onerror="this.src='/img/noavatar_light.png';">`
-			}
-		} else if (this.switchAvatar === 'dark') {
-			if (this.accountInfo.names.length === 0) {
-				return html`<img src="/img/noavatar_dark.png" style="width:150px; height:150px; border-radius: 25%;">`
-			} else {
-				const avatarName = this.accountInfo.names[0].name
-				const avatarNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-				const avatarUrl = avatarNode.protocol + '://' + avatarNode.domain + ':' + avatarNode.port
-				const url = `${avatarUrl}/arbitrary/THUMBNAIL/${avatarName}/qortal_avatar?async=true`
-
-				return html`<img src="${url}" style="width:150px; height:150px; border-radius: 25%;" onerror="this.src='/img/noavatar_dark.png';">`
-			}
+		if (!this.displayName && !fallbackChar) {
+			return html`<img src="${defaultImg}" style="width:150px; height:150px; border-radius: 25%;">`
 		}
+
+		const avatarNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
+		const avatarUrl = avatarNode.protocol + '://' + avatarNode.domain + ':' + avatarNode.port
+		const url = this.displayName ? `${avatarUrl}/arbitrary/THUMBNAIL/${this.displayName}/qortal_avatar?async=true` : ''
+
+		return html`
+			<div style="width:150px; height:150px;">
+				${this.displayName ? html`
+					<img src="${url}" style="width:150px; height:150px; border-radius: 25%;" ?hidden=${this.avatarError} @error=${() => { this.avatarError = true }}>
+				` : null}
+				${(this.avatarError || !this.displayName) && fallbackChar ? html`
+					<div style="width:150px; height:150px; border-radius:25%; display:flex; align-items:center; justify-content:center; background: var(--paper-grey-200, #e0e0e0); color: var(--black); font-size:60px;">
+						${fallbackChar}
+					</div>
+				` : null}
+				${(!fallbackChar && (this.avatarError || !this.displayName)) ? html`
+					<img src="${defaultImg}" style="width:150px; height:150px; border-radius: 25%;">
+				` : null}
+			</div>
+		`
 	}
 
 	getSwitchAvatar() {
@@ -86,6 +93,8 @@ class AccountView extends connect(store)(LitElement) {
 
 	stateChanged(state) {
 		this.accountInfo = state.app.accountInfo
+		this.displayName = pickDisplayName(this.accountInfo)
+		this.avatarError = false
 	}
 }
 
