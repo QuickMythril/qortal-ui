@@ -421,7 +421,7 @@ class LoginSection extends connect(store)(LitElement) {
 		return html`${translate("login.lp8")}`
 	}
 
-	renderLoginAvatar(renderAddress) {
+	async renderLoginAvatar(renderAddress) {
 		const avatarNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
 		const avatarUrl = avatarNode.protocol + '://' + avatarNode.domain + ':' + avatarNode.port
 		const namesUrl = `${avatarUrl}/names/address/${renderAddress}?limit=0&reverse=true`
@@ -429,26 +429,30 @@ class LoginSection extends connect(store)(LitElement) {
 		this.namesAvatar = ''
 
 		if (this.isEmptyArray(this.names)) {
-			fetch(namesUrl).then(response => {
-				return response.json()
-			}).then(data => {
-				this.names = data
-				const primaryUrl = `${avatarUrl}/names/primary/${renderAddress}`
-				const primaryRes = await fetch(primaryUrl).then(r => r.json()).catch(() => ({}))
-				const displayName = primaryRes?.name || (this.names[0]?.name || '')
-				if (!displayName) {
-					this.namesAvatar = html`<mwc-icon id='accountIcon' style="padding-bottom: 24px; color: var(--black);">account_circle</mwc-icon>`
-				} else {
-					const url = `${avatarUrl}/arbitrary/THUMBNAIL/${displayName}/qortal_avatar?async=true`
-					this.namesAvatar = html`
-						<img style="width: 48px; height: 48px; border-radius: 25%; padding-bottom: 16px;" src="${url}" onerror="this.src='/img/incognito.png';" />
-						<br>
-						<span style="font-size:16px; font-weight: 400; font-family: 'Roboto Mono', monospace; color: var(--black);">${displayName}</span>
-						<br>
-					`
-				}
-                	})
+			try {
+				const fetchedNames = await fetch(namesUrl).then(response => response.json())
+				this.names = fetchedNames
+			} catch (error) {
+				this.names = []
+			}
 		}
+
+		const primaryUrl = `${avatarUrl}/names/primary/${renderAddress}`
+		const primaryRes = await fetch(primaryUrl).then(r => r.json()).catch(() => ({}))
+		const displayName = primaryRes?.name || (this.names[0]?.name || '')
+
+		if (!displayName) {
+			this.namesAvatar = html`<mwc-icon id='accountIcon' style="padding-bottom: 24px; color: var(--black);">account_circle</mwc-icon>`
+			return
+		}
+
+		const url = `${avatarUrl}/arbitrary/THUMBNAIL/${displayName}/qortal_avatar?async=true`
+		this.namesAvatar = html`
+			<img style="width: 48px; height: 48px; border-radius: 25%; padding-bottom: 16px;" src="${url}" onerror="this.src='/img/incognito.png';" />
+			<br>
+			<span style="font-size:16px; font-weight: 400; font-family: 'Roboto Mono', monospace; color: var(--black);">${displayName}</span>
+			<br>
+		`
 	}
 
 	selectWallet(wallet) {
