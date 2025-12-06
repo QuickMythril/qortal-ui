@@ -740,11 +740,14 @@ class PublishData extends LitElement {
 	selectName(e) {
 		let name = this.shadowRoot.getElementById('registeredName')
 
-		this.selectedName = (name.value)
+		const availableNames = Array.isArray(this.names) ? this.names : []
+		const requested = name.value
+		const isOwned = availableNames.includes(requested)
+		this.selectedName = isOwned ? requested : (availableNames[0] || '')
 
 		// Update the current name if one has been selected
-		if (name.value.length > 0) {
-			this.name = (name.value)
+		if (this.selectedName.length > 0) {
+			this.name = this.selectedName
 		}
 
 		this.fetchResourceMetadata()

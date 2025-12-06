@@ -26,8 +26,8 @@
 
 - [ ] Publishing flows (support multiple names + ownership validation)
   - [x] "Populate publish dropdown with allNames": In `qdn/publish/publish.src.js`, populate dropdown with `allNames` (default `activeName || primaryName`).
-  - [ ] "Remove single-name TODO in publish": Remove hardcoded single-option TODO; show all owned names.
-  - [ ] "Validate selected publish name ownership": Validate selected name is in `allNames`; fall back to `activeName || primaryName` if none selected.
+  - [x] "Remove single-name TODO in publish": Remove hardcoded single-option TODO; show all owned names.
+  - [x] "Validate selected publish name ownership": Validate selected name is in `allNames`; fall back to `activeName || primaryName` if none selected.
   - [ ] "Use primary/all names in other publish flows": Other publish flows using `myRegisteredName` load from `activeName || primaryName` and surface `allNames` where relevant.
 
 - [ ] Other-user lookups aligned to primary name
