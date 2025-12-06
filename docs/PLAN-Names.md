@@ -18,14 +18,14 @@
   - [x] "Keep names array backward compatible": Keep backward compatibility: populate legacy `names` array from `allNames` with `primaryName` first.
   - [x] "Add activeName selection": Persist an `activeName` in state (alongside accountInfo; default primary or first name) to represent the user-selected name when multiple exist.
 
-- [ ] Surfaces that assume a single name (use primaryName with fallback)
+- [x] Surfaces that assume a single name (use primaryName with fallback)
   - [x] "Update chat UI name usage": Chat UI components (`ChatPage.js`, `ChatRightPanelResources`, `ChatGroupManager`, `ChatGifs`, `q-chat`, placeholders) use `activeName || primaryName || names[0]?.name || address`.
   - [x] "Update profile/avatar name usage": Profile/avatars (`wallet-profile.js`, `overview-page.src.js`, `settings account-view.js`, `user-info-view.js`, `qortal-info-view.js`, notification bell) use `activeName || primaryName || names[0]?.name || address`; when avatar image fails or name is missing, show first letter fallback (preserve original casing/character) and keep incognito as last resort; when name+address are shown together and no name exists, display “No registered name”.
   - [x] "Update trade/tip/info name usage": Trade/tip/info (`TipUser.js`, `TradeInfoView.js`, `TraderInfoView.js`, `sponsorship-list`, `puzzles`, `qortal-lottery`, `group-management`) use `activeName || primaryName || names[0]?.name || address`.
-  - [ ] "Use active name for avatar URLs": Avatar URL builders use `activeName || primaryName` when present.
+  - [x] "Use active name for avatar URLs": Avatar URL builders use `activeName || primaryName` when present.
 
 - [ ] Publishing flows (support multiple names + ownership validation)
-  - [ ] "Populate publish dropdown with allNames": In `qdn/publish/publish.src.js`, populate dropdown with `allNames` (default `activeName || primaryName`).
+  - [x] "Populate publish dropdown with allNames": In `qdn/publish/publish.src.js`, populate dropdown with `allNames` (default `activeName || primaryName`).
   - [ ] "Remove single-name TODO in publish": Remove hardcoded single-option TODO; show all owned names.
   - [ ] "Validate selected publish name ownership": Validate selected name is in `allNames`; fall back to `activeName || primaryName` if none selected.
   - [ ] "Use primary/all names in other publish flows": Other publish flows using `myRegisteredName` load from `activeName || primaryName` and surface `allNames` where relevant.

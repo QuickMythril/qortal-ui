@@ -36,7 +36,6 @@ class PublishData extends LitElement {
 			metadata: { type: Array },
 			categories: { type: Array },
 			names: { type: Array },
-			myRegisteredName: { type: String },
 			selectedName: { type: String },
 			path: { type: String },
 			portForwardingEnabled: { type: Boolean },
@@ -98,8 +97,7 @@ class PublishData extends LitElement {
 		// Default to true so the message doesn't appear and disappear quickly
 		this.portForwardingEnabled = true
 		this.names = []
-		this.myRegisteredName = ''
-		this.selectedName = 'invalid'
+		this.selectedName = ''
 		this.path = ''
 		this.successMessage = ''
 		this.generalMessage = ''
@@ -108,15 +106,37 @@ class PublishData extends LitElement {
 		this.btnDisable = false
 		this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
 
-		const fetchNames = () => {
-			parentEpml.request('apiCall', { url: `/names/address/${this.selectedAddress.address}?limit=0&reverse=true` }).then(res => {
-				setTimeout(() => {
-					this.names = res
-					if (res[0] != null) {
-						this.myRegisteredName = res[0].name
+		const fetchNames = async () => {
+			try {
+				const accountInfo = window.parent.reduxStore?.getState?.().app?.accountInfo || {}
+				const activeOrPrimary = accountInfo.activeName || accountInfo.primaryName || ''
+				const allNames = Array.isArray(accountInfo.allNames) && accountInfo.allNames.length ? accountInfo.allNames : accountInfo.names || []
+
+				if (allNames.length) {
+					this.names = allNames.map(n => n.name || n)
+					this.selectedName = activeOrPrimary || this.names[0] || ''
+					return
+				}
+
+				const primaryRes = await parentEpml.request('apiCall', { url: `/names/primary/${this.selectedAddress.address}` }).catch(() => ({}))
+				const namesRes = await parentEpml.request('apiCall', { url: `/names/address/${this.selectedAddress.address}?limit=0&reverse=true` }).catch(() => [])
+
+				const primaryName = primaryRes?.name || ''
+				const namesList = Array.isArray(namesRes) ? namesRes.map(n => n.name || n) : []
+				if (primaryName && namesList.length) {
+					const idx = namesList.findIndex(n => n === primaryName)
+					if (idx > 0) {
+						namesList.splice(idx, 1)
+						namesList.unshift(primaryName)
 					}
-				}, 1)
-			})
+				}
+				this.names = namesList
+				this.selectedName = primaryName || namesList[0] || ''
+			} catch (error) {
+				console.error(error)
+				this.names = []
+				this.selectedName = ''
+			}
 
 			setTimeout(fetchNames, this.config.user.nodeSettings.pingInterval)
 		}
@@ -181,11 +201,12 @@ class PublishData extends LitElement {
 							<p style="font-style: italic; font-size: 14px; color: var(--black);">${this.renderUploadSize()}</p>
 						</div>
 					</paper-card>
-					<!-- TODO: adapt this dropdown to list all names on the account. Right now it's hardcoded to a single name -->
 					<p style="display: ${this.showName ? 'block' : 'none'}">
 						<mwc-select id="registeredName" label="${translate("publishpage.pchange4")}" @selected=${(e) => this.selectName(e)} style="min-width: 130px; max-width:100%; width:100%;">
-							<mwc-list-item selected value=""></mwc-list-item>
-							<mwc-list-item value="${this.myRegisteredName}" style="color: var(--black);">${this.myRegisteredName}</mwc-list-item>
+							<mwc-list-item ?selected=${!this.selectedName} value=""></mwc-list-item>
+							${(this.names || []).map((n) => html`
+								<mwc-list-item value="${n}" ?selected=${this.selectedName === n} style="color: var(--black);">${n}</mwc-list-item>
+							`)}
 						</mwc-select>
 					</p>
 					<div style="display: ${this.showMetadata ? 'block' : 'none'}">
