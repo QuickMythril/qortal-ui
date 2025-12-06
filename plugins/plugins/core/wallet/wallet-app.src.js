@@ -136,8 +136,7 @@ class MultiWallet extends LitElement {
 			searchLimit: { type: Number },
 			counter: { type: Number },
 			pageButtonsHidden: { type: Boolean },
-			showNames: { type: Boolean },
-			currentPageSize: { type: Number }
+			showNames: { type: Boolean }
 		}
 	}
 
@@ -247,12 +246,11 @@ class MultiWallet extends LitElement {
 		this.bookPiratechainAddress = ''
 		this.visitedTab = 0
 		this.searchOffset = 0
-		this.searchLimit = this.currentPageSize
+		this.searchLimit = 25
 		this.counter = 1
 		this.pageButtonsHidden = false
 		this.showNames = this.loadShowNamesPreference()
 		this.nameCache = new Map()
-		this.currentPageSize = this.loadPageSizePreference()
 		this.wallets = new Map()
 
 		let coinProp = {
@@ -314,12 +312,6 @@ class MultiWallet extends LitElement {
 		return true
 	}
 
-	loadPageSizePreference() {
-		const pref = parseInt(localStorage.getItem('walletTxPageSize'), 10)
-		if ([10, 25, 50, 100].includes(pref)) return pref
-		return 25
-	}
-
 	toggleShowNames() {
 		this.showNames = !this.showNames
 		localStorage.setItem('walletTxShowNames', this.showNames ? 'true' : 'false')
@@ -333,19 +325,7 @@ class MultiWallet extends LitElement {
 
 	changePageSize(size) {
 		if (![10, 25, 50, 100].includes(size)) return
-		this.currentPageSize = size
-		this.searchLimit = size
-		this.searchOffset = 0
-		this.counter = 1
-		this.pageButtonsHidden = false
-		localStorage.setItem('walletTxPageSize', String(size))
-		if (this.transactionsGrid) {
-			this.transactionsGrid.pageSize = size
-		}
-		this.pages = null
-		this.updateItemsFromPage(1, true)
-		this.renderNewDom()
-		this.requestUpdate()
+		return
 	}
 
 	async ensureNamesForTransactions(transactions) {
@@ -2383,7 +2363,7 @@ class MultiWallet extends LitElement {
 		this.pageButtonsHidden = false
 		this.visitedTab = value
 		this.searchOffset = 0
-		this.searchLimit = this.currentPageSize
+		this.searchLimit = 25
 		this.counter = 1
 		await this.renderNewDom()
 	}
@@ -2631,7 +2611,7 @@ class MultiWallet extends LitElement {
 		this._selectedWallet = 'qort'
 		this.visitedTab = 0
 		this.searchOffset = 0
-		this.searchLimit = this.currentPageSize
+		this.searchLimit = 25
 		this.pageButtonsHidden = false
 		this.showNewQortWallet()
 	}
@@ -4987,7 +4967,7 @@ class MultiWallet extends LitElement {
 	async getTransactionGrid(coin) {
 			this.transactionsGrid = this.shadowRoot.querySelector(`#${coin}TransactionsGrid`)
 			if (this.transactionsGrid) {
-				this.transactionsGrid.pageSize = this.currentPageSize
+				this.transactionsGrid.pageSize = 25
 			}
 			if (coin === 'qort') {
 				this.transactionsGrid.addEventListener(
