@@ -32,6 +32,9 @@ class PublishData extends LitElement {
 			showIdentifier: { type: Boolean },
 			showMetadata: { type: Boolean },
 			tags: { type: Array },
+			tagValues: { type: Array },
+			titleValue: { type: String },
+			descriptionValue: { type: String },
 			serviceLowercase: { type: String },
 			metadata: { type: Array },
 			categories: { type: Array },
@@ -45,6 +48,7 @@ class PublishData extends LitElement {
 			errorMessage: { type: String },
 			loading: { type: Boolean },
 			btnDisable: { type: Boolean },
+			metadataLoading: { type: Boolean },
 			theme: { type: String, reflect: true }
 		}
 	}
@@ -104,6 +108,10 @@ class PublishData extends LitElement {
 		this.errorMessage = ''
 		this.loading = false
 		this.btnDisable = false
+		this.metadataLoading = false
+		this.titleValue = ''
+		this.descriptionValue = ''
+		this.tagValues = ['', '', '', '', '']
 		this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
 
 		const fetchNames = async () => {
@@ -219,10 +227,30 @@ class PublishData extends LitElement {
 					</p>
 					<div style="display: ${this.showMetadata ? 'block' : 'none'}">
 						<p>
-							<mwc-textfield style="width:100%;" label="${translate("publishpage.pchange5")}" id="title" type="text" value="${this.metadata != null && this.metadata.title != null ? this.metadata.title : ''}" maxLength="80"></mwc-textfield>
+						<mwc-textfield
+								style="width:100%;"
+								label="${translate("publishpage.pchange5")}"
+								id="title"
+								type="text"
+								.value="${this.titleValue || ''}"
+								maxLength="80"
+								@input=${this.onTitleInput}
+								?disabled=${this.metadataLoading}
+							></mwc-textfield>
+							<div style="text-align:right; font-size:12px; color: var(--black); margin-top:4px;">${this._byteLength(this.titleValue)}/80 bytes</div>
 						</p>
 						<p>
-							<mwc-textfield style="width:100%;" label="${translate("publishpage.pchange6")}" id="description" type="text" value="${this.metadata != null && this.metadata.description != null ? this.metadata.description : ''}" maxLength="500"></mwc-textfield>
+							<mwc-textfield
+								style="width:100%;"
+								label="${translate("publishpage.pchange6")}"
+								id="description"
+								type="text"
+								.value="${this.descriptionValue || ''}"
+								maxLength="240"
+								@input=${this.onDescriptionInput}
+								?disabled=${this.metadataLoading}
+							></mwc-textfield>
+							<div style="text-align:right; font-size:12px; color: var(--black); margin-top:4px;">${this._byteLength(this.descriptionValue)}/240 bytes</div>
 						</p>
 						<p>
 							<mwc-select id="category" label="${translate("publishpage.pchange7")}" index="0" style="min-width: 130px; max-width:100%; width:100%;">
@@ -232,36 +260,22 @@ class PublishData extends LitElement {
 							</mwc-select>
 						</p>
 						<div style="display: flex; justify-content: space-between; max-width:100%; width:100%;">
-							<mwc-textfield
-								style="width:19.6%;" id="tag1" type="text" value="${this.metadata != null && this.metadata.tags != null && this.metadata.tags[0] != null ? this.metadata.tags[0] : ''}"
-								placeholder="${translate("publishpage.pchange8")} 1"
-								maxLength="20"
-							>
-							</mwc-textfield>
-							<mwc-textfield
-								style="width:19.6%;" id="tag2" type="text" value="${this.metadata != null && this.metadata.tags != null && this.metadata.tags[1] != null ? this.metadata.tags[1] : ''}"
-								placeholder="${translate("publishpage.pchange8")} 2"
-								maxLength="20"
-							>
-							</mwc-textfield>
-							<mwc-textfield
-								style="width:19.6%;" id="tag3" type="text" value="${this.metadata != null && this.metadata.tags != null && this.metadata.tags[2] != null ? this.metadata.tags[2] : ''}"
-								placeholder="${translate("publishpage.pchange8")} 3"
-								maxLength="20"
-							>
-							</mwc-textfield>
-							<mwc-textfield
-								style="width:19.6%;" id="tag4" type="text" value="${this.metadata != null && this.metadata.tags != null && this.metadata.tags[3] != null ? this.metadata.tags[3] : ''}"
-								placeholder="${translate("publishpage.pchange8")} 4"
-								maxLength="20"
-							>
-							</mwc-textfield>
-							<mwc-textfield
-								style="width:19.6%;" id="tag5" type="text" value="${this.metadata != null && this.metadata.tags != null && this.metadata.tags[4] != null ? this.metadata.tags[4] : ''}"
-								placeholder="${translate("publishpage.pchange8")} 5"
-								maxLength="20"
-							>
-							</mwc-textfield>
+							${[1, 2, 3, 4, 5].map((num, idx) => html`
+								<div style="width:19.6%;">
+									<mwc-textfield
+										style="width:100%;"
+										id="tag${num}"
+										type="text"
+										.value="${(this.tagValues[idx] || '')}"
+										placeholder="${translate("publishpage.pchange8")} ${num}"
+										maxLength="20"
+										@input=${(e) => this.onTagInput(e, idx)}
+										?disabled=${this.metadataLoading}
+									>
+									</mwc-textfield>
+									<div style="text-align:right; font-size:12px; color: var(--black); margin-top:4px;">${(this.tagValues[idx] || '').length}/20</div>
+								</div>
+							`)}
 						</div>
 					</div>
 					${this.renderUploadField()}
@@ -494,6 +508,46 @@ class PublishData extends LitElement {
 		}
 	}
 
+	onTitleInput(e) {
+		const raw = e && e.target ? e.target.value || '' : ''
+		const limited = this._limitUtf8(raw, 80)
+		if (e && e.target && e.target.value !== limited) {
+			e.target.value = limited
+		}
+		this.titleValue = limited
+	}
+
+	onDescriptionInput(e) {
+		const raw = e && e.target ? e.target.value || '' : ''
+		const limited = this._limitUtf8(raw, 240)
+		if (e && e.target && e.target.value !== limited) {
+			e.target.value = limited
+		}
+		this.descriptionValue = limited
+	}
+
+	onTagInput(e, idx) {
+		const value = e && e.target ? e.target.value || '' : ''
+		const updated = Array.isArray(this.tagValues) ? [...this.tagValues] : ['', '', '', '', '']
+		updated[idx] = value.slice(0, 20)
+		this.tagValues = updated
+	}
+
+	_byteLength(str) {
+		if (!str) return 0
+		const encoder = new TextEncoder()
+		return encoder.encode(str).length
+	}
+
+	_limitUtf8(str, maxBytes) {
+		let value = str || ''
+		const encoder = new TextEncoder()
+		while (encoder.encode(value).length > maxBytes) {
+			value = value.slice(0, -1)
+		}
+		return value
+	}
+
 	async publishData(registeredName, path, file, service, identifier, preview, fee) {
 		this.loading = true
 		this.btnDisable = true
@@ -630,15 +684,43 @@ class PublishData extends LitElement {
 				postBody = Buffer.from(fileBuffer).toString('base64')
 			}
 
-			// Optional metadata
-			let title = encodeURIComponent(this.shadowRoot.getElementById('title').value)
-			let description = encodeURIComponent(this.shadowRoot.getElementById('description').value)
-			let category = encodeURIComponent(this.shadowRoot.getElementById('category').value)
-			let tag1 = encodeURIComponent(this.shadowRoot.getElementById('tag1').value)
-			let tag2 = encodeURIComponent(this.shadowRoot.getElementById('tag2').value)
-			let tag3 = encodeURIComponent(this.shadowRoot.getElementById('tag3').value)
-			let tag4 = encodeURIComponent(this.shadowRoot.getElementById('tag4').value)
-			let tag5 = encodeURIComponent(this.shadowRoot.getElementById('tag5').value)
+			// Optional metadata (enforce byte/char limits before sending)
+			const titleField = this.shadowRoot.getElementById('title')
+			const descField = this.shadowRoot.getElementById('description')
+			const categoryField = this.shadowRoot.getElementById('category')
+			const tagFields = [
+				this.shadowRoot.getElementById('tag1'),
+				this.shadowRoot.getElementById('tag2'),
+				this.shadowRoot.getElementById('tag3'),
+				this.shadowRoot.getElementById('tag4'),
+				this.shadowRoot.getElementById('tag5')
+			]
+
+			const limitedTitle = this._limitUtf8(titleField ? titleField.value : this.titleValue, 80)
+			const limitedDesc = this._limitUtf8(descField ? descField.value : this.descriptionValue, 240)
+			this.titleValue = limitedTitle
+			this.descriptionValue = limitedDesc
+			if (titleField) titleField.value = limitedTitle
+			if (descField) descField.value = limitedDesc
+
+			const tagsLimited = tagFields.map((field, idx) => {
+				const current = field ? field.value : (this.tagValues[idx] || '')
+				const limited = (current || '').slice(0, 20)
+				if (field && field.value !== limited) {
+					field.value = limited
+				}
+				return limited
+			})
+			this.tagValues = tagsLimited
+
+			let title = encodeURIComponent(limitedTitle)
+			let description = encodeURIComponent(limitedDesc)
+			let category = encodeURIComponent(categoryField ? categoryField.value : '')
+			let tag1 = encodeURIComponent(tagsLimited[0])
+			let tag2 = encodeURIComponent(tagsLimited[1])
+			let tag3 = encodeURIComponent(tagsLimited[2])
+			let tag4 = encodeURIComponent(tagsLimited[3])
+			let tag5 = encodeURIComponent(tagsLimited[4])
 			let metadataQueryString = `title=${title}&description=${description}&category=${category}&tags=${tag1}&tags=${tag2}&tags=${tag3}&tags=${tag4}&tags=${tag5}`
 			let uploadDataUrl = ``
 
@@ -739,6 +821,7 @@ class PublishData extends LitElement {
 	fetchResourceMetadata() {
 		let identifier = this.identifier != null ? this.identifier : "default"
 
+		this.metadataLoading = true
 		parentEpml.request('apiCall', {
 			url: `/arbitrary/metadata/${this.service}/${this.name}/${identifier}?apiKey=${this.getApiKey()}`
 		}).then(res => {
@@ -761,10 +844,22 @@ class PublishData extends LitElement {
 				if (categoryField) categoryField.value = (this.metadata && this.metadata.category) ? this.metadata.category : ''
 
 				const tags = (this.metadata && Array.isArray(this.metadata.tags)) ? this.metadata.tags : []
+			this.titleValue = this._limitUtf8((this.metadata && this.metadata.title) ? this.metadata.title : '', 80)
+			this.descriptionValue = this._limitUtf8((this.metadata && this.metadata.description) ? this.metadata.description : '', 240)
+			this.tagValues = [
+				tags[0] || '',
+				tags[1] || '',
+					tags[2] || '',
+					tags[3] || '',
+					tags[4] || ''
+				]
 				tagFields.forEach((field, idx) => {
 					if (field) field.value = tags[idx] || ''
 				})
+				this.metadataLoading = false
 			}, 1)
+		}).catch(() => {
+			this.metadataLoading = false
 		})
 	}
 

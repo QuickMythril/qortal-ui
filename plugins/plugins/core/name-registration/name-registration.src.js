@@ -54,7 +54,11 @@ class NameRegistration extends LitElement {
 			toUpdateName: { type: String },
 			errorMessage: { type: String },
 			successMessage: { type: String },
-			primaryName: { type: String }
+			primaryName: { type: String },
+			registerNameValue: { type: String },
+			registerDescValue: { type: String },
+			updateNewNameValue: { type: String },
+			updateDescValue: { type: String }
 		}
 	}
 
@@ -84,6 +88,16 @@ class NameRegistration extends LitElement {
 		this.errorMessage = ''
 		this.successMessage = ''
 		this.primaryName = ''
+		this.registerNameValue = ''
+		this.registerDescValue = ''
+		this.updateNewNameValue = ''
+		this.updateDescValue = ''
+		this.lastRegisterNameRaw = ''
+		this.lastUpdateNameRaw = ''
+	}
+
+	firstUpdated() {
+		this._updateCounters()
 	}
 
 	_validateNameRules(name, data) {
@@ -101,10 +115,36 @@ class NameRegistration extends LitElement {
 			return translate("registernamepage.nchange_whitespace_error") || "Name cannot have leading/trailing whitespace"
 		}
 		// Basic address-like check: starts with Q and length 25-34
-		if (/^Q[1-9A-HJ-NP-Za-km-z]{25,34}$/i.test(name.trim())) {
+		if (this._looksLikeAddress(name)) {
 			return translate("registernamepage.nchange_address_error") || "Name cannot look like a QORT address"
 		}
 		return null
+	}
+
+	_byteLength(str) {
+		const encoder = new TextEncoder()
+		return encoder.encode(str || '').length
+	}
+
+	_limitUtf8(str, maxBytes) {
+		let value = str || ''
+		const encoder = new TextEncoder()
+		while (encoder.encode(value).length > maxBytes) {
+			value = value.slice(0, -1)
+		}
+		return value
+	}
+
+	_normalizeNameInput(value) {
+		if (!value) return ''
+		let normalized = value.normalize('NFKC')
+		normalized = normalized.replace(/[\u200b\u200c\u200d\u2060\ufeff]/g, '')
+		normalized = normalized.replace(/\s+/g, ' ').trim()
+		return normalized
+	}
+
+	_looksLikeAddress(name) {
+		return /^Q[1-9A-HJ-NP-Za-km-z]{25,34}$/i.test((name || '').trim())
 	}
 
 	render() {
@@ -112,8 +152,7 @@ class NameRegistration extends LitElement {
 			<div id="name-registration-page">
 				<div style="min-height:48px; display: flex; padding-bottom: 6px; margin: 2px;">
 					<h3 style="margin: 0; flex: 1; padding-top: .1em; display: inline;">${translate("sidemenu.sm2")}</h3>
-					<mwc-button style="float:right;" @click=${() =>
-						this.shadowRoot.querySelector('#registerNameDialog').show()}>
+					<mwc-button style="float:right;" @click=${this.openRegisterNameDialog}>
 						<mwc-icon>add</mwc-icon>
 						${translate("registernamepage.nchange2")}
 					</mwc-button>
@@ -142,8 +181,11 @@ class NameRegistration extends LitElement {
 						id="nameInput"
 						label="${translate("registernamepage.nchange5")}"
 						type="text"
+						@input=${this.onRegisterNameInput}
 						>
 						</mwc-textfield>
+						<div id="registerNameCounter" style="text-align:right; font-size:12px; color: var(--black); margin-top:4px;">0/40</div>
+						<div id="registerAddressWarning" style="text-align:right; font-size:12px; color: red; margin-top:2px;"></div>
 					</p>
 					<p>
 						<mwc-textfield
@@ -153,8 +195,10 @@ class NameRegistration extends LitElement {
 						id="descInput"
 						label="${translate("registernamepage.nchange10")}"
 						type="text"
+						@input=${this.onRegisterDescInput}
 						>
 						</mwc-textfield>
+						<div id="registerDescCounter" style="text-align:right; font-size:12px; color: var(--black); margin-top:4px;">0/4000</div>
 					</p>
 					<div style="text-align:right; height:36px;">
 						<span ?hidden="${!this.registerNameLoading}">
@@ -213,8 +257,11 @@ class NameRegistration extends LitElement {
 						id="newNameInput"
 						label="${translate("registernamepage.nchange42")}"
 						type="text"
+						@input=${this.onUpdateNameInput}
 						>
 						</mwc-textfield>
+						<div id="updateNameCounter" style="text-align:right; font-size:12px; color: var(--black); margin-top:4px;">0/40</div>
+						<div id="updateAddressWarning" style="text-align:right; font-size:12px; color: red; margin-top:2px;"></div>
 					</p>
 					<p>
 						<mwc-textfield
@@ -223,8 +270,10 @@ class NameRegistration extends LitElement {
 						id="newDescInput"
 						label="${translate("registernamepage.nchange10")}"
 						type="text"
+						@input=${this.onUpdateDescInput}
 						>
 						</mwc-textfield>
+						<div id="updateDescCounter" style="text-align:right; font-size:12px; color: var(--black); margin-top:4px;">0/4000</div>
 					</p>
 					<div style="text-align:right; height:36px;">
 						<span ?hidden=${this.message === ''} style="${this.error ? 'color:red;' : 'color:green;'}">
@@ -583,6 +632,108 @@ class NameRegistration extends LitElement {
 		return html`${translate('registernamepage.nchange17')}`
 	}
 
+	openRegisterNameDialog() {
+		this.message = ''
+		this.error = false
+		this.registerNameValue = ''
+		this.registerDescValue = ''
+		this.lastRegisterNameRaw = ''
+		const nameField = this.shadowRoot.querySelector('#nameInput')
+		const descField = this.shadowRoot.querySelector('#descInput')
+		if (nameField) nameField.value = ''
+		if (descField) descField.value = ''
+		this._updateCounters()
+		this.shadowRoot.querySelector('#registerNameDialog').show()
+	}
+
+	onRegisterNameInput(e) {
+		const raw = e && e.target ? e.target.value : ''
+		const normalized = this._normalizeNameInput(raw)
+		const limitedNormalized = this._limitUtf8(normalized, 40)
+		if (this._byteLength(normalized) > this._byteLength(limitedNormalized)) {
+			if (e && e.target) {
+				e.target.value = this.lastRegisterNameRaw || ''
+			}
+		} else {
+			this.lastRegisterNameRaw = raw
+		}
+		this._updateCounters()
+	}
+
+	onRegisterDescInput(e) {
+		const limited = this._limitUtf8(e && e.target ? e.target.value : '', 4000)
+		if (e && e.target && e.target.value !== limited) {
+			e.target.value = limited
+		}
+		this._updateCounters()
+	}
+
+	onUpdateNameInput(e) {
+		const raw = e && e.target ? e.target.value : ''
+		const normalized = this._normalizeNameInput(raw)
+		const limitedNormalized = this._limitUtf8(normalized, 40)
+		if (this._byteLength(normalized) > this._byteLength(limitedNormalized)) {
+			if (e && e.target) {
+				e.target.value = this.lastUpdateNameRaw || ''
+			}
+		} else {
+			this.lastUpdateNameRaw = raw
+		}
+		this._updateCounters()
+	}
+
+	onUpdateDescInput(e) {
+		const limited = this._limitUtf8(e && e.target ? e.target.value : '', 4000)
+		if (e && e.target && e.target.value !== limited) {
+			e.target.value = limited
+		}
+		this._updateCounters()
+	}
+
+	_updateCounters() {
+		const nameField = this.shadowRoot && this.shadowRoot.getElementById('nameInput')
+		const descField = this.shadowRoot && this.shadowRoot.getElementById('descInput')
+		const updateNameField = this.shadowRoot && this.shadowRoot.getElementById('newNameInput')
+		const updateDescField = this.shadowRoot && this.shadowRoot.getElementById('newDescInput')
+
+		const registerNameCounter = this.shadowRoot && this.shadowRoot.getElementById('registerNameCounter')
+		const registerDescCounter = this.shadowRoot && this.shadowRoot.getElementById('registerDescCounter')
+		const updateNameCounter = this.shadowRoot && this.shadowRoot.getElementById('updateNameCounter')
+		const updateDescCounter = this.shadowRoot && this.shadowRoot.getElementById('updateDescCounter')
+		const registerAddressWarning = this.shadowRoot && this.shadowRoot.getElementById('registerAddressWarning')
+		const updateAddressWarning = this.shadowRoot && this.shadowRoot.getElementById('updateAddressWarning')
+
+		const registerNameVal = nameField ? nameField.value : (this.registerNameValue || '')
+		const registerDescVal = descField ? descField.value : (this.registerDescValue || '')
+		const updateNameVal = updateNameField ? updateNameField.value : (this.updateNewNameValue || '')
+		const updateDescVal = updateDescField ? updateDescField.value : (this.updateDescValue || '')
+
+		const normalizedRegister = this._limitUtf8(this._normalizeNameInput(registerNameVal), 40)
+		const normalizedUpdate = this._limitUtf8(this._normalizeNameInput(updateNameVal), 40)
+		if (registerNameCounter) {
+			registerNameCounter.textContent = `${this._byteLength(normalizedRegister)}/40`
+		}
+		if (updateNameCounter) {
+			updateNameCounter.textContent = `${this._byteLength(normalizedUpdate)}/40`
+		}
+		if (registerDescCounter) {
+			registerDescCounter.textContent = `${this._byteLength(registerDescVal || '')}/4000`
+		}
+		if (updateDescCounter) {
+			updateDescCounter.textContent = `${this._byteLength(updateDescVal || '')}/4000`
+		}
+		const addressWarn = translate("registernamepage.nchange_address_error") || "Name cannot look like a QORT address"
+		const addressWarnText = (typeof addressWarn === 'string' && addressWarn.length > 0)
+			? addressWarn
+			: "Name cannot look like a QORT address"
+		if (registerAddressWarning) {
+			registerAddressWarning.textContent = this._looksLikeAddress(normalizedRegister) ? addressWarnText : ''
+		}
+		if (updateAddressWarning) {
+			updateAddressWarning.textContent = this._looksLikeAddress(normalizedUpdate) ? addressWarnText : ''
+		}
+	}
+
 	renderPrimaryNameSection() {
 		const primaryEntry = this.primaryName
 			? this.names.find(n => n.name === this.primaryName)
@@ -692,7 +843,11 @@ class NameRegistration extends LitElement {
 		this.shadowRoot.getElementById('oldNameInput').value = ''
 		this.shadowRoot.getElementById('newNameInput').value = ''
 		this.shadowRoot.getElementById('newDescInput').value = ''
+		this.updateNewNameValue = ''
+		this.updateDescValue = ''
+		this.lastUpdateNameRaw = ''
 		this.toUpdateName = nameObj.name
+		this._updateCounters()
 		this.shadowRoot.querySelector('#updateNameDialog').show()
 	}
 
@@ -702,6 +857,10 @@ class NameRegistration extends LitElement {
 		this.shadowRoot.getElementById('oldNameInput').value = ''
 		this.shadowRoot.getElementById('newNameInput').value = ''
 		this.shadowRoot.getElementById('newDescInput').value = ''
+		this.updateNewNameValue = ''
+		this.updateDescValue = ''
+		this.lastUpdateNameRaw = ''
+		this._updateCounters()
 	}
 
 	renderCancelSellNameButton(nameObj) {
@@ -806,8 +965,14 @@ class NameRegistration extends LitElement {
 		this.error = false
 		this.message = ''
 		const feeInput = this.fee
-		const nameInput = this.shadowRoot.getElementById('nameInput').value
-		const descInput = this.shadowRoot.getElementById('descInput').value
+		const nameField = this.shadowRoot.getElementById('nameInput')
+		const descField = this.shadowRoot.getElementById('descInput')
+		const rawName = nameField ? nameField.value : this.registerNameValue
+		const normalizedName = this._normalizeNameInput(rawName)
+		const nameInput = this._limitUtf8(normalizedName, 40)
+		const descInput = this._limitUtf8(descField ? descField.value : this.registerDescValue, 4000)
+		if (nameField) nameField.value = rawName
+		if (descField) descField.value = descInput
 
 		const validationError = this._validateNameRules(nameInput, descInput)
 		if (validationError) {
@@ -893,8 +1058,14 @@ class NameRegistration extends LitElement {
 		this.message = ''
 		const updateFeeInput = this.updateFee
 		const oldNameInput = this.shadowRoot.getElementById('oldNameInput').value
-		const newNameInput = this.shadowRoot.getElementById('newNameInput').value
-		const newDescInput = this.shadowRoot.getElementById('newDescInput').value
+		const newNameField = this.shadowRoot.getElementById('newNameInput')
+		const newDescField = this.shadowRoot.getElementById('newDescInput')
+		const rawNewName = newNameField ? newNameField.value : this.updateNewNameValue
+		const normalizedNewName = this._normalizeNameInput(rawNewName)
+		const newNameInput = this._limitUtf8(normalizedNewName, 40)
+		const newDescInput = this._limitUtf8(newDescField ? newDescField.value : this.updateDescValue, 4000)
+		if (newNameField) newNameField.value = rawNewName
+		if (newDescField) newDescField.value = newDescInput
 
 		const validationError = this._validateNameRules(newNameInput || oldNameInput, newDescInput)
 		if (validationError) {
