@@ -983,8 +983,8 @@ class QortalInfoView extends LitElement {
 					this.imageName = item.name
 				})
 			} else {
-				this.infoAccountName = "No registered name"
-				this.imageName = avatarAddress
+				this.infoAccountName = avatarAddress || "No registered name"
+				this.imageName = this.infoAccountName
 			}
 		})
 

@@ -32,7 +32,7 @@
 
 - [ ] Other-user lookups aligned to primary name
   - [x] "Update lookup helpers to use /names/primary": Update chat/UI lookup helpers (`ChatPage#getName`, `functions.js#getUserNameFromAddress`, `classes.js#getNameInfo`, user-info/address book) to use `/names/primary/<address>` first, then `/names/address`, then address.
-  - [ ] "Preserve name fallbacks": Preserve fallbacks (“No registered name” or address).
+  - [x] "Preserve name fallbacks": Preserve fallbacks (“No registered name” or address) and avoid empty string returns.
 
 - [ ] Polling/refresh cadence
   - [ ] "Poll /names/primary after registration": Switch register-name polling to `/names/primary`; also refresh `allNames`.
