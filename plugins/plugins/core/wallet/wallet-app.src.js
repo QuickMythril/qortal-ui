@@ -4361,11 +4361,11 @@ class MultiWallet extends LitElement {
 	goBackwardTX() {
 		if (this.searchOffset === 0) {
 			this.pageButtonsHidden = false
-			this.searchLimit = this.currentPageSize
+			this.searchLimit = 25
 			this.counter = 1
 		} else {
 			this.pageButtonsHidden = false
-			this.searchLimit = this.currentPageSize
+			this.searchLimit = 25
 			this.counter = this.searchOffset / this.searchLimit
 			this.searchOffset = this.searchOffset - this.searchLimit
 			this.renderNewDom()
@@ -4374,7 +4374,7 @@ class MultiWallet extends LitElement {
 
 	goForwardTX() {
 		this.pageButtonsHidden = false
-		this.searchLimit = this.currentPageSize
+		this.searchLimit = 25
 		this.searchOffset = this.searchOffset + this.searchLimit
 		this.counter = (this.searchOffset / this.searchLimit) + 1
 		this.renderNewDom()
