@@ -410,14 +410,31 @@ class NameRegistration extends LitElement {
 		this.unitSellFee()
 		this.unitCancelSellFee()
 
-		const fetchNames = () => {
+		const fetchNames = async () => {
 			this.isLoading = true
-			parentEpml.request('apiCall', {
-				url: `/names/address/${this.selectedAddress.address}?limit=0&reverse=true`
-			}).then(res => {
-				setTimeout(() => { this.names = res }, 1)
+			try {
+				const [primaryRes, namesRes] = await Promise.all([
+					parentEpml.request('apiCall', { url: `/names/primary/${this.selectedAddress.address}` }).catch(() => ({})),
+					parentEpml.request('apiCall', { url: `/names/address/${this.selectedAddress.address}?limit=0&reverse=true` }).catch(() => [])
+				])
+
+				let names = Array.isArray(namesRes) ? namesRes : []
+				const primaryName = primaryRes?.name || ''
+				if (primaryName && names.length) {
+					const idx = names.findIndex(n => n.name === primaryName)
+					if (idx > 0) {
+						const [primaryEntry] = names.splice(idx, 1)
+						names.unshift(primaryEntry)
+					}
+				}
+
+				setTimeout(() => { this.names = names }, 1)
+			} catch (error) {
+				console.error(error)
+				setTimeout(() => { this.names = [] }, 1)
+			} finally {
 				this.isLoading = false
-			})
+			}
 			setTimeout(fetchNames, this.config.user.nodeSettings.pingInterval)
 		}
 

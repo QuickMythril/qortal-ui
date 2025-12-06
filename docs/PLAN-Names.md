@@ -30,17 +30,17 @@
   - [x] "Validate selected publish name ownership": Validate selected name is in `allNames`; fall back to `activeName || primaryName` if none selected.
   - [x] "Use primary/all names in other publish flows": Other publish flows using `myRegisteredName` load from `activeName || primaryName` and surface `allNames` where relevant.
 
-- [ ] Other-user lookups aligned to primary name
+- [x] Other-user lookups aligned to primary name
   - [x] "Update lookup helpers to use /names/primary": Update chat/UI lookup helpers (`ChatPage#getName`, `functions.js#getUserNameFromAddress`, `classes.js#getNameInfo`, user-info/address book) to use `/names/primary/<address>` first, then `/names/address`, then address.
   - [x] "Preserve name fallbacks": Preserve fallbacks (“No registered name” or address) and avoid empty string returns.
 
 - [ ] Polling/refresh cadence
-  - [ ] "Poll /names/primary after registration": Switch register-name polling to `/names/primary`; also refresh `allNames`.
-  - [ ] "Refresh primary/all names on intervals": Ensure intervals (publish modal `pingInterval`, update-name 10s) update both `primaryName` and `allNames` in Redux.
-  - [ ] "Handle lite-node primary fallback": Gracefully handle `/names/primary` unauthorized on lite nodes and fall back to `/names/address`.
+  - [x] "Poll /names/primary after registration": Switch register-name polling to `/names/primary`; also refresh `allNames`.
+  - [x] "Refresh primary/all names on intervals": Ensure intervals (publish modal `pingInterval`, update-name 10s) update both `primaryName` and `allNames` in Redux.
+  - [x] "Handle lite-node primary fallback": Gracefully handle `/names/primary` unauthorized on lite nodes and fall back to `/names/address`.
 
 - [ ] Compatibility and guards
-  - [ ] "Fallback to names/address if primary unavailable": Fallback to `/names/address` if `/names/primary` is unavailable.
+  - [x] "Fallback to names/address if primary unavailable": Fallback to `/names/address` if `/names/primary` is unavailable.
   - [ ] "Keep legacy names array populated": Keep `accountInfo.names` populated for legacy consumers while adding `primaryName`/`allNames`.
   - [ ] "Do not attempt core primary switch": Keep `activeName` UI-only; do not try to change core primary when multiple names exist due to core restrictions.
   - [ ] "Handle TEMPORARY_DISABLED/name errors": Surface core errors such as `TEMPORARY_DISABLED`, name length/data length, normalization, address-like name rejections clearly in UI.
