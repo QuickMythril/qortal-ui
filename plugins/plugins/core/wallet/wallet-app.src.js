@@ -136,7 +136,8 @@ class MultiWallet extends LitElement {
 			searchLimit: { type: Number },
 			counter: { type: Number },
 			pageButtonsHidden: { type: Boolean },
-			showNames: { type: Boolean }
+			showNames: { type: Boolean },
+			currentPageSize: { type: Number }
 		}
 	}
 
@@ -251,6 +252,7 @@ class MultiWallet extends LitElement {
 		this.pageButtonsHidden = false
 		this.showNames = this.loadShowNamesPreference()
 		this.nameCache = new Map()
+		this.currentPageSize = this.loadPageSizePreference()
 		this.wallets = new Map()
 
 		let coinProp = {
@@ -312,12 +314,33 @@ class MultiWallet extends LitElement {
 		return true
 	}
 
+	loadPageSizePreference() {
+		const pref = parseInt(localStorage.getItem('walletTxPageSize'), 10)
+		if ([10, 25, 50, 100].includes(pref)) return pref
+		return 25
+	}
+
 	toggleShowNames() {
 		this.showNames = !this.showNames
 		localStorage.setItem('walletTxShowNames', this.showNames ? 'true' : 'false')
 		if (this.showNames) {
 			this.ensureNamesForTransactions(this.wallets.get('qort').transactions)
+		} else if (this.transactionsGrid) {
+			this.transactionsGrid.items = [...(this.wallets.get('qort').transactions || [])]
 		}
+		this.requestUpdate()
+	}
+
+	changePageSize(size) {
+		if (![10, 25, 50, 100].includes(size)) return
+		this.currentPageSize = size
+		localStorage.setItem('walletTxPageSize', String(size))
+		if (this.transactionsGrid) {
+			this.transactionsGrid.pageSize = size
+		}
+		this.pages = null
+		this.counter = 1
+		this.updateItemsFromPage(1, true)
 	}
 
 	async ensureNamesForTransactions(transactions) {
@@ -341,6 +364,9 @@ class MultiWallet extends LitElement {
 				this.nameCache.set(addr, name)
 			})
 			this.requestUpdate()
+			if (this.transactionsGrid) {
+				this.transactionsGrid.items = [...(this.wallets.get('qort').transactions || [])]
+			}
 		} catch (error) {
 			console.error('Failed to fetch names for transactions', error)
 		}
@@ -4951,12 +4977,15 @@ class MultiWallet extends LitElement {
 	}
 
 	async getTransactionGrid(coin) {
-		this.transactionsGrid = this.shadowRoot.querySelector(`#${coin}TransactionsGrid`)
-		if (coin === 'qort') {
-			this.transactionsGrid.addEventListener(
-				'click',
-				(e) => {
-					let qortItem = this.transactionsGrid.getEventContext(e).item
+			this.transactionsGrid = this.shadowRoot.querySelector(`#${coin}TransactionsGrid`)
+			if (this.transactionsGrid) {
+				this.transactionsGrid.pageSize = this.currentPageSize
+			}
+			if (coin === 'qort') {
+				this.transactionsGrid.addEventListener(
+					'click',
+					(e) => {
+						let qortItem = this.transactionsGrid.getEventContext(e).item
 					this.showQortTransactionDetails(qortItem, this.wallets.get(this._selectedWallet).transactions)
 				},
 				{ passive: true }
@@ -5049,6 +5078,7 @@ class MultiWallet extends LitElement {
 				return tx
 			})
 		}
+		this.ensureNamesForTransactions(this.wallets.get('qort').transactions)
 		return html`
 			<div style="padding-left:12px;" ?hidden="${!this.isEmptyArray(transactions)}"><span style="color: var(--black);">${translate("walletpage.wchange38")}</span></div>
 			<vaadin-grid theme="large" id="${coin}TransactionsGrid" ?hidden="${this.isEmptyArray(this.wallets.get(this._selectedWallet).transactions)}" .items="${this.wallets.get(this._selectedWallet).transactions}" all-rows-visible>
@@ -5118,8 +5148,13 @@ class MultiWallet extends LitElement {
 					}}
 				>
 				</vaadin-grid-column>
-			</vaadin-grid>
+				</vaadin-grid>
 				<div style="margin-top: 10px;">
+					<span style="margin-right: 8px; color: var(--black); font-size: 14px;">Rows:</span>
+					<vaadin-button theme="primary small" style="cursor: pointer; margin-right: 6px;" @click=${() => this.changePageSize(10)} ?disabled=${this.currentPageSize === 10}>10</vaadin-button>
+					<vaadin-button theme="primary small" style="cursor: pointer; margin-right: 6px;" @click=${() => this.changePageSize(25)} ?disabled=${this.currentPageSize === 25}>25</vaadin-button>
+					<vaadin-button theme="primary small" style="cursor: pointer; margin-right: 6px;" @click=${() => this.changePageSize(50)} ?disabled=${this.currentPageSize === 50}>50</vaadin-button>
+					<vaadin-button theme="primary small" style="cursor: pointer; margin-right: 12px;" @click=${() => this.changePageSize(100)} ?disabled=${this.currentPageSize === 100}>100</vaadin-button>
 					<vaadin-button theme="primary small" style="cursor: pointer;" ?hidden="${this.pageButtonsHidden}" @click=${() => this.goBackwardTX()}>
 						<< <span style="text-transform: uppercase; font-size: 14px;">${translate("general.back")}</span>
 					</vaadin-button>
