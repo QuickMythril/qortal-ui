@@ -5138,11 +5138,6 @@ class MultiWallet extends LitElement {
 				</vaadin-grid-column>
 				</vaadin-grid>
 				<div style="margin-top: 10px;">
-					<span style="margin-right: 8px; color: var(--black); font-size: 14px;">Rows:</span>
-					<vaadin-button theme="primary small" style="cursor: pointer; margin-right: 6px;" @click=${() => this.changePageSize(10)} ?disabled=${this.currentPageSize === 10}>10</vaadin-button>
-					<vaadin-button theme="primary small" style="cursor: pointer; margin-right: 6px;" @click=${() => this.changePageSize(25)} ?disabled=${this.currentPageSize === 25}>25</vaadin-button>
-					<vaadin-button theme="primary small" style="cursor: pointer; margin-right: 6px;" @click=${() => this.changePageSize(50)} ?disabled=${this.currentPageSize === 50}>50</vaadin-button>
-					<vaadin-button theme="primary small" style="cursor: pointer; margin-right: 12px;" @click=${() => this.changePageSize(100)} ?disabled=${this.currentPageSize === 100}>100</vaadin-button>
 					<vaadin-button theme="primary small" style="cursor: pointer;" ?hidden="${this.pageButtonsHidden}" @click=${() => this.goBackwardTX()}>
 						<< <span style="text-transform: uppercase; font-size: 14px;">${translate("general.back")}</span>
 					</vaadin-button>
