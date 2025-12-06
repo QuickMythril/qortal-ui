@@ -12,6 +12,7 @@ import '@vaadin/grid'
 
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../core/translate'
+import { getUserNameFromAddress } from '../utils/functions'
 
 registerTranslateConfig({
 	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
@@ -85,9 +86,27 @@ class NodeManagement extends LitElement {
 								${translate("nodepage.nchange4")}
 							</mwc-button>
 						</div>
-						<vaadin-grid theme="large" id="mintingAccountsGrid" ?hidden="${this.isEmptyArray(this.mintingAccounts)}" .items="${this.mintingAccounts}" aria-label="Minting Accounts" all-rows-visible>
-							<vaadin-grid-column auto-width header="${translate("nodepage.nchange9")}" path="mintingAccount"></vaadin-grid-column>
-							<vaadin-grid-column auto-width header="${translate("nodepage.nchange10")}" path="recipientAccount"></vaadin-grid-column>
+							<vaadin-grid theme="large" id="mintingAccountsGrid" ?hidden="${this.isEmptyArray(this.mintingAccounts)}" .items="${this.mintingAccounts}" aria-label="Minting Accounts" all-rows-visible>
+								<vaadin-grid-column auto-width header="${translate("nodepage.nchange9")}" .renderer=${(root, column, data) => {
+									const name = data.item.mintingName
+									const addr = data.item.mintingAccount
+									render(html`
+										<div>
+											<div class="name-line">${name && name !== addr ? name : "No registered name"}</div>
+											<div class="address-line">${addr}</div>
+										</div>
+									`, root)
+								}}></vaadin-grid-column>
+								<vaadin-grid-column auto-width header="${translate("nodepage.nchange10")}" .renderer=${(root, column, data) => {
+									const name = data.item.recipientName
+									const addr = data.item.recipientAccount
+									render(html`
+										<div>
+											<div class="name-line">${name && name !== addr ? name : "No registered name"}</div>
+											<div class="address-line">${addr}</div>
+										</div>
+									`, root)
+								}}></vaadin-grid-column>
 							<vaadin-grid-column width="12em" header="${translate("nodepage.nchange11")}" .renderer=${(root, column, data) => {
 							render(html`
 								<mwc-button class="red" ?disabled=${this.removeMintingAccountLoading} @click=${() => this.removeMintingAccount(data.item.publicKey)}>
@@ -479,16 +498,34 @@ class NodeManagement extends LitElement {
 		})
 	}
 
-	updateMintingAccounts() {
-		this.mintingAccounts = []
+		async updateMintingAccounts() {
+			this.mintingAccounts = []
 
-		parentEpml.request('apiCall', {
-			url: `/admin/mintingaccounts?apiKey=${this.getApiKey()}`,
-			method: 'GET'
-		}).then((res) => {
-			this.mintingAccounts = res
-		})
-	}
+			try {
+				const res = await parentEpml.request('apiCall', {
+					url: `/admin/mintingaccounts?apiKey=${this.getApiKey()}`,
+					method: 'GET'
+				})
+
+				if (!Array.isArray(res)) {
+					this.mintingAccounts = []
+					return
+				}
+
+				const enriched = await Promise.all(res.map(async (item) => {
+					const [mintingName, recipientName] = await Promise.all([
+						getUserNameFromAddress(item.mintingAccount),
+						getUserNameFromAddress(item.recipientAccount)
+					])
+					return { ...item, mintingName, recipientName }
+				}))
+
+				this.mintingAccounts = enriched
+			} catch (error) {
+				console.error('Failed to load minting accounts', error)
+				this.mintingAccounts = []
+			}
+		}
 
 	removeMintingAccount(publicKey) {
 		this.removeMintingAccountLoading = true
