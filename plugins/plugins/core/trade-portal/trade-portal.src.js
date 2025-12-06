@@ -358,7 +358,6 @@ class TradePortal extends LitElement {
 		if (!this.showNames) return address
 		const cached = this.nameCache.get(address)
 		if (cached) return cached
-		this.ensureOpenOrderNames(this.listedCoins.get(this.selectedCoin).openFilteredOrders)
 		return address
 	}
 
