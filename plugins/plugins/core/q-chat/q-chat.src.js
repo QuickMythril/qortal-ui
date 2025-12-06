@@ -1167,7 +1167,7 @@ class Chat extends LitElement {
 	renderChatWelcomePage() {
 		return html`
 			<chat-welcome-page
-				myAddress=${JSON.stringify(this.selectedAddress)}
+				.myAddress=${this.selectedAddress}
 				.setOpenPrivateMessage=${(val) => this.setOpenPrivateMessage(val)}
 			>
 			</chat-welcome-page>

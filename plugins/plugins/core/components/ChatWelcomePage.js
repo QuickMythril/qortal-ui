@@ -2,6 +2,7 @@ import { html, LitElement } from 'lit'
 import { Epml } from '../../../epml'
 import { chatWelcomePageStyles } from './plugins-css'
 import isElectron from 'is-electron'
+import { getMyNameFromStore } from '../utils/functions'
 import '@material/mwc-icon'
 import '@material/mwc-button'
 import '@material/mwc-dialog'
@@ -39,6 +40,7 @@ class ChatWelcomePage extends LitElement {
 		super()
 		this.selectedAddress = window.parent.reduxStore.getState().app.selectedAddress.address
 		this.myAddress = {}
+		this.displayName = 'No registered name'
 		this.balance = 1
 		this.messages = []
 		this.btnDisable = false
@@ -54,14 +56,15 @@ class ChatWelcomePage extends LitElement {
 					<hr style="color: #eee; border-radius: 80%; margin-bottom: 2rem;">
 				</div>
 				<div class="sub-main">
-					<div class="center-box">
-						<mwc-icon class="img-icon">chat</mwc-icon><br>
-						<span style="font-size: 20px; color: var(--black);">${this.myAddress.address}</span>
-						<div class="start-chat" @click="${() => this.setOpenPrivateMessage({name: "", open: true})}">
-							${translate("welcomepage.wcchange2")}
+						<div class="center-box">
+							<mwc-icon class="img-icon">chat</mwc-icon><br>
+							<div class="name-line">${this.displayName}</div>
+							<div class="address-line">${this.myAddress.address || ''}</div>
+							<div class="start-chat" @click="${() => this.setOpenPrivateMessage({name: "", open: true})}">
+								${translate("welcomepage.wcchange2")}
+							</div>
 						</div>
 					</div>
-				</div>
 				<!-- Start Chatting Dialog -->
 				<mwc-dialog id="startSecondChatDialog" scrimClickAction="${this.isLoading ? '' : 'close'}">
 					<div style="text-align:center">
@@ -87,6 +90,7 @@ class ChatWelcomePage extends LitElement {
 	firstUpdated() {
 		this.changeTheme()
 		this.changeLanguage()
+		this.syncAddressAndName()
 
 		const stopKeyEventPropagation = (e) => {
 			e.stopPropagation()
@@ -125,6 +129,7 @@ class ChatWelcomePage extends LitElement {
 				selectedAddress = JSON.parse(selectedAddress)
 				if (!selectedAddress || Object.entries(selectedAddress).length === 0) return
 				this.selectedAddress = selectedAddress
+				this.syncAddressAndName()
 			})
 
 		})
@@ -163,6 +168,22 @@ class ChatWelcomePage extends LitElement {
 			use('us')
 		} else {
 			use(checkLanguage)
+		}
+	}
+
+	syncAddressAndName() {
+		try {
+			const state = window?.parent?.reduxStore?.getState?.()
+			const selected = state?.app?.selectedAddress || {}
+			this.myAddress = {
+				...selected,
+				address: selected.address || this.selectedAddress || ''
+			}
+			const name = getMyNameFromStore({ allowAddressFallback: false })
+			this.displayName = name && name !== this.myAddress.address ? name : 'No registered name'
+		} catch (error) {
+			console.error('Failed to sync address/name for welcome page', error)
+			this.displayName = 'No registered name'
 		}
 	}
 
