@@ -320,6 +320,8 @@ class MultiWallet extends LitElement {
 		} else if (this.transactionsGrid) {
 			this.transactionsGrid.items = [...(this.wallets.get('qort').transactions || [])]
 		}
+		this.renderTransactions()
+		this.getTransactionGrid(this._selectedWallet)
 		this.requestUpdate()
 	}
 
