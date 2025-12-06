@@ -44,7 +44,7 @@
   - [x] "Keep legacy names array populated": Keep `accountInfo.names` populated for legacy consumers while adding `primaryName`/`allNames`.
   - [x] "Do not attempt core primary switch": Keep `activeName` UI-only; do not try to change core primary when multiple names exist due to core restrictions.
   - [x] "Handle TEMPORARY_DISABLED/name errors": Surface core errors such as `TEMPORARY_DISABLED`, name length/data length, normalization, address-like name rejections clearly in UI.
-  - [ ] "Explain primary/active differences": Add UX copy (e.g., in Name Registration plugin) explaining core primary rules and how UI activeName differs.
+  - [x] "Explain primary/active differences": Add UX copy (e.g., in Name Registration plugin) explaining core primary rules and how UI activeName differs.
 
 - [ ] Validation and smoke tests
   - [ ] "Test publish modal with multiple names": Publish modal shows all owned names, defaults to active/primary, rejects non-owned name.

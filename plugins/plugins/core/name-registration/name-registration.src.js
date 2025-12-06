@@ -116,6 +116,9 @@ class NameRegistration extends LitElement {
 						${translate("registernamepage.nchange2")}
 					</mwc-button>
 				</div>
+				<p style="margin: 4px 0; color: var(--black); font-size: 13px;">
+					Note: the Core primary name is fixed; the UI will let you pick an active name later for display without changing your primary.
+				</p>
 				<div class="divCard">
 					<h3 style="margin: 0; margin-bottom: 1em; text-align: center;">${translate("registernamepage.nchange3")}</h3>
 					<vaadin-grid theme="large" id="namesGrid" ?hidden="${this.isEmptyArray(this.names)}" aria-label="Names" .items="${this.names}" all-rows-visible>
