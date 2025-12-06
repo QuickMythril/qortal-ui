@@ -56,6 +56,7 @@ export const getUserNameFromAddress = async (address) => {
 		}
 	} catch (error) {
 		console.error(error)
+		return address
 	}
 }
 

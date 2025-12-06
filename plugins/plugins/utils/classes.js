@@ -1109,7 +1109,6 @@ export async function getNameInfo(address) {
 	const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 	const nodeUrl = `${myNode.protocol}://${myNode.domain}:${myNode.port}`
 
-	// Try primary first
 	try {
 		const primaryRes = await fetch(`${nodeUrl}/names/primary/${address}`)
 		if (primaryRes.ok) {
@@ -1128,7 +1127,7 @@ export async function getNameInfo(address) {
 	if (Array.isArray(nameData) && nameData.length > 0) {
 		return nameData[0].name
 	} else {
-		return ""
+		return address
 	}
 }
 

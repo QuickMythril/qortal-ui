@@ -24,14 +24,14 @@
   - [x] "Update trade/tip/info name usage": Trade/tip/info (`TipUser.js`, `TradeInfoView.js`, `TraderInfoView.js`, `sponsorship-list`, `puzzles`, `qortal-lottery`, `group-management`) use `activeName || primaryName || names[0]?.name || address`.
   - [x] "Use active name for avatar URLs": Avatar URL builders use `activeName || primaryName` when present.
 
-- [ ] Publishing flows (support multiple names + ownership validation)
+- [x] Publishing flows (support multiple names + ownership validation)
   - [x] "Populate publish dropdown with allNames": In `qdn/publish/publish.src.js`, populate dropdown with `allNames` (default `activeName || primaryName`).
   - [x] "Remove single-name TODO in publish": Remove hardcoded single-option TODO; show all owned names.
   - [x] "Validate selected publish name ownership": Validate selected name is in `allNames`; fall back to `activeName || primaryName` if none selected.
   - [x] "Use primary/all names in other publish flows": Other publish flows using `myRegisteredName` load from `activeName || primaryName` and surface `allNames` where relevant.
 
 - [ ] Other-user lookups aligned to primary name
-  - [ ] "Update lookup helpers to use /names/primary": Update chat/UI lookup helpers (`ChatPage#getName`, `functions.js#getUserNameFromAddress`, `classes.js#getNameInfo`, user-info/address book) to use `/names/primary/<address>` first, then `/names/address`, then address.
+  - [x] "Update lookup helpers to use /names/primary": Update chat/UI lookup helpers (`ChatPage#getName`, `functions.js#getUserNameFromAddress`, `classes.js#getNameInfo`, user-info/address book) to use `/names/primary/<address>` first, then `/names/address`, then address.
   - [ ] "Preserve name fallbacks": Preserve fallbacks (“No registered name” or address).
 
 - [ ] Polling/refresh cadence
