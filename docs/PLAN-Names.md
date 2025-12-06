@@ -10,7 +10,7 @@
 - [ ] Core helpers for primary + all names
   - [x] "Implement getPrimaryName/getAllUserNames": Add utilities: `getPrimaryName(address)` -> `/names/primary/<address>`; `getAllUserNames(address)` -> `/names/address/<address>?limit=0&reverse=true`.
   - [x] "Prefer primary in name helpers": Update `getUserNameFromAddress` / `getNameInfo` to prefer `/names/primary` for others and fall back to `/names/address`.
-  - [ ] "Validate names per core rules": Add client-side checks for length (3–40 bytes UTF-8), data length (≤4000 bytes), normalization/sanitization (Unicode normalize/sanitize), and reject address-like names before building/sending tx.
+  - [x] "Validate names per core rules": Add client-side checks for length (3–40 bytes UTF-8), data length (≤4000 bytes), normalization/sanitization (Unicode normalize/sanitize), and reject address-like names before building/sending tx.
 
 - [ ] Redux/accountInfo shape
   - [ ] "Store primaryName/allNames in accountInfo": Extend `app.accountInfo` to include `primaryName` and `allNames`; default from `/names/primary` and `/names/address`.

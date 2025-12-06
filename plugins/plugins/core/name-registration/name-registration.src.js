@@ -17,6 +17,7 @@ import '@vaadin/grid'
 import '@vaadin/icon'
 import '@vaadin/icons'
 import '@vaadin/text-field'
+import { Buffer } from 'buffer'
 
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../core/translate'
@@ -80,6 +81,27 @@ class NameRegistration extends LitElement {
 		this.toCancelSellName = ''
 		this.errorMessage = ''
 		this.successMessage = ''
+	}
+
+	_validateNameRules(name, data) {
+		const encoder = new TextEncoder()
+		const nameBytes = encoder.encode(name || '')
+		const dataBytes = encoder.encode(data || '')
+
+		if (nameBytes.length < 3 || nameBytes.length > 40) {
+			return translate("registernamepage.nchange_length_error") || "Name must be between 3 and 40 bytes"
+		}
+		if (dataBytes.length > 4000) {
+			return translate("registernamepage.nchange_data_length_error") || "Description/data must be 4000 bytes or less"
+		}
+		if (name.trim() !== name) {
+			return translate("registernamepage.nchange_whitespace_error") || "Name cannot have leading/trailing whitespace"
+		}
+		// Basic address-like check: starts with Q and length 25-34
+		if (/^Q[1-9A-HJ-NP-Za-km-z]{25,34}$/i.test(name.trim())) {
+			return translate("registernamepage.nchange_address_error") || "Name cannot look like a QORT address"
+		}
+		return null
 	}
 
 	render() {
@@ -732,6 +754,13 @@ class NameRegistration extends LitElement {
 		const nameInput = this.shadowRoot.getElementById('nameInput').value
 		const descInput = this.shadowRoot.getElementById('descInput').value
 
+		const validationError = this._validateNameRules(nameInput, descInput)
+		if (validationError) {
+			this.error = true
+			this.message = validationError
+			return
+		}
+
 		// Check for valid...
 		this.registerNameLoading = true
 
@@ -811,6 +840,13 @@ class NameRegistration extends LitElement {
 		const oldNameInput = this.shadowRoot.getElementById('oldNameInput').value
 		const newNameInput = this.shadowRoot.getElementById('newNameInput').value
 		const newDescInput = this.shadowRoot.getElementById('newDescInput').value
+
+		const validationError = this._validateNameRules(newNameInput || oldNameInput, newDescInput)
+		if (validationError) {
+			this.error = true
+			this.message = validationError
+			return
+		}
 
 		// Get Last Ref
 		const getLastRef = async () => {
