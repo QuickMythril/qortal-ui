@@ -56,6 +56,38 @@ export const getUserNameFromAddress = async (address) => {
 	}
 }
 
+export const getPrimaryName = async (address) => {
+	try {
+		const res = await parentEpml.request("apiCall", {
+			type: "api",
+			url: `/names/primary/${address}`
+		})
+		if (res?.name) {
+			return res.name
+		}
+		return ''
+	} catch (error) {
+		console.error(error)
+		return ''
+	}
+}
+
+export const getAllUserNames = async (address) => {
+	try {
+		const res = await parentEpml.request("apiCall", {
+			type: "api",
+			url: `/names/address/${address}?limit=0&reverse=true`
+		})
+		if (Array.isArray(res)) {
+			return res.map(item => item.name)
+		}
+		return []
+	} catch (error) {
+		console.error(error)
+		return []
+	}
+}
+
 export const replaceMessagesEdited = async ({ decodedMessages, parentEpml, isReceipient, decodeMessageFunc, _publicKey, symKeys, addToUpdateMessageHashmap }) => {
 	const MAX_CONCURRENT_REQUESTS = 5 // Maximum number of concurrent requests
 
