@@ -12,6 +12,7 @@ import {
 	uint8ArrayToObject,
 	validateSecretKey
 } from '../components/GroupEncryption'
+import { getMyNameFromStore } from '../../utils/functions'
 import Base58 from '../../../../crypto/api/deps/Base58'
 import isElectron from 'is-electron'
 import WebWorker from 'web-worker:./computePowWorker'
@@ -761,8 +762,9 @@ class Chat extends LitElement {
 					}
 				}
 
-				if (currentState.app.accountInfo && currentState.app.accountInfo.names && currentState.app.accountInfo.names.length > 0 && this.loggedInUserName !== currentState.app.accountInfo.names[0].name) {
-					this.loggedInUserName = currentState.app.accountInfo.names[0].name
+				const myName = getMyNameFromStore()
+				if (myName !== undefined && this.loggedInUserName !== myName) {
+					this.loggedInUserName = myName
 				}
 
 				if (currentState.app.accountInfo && currentState.app.accountInfo.addressInfo && currentState.app.accountInfo.addressInfo.address && this.loggedInUserAddress !== currentState.app.accountInfo.addressInfo.address) {

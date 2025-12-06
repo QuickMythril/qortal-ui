@@ -91,6 +91,22 @@ export const getAllUserNames = async (address) => {
 	}
 }
 
+export const getMyNameFromStore = (opts = {}) => {
+	const allowAddressFallback = opts.allowAddressFallback !== false
+	try {
+		const state = window?.parent?.reduxStore?.getState?.()
+		const info = state?.app?.accountInfo || {}
+		const address = info?.addressInfo?.address || ''
+		const name = info?.activeName || info?.primaryName || info?.names?.[0]?.name || ''
+
+		if (name) return name
+		return allowAddressFallback ? address : ''
+	} catch (error) {
+		console.error(error)
+		return ''
+	}
+}
+
 export const replaceMessagesEdited = async ({ decodedMessages, parentEpml, isReceipient, decodeMessageFunc, _publicKey, symKeys, addToUpdateMessageHashmap }) => {
 	const MAX_CONCURRENT_REQUESTS = 5 // Maximum number of concurrent requests
 

@@ -1,7 +1,7 @@
 import { html, LitElement } from 'lit'
 import { Epml } from '../../../epml'
 import { publishData } from '../../utils/classes'
-import { bytesToMegabytes } from '../../../utils/functions'
+import { bytesToMegabytes, getMyNameFromStore } from '../../../utils/functions'
 import { gifExplorerStyles } from './plugins-css'
 import * as zip from '@zip.js/zip.js'
 import ShortUniqueId from 'short-unique-id'
@@ -462,7 +462,7 @@ class ChatGifs extends LitElement {
 	}
 
 	async structureCollections(gifCollections) {
-		const userName = await this.getName(this.selectedAddress.address)
+		const userName = getMyNameFromStore({ allowAddressFallback: false })
 
 		if (!userName) {
 			return
@@ -583,7 +583,7 @@ class ChatGifs extends LitElement {
 	}
 
 	async getMyGifCollections() {
-		this.myAccountName = await this.getName(this.selectedAddress.address)
+		this.myAccountName = getMyNameFromStore({ allowAddressFallback: false })
 
 		if (this.myAccountName) {
 			const getMyGifCollections = await parentEpml.request('apiCall', {
@@ -649,23 +649,6 @@ class ChatGifs extends LitElement {
 		return await this.structureCollections(savedCollections)
 	}
 
-	async getName(recipient) {
-		try {
-			const getNames = await parentEpml.request('apiCall', {
-				type: 'api',
-				url: `/names/address/${recipient}?apiKey=${this.getApiKey()}`
-			})
-
-			if (Array.isArray(getNames) && getNames.length > 0) {
-				return getNames[0].name
-			} else {
-				return ''
-			}
-		} catch (error) {
-			return ''
-		}
-	}
-
 	removeDotGIF(arr) {
 		return arr.map(obj => {
 			const newObj = { ...obj }
@@ -712,7 +695,7 @@ class ChatGifs extends LitElement {
 			this.setGifsLoading(true)
 			this.isLoading = true
 
-			const userName = await this.getName(this.selectedAddress.address)
+			const userName = getMyNameFromStore({ allowAddressFallback: false })
 
 			const doesNameExist = await parentEpml.request('apiCall', {
 				url: `/arbitrary/metadata/GIF_REPOSITORY/${userName}/${this.newCollectionName}?apiKey=${this.getApiKey()}`

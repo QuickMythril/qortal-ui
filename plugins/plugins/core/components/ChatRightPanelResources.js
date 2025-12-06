@@ -1,6 +1,6 @@
 import { html, LitElement } from 'lit'
 import { Epml } from '../../../epml'
-import { generateIdFromAddresses } from '../../utils/functions'
+import { generateIdFromAddresses, getMyNameFromStore } from '../../utils/functions'
 import { chatRightPanelResourcesStyles, imageParentStyles } from './plugins-css'
 import './WrapperModal'
 import './TipUser'
@@ -73,7 +73,7 @@ class ChatRightPanelResources extends LitElement {
 		this.successMessage = ''
 		this.images = []
 		this.viewImage = false
-		this.myName = window.parent.reduxStore.getState().app.accountInfo.names[0].name
+		this.myName = getMyNameFromStore()
 		this.myAddress = window.parent.reduxStore.getState().app.selectedAddress.address
 		this.autoView = false
 		this.onlyMyImages = true
@@ -114,6 +114,7 @@ class ChatRightPanelResources extends LitElement {
 
 	async getMoreImages(reset) {
 		try {
+			this.myName = getMyNameFromStore()
 			if (reset) {
 				this.images = []
 			}

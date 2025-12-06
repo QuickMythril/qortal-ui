@@ -19,7 +19,7 @@
   - [x] "Add activeName selection": Persist an `activeName` in state (alongside accountInfo; default primary or first name) to represent the user-selected name when multiple exist.
 
 - [ ] Surfaces that assume a single name (use primaryName with fallback)
-  - [ ] "Update chat UI name usage": Chat UI components (`ChatPage.js`, `ChatRightPanelResources`, `ChatGroupManager`, `ChatGifs`, `q-chat`, placeholders) use `primaryName || names[0]?.name || address`.
+  - [x] "Update chat UI name usage": Chat UI components (`ChatPage.js`, `ChatRightPanelResources`, `ChatGroupManager`, `ChatGifs`, `q-chat`, placeholders) use `activeName || primaryName || names[0]?.name || address`.
   - [ ] "Update profile/avatar name usage": Profile/avatars (`wallet-profile.js`, `overview-page.src.js`, `settings account-view.js`, `user-info-view.js`, `qortal-info-view.js`, notification bell) use primaryName.
   - [ ] "Update trade/tip/info name usage": Trade/tip/info (`TipUser.js`, `TradeInfoView.js`, `TraderInfoView.js`, `sponsorship-list`, `puzzles`, `qortal-lottery`, `group-management`) use primaryName.
   - [ ] "Use primary name for avatar URLs": Avatar URL builders use `primaryName` when present.

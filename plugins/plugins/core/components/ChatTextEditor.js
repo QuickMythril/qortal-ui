@@ -2,6 +2,7 @@ import { html, LitElement } from 'lit'
 import { Epml } from '../../../epml'
 import { EmojiPicker } from 'emoji-picker-js'
 import { chatTextEditorStyles } from './plugins-css'
+import { getMyNameFromStore } from '../../utils/functions'
 import '@material/mwc-checkbox'
 import '@material/mwc-icon'
 
@@ -52,7 +53,7 @@ class ChatTextEditor extends LitElement {
 		this.sendMessageFunc = this.sendMessageFunc.bind(this)
 		this.iframeHeight = 42
 		this.chatMessageSize = 0
-		this.userName = window.parent.reduxStore.getState().app.accountInfo.names[0]
+		this.userName = getMyNameFromStore()
 		this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
 		this.editor = null
 		this.messageQueue = []
@@ -244,6 +245,7 @@ class ChatTextEditor extends LitElement {
 	}
 
 	preventUserSendingImage(e) {
+		this.userName = getMyNameFromStore()
 		if (!this.userName) {
 			e.preventDefault()
 			parentEpml.request('showSnackBar', get("chatpage.cchange27"))
