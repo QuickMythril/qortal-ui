@@ -1,7 +1,7 @@
 ## Plan: bring Hub name features into Qortal UI (checklist)
 
 - [ ] Expose name endpoints to apps (qortalRequest)
-  - [ ] "Add primary/account name actions": Add `GET_PRIMARY_NAME` and `GET_ACCOUNT_NAMES` to `plugins/plugins/core/components/qdn-action-constants.js` and `qdn-action-types.js`.
+  - [x] "Add primary/account name actions": Add `GET_PRIMARY_NAME` and `GET_ACCOUNT_NAMES` to `plugins/plugins/core/components/qdn-action-constants.js` and `qdn-action-types.js`.
   - [ ] "Handle name actions in browser bridge": Implement handlers in `plugins/plugins/core/qdn/browser/browser.src.js`:
     - [ ] "Add GET_PRIMARY_NAME handler": `GET_PRIMARY_NAME`: call `/names/primary/<address>` (payload or selected address) via `parentEpml.request('apiCall', …)` and return `{ name }` or `''`.
     - [ ] "Add GET_ACCOUNT_NAMES handler": `GET_ACCOUNT_NAMES`: call `/names/address/<address>?limit=0&reverse=true` and return array of names.
