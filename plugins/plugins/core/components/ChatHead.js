@@ -132,16 +132,16 @@ class ChatHead extends LitElement {
 							>
 								${this.chatInfo.groupName ? this.chatInfo.groupName : this.chatInfo.name !== undefined ? this.chatInfo.name : this.chatInfo.address.substr(0, 15)}
 							</span>
-							<mwc-icon
-								style="font-size:18px; color:${
-								this.chatInfo.groupId === undefined ? '#f0ad4e' :
-								this.chatInfo.isOpen === false ? '#C6011F' :
-								this.chatInfo.isOpen === true ? '#198754' : '#198754'}"
-							>
-								${
-									this.chatInfo.groupId === undefined ? 'private_connectivity' :
-									this.chatInfo.isOpen === false ? 'lock_outline' :
-									this.chatInfo.isOpen === true ? 'lock_open' :
+								<mwc-icon
+									style="font-size:18px; color:${
+									this.chatInfo.groupId === undefined ? '#f0ad4e' :
+									this.chatInfo.isOpen === false ? '#198754' :
+									this.chatInfo.isOpen === true ? '#C6011F' : '#C6011F'}"
+								>
+									${
+										this.chatInfo.groupId === undefined ? 'private_connectivity' :
+										this.chatInfo.isOpen === false ? 'lock_outline' :
+										this.chatInfo.isOpen === true ? 'lock_open' :
 									'lock_open'
 								}
 							</mwc-icon>
