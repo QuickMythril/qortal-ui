@@ -50,6 +50,6 @@
 - [?] Check Overview page
 - [ ] Node manage shows nothing
   - [ ] error says "[publicNode.actionBlocked]"
-- [ ] Remove the warning banner/message from the Trade Portal page for public node.
+- [?] Remove the warning banner/message from the Trade Portal page for public node.
 - [?] Add an orange warning background behind the core status icon in the top bar when on public node.
 - [ ] Q-Apps plugin fails to load on public node; diagnose and fix while Websites works.

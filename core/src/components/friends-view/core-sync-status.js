@@ -84,11 +84,11 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 			<h4 class="lineHeight">${baseUrl}</h4>
 		`
 		const iconStyle = isPublic
-			? 'display:inline-flex;align-items:center;justify-content:center;padding:4px;border-radius:50%;background:rgba(255,152,0,0.18);border:1px solid rgba(255,152,0,0.45);'
-			: 'display:inline-block;'
+			? 'display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;padding:4px;border-radius:50%;background:rgba(255,152,0,0.18);border:1px solid rgba(255,152,0,0.45);line-height:0;'
+			: 'display:inline-flex;align-items:center;justify-content:center;line-height:0;'
 		const iconWrapper = (src) => html`
 			<span style="${iconStyle}">
-				<img src="${src}" style="height: 24px; width: 24px; padding-top: 4px;">
+				<img src="${src}" style="height: 24px; width: 24px;">
 			</span>
 		`
 		if (this.nodeInfos.isSynchronizing === true && this.nodeInfos.syncPercent === 99) {

@@ -389,9 +389,6 @@ class TradePortal extends LitElement {
 					<div style="padding-left: 10px; padding-top: 12px; color: var(--black);">
 						${this.renderTradeLockButton()}
 					</div>
-					<div style="padding-left: 12px; padding-top: 16px;">
-						${this.renderPublicBadge()}
-					</div>
 				</div>
 				<div id="trade-portal">
 					<div id="first-trade-section">
@@ -2999,13 +2996,6 @@ class TradePortal extends LitElement {
 
 	round(number) {
 		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
-	}
-
-	renderPublicBadge() {
-		if (!this.isPublicNode()) return html``
-		const node = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node] || {}
-		const host = node.domain ? `${node.domain}${node.port ? `:${node.port}` : ''}` : translate('publicNode.fallbackPromptTitle')
-		return html`<span style="font-size: 12px; color: var(--black); background: var(--paper-grey-200, #e0e0e0); padding: 4px 8px; border-radius: 8px;">Public node: ${host}</span>`
 	}
 }
 
