@@ -5,8 +5,13 @@ import nacl from '../../../crypto/api/deps/nacl-fast.js'
 import ed2curve from '../../../crypto/api/deps/ed2curve.js'
 
 const getApiKey = () => {
-	const ctx = window.parent.qortalNodeContext
-	return ctx?.apiKey || ''
+	const ctx = window.parent && window.parent.qortalNodeContext
+	return (ctx && ctx.apiKey) || ''
+}
+
+const getBaseUrl = () => {
+	const ctx = window.parent && window.parent.qortalNodeContext
+	return (ctx && ctx.baseUrl) || ''
 }
 
 export class RequestQueue {
@@ -137,7 +142,7 @@ export class ModalHelper {
 
 	async getArbitraryFee() {
 		const timestamp = Date.now()
-		const nodeUrl = window.parent.qortalNodeContext?.baseUrl
+		const nodeUrl = getBaseUrl()
 		const url = `${nodeUrl}/transactions/unitfee?txType=ARBITRARY&timestamp=${timestamp}`
 		const response = await fetch(url)
 
@@ -826,7 +831,7 @@ export class DeleteTradeOffer {
 }
 
 export const processTransactionV2 = async (bytes) => {
-	const baseUrl = window.parent.qortalNodeContext?.baseUrl
+	const baseUrl = getBaseUrl()
 	const url = `${baseUrl}/transactions/process?apiVersion=2`
 
 	const doProcess = await fetch(url, {
