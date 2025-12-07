@@ -533,7 +533,9 @@
 		"nchange46": "Navnsalgshistorikk",
 		"nchange47": "Navneoppdateringen er vellykket!",
 		"nchange48": "Advarsel! Hvis du oppdaterer navnet ditt, mister du ressursene knyttet til det opprinnelige navnet. Du vil med andre ord miste eierskapet til innholdet under det opprinnelige navnet i QDN. Fortsett med forsiktighet!",
-		"nchange49": "Navnet kan ikke se ut som en QORT-adresse."
+		"nchange49": "Navnet kan ikke se ut som en QORT-adresse.",
+		"nchange50": "Primærnavn kan ikke endres. Qortal UI kan sette et annet aktivt navn som Q-apper bruker som primært.",
+		"nchange51": "Kan ikke selge primærnavnet mens du eier andre navn."
 	},
 	"websitespage": {
 		"schange1": "Bla gjennom nettsteder",

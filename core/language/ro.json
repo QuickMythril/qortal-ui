@@ -533,7 +533,9 @@
 		"nchange46": "Istoricul vânzărilor de nume",
 		"nchange47": "Actualizarea numelui a reușit!",
 		"nchange48": "Atenție! Dacă vă actualizați numele, veți pierde resursele asociate cu numele inițial. Cu alte cuvinte, veți pierde dreptul de proprietate asupra conținutului sub numele inițial din QDN. Procedați cu prudență!",
-		"nchange49": "Numele nu poate semăna cu o adresă QORT."
+		"nchange49": "Numele nu poate semăna cu o adresă QORT.",
+		"nchange50": "Numele principal nu poate fi schimbat. Interfața Qortal poate seta un alt nume activ pe care Q-Apps îl folosesc ca primar.",
+		"nchange51": "Nu poți vinde numele principal cât timp deții alte nume."
 	},
 	"websitespage": {
 		"schange1": "Navigati pe Site-uri Web",

@@ -533,7 +533,9 @@
 		"nchange46": "Historial de venta de nombres",
 		"nchange47": "¡Actualización de nombre exitosa!",
 		"nchange48": "¡Advertencia! Si actualiza su nombre, perderá los recursos asociados con el nombre original. En otras palabras, perderá la propiedad del contenido bajo el nombre original en el QDN. ¡Proceda con precaución!",
-		"nchange49": "El nombre no puede parecerse a una dirección QORT."
+		"nchange49": "El nombre no puede parecerse a una dirección QORT.",
+		"nchange50": "El nombre primario no se puede cambiar. Qortal UI puede establecer un nombre activo diferente que las Q-Apps usarán como primario.",
+		"nchange51": "No se puede vender el nombre primario mientras tengas otros nombres."
 	},
 	"websitespage": {
 		"schange1": "Navegar sitios web",

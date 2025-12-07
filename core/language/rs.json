@@ -533,7 +533,9 @@
 		"nchange46": "Istorija prodaje imena",
 		"nchange47": "Ažuriranje imena je uspešno!",
 		"nchange48": "Upozorenje! Ako ažurirate svoje ime, izgubićete resurse povezane sa originalnim imenom. Drugim rečima, izgubićete vlasništvo nad sadržajem pod originalnim imenom u KDN-u. Budite oprezni!",
-		"nchange49": "Ime ne može da izgleda kao QORT adresa."
+		"nchange49": "Ime ne može da izgleda kao QORT adresa.",
+		"nchange50": "Primarno ime se ne može promeniti. Qortal UI može postaviti drugo aktivno ime koje Q-Apps koriste kao primarno.",
+		"nchange51": "Primarno ime se ne može prodati dok poseduješ druga imena."
 	},
 	"websitespage": {
 		"schange1": "Pretraživanje web sajtova",

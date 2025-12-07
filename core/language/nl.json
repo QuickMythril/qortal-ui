@@ -533,7 +533,9 @@
 		"nchange46": "Naam-verkoopgeschiedenis",
 		"nchange47": "Naamsverandering is gelukt!",
 		"nchange48": "Opgelet! Als je jouw naam veranderd, dan geef je alle gegevens weg die aan de oude naam gekoppeld zijn. Met andere woorden, je zal geen eigenaar meer zijn van de gegevens die op QDN geplaatst werden onder de oude naam. Wees voorzichtig, en denk kijk alles eerst nog eens goed na!",
-		"nchange49": "Naam mag niet op een QORT-adres lijken."
+		"nchange49": "Naam mag niet op een QORT-adres lijken.",
+		"nchange50": "Primaire naam kan niet worden gewijzigd. Qortal UI kan een andere actieve naam instellen die Q-Apps als primair gebruiken.",
+		"nchange51": "Primaire naam kan niet worden verkocht terwijl je andere namen hebt."
 	},
 	"websitespage": {
 		"schange1": "Overzicht van websites",

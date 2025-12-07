@@ -533,7 +533,9 @@
 		"nchange46": "Nimen myyntihistoria",
 		"nchange47": "Nimen päivitys tehty!",
 		"nchange48": "Varoitus! Jos päivität nimesi, menetät alkuperäiseen nimeen liittyvät resurssit. Toisin sanoen menetät sisällön omistajuuden alkuperäisellä nimellä QDN:ssä. Jatka varovasti!",
-		"nchange49": "Nimi ei voi näyttää QORT-osoitteelta."
+		"nchange49": "Nimi ei voi näyttää QORT-osoitteelta.",
+		"nchange50": "Ensisijaista nimeä ei voi muuttaa. Qortal UI voi asettaa toisen aktiivisen nimen, jota Q-Appit käyttävät ensisijaisena.",
+		"nchange51": "Ensisijaista nimeä ei voi myydä, kun omistat muita nimiä."
 	},
 	"websitespage": {
 		"schange1": "Selaa verkkosivuja",

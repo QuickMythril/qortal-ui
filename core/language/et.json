@@ -533,7 +533,9 @@
 		"nchange46": "Nimemüügi ajalugu",
 		"nchange47": "Nime uuendamine tehtud!",
 		"nchange48": "Hoiatus! Kui uuendate oma nime, siis kaotate algse nimega seotud ressursid. Teisisõnu kaotate QDN-is algse nime all oleva sisu omandiõiguse. Jätkake ettevaatlikult!",
-		"nchange49": "Nimi ei tohi välja näha nagu QORT-aadress."
+		"nchange49": "Nimi ei tohi välja näha nagu QORT-aadress.",
+		"nchange50": "Põhinime ei saa muuta. Qortal UI saab seada teise aktiivse nime, mida Q-Apps kasutavad põhinimena.",
+		"nchange51": "Põhinime ei saa müüa, kui sul on teisi nimesid."
 	},
 	"websitespage": {
 		"schange1": "Sirvi Veebilehti",

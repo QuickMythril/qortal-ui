@@ -533,7 +533,9 @@
 		"nchange46": "Név eladási előzmények",
 		"nchange47": "A névfrissítés sikeres!",
 		"nchange48": "Figyelem! Ha frissíti a nevét, elveszíti az eredeti névhez társított erőforrásokat. Más szóval, elveszíti a tartalom tulajdonjogát a QDN-ben az eredeti név alatt. Óvatosan járjon el!",
-		"nchange49": "A név nem nézhet ki QORT-címnek."
+		"nchange49": "A név nem nézhet ki QORT-címnek.",
+		"nchange50": "Az elsődleges név nem változtatható. A Qortal UI beállíthat egy másik aktív nevet, amelyet a Q-alkalmazások elsődlegesként használnak.",
+		"nchange51": "Az elsődleges név nem adható el, amíg más neveid is vannak."
 	},
 	"websitespage": {
 		"schange1": "Webhelyek Böngészése",

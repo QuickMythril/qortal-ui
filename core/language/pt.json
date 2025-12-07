@@ -533,7 +533,9 @@
 		"nchange46": "Histórico de vendas de nomes",
 		"nchange47": "Atualização de nome com sucesso!",
 		"nchange48": "Atenção! Se você atualizar seu nome, você perderá os recursos associados ao nome original. Em outras palavras, você perderá a propriedade do conteúdo sob o nome original no QDN. Prossiga com cuidado!",
-		"nchange49": "O nome não pode se parecer com um endereço QORT."
+		"nchange49": "O nome não pode se parecer com um endereço QORT.",
+		"nchange50": "O nome primário não pode ser alterado. A Qortal UI pode definir um nome ativo diferente que as Q-Apps usarão como primário.",
+		"nchange51": "Não é possível vender o nome primário enquanto você tiver outros nomes."
 	},
 	"websitespage": {
 		"schange1": "Navegar Sites",

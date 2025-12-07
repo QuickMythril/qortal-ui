@@ -533,7 +533,9 @@
 		"nchange46": "Historia sprzedaży nazw",
 		"nchange47": "Aktualizacja nazwy powiodła się!",
 		"nchange48": "Ostrzeżenie! Jeśli zaktualizujesz swoją nazwę, utracisz zasoby powiązane z pierwotną nazwą. Innymi słowy, utracisz własność treści pod oryginalną nazwą w QDN. Postępuj ostrożnie!",
-		"nchange49": "Nazwa nie może wyglądać jak adres QORT."
+		"nchange49": "Nazwa nie może wyglądać jak adres QORT.",
+		"nchange50": "Nazwy głównej nie można zmienić. Interfejs Qortal może ustawić inną aktywną nazwę, której Q-Apps użyją jako głównej.",
+		"nchange51": "Nie można sprzedać nazwy głównej, gdy posiadasz inne nazwy."
 	},
 	"websitespage": {
 		"schange1": "Przeglądaj strony internetowe",
