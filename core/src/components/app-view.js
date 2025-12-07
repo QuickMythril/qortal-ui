@@ -294,12 +294,7 @@ class AppView extends connect(store)(LitElement) {
 							<new-selector></new-selector>
 							<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 							<core-sync-status></core-sync-status>
-							${this.nodeIndicator ? html`
-								<div class="node-indicator-pill" title="${this.nodeIndicator.host || ''}">
-									<span>${this.nodeIndicator.label}</span>
-									${this.nodeIndicator.host ? html`<span class="node-indicator-host">${this.nodeIndicator.host}</span>` : ''}
-								</div>
-							` : ''}
+							${'' /* Node indicator pill removed per request */}
 							<div>&nbsp;&nbsp;&nbsp;</div>
 							<theme-toggle></theme-toggle>
 							<div>&nbsp;&nbsp;</div>

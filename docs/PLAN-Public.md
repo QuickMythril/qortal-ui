@@ -46,8 +46,8 @@
 
 ## Issues to fix from manual testing (public node UX)
 
-- [ ] Node picker shows “Public Node ([object Object])” – fix label formatting.
-- [ ] Remove the text “Public node ext-node.qortal.link:443” badge in the top menu bar.
+- [?] Node picker shows “Public Node ([object Object])” – fix label formatting.
+- [ ] Remove the text “Public node ext-node.qortal.link:443” label in the top menu bar.
 - [ ] Sidebar menu not rendered and no hamburger hover control when on public node.
 - [ ] Core status hover card in the top bar and overview page fail to load data on public node (should degrade gracefully).
 - [ ] Remove the warning banner/message from the Trade Portal page for public node.
