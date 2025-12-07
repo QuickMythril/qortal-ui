@@ -208,12 +208,9 @@ class MintingInfo extends LitElement {
 		await this.getAddressLevel()
 
 		this.blocked = this.isPublicNode()
-		if (this.blocked) {
-			parentEpml.request('showSnackBar', `${get('publicNode.actionBlocked')}`)
-			return
-		}
 
 		const getAdminInfo = () => {
+			if (this.blocked) return
 			parentEpml.request('apiCall', { url: `/admin/info` }).then((res) => {
 				setTimeout(() => { this.adminInfo = res }, 1)
 			})
@@ -221,6 +218,7 @@ class MintingInfo extends LitElement {
 		}
 
 		const getNodeInfo = () => {
+			if (this.blocked) return
 			parentEpml.request('apiCall', { url: `/admin/status` }).then((res) => {
 				this.nodeInfo = res
 				// Now look up the sample block
@@ -230,6 +228,7 @@ class MintingInfo extends LitElement {
 		}
 
 		const getSampleBlock = () => {
+			if (this.blocked) return
 			let callBlock = parseFloat(this.nodeInfo.height) - 1440
 			parentEpml.request('apiCall', { url: `/blocks/byheight/${callBlock}` }).then((res) => {
 				setTimeout(() => { this.sampleBlock = res }, 1)

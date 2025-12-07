@@ -357,7 +357,6 @@ class OverviewPage extends LitElement {
 	}
 
 	async getNodeInfo() {
-		if (this.blocked) return
 		const infoNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		const infoNodeUrl = infoNode.protocol + '://' + infoNode.domain + ':' + infoNode.port
 		const nodeUrl = `${infoNodeUrl}/admin/status`
@@ -372,7 +371,6 @@ class OverviewPage extends LitElement {
 	}
 
 	async getCoreInfo() {
-		if (this.blocked) return
 		const infoCore = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		const infoCoreUrl = infoCore.protocol + '://' + infoCore.domain + ':' + infoCore.port
 		const coreUrl = `${infoCoreUrl}/admin/info`
