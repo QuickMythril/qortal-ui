@@ -29,7 +29,7 @@
     - Admin actions (stop/restart/bootstrap/peers/minting).
   - [x] Surface clear user-facing errors matching Hub’s “no action public node” messaging.
 
-- [ ] UI affordances when on public node
+- [x] UI affordances when on public node
   - [x] Hide/disable node-management menu for the public node (respect `enableManagement:false`).
   - [x] Mirror Hub UX that hides block/unblock or moderation actions if they rely on non-gateway endpoints (audit UI components that call Core admin/management routes).
   - [x] Add a small badge in sensitive dialogs (e.g., trade/buy-order) noting “using public node: <host>”.
