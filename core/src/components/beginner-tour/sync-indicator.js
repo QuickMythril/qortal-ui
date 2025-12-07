@@ -2,6 +2,7 @@ import { html, LitElement } from 'lit'
 import { connect } from 'pwa-helpers'
 import { store } from '../../store'
 import { parentEpml } from '../show-plugin'
+import { buildRequestUrl, isSelectedNodePublic } from '../../utils/node'
 import { syncIndicator2Styles } from '../../styles/core-css'
 import '@material/mwc-icon'
 
@@ -96,9 +97,7 @@ class SyncIndicator extends connect(store)(LitElement) {
 	}
 
 	getNodeUrl() {
-		const syncInfoNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const syncInfoUrl = syncInfoNode.protocol + '://' + syncInfoNode.domain + ':' + syncInfoNode.port
-		this.nodeUrl = syncInfoUrl
+		this.nodeUrl = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]?.baseUrl || ''
 	}
 
 	async getDaySummary() {
@@ -149,7 +148,9 @@ class SyncIndicator extends connect(store)(LitElement) {
 
 	async bootstrap() {
 		try {
-			const endpoint = `${this.nodeUrl}/admin/bootstrap/?apiKey=${this.getApiKey()}`
+			const endpoint = buildRequestUrl(`/admin/bootstrap`, store.getState(), {
+				usePublicFallback: false
+			})
 			const res = await fetch(endpoint)
 			const data = await res.json()
 			if (data === true) {
