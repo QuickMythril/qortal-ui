@@ -7,6 +7,7 @@ import './feed-item'
 import './friends-view'
 import '@material/mwc-icon'
 import '@polymer/paper-spinner/paper-spinner-lite.js'
+import { buildRequestUrl } from '../../utils/node'
 
 const perEndpointCount = 20
 const totalDesiredCount = 100
@@ -31,8 +32,6 @@ class FriendsFeed extends connect(store)(LitElement) {
 		super()
 		this.feed = []
 		this.feedToRender = []
-		this.nodeUrl = this.getNodeUrl()
-		this.myNode = this.getMyNode()
 		this.endpoints = []
 		this.endpointOffsets = []  // Initialize offsets for each endpoint to 0
 		this.loadAndMergeData = this.loadAndMergeData.bind(this)
@@ -99,15 +98,6 @@ class FriendsFeed extends connect(store)(LitElement) {
 		}
 	}
 
-	getNodeUrl() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		return myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-	}
-
-	getMyNode() {
-		return store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-	}
-
 	_updateFeeds(event) {
 		this.mySelectedFeeds = event.detail
 		this.reFetchFeedData()
@@ -131,7 +121,7 @@ class FriendsFeed extends connect(store)(LitElement) {
 		const getAllSchemas = (schemas || []).map(
 			async (schema) => {
 				try {
-					const url = `${this.nodeUrl}/arbitrary/${schema.service}/${schema.name}/${schema.identifier}`
+					const url = buildRequestUrl(`/arbitrary/${schema.service}/${schema.name}/${schema.identifier}`, store.getState())
 					const res = await fetch(url)
 					const data = await res.json()
 					if (data.error) return false
@@ -176,7 +166,7 @@ class FriendsFeed extends connect(store)(LitElement) {
 			return
 		}
 
-		const baseurl = `${this.nodeUrl}/arbitrary/resources/search?reverse=true&mode=ALL&exactmatchnames=true&${names}`
+		const baseurl = buildRequestUrl(`/arbitrary/resources/search?reverse=true&mode=ALL&exactmatchnames=true&${names}`, store.getState())
 		let formEndpoints = []
 
 		schemas.forEach((schema) => {

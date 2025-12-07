@@ -14,6 +14,7 @@ import '@vaadin/list-box'
 
 // Multi language support
 import { get, translate } from '../../../translate'
+import { buildRequestUrl } from '../../utils/node'
 
 class NotificationBellGeneral extends connect(store)(LitElement) {
 	static get properties() {
@@ -181,8 +182,6 @@ class NotificationItemTx extends connect(store)(LitElement) {
 
 	constructor() {
 		super()
-		this.nodeUrl = this.getNodeUrl()
-		this.myNode = this.getMyNode()
 	}
 
 	render() {
@@ -214,22 +213,13 @@ class NotificationItemTx extends connect(store)(LitElement) {
 		this.getStatus()
 	}
 
-	getNodeUrl() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		return myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-	}
-
-	getMyNode() {
-		return store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-	}
-
 	async getStatus() {
 		let interval = null
 		let stop = false
 
 		const getAnswer = async () => {
 			const getTx = async (minterAddr) => {
-				const url = `${this.nodeUrl}/transactions/signature/${this.signature}`
+				const url = buildRequestUrl(`/transactions/signature/${this.signature}`, store.getState())
 				const res = await fetch(url)
 
 				return await res.json()

@@ -7,6 +7,7 @@ import { translate } from '../../../translate'
 import { friendItemActionsStyles } from '../../styles/core-css'
 import ShortUniqueId from 'short-unique-id'
 import '@material/mwc-icon'
+import { buildRequestUrl } from '../../utils/node'
 
 export class FriendItemActions extends connect(store)(LitElement) {
 	static get properties() {
@@ -26,7 +27,6 @@ export class FriendItemActions extends connect(store)(LitElement) {
 	constructor() {
 		super()
 		this.message = ''
-		this.nodeUrl = this.getNodeUrl()
 		this.uid = new ShortUniqueId()
 		this.getUserAddress = this.getUserAddress.bind(this)
 	}
@@ -136,11 +136,6 @@ export class FriendItemActions extends connect(store)(LitElement) {
 		// ...
 	}
 
-	getNodeUrl() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		return myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-	}
-
 	attachToTarget(target) {
 		if (!this.popperInstance && target) {
 			this.popperInstance = createPopper(target, this, {
@@ -174,7 +169,7 @@ export class FriendItemActions extends connect(store)(LitElement) {
 
 	async getUserAddress() {
 		try {
-			const url = `${this.nodeUrl}/names/${this.name}`
+			const url = buildRequestUrl(`/names/${this.name}`, store.getState())
 			const res = await fetch(url)
 			const result = await res.json()
 			if (result.error === 401) {

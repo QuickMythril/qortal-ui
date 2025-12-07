@@ -12,6 +12,7 @@ import '@polymer/paper-icon-button/paper-icon-button.js'
 import '@polymer/iron-icons/iron-icons.js'
 import '@vaadin/item'
 import '@vaadin/list-box'
+import { buildRequestUrl } from '../../utils/node'
 
 class BeginnerChecklist extends connect(store)(LitElement) {
 	static get properties() {
@@ -35,8 +36,6 @@ class BeginnerChecklist extends connect(store)(LitElement) {
 		this.initialFetch = false
 		this.isSynced = false
 		this.hasName = null
-		this.nodeUrl = this.getNodeUrl()
-		this.myNode = this.getMyNode()
 		this.hasTourFinished = null
 		this._controlTourFinished = this._controlTourFinished.bind(this)
 		this.uid = new ShortUniqueId()
@@ -135,20 +134,11 @@ class BeginnerChecklist extends connect(store)(LitElement) {
 		super.disconnectedCallback()
 	}
 
-	getNodeUrl() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		return myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-	}
-
-	getMyNode() {
-		return store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-	}
-
 	async getName(recipient) {
 		try {
 			if (!recipient) return ''
 
-			const endpoint = `${this.nodeUrl}/names/address/${recipient}`
+			const endpoint = buildRequestUrl(`/names/address/${recipient}`, store.getState())
 			const res = await fetch(endpoint)
 			const getNames = await res.json()
 
@@ -196,11 +186,6 @@ class BeginnerChecklist extends connect(store)(LitElement) {
 	}
 
 	// Standard functions
-	getApiKey() {
-		const coreNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		return coreNode.apiKey
-	}
-
 	isEmptyArray(arr) {
 		if (!arr) { return true }
 		return arr.length === 0

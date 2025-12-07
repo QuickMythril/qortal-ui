@@ -19,6 +19,7 @@ import '../notification-view/popover'
 import '@material/mwc-icon'
 import '@polymer/paper-spinner/paper-spinner-lite.js'
 import '@vaadin/tooltip'
+import { buildRequestUrl } from '../../utils/node'
 
 class SaveSettingsQdn extends connect(store)(LitElement) {
 	static get properties() {
@@ -52,8 +53,6 @@ class SaveSettingsQdn extends connect(store)(LitElement) {
 		this.hasAttemptedToFetchResource = false
 		this.resourceExists = undefined
 		this.settingsRawData = null
-		this.nodeUrl = this.getNodeUrl()
-		this.myNode = this.getMyNode()
 		this.valuesToBeSavedOnQdn = {}
 		this.isSaving = false
 		this.fee = null
@@ -202,17 +201,8 @@ class SaveSettingsQdn extends connect(store)(LitElement) {
 		// ...
 	}
 
-	getNodeUrl() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		return myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-	}
-
-	getMyNode() {
-		return store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-	}
-
 	async getRawData(dataItem) {
-		const url = `${this.nodeUrl}/arbitrary/${dataItem.service}/${dataItem.name}/${dataItem.identifier}?encoding=base64`
+		const url = buildRequestUrl(`/arbitrary/${dataItem.service}/${dataItem.name}/${dataItem.identifier}?encoding=base64`, store.getState())
 		const res = await fetch(url)
 		const data = await res.text()
 		if (data.error) throw new Error('Cannot retrieve your data from qdn')
@@ -225,7 +215,7 @@ class SaveSettingsQdn extends connect(store)(LitElement) {
 
 		try {
 			myFollowedNames = await parentEpml.request('apiCall', {
-				url: `/lists/followedNames?apiKey=${this.myNode.apiKey}`
+				url: buildRequestUrl(`/lists/followedNames`, store.getState())
 			})
 		} catch (error) { }
 
@@ -236,7 +226,7 @@ class SaveSettingsQdn extends connect(store)(LitElement) {
 		let namesJsonString = JSON.stringify({ "items": names })
 
 		return await parentEpml.request('apiCall', {
-			url: `/lists/followedNames?apiKey=${this.myNode.apiKey}`,
+			url: buildRequestUrl(`/lists/followedNames`, store.getState()),
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -355,7 +345,7 @@ class SaveSettingsQdn extends connect(store)(LitElement) {
 			this.name = name
 			this.hasName = true
 			this.error = ''
-			const url = `${this.nodeUrl}/arbitrary/resources/search?service=DOCUMENT_PRIVATE&mode=ALL&identifier=qortal_general_settings&name=${name}&prefix=true&exactmatchnames=true&excludeblocked=true&limit=20`
+			const url = buildRequestUrl(`/arbitrary/resources/search?service=DOCUMENT_PRIVATE&mode=ALL&identifier=qortal_general_settings&name=${name}&prefix=true&exactmatchnames=true&excludeblocked=true&limit=20`, store.getState())
 			const res = await fetch(url)
 			let data = ''
 
@@ -421,7 +411,7 @@ class SaveSettingsQdn extends connect(store)(LitElement) {
 
 	async getArbitraryFee() {
 		const timestamp = Date.now()
-		const url = `${this.nodeUrl}/transactions/unitfee?txType=ARBITRARY&timestamp=${timestamp}`
+		const url = buildRequestUrl(`/transactions/unitfee?txType=ARBITRARY&timestamp=${timestamp}`, store.getState())
 		const response = await fetch(url)
 
 		if (!response.ok) {

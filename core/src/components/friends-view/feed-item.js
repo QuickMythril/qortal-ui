@@ -5,6 +5,7 @@ import { setNewTab } from '../../redux/app/app-actions'
 import { RequestQueueWithPromise } from '../../../../plugins/plugins/utils/classes'
 import { translate, } from '../../../translate'
 import { feedItemStyles } from '../../styles/core-css'
+import { buildRequestUrl } from '../../utils/node'
 import axios from 'axios'
 import ShortUniqueId from 'short-unique-id'
 import '../../../../plugins/plugins/core/components/TimeAgo'
@@ -42,8 +43,6 @@ export class FeedItem extends connect(store)(LitElement) {
 			status: ''
 		}
 		this.isReady = false
-		this.nodeUrl = this.getNodeUrl()
-		this.myNode = this.getMyNode()
 		this.hasCalledWhenDownloaded = false
 		this.isFetching = false
 		this.uid = new ShortUniqueId()
@@ -61,11 +60,11 @@ export class FeedItem extends connect(store)(LitElement) {
 
 	render() {
 		let avatarImg
-		const avatarUrl = `${this.nodeUrl}/arbitrary/THUMBNAIL/${this.resource.name}/qortal_avatar?async=true`
+		const avatarUrl = buildRequestUrl(`/arbitrary/THUMBNAIL/${this.resource.name}/qortal_avatar?async=true`, store.getState())
 		avatarImg = html`<img src="${avatarUrl}" style="width:100%; height:100%;" onerror="this.onerror=null; this.src='/img/incognito.png';" />`
 
 		let avatarImgApp
-		const avatarUrl2 = `${this.nodeUrl}/arbitrary/THUMBNAIL/${this.appName}/qortal_avatar?async=true`
+		const avatarUrl2 = buildRequestUrl(`/arbitrary/THUMBNAIL/${this.appName}/qortal_avatar?async=true`, store.getState())
 		avatarImgApp = html`<img src="${avatarUrl2}" style="width:100%; height:100%;" onerror="this.onerror=null; this.src='/img/incognito.png';" />`
 
 		return html`
@@ -110,20 +109,12 @@ export class FeedItem extends connect(store)(LitElement) {
 		this.observer.observe(this)
 	}
 
-	getNodeUrl() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		return myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-	}
-
-	getMyNode() {
-		return store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-	}
-
 	async fetchResource() {
 		try {
 			if (this.isFetching) return
 			this.isFetching = true
-			await axios.get(`${this.nodeUrl}/arbitrary/resource/properties/${this.resource.service}/${this.resource.name}/${this.resource.identifier}?apiKey=${this.myNode.apiKey}`)
+			const url = buildRequestUrl(`/arbitrary/resource/properties/${this.resource.service}/${this.resource.name}/${this.resource.identifier}`, store.getState())
+			await axios.get(url)
 			this.isFetching = false
 
 		} catch (error) {
@@ -136,7 +127,7 @@ export class FeedItem extends connect(store)(LitElement) {
 	}
 
 	async getRawData() {
-		const url = `${this.nodeUrl}/arbitrary/${this.resource.service}/${this.resource.name}/${this.resource.identifier}?apiKey=${this.myNode.apiKey}`
+		const url = buildRequestUrl(`/arbitrary/${this.resource.service}/${this.resource.name}/${this.resource.identifier}`, store.getState())
 
 		return await requestQueueRawData.enqueue(() => {
 			return axios.get(url)
@@ -172,9 +163,10 @@ export class FeedItem extends connect(store)(LitElement) {
 		let isCalling = false
 		let percentLoaded = 0
 		let timer = 24
+		const statusPath = `/arbitrary/resource/status/${this.resource.service}/${this.resource.name}/${this.resource.identifier}`
 
 		const response = await requestQueueStatus.enqueue(() => {
-			return axios.get(`${this.nodeUrl}/arbitrary/resource/status/${this.resource.service}/${this.resource.name}/${this.resource.identifier}?apiKey=${this.myNode.apiKey}`)
+			return axios.get(buildRequestUrl(statusPath, store.getState()))
 		})
 
 		if (response && response.data && response.data.status === 'READY') {
@@ -196,7 +188,7 @@ export class FeedItem extends connect(store)(LitElement) {
 			isCalling = true
 
 			const data = await requestQueue.enqueue(() => {
-				return axios.get(`${this.nodeUrl}/arbitrary/resource/status/${this.resource.service}/${this.resource.name}/${this.resource.identifier}?apiKey=${this.myNode.apiKey}`)
+				return axios.get(buildRequestUrl(statusPath, store.getState()))
 			})
 
 			const res = data.data
@@ -314,9 +306,7 @@ export class FeedItem extends connect(store)(LitElement) {
 			if (parts.length > 0) {
 				identifier = parts[0] // Do not shift yet
 				// Check if a resource exists with this service, name and identifier combination
-				const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-				const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-				const url = `${nodeUrl}/arbitrary/resource/status/${service}/${name}/${identifier}?apiKey=${myNode.apiKey}}`
+				const url = buildRequestUrl(`/arbitrary/resource/status/${service}/${name}/${identifier}`, store.getState())
 
 				const res = await fetch(url);
 				const data = await res.json();

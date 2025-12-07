@@ -318,8 +318,9 @@ class ExportKeys extends connect(store)(LitElement) {
 		this.shadowRoot.querySelector('#repairLTCDialog').close()
 		this.shadowRoot.querySelector('#pleaseWaitDialog').show()
 
+		const url = buildRequestUrl(`/crosschain/ltc/repair`, store.getState())
 		let resRepair = await parentEpml.request('apiCall', {
-			url: `/crosschain/ltc/repair?apiKey=${this.getApiKey()}`,
+			url,
 			method: 'POST',
 			body: `${store.getState().app.selectedAddress.ltcWallet.derivedMasterPrivateKey}`
 		})
@@ -413,10 +414,6 @@ class ExportKeys extends connect(store)(LitElement) {
 		}
 	}
 
-	getApiKey() {
-		const apiNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		return apiNode.apiKey
-	}
 }
 
 window.customElements.define('export-keys', ExportKeys)

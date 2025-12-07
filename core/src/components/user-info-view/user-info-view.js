@@ -11,6 +11,7 @@ import '@vaadin/grid/vaadin-grid-sorter'
 
 // Multi language support
 import { get, translate } from '../../../translate'
+import { buildRequestUrl } from '../../utils/node'
 
 class UserInfoView extends connect(store)(LitElement) {
 	static get properties() {
@@ -1024,8 +1025,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getAddressUserResult(resultAddress) {
-		const nodeUrl = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]?.baseUrl
-		const addressUrl = `${nodeUrl}/addresses/${resultAddress}`
+		const addressUrl = this.buildUrl(`/addresses/${resultAddress}`)
 
 		await fetch(addressUrl).then(res => {
 			if (res.status === 400) {
@@ -1037,8 +1037,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getNameUserResult(resultName) {
-		const nodeUrl = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]?.baseUrl
-		const nameUrl = `${nodeUrl}/names/${resultName}`
+		const nameUrl = this.buildUrl(`/names/${resultName}`)
 
 		await fetch(nameUrl).then(res => {
 			if (res.status === 404) {
@@ -1050,8 +1049,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getAddressFromName(fromName) {
-		const nodeUrl = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]?.baseUrl
-		const fromNameUrl = `${nodeUrl}/names/${fromName}`
+		const fromNameUrl = this.buildUrl(`/names/${fromName}`)
 
 		this.nameAddressResult = await fetch(fromNameUrl).then(response => {
 			return response.json()
@@ -1079,8 +1077,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getAddressUserInfo(infoAddress) {
-		const nodeUrl = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]?.baseUrl
-		const infoAddressUrl = `${nodeUrl}/addresses/${infoAddress}`
+		const infoAddressUrl = this.buildUrl(`/addresses/${infoAddress}`)
 
 		this.addressResult = await fetch(infoAddressUrl).then(response => {
 			return response.json()
@@ -1088,8 +1085,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getAddressUserAvatar(avatarAddress) {
-		const nodeUrl = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]?.baseUrl
-		const nameUrl = `${nodeUrl}/names/address/${avatarAddress}?limit=0&reverse=true`
+		const nameUrl = this.buildUrl(`/names/address/${avatarAddress}?limit=0&reverse=true`)
 
 		await fetch(nameUrl).then(res => {
 			return res.json()
@@ -1105,12 +1101,11 @@ class UserInfoView extends connect(store)(LitElement) {
 			}
 		})
 
-		this.imageUrl = `${nodeUrl}/arbitrary/THUMBNAIL/${this.imageName}/qortal_avatar?async=true`
+		this.imageUrl = this.buildUrl(`/arbitrary/THUMBNAIL/${this.imageName}/qortal_avatar?async=true`)
 	}
 
 	async getAddressUserBalance(balanceAddress) {
-		const nodeUrl = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]?.baseUrl
-		const balanceAddressUrl = `${nodeUrl}/addresses/balance/${balanceAddress}`
+		const balanceAddressUrl = this.buildUrl(`/addresses/balance/${balanceAddress}`)
 
 		const qortalBalanceInfo = await fetch(balanceAddressUrl).then(res => {
 			return res.json()
@@ -1124,12 +1119,11 @@ class UserInfoView extends connect(store)(LitElement) {
 		this.startMinting = []
 
 		const checkBlocks = this.addressResult.blocksMinted + this.addressResult.blocksMintedAdjustment
-		const nodeUrl = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]?.baseUrl
 
 		if (checkBlocks === 0) {
 			this.startMintTime = get("explorerpage.exp16")
 		} else {
-			const rewardshareUrl = `${nodeUrl}/transactions/search?txType=REWARD_SHARE&address=${mintAddress}&confirmationStatus=CONFIRMED&limit=1&reverse=false`
+			const rewardshareUrl = this.buildUrl(`/transactions/search?txType=REWARD_SHARE&address=${mintAddress}&confirmationStatus=CONFIRMED&limit=1&reverse=false`)
 
 			this.startMinting = await fetch(rewardshareUrl).then(response => {
 				return response.json()
@@ -1172,9 +1166,7 @@ class UserInfoView extends connect(store)(LitElement) {
 		this.totalReceived = 0
 
 		const paymentsAddress = this.displayAddress
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-		const paymentsUrl = `${nodeUrl}/transactions/address/${paymentsAddress}?limit=0&reverse=true`
+		const paymentsUrl = this.buildUrl(`/transactions/address/${paymentsAddress}?limit=0&reverse=true`)
 
 		const paymentsAll = await fetch(paymentsUrl).then(response => {
 			return response.json()
@@ -1255,9 +1247,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getBoughtBTCGridItems() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-		const tradesBoughtBTCUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=BITCOIN&minimumTimestamp=1597310000000&limit=0&reverse=true`
+		const tradesBoughtBTCUrl = this.buildUrl(`/crosschain/trades?foreignBlockchain=BITCOIN&minimumTimestamp=1597310000000&limit=0&reverse=true`)
 		const myBTCAddress = this.displayAddress
 
 		const boughtBTCTradesAll = await fetch(tradesBoughtBTCUrl).then(response => {
@@ -1277,9 +1267,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getBoughtLTCGridItems() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-		const tradesBoughtLTCUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=LITECOIN&minimumTimestamp=1597310000000&limit=0&reverse=true`
+		const tradesBoughtLTCUrl = this.buildUrl(`/crosschain/trades?foreignBlockchain=LITECOIN&minimumTimestamp=1597310000000&limit=0&reverse=true`)
 		const myLTCAddress = this.displayAddress
 
 		const boughtLTCTradesAll = await fetch(tradesBoughtLTCUrl).then(response => {
@@ -1299,9 +1287,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getBoughtDOGEGridItems() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-		const tradesBoughtDOGEUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=DOGECOIN&minimumTimestamp=1597310000000&limit=0&reverse=true`
+		const tradesBoughtDOGEUrl = this.buildUrl(`/crosschain/trades?foreignBlockchain=DOGECOIN&minimumTimestamp=1597310000000&limit=0&reverse=true`)
 		const myDOGEAddress = this.displayAddress
 
 		const boughtDOGETradesAll = await fetch(tradesBoughtDOGEUrl).then(response => {
@@ -1321,9 +1307,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getBoughtDGBGridItems() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-		const tradesBoughtDGBUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=DIGIBYTE&minimumTimestamp=1597310000000&limit=0&reverse=true`
+		const tradesBoughtDGBUrl = this.buildUrl(`/crosschain/trades?foreignBlockchain=DIGIBYTE&minimumTimestamp=1597310000000&limit=0&reverse=true`)
 		const myDGBAddress = this.displayAddress
 
 		const boughtDGBTradesAll = await fetch(tradesBoughtDGBUrl).then(response => {
@@ -1343,9 +1327,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getBoughtRVNGridItems() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-		const tradesBoughtRVNUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=RAVENCOIN&minimumTimestamp=1597310000000&limit=0&reverse=true`
+		const tradesBoughtRVNUrl = this.buildUrl(`/crosschain/trades?foreignBlockchain=RAVENCOIN&minimumTimestamp=1597310000000&limit=0&reverse=true`)
 		const myRVNAddress = this.displayAddress
 
 		const boughtRVNTradesAll = await fetch(tradesBoughtRVNUrl).then(response => {
@@ -1365,9 +1347,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getBoughtARRRGridItems() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-		const tradesBoughtARRRUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=PIRATECHAIN&minimumTimestamp=1597310000000&limit=0&reverse=true`
+		const tradesBoughtARRRUrl = this.buildUrl(`/crosschain/trades?foreignBlockchain=PIRATECHAIN&minimumTimestamp=1597310000000&limit=0&reverse=true`)
 		const myARRRAddress = this.displayAddress
 
 		const boughtARRRTradesAll = await fetch(tradesBoughtARRRUrl).then(response => {
@@ -1387,9 +1367,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getSoldBTCGridItems() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-		const tradesSoldBTCUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=BITCOIN&minimumTimestamp=1597310000000&limit=0&reverse=true`
+		const tradesSoldBTCUrl = this.buildUrl(`/crosschain/trades?foreignBlockchain=BITCOIN&minimumTimestamp=1597310000000&limit=0&reverse=true`)
 		const myBTCAddress = this.displayAddress
 
 		const soldBTCTradesAll = await fetch(tradesSoldBTCUrl).then(response => {
@@ -1409,9 +1387,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getSoldLTCGridItems() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-		const tradesSoldLTCUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=LITECOIN&minimumTimestamp=1597310000000&limit=0&reverse=true`
+		const tradesSoldLTCUrl = this.buildUrl(`/crosschain/trades?foreignBlockchain=LITECOIN&minimumTimestamp=1597310000000&limit=0&reverse=true`)
 		const myLTCAddress = this.displayAddress
 
 		const soldLTCTradesAll = await fetch(tradesSoldLTCUrl).then(response => {
@@ -1431,9 +1407,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getSoldDOGEGridItems() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-		const tradesSoldDOGEUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=DOGECOIN&minimumTimestamp=1597310000000&limit=0&reverse=true`
+		const tradesSoldDOGEUrl = this.buildUrl(`/crosschain/trades?foreignBlockchain=DOGECOIN&minimumTimestamp=1597310000000&limit=0&reverse=true`)
 		const myDOGEAddress = this.displayAddress
 
 		const soldDOGETradesAll = await fetch(tradesSoldDOGEUrl).then(response => {
@@ -1453,9 +1427,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getSoldDGBGridItems() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-		const tradesSoldDGBUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=DIGIBYTE&minimumTimestamp=1597310000000&limit=0&reverse=true`
+		const tradesSoldDGBUrl = this.buildUrl(`/crosschain/trades?foreignBlockchain=DIGIBYTE&minimumTimestamp=1597310000000&limit=0&reverse=true`)
 		const myDGBAddress = this.displayAddress
 
 		const soldDGBTradesAll = await fetch(tradesSoldDGBUrl).then(response => {
@@ -1475,9 +1447,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getSoldRVNGridItems() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-		const tradesSoldRVNUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=RAVENCOIN&minimumTimestamp=1597310000000&limit=0&reverse=true`
+		const tradesSoldRVNUrl = this.buildUrl(`/crosschain/trades?foreignBlockchain=RAVENCOIN&minimumTimestamp=1597310000000&limit=0&reverse=true`)
 		const myRVNAddress = this.displayAddress
 
 		const soldRVNTradesAll = await fetch(tradesSoldRVNUrl).then(response => {
@@ -1497,9 +1467,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getSoldARRRGridItems() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-		const tradesSoldARRRUrl = `${nodeUrl}/crosschain/trades?foreignBlockchain=PIRATECHAIN&minimumTimestamp=1597310000000&limit=0&reverse=true`
+		const tradesSoldARRRUrl = this.buildUrl(`/crosschain/trades?foreignBlockchain=PIRATECHAIN&minimumTimestamp=1597310000000&limit=0&reverse=true`)
 		const myARRRAddress = this.displayAddress
 
 		const soldARRRTradesAll = await fetch(tradesSoldARRRUrl).then(response => {
@@ -1625,6 +1593,10 @@ class UserInfoView extends connect(store)(LitElement) {
 
 	closeShowAllPaymentsDialog() {
 		this.shadowRoot.getElementById('showAllPaymentsDialog').close()
+	}
+
+	buildUrl(path) {
+		return buildRequestUrl(path, store.getState())
 	}
 
 	isEmptyArray(arr) {

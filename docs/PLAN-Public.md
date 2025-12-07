@@ -10,7 +10,7 @@
   - [x] Expose selected-node context globally (baseUrl/apiKey/isPublic) for Epml/qortal-ui-crypto consumers.
   - [x] Wire Epml consumers to the selected-node context (global snapshot of baseUrl/apiKey) and expose `buildApiUrl` for request building.
   - [x] Add a global `isPublicNode` flag in Redux/derived selectors for easy guards.
-  - [ ] Replace per-call manual URL concatenation with the shared builder across request sites (app-view, sync indicator, show-plugin, controllers, remaining components like user-info and export-keys).
+  - [x] Replace per-call manual URL concatenation with the shared builder across request sites (app-view, tour, friends/notifications/profile/start-minting, remaining helpers like export-keys).
 
 - [ ] Node selection UX parity
   - [ ] Surface the public node in the Settings node picker with a “Public node” label and warning copy.

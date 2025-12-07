@@ -4,6 +4,7 @@ import { connect } from 'pwa-helpers'
 import { store } from '../store.js'
 import { routes } from '../plugins/routes'
 import { startMintingStyles } from '../styles/core-css'
+import { buildRequestUrl } from '../utils/node'
 import '../functional-components/my-button'
 import "@material/mwc-button"
 import '@material/mwc-dialog'
@@ -100,9 +101,7 @@ class StartMinting extends connect(store)(LitElement) {
 	}
 
 	async getMintingAcccounts() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-		const url = `${nodeUrl}/admin/mintingaccounts`
+		const url = buildRequestUrl(`/admin/mintingaccounts`, store.getState())
 
 		try {
 			const res = await fetch(url)
@@ -114,8 +113,7 @@ class StartMinting extends connect(store)(LitElement) {
 	}
 
 	async changeStatus(value) {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
+		const mintingAccountsUrl = buildRequestUrl(`/admin/mintingaccounts`, store.getState())
 		const address = this.address
 
 		this.status = value
@@ -124,17 +122,14 @@ class StartMinting extends connect(store)(LitElement) {
 		const findMintingAccountFromOtherUser = this.mintingAccountData.find((ma) => ma.recipientAccount === address && ma.mintingAccount !== address)
 
 		const removeMintingAccount = async (publicKey) => {
-			const url = `${nodeUrl}/admin/mintingaccounts?apiKey=${myNode.apiKey}`
-			return await fetch(url, {
+			return await fetch(mintingAccountsUrl, {
 				method: 'DELETE',
 				body: publicKey
 			})
 		}
 
 		const addMintingAccount = async (sponsorshipKeyValue) => {
-			const url = `${nodeUrl}/admin/mintingaccounts?apiKey=${myNode.apiKey}`
-
-			return await fetch(url, {
+			return await fetch(mintingAccountsUrl, {
 				method: 'POST',
 				body: sponsorshipKeyValue
 			})
@@ -169,9 +164,6 @@ class StartMinting extends connect(store)(LitElement) {
 	}
 
 	async confirmRelationship() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-
 		let interval = null
 		let stop = false
 
@@ -179,7 +171,7 @@ class StartMinting extends connect(store)(LitElement) {
 
 		const getAnswer = async () => {
 			const rewardShares = async (minterAddr) => {
-				const url = `${nodeUrl}/addresses/rewardshares?minters=${minterAddr}&recipients=${minterAddr}`
+				const url = buildRequestUrl(`/addresses/rewardshares?minters=${minterAddr}&recipients=${minterAddr}`, store.getState())
 				const res = await fetch(url)
 
 				return await res.json()
@@ -208,8 +200,7 @@ class StartMinting extends connect(store)(LitElement) {
 	}
 
 	renderStartMintingButton() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
+		const buildUrl = (path) => buildRequestUrl(path, store.getState())
 		const mintingAccountData = this.mintingAccountData
 		const addressInfo = window.parent.reduxStore.getState().app.accountInfo.addressInfo
 		const address = this.address
@@ -275,7 +266,7 @@ class StartMinting extends connect(store)(LitElement) {
 
 
 		const getLastRef = async () => {
-			const url = `${nodeUrl}/addresses/lastreference/${address}`
+			const url = buildUrl(`/addresses/lastreference/${address}`)
 			const res = await fetch(url)
 
 			return await res.text()

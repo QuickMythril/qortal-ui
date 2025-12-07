@@ -12,6 +12,7 @@ import {
 } from '../../../../plugins/plugins/core/components/qdn-action-encryption'
 import { get, translate } from '../../../translate'
 import { profileQdnStyles } from '../../styles/core-css'
+import { buildRequestUrl } from '../../utils/node'
 import ShortUniqueId from 'short-unique-id'
 import WebWorker2 from '../WebWorkerFile.js'
 import './avatar'
@@ -65,8 +66,6 @@ class ProfileQdn extends connect(store)(LitElement) {
 		this.hasAttemptedToFetchResource = false
 		this.resourceExists = undefined
 		this.settingsRawData = null
-		this.nodeUrl = this.getNodeUrl()
-		this.myNode = this.getMyNode()
 		this.valuesToBeSavedOnQdn = {}
 		this.isSaving = false
 		this.fee = null
@@ -409,17 +408,8 @@ class ProfileQdn extends connect(store)(LitElement) {
 		// ...
 	}
 
-	getNodeUrl() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		return myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-	}
-
-	getMyNode() {
-		return store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-	}
-
 	async getRawData(dataItem) {
-		const url = `${this.nodeUrl}/arbitrary/${dataItem.service}/${dataItem.name}/${dataItem.identifier}`
+		const url = buildRequestUrl(`/arbitrary/${dataItem.service}/${dataItem.name}/${dataItem.identifier}`, store.getState())
 		const res = await fetch(url)
 		const data = await res.json()
 		if (data.error) throw new Error('Cannot retrieve your data from qdn')
@@ -431,7 +421,7 @@ class ProfileQdn extends connect(store)(LitElement) {
 
 		try {
 			myFollowedNames = await parentEpml.request('apiCall', {
-				url: `/lists/followedNames?apiKey=${this.myNode.apiKey}`
+				url: buildRequestUrl(`/lists/followedNames`, store.getState())
 			})
 		} catch (error) { }
 
@@ -442,7 +432,7 @@ class ProfileQdn extends connect(store)(LitElement) {
 		let namesJsonString = JSON.stringify({ items: names })
 
 		return await parentEpml.request('apiCall', {
-			url: `/lists/followedNames?apiKey=${this.myNode.apiKey}`,
+			url: buildRequestUrl(`/lists/followedNames`, store.getState()),
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -490,7 +480,7 @@ class ProfileQdn extends connect(store)(LitElement) {
 			this.isLoadingVisitingProfile = true
 			this.nameVisiting = name
 			this.checkIfInFriendsList(this.nameVisiting)
-			const url = `${this.nodeUrl}/arbitrary/resources/search?service=DOCUMENT&identifier=qortal_profile&mode=ALL&name=${name}&prefix=true&exactmatchnames=true&excludeblocked=true&limit=20`
+			const url = buildRequestUrl(`/arbitrary/resources/search?service=DOCUMENT&identifier=qortal_profile&mode=ALL&name=${name}&prefix=true&exactmatchnames=true&excludeblocked=true&limit=20`, store.getState())
 			const res = await fetch(url)
 			let data = ''
 
@@ -556,7 +546,7 @@ class ProfileQdn extends connect(store)(LitElement) {
 			this.hasName = true
 			const name = nameObject.name
 			this.name = name
-			const url = `${this.nodeUrl}/arbitrary/resources/search?service=DOCUMENT&mode=ALL&identifier=qortal_profile&name=${name}&prefix=true&exactmatchnames=true&excludeblocked=true&limit=20`
+			const url = buildRequestUrl(`/arbitrary/resources/search?service=DOCUMENT&mode=ALL&identifier=qortal_profile&name=${name}&prefix=true&exactmatchnames=true&excludeblocked=true&limit=20`, store.getState())
 			const res = await fetch(url)
 			let data = ''
 
@@ -625,7 +615,7 @@ class ProfileQdn extends connect(store)(LitElement) {
 
 	async getArbitraryFee() {
 		const timestamp = Date.now()
-		const url = `${this.nodeUrl}/transactions/unitfee?txType=ARBITRARY&timestamp=${timestamp}`
+		const url = buildRequestUrl(`/transactions/unitfee?txType=ARBITRARY&timestamp=${timestamp}`, store.getState())
 		const response = await fetch(url)
 
 		if (!response.ok) {
@@ -841,7 +831,7 @@ class ProfileQdn extends connect(store)(LitElement) {
 	}
 
 	avatarFullImage() {
-		this.imageUrl = `${this.nodeUrl}/arbitrary/THUMBNAIL/${this.nameVisiting}/qortal_avatar?async=true&apiKey=${this.myNode.apiKey}`
+		this.imageUrl = buildRequestUrl(`/arbitrary/THUMBNAIL/${this.nameVisiting}/qortal_avatar?async=true`, store.getState())
 
 		return html`<img class="round-fullinfo" src="${this.imageUrl}" onerror="this.src='/img/incognito.png';" />`
 	}
@@ -875,7 +865,7 @@ class ProfileQdn extends connect(store)(LitElement) {
 
 	async getUserAddress() {
 		try {
-			const url = `${this.nodeUrl}/names/${this.nameVisiting}`
+			const url = buildRequestUrl(`/names/${this.nameVisiting}`, store.getState())
 			const res = await fetch(url)
 			const result = await res.json()
 
@@ -899,11 +889,6 @@ class ProfileQdn extends connect(store)(LitElement) {
 	}
 
 	// Standard functions
-	getApiKey() {
-		const coreNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		return coreNode.apiKey
-	}
-
 	isEmptyArray(arr) {
 		if (!arr) { return true }
 		return arr.length === 0

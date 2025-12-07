@@ -6,6 +6,7 @@ import { routes } from '../../plugins/routes'
 import { notificationBellStyles } from '../../styles/core-css'
 import config from '../../notifications/config'
 import { pickDisplayNameOrAddress } from '../../utils/name'
+import { buildRequestUrl } from '../../utils/node'
 import '../../../../plugins/plugins/core/components/TimeAgo'
 import '@material/mwc-icon'
 import '@polymer/paper-icon-button/paper-icon-button'
@@ -116,15 +117,7 @@ class NotificationBell extends connect(store)(LitElement) {
 		})
 	}
 
-	getApiKey() {
-		const apiNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		return apiNode.apiKey
-	}
-
 	async getNotifications() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-
 		let interval = null
 		let stop = false
 
@@ -135,7 +128,7 @@ class NotificationBell extends connect(store)(LitElement) {
 					20
 				)}_${recipientAddress.slice(-6)}_mail_`
 
-				const url = `${nodeUrl}/arbitrary/resources/search?service=MAIL_PRIVATE&query=${query}&limit=10&includemetadata=false&offset=0&reverse=true&excludeblocked=true`
+				const url = buildRequestUrl(`/arbitrary/resources/search?service=MAIL_PRIVATE&query=${query}&limit=10&includemetadata=false&offset=0&reverse=true&excludeblocked=true`, store.getState())
 
 				const response = await fetch(url, {
 					method: 'GET',
@@ -175,7 +168,7 @@ class NotificationBell extends connect(store)(LitElement) {
 
 					if (!this.initialFetch && notificationsToShow.length > 0) {
 						const mail = notificationsToShow[0]
-						const urlPic = `${nodeUrl}/arbitrary/THUMBNAIL/${mail.name}/qortal_avatar?async=true}`
+						const urlPic = buildRequestUrl(`/arbitrary/THUMBNAIL/${mail.name}/qortal_avatar?async=true`, store.getState())
 
 						await routes.showNotification({
 							data: {
@@ -193,7 +186,7 @@ class NotificationBell extends connect(store)(LitElement) {
 					} else if (notificationsToShow.length > 0) {
 						if (notificationsToShow[0].created > (this.notifications[0]?.created || 0)) {
 							const mail = notificationsToShow[0]
-							const urlPic = `${nodeUrl}/arbitrary/THUMBNAIL/${mail.name}/qortal_avatar?async=true}`
+							const urlPic = buildRequestUrl(`/arbitrary/THUMBNAIL/${mail.name}/qortal_avatar?async=true`, store.getState())
 
 							await routes.showNotification({
 								data: {

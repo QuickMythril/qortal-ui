@@ -10,6 +10,7 @@ import '@material/mwc-dialog'
 import '@material/mwc-icon'
 import '@polymer/paper-spinner/paper-spinner-lite.js'
 import '@vaadin/tooltip'
+import { buildRequestUrl } from '../../utils/node'
 
 class ProfileModalUpdate extends connect(store)(LitElement) {
 	static get properties() {
@@ -43,8 +44,6 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 		super();
 		this.isOpen = false
 		this.isLoading = false
-		this.nodeUrl = this.getNodeUrl()
-		this.myNode = this.getMyNode()
 		this.tagline = ''
 		this.bio = ''
 		this.walletList = ['btc', 'ltc', 'doge', 'dgb', 'rvn', 'arrr']
@@ -403,7 +402,7 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 				const arrrWalletName = `${coin}Wallet`;
 
 				let res = await parentEpml.request('apiCall', {
-					url: `/crosschain/${coin}/walletaddress?apiKey=${this.myNode.apiKey}`,
+					url: buildRequestUrl(`/crosschain/${coin}/walletaddress`, store.getState()),
 					method: 'POST',
 					body: `${store.getState().app.selectedAddress[arrrWalletName].seed58}`
 				})
@@ -436,15 +435,6 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 				// Use locally derived address
 				return this.walletsUi.get(wallet).wallet.address
 		}
-	}
-
-	getNodeUrl() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		return myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-	}
-
-	getMyNode() {
-		return store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
 	}
 
 	clearFields() {
@@ -544,11 +534,6 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 	}
 
 	// Standard functions
-	getApiKey() {
-		const coreNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		return coreNode.apiKey
-	}
-
 	isEmptyArray(arr) {
 		if (!arr) { return true }
 		return arr.length === 0

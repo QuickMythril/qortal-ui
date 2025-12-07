@@ -7,6 +7,7 @@ import '@material/mwc-button'
 import '@material/mwc-checkbox'
 import '@material/mwc-dialog'
 import '@polymer/paper-spinner/paper-spinner-lite.js'
+import { buildRequestUrl } from '../../utils/node'
 
 class AddFriendsModal extends connect(store)(LitElement) {
 	static get properties() {
@@ -38,8 +39,6 @@ class AddFriendsModal extends connect(store)(LitElement) {
 		this.alias = ''
 		this.willFollow = true
 		this.notes = ''
-		this.nodeUrl = this.getNodeUrl()
-		this.myNode = this.getMyNode()
 		this.mySelectedFeeds = []
 		this.availableFeeedSchemas = []
 		this.isLoadingSchemas = false
@@ -141,7 +140,7 @@ class AddFriendsModal extends connect(store)(LitElement) {
 							${this.availableFeeedSchemas.map((schema) => {
 								const isAlreadySelected = this.mySelectedFeeds.find((item) => item.name === schema.name);
 								let avatarImgApp;
-								const avatarUrl2 = `${this.nodeUrl}/arbitrary/THUMBNAIL/${schema.name}/qortal_avatar?async=true&apiKey=${this.myNode.apiKey}`;
+								const avatarUrl2 = buildRequestUrl(`/arbitrary/THUMBNAIL/${schema.name}/qortal_avatar?async=true`, store.getState());
 								avatarImgApp = html`<img src="${avatarUrl2}" style="max-width:100%; max-height:100%;" onerror="this.onerror=null; this.src='/img/incognito.png';"/>`;
 								return html`
 									<div
@@ -198,15 +197,6 @@ class AddFriendsModal extends connect(store)(LitElement) {
 		// ...
 	}
 
-	getNodeUrl() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		return myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-	}
-
-	getMyNode() {
-		return store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-	}
-
 	clearFields() {
 		this.alias = ''
 		this.willFollow = true
@@ -259,7 +249,7 @@ class AddFriendsModal extends connect(store)(LitElement) {
 	async getAvailableFeedSchemas() {
 		try {
 			this.isLoadingSchemas = true
-			const url = `${this.nodeUrl}/arbitrary/resources/search?service=DOCUMENT&identifier=ui_schema_feed&prefix=true`
+			const url = buildRequestUrl(`/arbitrary/resources/search?service=DOCUMENT&identifier=ui_schema_feed&prefix=true`, store.getState())
 			const res = await fetch(url)
 			const data = await res.json()
 
@@ -277,11 +267,6 @@ class AddFriendsModal extends connect(store)(LitElement) {
 	}
 
 	// Standard functions
-	getApiKey() {
-		const coreNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		return coreNode.apiKey
-	}
-
 	isEmptyArray(arr) {
 		if (!arr) { return true }
 		return arr.length === 0

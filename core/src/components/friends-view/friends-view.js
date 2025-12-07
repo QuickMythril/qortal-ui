@@ -15,6 +15,7 @@ import '@polymer/paper-progress/paper-progress.js'
 import '@vaadin/icon'
 import '@vaadin/icons'
 import '@vaadin/button'
+import { buildRequestUrl } from '../../utils/node'
 
 class FriendsView extends connect(store)(LitElement) {
 	static get properties() {
@@ -57,8 +58,6 @@ class FriendsView extends connect(store)(LitElement) {
 		this.isLoading = false
 		this.userFoundModalOpen = false
 		this.userFound = []
-		this.nodeUrl = this.getNodeUrl()
-		this.myNode = this.getMyNode()
 		this.isOpenAddFriendsModal = false
 		this.editContent = null
 		this.addToFriendList = this.addToFriendList.bind(this)
@@ -150,15 +149,6 @@ class FriendsView extends connect(store)(LitElement) {
 		this.friendList = JSON.parse(localStorage.getItem('friends-my-friend-list') || "[]")
 	}
 
-	getNodeUrl() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		return myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-	}
-
-	getMyNode() {
-		return store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-	}
-
 	getMoreFriends() { }
 
 	_updateFriends(event) {
@@ -243,7 +233,7 @@ class FriendsView extends connect(store)(LitElement) {
 		}
 
 		try {
-			const url = `${this.nodeUrl}/names/${nameValue}`
+			const url = buildRequestUrl(`/names/${nameValue}`, store.getState())
 			const res = await fetch(url)
 			const result = await res.json()
 
@@ -270,7 +260,7 @@ class FriendsView extends connect(store)(LitElement) {
 		let namesJsonString = JSON.stringify({ "items": items })
 
 		return await parentEpml.request('apiCall', {
-			url: `/lists/followedNames?apiKey=${this.getApiKey()}`,
+			url: buildRequestUrl(`/lists/followedNames`, store.getState()),
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -287,7 +277,7 @@ class FriendsView extends connect(store)(LitElement) {
 		let namesJsonString = JSON.stringify({ "items": items })
 
 		return await parentEpml.request('apiCall', {
-			url: `/lists/followedNames?apiKey=${this.getApiKey()}`,
+			url: buildRequestUrl(`/lists/followedNames`, store.getState()),
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json'
@@ -391,11 +381,6 @@ class FriendsView extends connect(store)(LitElement) {
 	}
 
 	// Standard functions
-	getApiKey() {
-		const coreNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		return coreNode.apiKey
-	}
-
 	isEmptyArray(arr) {
 		if (!arr) { return true }
 		return arr.length === 0

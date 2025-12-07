@@ -254,7 +254,7 @@ class TourComponent extends connect(store)(LitElement) {
 
 	getNodeUrl() {
 		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const myNodeUrl =  myNode.protocol + '://' + myNode.domain + ':' + myNode.port
+		const myNodeUrl = myNode?.baseUrl
 		this.nodeUrl = myNodeUrl
 	}
 

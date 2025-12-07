@@ -431,7 +431,7 @@ class AppView extends connect(store)(LitElement) {
 		await this.getNodeType()
 
 		const myAppNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeAppUrl = myAppNode.protocol + '://' + myAppNode.domain + ':' + myAppNode.port
+		const nodeAppUrl = myAppNode.baseUrl
 		const appDelay = ms => new Promise(res => setTimeout(res, ms))
 
 		await appDelay(3000)
@@ -1736,7 +1736,7 @@ class AppView extends connect(store)(LitElement) {
 
 	async getNodeType() {
 		const myAppNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeAppUrl = myAppNode.protocol + '://' + myAppNode.domain + ':' + myAppNode.port
+		const nodeAppUrl = myAppNode.baseUrl
 		const url = `${nodeAppUrl}/admin/info`
 
 		await fetch(url).then((response) => {

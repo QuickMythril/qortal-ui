@@ -24,6 +24,7 @@
 - [ ] Add public node support
 - [ ] Make dashboard apps drag to resort
 - [ ] Add a code linter
+- [ ] Update welcome info and tutorials
 
 ## Needs research
 

@@ -23,7 +23,7 @@ import '@vaadin/text-field'
 
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../translate'
-import { buildRequestUrl } from '../utils/node'
+import { buildRequestUrl, getSelectedNodeBaseUrl } from '../utils/node'
 
 registerTranslateConfig({
 	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
@@ -341,8 +341,11 @@ class ShowPlugin extends connect(store)(LitElement) {
 
 	createUrl(framePort) {
 		this.proxyPort = framePort
-		const myFrameNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const myFrameNodeUrl = myFrameNode.protocol + '://' + myFrameNode.domain + ':' + this.proxyPort
+		const baseUrl = getSelectedNodeBaseUrl(store.getState())
+		if (!baseUrl) return
+		const proxyUrl = new URL(baseUrl)
+		proxyUrl.port = this.proxyPort
+		const myFrameNodeUrl = proxyUrl.origin
 
 		this.changePage({
 			"url": "devmode",
@@ -1126,9 +1129,7 @@ class NavBar extends connect(store)(LitElement) {
 	renderNameAvatar(nameObj) {
 		let myName = nameObj.name
 
-		const myNameNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const myNameNodeUrl = myNameNode.protocol + '://' + myNameNode.domain + ':' + myNameNode.port
-		const nameUrl = `${myNameNodeUrl}/arbitrary/THUMBNAIL/${myName}/qortal_avatar?async=true`
+		const nameUrl = buildRequestUrl(`/arbitrary/THUMBNAIL/${myName}/qortal_avatar?async=true`, store.getState())
 
 		return html`<img src="${nameUrl}" onerror="this.src='/img/incognito.png';">`
 	}
@@ -1889,9 +1890,7 @@ class NavBar extends connect(store)(LitElement) {
 				identifier = parts[0]
 
 				// Check if a resource exists with this service, name and identifier combination
-				const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-				const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-				const url = `${nodeUrl}/arbitrary/resource/status/${service}/${name}/${identifier}?apiKey=${myNode.apiKey}}`
+				const url = buildRequestUrl(`/arbitrary/resource/status/${service}/${name}/${identifier}`, store.getState())
 				const res = await fetch(url)
 				const data = await res.json()
 

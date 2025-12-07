@@ -3,6 +3,7 @@ import { connect } from 'pwa-helpers'
 import { store } from '../store'
 import { doAddNode, doEditNode, doLoadNodeConfig, doRemoveNode, doSetNode } from '../redux/app/app-actions'
 import { settingsPageStyles } from '../styles/core-css'
+import { getNodeBaseUrl } from '../constants/nodes'
 import FileSaver from 'file-saver'
 import snackbar from './snackbar'
 import './frag-file-input'
@@ -73,7 +74,7 @@ class SettingsPage extends connect(store)(LitElement) {
 									html `
 										<div>
 											<span class="name">${this.selectedItem.name}</span>
-											<span>${this.selectedItem.protocol + '://' + this.selectedItem.domain + ':' + this.selectedItem.port}</span>
+											<span>${this.selectedItem.baseUrl || getNodeBaseUrl(this.selectedItem)}</span>
 										</div>
 									` : html`
 										${translate('settings.selectnode')}
@@ -88,7 +89,7 @@ class SettingsPage extends connect(store)(LitElement) {
 									<div class="list-parent">
 										<div>
 											<span class="name">${n.name}</span>
-											<span>${n.protocol + '://' + n.domain + ':' + n.port}</span>
+											<span>${n.baseUrl || getNodeBaseUrl(n)}</span>
 										</div>
 										<div>
 											<mwc-button
@@ -259,7 +260,7 @@ class SettingsPage extends connect(store)(LitElement) {
 		const catchSavedNodes = JSON.parse(localStorage.getItem('myQortalNodes'))
 		const selectedNodeOnNewStart = catchSavedNodes[selectedNodeIndexOnNewStart]
 		const selectedNameOnNewStart = `${selectedNodeOnNewStart.name}`
-		const selectedNodeUrlOnNewStart = `${selectedNodeOnNewStart.protocol + '://' + selectedNodeOnNewStart.domain + ':' + selectedNodeOnNewStart.port}`
+		const selectedNodeUrlOnNewStart = getNodeBaseUrl(selectedNodeOnNewStart)
 
 		let snack2string = get('settings.snack2')
 
@@ -281,7 +282,7 @@ class SettingsPage extends connect(store)(LitElement) {
 		const catchSavedNodes = JSON.parse(localStorage.getItem('myQortalNodes'))
 		const selectedNodeOnNewStart = catchSavedNodes[selectedNodeIndexOnNewStart]
 		const selectedNameOnNewStart = `${selectedNodeOnNewStart.name}`
-		const selectedNodeUrlOnNewStart = `${selectedNodeOnNewStart.protocol + '://' + selectedNodeOnNewStart.domain + ':' + selectedNodeOnNewStart.port}`
+		const selectedNodeUrlOnNewStart = getNodeBaseUrl(selectedNodeOnNewStart)
 
 		let snack2string = get('settings.snack2')
 
@@ -340,7 +341,6 @@ class SettingsPage extends connect(store)(LitElement) {
 	nodeSelected(selectedNodeIndex) {
 		const selectedNode = this.nodeConfig.knownNodes[selectedNodeIndex]
 		const selectedName = `${selectedNode.name}`
-		const selectedNodeUrl = `${selectedNode.protocol + '://' + selectedNode.domain + ':' + selectedNode.port}`
 		const index = parseInt(selectedNodeIndex)
 
 		if (isNaN(index)) return
