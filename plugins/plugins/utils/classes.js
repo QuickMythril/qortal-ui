@@ -826,9 +826,8 @@ export class DeleteTradeOffer {
 }
 
 export const processTransactionV2 = async (bytes) => {
-	const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
-	const nodeUrl = `${myNode.protocol}://${myNode.domain}:${myNode.port}`
-	const url = `${nodeUrl}/transactions/process?apiVersion=2`
+	const baseUrl = window.parent.qortalNodeContext?.baseUrl
+	const url = `${baseUrl}/transactions/process?apiVersion=2`
 
 	const doProcess = await fetch(url, {
 		method: "POST",
