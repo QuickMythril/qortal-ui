@@ -43,3 +43,15 @@
   - [ ] Confirm guards: each restricted action throws the public-node error; allowed actions still work.
   - [ ] Confirm publishes: >500 MB fails on public, succeeds on local; ≤500 MB succeeds on public.
   - [ ] UX checks: node picker shows public entry, login skips key generation on public, banner/badges render, node-management hidden on public.
+
+## Issues to fix from manual testing (public node UX)
+
+- [ ] Node picker shows “Public Node ([object Object])” – fix label formatting.
+- [ ] Node settings page only shows partial copy (“Select a Node…” and “Install Qortal Core for full access and privacy.”); restore missing text.
+- [ ] Remove the red “Public node ext-node.qortal.link:443” badge in the top menu bar.
+- [ ] Sidebar menu not rendered and no hamburger hover control when on public node.
+- [ ] Core status hover card in the top bar and overview page fail to load data on public node (should degrade gracefully).
+- [ ] Remove the warning banner/message from the Trade Portal page for public node.
+- [ ] Add a yellow warning background behind the core status icon in the top bar when on public node.
+- [ ] Add public-node indication in the core status tooltip (below “Core Information”).
+- [ ] Q-Apps plugin fails to load on public node; diagnose and fix while Websites works.
