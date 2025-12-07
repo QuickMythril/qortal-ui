@@ -2,6 +2,7 @@ import { html, LitElement } from 'lit'
 import { connect } from 'pwa-helpers'
 import { store } from '../store'
 import { Epml } from '../epml'
+import { buildRequestUrl } from '../utils/node'
 import { addTradeBotRoutes } from '../tradebot/addTradeBotRoutes'
 import { get, translate } from '../../translate'
 import { decryptData, encryptData } from '../lockScreen'
@@ -613,7 +614,7 @@ class AppView extends connect(store)(LitElement) {
 		}
 
 		const filterMyBotPriceTradesBTC = async () => {
-			const tradeBotBtcUrl = `${nodeAppUrl}/crosschain/tradebot?foreignBlockchain=BITCOIN&apiKey=${this.getApiKey()}`
+			const tradeBotBtcUrl = buildRequestUrl(`/crosschain/tradebot?foreignBlockchain=BITCOIN`, store.getState())
 
 			this.tradeBotBtcAt = await fetch(tradeBotBtcUrl).then(response => {
 				return response.json()
@@ -814,7 +815,7 @@ class AppView extends connect(store)(LitElement) {
 		}
 
 		const filterMyBotPriceTradesLTC = async () => {
-			const tradeBotLtcUrl = `${nodeAppUrl}/crosschain/tradebot?foreignBlockchain=LITECOIN&apiKey=${this.getApiKey()}`
+			const tradeBotLtcUrl = buildRequestUrl(`/crosschain/tradebot?foreignBlockchain=LITECOIN`, store.getState())
 
 			this.tradeBotLtcAt = await fetch(tradeBotLtcUrl).then(response => {
 				return response.json()
@@ -1004,7 +1005,7 @@ class AppView extends connect(store)(LitElement) {
 		}
 
 		const filterMyBotPriceTradesDOGE = async () => {
-			const tradeBotDogeUrl = `${nodeAppUrl}/crosschain/tradebot?foreignBlockchain=DOGECOIN&apiKey=${this.getApiKey()}`
+			const tradeBotDogeUrl = buildRequestUrl(`/crosschain/tradebot?foreignBlockchain=DOGECOIN`, store.getState())
 
 			this.tradeBotDogeAt = await fetch(tradeBotDogeUrl).then(response => {
 				return response.json()
@@ -1194,7 +1195,7 @@ class AppView extends connect(store)(LitElement) {
 		}
 
 		const filterMyBotPriceTradesDGB = async () => {
-			const tradeBotDgbUrl = `${nodeAppUrl}/crosschain/tradebot?foreignBlockchain=DIGIBYTE&apiKey=${this.getApiKey()}`
+			const tradeBotDgbUrl = buildRequestUrl(`/crosschain/tradebot?foreignBlockchain=DIGIBYTE`, store.getState())
 
 			this.tradeBotDgbAt = await fetch(tradeBotDgbUrl).then(response => {
 				return response.json()
@@ -1384,7 +1385,7 @@ class AppView extends connect(store)(LitElement) {
 		}
 
 		const filterMyBotPriceTradesRVN = async () => {
-			const tradeBotRvnUrl = `${nodeAppUrl}/crosschain/tradebot?foreignBlockchain=RAVENCOIN&apiKey=${this.getApiKey()}`
+			const tradeBotRvnUrl = buildRequestUrl(`/crosschain/tradebot?foreignBlockchain=RAVENCOIN`, store.getState())
 
 			this.tradeBotRvnAt = await fetch(tradeBotRvnUrl).then(response => {
 				return response.json()
@@ -1573,7 +1574,7 @@ class AppView extends connect(store)(LitElement) {
 		}
 
 		const filterMyBotPriceTradesARRR = async () => {
-			const tradeBotArrrUrl = `${nodeAppUrl}/crosschain/tradebot?foreignBlockchain=PIRATECHAIN&apiKey=${this.getApiKey()}`
+			const tradeBotArrrUrl = buildRequestUrl(`/crosschain/tradebot?foreignBlockchain=PIRATECHAIN`, store.getState())
 
 			this.tradeBotArrrAt = await fetch(tradeBotArrrUrl).then(response => {
 				return response.json()
@@ -1991,14 +1992,14 @@ class AppView extends connect(store)(LitElement) {
 		let qortAddress = store.getState().app.selectedAddress.address
 
 		await parentEpml.request('apiCall', {
-			url: `/addresses/balance/${qortAddress}?apiKey=${this.getApiKey()}`,
+			url: buildRequestUrl(`/addresses/balance/${qortAddress}`, store.getState()),
 		}).then((res) => {
 			this.qortWalletBalance = res
 		})
 	}
 
 	async updateBtcWalletBalance() {
-		let _url = `/crosschain/btc/walletbalance?apiKey=${this.getApiKey()}`
+		let _url = buildRequestUrl(`/crosschain/btc/walletbalance`, store.getState())
 		let _body = store.getState().app.selectedAddress.btcWallet.derivedMasterPublicKey
 
 		await parentEpml.request('apiCall', {
@@ -2015,7 +2016,7 @@ class AppView extends connect(store)(LitElement) {
 	}
 
 	async updateLtcWalletBalance() {
-		let _url = `/crosschain/ltc/walletbalance?apiKey=${this.getApiKey()}`
+		let _url = buildRequestUrl(`/crosschain/ltc/walletbalance`, store.getState())
 		let _body = store.getState().app.selectedAddress.ltcWallet.derivedMasterPublicKey
 
 		await parentEpml.request('apiCall', {
@@ -2032,7 +2033,7 @@ class AppView extends connect(store)(LitElement) {
 	}
 
 	async updateDogeWalletBalance() {
-		let _url = `/crosschain/doge/walletbalance?apiKey=${this.getApiKey()}`
+		let _url = buildRequestUrl(`/crosschain/doge/walletbalance`, store.getState())
 		let _body = store.getState().app.selectedAddress.dogeWallet.derivedMasterPublicKey
 
 		await parentEpml.request('apiCall', {
@@ -2049,7 +2050,7 @@ class AppView extends connect(store)(LitElement) {
 	}
 
 	async updateDgbWalletBalance() {
-		let _url = `/crosschain/dgb/walletbalance?apiKey=${this.getApiKey()}`
+		let _url = buildRequestUrl(`/crosschain/dgb/walletbalance`, store.getState())
 		let _body = store.getState().app.selectedAddress.dgbWallet.derivedMasterPublicKey
 
 		await parentEpml.request('apiCall', {
@@ -2066,7 +2067,7 @@ class AppView extends connect(store)(LitElement) {
 	}
 
 	async updateRvnWalletBalance() {
-		let _url = `/crosschain/rvn/walletbalance?apiKey=${this.getApiKey()}`
+		let _url = buildRequestUrl(`/crosschain/rvn/walletbalance`, store.getState())
 		let _body = store.getState().app.selectedAddress.rvnWallet.derivedMasterPublicKey
 
 		await parentEpml.request('apiCall', {
@@ -2083,7 +2084,7 @@ class AppView extends connect(store)(LitElement) {
 	}
 
 	async updateArrrWalletBalance() {
-		let _url = `/crosschain/arrr/walletbalance?apiKey=${this.getApiKey()}`
+		let _url = buildRequestUrl(`/crosschain/arrr/walletbalance`, store.getState())
 		let _body = store.getState().app.selectedAddress.arrrWallet.seed58
 
 		await parentEpml.request('apiCall', {
