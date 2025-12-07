@@ -46,8 +46,7 @@ class ChatSideNavHeads extends connect(store)(LitElement) {
 		let avatarImg = ''
 
 		if (this.chatInfo.name) {
-			const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-			const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
+			const nodeUrl = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]?.baseUrl
 			const avatarUrl = `${nodeUrl}/arbitrary/THUMBNAIL/${this.chatInfo.name}/qortal_avatar?async=true`
 			avatarImg = this.createImage(avatarUrl)
 		}
