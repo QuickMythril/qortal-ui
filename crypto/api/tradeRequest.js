@@ -7,23 +7,27 @@ import { request } from './fetch-request'
 import TradeBotRespondMultipleRequest from "./transactions/trade-portal/tradebot/TradeBotRespondMultipleRequest";
 import { isPublicNode } from '../../core/src/constants/nodes'
 
-const ensureNotPublicNode = () => {
-	const node =
-		window.parent.reduxStore.getState().app.nodeConfig.knownNodes[
-			window.parent.reduxStore.getState().app.nodeConfig.node
-		]
+const getSelectedNode = () => window.parent.reduxStore.getState().app.nodeConfig.knownNodes[
+	window.parent.reduxStore.getState().app.nodeConfig.node
+]
+
+const ensureSendAllowed = () => {
+	const node = getSelectedNode()
 	if (isPublicNode(node)) {
 		throw new Error('Public node does not allow this action')
 	}
 	return node
 }
 
+const buildApiKeySuffix = (node) => node?.apiKey ? `?apiKey=${node.apiKey}` : ''
+
 // TradeBotCreateRequest
 export const tradeBotCreateRequest = (requestObject) => {
 	const txn = new TradeBotCreateRequest().createTransaction(requestObject)
-	const myNode = ensureNotPublicNode()
+	const myNode = getSelectedNode()
+	const apiKeySuffix = buildApiKeySuffix(myNode)
 
-	return request(`/crosschain/tradebot/create?apiKey=${myNode.apiKey}`, {
+	return request(`/crosschain/tradebot/create${apiKeySuffix}`, {
 		method: 'POST',
 		headers: {
 			'Accept': 'text/plain',
@@ -36,9 +40,10 @@ export const tradeBotCreateRequest = (requestObject) => {
 // TradeBotRespondRequest
 export const tradeBotRespondRequest = (requestObject) => {
 	const txn = new TradeBotRespondRequest().createTransaction(requestObject)
-	const myNode = ensureNotPublicNode()
+	const myNode = getSelectedNode()
+	const apiKeySuffix = buildApiKeySuffix(myNode)
 
-	return request(`/crosschain/tradebot/respond?apiKey=${myNode.apiKey}`, {
+	return request(`/crosschain/tradebot/respond${apiKeySuffix}`, {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',
@@ -51,9 +56,10 @@ export const tradeBotRespondRequest = (requestObject) => {
 // TradeBotRespondRequest
 export const tradeBotRespondMultipleRequest = (requestObject) => {
 	const txn = new TradeBotRespondMultipleRequest().createTransaction(requestObject)
-	const myNode = ensureNotPublicNode()
+	const myNode = getSelectedNode()
+	const apiKeySuffix = buildApiKeySuffix(myNode)
 
-	return request(`/crosschain/tradebot/respondmultiple?apiKey=${myNode.apiKey}`, {
+	return request(`/crosschain/tradebot/respondmultiple${apiKeySuffix}`, {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',
@@ -71,9 +77,10 @@ export const signTradeBotTxn = (unsignedTxn, keyPair) => {
 // Delete Trade Offer
 export const deleteTradeOffer = (requestObject) => {
 	const txn = new DeleteTradeOffer().createTransaction(requestObject)
-	const myNode = ensureNotPublicNode()
+	const myNode = getSelectedNode()
+	const apiKeySuffix = buildApiKeySuffix(myNode)
 
-	return request(`/crosschain/tradeoffer?apiKey=${myNode.apiKey}`, {
+	return request(`/crosschain/tradeoffer${apiKeySuffix}`, {
 		method: 'DELETE',
 		headers: {
 			'Accept': 'application/json',
@@ -85,8 +92,9 @@ export const deleteTradeOffer = (requestObject) => {
 
 // Send Coin
 const sendCoin = (coin, requestObject) => {
-	const myNode = ensureNotPublicNode()
-	return request(`/crosschain/${coin}/send?apiKey=${myNode.apiKey}`, {
+	const myNode = ensureSendAllowed()
+	const apiKeySuffix = buildApiKeySuffix(myNode)
+	return request(`/crosschain/${coin}/send${apiKeySuffix}`, {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',

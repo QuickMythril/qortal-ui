@@ -18,11 +18,7 @@ export async function request(url, options) {
 	const n = config.nodeConfig.knownNodes[config.nodeConfig.node]
 	const node = n.protocol + '://' + n.domain + ':' + n.port
 
-	if (
-		isPublicNode(n) &&
-		(options.method && options.method !== 'GET') &&
-		(url.startsWith('/crosschain/') || url.startsWith('/admin/'))
-	) {
+	if (isPublicNode(n) && url.startsWith('/admin/')) {
 		throw new Error('Public node does not allow this action')
 	}
 

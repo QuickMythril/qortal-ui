@@ -54,7 +54,6 @@ class CoinBalancesController extends connect(store)(LitElement) {
 	}
 
 	async updateBtcWalletBalance() {
-		if (isSelectedNodePublic(store.getState())) return
 		this._refreshNodeInfo()
 		let _url = buildRequestUrl(`/crosschain/btc/walletbalance`, store.getState())
 		let _body = store.getState().app.selectedAddress.btcWallet.derivedMasterPublicKey
@@ -81,7 +80,6 @@ class CoinBalancesController extends connect(store)(LitElement) {
 	}
 
 	async updateLtcWalletBalance() {
-		if (isSelectedNodePublic(store.getState())) return
 		this._refreshNodeInfo()
 		let _url = buildRequestUrl(`/crosschain/ltc/walletbalance`, store.getState())
 		let _body = store.getState().app.selectedAddress.ltcWallet.derivedMasterPublicKey
@@ -109,7 +107,6 @@ class CoinBalancesController extends connect(store)(LitElement) {
 	}
 
 	async updateDogeWalletBalance() {
-		if (isSelectedNodePublic(store.getState())) return
 		this._refreshNodeInfo()
 		let _url = buildRequestUrl(`/crosschain/doge/walletbalance`, store.getState())
 		let _body = store.getState().app.selectedAddress.dogeWallet.derivedMasterPublicKey
@@ -136,7 +133,6 @@ class CoinBalancesController extends connect(store)(LitElement) {
 	}
 
 	async updateDgbWalletBalance() {
-		if (isSelectedNodePublic(store.getState())) return
 		this._refreshNodeInfo()
 		let _url = buildRequestUrl(`/crosschain/dgb/walletbalance`, store.getState())
 		let _body = store.getState().app.selectedAddress.dgbWallet.derivedMasterPublicKey
@@ -163,7 +159,6 @@ class CoinBalancesController extends connect(store)(LitElement) {
 	}
 
 	async updateRvnWalletBalance() {
-		if (isSelectedNodePublic(store.getState())) return
 		this._refreshNodeInfo()
 		let _url = buildRequestUrl(`/crosschain/rvn/walletbalance`, store.getState())
 		let _body = store.getState().app.selectedAddress.rvnWallet.derivedMasterPublicKey
