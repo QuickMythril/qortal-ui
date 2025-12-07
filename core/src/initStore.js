@@ -20,7 +20,7 @@ const updateGlobalNodeContext = () => {
 	window.qortalNodeContext = {
 		baseUrl: getSelectedNodeBaseUrl(state),
 		apiKey: getSelectedNodeApiKey(state),
-		isPublic: nodeInfo?.isPublic || false,
+		isPublic: (nodeInfo && nodeInfo.isPublic) || false,
 		node: nodeInfo || {}
 	}
 }
@@ -49,7 +49,10 @@ window.buildApiUrl = (path, options = {}) => {
 }
 
 // Rehydrate app.accountInfo from persisted user slice so UI sees saved activeName on startup.
-const persistedUserAccountInfo = store.getState()?.user?.accountInfo
+const persistedUserAccountInfo = (() => {
+	const state = store.getState()
+	return state && state.user ? state.user.accountInfo : undefined
+})()
 if (persistedUserAccountInfo) {
 	store.dispatch(doUpdateAccountInfo(persistedUserAccountInfo))
 }

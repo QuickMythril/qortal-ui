@@ -5,7 +5,7 @@
   - [x] Extend default node list to include the public gateway (no apiKey, `enableManagement:false`); keep localhost mainnet/testnet defaults.
   - [x] Ensure node selection persists protocol/domain/port/apiKey and exposes a derived `baseUrl` + `apiKey` for requests.
 
-- [ ] Update request routing to respect public vs local
+- [x] Update request routing to respect public vs local
   - [x] Add a helper to build endpoints: append `apiKey` only when present; otherwise use base URL; when no node is selected, never auto-switch to public—prompt the user with an explicit opt-in before falling back to the public gateway.
   - [x] Expose selected-node context globally (baseUrl/apiKey/isPublic) for Epml/qortal-ui-crypto consumers.
   - [x] Wire Epml consumers to the selected-node context (global snapshot of baseUrl/apiKey) and expose `buildApiUrl` for request building.
