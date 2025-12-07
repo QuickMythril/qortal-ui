@@ -17,3 +17,5 @@ export const isPublicNode = (node) => {
 	const url = normalizeNodeUrl(node);
 	return gateways.some((gateway) => url.includes(gateway));
 };
+
+export const getNodeBaseUrl = (node) => normalizeNodeUrl(node);

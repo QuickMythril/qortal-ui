@@ -2,7 +2,7 @@
 
 - [ ] Add public-node constants and detection
   - [x] Define `EXT_NODE_QORTAL_LINK`/`HTTPS_EXT_NODE_QORTAL_LINK` and a `gateways` array (mirroring Hub) plus an `isPublicNode()` helper in UI’s shared config layer.
-  - [ ] Extend default node list to include the public gateway (no apiKey, `enableManagement:false`); keep localhost mainnet/testnet defaults.
+  - [x] Extend default node list to include the public gateway (no apiKey, `enableManagement:false`); keep localhost mainnet/testnet defaults.
   - [ ] Ensure node selection persists protocol/domain/port/apiKey and exposes a derived `baseUrl` + `apiKey` for requests.
 
 - [ ] Update request routing to respect public vs local

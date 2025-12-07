@@ -1,10 +1,9 @@
 // Node Config Actions here...
 import { ADD_NODE, EDIT_NODE, LOAD_NODE_CONFIG, REMOVE_NODE, SET_NODE } from '../app-action-types'
 import { UI_VERSION } from '../version'
+import { EXT_NODE_QORTAL_LINK } from '../../constants/nodes'
 
 const nodeConfigUrl = '/getConfig'
-const checkNodes = JSON.parse(localStorage.getItem('myQortalNodes'))
-const checkMyNode = localStorage.getItem('mySelectedNode')
 
 export const doLoadNodeConfig = () => {
 	return (dispatch, getState) => {
@@ -13,25 +12,49 @@ export const doLoadNodeConfig = () => {
 			}).then(data => {
 				const nodeConfig = {
 					node: 0,
-					knownNodes: [{}],
+					knownNodes: [],
 					version: ''
 				}
 
-				if (checkMyNode === null || checkMyNode.length === 0) {
-					localStorage.setItem('mySelectedNode', 0)
-					nodeConfig.node = localStorage.getItem('mySelectedNode')
-				} else {
-					nodeConfig.node = localStorage.getItem('mySelectedNode')
+				const storedNodes = JSON.parse(localStorage.getItem('myQortalNodes') || '[]')
+				const storedSelectedNode = localStorage.getItem('mySelectedNode')
+
+				const defaultNodes = [obj1, objPublic, obj2]
+				const hydrateNode = (node) => ({
+					name: node?.name || '',
+					protocol: node?.protocol || 'http',
+					domain: node?.domain || '',
+					port: node?.port ?? '',
+					enableManagement:
+						typeof node?.enableManagement === 'boolean'
+							? node.enableManagement
+							: true,
+					apiKey: node?.apiKey || ''
+				})
+
+				let knownNodes =
+					storedNodes && storedNodes.length > 0
+						? storedNodes.map(hydrateNode)
+						: defaultNodes
+
+				const hasPublicNode = knownNodes.some(
+					(node) => node.domain === EXT_NODE_QORTAL_LINK
+				)
+
+				if (!hasPublicNode) {
+					knownNodes = [...knownNodes, hydrateNode(objPublic)]
 				}
 
-				if (checkNodes === null || checkNodes.length === 0) {
-					var saveNode = []
-					saveNode.push(obj1, obj2)
-					localStorage.setItem('myQortalNodes', JSON.stringify(saveNode))
-					nodeConfig.knownNodes = JSON.parse(localStorage.getItem('myQortalNodes'))
-				} else {
-					nodeConfig.knownNodes = JSON.parse(localStorage.getItem('myQortalNodes'))
+				localStorage.setItem('myQortalNodes', JSON.stringify(knownNodes))
+
+				let selectedIndex = parseInt(storedSelectedNode, 10)
+				if (isNaN(selectedIndex) || selectedIndex < 0 || selectedIndex >= knownNodes.length) {
+					selectedIndex = 0
+					localStorage.setItem('mySelectedNode', selectedIndex)
 				}
+
+				nodeConfig.node = selectedIndex
+				nodeConfig.knownNodes = knownNodes
 
 				nodeConfig.version = UI_VERSION
 
@@ -106,7 +129,17 @@ const obj1 = {
 	protocol: 'http',
 	domain: '127.0.0.1',
 	port: 12391,
-	enableManagement: true
+	enableManagement: true,
+	apiKey: ''
+}
+
+const objPublic = {
+	name: 'Public Node',
+	protocol: 'https',
+	domain: EXT_NODE_QORTAL_LINK,
+	port: 443,
+	enableManagement: false,
+	apiKey: ''
 }
 
 const obj2 = {
@@ -114,5 +147,6 @@ const obj2 = {
 	protocol: 'http',
 	domain: '127.0.0.1',
 	port: 62391,
-	enableManagement: true
+	enableManagement: true,
+	apiKey: ''
 }
