@@ -3,9 +3,30 @@ import { doLoadConfigFromAPI } from './redux/config/config-actions'
 import { doInitWorkers, doLoadNodeConfig, doUpdateAccountInfo } from './redux/app/app-actions'
 import { doLoadNotificationConfig } from './redux/user/user-actions'
 import { initApi } from 'qortal-ui-crypto'
+import {
+	getSelectedNodeApiKey,
+	getSelectedNodeBaseUrl,
+	getSelectedNodeInfo
+} from './utils/node'
 import './persistState'
 
 initApi(store)
+
+// Keep a simple global snapshot of the selected node for consumers that
+// rely on window-scoped context (e.g., request builders).
+const updateGlobalNodeContext = () => {
+	const state = store.getState()
+	const nodeInfo = getSelectedNodeInfo(state)
+	window.qortalNodeContext = {
+		baseUrl: getSelectedNodeBaseUrl(state),
+		apiKey: getSelectedNodeApiKey(state),
+		isPublic: nodeInfo?.isPublic || false,
+		node: nodeInfo || {}
+	}
+}
+
+updateGlobalNodeContext()
+store.subscribe(updateGlobalNodeContext)
 
 // Rehydrate app.accountInfo from persisted user slice so UI sees saved activeName on startup.
 const persistedUserAccountInfo = store.getState()?.user?.accountInfo
