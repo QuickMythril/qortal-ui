@@ -162,10 +162,12 @@ class NameRegistration extends LitElement {
 					Note: the Core primary name is fixed; the UI will let you pick an active name later for display without changing your primary.
 				</p>
 					<div class="divCard">
-						<h3 style="margin: 0; margin-bottom: 0.5em; text-align: center;">Primary Name</h3>
-						${this.renderPrimaryNameSection()}
-						<h3 style="margin: 1.5em 0 0.5em 0; text-align: center;">Additional Names</h3>
-						${this.renderAdditionalNamesSection()}
+						<div style="margin-bottom: 1em;">
+							${this.renderPrimaryNameSection()}
+						</div>
+						<div>
+							${this.renderAdditionalNamesSection()}
+						</div>
 					</div>
 				<mwc-dialog id="registerNameDialog" scrimClickAction="${this.registerNameLoading ? '' : 'close'}">
 					<div style="text-align:center">
@@ -739,7 +741,7 @@ class NameRegistration extends LitElement {
 			return html`<span style="color: var(--black);">${translate("registernamepage.nchange8")}</span>`
 		}
 		return html`
-			<vaadin-grid theme="large" aria-label="Primary Name" .items="${[primaryEntry]}" all-rows-visible>
+			<vaadin-grid theme="large" .items="${[primaryEntry]}" all-rows-visible>
 				${this.renderNameColumns()}
 			</vaadin-grid>
 		`
@@ -751,7 +753,7 @@ class NameRegistration extends LitElement {
 			return html`<span style="color: var(--black);">${translate("registernamepage.nchange8")}</span>`
 		}
 		return html`
-			<vaadin-grid theme="large" aria-label="Additional Names" .items="${additional}" all-rows-visible>
+			<vaadin-grid theme="large" .items="${additional}" all-rows-visible>
 				${this.renderNameColumns()}
 			</vaadin-grid>
 		`
