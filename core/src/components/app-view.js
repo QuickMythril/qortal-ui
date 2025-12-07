@@ -295,12 +295,9 @@ class AppView extends connect(store)(LitElement) {
 							<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 							<core-sync-status></core-sync-status>
 							${this.nodeIndicator ? html`
-								<div
-									class="node-indicator-pill"
-									style="display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:12px;color:#fff;font-size:12px;font-weight:600;background:${this.nodeIndicator.color};"
-								>
+								<div class="node-indicator-pill" title="${this.nodeIndicator.host || ''}">
 									<span>${this.nodeIndicator.label}</span>
-									${this.nodeIndicator.host ? html`<span style="opacity:0.8;">${this.nodeIndicator.host}</span>` : ''}
+									${this.nodeIndicator.host ? html`<span class="node-indicator-host">${this.nodeIndicator.host}</span>` : ''}
 								</div>
 							` : ''}
 							<div>&nbsp;&nbsp;&nbsp;</div>
@@ -3118,21 +3115,17 @@ class AppView extends connect(store)(LitElement) {
 			}`
 		const host = baseUrl.replace(/^https?:\/\//, '')
 		let type = translate('publicNode.customLabel')
-		let color = '#1565c0'
 
 		if (isPublicNode(node)) {
 			type = translate('publicNode.label')
-			color = '#d32f2f'
 		} else if (['127.0.0.1', 'localhost'].includes(node?.domain)) {
 			type = translate('publicNode.localLabel')
-			color = '#2e7d32'
 		}
 
 		this.nodeIndicator = {
 			type,
 			label: isPublicNode(node) ? translate('publicNode.label') : `${type}`,
-			host,
-			color
+			host
 		}
 	}
 }
