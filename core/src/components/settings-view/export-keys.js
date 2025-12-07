@@ -9,6 +9,7 @@ import snackbar from '../../functional-components/snackbar'
 import '@material/mwc-button'
 import '@material/mwc-dialog'
 import '@material/mwc-icon'
+import { buildRequestUrl } from '../../utils/node'
 
 // Multi language support
 import { get, translate } from '../../../translate'
@@ -240,7 +241,7 @@ class ExportKeys extends connect(store)(LitElement) {
 
 	async fetchArrrWalletAddress() {
 		let resAD = await parentEpml.request('apiCall', {
-			url: `/crosschain/arrr/walletaddress?apiKey=${this.getApiKey()}`,
+			url: buildRequestUrl(`/crosschain/arrr/walletaddress`, store.getState()),
 			method: 'POST',
 			body: `${store.getState().app.selectedAddress.arrrWallet.seed58}`
 		})
@@ -257,9 +258,7 @@ class ExportKeys extends connect(store)(LitElement) {
 	}
 
 	async checkArrrWalletPrivateKey() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-		const privateKeyUrl = `${nodeUrl}/crosschain/arrr/walletprivatekey?apiKey=${this.getApiKey()}`
+		const privateKeyUrl = buildRequestUrl(`/crosschain/arrr/walletprivatekey`, store.getState())
 
 		await fetch(privateKeyUrl, {
 			method: 'POST',
@@ -277,7 +276,7 @@ class ExportKeys extends connect(store)(LitElement) {
 
 	async fetchArrrWalletPrivateKey() {
 		let resPK = await parentEpml.request('apiCall', {
-			url: `/crosschain/arrr/walletprivatekey?apiKey=${this.getApiKey()}`,
+			url: buildRequestUrl(`/crosschain/arrr/walletprivatekey`, store.getState()),
 			method: 'POST',
 			body: `${store.getState().app.selectedAddress.arrrWallet.seed58}`
 		})
