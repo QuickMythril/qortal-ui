@@ -2028,7 +2028,7 @@ class AppAvatar extends connect(store)(LitElement) {
 
 		if (this.appname) {
 			const appAvatarNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-			const appAvatarNodeUrl = appAvatarNode.protocol + '://' + appAvatarNode.domain + ':' + appAvatarNode.port
+		const appAvatarNodeUrl = appAvatarNode?.baseUrl
 			const appAvatarUrl = `${appAvatarNodeUrl}/arbitrary/THUMBNAIL/${this.appname}/qortal_avatar?async=true`
 
 			appAvatarImg = this.createImage(appAvatarUrl)
@@ -2098,7 +2098,7 @@ class TabAvatar extends connect(store)(LitElement) {
 
 		if (this.appname) {
 			const tabAvatarNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-			const tabAvatarNodeUrl = tabAvatarNode.protocol + '://' + tabAvatarNode.domain + ':' + tabAvatarNode.port
+		const tabAvatarNodeUrl = tabAvatarNode?.baseUrl
 			const tabAvatarUrl = `${tabAvatarNodeUrl}/arbitrary/THUMBNAIL/${this.appname}/qortal_avatar?async=true`
 
 			tabAvatarImg = this.createImage(tabAvatarUrl)
