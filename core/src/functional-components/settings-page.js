@@ -3,7 +3,7 @@ import { connect } from 'pwa-helpers'
 import { store } from '../store'
 import { doAddNode, doEditNode, doLoadNodeConfig, doRemoveNode, doSetNode } from '../redux/app/app-actions'
 import { settingsPageStyles } from '../styles/core-css'
-import { getNodeBaseUrl } from '../constants/nodes'
+import { getNodeBaseUrl, isPublicNode } from '../constants/nodes'
 import FileSaver from 'file-saver'
 import snackbar from './snackbar'
 import './frag-file-input'
@@ -58,6 +58,8 @@ class SettingsPage extends connect(store)(LitElement) {
 	}
 
 	render() {
+		const isPublicSelected = this.selectedItem && isPublicNode(this.selectedItem)
+
 		return html`
 			<mwc-dialog id="settingsDialog" opened="false">
 				<div style="display: inline; text-align: center;">
@@ -88,7 +90,7 @@ class SettingsPage extends connect(store)(LitElement) {
 								<li @click="${(e) => this.handleSelection(e, n, index)}">
 									<div class="list-parent">
 										<div>
-											<span class="name">${n.name}</span>
+											<span class="name">${n.name}${isPublicNode(n) ? ' (Public)' : ''}</span>
 											<span>${n.baseUrl || getNodeBaseUrl(n)}</span>
 										</div>
 										<div>
@@ -126,6 +128,11 @@ class SettingsPage extends connect(store)(LitElement) {
 					<p style="margin-top: 30px; text-align: center;">
 						${translate('settings.nodehint')}
 					</p>
+					${isPublicSelected ? html`
+						<p style="margin-top:10px; text-align:center; color: var(--red);">
+							Using the Public node limits certain actions; switch to your own node for full features and privacy.
+						</p>
+					` : ''}
 					<center>
 						<mwc-button outlined @click="${() => this.shadowRoot.querySelector('#addNodeDialog').show()}">
 							<mwc-icon class="buttongreen">add</mwc-icon>

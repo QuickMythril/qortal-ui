@@ -13,7 +13,7 @@
   - [x] Replace per-call manual URL concatenation with the shared builder across request sites (app-view, tour, friends/notifications/profile/start-minting, remaining helpers like export-keys).
 
 - [ ] Node selection UX parity
-  - [ ] Surface the public node in the Settings node picker with a “Public node” label and warning copy.
+  - [x] Surface the public node in the Settings node picker with a “Public node” label and warning copy.
   - [ ] If selected node is public, skip API-key generation/testing in login, and clear stored apiKey for that entry.
   - [ ] Show a lightweight indicator/banner of the currently selected node (Local/Public/Custom) in the header/login flow.
   - [ ] Add i18n strings for public-node warnings and descriptions (reuse Hub copy where suitable).
