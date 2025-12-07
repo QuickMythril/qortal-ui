@@ -779,7 +779,7 @@ class NameRegistration extends LitElement {
 				if (this.marketSellNames.some(e => e.owner === this.selectedAddress.address)) {
 					render(html`${this.renderCancelSellNameButton(data.item)}`, root)
 				} else if (primaryBlocked) {
-					render(html`<mwc-button class="green" disabled title="Primary name cannot be sold while you have other names"><mwc-icon>sell</mwc-icon>&nbsp;${translate('registernamepage.nchange19')}</mwc-button>`, root)
+					render(html`<mwc-button class="green" disabled title="${translate('registernamepage.nchange51')}"><mwc-icon>sell</mwc-icon>&nbsp;${translate('registernamepage.nchange19')}</mwc-button>`, root)
 				} else {
 					render(html`${this.renderSellNameButton(data.item)}`, root)
 				}

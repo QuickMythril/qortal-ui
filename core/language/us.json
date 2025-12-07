@@ -534,7 +534,8 @@
 		"nchange47": "Name Update Successful!",
 		"nchange48": "Warning! If you update your Name, you will forfeit the resources associated with the original Name. In other words, you will lose ownership of the content under the original Name on QDN. Proceed with caution!",
 		"nchange49": "Name cannot look like a QORT address.",
-		"nchange50": "Primary name cannot be changed. Qortal UI can set a different active name that Q-Apps use as primary."
+		"nchange50": "Primary name cannot be changed. Qortal UI can set a different active name that Q-Apps use as primary.",
+		"nchange51": "Cannot sell the primary name while you own other names."
 	},
 	"websitespage": {
 		"schange1": "Browse Websites",
