@@ -3,6 +3,7 @@ import { connect } from 'pwa-helpers'
 import { store } from '../store'
 import { walletProfileStyles } from '../styles/core-css'
 import { pickDisplayName, avatarFallbackChar } from '../utils/name'
+import { getSelectedNodeBaseUrl } from '../utils/node'
 
 // Multi language support
 import { translate } from '../../translate'
@@ -72,7 +73,7 @@ class WalletProfile extends connect(store)(LitElement) {
 		}
 
 		const avatarNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const avatarUrl = avatarNode.protocol + '://' + avatarNode.domain + ':' + avatarNode.port
+		const avatarUrl = avatarNode?.baseUrl || getSelectedNodeBaseUrl(store.getState())
 		const url = this.displayName ? `${avatarUrl}/arbitrary/THUMBNAIL/${this.displayName}/qortal_avatar?async=true` : ''
 
 		return html`

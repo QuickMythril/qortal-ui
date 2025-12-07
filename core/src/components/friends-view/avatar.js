@@ -8,6 +8,7 @@ import ShortUniqueId from 'short-unique-id'
 import '../../../../plugins/plugins/core/components/TimeAgo'
 import '@material/mwc-menu'
 import '@material/mwc-list/mwc-list-item.js'
+import { buildRequestUrl, getSelectedNodeBaseUrl } from '../../utils/node'
 
 const requestQueue = new RequestQueueWithPromise(3)
 const requestQueueRawData = new RequestQueueWithPromise(3)
@@ -56,7 +57,7 @@ export class AvatarComponent extends connect(store)(LitElement) {
 					html`
 						<div style="height: 24px;width: 24px;overflow: hidden;">
 							<img
-								src="${this.nodeUrl}/arbitrary/THUMBNAIL/${this.name}/qortal_avatar?async=true&apiKey=${this.myNode.apiKey}"
+								src="${buildRequestUrl(`/arbitrary/THUMBNAIL/${this.name}/qortal_avatar?async=true`, store.getState())}"
 								style="width:100%; height:100%;border-radius:50%"
 								onerror="this.onerror=null; this.src='/img/incognito.png';"
 							/>
@@ -72,8 +73,7 @@ export class AvatarComponent extends connect(store)(LitElement) {
 	}
 
 	getNodeUrl() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		return myNode.protocol + '://' + myNode.domain + ':' + myNode.port
+		return getSelectedNodeBaseUrl(store.getState())
 	}
 
 	getMyNode() {
@@ -87,7 +87,10 @@ export class AvatarComponent extends connect(store)(LitElement) {
 			this.isFetching = true
 
 			await axios.get(
-				`${this.nodeUrl}/arbitrary/resource/properties/${this.resource.service}/${this.resource.name}/${this.resource.identifier}?apiKey=${this.myNode.apiKey}`
+				buildRequestUrl(
+					`/arbitrary/resource/properties/${this.resource.service}/${this.resource.name}/${this.resource.identifier}`,
+					store.getState()
+				)
 			)
 
 			this.isFetching = false
@@ -101,7 +104,10 @@ export class AvatarComponent extends connect(store)(LitElement) {
 	}
 
 	async getRawData() {
-		const url = `${this.nodeUrl}/arbitrary/${this.resource.service}/${this.resource.name}/${this.resource.identifier}?apiKey=${this.myNode.apiKey}`
+		const url = buildRequestUrl(
+			`/arbitrary/${this.resource.service}/${this.resource.name}/${this.resource.identifier}`,
+			store.getState()
+		)
 
 		return await requestQueueRawData.enqueue(() => {
 			return axios.get(url)
@@ -145,7 +151,10 @@ export class AvatarComponent extends connect(store)(LitElement) {
 
 		const response = await requestQueueStatus.enqueue(() => {
 			return axios.get(
-				`${this.nodeUrl}/arbitrary/resource/status/${this.resource.service}/${this.resource.name}/${this.resource.identifier}?apiKey=${this.myNode.apiKey}`
+				buildRequestUrl(
+					`/arbitrary/resource/status/${this.resource.service}/${this.resource.name}/${this.resource.identifier}`,
+					store.getState()
+				)
 			)
 		})
 
@@ -161,7 +170,10 @@ export class AvatarComponent extends connect(store)(LitElement) {
 
 			const data = await requestQueue.enqueue(() => {
 				return axios.get(
-					`${this.nodeUrl}/arbitrary/resource/status/${this.resource.service}/${this.resource.name}/${this.resource.identifier}?apiKey=${this.myNode.apiKey}`
+					buildRequestUrl(
+						`/arbitrary/resource/status/${this.resource.service}/${this.resource.name}/${this.resource.identifier}`,
+						store.getState()
+					)
 				)
 			})
 
