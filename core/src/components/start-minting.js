@@ -4,7 +4,7 @@ import { connect } from 'pwa-helpers'
 import { store } from '../store.js'
 import { routes } from '../plugins/routes'
 import { startMintingStyles } from '../styles/core-css'
-import { buildRequestUrl } from '../utils/node'
+import { buildRequestUrl, isSelectedNodePublic } from '../utils/node'
 import '../functional-components/my-button'
 import "@material/mwc-button"
 import '@material/mwc-dialog'
@@ -57,7 +57,11 @@ class StartMinting extends connect(store)(LitElement) {
 	}
 
 	firstUpdated() {
-		this.getMintingAcccounts()
+		if (!isSelectedNodePublic(store.getState())) {
+			this.getMintingAcccounts()
+		} else {
+			this.errorMsg = translate('publicNode.actionBlocked')
+		}
 	}
 
 	getBase58PublicKey() {
@@ -101,6 +105,10 @@ class StartMinting extends connect(store)(LitElement) {
 	}
 
 	async getMintingAcccounts() {
+		if (isSelectedNodePublic(store.getState())) {
+			this.errorMsg = this.renderErrorMsg1()
+			return
+		}
 		const url = buildRequestUrl(`/admin/mintingaccounts`, store.getState())
 
 		try {
@@ -113,6 +121,10 @@ class StartMinting extends connect(store)(LitElement) {
 	}
 
 	async changeStatus(value) {
+		if (isSelectedNodePublic(store.getState())) {
+			this.errorMsg = translate('publicNode.actionBlocked')
+			return
+		}
 		const mintingAccountsUrl = buildRequestUrl(`/admin/mintingaccounts`, store.getState())
 		const address = this.address
 
@@ -272,7 +284,11 @@ class StartMinting extends connect(store)(LitElement) {
 			return await res.text()
 		}
 
-		const startMinting = async () => {
+	const startMinting = async () => {
+			if (isSelectedNodePublic(store.getState())) {
+				this.errorMsg = translate('publicNode.actionBlocked')
+				return
+			}
 			this.openDialogRewardShare = true
 			this.errorMsg = ''
 
