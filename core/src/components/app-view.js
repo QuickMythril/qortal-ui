@@ -3112,20 +3112,20 @@ class AppView extends connect(store)(LitElement) {
 				node?.port ? `:${node.port}` : ''
 			}`
 		const host = baseUrl.replace(/^https?:\/\//, '')
-		let type = 'Custom'
+		let type = translate('publicNode.customLabel')
 		let color = '#1565c0'
 
 		if (isPublicNode(node)) {
 			type = translate('publicNode.label')
 			color = '#d32f2f'
 		} else if (['127.0.0.1', 'localhost'].includes(node?.domain)) {
-			type = 'Local'
+			type = translate('publicNode.localLabel')
 			color = '#2e7d32'
 		}
 
 		this.nodeIndicator = {
 			type,
-			label: isPublicNode(node) ? translate('publicNode.label') : `${type} node`,
+			label: isPublicNode(node) ? translate('publicNode.label') : `${type}`,
 			host,
 			color
 		}
