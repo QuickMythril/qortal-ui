@@ -68,10 +68,21 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 		})
 	}
 
-		renderSyncStatusIcon() {
-		const node = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node] || {}
+	renderSyncStatusIcon() {
+		const state = store.getState()
+		const node = state.app.nodeConfig.knownNodes[state.app.nodeConfig.node] || {}
 		const baseUrl = node.baseUrl || `${node?.protocol || 'http'}://${node?.domain || ''}${node?.port ? `:${node.port}` : ''}`
-		const isPublic = isSelectedNodePublic(store.getState())
+		const isPublic = isSelectedNodePublic(state)
+		const nodeLabel = isPublic
+			? translate('publicNode.label')
+			: ['127.0.0.1', 'localhost'].includes(node?.domain)
+				? translate('publicNode.localLabel')
+				: translate('publicNode.customLabel')
+		const nodeInfoSection = html`
+			<hr />
+			<h4 class="lineHeight">${nodeLabel}:</h4>
+			<h4 class="lineHeight">${baseUrl}</h4>
+		`
 		if (this.nodeInfos.isSynchronizing === true && this.nodeInfos.syncPercent === 99) {
 			return html`
 				<div class="tooltip" style="display: inline;">
