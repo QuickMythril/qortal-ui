@@ -1766,8 +1766,9 @@ class AppView extends connect(store)(LitElement) {
 		const addressInfo = this.addressInfo
 		const isMinter = addressInfo?.error !== 124 && +addressInfo?.level > 0
 		const isSponsor = +addressInfo?.level >= 5
+		const isGateway = isPublicNode(store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node])
 
-		if (this.nodeType === 'lite') {
+		if (this.nodeType === 'lite' || isGateway) {
 			return html`
 				<side-menu-item label="${translate('sidemenu.wallets')}" href="/app/wallet" selected>
 					<vaadin-icon icon="vaadin:wallet" slot="icon"></vaadin-icon>

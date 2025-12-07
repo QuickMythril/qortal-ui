@@ -1616,9 +1616,10 @@ export const getArrrSyncStatus = async () => {
 }
 
 export const getNodeInfo = async () => {
+	if (await isUsingPublicNode()) return {}
 	const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 	const nodeUrl = `${myNode.protocol}://${myNode.domain}:${myNode.port}`
-	const url = `${nodeUrl}/admin/info`
+   	const url = `${nodeUrl}/admin/info`
 
 	try {
 		const response = await fetch(url, {
@@ -1648,7 +1649,8 @@ export const getNodeInfo = async () => {
 	}
 }
  
- export const getNodeStatus = async () => {
+export const getNodeStatus = async () => {
+	if (await isUsingPublicNode()) return {}
 	const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 	const nodeUrl = `${myNode.protocol}://${myNode.domain}:${myNode.port}`
    	const url = `${nodeUrl}/admin/status`

@@ -3,7 +3,7 @@ import { connect } from 'pwa-helpers'
 import { store } from '../../store'
 import { translate } from '../../../translate'
 import { coreSyncStatusStyles } from '../../styles/core-css'
-import { buildRequestUrl } from '../../utils/node'
+import { buildRequestUrl, isSelectedNodePublic } from '../../utils/node'
 
 class CoreSyncStatus extends connect(store)(LitElement) {
 	static get properties() {
@@ -23,9 +23,13 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 		this.nodeInfos = []
 		this.coreInfos = []
 		this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
+		this.blocked = false
 	}
 
 	render() {
+		if (this.blocked) {
+			return html``
+		}
 		return html`
 			<div id="core-sync-status-id">
 				${this.renderSyncStatusIcon()}
@@ -34,12 +38,17 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 	}
 
 	firstUpdated() {
-		this.getNodeInfos()
-		this.getCoreInfos()
-
-		setInterval(() => {
+		this.blocked = isSelectedNodePublic(store.getState())
+		if (!this.blocked) {
 			this.getNodeInfos()
 			this.getCoreInfos()
+		}
+
+		setInterval(() => {
+			if (!this.blocked) {
+				this.getNodeInfos()
+				this.getCoreInfos()
+			}
 		}, 30000)
 	}
 

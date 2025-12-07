@@ -15,6 +15,7 @@ import '@vaadin/button'
 
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../core/translate'
+import { isSelectedNodePublic } from '../../../../core/src/utils/node'
 registerTranslateConfig({
 	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
 })
@@ -84,6 +85,7 @@ class SponsorshipList extends LitElement {
 		this.lookupPublicAddressValue = ''
 		this.errorLookup = ''
 		this.nextEnding = 0
+		this.blocked = false
 	}
 
 	render() {
@@ -382,6 +384,12 @@ class SponsorshipList extends LitElement {
 	async firstUpdated() {
 		this.changeTheme()
 		this.changeLanguage()
+		this.blocked = isSelectedNodePublic(window.parent.reduxStore.getState())
+		if (this.blocked) {
+			parentEpml.request('showSnackBar', `${get('publicNode.actionBlocked')}`)
+			this.isPageLoading = false
+			return
+		}
 		await this.atMount()
 
 		window.addEventListener('storage', () => {
@@ -459,6 +467,7 @@ class SponsorshipList extends LitElement {
 	}
 
 	async getNodeInfo() {
+		if (this.blocked) return {}
 		return await parentEpml.request('apiCall', {
 			url: `/admin/status`
 		})
@@ -479,6 +488,7 @@ class SponsorshipList extends LitElement {
 	}
 
 	async atMount() {
+		if (this.blocked) return
 		this.addressInfo = window.parent.reduxStore.getState().app.accountInfo.addressInfo
 		this.isPageLoading = true
 		try {
