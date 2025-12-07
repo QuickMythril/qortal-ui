@@ -32,7 +32,7 @@
 - [ ] UI affordances when on public node
   - [x] Hide/disable node-management menu for the public node (respect `enableManagement:false`).
   - [x] Mirror Hub UX that hides block/unblock or moderation actions if they rely on non-gateway endpoints (audit UI components that call Core admin/management routes).
-  - [ ] Add a small badge in sensitive dialogs (e.g., trade/buy-order) noting “using public node: <host>”.
+  - [x] Add a small badge in sensitive dialogs (e.g., trade/buy-order) noting “using public node: <host>”.
 
 - [ ] Storage and migration
   - [ ] Migrate existing `myQortalNodes` entries: keep user nodes, append the public entry if missing; preserve `mySelectedNode`.
