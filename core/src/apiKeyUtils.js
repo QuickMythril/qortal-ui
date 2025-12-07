@@ -1,9 +1,18 @@
 import * as api from 'qortal-ui-crypto'
 import mykey from './functional-components/mykey-page'
+import { isPublicNode } from './constants/nodes'
 
 export const checkApiKey = async (nodeConfig) => {
 	let selectedNode = nodeConfig.knownNodes[nodeConfig.node]
 	let apiKey = selectedNode.apiKey
+
+	// Skip generation/testing on the public node; ensure apiKey is cleared.
+	if (isPublicNode(selectedNode)) {
+		selectedNode.apiKey = ''
+		nodeConfig.knownNodes[nodeConfig.node] = selectedNode
+		localStorage.setItem('myQortalNodes', JSON.stringify(nodeConfig.knownNodes))
+		return true
+	}
 
 	// Attempt to generate an API key
 	const generateUrl = '/admin/apikey/generate'
@@ -26,7 +35,7 @@ export const checkApiKey = async (nodeConfig) => {
 	}
 
 	// Now test the API key
-	let testResult = await testApiKey(apiKey)
+	let testResult = apiKey ? await testApiKey(apiKey) : false
 
 	if (testResult === true) {
 		console.log('API key test passed')
