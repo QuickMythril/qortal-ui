@@ -532,7 +532,8 @@
 		"nchange45": "Premendo conferma, verrà inviata la richiesta di aggiornamento del nome!",
 		"nchange46": "Nome Cronologia vendite",
 		"nchange47": "Aggiornamento nome riuscito!",
-		"nchange48": "Attenzione! Se aggiorni il tuo nome, perderai le risorse associate al nome originale. In altre parole, perderai la proprietà del contenuto sotto il nome originale nel QDN. Procedi con cautela!"
+		"nchange48": "Attenzione! Se aggiorni il tuo nome, perderai le risorse associate al nome originale. In altre parole, perderai la proprietà del contenuto sotto il nome originale nel QDN. Procedi con cautela!",
+		"nchange49": "Il nome non può sembrare un indirizzo QORT."
 	},
 	"websitespage": {
 		"schange1": "Sfoglia siti Web",

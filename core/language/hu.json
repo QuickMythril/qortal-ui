@@ -532,7 +532,8 @@
 		"nchange45": "A megerősítés megnyomására a névfrissítési kérés elküldésre kerül!",
 		"nchange46": "Név eladási előzmények",
 		"nchange47": "A névfrissítés sikeres!",
-		"nchange48": "Figyelem! Ha frissíti a nevét, elveszíti az eredeti névhez társított erőforrásokat. Más szóval, elveszíti a tartalom tulajdonjogát a QDN-ben az eredeti név alatt. Óvatosan járjon el!"
+		"nchange48": "Figyelem! Ha frissíti a nevét, elveszíti az eredeti névhez társított erőforrásokat. Más szóval, elveszíti a tartalom tulajdonjogát a QDN-ben az eredeti név alatt. Óvatosan járjon el!",
+		"nchange49": "A név nem nézhet ki QORT-címnek."
 	},
 	"websitespage": {
 		"schange1": "Webhelyek Böngészése",

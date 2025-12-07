@@ -117,7 +117,7 @@ class NameRegistration extends LitElement {
 		}
 		// Basic address-like check: starts with Q and length 25-34
 		if (this._looksLikeAddress(name)) {
-			return translate("registernamepage.nchange_address_error") || "Name cannot look like a QORT address"
+		return translate("registernamepage.nchange49") || "Name cannot look like a QORT address."
 		}
 		return null
 	}
@@ -721,10 +721,10 @@ class NameRegistration extends LitElement {
 		if (updateDescCounter) {
 			updateDescCounter.textContent = `${this._byteLength(updateDescVal || '')}/4000`
 		}
-		const addressWarn = translate("registernamepage.nchange_address_error") || "Name cannot look like a QORT address"
+		const addressWarn = translate("registernamepage.nchange49") || "Name cannot look like a QORT address."
 		const addressWarnText = (typeof addressWarn === 'string' && addressWarn.length > 0)
 			? addressWarn
-			: "Name cannot look like a QORT address"
+			: "Name cannot look like a QORT address."
 		if (registerAddressWarning) {
 			registerAddressWarning.textContent = this._looksLikeAddress(normalizedRegister) ? addressWarnText : ''
 		}

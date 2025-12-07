@@ -532,7 +532,8 @@
 		"nchange45": "Når du trykker bekreft, vil forespørselen om navneoppdatering bli sendt!",
 		"nchange46": "Navnsalgshistorikk",
 		"nchange47": "Navneoppdateringen er vellykket!",
-		"nchange48": "Advarsel! Hvis du oppdaterer navnet ditt, mister du ressursene knyttet til det opprinnelige navnet. Du vil med andre ord miste eierskapet til innholdet under det opprinnelige navnet i QDN. Fortsett med forsiktighet!"
+		"nchange48": "Advarsel! Hvis du oppdaterer navnet ditt, mister du ressursene knyttet til det opprinnelige navnet. Du vil med andre ord miste eierskapet til innholdet under det opprinnelige navnet i QDN. Fortsett med forsiktighet!",
+		"nchange49": "Navnet kan ikke se ut som en QORT-adresse."
 	},
 	"websitespage": {
 		"schange1": "Bla gjennom nettsteder",

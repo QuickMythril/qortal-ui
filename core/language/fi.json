@@ -532,7 +532,8 @@
 		"nchange45": "Jos vahvistat, nimipäivityspyyntö välitetään!",
 		"nchange46": "Nimen myyntihistoria",
 		"nchange47": "Nimen päivitys tehty!",
-		"nchange48": "Varoitus! Jos päivität nimesi, menetät alkuperäiseen nimeen liittyvät resurssit. Toisin sanoen menetät sisällön omistajuuden alkuperäisellä nimellä QDN:ssä. Jatka varovasti!"
+		"nchange48": "Varoitus! Jos päivität nimesi, menetät alkuperäiseen nimeen liittyvät resurssit. Toisin sanoen menetät sisällön omistajuuden alkuperäisellä nimellä QDN:ssä. Jatka varovasti!",
+		"nchange49": "Nimi ei voi näyttää QORT-osoitteelta."
 	},
 	"websitespage": {
 		"schange1": "Selaa verkkosivuja",

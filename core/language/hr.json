@@ -532,7 +532,8 @@
 		"nchange45": "Kada pritisnete potvrdu, bit će poslan zahtjev za ažuriranje imena!",
 		"nchange46": "Povijest prodaje imena",
 		"nchage47": "Ažuriranje imena uspješno!",
-		"nchange48": "Upozorenje! Ako ažurirate svoje ime, izgubit ćete resurse povezane s izvornim imenom. Drugim riječima, izgubit ćete vlasništvo nad sadržajem pod izvornim imenom u QDN-u. Nastavite s oprezom!"
+		"nchange48": "Upozorenje! Ako ažurirate svoje ime, izgubit ćete resurse povezane s izvornim imenom. Drugim riječima, izgubit ćete vlasništvo nad sadržajem pod izvornim imenom u QDN-u. Nastavite s oprezom!",
+		"nchange49": "Ime ne može izgledati kao QORT adresa."
 	},
 	"websitespage": {
 		"schange1": "Pregledavanje web stranica",

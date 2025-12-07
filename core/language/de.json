@@ -532,7 +532,8 @@
 		"nchange45": "Beim Bestätigen wird die Anfrage zur Namensaktualisierung gesendet!",
 		"nchange46": "Namensverkaufshistorie",
 		"nchange47": "Namensaktualisierung erfolgreich!",
-		"nchange48": "Warnung! Wenn Sie Ihren Namen aktualisieren, verlieren Sie die mit dem ursprünglichen Namen verbundenen Ressourcen. Mit anderen Worten: Sie verlieren das Eigentum an den Inhalten unter dem ursprünglichen Namen im QDN. Gehen Sie vorsichtig vor!"
+		"nchange48": "Warnung! Wenn Sie Ihren Namen aktualisieren, verlieren Sie die mit dem ursprünglichen Namen verbundenen Ressourcen. Mit anderen Worten: Sie verlieren das Eigentum an den Inhalten unter dem ursprünglichen Namen im QDN. Gehen Sie vorsichtig vor!",
+		"nchange49": "Name darf nicht wie eine QORT-Adresse aussehen."
 	},
 	"websitespage": {
 		"schange1": "Webseiten durchsuchen",

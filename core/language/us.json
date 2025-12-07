@@ -532,7 +532,8 @@
 		"nchange45": "On pressing confirm, the Update Name request will be sent!",
 		"nchange46": "Name Sale History",
 		"nchange47": "Name Update Successful!",
-		"nchange48": "Warning! If you update your Name, you will forfeit the resources associated with the original Name. In other words, you will lose ownership of the content under the original Name on QDN. Proceed with caution!"
+		"nchange48": "Warning! If you update your Name, you will forfeit the resources associated with the original Name. In other words, you will lose ownership of the content under the original Name on QDN. Proceed with caution!",
+		"nchange49": "Name cannot look like a QORT address."
 	},
 	"websitespage": {
 		"schange1": "Browse Websites",

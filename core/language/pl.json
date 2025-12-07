@@ -532,7 +532,8 @@
 		"nchange45": "Po naciśnięciu potwierdzenia, prośba o aktualizację nazwy zostanie wysłana!",
 		"nchange46": "Historia sprzedaży nazw",
 		"nchange47": "Aktualizacja nazwy powiodła się!",
-		"nchange48": "Ostrzeżenie! Jeśli zaktualizujesz swoją nazwę, utracisz zasoby powiązane z pierwotną nazwą. Innymi słowy, utracisz własność treści pod oryginalną nazwą w QDN. Postępuj ostrożnie!"
+		"nchange48": "Ostrzeżenie! Jeśli zaktualizujesz swoją nazwę, utracisz zasoby powiązane z pierwotną nazwą. Innymi słowy, utracisz własność treści pod oryginalną nazwą w QDN. Postępuj ostrożnie!",
+		"nchange49": "Nazwa nie może wyglądać jak adres QORT."
 	},
 	"websitespage": {
 		"schange1": "Przeglądaj strony internetowe",

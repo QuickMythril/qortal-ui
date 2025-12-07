@@ -532,7 +532,8 @@
 		"nchange45": "La apăsarea confirmării, cererea de actualizare a numelui va fi trimisă!",
 		"nchange46": "Istoricul vânzărilor de nume",
 		"nchange47": "Actualizarea numelui a reușit!",
-		"nchange48": "Atenție! Dacă vă actualizați numele, veți pierde resursele asociate cu numele inițial. Cu alte cuvinte, veți pierde dreptul de proprietate asupra conținutului sub numele inițial din QDN. Procedați cu prudență!"
+		"nchange48": "Atenție! Dacă vă actualizați numele, veți pierde resursele asociate cu numele inițial. Cu alte cuvinte, veți pierde dreptul de proprietate asupra conținutului sub numele inițial din QDN. Procedați cu prudență!",
+		"nchange49": "Numele nu poate semăna cu o adresă QORT."
 	},
 	"websitespage": {
 		"schange1": "Navigati pe Site-uri Web",

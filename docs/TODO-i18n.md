@@ -10,5 +10,8 @@
 ## Harcoded strings
 
 - "Note: the Core primary name is fixed; the UI will let you pick an active name later for display without changing your primary." in `plugins/plugins/core/name-registration/name-registration.src.js:162`.
-- "Name cannot look like a QORT address" fallback in `plugins/plugins/core/name-registration/name-registration.src.js:120/722/725`.
 - "Primary name cannot be sold while you have other names" title in `plugins/plugins/core/name-registration/name-registration.src.js:780`.
+
+## Translation sequencing (per string)
+
+English → German → Dutch → Norwegian → French → Spanish → Portuguese → Italian → Romanian → Russian → Polish → Serbian → Croatian → Finnish → Estonian → Hungarian → Hindi → Chinese (Simplified) → Chinese (Traditional) → Japanese → Korean

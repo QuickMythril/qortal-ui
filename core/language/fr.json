@@ -532,7 +532,8 @@
 		"nchange45": "En appuyant sur confirmer, la demande de mise à jour du nom sera envoyée !",
 		"nchange46": "Historique des ventes de noms",
 		"nchange47": "Mise à jour du nom réussie !",
-		"nchange48": "Attention ! Si vous mettez à jour votre nom, vous perdrez les ressources associées au nom d'origine. En d'autres termes, vous perdrez la propriété du contenu sous le nom d'origine dans le QDN. Procédez avec prudence !"
+		"nchange48": "Attention ! Si vous mettez à jour votre nom, vous perdrez les ressources associées au nom d'origine. En d'autres termes, vous perdrez la propriété du contenu sous le nom d'origine dans le QDN. Procédez avec prudence !",
+		"nchange49": "Le nom ne peut pas ressembler à une adresse QORT."
 	},
 	"websitespage": {
 		"schange1": "Parcourir les sites Web",
