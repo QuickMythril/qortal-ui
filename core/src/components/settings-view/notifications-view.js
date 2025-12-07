@@ -66,7 +66,7 @@ class NotificationsView extends connect(store)(LitElement) {
 						${this.appNotificationList.map((app) => html`
 							<div style="display: flex; justify-content: space-between; margin-top: 10px;">
 								${app}
-								<button class="remove-button" @click=${() => this.removeApp(app)}>Remove</button>
+								<button class="remove-button" @click=${() => this.removeApp(app)}>${translate("rewardsharepage.rchange17")}</button>
 							</div>
 						`)}
 					</div>

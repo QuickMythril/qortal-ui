@@ -38,7 +38,7 @@ class UserSettings extends connect(store)(LitElement) {
 			<paper-dialog id="userSettingsDialog" class="userSettings" modal>
 				<div class="actions">
 					<h2></h2>
-					<mwc-icon class="close-icon" @click=${() => this.closeSettings()} title="Close Settings" >highlight_off</mwc-icon>
+					<mwc-icon class="close-icon" @click=${() => this.closeSettings()} title="${translate('general.close')}" >highlight_off</mwc-icon>
 				</div>
 				<div class="container">
 					<div class="wrapper">
