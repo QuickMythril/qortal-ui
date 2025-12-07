@@ -34,9 +34,9 @@
   - [x] Mirror Hub UX that hides block/unblock or moderation actions if they rely on non-gateway endpoints (audit UI components that call Core admin/management routes).
   - [x] Add a small badge in sensitive dialogs (e.g., trade/buy-order) noting “using public node: <host>”.
 
-- [ ] Storage and migration
-  - [ ] Migrate existing `myQortalNodes` entries: keep user nodes, append the public entry if missing; preserve `mySelectedNode`.
-  - [ ] Ensure old records without `enableManagement` or `apiKey` still work; default missing fields safely.
+- [x] Storage and migration
+  - [x] Migrate existing `myQortalNodes` entries: keep user nodes, append the public entry if missing; preserve `mySelectedNode`.
+  - [x] Ensure old records without `enableManagement` or `apiKey` still work; default missing fields safely.
 
 - [ ] Testing / validation
   - [ ] Verify routing: public node selected → requests omit apiKey and hit `ext-node.qortal.link`; custom/local nodes → apiKey appended and management endpoints reachable.
