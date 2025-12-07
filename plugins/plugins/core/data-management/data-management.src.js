@@ -15,6 +15,7 @@ import '@vaadin/text-field'
 
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../core/translate'
+import { isSelectedNodePublic } from '../../../../core/src/utils/node'
 registerTranslateConfig({
 	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
 })
@@ -541,6 +542,12 @@ class DataManagement extends LitElement {
 	}
 
 	async searchBlockName(search) {
+		if (this.isPublicNode()) {
+			const msg = get('publicNode.actionBlocked')
+			parentEpml.request('showSnackBar', `${msg}`)
+			return false
+		}
+
 		let name = search.name
 		let items = [
 			name
@@ -571,6 +578,12 @@ class DataManagement extends LitElement {
 	}
 
 	async searchUnfollowName(search) {
+		if (this.isPublicNode()) {
+			const msg = get('publicNode.actionBlocked')
+			parentEpml.request('showSnackBar', `${msg}`)
+			return false
+		}
+
 		let name = search.name
 		let items = [
 			name
@@ -598,6 +611,12 @@ class DataManagement extends LitElement {
 	}
 
 	async searchUnblockName(search) {
+		if (this.isPublicNode()) {
+			const msg = get('publicNode.actionBlocked')
+			parentEpml.request('showSnackBar', `${msg}`)
+			return false
+		}
+
 		let name = search.name
 		let items = [
 			name
@@ -625,6 +644,12 @@ class DataManagement extends LitElement {
 	}
 
 	async deleteSearchResource(search) {
+		if (this.isPublicNode()) {
+			const msg = get('publicNode.actionBlocked')
+			parentEpml.request('showSnackBar', `${msg}`)
+			return false
+		}
+
 		let identifier = search.identifier == null ? "default" : search.identifier
 
 		let ret = await parentEpml.request('apiCall', {
@@ -686,6 +711,12 @@ class DataManagement extends LitElement {
 	}
 
 	async blockName(resource) {
+		if (this.isPublicNode()) {
+			const msg = get('publicNode.actionBlocked')
+			parentEpml.request('showSnackBar', `${msg}`)
+			return false
+		}
+
 		let name = resource.name
 		let items = [
 			name
@@ -717,6 +748,12 @@ class DataManagement extends LitElement {
 	}
 
 	async unfollowName(resource) {
+		if (this.isPublicNode()) {
+			const msg = get('publicNode.actionBlocked')
+			parentEpml.request('showSnackBar', `${msg}`)
+			return false
+		}
+
 		let name = resource.name
 		let items = [
 			name
@@ -745,6 +782,12 @@ class DataManagement extends LitElement {
 	}
 
 	async unblockName(resource) {
+		if (this.isPublicNode()) {
+			const msg = get('publicNode.actionBlocked')
+			parentEpml.request('showSnackBar', `${msg}`)
+			return false
+		}
+
 		let name = resource.name
 		let items = [
 			name
@@ -773,6 +816,12 @@ class DataManagement extends LitElement {
 	}
 
 	async deleteResource(resource) {
+		if (this.isPublicNode()) {
+			const msg = get('publicNode.actionBlocked')
+			parentEpml.request('showSnackBar', `${msg}`)
+			return false
+		}
+
 		let identifier = resource.identifier == null ? "default" : resource.identifier
 
 		let ret = await parentEpml.request('apiCall', {
@@ -917,6 +966,18 @@ class DataManagement extends LitElement {
 	getApiKey() {
 		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		return myNode.apiKey
+	}
+
+	isPublicNode() {
+		try {
+			const state = window.parent && window.parent.reduxStore && typeof window.parent.reduxStore.getState === 'function'
+				? window.parent.reduxStore.getState()
+				: null
+			return isSelectedNodePublic(state)
+		} catch (error) {
+			console.error(error)
+			return false
+		}
 	}
 
 	isEmptyArray(arr) {

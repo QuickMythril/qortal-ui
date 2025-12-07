@@ -11,6 +11,7 @@ import '@polymer/paper-spinner/paper-spinner-lite.js'
 
 // Multi language support
 import { get, translate } from '../../../../core/translate'
+import { isSelectedNodePublic } from '../../../../core/src/utils/node'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
@@ -192,6 +193,13 @@ class NameMenu extends LitElement {
 	}
 
 	async chatBlockAddress() {
+		if (this.isPublicNode()) {
+			const msg = get('publicNode.actionBlocked')
+			snackbar.add({ labelText: `${msg}`, dismiss: true })
+			this.shadowRoot.querySelector('#blockNameDialog').close()
+			return false
+		}
+
 		let address = this.toblockaddress
 
 		let items = [
@@ -461,6 +469,18 @@ class NameMenu extends LitElement {
 	getApiKey() {
 		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		return myNode.apiKey
+	}
+
+	isPublicNode() {
+		try {
+			const state = window.parent && window.parent.reduxStore && typeof window.parent.reduxStore.getState === 'function'
+				? window.parent.reduxStore.getState()
+				: null
+			return isSelectedNodePublic(state)
+		} catch (error) {
+			console.error(error)
+			return false
+		}
 	}
 
 	isEmptyArray(arr) {

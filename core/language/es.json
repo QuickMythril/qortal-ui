@@ -1053,6 +1053,7 @@
         "warningTitle": "El nodo público limita funciones",
         "warningBody": "Instala Qortal Core para acceso completo y privacidad.",
         "fallbackPromptTitle": "¿Usar nodo público?",
+		"actionBlocked": "Not available on the public node. Connect to your own node to continue.",
         "localLabel": "Nodo local",
         "customLabel": "Nodo personalizado"
     },

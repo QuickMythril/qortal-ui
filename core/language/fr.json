@@ -1053,6 +1053,7 @@
         "warningTitle": "Le nœud public limite les fonctions",
         "warningBody": "Installez Qortal Core pour un accès complet et la confidentialité.",
         "fallbackPromptTitle": "Utiliser le nœud public ?",
+		"actionBlocked": "Not available on the public node. Connect to your own node to continue.",
         "localLabel": "Nœud local",
         "customLabel": "Nœud personnalisé"
     },

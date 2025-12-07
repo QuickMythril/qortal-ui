@@ -1053,6 +1053,7 @@
         "warningTitle": "Publieke node heeft beperkte functies",
         "warningBody": "Installeer Qortal Core voor volledige toegang en privacy.",
         "fallbackPromptTitle": "Publieke node gebruiken?",
+		"actionBlocked": "Not available on the public node. Connect to your own node to continue.",
         "localLabel": "Lokale node",
         "customLabel": "Aangepaste node"
     },

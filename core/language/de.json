@@ -1053,6 +1053,7 @@
         "warningTitle": "Öffentlicher Node hat eingeschränkte Funktionen",
         "warningBody": "Installiere Qortal Core für vollen Zugriff und Privatsphäre.",
         "fallbackPromptTitle": "Öffentlichen Node verwenden?",
+		"actionBlocked": "Not available on the public node. Connect to your own node to continue.",
         "localLabel": "Lokaler Node",
         "customLabel": "Benutzerdefinierter Node"
     },

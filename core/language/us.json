@@ -1053,6 +1053,7 @@
 		"warningTitle": "Public node limits features",
 		"warningBody": "Install Qortal Core for full access and privacy.",
 		"fallbackPromptTitle": "Use public node?",
+		"actionBlocked": "Not available on the public node. Connect to your own node to continue.",
 		"localLabel": "Local node",
 		"customLabel": "Custom node"
 	},

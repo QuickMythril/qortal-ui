@@ -7,6 +7,7 @@ import '@material/mwc-dialog'
 
 // Multi language support
 import { get, translate } from '../../../../core/translate'
+import { isSelectedNodePublic } from '../../../../core/src/utils/node'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
@@ -321,6 +322,13 @@ class ChatModals extends LitElement {
 	}
 
 	async chatBlockAddress() {
+		if (this.isPublicNode()) {
+			const msg = get('publicNode.actionBlocked')
+			snackbar.add({ labelText: `${msg}`, dismiss: true })
+			this.hideBlockUserModal()
+			return false
+		}
+
 		let address = this.toblockaddress
 
 		let items = [
@@ -365,6 +373,18 @@ class ChatModals extends LitElement {
 	getApiKey() {
 		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		return myNode.apiKey
+	}
+
+	isPublicNode() {
+		try {
+			const state = window.parent && window.parent.reduxStore && typeof window.parent.reduxStore.getState === 'function'
+				? window.parent.reduxStore.getState()
+				: null
+			return isSelectedNodePublic(state)
+		} catch (error) {
+			console.error(error)
+			return false
+		}
 	}
 
 	isEmptyArray(arr) {

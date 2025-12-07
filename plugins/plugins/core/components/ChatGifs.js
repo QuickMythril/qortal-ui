@@ -12,6 +12,7 @@ import '@vaadin/tooltip'
 
 // Multi language support
 import { get, translate } from '../../../../core/translate'
+import { isSelectedNodePublic } from '../../../../core/src/utils/node'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
@@ -543,6 +544,12 @@ class ChatGifs extends LitElement {
 	}
 
 	async addCollectionToList(collection) {
+		if (this.isPublicNode()) {
+			const msg = get('publicNode.actionBlocked')
+			parentEpml.request('showSnackBar', `${msg}`)
+			return
+		}
+
 		try {
 			const body = {
 				items: [collection]
@@ -563,6 +570,12 @@ class ChatGifs extends LitElement {
 	}
 
 	async removeCollectionFromList(collection) {
+		if (this.isPublicNode()) {
+			const msg = get('publicNode.actionBlocked')
+			parentEpml.request('showSnackBar', `${msg}`)
+			return
+		}
+
 		try {
 			const body = {
 				items: [collection]
@@ -891,6 +904,18 @@ class ChatGifs extends LitElement {
 	getApiKey() {
 		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		return myNode.apiKey
+	}
+
+	isPublicNode() {
+		try {
+			const state = window.parent && window.parent.reduxStore && typeof window.parent.reduxStore.getState === 'function'
+				? window.parent.reduxStore.getState()
+				: null
+			return isSelectedNodePublic(state)
+		} catch (error) {
+			console.error(error)
+			return false
+		}
 	}
 
 	isEmptyArray(arr) {

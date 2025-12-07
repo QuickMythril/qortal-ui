@@ -13,6 +13,7 @@ import '@vaadin/text-field'
 
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../core/translate'
+import { isSelectedNodePublic } from '../../../../core/src/utils/node'
 registerTranslateConfig({
 	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
 })
@@ -1027,6 +1028,12 @@ class QApps extends LitElement {
 	}
 
 	async followName(appName) {
+		if (this.isPublicNode()) {
+			const msg = get('publicNode.actionBlocked')
+			parentEpml.request('showSnackBar', `${msg}`)
+			return false
+		}
+
 		let name = appName
 
 		let items = [
@@ -1059,6 +1066,12 @@ class QApps extends LitElement {
 	}
 
 	async unfollowName(appName) {
+		if (this.isPublicNode()) {
+			const msg = get('publicNode.actionBlocked')
+			parentEpml.request('showSnackBar', `${msg}`)
+			return false
+		}
+
 		let name = appName
 
 		let items = [
@@ -1090,6 +1103,12 @@ class QApps extends LitElement {
 	}
 
 	async blockName(appName) {
+		if (this.isPublicNode()) {
+			const msg = get('publicNode.actionBlocked')
+			parentEpml.request('showSnackBar', `${msg}`)
+			return false
+		}
+
 		let name = appName
 
 		let items = [
@@ -1123,6 +1142,12 @@ class QApps extends LitElement {
 	}
 
 	async unblockName(appName) {
+		if (this.isPublicNode()) {
+			const msg = get('publicNode.actionBlocked')
+			parentEpml.request('showSnackBar', `${msg}`)
+			return false
+		}
+
 		let name = appName
 
 		let items = [
@@ -1174,6 +1199,18 @@ class QApps extends LitElement {
 	getApiKey() {
 		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		return myNode.apiKey
+	}
+
+	isPublicNode() {
+		try {
+			const state = window.parent && window.parent.reduxStore && typeof window.parent.reduxStore.getState === 'function'
+				? window.parent.reduxStore.getState()
+				: null
+			return isSelectedNodePublic(state)
+		} catch (error) {
+			console.error(error)
+			return false
+		}
 	}
 
 	isEmptyArray(arr) {
