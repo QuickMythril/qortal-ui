@@ -1046,6 +1046,12 @@
 		"nchange42": "Successfully Repaired LTC Wallet!",
 		"nchange43": "Error occurred when trying to repair LTC wallet. Please try again!"
 	},
+	"publicNode": {
+		"label": "Public node",
+		"warningTitle": "Public node limits features",
+		"warningBody": "Install Qortal Core for full access and privacy.",
+		"fallbackPromptTitle": "Use public node?"
+	},
 	"transpage": {
 		"tchange1": "Transaction request",
 		"tchange2": "Decline",
