@@ -41,7 +41,8 @@ class OverviewPage extends LitElement {
 			myBalance: { type: Number },
 			listAccounts: { type: Array },
 			check1: { type: Boolean },
-			check2: { type: Boolean }
+			check2: { type: Boolean },
+			isPublic: { type: Boolean }
 		}
 	}
 
@@ -66,6 +67,7 @@ class OverviewPage extends LitElement {
 		this.check2 = false
 		this.displayName = pickDisplayName(this.accountInfo)
 		this.avatarError = false
+		this.isPublic = false
 			}
 
 	render() {
@@ -82,10 +84,10 @@ class OverviewPage extends LitElement {
 										</div>
 									</div>
 								</div>
-								<div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+									<div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
 									<div class="d-flex justify-content-between">
 										<span class="btn btn-sm btn-info mr-4">${translate("walletprofile.minterlevel")} ${this.accountInfo.addressInfo.level}</span>
-										${this.renderMintingStatus()}
+										${this.isPublic ? '' : this.renderMintingStatus()}
 									</div>
 								</div>
 								<div class="card-body pt-0 pt-md-4">
@@ -151,6 +153,7 @@ class OverviewPage extends LitElement {
 		this.changeLanguage()
 		this.nodeConfig = window.parent.reduxStore.getState().app.nodeConfig
 		this.accountInfo = window.parent.reduxStore.getState().app.accountInfo
+		this.isPublic = isSelectedNodePublic(window.parent.reduxStore.getState())
 		await this.getNodeInfo()
 		await this.getCoreInfo()
 		if (!isSelectedNodePublic(window.parent.reduxStore.getState())) {
@@ -234,6 +237,7 @@ class OverviewPage extends LitElement {
 		this.accountInfo = window.parent.reduxStore.getState().app.accountInfo
 		this.displayName = pickDisplayName(this.accountInfo)
 		this.avatarError = false
+		this.isPublic = isSelectedNodePublic(window.parent.reduxStore.getState())
 
 		await this.getNodeInfo()
 		await this.getCoreInfo()

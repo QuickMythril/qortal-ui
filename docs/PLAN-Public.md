@@ -47,9 +47,10 @@
 ## Issues to fix from manual testing (public node UX)
 
 - [ ] Sidebar menu not rendered and no hamburger hover control when on public node.
-- [?] Core status hover card in the top bar and overview page fail to load data on public node (should degrade gracefully).
+- [?] Core status hover card in the top bar fail to load data on public node (should degrade gracefully).
   - [ ] Check Overview page
-- [ ] Node manage shows nothing - error says "[publicNode.actionBlocked]"
+- [ ] Node manage shows nothing
+  - [ ] error says "[publicNode.actionBlocked]"
 - [ ] Remove the warning banner/message from the Trade Portal page for public node.
 - [?] Add an orange warning background behind the core status icon in the top bar when on public node.
 - [?] Add public-node indication in the core status tooltip (below “Core Information”).

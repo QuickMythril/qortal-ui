@@ -3,7 +3,7 @@ import { connect } from 'pwa-helpers'
 import { store } from '../../store'
 import { translate } from '../../../translate'
 import { coreSyncStatusStyles } from '../../styles/core-css'
-import { buildRequestUrl } from '../../utils/node'
+import { buildRequestUrl, isSelectedNodePublic } from '../../utils/node'
 
 class CoreSyncStatus extends connect(store)(LitElement) {
 	static get properties() {
@@ -101,11 +101,7 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 						<h4 class="lineHeight">${translate("appinfo.synchronizing")}... <span style="color: #03a9f4">${this.nodeInfos.syncPercent !== undefined ? this.nodeInfos.syncPercent + '%' : ''}</span></h4>
 						<h4 class="lineHeight">${translate("appinfo.blockheight")}: <span style="color: #03a9f4">${this.nodeInfos.height ? this.nodeInfos.height : ''}</span></h4>
 						<h4 class="lineHeight">${translate("appinfo.peers")}: <span style="color: #03a9f4">${this.nodeInfos.numberOfConnections ? this.nodeInfos.numberOfConnections : ''}</span></h4>
-						${isPublic ? html`
-							<hr />
-							<h4 class="lineHeight">${translate('publicNode.label')}:</h4>
-							<h4 class="lineHeight">${baseUrl}</h4>
-						` : ''}
+						${nodeInfoSection}
 						<i></i>
 					</div>
 				</div>
@@ -134,11 +130,7 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 						<h4 class="lineHeight">${translate("walletprofile.wp4")} ${translate("walletprofile.wp2")}</h4>
 						<h4 class="lineHeight">${translate("appinfo.blockheight")}: <span style="color: #03a9f4">${this.nodeInfos.height ? this.nodeInfos.height : ''}</span></h4>
 						<h4 class="lineHeight">${translate("appinfo.peers")}: <span style="color: #03a9f4">${this.nodeInfos.numberOfConnections ? this.nodeInfos.numberOfConnections : ''}</span></h4>
-						${isPublic ? html`
-							<hr />
-							<h4 class="lineHeight">${translate('publicNode.label')}:</h4>
-							<h4 class="lineHeight">${baseUrl}</h4>
-						` : ''}
+						${nodeInfoSection}
 						<i></i>
 					</div>
 				</div>
@@ -167,11 +159,7 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 						<h4 class="lineHeight">${translate("walletprofile.wp4")} <span style="color: #03a9f4">( ${translate("walletprofile.wp1")} )</span></h4>
 						<h4 class="lineHeight">${translate("appinfo.blockheight")}: <span style="color: #03a9f4">${this.nodeInfos.height ? this.nodeInfos.height : ''}</span></h4>
 						<h4 class="lineHeight">${translate("appinfo.peers")}: <span style="color: #03a9f4">${this.nodeInfos.numberOfConnections ? this.nodeInfos.numberOfConnections : ''}</span></h4>
-						${isPublic ? html`
-							<hr />
-							<h4 class="lineHeight">${translate('publicNode.label')}:</h4>
-							<h4 class="lineHeight">${baseUrl}</h4>
-						` : ''}
+						${nodeInfoSection}
 						<i></i>
 					</div>
 				</div>
@@ -186,11 +174,7 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 						<h4 class="lineHeight">${translate("appinfo.synchronizing")}... <span style="color: #03a9f4">${this.nodeInfos.syncPercent !== undefined ? this.nodeInfos.syncPercent + '%' : ''}</span></h4>
 						<h4 class="lineHeight">${translate("appinfo.blockheight")}: <span style="color: #03a9f4">${this.nodeInfos.height ? this.nodeInfos.height : ''}</span></h4>
 						<h4 class="lineHeight">${translate("appinfo.peers")}: <span style="color: #03a9f4">${this.nodeInfos.numberOfConnections ? this.nodeInfos.numberOfConnections : ''}</span></h4>
-						${isPublic ? html`
-							<hr />
-							<h4 class="lineHeight">${translate('publicNode.label')}:</h4>
-							<h4 class="lineHeight">${baseUrl}</h4>
-						` : ''}
+						${nodeInfoSection}
 						<i></i>
 					</div>
 				</div>
