@@ -90,7 +90,7 @@ class SettingsPage extends connect(store)(LitElement) {
 								<li @click="${(e) => this.handleSelection(e, n, index)}">
 									<div class="list-parent">
 										<div>
-											<span class="name">${n.name}${isPublicNode(n) ? ' (Public)' : ''}</span>
+											<span class="name">${n.name}${isPublicNode(n) ? ` (${translate('publicNode.label')})` : ''}</span>
 											<span>${n.baseUrl || getNodeBaseUrl(n)}</span>
 										</div>
 										<div>
@@ -130,7 +130,7 @@ class SettingsPage extends connect(store)(LitElement) {
 					</p>
 					${isPublicSelected ? html`
 						<p style="margin-top:10px; text-align:center; color: var(--red);">
-							Using the Public node limits certain actions; switch to your own node for full features and privacy.
+							${translate('publicNode.warningBody')}
 						</p>
 					` : ''}
 					<center>

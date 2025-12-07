@@ -3116,7 +3116,7 @@ class AppView extends connect(store)(LitElement) {
 		let color = '#1565c0'
 
 		if (isPublicNode(node)) {
-			type = 'Public'
+			type = translate('publicNode.label')
 			color = '#d32f2f'
 		} else if (['127.0.0.1', 'localhost'].includes(node?.domain)) {
 			type = 'Local'
@@ -3125,7 +3125,7 @@ class AppView extends connect(store)(LitElement) {
 
 		this.nodeIndicator = {
 			type,
-			label: `${type} node`,
+			label: isPublicNode(node) ? translate('publicNode.label') : `${type} node`,
 			host,
 			color
 		}
