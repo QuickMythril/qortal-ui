@@ -459,8 +459,7 @@ class LoginSection extends connect(store)(LitElement) {
 	}
 
 	async renderLoginAvatar(renderAddress) {
-		const avatarNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const avatarUrl = avatarNode.protocol + '://' + avatarNode.domain + ':' + avatarNode.port
+		const avatarUrl = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]?.baseUrl
 		const namesUrl = `${avatarUrl}/names/address/${renderAddress}?limit=0&reverse=true`
 
 		this.namesAvatar = ''
@@ -523,7 +522,7 @@ class LoginSection extends connect(store)(LitElement) {
 		try {
 			const avatarNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
 			if (!avatarNode) { throw new Error('No node available for avatar lookup') }
-			const avatarUrl = `${avatarNode.protocol}://${avatarNode.domain}:${avatarNode.port}`
+			const avatarUrl = avatarNode?.baseUrl
 			const namesUrl = `${avatarUrl}/names/address/${address}?limit=0&reverse=true`
 
 			let fetchedNames = []

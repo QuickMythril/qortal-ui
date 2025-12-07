@@ -387,7 +387,7 @@ class LoginView extends connect(store)(LitElement) {
 		const catchSavedNodes = JSON.parse(localStorage.getItem('myQortalNodes'))
 		const selectedNodeOnStart = catchSavedNodes[selectedNodeIndexOnStart]
 		const selectedNameOnStart = `${selectedNodeOnStart.name}`
-		const selectedNodeUrlOnStart = `${selectedNodeOnStart.protocol + '://' + selectedNodeOnStart.domain + ':' + selectedNodeOnStart.port}`
+		const selectedNodeUrlOnStart = selectedNodeOnStart?.baseUrl
 
 		let connectString = get('settings.snack2')
 
