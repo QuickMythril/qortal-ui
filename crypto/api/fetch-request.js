@@ -1,4 +1,5 @@
 import { waitForConfig, watchConfig } from '../config'
+import { isPublicNode } from '../../core/src/constants/nodes'
 
 let config = {}
 
@@ -16,6 +17,14 @@ export async function request(url, options) {
 
 	const n = config.nodeConfig.knownNodes[config.nodeConfig.node]
 	const node = n.protocol + '://' + n.domain + ':' + n.port
+
+	if (
+		isPublicNode(n) &&
+		(options.method && options.method !== 'GET') &&
+		(url.startsWith('/crosschain/') || url.startsWith('/admin/'))
+	) {
+		throw new Error('Public node does not allow this action')
+	}
 
 	return fetch(node + url, {
 		method,
