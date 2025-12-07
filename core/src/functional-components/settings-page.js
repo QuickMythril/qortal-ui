@@ -130,9 +130,10 @@ class SettingsPage extends connect(store)(LitElement) {
 						${translate('settings.nodehint')}
 					</p>
 					${isPublicSelected ? html`
-						<p style="margin-top:10px; text-align:center; color: var(--red);">
-							${translate('publicNode.warningBody')}
-						</p>
+						<div style="margin-top:10px; text-align:center; color: var(--red);">
+							<p style="margin: 0; font-weight: bold;">${translate('publicNode.warningTitle')}</p>
+							<p style="margin: 4px 0 0 0; color: var(--black);">${translate('publicNode.warningBody')}</p>
+						</div>
 					` : ''}
 					<center>
 						<mwc-button outlined @click="${() => this.shadowRoot.querySelector('#addNodeDialog').show()}">
