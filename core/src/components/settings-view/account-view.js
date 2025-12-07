@@ -3,6 +3,7 @@ import { connect } from 'pwa-helpers'
 import { store } from '../../store'
 import { accountViewStyles } from '../../styles/core-css'
 import { pickDisplayName, avatarFallbackChar } from '../../utils/name'
+import { getSelectedNodeBaseUrl } from '../../utils/node'
 
 // Multi language support
 import { get, translate } from '../../../translate'
@@ -66,8 +67,7 @@ class AccountView extends connect(store)(LitElement) {
 			return html`<img src="${defaultImg}" style="width:150px; height:150px; border-radius: 25%;">`
 		}
 
-		const avatarNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const avatarUrl = avatarNode.protocol + '://' + avatarNode.domain + ':' + avatarNode.port
+		const avatarUrl = getSelectedNodeBaseUrl(store.getState())
 		const url = this.displayName ? `${avatarUrl}/arbitrary/THUMBNAIL/${this.displayName}/qortal_avatar?async=true` : ''
 
 		return html`
