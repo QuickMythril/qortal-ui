@@ -59,7 +59,7 @@ class SettingsPage extends connect(store)(LitElement) {
 
 	render() {
 		const isPublicSelected = this.selectedItem && isPublicNode(this.selectedItem)
-		const publicLabel = translate('publicNode.label') || 'Public node'
+		const publicLabel = get('publicNode.label') || 'Public node'
 
 		return html`
 			<mwc-dialog id="settingsDialog" opened="false">

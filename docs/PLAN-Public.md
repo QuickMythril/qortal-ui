@@ -47,8 +47,7 @@
 ## Issues to fix from manual testing (public node UX)
 
 - [ ] Node picker shows “Public Node ([object Object])” – fix label formatting.
-- [ ] Node settings page only shows partial copy (“Select a Node…” and “Install Qortal Core for full access and privacy.”); restore missing text.
-- [ ] Remove the red “Public node ext-node.qortal.link:443” badge in the top menu bar.
+- [ ] Remove the text “Public node ext-node.qortal.link:443” badge in the top menu bar.
 - [ ] Sidebar menu not rendered and no hamburger hover control when on public node.
 - [ ] Core status hover card in the top bar and overview page fail to load data on public node (should degrade gracefully).
 - [ ] Remove the warning banner/message from the Trade Portal page for public node.
