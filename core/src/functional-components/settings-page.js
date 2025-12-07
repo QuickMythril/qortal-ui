@@ -59,6 +59,7 @@ class SettingsPage extends connect(store)(LitElement) {
 
 	render() {
 		const isPublicSelected = this.selectedItem && isPublicNode(this.selectedItem)
+		const publicLabel = translate('publicNode.label') || 'Public node'
 
 		return html`
 			<mwc-dialog id="settingsDialog" opened="false">
@@ -90,7 +91,7 @@ class SettingsPage extends connect(store)(LitElement) {
 								<li @click="${(e) => this.handleSelection(e, n, index)}">
 									<div class="list-parent">
 										<div>
-											<span class="name">${n.name}${isPublicNode(n) ? ` (${translate('publicNode.label')})` : ''}</span>
+											<span class="name">${n.name}${isPublicNode(n) ? ` (${publicLabel})` : ''}</span>
 											<span>${n.baseUrl || getNodeBaseUrl(n)}</span>
 										</div>
 										<div>
