@@ -3,6 +3,10 @@ import { connect } from 'pwa-helpers'
 import { store } from '../../store'
 import { parentEpml } from '../show-plugin'
 import { setCoinBalances } from '../../redux/app/app-actions'
+import {
+	buildRequestUrl,
+	getSelectedNodeInfo,
+} from '../../utils/node'
 
 class CoinBalancesController extends connect(store)(LitElement) {
 	static get properties() {
@@ -14,8 +18,7 @@ class CoinBalancesController extends connect(store)(LitElement) {
 	constructor() {
 		super();
 		this.coinList = {}
-		this.nodeUrl = this.getNodeUrl()
-		this.myNode = this.getMyNode()
+		this._refreshNodeInfo()
 		this.fetchBalance = this.fetchBalance.bind(this)
 		this._updateCoinList = this._updateCoinList.bind(this)
 		this.stop = false
@@ -25,20 +28,17 @@ class CoinBalancesController extends connect(store)(LitElement) {
 		return html``
 	}
 
-	getNodeUrl() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		return myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-	}
-
-	getMyNode() {
-		return store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
+	_refreshNodeInfo() {
+		this.myNode = getSelectedNodeInfo(store.getState())
+		this.nodeUrl = this.myNode?.baseUrl || ''
 	}
 
 	async updateQortWalletBalance() {
+		this._refreshNodeInfo()
 		let qortAddress = store.getState().app.selectedAddress.address
 
 		await parentEpml.request('apiCall', {
-			url: `/addresses/balance/${qortAddress}?apiKey=${this.myNode.apiKey}`,
+			url: buildRequestUrl(`/addresses/balance/${qortAddress}`, store.getState()),
 		}).then((res) => {
 			this.qortWalletBalance = res
 			store.dispatch(
@@ -53,7 +53,8 @@ class CoinBalancesController extends connect(store)(LitElement) {
 	}
 
 	async updateBtcWalletBalance() {
-		let _url = `/crosschain/btc/walletbalance?apiKey=${this.myNode.apiKey}`
+		this._refreshNodeInfo()
+		let _url = buildRequestUrl(`/crosschain/btc/walletbalance`, store.getState())
 		let _body = store.getState().app.selectedAddress.btcWallet.derivedMasterPublicKey
 
 		await parentEpml.request('apiCall', {
@@ -78,7 +79,8 @@ class CoinBalancesController extends connect(store)(LitElement) {
 	}
 
 	async updateLtcWalletBalance() {
-		let _url = `/crosschain/ltc/walletbalance?apiKey=${this.myNode.apiKey}`
+		this._refreshNodeInfo()
+		let _url = buildRequestUrl(`/crosschain/ltc/walletbalance`, store.getState())
 		let _body = store.getState().app.selectedAddress.ltcWallet.derivedMasterPublicKey
 
 		await parentEpml.request('apiCall', {
@@ -104,7 +106,8 @@ class CoinBalancesController extends connect(store)(LitElement) {
 	}
 
 	async updateDogeWalletBalance() {
-		let _url = `/crosschain/doge/walletbalance?apiKey=${this.myNode.apiKey}`
+		this._refreshNodeInfo()
+		let _url = buildRequestUrl(`/crosschain/doge/walletbalance`, store.getState())
 		let _body = store.getState().app.selectedAddress.dogeWallet.derivedMasterPublicKey
 
 		await parentEpml.request('apiCall', {
@@ -129,7 +132,8 @@ class CoinBalancesController extends connect(store)(LitElement) {
 	}
 
 	async updateDgbWalletBalance() {
-		let _url = `/crosschain/dgb/walletbalance?apiKey=${this.myNode.apiKey}`
+		this._refreshNodeInfo()
+		let _url = buildRequestUrl(`/crosschain/dgb/walletbalance`, store.getState())
 		let _body = store.getState().app.selectedAddress.dgbWallet.derivedMasterPublicKey
 
 		await parentEpml.request('apiCall', {
@@ -154,7 +158,8 @@ class CoinBalancesController extends connect(store)(LitElement) {
 	}
 
 	async updateRvnWalletBalance() {
-		let _url = `/crosschain/rvn/walletbalance?apiKey=${this.myNode.apiKey}`
+		this._refreshNodeInfo()
+		let _url = buildRequestUrl(`/crosschain/rvn/walletbalance`, store.getState())
 		let _body = store.getState().app.selectedAddress.rvnWallet.derivedMasterPublicKey
 
 		await parentEpml.request('apiCall', {
@@ -179,7 +184,8 @@ class CoinBalancesController extends connect(store)(LitElement) {
 	}
 
 	async updateArrrWalletBalance() {
-		let _url = `/crosschain/arrr/walletbalance?apiKey=${this.myNode.apiKey}`
+		this._refreshNodeInfo()
+		let _url = buildRequestUrl(`/crosschain/arrr/walletbalance`, store.getState())
 		let _body = store.getState().app.selectedAddress.arrrWallet.seed58
 
 		await parentEpml.request('apiCall', {
