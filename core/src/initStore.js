@@ -28,6 +28,26 @@ const updateGlobalNodeContext = () => {
 updateGlobalNodeContext()
 store.subscribe(updateGlobalNodeContext)
 
+// Expose a helper to build full API URLs with the current node and apiKey.
+window.buildApiUrl = (path, options = {}) => {
+	const state = store.getState()
+	const usePublicFallback = options.usePublicFallback || false
+	const normalizedPath = typeof path === 'string' ? path : ''
+	const base = getSelectedNodeBaseUrl(state)
+	if (!base && !usePublicFallback) throw new Error('No node selected for request')
+
+	const cleanedBase = (base || '').replace(/\/+$/, '')
+	const url = normalizedPath.startsWith('/')
+		? `${cleanedBase}${normalizedPath}`
+		: `${cleanedBase}/${normalizedPath}`
+	const apiKey = getSelectedNodeApiKey(state)
+	if (apiKey) {
+		const sep = url.includes('?') ? '&' : '?'
+		return `${url}${sep}apiKey=${apiKey}`
+	}
+	return url
+}
+
 // Rehydrate app.accountInfo from persisted user slice so UI sees saved activeName on startup.
 const persistedUserAccountInfo = store.getState()?.user?.accountInfo
 if (persistedUserAccountInfo) {
