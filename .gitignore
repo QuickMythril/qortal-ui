@@ -6,6 +6,8 @@ plugins/plugins/core/**/*.js
 !*.src.js
 !plugins/plugins/core/**/*charts.js
 !plugins/plugins/core/**/*css.js
+!plugins/plugins/core/qdn/browser/name-handlers.js
+!plugins/plugins/core/qdn/browser/name-handlers.test.js
 core/src/redux/app/version.js
 !plugins/plugins/core/components/**/*.js
 

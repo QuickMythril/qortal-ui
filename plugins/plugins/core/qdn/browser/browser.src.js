@@ -58,6 +58,7 @@ import '@material/mwc-checkbox'
 
 // Multi language support
 import {get, registerTranslateConfig, translate, use} from '../../../../../core/translate'
+import { getAccountNamesResponse, getPrimaryNameResponse } from './name-handlers'
 
 registerTranslateConfig({
 	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
@@ -471,22 +472,14 @@ class WebBrowser extends LitElement {
 								? window.parent.reduxStore.getState()
 								: {}
 							const accountInfo = (state && state.app && state.app.accountInfo) ? state.app.accountInfo : {}
-							const selectedAddr = (this.selectedAddress && this.selectedAddress.address) ? this.selectedAddress.address : ''
-							const activeName = accountInfo && accountInfo.activeName ? accountInfo.activeName : ''
-							const primaryFromState = accountInfo && accountInfo.primaryName ? accountInfo.primaryName : ''
-
-							// Only use UI state when requesting for the currently selected address
-							if (selectedAddr && address === selectedAddr && activeName) {
-								response = JSON.stringify(activeName)
-								break
-							}
-
-							const res = await parentEpml.request('apiCall', {
-								type: 'api',
-								url: `/names/primary/${address}`
+							const primaryName = await getPrimaryNameResponse({
+								address,
+								selectedAddress: this.selectedAddress,
+								accountInfo,
+								apiCall: (opts) => parentEpml.request('apiCall', opts)
 							})
-							const primaryName = (res && res.name) ? res.name : ((address === selectedAddr && primaryFromState) ? primaryFromState : '')
-							response = JSON.stringify(primaryName || '')
+
+							response = JSON.stringify(primaryName)
 						} catch (error) {
 							const errMsg = (error && error.message) ? error.message : "Unable to fetch primary name"
 							response = JSON.stringify({ error: errMsg })
@@ -505,33 +498,12 @@ class WebBrowser extends LitElement {
 								? window.parent.reduxStore.getState()
 								: {}
 							const accountInfo = (state && state.app && state.app.accountInfo) ? state.app.accountInfo : {}
-							const selectedAddr = (this.selectedAddress && this.selectedAddress.address) ? this.selectedAddress.address : ''
-							const activeName = accountInfo && accountInfo.activeName ? accountInfo.activeName : ''
-
-							let names = []
-
-							// Only trust UI state when the requested address matches the selected address
-							if (selectedAddr && address === selectedAddr && Array.isArray(accountInfo && accountInfo.allNames) && accountInfo.allNames.length) {
-								names = accountInfo.allNames
-							} else {
-								const res = await parentEpml.request('apiCall', {
-									type: 'api',
-									url: `/names/address/${address}?limit=0&reverse=false`
-								})
-								if (Array.isArray(res)) {
-									names = res
-								}
-							}
-
-							let namesList = Array.isArray(names) ? names.map(item => (item && item.name) ? item.name : item) : []
-
-							if (selectedAddr && address === selectedAddr && activeName) {
-								const idx = namesList.findIndex(n => n === activeName)
-								if (idx > 0) {
-									const [activeEntry] = namesList.splice(idx, 1)
-									namesList.unshift(activeEntry)
-								}
-							}
+							const namesList = await getAccountNamesResponse({
+								address,
+								selectedAddress: this.selectedAddress,
+								accountInfo,
+								apiCall: (opts) => parentEpml.request('apiCall', opts)
+							})
 
 							response = JSON.stringify(namesList)
 							} catch (error) {
