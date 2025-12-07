@@ -1,11 +1,17 @@
 import { store } from './store'
 import { doLoadConfigFromAPI } from './redux/config/config-actions'
-import { doInitWorkers, doLoadNodeConfig } from './redux/app/app-actions'
+import { doInitWorkers, doLoadNodeConfig, doUpdateAccountInfo } from './redux/app/app-actions'
 import { doLoadNotificationConfig } from './redux/user/user-actions'
 import { initApi } from 'qortal-ui-crypto'
 import './persistState'
 
 initApi(store)
+
+// Rehydrate app.accountInfo from persisted user slice so UI sees saved activeName on startup.
+const persistedUserAccountInfo = store.getState()?.user?.accountInfo
+if (persistedUserAccountInfo) {
+	store.dispatch(doUpdateAccountInfo(persistedUserAccountInfo))
+}
 
 const workerInitChecker = () => {
 	const state = store.getState()
