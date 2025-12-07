@@ -3,6 +3,7 @@ import { connect } from 'pwa-helpers'
 import { store } from '../../store'
 import { translate } from '../../../translate'
 import { coreSyncStatusStyles } from '../../styles/core-css'
+import { buildRequestUrl } from '../../utils/node'
 
 class CoreSyncStatus extends connect(store)(LitElement) {
 	static get properties() {
@@ -44,9 +45,7 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 
 
 	async getNodeInfos() {
-		const appInfoNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const appInfoUrl = appInfoNode.protocol + '://' + appInfoNode.domain + ':' + appInfoNode.port
-		const nodeInfoUrl = `${appInfoUrl}/admin/status`
+		const nodeInfoUrl = buildRequestUrl(`/admin/status`, store.getState())
 
 		await fetch(nodeInfoUrl).then(response => {
 			return response.json()
@@ -58,9 +57,7 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 	}
 
 	async getCoreInfos() {
-		const appCoreNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const appCoreUrl = appCoreNode.protocol + '://' + appCoreNode.domain + ':' + appCoreNode.port
-		const coreInfoUrl = `${appCoreUrl}/admin/info`
+		const coreInfoUrl = buildRequestUrl(`/admin/info`, store.getState())
 
 		await fetch(coreInfoUrl).then(response => {
 			return response.json()
