@@ -340,6 +340,12 @@ class WebBrowser extends LitElement {
 					break
 
 				case actions.ADMIN_ACTION: {
+					const isGateway = await isUsingPublicNode()
+					if (isGateway) {
+						parentEpml.request('showSnackBar', `${get('publicNode.actionBlocked')}`)
+						response = JSON.stringify({ error: 'Public node does not allow this action' })
+						break
+					}
 					let type = data.type
 					let value = data.value
 					let res1 = await showModalAndWait(
@@ -3495,6 +3501,11 @@ class WebBrowser extends LitElement {
 					break
 
 				case actions.GET_DAY_SUMMARY: {
+					if (await isUsingPublicNode()) {
+						parentEpml.request('showSnackBar', `${get('publicNode.actionBlocked')}`)
+						response = JSON.stringify({ error: 'Public node does not allow this action' })
+						break
+					}
 					try {
 						response = await parentEpml.request('apiCall', {
 							type: 'api',
