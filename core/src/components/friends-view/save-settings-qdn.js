@@ -10,7 +10,7 @@ import {
 	objectToBase64,
 	uint8ArrayToObject
 } from '../../../../plugins/plugins/core/components/qdn-action-encryption'
-import { translate } from '../../../translate'
+import { get, translate } from '../../../translate'
 import { saveSettingsQdnStyles } from '../../styles/core-css'
 import ShortUniqueId from 'short-unique-id'
 import WebWorker from '../WebWorkerFile.js'
@@ -19,7 +19,7 @@ import '../notification-view/popover'
 import '@material/mwc-icon'
 import '@polymer/paper-spinner/paper-spinner-lite.js'
 import '@vaadin/tooltip'
-import { buildRequestUrl } from '../../utils/node'
+import { buildRequestUrl, isSelectedNodePublic } from '../../utils/node'
 
 class SaveSettingsQdn extends connect(store)(LitElement) {
 	static get properties() {
@@ -211,6 +211,11 @@ class SaveSettingsQdn extends connect(store)(LitElement) {
 	}
 
 	async getMyFollowedNames() {
+		if (isSelectedNodePublic(store.getState())) {
+			parentEpml.request('showSnackBar', `${get('publicNode.actionBlocked')}`)
+			return []
+		}
+
 		let myFollowedNames = []
 
 		try {
@@ -223,6 +228,11 @@ class SaveSettingsQdn extends connect(store)(LitElement) {
 	}
 
 	async followNames(names) {
+		if (isSelectedNodePublic(store.getState())) {
+			parentEpml.request('showSnackBar', `${get('publicNode.actionBlocked')}`)
+			return false
+		}
+
 		let namesJsonString = JSON.stringify({ "items": names })
 
 		return await parentEpml.request('apiCall', {

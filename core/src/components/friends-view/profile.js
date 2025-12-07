@@ -12,7 +12,7 @@ import {
 } from '../../../../plugins/plugins/core/components/qdn-action-encryption'
 import { get, translate } from '../../../translate'
 import { profileQdnStyles } from '../../styles/core-css'
-import { buildRequestUrl } from '../../utils/node'
+import { buildRequestUrl, isSelectedNodePublic } from '../../utils/node'
 import ShortUniqueId from 'short-unique-id'
 import WebWorker2 from '../WebWorkerFile.js'
 import './avatar'
@@ -417,6 +417,11 @@ class ProfileQdn extends connect(store)(LitElement) {
 	}
 
 	async getMyFollowedNames() {
+		if (isSelectedNodePublic(store.getState())) {
+			parentEpml.request('showSnackBar', `${get('publicNode.actionBlocked')}`)
+			return []
+		}
+
 		let myFollowedNames = []
 
 		try {
@@ -429,6 +434,11 @@ class ProfileQdn extends connect(store)(LitElement) {
 	}
 
 	async followNames(names) {
+		if (isSelectedNodePublic(store.getState())) {
+			parentEpml.request('showSnackBar', `${get('publicNode.actionBlocked')}`)
+			return false
+		}
+
 		let namesJsonString = JSON.stringify({ items: names })
 
 		return await parentEpml.request('apiCall', {

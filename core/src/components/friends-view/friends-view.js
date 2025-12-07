@@ -2,7 +2,7 @@ import { html, LitElement } from 'lit'
 import { store } from '../../store'
 import { connect } from 'pwa-helpers'
 import { parentEpml } from '../show-plugin'
-import { translate } from '../../../translate'
+import { get, translate } from '../../../translate'
 import { friendsViewStyles } from '../../styles/core-css'
 import './add-friends-modal'
 import './ChatSideNavHeads'
@@ -15,7 +15,7 @@ import '@polymer/paper-progress/paper-progress.js'
 import '@vaadin/icon'
 import '@vaadin/icons'
 import '@vaadin/button'
-import { buildRequestUrl } from '../../utils/node'
+import { buildRequestUrl, isSelectedNodePublic } from '../../utils/node'
 
 class FriendsView extends connect(store)(LitElement) {
 	static get properties() {
@@ -253,6 +253,11 @@ class FriendsView extends connect(store)(LitElement) {
 	}
 
 	async myFollowName(name) {
+		if (isSelectedNodePublic(store.getState())) {
+			parentEpml.request('showSnackBar', `${get('publicNode.actionBlocked')}`)
+			return false
+		}
+
 		let items = [
 			name
 		]
@@ -270,6 +275,11 @@ class FriendsView extends connect(store)(LitElement) {
 	}
 
 	async unFollowName(name) {
+		if (isSelectedNodePublic(store.getState())) {
+			parentEpml.request('showSnackBar', `${get('publicNode.actionBlocked')}`)
+			return false
+		}
+
 		let items = [
 			name
 		]

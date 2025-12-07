@@ -23,7 +23,7 @@ import '@vaadin/text-field'
 
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../translate'
-import { buildRequestUrl, getSelectedNodeBaseUrl } from '../utils/node'
+import { buildRequestUrl, getSelectedNodeBaseUrl, isSelectedNodePublic } from '../utils/node'
 
 registerTranslateConfig({
 	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
@@ -1066,6 +1066,11 @@ class NavBar extends connect(store)(LitElement) {
 	}
 
 	async getMyFollowedNames() {
+		if (isSelectedNodePublic(store.getState())) {
+			parentEpml.request('showSnackBar', `${get('publicNode.actionBlocked')}`)
+			return []
+		}
+
 		this.myFollowedNames = await parentEpml.request('apiCall', {
 			url: buildRequestUrl(`/lists/followedNames`, store.getState())
 		})
@@ -1078,6 +1083,11 @@ class NavBar extends connect(store)(LitElement) {
 	}
 
 	async getMyFollowedNamesList() {
+		if (isSelectedNodePublic(store.getState())) {
+			parentEpml.request('showSnackBar', `${get('publicNode.actionBlocked')}`)
+			return
+		}
+
 		const followedNamesUrl = buildRequestUrl(`/lists/followedNames`, store.getState())
 
 		var myFollowedNamesNew = []
@@ -1149,6 +1159,11 @@ class NavBar extends connect(store)(LitElement) {
 	}
 
 	async myFollowName(nameObj) {
+		if (isSelectedNodePublic(store.getState())) {
+			parentEpml.request('showSnackBar', `${get('publicNode.actionBlocked')}`)
+			return false
+		}
+
 		let name = nameObj.name
 
 		let items = [
@@ -1180,6 +1195,11 @@ class NavBar extends connect(store)(LitElement) {
 	}
 
 	async myUnfollowName(nameObj) {
+		if (isSelectedNodePublic(store.getState())) {
+			parentEpml.request('showSnackBar', `${get('publicNode.actionBlocked')}`)
+			return false
+		}
+
 		let name = nameObj.name
 
 		let items = [
