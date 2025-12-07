@@ -1,7 +1,11 @@
 // Node Config Actions here...
 import { ADD_NODE, EDIT_NODE, LOAD_NODE_CONFIG, REMOVE_NODE, SET_NODE } from '../app-action-types'
 import { UI_VERSION } from '../version'
-import { EXT_NODE_QORTAL_LINK, getNodeBaseUrl } from '../../constants/nodes'
+import {
+	EXT_NODE_QORTAL_LINK,
+	getNodeBaseUrl,
+	PUBLIC_NODE_TEMPLATE
+} from '../../constants/nodes'
 
 const nodeConfigUrl = '/getConfig'
 
@@ -19,7 +23,7 @@ export const doLoadNodeConfig = () => {
 				const storedNodes = JSON.parse(localStorage.getItem('myQortalNodes') || '[]')
 				const storedSelectedNode = localStorage.getItem('mySelectedNode')
 
-				const defaultNodes = [obj1, objPublic, obj2]
+				const defaultNodes = [obj1, PUBLIC_NODE_TEMPLATE, obj2]
 				const hydratedDefaults = defaultNodes.map(hydrateNode)
 				const hydrateNode = (node) => {
 					const hydrated = {
@@ -47,7 +51,7 @@ export const doLoadNodeConfig = () => {
 				)
 
 				if (!hasPublicNode) {
-					knownNodes = [...knownNodes, hydrateNode(objPublic)]
+					knownNodes = [...knownNodes, hydrateNode(PUBLIC_NODE_TEMPLATE)]
 				}
 
 				localStorage.setItem('myQortalNodes', JSON.stringify(knownNodes))
@@ -135,15 +139,6 @@ const obj1 = {
 	domain: '127.0.0.1',
 	port: 12391,
 	enableManagement: true,
-	apiKey: ''
-}
-
-const objPublic = {
-	name: 'Public Node',
-	protocol: 'https',
-	domain: EXT_NODE_QORTAL_LINK,
-	port: 443,
-	enableManagement: false,
 	apiKey: ''
 }
 

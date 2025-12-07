@@ -6,7 +6,7 @@
   - [x] Ensure node selection persists protocol/domain/port/apiKey and exposes a derived `baseUrl` + `apiKey` for requests.
 
 - [ ] Update request routing to respect public vs local
-  - [ ] Add a helper to build endpoints: append `apiKey` only when present; otherwise use base URL; when no node is selected, never auto-switch to public—prompt the user with an explicit opt-in before falling back to the public gateway.
+  - [x] Add a helper to build endpoints: append `apiKey` only when present; otherwise use base URL; when no node is selected, never auto-switch to public—prompt the user with an explicit opt-in before falling back to the public gateway.
   - [ ] Wire `qortal-ui-crypto` / Epml initialization to use the new base-url builder and carry the selected apiKey.
   - [ ] Add a global `isPublicNode` flag in Redux/derived selectors for easy guards.
 
