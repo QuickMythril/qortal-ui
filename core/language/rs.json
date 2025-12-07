@@ -1053,7 +1053,7 @@
         "warningTitle": "Јавни чвор ограничава функције",
         "warningBody": "Инсталирајте Qortal Core за пун приступ и приватност.",
         "fallbackPromptTitle": "Користити јавни чвор?",
-		"actionBlocked": "Not available on the public node. Connect to your own node to continue.",
+		"actionBlocked": "Nije dostupno na javnom čvoru. Poveži se na svoj čvor da nastaviš.",
         "localLabel": "Локални чвор",
         "customLabel": "Прилагођени чвор"
     },

@@ -1053,7 +1053,7 @@
         "warningTitle": "सार्वजनिक नोड सुविधाएँ सीमित करता है",
         "warningBody": "पूर्ण एक्सेस और गोपनीयता के लिए Qortal Core इंस्टॉल करें।",
         "fallbackPromptTitle": "सार्वजनिक नोड इस्तेमाल करें?",
-		"actionBlocked": "Not available on the public node. Connect to your own node to continue.",
+		"actionBlocked": "पब्लिक नोड पर उपलब्ध नहीं है. जारी रखने के लिए अपने नोड से कनेक्ट करें.",
         "localLabel": "लोकल नोड",
         "customLabel": "कस्टम नोड"
     },

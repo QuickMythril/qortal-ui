@@ -1053,7 +1053,7 @@
         "warningTitle": "Публичный узел ограничивает функции",
         "warningBody": "Установите Qortal Core для полного доступа и приватности.",
         "fallbackPromptTitle": "Использовать публичный узел?",
-		"actionBlocked": "Not available on the public node. Connect to your own node to continue.",
+		"actionBlocked": "Недоступно на публичном узле. Подключитесь к своему узлу, чтобы продолжить.",
         "localLabel": "Локальный узел",
         "customLabel": "Пользовательский узел"
     },

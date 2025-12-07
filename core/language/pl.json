@@ -1053,7 +1053,7 @@
         "warningTitle": "Węzeł publiczny ogranicza funkcje",
         "warningBody": "Zainstaluj Qortal Core, aby mieć pełny dostęp i prywatność.",
         "fallbackPromptTitle": "Użyć węzła publicznego?",
-		"actionBlocked": "Not available on the public node. Connect to your own node to continue.",
+		"actionBlocked": "Niedostępne na publicznym węźle. Połącz się z własnym węzłem, aby kontynuować.",
         "localLabel": "Węzeł lokalny",
         "customLabel": "Węzeł własny"
     },

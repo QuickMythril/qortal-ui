@@ -1053,7 +1053,7 @@
         "warningTitle": "Avalik sõlm piirab funktsioone",
         "warningBody": "Paigalda Qortal Core, et saada täielik ligipääs ja privaatsus.",
         "fallbackPromptTitle": "Kasuta avalikku sõlme?",
-		"actionBlocked": "Not available on the public node. Connect to your own node to continue.",
+		"actionBlocked": "Avalikus sõlmes pole saadaval. Ühendu oma sõlmega, et jätkata.",
         "localLabel": "Kohalik sõlm",
         "customLabel": "Kohandatud sõlm"
     },

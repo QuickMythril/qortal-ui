@@ -1053,7 +1053,7 @@
         "warningTitle": "公共节点功能受限",
         "warningBody": "安装 Qortal Core 以获得完整访问和隐私。",
         "fallbackPromptTitle": "使用公共节点？",
-		"actionBlocked": "Not available on the public node. Connect to your own node to continue.",
+		"actionBlocked": "公共节点不可用。请连接到您自己的节点后继续。",
         "localLabel": "本地节点",
         "customLabel": "自定义节点"
     },

@@ -1053,7 +1053,7 @@
         "warningTitle": "O nó público limita funcionalidades",
         "warningBody": "Instale o Qortal Core para acesso total e privacidade.",
         "fallbackPromptTitle": "Usar nó público?",
-		"actionBlocked": "Not available on the public node. Connect to your own node to continue.",
+		"actionBlocked": "Não disponível no nó público. Conecte-se ao seu próprio nó para continuar.",
         "localLabel": "Nó local",
         "customLabel": "Nó personalizado"
     },

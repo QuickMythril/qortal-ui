@@ -1053,7 +1053,7 @@
         "warningTitle": "공개 노드는 기능이 제한됩니다",
         "warningBody": "전체 접근과 프라이버시를 위해 Qortal Core를 설치하세요.",
         "fallbackPromptTitle": "공개 노드를 사용하시겠습니까?",
-		"actionBlocked": "Not available on the public node. Connect to your own node to continue.",
+		"actionBlocked": "공용 노드에서는 사용할 수 없습니다. 계속하려면 자신의 노드에 연결하세요.",
         "localLabel": "로컬 노드",
         "customLabel": "사용자 지정 노드"
     },

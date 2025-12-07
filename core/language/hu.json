@@ -1053,7 +1053,7 @@
         "warningTitle": "A nyilvános csomópont korlátozza a funkciókat",
         "warningBody": "Telepítsd a Qortal Core-t a teljes hozzáférés és adatvédelem érdekében.",
         "fallbackPromptTitle": "Nyilvános csomópontot használsz?",
-		"actionBlocked": "Not available on the public node. Connect to your own node to continue.",
+		"actionBlocked": "Nem érhető el a nyilvános csomóponton. Csatlakozz a saját csomópontodhoz a folytatáshoz.",
         "localLabel": "Helyi csomópont",
         "customLabel": "Egyedi csomópont"
     },

@@ -1053,7 +1053,7 @@
         "warningTitle": "パブリックノードは機能が制限されます",
         "warningBody": "Qortal Core をインストールして、完全なアクセスとプライバシーを確保してください。",
         "fallbackPromptTitle": "パブリックノードを使いますか？",
-		"actionBlocked": "Not available on the public node. Connect to your own node to continue.",
+		"actionBlocked": "公開ノードでは利用できません。続行するには自分のノードに接続してください。",
         "localLabel": "ローカルノード",
         "customLabel": "カスタムノード"
     },

@@ -1053,7 +1053,7 @@
         "warningTitle": "Nodul public limitează funcțiile",
         "warningBody": "Instalează Qortal Core pentru acces complet și confidențialitate.",
         "fallbackPromptTitle": "Folosești nodul public?",
-		"actionBlocked": "Not available on the public node. Connect to your own node to continue.",
+		"actionBlocked": "Nu este disponibil pe nodul public. Conectează-te la nodul tău pentru a continua.",
         "localLabel": "Nod local",
         "customLabel": "Nod personalizat"
     },

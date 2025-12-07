@@ -1053,7 +1053,7 @@
         "warningTitle": "Julkinen solmu rajoittaa toimintoja",
         "warningBody": "Asenna Qortal Core saadaksesi täyden käytön ja yksityisyyden.",
         "fallbackPromptTitle": "Käytäkö julkista solmua?",
-		"actionBlocked": "Not available on the public node. Connect to your own node to continue.",
+		"actionBlocked": "Ei käytettävissä julkisella solmulla. Yhdistä omaan solmuusi jatkaaksesi.",
         "localLabel": "Paikallinen solmu",
         "customLabel": "Mukautettu solmu"
     },

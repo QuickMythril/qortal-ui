@@ -1053,7 +1053,7 @@
         "warningTitle": "Offentlig node har begrensede funksjoner",
         "warningBody": "Installer Qortal Core for full tilgang og personvern.",
         "fallbackPromptTitle": "Bruke offentlig node?",
-		"actionBlocked": "Not available on the public node. Connect to your own node to continue.",
+		"actionBlocked": "Ikke tilgjengelig på den offentlige noden. Koble til din egen node for å fortsette.",
         "localLabel": "Lokal node",
         "customLabel": "Egendefinert node"
     },
