@@ -8,6 +8,7 @@ import { createWallet } from '../../../../crypto/api/createWallet'
 import { createAccountSectionStyles } from '../../styles/core-css'
 import ripple from '../../functional-components/loading-ripple'
 import snackbar from '../../functional-components/snackbar'
+import { isSelectedNodePublic } from '../../utils/node'
 import '../../functional-components/frag-file-input'
 import '@material/mwc-button'
 import '@material/mwc-checkbox'
@@ -459,6 +460,10 @@ class LoginSection extends connect(store)(LitElement) {
 	}
 
 	async renderLoginAvatar(renderAddress) {
+		if (isSelectedNodePublic(store.getState())) {
+			this.namesAvatar = html`<mwc-icon id='accountIcon' style="padding-bottom: 24px; color: var(--black);">account_circle</mwc-icon>`
+			return
+		}
 		const avatarUrl = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]?.baseUrl
 		const namesUrl = `${avatarUrl}/names/address/${renderAddress}?limit=0&reverse=true`
 
@@ -519,6 +524,13 @@ class LoginSection extends connect(store)(LitElement) {
 	}
 
 	async loadWalletAvatar(address) {
+		if (isSelectedNodePublic(store.getState())) {
+			this.walletAvatars = {
+				...this.walletAvatars,
+				[address]: html`<mwc-icon class="wallet-avatar-icon">account_circle</mwc-icon>`
+			}
+			return
+		}
 		try {
 			const avatarNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
 			if (!avatarNode) { throw new Error('No node available for avatar lookup') }
