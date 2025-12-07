@@ -119,25 +119,31 @@ class PublishData extends LitElement {
 				const parentStore = window.parent && window.parent.reduxStore
 				const state = parentStore && typeof parentStore.getState === 'function' ? parentStore.getState() : {}
 				const accountInfo = (state && state.app && state.app.accountInfo) ? state.app.accountInfo : {}
-				// Use active first, then primary, then first name
-				const firstName = Array.isArray(accountInfo.names) && accountInfo.names[0] ? (accountInfo.names[0].name || accountInfo.names[0]) : ''
-				const activeOrPrimary = accountInfo.activeName || accountInfo.primaryName || firstName || ''
-				const allNames = Array.isArray(accountInfo.allNames) && accountInfo.allNames.length ? accountInfo.allNames : accountInfo.names || []
+				const activeName = accountInfo && accountInfo.activeName ? accountInfo.activeName : ''
+				const primaryNameState = accountInfo && accountInfo.primaryName ? accountInfo.primaryName : ''
+				const allNames = Array.isArray(accountInfo.allNames) && accountInfo.allNames.length ? accountInfo.allNames : (accountInfo.names || [])
 
 				if (allNames.length) {
 					this.names = allNames.map(n => n.name || n)
-					this.selectedName = activeOrPrimary || this.names[0] || ''
+					const ownedActive = activeName && this.names.includes(activeName) ? activeName : ''
+					this.selectedName = ownedActive || primaryNameState || this.names[0] || ''
 					this.name = this.selectedName
 					this.fetchResourceMetadata()
 					return
 				}
 
 				const primaryRes = await parentEpml.request('apiCall', { url: `/names/primary/${this.selectedAddress.address}` }).catch(() => ({}))
-				const namesRes = await parentEpml.request('apiCall', { url: `/names/address/${this.selectedAddress.address}?limit=0&reverse=true` }).catch(() => [])
+				const namesRes = await parentEpml.request('apiCall', { url: `/names/address/${this.selectedAddress.address}?limit=0&reverse=false` }).catch(() => [])
 
-				const primaryName = primaryRes && primaryRes.name ? primaryRes.name : ''
-				const namesList = Array.isArray(namesRes) ? namesRes.map(n => n.name || n) : []
-				if (primaryName && namesList.length) {
+				const primaryName = primaryRes && primaryRes.name ? primaryRes.name : primaryNameState
+				let namesList = Array.isArray(namesRes) ? namesRes.map(n => n.name || n) : []
+				if (activeName && namesList.includes(activeName)) {
+					const idx = namesList.findIndex(n => n === activeName)
+					if (idx > 0) {
+						const [activeEntry] = namesList.splice(idx, 1)
+						namesList.unshift(activeEntry)
+					}
+				} else if (primaryName && namesList.length) {
 					const idx = namesList.findIndex(n => n === primaryName)
 					if (idx > 0) {
 						namesList.splice(idx, 1)
@@ -145,7 +151,7 @@ class PublishData extends LitElement {
 					}
 				}
 				this.names = namesList
-				this.selectedName = primaryName || namesList[0] || ''
+				this.selectedName = (activeName && namesList.includes(activeName)) ? activeName : (primaryName || namesList[0] || '')
 				this.name = this.selectedName
 				if (this.selectedName) {
 					this.fetchResourceMetadata()

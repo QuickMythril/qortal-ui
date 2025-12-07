@@ -467,15 +467,17 @@ class WebBrowser extends LitElement {
 							break
 						}
 						try {
-								const state = window && window.parent && window.parent.reduxStore && typeof window.parent.reduxStore.getState === 'function'
-									? window.parent.reduxStore.getState()
-									: {}
-								const accountInfo = (state && state.app && state.app.accountInfo) ? state.app.accountInfo : {}
-								const activeName = accountInfo && accountInfo.activeName ? accountInfo.activeName : ''
-								const primaryFromState = accountInfo && accountInfo.primaryName ? accountInfo.primaryName : ''
+							const state = window && window.parent && window.parent.reduxStore && typeof window.parent.reduxStore.getState === 'function'
+								? window.parent.reduxStore.getState()
+								: {}
+							const accountInfo = (state && state.app && state.app.accountInfo) ? state.app.accountInfo : {}
+							const selectedAddr = (this.selectedAddress && this.selectedAddress.address) ? this.selectedAddress.address : ''
+							const activeName = accountInfo && accountInfo.activeName ? accountInfo.activeName : ''
+							const primaryFromState = accountInfo && accountInfo.primaryName ? accountInfo.primaryName : ''
 
-							if (activeName) {
-								response = JSON.stringify({ name: activeName })
+							// Only use UI state when requesting for the currently selected address
+							if (selectedAddr && address === selectedAddr && activeName) {
+								response = JSON.stringify(activeName)
 								break
 							}
 
@@ -483,12 +485,12 @@ class WebBrowser extends LitElement {
 								type: 'api',
 								url: `/names/primary/${address}`
 							})
-								const primaryName = (res && res.name) ? res.name : (primaryFromState || '')
-								response = JSON.stringify({ name: primaryName })
-							} catch (error) {
-								const errMsg = (error && error.message) ? error.message : "Unable to fetch primary name"
-								response = JSON.stringify({ error: errMsg })
-							}
+							const primaryName = (res && res.name) ? res.name : ((address === selectedAddr && primaryFromState) ? primaryFromState : '')
+							response = JSON.stringify(primaryName || '')
+						} catch (error) {
+							const errMsg = (error && error.message) ? error.message : "Unable to fetch primary name"
+							response = JSON.stringify({ error: errMsg })
+						}
 					}
 						break
 
@@ -499,14 +501,19 @@ class WebBrowser extends LitElement {
 							break
 						}
 						try {
-								const state = window && window.parent && window.parent.reduxStore && typeof window.parent.reduxStore.getState === 'function'
-									? window.parent.reduxStore.getState()
-									: {}
-								const accountInfo = (state && state.app && state.app.accountInfo) ? state.app.accountInfo : {}
-								const activeName = accountInfo && accountInfo.activeName ? accountInfo.activeName : ''
-								let names = Array.isArray(accountInfo && accountInfo.allNames) ? accountInfo.allNames : []
+							const state = window && window.parent && window.parent.reduxStore && typeof window.parent.reduxStore.getState === 'function'
+								? window.parent.reduxStore.getState()
+								: {}
+							const accountInfo = (state && state.app && state.app.accountInfo) ? state.app.accountInfo : {}
+							const selectedAddr = (this.selectedAddress && this.selectedAddress.address) ? this.selectedAddress.address : ''
+							const activeName = accountInfo && accountInfo.activeName ? accountInfo.activeName : ''
 
-							if (!names.length) {
+							let names = []
+
+							// Only trust UI state when the requested address matches the selected address
+							if (selectedAddr && address === selectedAddr && Array.isArray(accountInfo && accountInfo.allNames) && accountInfo.allNames.length) {
+								names = accountInfo.allNames
+							} else {
 								const res = await parentEpml.request('apiCall', {
 									type: 'api',
 									url: `/names/address/${address}?limit=0&reverse=false`
@@ -516,9 +523,9 @@ class WebBrowser extends LitElement {
 								}
 							}
 
-								let namesList = Array.isArray(names) ? names.map(item => (item && item.name) ? item.name : item) : []
+							let namesList = Array.isArray(names) ? names.map(item => (item && item.name) ? item.name : item) : []
 
-							if (activeName) {
+							if (selectedAddr && address === selectedAddr && activeName) {
 								const idx = namesList.findIndex(n => n === activeName)
 								if (idx > 0) {
 									const [activeEntry] = namesList.splice(idx, 1)
