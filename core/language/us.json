@@ -690,7 +690,9 @@
 		"pchange23": "Transaction successful!",
 		"pchange24": "Unable to sign and process transaction",
 		"pchange25": "Choose File",
-		"pchange26": "Uploading data... this can take some time..."
+		"pchange26": "Uploading data... this can take some time...",
+		"maxSize": "Maximum file size is 2 GB per file.",
+		"maxSizePublic": "Public node limit is 500 MB per file. Use a local node for larger files."
 	},
 	"browserpage": {
 		"bchange1": "Forward",

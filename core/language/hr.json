@@ -690,7 +690,9 @@
         "pchange23": "Transakcija uspješna!",
         "pchange24": "Nije moguće potpisati i obraditi transakciju",
         "pchange25": "Odaberite datoteku",
-        "pchange26": "Učitavanje podataka... ovo može potrajati..."
+        "pchange26": "Učitavanje podataka... ovo može potrajati...",
+        "maxSize": "Maksimalna veličina datoteke je 2 GB po datoteci.",
+        "maxSizePublic": "Na javnom čvoru maksimalna veličina je 500 MB. Koristite svoj lokalni čvor za veće datoteke."
     },
     "browserpage": {
         "bchange1": "Naprijed",

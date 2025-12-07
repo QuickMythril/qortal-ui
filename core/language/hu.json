@@ -690,7 +690,9 @@
         "pchange23": "A tranzakció sikeres!",
         "pchange24": "Nem lehet aláírni és feldolgozni a tranzakciót",
         "pchange25": "Fájl Kiválasztása",
-        "pchange26": "Adatok feltöltése... ez eltarthat egy ideig..."
+        "pchange26": "Adatok feltöltése... ez eltarthat egy ideig...",
+        "maxSize": "Maximális fájlméret 2 GB fájlonként.",
+        "maxSizePublic": "A nyilvános csomóponton a maximális fájlméret 500 MB. Nagyobb fájlokhoz használd a saját csomópontodat."
     },
     "browserpage": {
         "bchange1": "Előre",

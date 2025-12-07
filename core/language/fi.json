@@ -690,7 +690,9 @@
         "pchange23": "Tapahtuma onnistui!",
         "pchange24": "Tapahtumaa ei voitu allekirjoittaa ja käsitellä",
         "pchange25": "Valitse tiedosto",
-        "pchange26": "Tietojen lataaminen... kestää jonkin aikaa..."
+        "pchange26": "Tietojen lataaminen... kestää jonkin aikaa...",
+        "maxSize": "Suurin sallittu tiedostokoko on 2 Gt tiedostoa kohden.",
+        "maxSizePublic": "Suurin sallittu tiedostokoko julkisella solmulla on 500 Mt. Käytä omaa solmua suuremmille tiedostoille."
     },
     "browserpage": {
         "bchange1": "Seuraava",

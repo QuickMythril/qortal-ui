@@ -690,7 +690,9 @@
         "pchange23": "Tehing edukas!",
         "pchange24": "Ei saanud tehingut allkirjastada ja töödelda",
         "pchange25": "Vali fail",
-        "pchange26": "Andmete üleslaadimine... nüüd kulub natuke aega...."
+        "pchange26": "Andmete üleslaadimine... nüüd kulub natuke aega....",
+        "maxSize": "Maksimaalne lubatud failisuurus on 2 GB faili kohta.",
+        "maxSizePublic": "Maksimaalne lubatud failisuurus avalikul sõlmel on 500 MB. Suuremate failide jaoks kasuta oma kohalikku sõlme."
     },
     "browserpage": {
         "bchange1": "Edasi",

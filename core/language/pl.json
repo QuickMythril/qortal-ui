@@ -690,7 +690,9 @@
         "pchange23": "Transakcja powiodła się!",
         "pchange24": "Nie można podpisać i przetworzyć transakcji",
         "pchange25": "Wybierz plik",
-        "pchange26": "Ładowanie danych... może to trochę potrwać..."
+        "pchange26": "Ładowanie danych... może to trochę potrwać...",
+        "maxSize": "Maksymalny rozmiar pliku to 2 GB na plik.",
+        "maxSizePublic": "Na publicznym nodzie maksymalny rozmiar pliku to 500 MB. Użyj własnego węzła dla większych plików."
     },
     "browserpage": {
         "bchange1": "Naprzód",

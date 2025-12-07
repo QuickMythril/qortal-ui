@@ -690,7 +690,9 @@
         "pchange23": "Transaction réussie!",
         "pchange24": "Impossible de signer et de traiter la transaction",
         "pchange25": "Choisissez un fichier",
-        "pchange26": "Télécharger des données... cela peut prendre un certain temps..."
+        "pchange26": "Télécharger des données... cela peut prendre un certain temps...",
+        "maxSize": "La taille maximale autorisée est de 2 Go par fichier.",
+        "maxSizePublic": "La taille maximale autorisée sur le nœud public est de 500 Mo. Utilisez votre nœud local pour les fichiers plus volumineux."
     },
     "browserpage": {
         "bchange1": "En avant",

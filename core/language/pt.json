@@ -690,7 +690,9 @@
         "pchange23": "Transação bem sucedida!",
         "pchange24": "Não foi possível assinar e processar a transação",
         "pchange25": "Escolha um Arqivo",
-        "pchange26": "Carregando dados... isso pode levar algum tempo..."
+        "pchange26": "Carregando dados... isso pode levar algum tempo...",
+        "maxSize": "O tamanho máximo permitido por arquivo é 2 GB.",
+        "maxSizePublic": "O tamanho máximo permitido no nó público é 500 MB. Use seu nó local para arquivos maiores."
     },
     "browserpage": {
         "bchange1": "Encaminhar",

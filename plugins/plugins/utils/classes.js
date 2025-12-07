@@ -4,6 +4,10 @@ import Base58 from '../../../crypto/api/deps/Base58'
 import nacl from '../../../crypto/api/deps/nacl-fast.js'
 import ed2curve from '../../../crypto/api/deps/ed2curve.js'
 
+const EXT_NODE_QORTAL_LINK = 'ext-node.qortal.link'
+const MAX_PUBLISH_BYTES = 2 * 1024 * 1024 * 1024
+const MAX_PUBLIC_PUBLISH_BYTES = 500 * 1024 * 1024
+
 const getApiKey = () => {
 	const ctx = window.parent && window.parent.qortalNodeContext
 	return (ctx && ctx.apiKey) || ''
@@ -13,6 +17,8 @@ const getBaseUrl = () => {
 	const ctx = window.parent && window.parent.qortalNodeContext
 	return (ctx && ctx.baseUrl) || ''
 }
+
+const isPublicBaseUrl = (url = '') => url.includes(EXT_NODE_QORTAL_LINK)
 
 export class RequestQueue {
 	constructor(maxConcurrent = 5) {
@@ -1032,6 +1038,16 @@ export const publishData = async ({
 				// If we're sending file data, use the /base64 version of the POST /arbitrary/* API
 				else if (uploadType === 'file') {
 					urlSuffix = '/base64'
+				}
+
+				const isPublic = isPublicBaseUrl(getBaseUrl())
+				const maxSize = isPublic ? MAX_PUBLIC_PUBLISH_BYTES : MAX_PUBLISH_BYTES
+
+				if (typeof file.size === 'number' && file.size > maxSize) {
+					const errorMessage = isPublic
+						? get('publishpage.maxSizePublic')
+						: get('publishpage.maxSize')
+					throw new Error(errorMessage)
 				}
 
 				// Base64 encode the file to work around compatibility issues between javascript and java byte arrays

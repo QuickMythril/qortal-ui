@@ -690,7 +690,9 @@
         "pchange23": "Transaksjon vellykket!",
         "pchange24": "Kan ikke signere og behandle transaksjonen",
         "pchange25": "Velg fil",
-        "pchange26": "Laster opp data... dette kan ta litt tid..."
+        "pchange26": "Laster opp data... dette kan ta litt tid...",
+        "maxSize": "Maksimal filstørrelse er 2 GB per fil.",
+        "maxSizePublic": "På den offentlige noden er maks filstørrelse 500 MB. Bruk din egen node for større filer."
     },
     "browserpage": {
         "bchange1": "Frem",

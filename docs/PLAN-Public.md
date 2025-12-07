@@ -12,17 +12,17 @@
   - [x] Add a global `isPublicNode` flag in Redux/derived selectors for easy guards.
   - [x] Replace per-call manual URL concatenation with the shared builder across request sites (app-view, tour, friends/notifications/profile/start-minting, remaining helpers like export-keys).
 
-- [ ] Node selection UX parity
+- [x] Node selection UX parity
   - [x] Surface the public node in the Settings node picker with a “Public node” label and warning copy.
   - [x] If selected node is public, skip API-key generation/testing in login, and clear stored apiKey for that entry.
   - [x] Show a lightweight indicator/banner of the currently selected node (Local/Public/Custom) in the header/login flow.
-  - [ ] Add i18n strings for public-node warnings and descriptions (reuse Hub copy where suitable).
+  - [x] Add i18n strings for public-node warnings and descriptions (reuse Hub copy where suitable).
 
 - [ ] Feature guards aligned with Hub
-  - [ ] QDN publishes: enforce 500 MB per file limit on public node; keep 2 GB limit otherwise.
+  - [x] QDN publishes: enforce 500 MB per file limit on public node; keep 2 GB limit otherwise.
   - [ ] Block unsupported actions on public node (throw/notify):
-    - Hosted data list/delete APIs.
-    - Lists (get/add/delete) APIs.
+    - Hosted data delete APIs.
+    - Lists (add/delete) APIs.
     - Cross-chain wallet/balance/transactions for non-QORT (esp. ARRR).
     - Non-QORT send; allow QORT only.
     - Foreign server management (set/add/remove) and foreign fee updates.

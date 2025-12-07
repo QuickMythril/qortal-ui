@@ -690,7 +690,9 @@
         "pchange23": "Transaktion Erfolgreich!",
         "pchange24": "Transaktion kann nicht signiert und verarbeitet werden",
         "pchange25": "Datei wählen",
-        "pchange26": "Daten werden hochgeladen... dies kann einige Zeit dauern..."
+        "pchange26": "Daten werden hochgeladen... dies kann einige Zeit dauern...",
+        "maxSize": "Maximale Dateigröße pro Datei beträgt 2 GB.",
+        "maxSizePublic": "Maximale Dateigröße auf dem öffentlichen Node beträgt 500 MB. Bitte lokalen Node für größere Dateien verwenden."
     },
     "browserpage": {
         "bchange1": "Vorwärts",

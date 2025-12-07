@@ -690,7 +690,9 @@
         "pchange23": "Tranzactie reusita!",
         "pchange24": "Nu s-a putut semna si procesa tranzactia",
         "pchange25": "Alege fisier",
-        "pchange26": "Încărcarea datelor... poate dura ceva timp..."
+        "pchange26": "Încărcarea datelor... poate dura ceva timp...",
+        "maxSize": "Dimensiunea maximă a fișierului este 2 GB per fișier.",
+        "maxSizePublic": "Pe nodul public limita este 500 MB. Folosește nodul tău local pentru fișiere mai mari."
     },
     "browserpage": {
         "bchange1": "Inainte",

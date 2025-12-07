@@ -690,7 +690,9 @@
         "pchange23": "Transactie is gelukt!",
         "pchange24": "Transactie kon niet gevalideerd en verwerkt worden",
         "pchange25": "Selecteer bestand",
-        "pchange26": "Data wordt opgeladen... Dit kan een tijdje duren..."
+        "pchange26": "Data wordt opgeladen... Dit kan een tijdje duren...",
+        "maxSize": "Maximale bestandsgrootte is 2 GB per bestand.",
+        "maxSizePublic": "Maximale bestandsgrootte op de publieke node is 500 MB. Gebruik je eigen node voor grotere bestanden."
     },
     "browserpage": {
         "bchange1": "Verder",

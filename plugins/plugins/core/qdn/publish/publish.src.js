@@ -4,6 +4,7 @@ import { modalHelper } from '../../../utils/classes'
 import { shouldFetchMetadata, pickPublishName } from './publish-helpers.src'
 import { publishDataStyles } from '../../components/plugins-css'
 import isElectron from 'is-electron'
+import { isPublicNode } from '../../../../../core/src/constants/nodes'
 import '@material/mwc-button'
 import '@material/mwc-dialog'
 import '@material/mwc-list/mwc-list-item.js'
@@ -17,6 +18,9 @@ import { get, registerTranslateConfig, translate, use } from '../../../../../cor
 registerTranslateConfig({
 	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
 })
+
+const MAX_PUBLISH_BYTES = 2 * 1024 * 1024 * 1024 // 2 GB
+const MAX_PUBLIC_PUBLISH_BYTES = 500 * 1024 * 1024 // 500 MB
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
@@ -677,6 +681,17 @@ class PublishData extends LitElement {
 			let urlSuffix = ""
 
 			if (file != null) {
+				const isPublic = this.isSelectedNodePublic()
+				const maxSize = isPublic ? MAX_PUBLIC_PUBLISH_BYTES : MAX_PUBLISH_BYTES
+
+				if (file.size > maxSize) {
+					const errorMessage = isPublic
+						? get("publishpage.maxSizePublic")
+						: get("publishpage.maxSize")
+					this.errorMessage = `${errorMessage}`
+					await showError(this.errorMessage)
+					throw new Error(this.errorMessage)
+				}
 
 				// If we're sending zipped data, make sure to use the /zip version of the POST /arbitrary/* API
 				if (this.uploadType === "zip") {
@@ -900,6 +915,25 @@ class PublishData extends LitElement {
 	getApiKey() {
 		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		return myNode.apiKey
+	}
+
+	getSelectedNode() {
+		try {
+			const state = window.parent && window.parent.reduxStore && typeof window.parent.reduxStore.getState === 'function'
+				? window.parent.reduxStore.getState()
+				: null
+			const selected = state && state.app && state.app.nodeConfig ? state.app.nodeConfig.node : null
+			if (state && state.app && state.app.nodeConfig && state.app.nodeConfig.knownNodes) {
+				return state.app.nodeConfig.knownNodes[selected] || {}
+			}
+		} catch (error) {
+			console.error(error)
+		}
+		return {}
+	}
+
+	isSelectedNodePublic() {
+		return isPublicNode(this.getSelectedNode())
 	}
 
 	isEmptyArray(arr) {

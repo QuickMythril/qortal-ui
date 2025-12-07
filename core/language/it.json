@@ -690,7 +690,9 @@
         "pchange23": "Transazione riuscita!",
         "pchange24": "Impossibile firmare ed elaborare la transazione",
         "pchange25": "Scegli file",
-        "pchange26": "Caricamento dei dati... questo può richiedere del tempo..."
+        "pchange26": "Caricamento dei dati... questo può richiedere del tempo...",
+        "maxSize": "Dimensione massima consentita per file: 2 GB.",
+        "maxSizePublic": "Dimensione massima consentita sul nodo pubblico: 500 MB. Usa il tuo nodo locale per file più grandi."
     },
     "browserpage": {
         "bchange1": "Avanti",
