@@ -159,7 +159,7 @@ class NameRegistration extends LitElement {
 					</mwc-button>
 				</div>
 				<p style="margin: 4px 0; color: var(--black); font-size: 13px;">
-					Note: the Core primary name is fixed; the UI will let you pick an active name later for display without changing your primary.
+					${translate("registernamepage.nchange50")}
 				</p>
 					<div class="divCard">
 						<div style="margin-bottom: 1em;">
