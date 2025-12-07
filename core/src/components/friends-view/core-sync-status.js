@@ -83,10 +83,18 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 			<h4 class="lineHeight">${nodeLabel}:</h4>
 			<h4 class="lineHeight">${baseUrl}</h4>
 		`
+		const iconStyle = isPublic
+			? 'display:inline-flex;align-items:center;justify-content:center;padding:4px;border-radius:50%;background:rgba(255,152,0,0.18);border:1px solid rgba(255,152,0,0.45);'
+			: ''
+		const iconWrapper = (src) => html`
+			<span style="${iconStyle}">
+				<img src="${src}" style="height: 24px; width: 24px; padding-top: 4px;">
+			</span>
+		`
 		if (this.nodeInfos.isSynchronizing === true && this.nodeInfos.syncPercent === 99) {
 			return html`
 				<div class="tooltip" style="display: inline;">
-					<span><img src="/img/syncing.png" style="height: 24px; width: 24px; padding-top: 4px;"></span>
+					${iconWrapper('/img/syncing.png')}
 					<div class="bottom">
 						<h3>${translate("walletprofile.wp3")}</h3>
 						<h4 class="lineHeight">${translate("appinfo.coreversion")}: <span style="color: #03a9f4">${this.coreInfos.buildVersion ? (this.coreInfos.buildVersion).substring(0, 12) : ''}</span></h4>
@@ -105,7 +113,7 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 		} else if (this.nodeInfos.isSynchronizing === true && this.nodeInfos.isMintingPossible === false && this.nodeInfos.syncPercent === 100) {
 			return html`
 				<div class="tooltip" style="display: inline;">
-					<span><img src="/img/synced.png" style="height: 24px; width: 24px; padding-top: 4px;"></span>
+					${iconWrapper('/img/synced.png')}
 					<div class="bottom">
 						<h3>${translate("walletprofile.wp3")}</h3>
 						<h4 class="lineHeight">${translate("appinfo.coreversion")}: <span style="color: #03a9f4">${this.coreInfos.buildVersion ? (this.coreInfos.buildVersion).substring(0, 12) : ''}</span></h4>
@@ -119,7 +127,7 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 		} else if (this.nodeInfos.isSynchronizing === false && this.nodeInfos.isMintingPossible === false && this.nodeInfos.syncPercent === 100) {
 			return html`
 				<div class="tooltip" style="display: inline;">
-					<span><img src="/img/synced.png" style="height: 24px; width: 24px; padding-top: 4px;"></span>
+					${iconWrapper('/img/synced.png')}
 					<div class="bottom">
 						<h3>${translate("walletprofile.wp3")}</h3>
 						<h4 class="lineHeight">${translate("appinfo.coreversion")}: <span style="color: #03a9f4">${this.coreInfos.buildVersion ? (this.coreInfos.buildVersion).substring(0, 12) : ''}</span></h4>
@@ -138,7 +146,7 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 		} else if (this.nodeInfos.isSynchronizing === true && this.nodeInfos.isMintingPossible === true && this.nodeInfos.syncPercent === 100) {
 			return html`
 				<div class="tooltip" style="display: inline;">
-					<span><img src="/img/synced_minting.png" style="height: 24px; width: 24px; padding-top: 4px;"></span>
+					${iconWrapper('/img/synced_minting.png')}
 					<div class="bottom">
 						<h3>${translate("walletprofile.wp3")}</h3>
 						<h4 class="lineHeight">${translate("appinfo.coreversion")}: <span style="color: #03a9f4">${this.coreInfos.buildVersion ? (this.coreInfos.buildVersion).substring(0, 12) : ''}</span></h4>
@@ -152,7 +160,7 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 		} else if (this.nodeInfos.isSynchronizing === false && this.nodeInfos.isMintingPossible === true && this.nodeInfos.syncPercent === 100) {
 			return html`
 				<div class="tooltip" style="display: inline;">
-					<span><img src="/img/synced_minting.png" style="height: 24px; width: 24px; padding-top: 4px;"></span>
+					${iconWrapper('/img/synced_minting.png')}
 					<div class="bottom">
 						<h3>${translate("walletprofile.wp3")}</h3>
 						<h4 class="lineHeight">${translate("appinfo.coreversion")}: <span style="color: #03a9f4">${this.coreInfos.buildVersion ? (this.coreInfos.buildVersion).substring(0, 12) : ''}</span></h4>
@@ -171,7 +179,7 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 		} else {
 			return html`
 				<div class="tooltip" style="display: inline;">
-					<span><img src="/img/syncing.png" style="height: 24px; width: 24px; padding-top: 4px;"></span>
+					${iconWrapper('/img/syncing.png')}
 					<div class="bottom">
 						<h3>${translate("walletprofile.wp3")}</h3>
 						<h4 class="lineHeight">${translate("appinfo.coreversion")}: <span style="color: #03a9f4">${this.coreInfos.buildVersion ? (this.coreInfos.buildVersion).substring(0, 12) : ''}</span></h4>
