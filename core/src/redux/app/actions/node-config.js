@@ -5,7 +5,7 @@ import {
 	EXT_NODE_QORTAL_LINK,
 	getNodeBaseUrl,
 	PUBLIC_NODE_TEMPLATE
-} from '../../constants/nodes'
+} from '../../../constants/nodes'
 
 const nodeConfigUrl = '/getConfig'
 
@@ -23,8 +23,6 @@ export const doLoadNodeConfig = () => {
 				const storedNodes = JSON.parse(localStorage.getItem('myQortalNodes') || '[]')
 				const storedSelectedNode = localStorage.getItem('mySelectedNode')
 
-				const defaultNodes = [obj1, PUBLIC_NODE_TEMPLATE, obj2]
-				const hydratedDefaults = defaultNodes.map(hydrateNode)
 				const hydrateNode = (node) => {
 					const hydrated = {
 						name: node?.name || '',
@@ -40,6 +38,9 @@ export const doLoadNodeConfig = () => {
 					hydrated.baseUrl = getNodeBaseUrl(hydrated)
 					return hydrated
 				}
+
+				const defaultNodes = [obj1, PUBLIC_NODE_TEMPLATE, obj2]
+				const hydratedDefaults = defaultNodes.map(hydrateNode)
 
 				let knownNodes =
 					storedNodes && storedNodes.length > 0
