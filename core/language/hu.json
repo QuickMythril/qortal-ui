@@ -250,7 +250,8 @@
 		"update": "FRISSÍTSE A PÉNZTÁRCSA-EGYENLEGEKET",
 		"view": "Kilátás",
 		"all": "Minden",
-		"page": "Oldal"
+		"page": "Oldal",
+		"noRegisteredName": "Nincs bejegyzett név"
 	},
 	"gifs": {
 		"gchange1": "Gif Explorer",
@@ -783,7 +784,6 @@
 		"cchange12": "Tulajdonos",
 		"cchange13": "Akció",
 		"cchange14": "Ez a fiók egyetlen felhasználót sem blokkolt.",
-		"cchange15": "Nincs bejegyzett név",
 		"cchange16": "A felhasználó blokkolásának feloldása sikeresen feloldása.",
 		"cchange17": "Hiba történt a felhasználó blokkolásának feloldásakor. Próbálkozzon újra!",
 		"cchange18": "Felszabadít",
@@ -890,7 +890,6 @@
 		"bcchange1": "Felhasználó Letiltása",
 		"bcchange2": "Sikeresen letiltotta ezt a felhasználót!",
 		"bcchange3": "Hiba történt a felhasználó letiltásakor. Próbálkozzon újra!",
-		"bcchange4": "Nincs bejegyzett név",
 		"bcchange5": "Felhasználói kérés blokkolása",
 		"bcchange6": "Biztosan letiltod ezt a felhasználót?",
 		"bcchange7": "MENÜ",

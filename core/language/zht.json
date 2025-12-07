@@ -250,7 +250,8 @@
 		"update": "更新錢包餘額",
 		"view": "看法",
 		"all": "全部",
-		"page": "頁"
+		"page": "頁",
+		"noRegisteredName": "沒有註冊名稱"
 	},
 	"gifs": {
 		"gchange1": "Gif 瀏覽器",
@@ -783,7 +784,6 @@
 		"cchange12": "擁有者",
 		"cchange13": "操作",
 		"cchange14": "此賬號沒有封鎖任何用戶。",
-		"cchange15": "沒有註冊名稱",
 		"cchange16": "成功解封此用戶。",
 		"cchange17": "嘗試解封此用戶時發生錯誤。 請再試一次!",
 		"cchange18": "解封",
@@ -890,7 +890,6 @@
 		"bcchange1": "封鎖用戶",
 		"bcchange2": "成功封鎖此用戶!",
 		"bcchange3": "嘗試封鎖此用戶時出錯。 請再試一次！",
-		"bcchange4": "沒有註冊名稱",
 		"bcchange5": "封鎖用戶請求",
 		"bcchange6": "你確定要封鎖這個用戶嗎？",
 		"bcchange7": "菜單",

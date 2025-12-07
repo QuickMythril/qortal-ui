@@ -250,7 +250,8 @@
 		"update": "Saldot päivitetään",
 		"view": "Katso",
 		"all": "Kaikki",
-		"page": "Sivu"
+		"page": "Sivu",
+		"noRegisteredName": "Ei nimeä"
 	},
 	"gifs": {
 		"gchange1": "Gif tutkija",
@@ -783,7 +784,6 @@
 		"cchange12": "Omistaja",
 		"cchange13": "Toiminta",
 		"cchange14": "Tämä tili ei ole estänyt yhtään käyttäjää.",
-		"cchange15": "Ei nimeä",
 		"cchange16": "Tämän käyttäjän esto kumottiin.",
 		"cchange17": "Tapahtui virhe vapautettaessa tämän käyttäjän estoa. Yritä uudelleen!",
 		"cchange18": "estää",
@@ -890,7 +890,6 @@
 		"bcchange1": "Estä käyttäjä",
 		"bcchange2": "Estetty!",
 		"bcchange3": "Tapahtui virhe tämän käyttäjän estämisessä. Yritä uudelleen!",
-		"bcchange4": "Nimeä ei ole olemassa",
 		"bcchange5": "Estä käyttäjäpyyntö",
 		"bcchange6": "Haluatko varmasti estää tämän käyttäjän?",
 		"bcchange7": "Valikko",

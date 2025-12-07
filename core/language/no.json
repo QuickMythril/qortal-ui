@@ -250,7 +250,8 @@
 		"update": "OPPDATERT WALLET-SALDOER",
 		"view": "Utsikt",
 		"all": "Alle",
-		"page": "Side"
+		"page": "Side",
+		"noRegisteredName": "Intet registrert navn"
 	},
 	"gifs": {
 		"gchange1": "Gif Explorer",
@@ -783,7 +784,6 @@
 		"cchange12": "Eier",
 		"cchange13": "Handling",
 		"cchange14": "Denne kontoen har ikke blokkert noen brukere.",
-		"cchange15": "Inget registrert navn",
 		"cchange16": "Blokkeringen av denne brukeren ble opphevet.",
 		"cchange17": "Det oppstod en feil ved forsøk på å oppheve blokkeringen av denne brukeren. Prøv på nytt!",
 		"cchange18": "opphev blokkering",
@@ -890,7 +890,6 @@
 		"bcchange1": "blokker",
 		"bcchange2": "Blokkering av denne brukeren vellykket!",
 		"bcchange3": "Det oppstod en feil ved forsøk på å blokkere denne brukeren. Prøv på nytt!",
-		"bcchange4": "Ingen registrert navn",
 		"bcchange5": "Blokker brukerforespørsel",
 		"bcchange6": "Er du sikker på å blokkere denne brukeren ?",
 		"bcchange7": "MENY",

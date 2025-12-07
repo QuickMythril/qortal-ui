@@ -250,7 +250,8 @@
 		"update": "AGGIORNA I SALDI DEL PORTAFOGLIO",
 		"view": "Vedere",
 		"all": "Tutto",
-		"page": "Pagina"
+		"page": "Pagina",
+		"noRegisteredName": "Nessun nome registrato"
 	},
 	"gifs": {
 		"gchange1": "Esplora Gif",
@@ -783,7 +784,6 @@
 		"cchange12": "Proprietario",
 		"cchange13": "Azione",
 		"cchange14": "Questo account non ha bloccato nessun utente.",
-		"cchange15": "Nessun nome registrato",
 		"cchange16": "Sbloccato con successo questo utente.",
 		"cchange17": "Si è verificato un errore durante il tentativo di sbloccare questo utente. Per favore, riprova!",
 		"cchange18": "sbloccare",
@@ -890,7 +890,6 @@
 		"bcchange1": "Blocca Utente",
 		"bcchange2": "Bloccato con successo questo utente!",
 		"bcchange3": "Si è verificato un errore durante il tentativo di bloccare questo utente. Per favore, riprova!",
-		"bcchange4": "Nessun nome registrato",
 		"bcchange5": "Blocca richiesta utente",
 		"bcchange6": "Sei sicuro di bloccare questo utente?",
 		"bcchange7": "MENÙ",

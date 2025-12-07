@@ -4,6 +4,7 @@ import { store } from '../store'
 import { pickDisplayName, pickDisplayNameOrAddress, pickAddress } from '../utils/name'
 import { doUpdateAccountInfo as doUpdateAppAccountInfo } from '../redux/app/app-actions'
 import { doUpdateAccountInfo as doUpdateUserAccountInfo } from '../redux/user/actions/update-account-info'
+import { translate } from '../../translate'
 import '@material/mwc-icon'
 import '@material/mwc-menu'
 import '@material/mwc-list/mwc-list-item.js'
@@ -211,7 +212,7 @@ class NameSwitcher extends connect(store)(LitElement) {
 					@closed=${() => { this.isMenuOpen = false }}
 				>
 						${this.namesList.length === 0 ? html`
-							<mwc-list-item disabled>${pickAddress(this.accountInfo) || 'No Registered Name'}</mwc-list-item>
+							<mwc-list-item disabled>${pickAddress(this.accountInfo) || translate('general.noRegisteredName')}</mwc-list-item>
 						` : this.namesList.map((entry) => html`
 							<mwc-list-item
 								class="list-name"

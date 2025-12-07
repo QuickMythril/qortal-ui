@@ -250,7 +250,8 @@
 		"update": "AKTUALISIERE WALLET-GUTHABEN",
 		"view": "Ansehen",
 		"all": "Alle",
-		"page": "Seite"
+		"page": "Seite",
+		"noRegisteredName": "Kein Name registriert"
 	},
 	"gifs": {
 		"gchange1": "GIF-Explorer",
@@ -783,7 +784,6 @@
 		"cchange12": "Eigentümer",
 		"cchange13": "Aktion",
 		"cchange14": "Dieses Konto hat keine Benutzer blockiert!",
-		"cchange15": "Kein Name registriert",
 		"cchange16": "Dieser Benutzer wurde erfolgreich entsperrt!",
 		"cchange17": "Beim Versuch, diesen Benutzer zu entsperren, ist ein Fehler aufgetreten. Bitte versuche es erneut!",
 		"cchange18": "entsperren",
@@ -890,7 +890,6 @@
 		"bcchange1": "Benutzer Blockieren",
 		"bcchange2": "Dieser Benutzer wurde erfolgreich blockiert!",
 		"bcchange3": "Beim Blockieren dieses Benutzers ist ein Fehler aufgetreten. Bitte versuche es erneut!",
-		"bcchange4": "Kein Name registriert",
 		"bcchange5": "Diesen Benutzer Blockieren",
 		"bcchange6": "Möchten Sie diesen Benutzer wirklich blockieren?",
 		"bcchange7": "MENÜ",

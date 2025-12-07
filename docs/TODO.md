@@ -1,6 +1,6 @@
 ## Upcoming work
 
-- [ ] Multiple and primary name support
+- [x] Multiple and primary name support
   - [x] HUB-Names.md
   - [x] UI-Names.md
   - [x] DIFF-Names.md

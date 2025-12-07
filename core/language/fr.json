@@ -250,7 +250,8 @@
 		"update": "METTRE À JOUR LES SOLDES DES PORTEFEUILLES",
 		"view": "Voir",
 		"all": "Tous",
-		"page": "Page"
+		"page": "Page",
+		"noRegisteredName": "Pas de nom enregistré"
 	},
 	"gifs": {
 		"gchange1": "Explorateur GIF",
@@ -783,7 +784,6 @@
 		"cchange12": "Propriétaire",
 		"cchange13": "Action",
 		"cchange14": "Ce compte n’a bloqué aucun utilisateur.",
-		"cchange15": "Pas de nom enregistré",
 		"cchange16": "Cet utilisateur a été débloqué avec succès.",
 		"cchange17": "Une erreur s’est produite lors de la tentative de débloquage de cet utilisateur. Veuillez réessayer!",
 		"cchange18": "Débloquer",
@@ -890,7 +890,6 @@
 		"bcchange1": "Bloquer un Utilisateur",
 		"bcchange2": "Blocage réussi de cet utilisateur!",
 		"bcchange3": "Une erreur s’est produite lors de la tentative de blocage de cet utilisateur. Veuillez réessayer!",
-		"bcchange4": "Pas de nom enregistré",
 		"bcchange5": "Bloquer la demande de l'utilisateur",
 		"bcchange6": "Êtes-vous sûr de bloquer cet utilisateur ?",
 		"bcchange7": "MENU",

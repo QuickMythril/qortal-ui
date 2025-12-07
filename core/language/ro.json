@@ -250,7 +250,8 @@
 		"update": "ACTUALIZAȚI SOLDELE PORTOTELULUI",
 		"view": "Vedere",
 		"all": "Toate",
-		"page": "Pagină"
+		"page": "Pagină",
+		"noRegisteredName": "Nu există un nume înregistrat"
 	},
 	"gifs": {
 		"gchange1": "Explorator GIF",
@@ -783,7 +784,6 @@
 		"cchange12": "Detinator",
 		"cchange13": "Actiune",
 		"cchange14": "Acest cont nu a blocat niciun utilizator.",
-		"cchange15": "Nu exista nume inregistrat",
 		"cchange16": "Ati deblocat cu succes acest utilizator.",
 		"cchange17": "A aparut o eroare atunci cand ati incercat sa deblocati acest utilizator. Va rugam sa incercati din nou!",
 		"cchange18": "Deblocheaza",
@@ -890,7 +890,6 @@
 		"bcchange1": "Blocheaza utilizator",
 		"bcchange2": "S-a blocat cu succes acest utilizator!",
 		"bcchange3": "A aparut o eroare atunci cand ati incercat sa blocati acest utilizator. Va rugam sa incercati din nou!",
-		"bcchange4": "Nu exista un nume inregistrat",
 		"bcchange5": "Cerere de blocare utilizator",
 		"bcchange6": "Sunteti sigur ca doriti sa blocati acest utilizator ?",
 		"bcchange7": "MENIU",

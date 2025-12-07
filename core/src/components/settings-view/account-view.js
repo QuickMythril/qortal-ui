@@ -35,7 +35,7 @@ class AccountView extends connect(store)(LitElement) {
 				<div class="center-box">
 					<div class="img-icon">${this.getAvatar()}</div>
 					<span id="accountName">
-						${this.displayName || get("chatpage.cchange15")}
+						${this.displayName || get("general.noRegisteredName")}
 					</span>
 					<div class="content-box">
 						<span class="title">${translate("settings.address")}: </span>

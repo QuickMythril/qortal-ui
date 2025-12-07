@@ -43,7 +43,7 @@ class WalletProfile extends connect(store)(LitElement) {
 						&nbsp;&nbsp;&nbsp;
 						<div id="inline-block-child">
 							<div>
-								${this.displayName || translate("chatpage.cchange15")}
+								${this.displayName || translate("general.noRegisteredName")}
 							</div>
                             				<div>
 								${this.accountInfo.addressInfo ? html`

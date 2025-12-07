@@ -1105,7 +1105,7 @@ class UserInfoView extends connect(store)(LitElement) {
 					this.imageName = item.name
 				})
 			} else {
-				this.infoAccountName = this.infoAccountName || avatarAddress || "No registered name"
+				this.infoAccountName = this.infoAccountName || avatarAddress || translate("general.noRegisteredName")
 				this.imageName = this.infoAccountName
 			}
 		})

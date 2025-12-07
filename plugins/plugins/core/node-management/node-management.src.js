@@ -92,7 +92,7 @@ class NodeManagement extends LitElement {
 									const addr = data.item.mintingAccount
 									render(html`
 										<div>
-											<div class="name-line">${name && name !== addr ? name : "No registered name"}</div>
+											<div class="name-line">${name && name !== addr ? name : translate("general.noRegisteredName")}</div>
 											<div class="address-line">${addr}</div>
 										</div>
 									`, root)
@@ -102,7 +102,7 @@ class NodeManagement extends LitElement {
 									const addr = data.item.recipientAccount
 									render(html`
 										<div>
-											<div class="name-line">${name && name !== addr ? name : "No registered name"}</div>
+											<div class="name-line">${name && name !== addr ? name : translate("general.noRegisteredName")}</div>
 											<div class="address-line">${addr}</div>
 										</div>
 									`, root)

@@ -250,7 +250,8 @@
 		"update": "AKTUALIZUJ SALDA W PORTFELU",
 		"view": "Pogląd",
 		"all": "Wszystko",
-		"page": "Strona"
+		"page": "Strona",
+		"noRegisteredName": "Brak zarejestrowanej nazwy"
 	},
 	"gifs": {
 		"gchange1": "Eksplorator gifów",
@@ -783,7 +784,6 @@
 		"cchange12": "Właściciel",
 		"cchange13": "Akcja",
 		"cchange14": "To konto nie zablokowało żadnych użytkowników.",
-		"cchange15": "Brak zarejestrowanej nazwy",
 		"cchange16": "Pomyślnie odblokowano tego użytkownika.",
 		"cchange17": "Wystąpił błąd podczas próby odblokowania tego użytkownika. Spróbuj ponownie!",
 		"cchange18": "odblokuj",
@@ -890,7 +890,6 @@
 		"bcchange1": "Zablokuj Użytkownika",
 		"bcchange2": "Pomyślnie zablokowano tego użytkownika!",
 		"bcchange3": "Wystąpił błąd podczas próby zablokowania tego użytkownika. Spróbuj ponownie!",
-		"bcchange4": "Brak zarejestrowanej nazwy",
 		"bcchange5": "Zablokuj żądanie użytkownika",
 		"bcchange6": "Czy na pewno chcesz zablokować tego użytkownika?",
 		"bcchange7": "MENU",

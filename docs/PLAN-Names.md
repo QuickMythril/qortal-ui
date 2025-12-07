@@ -51,7 +51,7 @@
   - [x] "Use active name in my-name contexts": Update internal consumers of the user name (chat metadata, publish defaults, avatars, app filters) to use `activeName || primaryName`.
   - [x] "Override qortalRequest name responses": For `GET_PRIMARY_NAME`, return `activeName` if set; for `GET_ACCOUNT_NAMES`, order names with `activeName` first.
 
-- [ ] Validation and smoke tests
+- [x] Validation and smoke tests
   - [x] "Verify name registration polling results": Name registration polling populates `primaryName` + `allNames`.
   - [x] "Validate qortalRequest formatting/parity": GET_PRIMARY_NAME returns a bare string (active for selected address), GET_ACCOUNT_NAMES returns an array of strings with active-first only for selected address; other addresses mirror core ordering.
   - [x] "Test active name persistence": Selecting an active name persists across reload/login and repopulates `app.accountInfo`.

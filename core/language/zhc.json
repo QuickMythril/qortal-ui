@@ -250,7 +250,8 @@
 		"update": "更新钱包余额",
 		"view": "看法",
 		"all": "全部",
-		"page": "页"
+		"page": "页",
+		"noRegisteredName": "没有注册名称"
 	},
 	"gifs": {
 		"gchange1": "Gif 浏览器",
@@ -783,7 +784,6 @@
 		"cchange12": "拥有者",
 		"cchange13": "操作",
 		"cchange14": "此账号没有封锁任何用户。",
-		"cchange15": "没有注册名称",
 		"cchange16": "成功解封此用户。",
 		"cchange17": "尝试解封此用户时发生错误。 请再试一次!",
 		"cchange18": "解封",
@@ -890,7 +890,6 @@
 		"bcchange1": "封锁用户",
 		"bcchange2": "成功封锁此用户!",
 		"bcchange3": "尝试封锁此用户时出错。 请再试一次！",
-		"bcchange4": "没有注册名称",
 		"bcchange5": "封锁用户请求",
 		"bcchange6": "你确定要封锁这个用户吗？",
 		"bcchange7": "菜单",

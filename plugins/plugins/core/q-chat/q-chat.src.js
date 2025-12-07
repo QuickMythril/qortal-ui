@@ -306,8 +306,8 @@ class Chat extends LitElement {
 					</div>
 					<vaadin-grid theme="compact" id="blockedGrid" ?hidden="${this.isEmptyArray(this.blockedUserList)}" aria-label="Blocked List" .items="${this.blockedUserList}" all-rows-visible>
 						<vaadin-grid-column auto-width header="${translate("chatpage.cchange11")}" .renderer=${(root, column, data) => {
-							if (data.item.name === "No registered name") {
-								render(html`${translate("chatpage.cchange15")}`, root);
+							if (data.item.name === translate("general.noRegisteredName")) {
+								render(html`${translate("general.noRegisteredName")}`, root);
 							} else {
 								render(html`${data.item.name}`, root);
 							}
@@ -1063,7 +1063,7 @@ class Chat extends LitElement {
 		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
 		const blockedAddressesUrl = `${nodeUrl}/lists/blockedAddresses?apiKey=${this.getApiKey()}`
-		const err1string = 'No registered name'
+		const err1string = translate('general.noRegisteredName')
 
 		localStorage.removeItem('ChatBlockedAddresses')
 

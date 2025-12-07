@@ -250,7 +250,8 @@
 		"update": "ACTUALIZAR SALDOS DE CARTERA",
 		"view": "Vista",
 		"all": "Todo",
-		"page": "Página"
+		"page": "Página",
+		"noRegisteredName": "Nombre no registrado"
 	},
 	"gifs": {
 		"gchange1": "Explorador de gifs",
@@ -783,7 +784,6 @@
 		"cchange12": "Propietario",
 		"cchange13": "Acción",
 		"cchange14": "Esta cuenta no ha bloqueado a ningún usuario.",
-		"cchange15": "Nombre no registrado",
 		"cchange16": "Se ha desbloqueado con éxito a este usuario.",
 		"cchange17": "Ha ocurrido un error al intentar desbloquear este usuario. Por favor, inténtelo de nuevo!",
 		"cchange18": "desbloquear",
@@ -890,7 +890,6 @@
 		"bcchange1": "Bloquear Usuario",
 		"bcchange2": "Se ha bloqueado con éxito a este usuario!",
 		"bcchange3": "Ha ocurrido un error al intentar bloquear este usuario. Por favor, inténtelo de nuevo!",
-		"bcchange4": "Nombre no registrado",
 		"bcchange5": "Bloquear solicitud de usuario",
 		"bcchange6": "Estás seguro de bloquear a este usuario?",
 		"bcchange7": "MENÚ",

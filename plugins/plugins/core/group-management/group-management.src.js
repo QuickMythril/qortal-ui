@@ -2433,7 +2433,7 @@ class GroupManagement extends LitElement {
 								obj.push(objToAdd)
 							})
 						} else {
-							const noName = 'No registered name'
+								const noName = translate('general.noRegisteredName')
 							const noNameObj = {
 								name: noName,
 								owner: a.member,
@@ -2459,7 +2459,7 @@ class GroupManagement extends LitElement {
 								obj1.push(obj1ToAdd)
 							})
 						} else {
-							const noName = 'No registered name'
+								const noName = translate('general.noRegisteredName')
 							const noNameObj1 = {
 								name: noName,
 								owner: a.member,
@@ -2509,7 +2509,7 @@ class GroupManagement extends LitElement {
 							banObj.push(banObjToAdd)
 						})
 					} else {
-						const noName = 'No registered name'
+						const noName = translate('general.noRegisteredName')
 						const noNameObj = {
 							name: noName,
 							owner: a.offender,
@@ -2559,7 +2559,7 @@ class GroupManagement extends LitElement {
 							inviteObj.push(inviteObjToAdd)
 						})
 					} else {
-						const noName = 'No registered name'
+						const noName = translate('general.noRegisteredName')
 						const noNameObj = {
 							name: noName,
 							owner: a.invitee,
@@ -2608,7 +2608,7 @@ class GroupManagement extends LitElement {
 							joinObj.push(joinObjToAdd)
 						})
 					} else {
-						const noName = 'No registered name'
+						const noName = translate('general.noRegisteredName')
 						const noNameObj = {
 							groupId: a.groupId,
 							name: noName,

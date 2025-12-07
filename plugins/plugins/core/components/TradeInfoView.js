@@ -187,7 +187,7 @@ class TradeInfoView extends LitElement {
 		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
 		const sellerName = await getUserNameFromAddress(seller)
 
-		this.infoSellerName = sellerName || get("chatpage.cchange15")
+		this.infoSellerName = sellerName || get("general.noRegisteredName")
 		this.sellerImageName = sellerName || seller
 		this.sellerImage = `${nodeUrl}/arbitrary/THUMBNAIL/${this.sellerImageName}/qortal_avatar?async=true}`
 	}
@@ -199,7 +199,7 @@ class TradeInfoView extends LitElement {
 		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
 		const buyerName = await getUserNameFromAddress(buyer)
 
-		this.infoBuyerName = buyerName || get("chatpage.cchange15")
+		this.infoBuyerName = buyerName || get("general.noRegisteredName")
 		this.buyerImageName = buyerName || buyer
 		this.buyerImage = `${nodeUrl}/arbitrary/THUMBNAIL/${this.buyerImageName}/qortal_avatar?async=true`
 	}

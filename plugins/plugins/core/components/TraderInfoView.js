@@ -1142,7 +1142,7 @@ class TraderInfoView extends LitElement {
 		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
 		const resolvedName = await getUserNameFromAddress(avatarAddress)
 
-		this.infoAccountName = resolvedName || get("chatpage.cchange15")
+		this.infoAccountName = resolvedName || get("general.noRegisteredName")
 		this.imageName = resolvedName || avatarAddress
 		this.imageUrl = `${nodeUrl}/arbitrary/THUMBNAIL/${this.imageName}/qortal_avatar?async=true}`
 	}

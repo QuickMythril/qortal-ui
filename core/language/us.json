@@ -248,6 +248,7 @@
 		"balance": "Balance",
 		"balances": "YOUR WALLET BALANCES",
 		"update": "UPDATE WALLET BALANCES",
+		"noRegisteredName": "No Registered Name",
 		"view": "View",
 		"all": "All",
 		"page": "Page"
@@ -783,7 +784,6 @@
 		"cchange12": "Owner",
 		"cchange13": "Action",
 		"cchange14": "This account has not blocked any users.",
-		"cchange15": "No Registered Name",
 		"cchange16": "Successfully unblocked this user.",
 		"cchange17": "Error occurred when trying to unblock this user. Please try again!",
 		"cchange18": "unblock",
@@ -890,7 +890,6 @@
 		"bcchange1": "Block User",
 		"bcchange2": "Successfully blocked this user!",
 		"bcchange3": "Error occurred when trying to block this user. Please try again!",
-		"bcchange4": "No Registered Name",
 		"bcchange5": "Block User Request",
 		"bcchange6": "Are you sure to block this user?",
 		"bcchange7": "MENU",

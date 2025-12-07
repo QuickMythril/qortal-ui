@@ -40,7 +40,7 @@ class ChatWelcomePage extends LitElement {
 		super()
 		this.selectedAddress = window.parent.reduxStore.getState().app.selectedAddress.address
 		this.myAddress = {}
-		this.displayName = 'No registered name'
+		this.displayName = translate('general.noRegisteredName')
 		this.balance = 1
 		this.messages = []
 		this.btnDisable = false
@@ -182,10 +182,10 @@ class ChatWelcomePage extends LitElement {
 				address: selected.address || this.selectedAddress || ''
 			}
 			const name = getMyNameFromStore({ allowAddressFallback: false, allowActiveName: false })
-			this.displayName = name && name !== this.myAddress.address ? name : 'No registered name'
+			this.displayName = name && name !== this.myAddress.address ? name : translate('general.noRegisteredName')
 		} catch (error) {
 			console.error('Failed to sync address/name for welcome page', error)
-			this.displayName = 'No registered name'
+			this.displayName = translate('general.noRegisteredName')
 		}
 	}
 

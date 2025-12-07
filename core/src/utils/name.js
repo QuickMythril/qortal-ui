@@ -1,3 +1,5 @@
+import { get as translateGet } from '../../translate'
+
 export const pickDisplayName = (accountInfo = {}) => {
 	return accountInfo?.activeName || accountInfo?.primaryName || accountInfo?.names?.[0]?.name || ''
 }
@@ -23,7 +25,16 @@ export const pickDisplayNameOrAddress = (accountInfo = {}) => {
 }
 
 export const pickNameOrNoName = (accountInfo = {}) => {
-	return pickDisplayName(accountInfo) || 'No Registered Name'
+	const name = pickDisplayName(accountInfo)
+	if (name) return name
+
+	// Prefer i18n key; fall back to English if translations aren't loaded.
+	try {
+		const translated = translateGet('general.noRegisteredName')
+		return translated && !translated.startsWith('[') ? translated : 'No Registered Name'
+	} catch (_) {
+		return 'No Registered Name'
+	}
 }
 
 export const pickPrimaryNameOrAddress = (accountInfo = {}) => {

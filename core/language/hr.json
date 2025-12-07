@@ -250,7 +250,8 @@
 		"update": "AŽURIRAJTE STANJE NOVČANIKA",
 		"view": "Pogled",
 		"all": "svi",
-		"page": "Stranica"
+		"page": "Stranica",
+		"noRegisteredName": "Nema registrirano ime"
 	},
 	"gifs": {
 		"gchange1": "Gif Explorer",
@@ -783,7 +784,6 @@
 		"cchange12": "Vlasnik",
 		"cchange13": "Akcija",
 		"cchange14": "Ovaj račun nije blokirao nikakve korisnike.",
-		"cchange15": "Nema registrirano ime",
 		"cchange16": "Uspješno odblokiran ovaj korisnik",
 		"cchange17": "Došlo je do pogreške prilikom pokušaja odblokiranja ovog korisnika. Molimo pokušajte ponovno!",
 		"cchange18": "odblokiraj",
@@ -890,7 +890,6 @@
 		"bcchange1": "Blokirati Korisnika",
 		"bcchange2": "Uspješno blokiran ovaj korisnik",
 		"bcchange3": "Došlo je do pogreške prilikom pokušaja blokiranja ovog korisnika. Molimo pokušajte ponovno!",
-		"bcchange4": "Nema registrirano ime",
 		"bcchange5": "Blokiraj korisnički zahtjev",
 		"bcchange6": "Jeste li sigurni da ćete blokirati ovog korisnika?",
 		"bcchange7": "MENI",

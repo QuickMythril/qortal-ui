@@ -250,7 +250,8 @@
 		"update": "Saldoseisude uuendamine",
 		"view": "Vaata",
 		"all": "Kõik",
-		"page": "Lehekülg"
+		"page": "Lehekülg",
+		"noRegisteredName": "Nimi puudub"
 	},
 	"gifs": {
 		"gchange1": "Gif avastaja",
@@ -783,7 +784,6 @@
 		"cchange12": "Omanik",
 		"cchange13": "Tegevus",
 		"cchange14": "See konto ei ole blokeerinud ühtegi kasutajat.",
-		"cchange15": "Nimi puudub",
 		"cchange16": "Selle kasutaja blokeeringu edukas vabastamine.",
 		"cchange17": "Selle kasutaja blokeeringu tühistamisel tekkis viga. Palun proovi uuesti!",
 		"cchange18": "blokk maha",
@@ -890,7 +890,6 @@
 		"bcchange1": "Blokeeri kasutaja",
 		"bcchange2": "Blokeeritud!",
 		"bcchange3": "Selle kasutaja blokeerimisel tekkis viga. Palun proovi uuesti!",
-		"bcchange4": "Nime ei eksisteeri",
 		"bcchange5": "Blokeeri kasutaja taotlus",
 		"bcchange6": "Kas oled kindel, et blokeerid selle kasutaja?",
 		"bcchange7": "Menüü",

@@ -89,7 +89,7 @@ class OverviewPage extends LitElement {
 								</div>
 								<div class="card-body pt-0 pt-md-4">
 									<div class="text-center pt-0 mt-md-3">
-										<h2>${this.displayName || get('chatpage.cchange15')}</h2>
+										<h2>${this.displayName || get('general.noRegisteredName')}</h2>
 										<div class="h3 font-weight-400">
 											${this.accountInfo.addressInfo.address}
 										</div>

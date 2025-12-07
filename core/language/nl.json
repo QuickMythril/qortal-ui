@@ -250,7 +250,8 @@
 		"update": "SALDI VAN PORTEFEUILLES HEROPVRAGEN",
 		"view": "Bekijken",
 		"all": "Alle",
-		"page": "Bladzijde"
+		"page": "Bladzijde",
+		"noRegisteredName": "Geen naam geregistreerd"
 	},
 	"gifs": {
 		"gchange1": "GIF-Explorer",
@@ -783,7 +784,6 @@
 		"cchange12": "Eigenaar",
 		"cchange13": "Actie",
 		"cchange14": "Voor dit account zijn er geen geblokkeerde gebruikers!",
-		"cchange15": "Geen naam geregistreerd",
 		"cchange16": "Deze gebruiker is niet meer geblokkeerd!",
 		"cchange17": "Het weghalen van de blokkering is mislukt. Gelieve opnieuw te proberen!",
 		"cchange18": "blokkering weghalen",
@@ -890,7 +890,6 @@
 		"bcchange1": "Gebruiker blokkeren",
 		"bcchange2": "Deze gebruiker werd geblokkeerd!",
 		"bcchange3": "Er is iets foutgelopen bij het blokkeren van deze gebruiker. Gelieve opnieuw te proberen!",
-		"bcchange4": "Geen naam geregistreerd",
 		"bcchange5": "Deze gebruiker blokkeren",
 		"bcchange6": "Bent U zeker dat U deze gebruiker wenst te blokkeren?",
 		"bcchange7": "MENU",
