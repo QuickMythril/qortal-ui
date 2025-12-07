@@ -1024,8 +1024,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getAddressUserResult(resultAddress) {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
+		const nodeUrl = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]?.baseUrl
 		const addressUrl = `${nodeUrl}/addresses/${resultAddress}`
 
 		await fetch(addressUrl).then(res => {
@@ -1038,8 +1037,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getNameUserResult(resultName) {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
+		const nodeUrl = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]?.baseUrl
 		const nameUrl = `${nodeUrl}/names/${resultName}`
 
 		await fetch(nameUrl).then(res => {
@@ -1052,8 +1050,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getAddressFromName(fromName) {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
+		const nodeUrl = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]?.baseUrl
 		const fromNameUrl = `${nodeUrl}/names/${fromName}`
 
 		this.nameAddressResult = await fetch(fromNameUrl).then(response => {
