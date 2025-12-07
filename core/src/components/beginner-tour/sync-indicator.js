@@ -7,7 +7,7 @@ import { syncIndicator2Styles } from '../../styles/core-css'
 import '@material/mwc-icon'
 
 // Multi language support
-import {translate} from '../../../translate'
+import { get, translate } from '../../../translate'
 
 class SyncIndicator extends connect(store)(LitElement) {
 	static get properties() {
@@ -147,6 +147,10 @@ class SyncIndicator extends connect(store)(LitElement) {
 	}
 
 	async bootstrap() {
+		if (isSelectedNodePublic(store.getState())) {
+			parentEpml.request('showSnackBar', get('publicNode.actionBlocked'))
+			return
+		}
 		try {
 			const endpoint = buildRequestUrl(`/admin/bootstrap`, store.getState(), {
 				usePublicFallback: false

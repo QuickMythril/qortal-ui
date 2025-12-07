@@ -12,6 +12,7 @@ import '@vaadin/grid'
 
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../core/translate'
+import { isSelectedNodePublic } from '../../../../core/src/utils/node'
 import { getUserNameFromAddress } from '../../utils/functions'
 
 registerTranslateConfig({
@@ -68,9 +69,20 @@ class NodeManagement extends LitElement {
 		this.nodeConfig = {}
 		this.nodeDomain = ''
 		this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
+		this.blocked = false
 	}
 
 	render() {
+		if (this.blocked) {
+			return html`
+				<div id="node-management-page">
+					<div class="node-card">
+						<h3>${translate('publicNode.actionBlocked')}</h3>
+					</div>
+				</div>
+			`
+		}
+
 		return html`
 			<div id="node-management-page">
 				<div class="node-card">
@@ -203,6 +215,13 @@ class NodeManagement extends LitElement {
 	}
 
 	firstUpdated() {
+		if (this.isPublicNode()) {
+			this.blocked = true
+			const msg = get('publicNode.actionBlocked')
+			parentEpml.request('showSnackBar', `${msg}`)
+			return
+		}
+
 		this.changeTheme()
 		this.changeLanguage()
 		this.updateMintingAccounts()
@@ -337,6 +356,7 @@ class NodeManagement extends LitElement {
 	}
 
 	forceSyncPeer(peerAddress, rowIndex) {
+		if (this.blocked) return
 		parentEpml.request('apiCall', {
 			url: `/admin/forcesync?apiKey=${this.getApiKey()}`,
 			method: 'POST',
@@ -348,6 +368,7 @@ class NodeManagement extends LitElement {
 	}
 
 	removePeer(peerAddress, rowIndex) {
+		if (this.blocked) return
 		parentEpml.request('apiCall', {
 			url: `/peers?apiKey=${this.getApiKey()}`,
 			method: 'DELETE',
@@ -390,6 +411,7 @@ class NodeManagement extends LitElement {
 	}
 
 	stopNode() {
+		if (this.blocked) return
 		parentEpml.request('apiCall', {
 			url: `/admin/stop?apiKey=${this.getApiKey()}`,
 			method: 'GET'
@@ -406,6 +428,7 @@ class NodeManagement extends LitElement {
 	}
 
 	restartNode() {
+		if (this.blocked) return
 		parentEpml.request('apiCall', {
 			url: `/admin/restart?apiKey=${this.getApiKey()}`,
 			method: 'GET'
@@ -422,6 +445,7 @@ class NodeManagement extends LitElement {
 	}
 
 	bootstrapNode() {
+		if (this.blocked) return
 		parentEpml.request('apiCall', {
 			url: `/admin/bootstrap/?apiKey=${this.getApiKey()}`,
 			method: 'GET'
@@ -446,6 +470,7 @@ class NodeManagement extends LitElement {
 	}
 
 	async addPeer() {
+		if (this.blocked) return
 		this.addPeerLoading = true
 
 		const addPeerAddress = this.shadowRoot.getElementById('addPeerAddress').value
@@ -476,6 +501,7 @@ class NodeManagement extends LitElement {
 	}
 
 	addMintingAccount() {
+		if (this.blocked) return
 		this.addMintingAccountLoading = true
 		this.addMintingAccountMessage = 'Loading...'
 		this.addMintingAccountKey = this.shadowRoot.querySelector('#addMintingAccountKey').value
@@ -499,6 +525,10 @@ class NodeManagement extends LitElement {
 	}
 
 		async updateMintingAccounts() {
+			if (this.blocked) {
+				this.mintingAccounts = []
+				return
+			}
 			this.mintingAccounts = []
 
 			try {
@@ -528,6 +558,7 @@ class NodeManagement extends LitElement {
 		}
 
 	removeMintingAccount(publicKey) {
+		if (this.blocked) return
 		this.removeMintingAccountLoading = true
 
 		parentEpml.request('apiCall', {
@@ -552,6 +583,18 @@ class NodeManagement extends LitElement {
 	getApiKey() {
 		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		return myNode.apiKey
+	}
+
+	isPublicNode() {
+		try {
+			const state = window.parent && window.parent.reduxStore && typeof window.parent.reduxStore.getState === 'function'
+				? window.parent.reduxStore.getState()
+				: null
+			return isSelectedNodePublic(state)
+		} catch (error) {
+			console.error(error)
+			return false
+		}
 	}
 
 	isEmptyArray(arr) {

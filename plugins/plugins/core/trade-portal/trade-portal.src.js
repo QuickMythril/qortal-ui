@@ -35,6 +35,7 @@ import '@vaadin/grid/vaadin-grid-selection-column.js'
 
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../core/translate'
+import { isSelectedNodePublic } from '../../../../core/src/utils/node'
 registerTranslateConfig({
 	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
 })
@@ -572,7 +573,14 @@ class TradePortal extends LitElement {
 		this._myHistoricTradesGrid = this.shadowRoot.getElementById('myHistoricTradesGrid')
 		this._stuckOrdersGrid = this.shadowRoot.getElementById('stuckOrdersGrid')
 
+		const isGateway = this.isPublicNode()
+
 		const getNodeInfo = () => {
+			if (isGateway) {
+				this.nodeInfo = {}
+				this.sellBtnDisable = false
+				return
+			}
 			parentEpml.request("apiCall", { url: `/admin/status` }).then((res) => {
 				this.nodeInfo = res
 				getSellButtonStatus()
@@ -2967,6 +2975,18 @@ class TradePortal extends LitElement {
 	getApiKey() {
 		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		return myNode.apiKey
+	}
+
+	isPublicNode() {
+		try {
+			const state = window.parent && window.parent.reduxStore && typeof window.parent.reduxStore.getState === 'function'
+				? window.parent.reduxStore.getState()
+				: null
+			return isSelectedNodePublic(state)
+		} catch (error) {
+			console.error(error)
+			return false
+		}
 	}
 
 	isEmptyArray(arr) {

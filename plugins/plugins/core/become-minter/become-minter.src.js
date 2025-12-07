@@ -13,6 +13,7 @@ import '@vaadin/button'
 
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../core/translate'
+import { isSelectedNodePublic } from '../../../../core/src/utils/node'
 registerTranslateConfig({
 	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
 })
@@ -45,6 +46,7 @@ class BecomeMinter extends LitElement {
 		this.addressInfo = {}
 		this.rewardSharePublicKey = ''
 		this.mintingAccountData = null
+		this.blocked = false
 	}
 
 	render() {
@@ -158,6 +160,13 @@ class BecomeMinter extends LitElement {
 	async atMount() {
 		this.changeLanguage()
 		this.isPageLoading = true
+		this.blocked = this.isPublicNode()
+
+		if (this.blocked) {
+			this.isPageLoading = false
+			parentEpml.request('showSnackBar', `${get('publicNode.actionBlocked')}`)
+			return
+		}
 
 		try {
 			const [nodeInfo, myRewardShareArray, mintingaccounts] =
@@ -203,6 +212,18 @@ class BecomeMinter extends LitElement {
 	getApiKey() {
 		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		return myNode.apiKey
+	}
+
+	isPublicNode() {
+		try {
+			const state = window.parent && window.parent.reduxStore && typeof window.parent.reduxStore.getState === 'function'
+				? window.parent.reduxStore.getState()
+				: null
+			return isSelectedNodePublic(state)
+		} catch (error) {
+			console.error(error)
+			return false
+		}
 	}
 
 	isEmptyArray(arr) {

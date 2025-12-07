@@ -9,6 +9,7 @@ import '@material/mwc-textfield'
 
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../core/translate'
+import { isSelectedNodePublic } from '../../../../core/src/utils/node'
 registerTranslateConfig({
 	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
 })
@@ -44,6 +45,7 @@ class MintingInfo extends LitElement {
 		this.addressLevel = []
 		this.tier4Online = 0
 		this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
+		this.blocked = false
 	}
 
 	render() {
@@ -204,6 +206,12 @@ class MintingInfo extends LitElement {
 		this.changeLanguage()
 
 		await this.getAddressLevel()
+
+		this.blocked = this.isPublicNode()
+		if (this.blocked) {
+			parentEpml.request('showSnackBar', `${get('publicNode.actionBlocked')}`)
+			return
+		}
 
 		const getAdminInfo = () => {
 			parentEpml.request('apiCall', { url: `/admin/info` }).then((res) => {
@@ -770,6 +778,18 @@ class MintingInfo extends LitElement {
 
 	round(number) {
 		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
+	}
+
+	isPublicNode() {
+		try {
+			const state = window.parent && window.parent.reduxStore && typeof window.parent.reduxStore.getState === 'function'
+				? window.parent.reduxStore.getState()
+				: null
+			return isSelectedNodePublic(state)
+		} catch (error) {
+			console.error(error)
+			return false
+		}
 	}
 }
 

@@ -11,6 +11,7 @@ import '@vaadin/button'
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../core/translate'
 import { pickDisplayName, pickDisplayNameOrAddress, avatarFallbackChar } from '../../../../core/src/utils/name'
+import { isSelectedNodePublic } from '../../../../core/src/utils/node'
 
 registerTranslateConfig({
 	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
@@ -65,6 +66,7 @@ class OverviewPage extends LitElement {
 		this.check2 = false
 		this.displayName = pickDisplayName(this.accountInfo)
 		this.avatarError = false
+		this.blocked = false
 	}
 
 	render() {
@@ -93,6 +95,7 @@ class OverviewPage extends LitElement {
 										<div class="h3 font-weight-400">
 											${this.accountInfo.addressInfo.address}
 										</div>
+										${this.blocked ? html`<div class="h5 text-muted">${translate('publicNode.actionBlocked')}</div>` : null}
 										<div class="h3 font-weight-400">
 											${translate("explorerpage.exp2")}: <span style="color: #03a9f4">${this.myBalance}</span> QORT
 										</div>
@@ -150,11 +153,14 @@ class OverviewPage extends LitElement {
 		this.changeLanguage()
 		this.nodeConfig = window.parent.reduxStore.getState().app.nodeConfig
 		this.accountInfo = window.parent.reduxStore.getState().app.accountInfo
+		this.blocked = isSelectedNodePublic(window.parent.reduxStore.getState())
 
-		await this.getNodeInfo()
-		await this.getCoreInfo()
+		if (!this.blocked) {
+			await this.getNodeInfo()
+			await this.getCoreInfo()
+			await this.getMintingKeysList()
+		}
 		await this.getBalanceInfo()
-		await this.getMintingKeysList()
 
 		window.addEventListener('storage', () => {
 			const checkLanguage = localStorage.getItem('qortalLanguage')
@@ -233,13 +239,21 @@ class OverviewPage extends LitElement {
 		this.displayName = pickDisplayName(this.accountInfo)
 		this.avatarError = false
 
-		await this.getNodeInfo()
-		await this.getCoreInfo()
+		if (!this.blocked) {
+			await this.getNodeInfo()
+			await this.getCoreInfo()
+			await this.getMintingKeysList()
+		}
 		await this.getBalanceInfo()
-		await this.getMintingKeysList()
 	}
 
 	async getMintingKeysList() {
+		if (this.blocked) {
+			this.listAccounts = []
+			this.check1 = false
+			this.check2 = false
+			return
+		}
 		this.check1 = false
 		this.check2 = false
 
@@ -271,6 +285,7 @@ class OverviewPage extends LitElement {
 	}
 
 	removeBlankKey(myPublicKey) {
+		if (this.blocked) return
 		parentEpml.request("apiCall", {
 			url: `/admin/mintingaccounts?apiKey=${this.getApiKey()}`,
 			method: "DELETE",
@@ -342,6 +357,7 @@ class OverviewPage extends LitElement {
 	}
 
 	async getNodeInfo() {
+		if (this.blocked) return
 		const infoNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		const infoNodeUrl = infoNode.protocol + '://' + infoNode.domain + ':' + infoNode.port
 		const nodeUrl = `${infoNodeUrl}/admin/status`
@@ -356,6 +372,7 @@ class OverviewPage extends LitElement {
 	}
 
 	async getCoreInfo() {
+		if (this.blocked) return
 		const infoCore = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		const infoCoreUrl = infoCore.protocol + '://' + infoCore.domain + ':' + infoCore.port
 		const coreUrl = `${infoCoreUrl}/admin/info`

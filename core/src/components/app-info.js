@@ -2,7 +2,7 @@ import { html, LitElement } from 'lit'
 import { connect } from 'pwa-helpers'
 import { store } from '../store'
 import { appInfoStyles } from '../styles/core-css'
-import { buildRequestUrl } from '../utils/node'
+import { buildRequestUrl, isSelectedNodePublic } from '../utils/node'
 
 // Multi language support
 import { translate } from '../../translate'
@@ -27,6 +27,7 @@ class AppInfo extends connect(store)(LitElement) {
 		this.coreInfo = []
 		this.nodeConfig = {}
 		this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
+		this.blocked = false
 	}
 
 	render() {
@@ -41,16 +42,23 @@ class AppInfo extends connect(store)(LitElement) {
 	}
 
 	firstUpdated() {
-		this.getNodeInfo()
-		this.getCoreInfo()
+		this.blocked = isSelectedNodePublic(store.getState())
 
-		setInterval(() => {
+		if (!this.blocked) {
 			this.getNodeInfo()
 			this.getCoreInfo()
+		}
+
+		setInterval(() => {
+			if (!this.blocked) {
+				this.getNodeInfo()
+				this.getCoreInfo()
+			}
 		}, 60000)
 	}
 
 	async getNodeInfo() {
+		if (this.blocked) return
 		const url = buildRequestUrl(`/admin/status`, store.getState())
 
 		await fetch(url).then(response => {
@@ -63,6 +71,7 @@ class AppInfo extends connect(store)(LitElement) {
 	}
 
 	async getCoreInfo() {
+		if (this.blocked) return
 		const url = buildRequestUrl(`/admin/info`, store.getState())
 
 		await fetch(url).then(response => {

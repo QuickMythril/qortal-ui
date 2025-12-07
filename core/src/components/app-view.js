@@ -1748,6 +1748,10 @@ class AppView extends connect(store)(LitElement) {
 
 	async getNodeType() {
 		const myAppNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
+		if (isPublicNode(myAppNode)) {
+			this.nodeType = 'gateway'
+			return
+		}
 		const nodeAppUrl = myAppNode.baseUrl
 		const url = `${nodeAppUrl}/admin/info`
 
