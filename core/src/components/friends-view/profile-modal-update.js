@@ -10,7 +10,7 @@ import '@material/mwc-dialog'
 import '@material/mwc-icon'
 import '@polymer/paper-spinner/paper-spinner-lite.js'
 import '@vaadin/tooltip'
-import { buildRequestUrl } from '../../utils/node'
+import { buildRequestUrl, isSelectedNodePublic } from '../../utils/node'
 
 class ProfileModalUpdate extends connect(store)(LitElement) {
 	static get properties() {
@@ -397,6 +397,10 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 	}
 
 	async fetchWalletAddress(coin) {
+		if (isSelectedNodePublic(store.getState())) {
+			parentEpml.request('showSnackBar', `${get('publicNode.actionBlocked')}`)
+			return
+		}
 		switch (coin) {
 			case 'arrr':
 				const arrrWalletName = `${coin}Wallet`;
@@ -422,6 +426,10 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 		switch (wallet) {
 			case 'arrr':
 				if (!this.arrrWalletAddress) {
+					if (isSelectedNodePublic(store.getState())) {
+						parentEpml.request('showSnackBar', `${get('publicNode.actionBlocked')}`)
+						return
+					}
 					try {
 						await this.fetchWalletAddress('arrr')
 					} catch (error) {

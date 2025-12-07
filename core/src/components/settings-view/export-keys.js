@@ -9,7 +9,7 @@ import snackbar from '../../functional-components/snackbar'
 import '@material/mwc-button'
 import '@material/mwc-dialog'
 import '@material/mwc-icon'
-import { buildRequestUrl } from '../../utils/node'
+import { buildRequestUrl, isSelectedNodePublic } from '../../utils/node'
 
 // Multi language support
 import { get, translate } from '../../../translate'
@@ -240,6 +240,12 @@ class ExportKeys extends connect(store)(LitElement) {
 	}
 
 	async fetchArrrWalletAddress() {
+		if (isSelectedNodePublic(store.getState())) {
+			this.enableArrr = false
+			snackbar.add({ labelText: `${get('publicNode.actionBlocked')}`, dismiss: true })
+			return
+		}
+
 		let resAD = await parentEpml.request('apiCall', {
 			url: buildRequestUrl(`/crosschain/arrr/walletaddress`, store.getState()),
 			method: 'POST',
@@ -258,6 +264,10 @@ class ExportKeys extends connect(store)(LitElement) {
 	}
 
 	async checkArrrWalletPrivateKey() {
+		if (isSelectedNodePublic(store.getState())) {
+			return
+		}
+
 		const privateKeyUrl = buildRequestUrl(`/crosschain/arrr/walletprivatekey`, store.getState())
 
 		await fetch(privateKeyUrl, {
@@ -275,6 +285,10 @@ class ExportKeys extends connect(store)(LitElement) {
 	}
 
 	async fetchArrrWalletPrivateKey() {
+		if (isSelectedNodePublic(store.getState())) {
+			return
+		}
+
 		let resPK = await parentEpml.request('apiCall', {
 			url: buildRequestUrl(`/crosschain/arrr/walletprivatekey`, store.getState()),
 			method: 'POST',
@@ -307,6 +321,10 @@ class ExportKeys extends connect(store)(LitElement) {
 	}
 
 	openRepairLTCDialog() {
+		if (isSelectedNodePublic(store.getState())) {
+			snackbar.add({ labelText: `${get('publicNode.actionBlocked')}`, dismiss: true })
+			return
+		}
 		this.shadowRoot.querySelector('#repairLTCDialog').show()
 	}
 
