@@ -1045,7 +1045,15 @@
 		"nchange41": "Javítani próbál. Kérjük, várjon...",
 		"nchange42": "Az LTC Wallet sikeresen megjavítva!",
 		"nchange43": "Hiba történt az LTC pénztárca javítása közben. Kérjük, próbálja újra!"
+	},	"publicNode": {
+		"label": "Public node",
+		"warningTitle": "Public node limits features",
+		"warningBody": "Install Qortal Core for full access and privacy.",
+		"fallbackPromptTitle": "Use public node?",
+		"localLabel": "Local node",
+		"customLabel": "Custom node"
 	},
+
 	"transpage": {
 		"tchange1": "Tranzakciós Kérelem",
 		"tchange2": "Visszautasít",

@@ -1045,7 +1045,15 @@
 		"nchange41": "Pokušavam da popravim. Molimo sačekajte...",
 		"nchange42": "Uspešno popravljen LTC novčanik!",
 		"nchange43": "Došlo je do greške pri pokušaju popravke LTC novčanika. Pokušajte ponovo!"
+	},	"publicNode": {
+		"label": "Public node",
+		"warningTitle": "Public node limits features",
+		"warningBody": "Install Qortal Core for full access and privacy.",
+		"fallbackPromptTitle": "Use public node?",
+		"localLabel": "Local node",
+		"customLabel": "Custom node"
 	},
+
 	"transpage": {
 		"tchange1": "Zahtev za transakcijom",
 		"tchange2": "Odbijte",

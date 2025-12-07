@@ -1045,7 +1045,15 @@
 		"nchange41": "Püüame parandada. Palun oodake...",
 		"nchange42": "LTC rahakott on edukalt parandatud!",
 		"nchange43": "LTC rahakoti parandamisel ilmnes viga. Proovige uuesti!"
+	},	"publicNode": {
+		"label": "Public node",
+		"warningTitle": "Public node limits features",
+		"warningBody": "Install Qortal Core for full access and privacy.",
+		"fallbackPromptTitle": "Use public node?",
+		"localLabel": "Local node",
+		"customLabel": "Custom node"
 	},
+
 	"transpage": {
 		"tchange1": "Tehingu taotlus",
 		"tchange2": "Keeldu",

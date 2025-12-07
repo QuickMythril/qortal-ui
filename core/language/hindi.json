@@ -1045,7 +1045,15 @@
 		"nchange41": "मरम्मत करने का प्रयास किया जा रहा है। कृपया प्रतीक्षा करें...",
 		"nchange42": "एलटीसी वॉलेट की सफलतापूर्वक मरम्मत!",
 		"nchange43": "LTC वॉलेट को सुधारने का प्रयास करते समय त्रुटि उत्पन्न हुई। कृपया पुनः प्रयास करें!"
+	},	"publicNode": {
+		"label": "Public node",
+		"warningTitle": "Public node limits features",
+		"warningBody": "Install Qortal Core for full access and privacy.",
+		"fallbackPromptTitle": "Use public node?",
+		"localLabel": "Local node",
+		"customLabel": "Custom node"
 	},
+
 	"transpage": {
 		"tchange1": "लेनदेन अनुरोध",
 		"tchange2": "अस्वीकार करना",

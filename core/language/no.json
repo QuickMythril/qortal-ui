@@ -1045,7 +1045,15 @@
 		"nchange41": "Prøver å reparere. Vennligst vent...",
 		"nchange42": "Vellykket reparert LTC-lommebok!",
 		"nchange43": "Det oppsto en feil under forsøk på å reparere LTC-lommeboken. Prøv igjen!"
+	},	"publicNode": {
+		"label": "Public node",
+		"warningTitle": "Public node limits features",
+		"warningBody": "Install Qortal Core for full access and privacy.",
+		"fallbackPromptTitle": "Use public node?",
+		"localLabel": "Local node",
+		"customLabel": "Custom node"
 	},
+
 	"transpage": {
 		"tchange1": "Transaksjonsforespørsel",
 		"tchange2": "Avslå",

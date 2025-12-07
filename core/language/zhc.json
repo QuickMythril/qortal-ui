@@ -1045,7 +1045,15 @@
 		"nchange41": "正在尝试修复。请稍候...",
 		"nchange42": "LTC钱包修复成功！",
 		"nchange43": "尝试修复 LTC 钱包时发生错误。请重试！"
+	},	"publicNode": {
+		"label": "Public node",
+		"warningTitle": "Public node limits features",
+		"warningBody": "Install Qortal Core for full access and privacy.",
+		"fallbackPromptTitle": "Use public node?",
+		"localLabel": "Local node",
+		"customLabel": "Custom node"
 	},
+
 	"transpage": {
 		"tchange1": "请求交易",
 		"tchange2": "取消",

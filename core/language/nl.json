@@ -1045,7 +1045,15 @@
 		"nchange41": "Herstelling is bezig. Even geduld graag...",
 		"nchange42": "LTC-portefeuille werd succesvol hersteld!",
 		"nchange43": "Er is een fout opgetreden bij het herstellen van de LTC-portefeuille. Probeer het opnieuw!"
+	},	"publicNode": {
+		"label": "Public node",
+		"warningTitle": "Public node limits features",
+		"warningBody": "Install Qortal Core for full access and privacy.",
+		"fallbackPromptTitle": "Use public node?",
+		"localLabel": "Local node",
+		"customLabel": "Custom node"
 	},
+
 	"transpage": {
 		"tchange1": "Transactie-aanvraag",
 		"tchange2": "Afwijzen",

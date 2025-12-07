@@ -1045,7 +1045,15 @@
 		"nchange41": "Se încearcă repararea. Vă rugăm să așteptați...",
 		"nchange42": "Portofel LTC a fost reparat cu succes!",
 		"nchange43": "A apărut o eroare la încercarea de a repara portofelul LTC. Vă rugăm să încercați din nou!"
+	},	"publicNode": {
+		"label": "Public node",
+		"warningTitle": "Public node limits features",
+		"warningBody": "Install Qortal Core for full access and privacy.",
+		"fallbackPromptTitle": "Use public node?",
+		"localLabel": "Local node",
+		"customLabel": "Custom node"
 	},
+
 	"transpage": {
 		"tchange1": "Cerere de tranzactionare",
 		"tchange2": "Respinge",

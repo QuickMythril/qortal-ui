@@ -1045,7 +1045,15 @@
 		"nchange41": "Intentando reparar. Espere...",
 		"nchange42": "¡Monedero LTC reparado con éxito!",
 		"nchange43": "Se produjo un error al intentar reparar la billetera LTC. ¡Inténtelo de nuevo!"
+	},	"publicNode": {
+		"label": "Public node",
+		"warningTitle": "Public node limits features",
+		"warningBody": "Install Qortal Core for full access and privacy.",
+		"fallbackPromptTitle": "Use public node?",
+		"localLabel": "Local node",
+		"customLabel": "Custom node"
 	},
+
 	"transpage": {
 		"tchange1": "Solicitud de transacción",
 		"tchange2": "Rechazar",

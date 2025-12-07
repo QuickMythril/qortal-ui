@@ -1045,7 +1045,15 @@
 		"nchange41": "Yritämme korjata sen. Odota...",
 		"nchange42": "LTC-lompakko korjattu onnistuneesti!",
 		"nchange43": "Tapahtui virhe korjattaessa LTC-lompakkoa. Yritä uudelleen!"
+	},	"publicNode": {
+		"label": "Public node",
+		"warningTitle": "Public node limits features",
+		"warningBody": "Install Qortal Core for full access and privacy.",
+		"fallbackPromptTitle": "Use public node?",
+		"localLabel": "Local node",
+		"customLabel": "Custom node"
 	},
+
 	"transpage": {
 		"tchange1": "Tapahtumapyyntö",
 		"tchange2": "Estä",

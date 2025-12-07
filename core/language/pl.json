@@ -1045,7 +1045,15 @@
 		"nchange41": "Próbuję naprawić. Proszę czekać...",
 		"nchange42": "Pomyślnie naprawiono portfel LTC!",
 		"nchange43": "Wystąpił błąd podczas próby naprawy portfela LTC. Spróbuj ponownie!"
+	},	"publicNode": {
+		"label": "Public node",
+		"warningTitle": "Public node limits features",
+		"warningBody": "Install Qortal Core for full access and privacy.",
+		"fallbackPromptTitle": "Use public node?",
+		"localLabel": "Local node",
+		"customLabel": "Custom node"
 	},
+
 	"transpage": {
 		"tchange1": "Żądanie transakcji",
 		"tchange2": "Odrzuć",

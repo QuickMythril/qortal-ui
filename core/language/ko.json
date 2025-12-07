@@ -1045,7 +1045,15 @@
 		"nchange41": "복구하는 중입니다. 잠시 기다려 주세요...",
 		"nchange42": "LTC 지갑을 성공적으로 복구했습니다!",
 		"nchange43": "LTC 지갑을 복구하는 중 오류가 발생했습니다. 다시 시도해 주세요!"
+	},	"publicNode": {
+		"label": "Public node",
+		"warningTitle": "Public node limits features",
+		"warningBody": "Install Qortal Core for full access and privacy.",
+		"fallbackPromptTitle": "Use public node?",
+		"localLabel": "Local node",
+		"customLabel": "Custom node"
 	},
+
 	"transpage": {
 		"tchange1": "거래요청",
 		"tchange2": " 감소",
