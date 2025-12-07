@@ -47,3 +47,5 @@ export const buildRequestUrl = (path, state, options = {}) => {
 		usePublicFallback: options.usePublicFallback,
 	});
 };
+
+export const isSelectedNodePublic = (state) => isPublicNode(getSelectedNode(state));
