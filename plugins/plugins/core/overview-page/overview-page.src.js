@@ -154,6 +154,7 @@ class OverviewPage extends LitElement {
 		this.nodeConfig = window.parent.reduxStore.getState().app.nodeConfig
 		this.accountInfo = window.parent.reduxStore.getState().app.accountInfo
 		this.isPublic = isSelectedNodePublic(window.parent.reduxStore.getState())
+		await this.ensureAccountInfo()
 		await this.getNodeInfo()
 		await this.getCoreInfo()
 		if (!isSelectedNodePublic(window.parent.reduxStore.getState())) {
@@ -238,6 +239,7 @@ class OverviewPage extends LitElement {
 		this.displayName = pickDisplayName(this.accountInfo)
 		this.avatarError = false
 		this.isPublic = isSelectedNodePublic(window.parent.reduxStore.getState())
+		await this.ensureAccountInfo()
 
 		await this.getNodeInfo()
 		await this.getCoreInfo()
@@ -400,6 +402,33 @@ class OverviewPage extends LitElement {
 	getApiKey() {
 		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		return myNode.apiKey
+	}
+
+	async ensureAccountInfo() {
+		const address = window.parent.reduxStore.getState().app.selectedAddress.address
+		if (!address) return
+		const info = window.parent.reduxStore.getState().app.accountInfo || {}
+		const hasAddressInfo = info.addressInfo && Object.keys(info.addressInfo).length > 0
+		const hasNames = Array.isArray(info.names) && info.names.length > 0
+		if (hasAddressInfo && hasNames) {
+			this.accountInfo = info
+			this.displayName = pickDisplayName(this.accountInfo)
+			return
+		}
+		try {
+			const [names, addressInfo] = await Promise.all([
+				parentEpml.request('apiCall', { url: `/names/address/${address}` }),
+				parentEpml.request('apiCall', { url: `/addresses/${address}` })
+			])
+			this.accountInfo = {
+				...info,
+				names: Array.isArray(names) ? names : [],
+				addressInfo: addressInfo || {}
+			}
+			this.displayName = pickDisplayName(this.accountInfo)
+		} catch (error) {
+			// best effort
+		}
 	}
 
 	isEmptyArray(arr) {
