@@ -15,7 +15,7 @@
 - [ ] Node selection UX parity
   - [x] Surface the public node in the Settings node picker with a “Public node” label and warning copy.
   - [x] If selected node is public, skip API-key generation/testing in login, and clear stored apiKey for that entry.
-  - [ ] Show a lightweight indicator/banner of the currently selected node (Local/Public/Custom) in the header/login flow.
+  - [x] Show a lightweight indicator/banner of the currently selected node (Local/Public/Custom) in the header/login flow.
   - [ ] Add i18n strings for public-node warnings and descriptions (reuse Hub copy where suitable).
 
 - [ ] Feature guards aligned with Hub

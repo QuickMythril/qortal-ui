@@ -3,6 +3,7 @@ import { connect } from 'pwa-helpers'
 import { store } from '../store'
 import { Epml } from '../epml'
 import { buildRequestUrl } from '../utils/node'
+import { isPublicNode } from '../constants/nodes'
 import { addTradeBotRoutes } from '../tradebot/addTradeBotRoutes'
 import { get, translate } from '../../translate'
 import { decryptData, encryptData } from '../lockScreen'
@@ -148,6 +149,7 @@ class AppView extends connect(store)(LitElement) {
 			myLockScreenPass: { type: String },
 			myLockScreenSet: { type: String },
 			helperMessage: { type: String },
+			nodeIndicator: { type: Object },
 			showSyncMessages: { type: Boolean }
 		}
 	}
@@ -247,6 +249,7 @@ class AppView extends connect(store)(LitElement) {
 		this.myLockScreenPass = ''
 		this.myLockScreenSet = ''
 		this.helperMessage = ''
+		this.nodeIndicator = null
 		this.getTourElements = this.getTourElements.bind(this)
 		this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
 	}
@@ -291,6 +294,15 @@ class AppView extends connect(store)(LitElement) {
 							<new-selector></new-selector>
 							<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 							<core-sync-status></core-sync-status>
+							${this.nodeIndicator ? html`
+								<div
+									class="node-indicator-pill"
+									style="display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:12px;color:#fff;font-size:12px;font-weight:600;background:${this.nodeIndicator.color};"
+								>
+									<span>${this.nodeIndicator.label}</span>
+									${this.nodeIndicator.host ? html`<span style="opacity:0.8;">${this.nodeIndicator.host}</span>` : ''}
+								</div>
+							` : ''}
 							<div>&nbsp;&nbsp;&nbsp;</div>
 							<theme-toggle></theme-toggle>
 							<div>&nbsp;&nbsp;</div>
@@ -2527,6 +2539,7 @@ class AppView extends connect(store)(LitElement) {
 		this.urls = state.app.registeredUrls
 		this.addressInfo = state.app.accountInfo.addressInfo
 		this.showSyncMessages = state.app.showSyncIndicator
+		this.updateNodeIndicator(state)
 
 		if (sideurl === 'minting') {
 			this.shadowRoot.getElementById('qminter').setAttribute('selected', 'selected')
@@ -3084,6 +3097,38 @@ class AppView extends connect(store)(LitElement) {
 
 	round(number) {
 		return (Math.round(parseFloat(number) * 1e8) / 1e8).toFixed(8)
+	}
+
+	updateNodeIndicator(state) {
+		const nodeIndex = state?.app?.nodeConfig?.node
+		const node =
+			state?.app?.nodeConfig?.knownNodes &&
+			state.app.nodeConfig.knownNodes[nodeIndex]
+				? state.app.nodeConfig.knownNodes[nodeIndex]
+				: {}
+		const baseUrl =
+			node.baseUrl ||
+			`${node?.protocol || 'http'}://${node?.domain || ''}${
+				node?.port ? `:${node.port}` : ''
+			}`
+		const host = baseUrl.replace(/^https?:\/\//, '')
+		let type = 'Custom'
+		let color = '#1565c0'
+
+		if (isPublicNode(node)) {
+			type = 'Public'
+			color = '#d32f2f'
+		} else if (['127.0.0.1', 'localhost'].includes(node?.domain)) {
+			type = 'Local'
+			color = '#2e7d32'
+		}
+
+		this.nodeIndicator = {
+			type,
+			label: `${type} node`,
+			host,
+			color
+		}
 	}
 }
 
