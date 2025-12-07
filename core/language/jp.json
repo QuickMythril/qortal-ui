@@ -876,7 +876,10 @@
 		"ccha​​nge111": "GIF アップロード",
 		"ccha​​nge112": "添付ファイルのアップロード",
 		"ccha​​nge113": "ファイルのアップロード",
-		"ccha​​nge114": "何か書いてください ..."
+		"ccha​​nge114": "何か書いてください ...",
+		"cchange100": "File size exceeds 125 MB",
+		"cchange101": "Switch chat by ID",
+		"cchange115": "Switch chat by ID"
 	},
 	"welcomepage": {
 		"wcchange1": "Q-Chat へようこそ",

@@ -148,14 +148,14 @@ class Chat extends LitElement {
 						<div style="display:flex; align-items:center;gap:10px">
 							<div id="viewChat" class="create-chat" @click=${() => { this.openView(this.activeChatHeadUrl) }}>
 								<mwc-icon style="color: var(--black);">pageview</mwc-icon>
-								<vaadin-tooltip
-									for="viewChat"
-									position="top"
-									hover-delay=${200}
-									hide-delay=${1}
-									text="Switch Chat Over ID"
-								>
-								</vaadin-tooltip>
+									<vaadin-tooltip
+										for="viewChat"
+										position="top"
+										hover-delay=${200}
+										hide-delay=${1}
+										text=${get('chatpage.cchange115')}
+									>
+									</vaadin-tooltip>
 							</div>
 							<div id="goToGroup" class="create-chat" @click=${() => { this.openTabToGroupManagement() }}>
 								<mwc-icon style="color: var(--black);">group_add</mwc-icon>

@@ -876,7 +876,8 @@
 		"cchange111": "GIF OPLADEN",
 		"cchange112": "BIJLAGE OPLADEN",
 		"cchange113": "BESTAND OPLADEN",
-		"cchange114": "Schrijf iets ..."
+		"cchange114": "Schrijf iets ...",
+		"cchange115": "Switch chat by ID"
 	},
 	"welcomepage": {
 		"wcchange1": "Welkom bij Q-Chat",

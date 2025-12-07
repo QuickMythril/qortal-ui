@@ -876,7 +876,8 @@
 		"cchange111": "GIF LATAUS",
 		"cchange112": "LIITTEEN LATAUS",
 		"cchange113": "TIEDOSTON LATAUS",
-		"cchange114": "Kirjoita jotain ..."
+		"cchange114": "Kirjoita jotain ...",
+		"cchange115": "Switch chat by ID"
 	},
 	"welcomepage": {
 		"wcchange1": "Tervetuloa Q-Chatiin",

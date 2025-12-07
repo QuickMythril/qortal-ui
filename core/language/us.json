@@ -876,7 +876,8 @@
 		"cchange111": "GIF UPLOAD",
 		"cchange112": "ATTACHMENT UPLOAD",
 		"cchange113": "FILE UPLOAD",
-		"cchange114": "Write something ..."
+		"cchange114": "Write something ...",
+		"cchange115": "Switch chat by ID"
 	},
 	"welcomepage": {
 		"wcchange1": "Welcome to Q-Chat",

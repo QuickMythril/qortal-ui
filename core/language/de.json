@@ -876,7 +876,8 @@
 		"cchange111": "GIF HOCHLADEN",
 		"cchange112": "ANHANG HOCHLADEN",
 		"cchange113": "DATEI HOCHLADEN",
-		"cchange114": "Schreibe etwas …"
+		"cchange114": "Schreibe etwas …",
+		"cchange115": "Switch chat by ID"
 	},
 	"welcomepage": {
 		"wcchange1": "Willkommen zu Q-Chat",

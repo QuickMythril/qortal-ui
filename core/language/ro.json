@@ -876,7 +876,8 @@
 		"cchange111": "ÎNCĂRCARE GIF",
 		"cchange112": "ÎNCĂRCARE AATAșAMENT",
 		"cchange113": "ÎNCĂRCARE FIȘIER",
-		"cchange114": "Scrie ceva ..."
+		"cchange114": "Scrie ceva ...",
+		"cchange115": "Switch chat by ID"
 	},
 	"welcomepage": {
 		"wcchange1": "Bine ai venit la Q-Chat",
