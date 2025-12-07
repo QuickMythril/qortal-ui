@@ -19,6 +19,7 @@ import '@vaadin/icons'
 import '@vaadin/text-field'
 import { Buffer } from 'buffer'
 import { mapNameErrorMessage } from '../../utils/functions'
+import { orderNamesWithPrimaryFirst } from './name-helpers.src'
 
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../core/translate'
@@ -451,11 +452,7 @@ class NameRegistration extends LitElement {
 			let names = Array.isArray(namesRes) ? namesRes : []
 			const primaryName = (primaryRes && primaryRes.name) ? primaryRes.name : ''
 			if (primaryName && names.length) {
-				const idx = names.findIndex(n => n.name === primaryName)
-				if (idx > 0) {
-					const [primaryEntry] = names.splice(idx, 1)
-					names.unshift(primaryEntry)
-				}
+				names = orderNamesWithPrimaryFirst(primaryName, names)
 			}
 
 			setTimeout(() => {
