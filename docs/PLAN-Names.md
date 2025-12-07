@@ -59,5 +59,5 @@
   - [x] "Name registration ordering": Names list uses reverse=false ordering with primary-first, no active reordering.
   - [x] "Publish metadata fetch": Metadata fetched once per name selection and defaults to active name when available.
   - [x] "Test publish modal with multiple names": Publish modal shows all owned names, defaults to active/primary, rejects non-owned name.
-  - [ ] "Check chat/avatar name display": Chat headers/placeholders and avatars show active/primary names consistently.
+  - [x] "Check chat/avatar name display": Chat headers/placeholders and avatars show active/primary names consistently.
   - [ ] "Test qortalRequest name actions": qortalRequest responds to `GET_PRIMARY_NAME`/`GET_ACCOUNT_NAMES` with expected data.
