@@ -8,7 +8,7 @@
 - [ ] Update request routing to respect public vs local
   - [x] Add a helper to build endpoints: append `apiKey` only when present; otherwise use base URL; when no node is selected, never auto-switch to public—prompt the user with an explicit opt-in before falling back to the public gateway.
   - [x] Expose selected-node context globally (baseUrl/apiKey/isPublic) for Epml/qortal-ui-crypto consumers.
-  - [ ] Wire `qortal-ui-crypto` / Epml initialization to use the new base-url builder and carry the selected apiKey.
+  - [x] Wire Epml consumers to the selected-node context (global snapshot of baseUrl/apiKey).
   - [ ] Add a global `isPublicNode` flag in Redux/derived selectors for easy guards.
   - [ ] Replace per-call manual URL concatenation with the shared builder across request sites (app-view, sync indicator, show-plugin, controllers).
 

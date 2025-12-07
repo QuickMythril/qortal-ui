@@ -5,8 +5,8 @@ import nacl from '../../../crypto/api/deps/nacl-fast.js'
 import ed2curve from '../../../crypto/api/deps/ed2curve.js'
 
 const getApiKey = () => {
-	const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
-	return myNode.apiKey
+	const ctx = window.parent.qortalNodeContext
+	return ctx?.apiKey || ''
 }
 
 export class RequestQueue {
@@ -137,8 +137,7 @@ export class ModalHelper {
 
 	async getArbitraryFee() {
 		const timestamp = Date.now()
-		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
-		const nodeUrl = `${myNode.protocol}://${myNode.domain}:${myNode.port}`
+		const nodeUrl = window.parent.qortalNodeContext?.baseUrl
 		const url = `${nodeUrl}/transactions/unitfee?txType=ARBITRARY&timestamp=${timestamp}`
 		const response = await fetch(url)
 
