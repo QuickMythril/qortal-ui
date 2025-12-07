@@ -23,6 +23,7 @@ import '@vaadin/text-field'
 
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../translate'
+import { buildRequestUrl } from '../utils/node'
 
 registerTranslateConfig({
 	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
@@ -1063,7 +1064,7 @@ class NavBar extends connect(store)(LitElement) {
 
 	async getMyFollowedNames() {
 		this.myFollowedNames = await parentEpml.request('apiCall', {
-			url: `/lists/followedNames?apiKey=${this.getApiKey()}`
+			url: buildRequestUrl(`/lists/followedNames`, store.getState())
 		})
 	}
 
@@ -1074,9 +1075,7 @@ class NavBar extends connect(store)(LitElement) {
 	}
 
 	async getMyFollowedNamesList() {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const myNodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-		const followedNamesUrl = `${myNodeUrl}/lists/followedNames?apiKey=${this.getApiKey()}`
+		const followedNamesUrl = buildRequestUrl(`/lists/followedNames`, store.getState())
 
 		var myFollowedNamesNew = []
 
@@ -1158,7 +1157,7 @@ class NavBar extends connect(store)(LitElement) {
 		let namesJsonString = JSON.stringify({ 'items': items })
 
 		let ret = await parentEpml.request('apiCall', {
-			url: `/lists/followedNames?apiKey=${this.getApiKey()}`,
+			url: buildRequestUrl(`/lists/followedNames`, store.getState()),
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -1189,7 +1188,7 @@ class NavBar extends connect(store)(LitElement) {
 		let namesJsonString = JSON.stringify({ 'items': items })
 
 		let ret = await parentEpml.request('apiCall', {
-			url: `/lists/followedNames?apiKey=${this.getApiKey()}`,
+			url: buildRequestUrl(`/lists/followedNames`, store.getState()),
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json'
