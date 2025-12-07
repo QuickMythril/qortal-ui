@@ -36,6 +36,19 @@ describe('getPrimaryNameResponse', () => {
 		expect(result).toBe('RemotePrimary')
 	})
 
+	it('returns empty string when no primary available', async () => {
+		apiCall.mockResolvedValue({})
+
+		const result = await getPrimaryNameResponse({
+			address: 'ADDR2',
+			selectedAddress: { address: 'ADDR1' },
+			accountInfo: {},
+			apiCall
+		})
+
+		expect(result).toBe('')
+	})
+
 	it('uses primary from state when API empty for selected address', async () => {
 		apiCall.mockResolvedValue({})
 
@@ -81,5 +94,21 @@ describe('getAccountNamesResponse', () => {
 			url: '/names/address/ADDR2?limit=0&reverse=false'
 		})
 		expect(result).toEqual(['Other1', 'Other2'])
+	})
+
+	it('does not reorder when active not present', async () => {
+		apiCall.mockResolvedValue([{ name: 'NameA' }, { name: 'NameB' }])
+
+		const result = await getAccountNamesResponse({
+			address: 'ADDR1',
+			selectedAddress: { address: 'ADDR1' },
+			accountInfo: {
+				activeName: 'Missing',
+				allNames: []
+			},
+			apiCall
+		})
+
+		expect(result).toEqual(['NameA', 'NameB'])
 	})
 })
