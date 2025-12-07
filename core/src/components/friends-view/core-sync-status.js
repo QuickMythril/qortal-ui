@@ -85,7 +85,7 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 		`
 		const iconStyle = isPublic
 			? 'display:inline-flex;align-items:center;justify-content:center;padding:4px;border-radius:50%;background:rgba(255,152,0,0.18);border:1px solid rgba(255,152,0,0.45);'
-			: ''
+			: 'display:inline-block;'
 		const iconWrapper = (src) => html`
 			<span style="${iconStyle}">
 				<img src="${src}" style="height: 24px; width: 24px; padding-top: 4px;">
