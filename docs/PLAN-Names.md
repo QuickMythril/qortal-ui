@@ -55,7 +55,7 @@
   - [x] "Verify name registration polling results": Name registration polling populates `primaryName` + `allNames`.
   - [x] "Validate qortalRequest formatting/parity": GET_PRIMARY_NAME returns a bare string (active for selected address), GET_ACCOUNT_NAMES returns an array of strings with active-first only for selected address; other addresses mirror core ordering.
   - [x] "Test active name persistence": Selecting an active name persists across reload/login and repopulates `app.accountInfo`.
-  - [ ] "Name switcher UX checks": Dropdown anchors under trigger, checkmark on active name, avatar fallback uses `person`, theming works in light/dark.
+  - [x] "Name switcher UX checks": Dropdown anchors under trigger, checkmark on active name, avatar fallback uses `person`, theming works in light/dark.
   - [ ] "Name registration ordering": Names list uses reverse=false ordering with primary-first, no active reordering.
   - [ ] "Publish metadata fetch": Metadata fetched once per name selection and defaults to active name when available.
   - [ ] "Test publish modal with multiple names": Publish modal shows all owned names, defaults to active/primary, rejects non-owned name.

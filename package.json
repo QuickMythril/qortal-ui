@@ -132,6 +132,8 @@
 		"@zip.js/zip.js": "2.7.57",
 		"axios": "1.8.3",
 		"babel-jest": "29.7.0",
+		"@testing-library/dom": "9.3.4",
+		"@testing-library/jest-dom": "6.5.0",
 		"electron": "32.3.1",
 		"electron-builder": "25.1.8",
 		"epml": "0.3.3",
