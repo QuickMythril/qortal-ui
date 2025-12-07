@@ -1513,7 +1513,10 @@ class NavBar extends connect(store)(LitElement) {
 				this.myPluginNameRes = []
 
 				await parentEpml.request('apiCall', {
-					url: `/arbitrary/resources/search?service=APP&query=${this.pluginName}&exactmatchnames=true&limit=1`
+					url: buildRequestUrl(
+						`/arbitrary/resources/search?service=APP&query=${this.pluginName}&exactmatchnames=true&limit=1`,
+						store.getState()
+					)
 				}).then(res => {
 					this.myPluginNameRes = res
 				})
@@ -1581,7 +1584,10 @@ class NavBar extends connect(store)(LitElement) {
 				this.myPluginNameRes = []
 
 				await parentEpml.request('apiCall', {
-					url: `/arbitrary/resources/search?service=WEBSITE&query=${this.pluginName}&exactmatchnames=true&limit=1`
+					url: buildRequestUrl(
+						`/arbitrary/resources/search?service=WEBSITE&query=${this.pluginName}&exactmatchnames=true&limit=1`,
+						store.getState()
+					)
 				}).then(res => {
 					this.myPluginNameRes = res
 				})
