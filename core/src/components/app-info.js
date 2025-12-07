@@ -2,6 +2,7 @@ import { html, LitElement } from 'lit'
 import { connect } from 'pwa-helpers'
 import { store } from '../store'
 import { appInfoStyles } from '../styles/core-css'
+import { buildRequestUrl } from '../utils/node'
 
 // Multi language support
 import { translate } from '../../translate'
@@ -50,9 +51,7 @@ class AppInfo extends connect(store)(LitElement) {
 	}
 
 	async getNodeInfo() {
-		const appinfoNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const appinfoUrl = appinfoNode.protocol + '://' + appinfoNode.domain + ':' + appinfoNode.port
-		const url = `${appinfoUrl}/admin/status`
+		const url = buildRequestUrl(`/admin/status`, store.getState())
 
 		await fetch(url).then(response => {
 			return response.json()
@@ -64,9 +63,7 @@ class AppInfo extends connect(store)(LitElement) {
 	}
 
 	async getCoreInfo() {
-		const appinfoNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const appinfoUrl = appinfoNode.protocol + '://' + appinfoNode.domain + ':' + appinfoNode.port
-		const url = `${appinfoUrl}/admin/info`
+		const url = buildRequestUrl(`/admin/info`, store.getState())
 
 		await fetch(url).then(response => {
 			return response.json()
