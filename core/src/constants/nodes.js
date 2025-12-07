@@ -19,3 +19,10 @@ export const isPublicNode = (node) => {
 };
 
 export const getNodeBaseUrl = (node) => normalizeNodeUrl(node);
+
+export const getNodeIdentifier = (node) => {
+	if (!node) return '';
+	return `${node?.protocol || 'http'}://${node?.domain || ''}${
+		node?.port ? `:${node.port}` : ''
+	}`;
+};

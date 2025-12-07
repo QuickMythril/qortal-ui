@@ -1,7 +1,7 @@
 // Node Config Actions here...
 import { ADD_NODE, EDIT_NODE, LOAD_NODE_CONFIG, REMOVE_NODE, SET_NODE } from '../app-action-types'
 import { UI_VERSION } from '../version'
-import { EXT_NODE_QORTAL_LINK } from '../../constants/nodes'
+import { EXT_NODE_QORTAL_LINK, getNodeBaseUrl } from '../../constants/nodes'
 
 const nodeConfigUrl = '/getConfig'
 
@@ -20,22 +20,27 @@ export const doLoadNodeConfig = () => {
 				const storedSelectedNode = localStorage.getItem('mySelectedNode')
 
 				const defaultNodes = [obj1, objPublic, obj2]
-				const hydrateNode = (node) => ({
-					name: node?.name || '',
-					protocol: node?.protocol || 'http',
-					domain: node?.domain || '',
-					port: node?.port ?? '',
-					enableManagement:
-						typeof node?.enableManagement === 'boolean'
-							? node.enableManagement
-							: true,
-					apiKey: node?.apiKey || ''
-				})
+				const hydratedDefaults = defaultNodes.map(hydrateNode)
+				const hydrateNode = (node) => {
+					const hydrated = {
+						name: node?.name || '',
+						protocol: node?.protocol || 'http',
+						domain: node?.domain || '',
+						port: node?.port ?? '',
+						enableManagement:
+							typeof node?.enableManagement === 'boolean'
+								? node.enableManagement
+								: true,
+						apiKey: node?.apiKey || ''
+					}
+					hydrated.baseUrl = getNodeBaseUrl(hydrated)
+					return hydrated
+				}
 
 				let knownNodes =
 					storedNodes && storedNodes.length > 0
 						? storedNodes.map(hydrateNode)
-						: defaultNodes
+						: hydratedDefaults
 
 				const hasPublicNode = knownNodes.some(
 					(node) => node.domain === EXT_NODE_QORTAL_LINK
