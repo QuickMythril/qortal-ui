@@ -66,8 +66,7 @@ class OverviewPage extends LitElement {
 		this.check2 = false
 		this.displayName = pickDisplayName(this.accountInfo)
 		this.avatarError = false
-		this.blocked = false
-	}
+			}
 
 	render() {
 		return html`
@@ -95,8 +94,7 @@ class OverviewPage extends LitElement {
 										<div class="h3 font-weight-400">
 											${this.accountInfo.addressInfo.address}
 										</div>
-										${this.blocked ? html`<div class="h5 text-muted">${translate('publicNode.actionBlocked')}</div>` : null}
-										<div class="h3 font-weight-400">
+																				<div class="h3 font-weight-400">
 											${translate("explorerpage.exp2")}: <span style="color: #03a9f4">${this.myBalance}</span> QORT
 										</div>
 									</div>
@@ -153,11 +151,9 @@ class OverviewPage extends LitElement {
 		this.changeLanguage()
 		this.nodeConfig = window.parent.reduxStore.getState().app.nodeConfig
 		this.accountInfo = window.parent.reduxStore.getState().app.accountInfo
-		this.blocked = isSelectedNodePublic(window.parent.reduxStore.getState())
-
-		if (!this.blocked) {
-			await this.getNodeInfo()
-			await this.getCoreInfo()
+		await this.getNodeInfo()
+		await this.getCoreInfo()
+		if (!isSelectedNodePublic(window.parent.reduxStore.getState())) {
 			await this.getMintingKeysList()
 		}
 		await this.getBalanceInfo()
@@ -239,16 +235,16 @@ class OverviewPage extends LitElement {
 		this.displayName = pickDisplayName(this.accountInfo)
 		this.avatarError = false
 
-		if (!this.blocked) {
-			await this.getNodeInfo()
-			await this.getCoreInfo()
+		await this.getNodeInfo()
+		await this.getCoreInfo()
+		if (!isSelectedNodePublic(window.parent.reduxStore.getState())) {
 			await this.getMintingKeysList()
 		}
 		await this.getBalanceInfo()
 	}
 
 	async getMintingKeysList() {
-		if (this.blocked) {
+		if (isSelectedNodePublic(window.parent.reduxStore.getState())) {
 			this.listAccounts = []
 			this.check1 = false
 			this.check2 = false
@@ -285,7 +281,7 @@ class OverviewPage extends LitElement {
 	}
 
 	removeBlankKey(myPublicKey) {
-		if (this.blocked) return
+		if (isSelectedNodePublic(window.parent.reduxStore.getState())) return
 		parentEpml.request("apiCall", {
 			url: `/admin/mintingaccounts?apiKey=${this.getApiKey()}`,
 			method: "DELETE",
