@@ -1079,8 +1079,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getAddressUserInfo(infoAddress) {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
+		const nodeUrl = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]?.baseUrl
 		const infoAddressUrl = `${nodeUrl}/addresses/${infoAddress}`
 
 		this.addressResult = await fetch(infoAddressUrl).then(response => {
@@ -1089,8 +1088,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getAddressUserAvatar(avatarAddress) {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
+		const nodeUrl = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]?.baseUrl
 		const nameUrl = `${nodeUrl}/names/address/${avatarAddress}?limit=0&reverse=true`
 
 		await fetch(nameUrl).then(res => {
@@ -1111,8 +1109,7 @@ class UserInfoView extends connect(store)(LitElement) {
 	}
 
 	async getAddressUserBalance(balanceAddress) {
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
+		const nodeUrl = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]?.baseUrl
 		const balanceAddressUrl = `${nodeUrl}/addresses/balance/${balanceAddress}`
 
 		const qortalBalanceInfo = await fetch(balanceAddressUrl).then(res => {
@@ -1127,8 +1124,7 @@ class UserInfoView extends connect(store)(LitElement) {
 		this.startMinting = []
 
 		const checkBlocks = this.addressResult.blocksMinted + this.addressResult.blocksMintedAdjustment
-		const myNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
+		const nodeUrl = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]?.baseUrl
 
 		if (checkBlocks === 0) {
 			this.startMintTime = get("explorerpage.exp16")
