@@ -1,6 +1,7 @@
 import { html, LitElement } from 'lit'
 import { Epml } from '../../../../epml'
 import { modalHelper } from '../../../utils/classes'
+import { shouldFetchMetadata } from './publish-helpers.src'
 import { publishDataStyles } from '../../components/plugins-css'
 import isElectron from 'is-electron'
 import '@material/mwc-button'
@@ -61,9 +62,9 @@ class PublishData extends LitElement {
 		return ['_kmxKeyUp(amount)']
 	}
 
-		constructor() {
-			super()
-			this._fetchedOnce = false
+	constructor() {
+		super()
+		this._lastFetchedName = ''
 		this.showName = false
 		this.showService = false
 		this.showIdentifier = false
@@ -129,7 +130,7 @@ class PublishData extends LitElement {
 					const ownedActive = activeName && this.names.includes(activeName) ? activeName : ''
 					this.selectedName = ownedActive || primaryNameState || this.names[0] || ''
 					this.name = this.selectedName
-					this.fetchResourceMetadata()
+					this.maybeFetchMetadata()
 					return
 				}
 
@@ -154,18 +155,13 @@ class PublishData extends LitElement {
 				this.names = namesList
 				this.selectedName = (activeName && namesList.includes(activeName)) ? activeName : (primaryName || namesList[0] || '')
 				this.name = this.selectedName
-					if (this.selectedName) {
-						// Avoid double-fetch: only fetch metadata the first time we resolve selectedName in this cycle
-						if (!this._fetchedOnce) {
-							this._fetchedOnce = true
-							this.fetchResourceMetadata()
-						}
-					}
-				} catch (error) {
-					console.error(error)
-					this.names = []
-					this.selectedName = ''
-				}
+				this.maybeFetchMetadata()
+			} catch (error) {
+				console.error(error)
+				this.names = []
+				this.selectedName = ''
+				this._lastFetchedName = ''
+			}
 
 			setTimeout(fetchNames, this.config.user.nodeSettings.pingInterval)
 		}
@@ -887,9 +883,18 @@ class PublishData extends LitElement {
 		// Update the current name if one has been selected
 		if (this.selectedName.length > 0) {
 			this.name = this.selectedName
+		} else {
+			this._lastFetchedName = ''
 		}
 
-		this.fetchResourceMetadata()
+		this.maybeFetchMetadata()
+	}
+
+	maybeFetchMetadata() {
+		if (shouldFetchMetadata(this._lastFetchedName, this.selectedName)) {
+			this._lastFetchedName = this.selectedName
+			this.fetchResourceMetadata()
+		}
 	}
 
 	// Standard functions

@@ -57,7 +57,7 @@
   - [x] "Test active name persistence": Selecting an active name persists across reload/login and repopulates `app.accountInfo`.
   - [x] "Name switcher UX checks": Dropdown anchors under trigger, checkmark on active name, avatar fallback uses `person`, theming works in light/dark.
   - [x] "Name registration ordering": Names list uses reverse=false ordering with primary-first, no active reordering.
-  - [ ] "Publish metadata fetch": Metadata fetched once per name selection and defaults to active name when available.
+  - [x] "Publish metadata fetch": Metadata fetched once per name selection and defaults to active name when available.
   - [ ] "Test publish modal with multiple names": Publish modal shows all owned names, defaults to active/primary, rejects non-owned name.
   - [ ] "Check chat/avatar name display": Chat headers/placeholders and avatars show active/primary names consistently.
   - [ ] "Test qortalRequest name actions": qortalRequest responds to `GET_PRIMARY_NAME`/`GET_ACCOUNT_NAMES` with expected data.

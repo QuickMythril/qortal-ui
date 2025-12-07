@@ -7,6 +7,8 @@ plugins/plugins/core/**/*.js
 !plugins/plugins/core/**/*charts.js
 !plugins/plugins/core/**/*css.js
 !plugins/plugins/core/name-registration/name-helpers.test.js
+!plugins/plugins/core/qdn/publish/publish-helpers.src.js
+!plugins/plugins/core/qdn/publish/publish-helpers.test.js
 !plugins/plugins/core/qdn/browser/name-handlers.js
 !plugins/plugins/core/qdn/browser/name-handlers.test.js
 core/src/redux/app/version.js
