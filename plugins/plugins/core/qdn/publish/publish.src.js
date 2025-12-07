@@ -1,7 +1,7 @@
 import { html, LitElement } from 'lit'
 import { Epml } from '../../../../epml'
 import { modalHelper } from '../../../utils/classes'
-import { shouldFetchMetadata } from './publish-helpers.src'
+import { shouldFetchMetadata, pickPublishName } from './publish-helpers.src'
 import { publishDataStyles } from '../../components/plugins-css'
 import isElectron from 'is-electron'
 import '@material/mwc-button'
@@ -127,8 +127,7 @@ class PublishData extends LitElement {
 
 				if (allNames.length) {
 					this.names = allNames.map(n => n.name || n)
-					const ownedActive = activeName && this.names.includes(activeName) ? activeName : ''
-					this.selectedName = ownedActive || primaryNameState || this.names[0] || ''
+					this.selectedName = pickPublishName(this.names, activeName, primaryNameState)
 					this.name = this.selectedName
 					this.maybeFetchMetadata()
 					return
@@ -153,7 +152,7 @@ class PublishData extends LitElement {
 					}
 				}
 				this.names = namesList
-				this.selectedName = (activeName && namesList.includes(activeName)) ? activeName : (primaryName || namesList[0] || '')
+				this.selectedName = pickPublishName(namesList, activeName, primaryName)
 				this.name = this.selectedName
 				this.maybeFetchMetadata()
 			} catch (error) {
