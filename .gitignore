@@ -11,6 +11,7 @@ core/src/redux/app/version.js
 
 # Node modules
 node_modules/
+coverage/
 
 # Mac .DS_Store files
 .DS_Store

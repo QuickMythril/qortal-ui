@@ -46,13 +46,18 @@
   - [x] "Handle TEMPORARY_DISABLED/name errors": Surface core errors such as `TEMPORARY_DISABLED`, name length/data length, normalization, address-like name rejections clearly in UI.
   - [x] "Explain primary/active differences": Add UX copy (e.g., in Name Registration plugin) explaining core primary rules and how UI activeName differs.
 
-- [ ] Active name selection + overrides
+- [x] Active name selection + overrides
   - [x] "Add active name selector UI": Provide a UI control to pick an active name from `allNames` and persist it.
   - [x] "Use active name in my-name contexts": Update internal consumers of the user name (chat metadata, publish defaults, avatars, app filters) to use `activeName || primaryName`.
   - [x] "Override qortalRequest name responses": For `GET_PRIMARY_NAME`, return `activeName` if set; for `GET_ACCOUNT_NAMES`, order names with `activeName` first.
 
 - [ ] Validation and smoke tests
+  - [x] "Verify name registration polling results": Name registration polling populates `primaryName` + `allNames`.
+  - [ ] "Validate qortalRequest formatting/parity": GET_PRIMARY_NAME returns a bare string (active for selected address), GET_ACCOUNT_NAMES returns an array of strings with active-first only for selected address; other addresses mirror core ordering.
+  - [ ] "Test active name persistence": Selecting an active name persists across reload/login and repopulates `app.accountInfo`.
+  - [ ] "Name switcher UX checks": Dropdown anchors under trigger, checkmark on active name, avatar fallback uses `person`, theming works in light/dark.
+  - [ ] "Name registration ordering": Names list uses reverse=false ordering with primary-first, no active reordering.
+  - [ ] "Publish metadata fetch": Metadata fetched once per name selection and defaults to active name when available.
   - [ ] "Test publish modal with multiple names": Publish modal shows all owned names, defaults to active/primary, rejects non-owned name.
   - [ ] "Check chat/avatar name display": Chat headers/placeholders and avatars show active/primary names consistently.
-  - [ ] "Verify name registration polling results": Name registration polling populates `primaryName` + `allNames`.
   - [ ] "Test qortalRequest name actions": qortalRequest responds to `GET_PRIMARY_NAME`/`GET_ACCOUNT_NAMES` with expected data.
