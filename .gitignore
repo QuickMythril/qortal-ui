@@ -1,6 +1,3 @@
-# npm
-package-lock.json
-
 # Derived js files
 plugins/plugins/core/**/*.js
 !*.src.js
