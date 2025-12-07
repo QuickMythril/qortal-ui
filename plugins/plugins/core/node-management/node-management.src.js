@@ -215,6 +215,9 @@ class NodeManagement extends LitElement {
 	}
 
 	firstUpdated() {
+		this.changeTheme()
+		this.changeLanguage()
+
 		if (this.isPublicNode()) {
 			this.blocked = true
 			const msg = get('publicNode.actionBlocked')
@@ -222,8 +225,6 @@ class NodeManagement extends LitElement {
 			return
 		}
 
-		this.changeTheme()
-		this.changeLanguage()
 		this.updateMintingAccounts()
 
 		window.addEventListener('storage', () => {
