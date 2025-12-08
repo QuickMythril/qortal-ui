@@ -45,9 +45,13 @@
 - [ ] Overview page - avatar and minter level elements shift left.
 - [ ] Q-Apps plugin fails to load on public node; diagnose and fix while Websites works.
 - [ ] Rework Minting page
-  - [?] error says "[publicNode.actionBlocked]"
 - [ ] Check Data Management page
 - [ ] Check Auto Buy page
+- [ ] Check Reward Share page
 - [ ] "Not available on the public node. Connect to your own node to continue."
-  - [ ] home page
-- [?] "No name" keeps last active name
+  - [ ] Home Page
+  - [ ] Node Mgmt
+  - [ ] Become A Minter
+- [ ] Fix broken missing avatar in sidebar
+- [ ] Use Active name in login?
+- [ ] Add name switcher to login?

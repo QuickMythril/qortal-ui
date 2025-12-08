@@ -12,7 +12,7 @@ import './persistState'
 
 initApi(store)
 
-// Keep a simple global snapshot of the selected node for consumers that
+// Keep a simple window-level snapshot of the selected node for consumers that
 // rely on window-scoped context (e.g., request builders).
 const updateGlobalNodeContext = () => {
 	const state = store.getState()
