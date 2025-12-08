@@ -41,7 +41,18 @@ crashReporter.start({
 
 const INTERNAL_UI_PORTS = new Set(['12388'])
 
-const isAllowedInternalUrl = (url) => {
+const sameHost = (a, b) => {
+	if (!a || !b) return false
+	try {
+		const ua = new URL(a)
+		const ub = new URL(b)
+		return ua.hostname === ub.hostname && ua.port === ub.port && ua.protocol === ub.protocol
+	} catch (_err) {
+		return false
+	}
+}
+
+const isAllowedInternalUrl = (url, referrerUrl) => {
 	try {
 		const parsed = new URL(url)
 
@@ -55,10 +66,8 @@ const isAllowedInternalUrl = (url) => {
 			return true
 		}
 
-		// QDN/Qortal-served resources (keep these in-app)
-		if (/\/render\//i.test(parsed.pathname) || /\/arbitrary\//i.test(parsed.pathname)) {
-			return true
-		}
+		// Allow same-origin navigations (keeps QDN sites on the same node inside the iframe)
+		if (referrerUrl && sameHost(url, referrerUrl)) return true
 
 		return false
 	} catch (_err) {
@@ -71,8 +80,8 @@ const hookedSessions = new WeakSet()
 const bindExternalNavigationHandlers = (win) => {
 	if (!win || !win.webContents) return
 
-	win.webContents.setWindowOpenHandler(({ url }) => {
-		if ((url.startsWith('http:') || url.startsWith('https:')) && !isAllowedInternalUrl(url)) {
+	win.webContents.setWindowOpenHandler(({ url, referrer }) => {
+		if ((url.startsWith('http:') || url.startsWith('https:')) && !isAllowedInternalUrl(url, referrer?.url)) {
 			shell.openExternal(url)
 			return { action: 'deny' }
 		}
@@ -81,7 +90,8 @@ const bindExternalNavigationHandlers = (win) => {
 	})
 
 	win.webContents.on('will-navigate', (event, url) => {
-		if ((url.startsWith('http:') || url.startsWith('https:')) && !isAllowedInternalUrl(url)) {
+		const referrerUrl = event.sender.getURL()
+		if ((url.startsWith('http:') || url.startsWith('https:')) && !isAllowedInternalUrl(url, referrerUrl)) {
 			event.preventDefault()
 			shell.openExternal(url)
 		}
@@ -94,8 +104,9 @@ const bindExternalNavigationHandlers = (win) => {
 		const filter = { urls: ['http://*/*', 'https://*/*'] }
 
 		winSession.webRequest.onBeforeRequest(filter, (details, callback) => {
-			if ((details.resourceType === 'mainFrame' || details.resourceType === 'subFrame')
-				&& !isAllowedInternalUrl(details.url)) {
+			const referrerUrl = details.referrer || details.initiator
+
+			if (!isAllowedInternalUrl(details.url, referrerUrl)) {
 				shell.openExternal(details.url)
 				return callback({ cancel: true })
 			}
