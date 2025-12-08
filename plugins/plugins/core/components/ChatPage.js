@@ -774,7 +774,6 @@ class ChatPage extends LitElement {
 							>
 							</user-info>
 						</wrapper-modal>
-						`}
 					</div>
 					<div class="chat-right-panel ${this.shifted ? 'movedin' : 'movedout'}" ${animate()}>
 					<chat-right-panel
