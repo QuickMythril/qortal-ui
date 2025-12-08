@@ -2897,6 +2897,14 @@ export const navBarStyles = css`
         align-items: center;
         justify-content: center;
         gap: 10px;
+        border: 1px solid transparent;
+        border-radius: 12px;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .app-list .app-icon.drag-over {
+        border-color: var(--mdc-theme-primary);
+        box-shadow: 0 0 0 2px var(--mdc-theme-primary);
     }
 
     .text {

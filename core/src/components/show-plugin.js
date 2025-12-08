@@ -676,6 +676,7 @@ class NavBar extends connect(store)(LitElement) {
 		this.newMenuList = []
 		this.myMenuList = []
 		this.myMenuPlugins = []
+		this._draggingId = null
 		this.pluginName = ''
 		this.pluginType = ''
 		this.pluginPage = ''
@@ -707,15 +708,24 @@ class NavBar extends connect(store)(LitElement) {
 					<button @click="${this.handlePasteLink}">${translate('general.open')}</button>
 				</div>
 				<div class="app-list">
-					${repeat(this.myMenuList, (plugin) => plugin.url, (plugin, index) => html`
-						<div class="app-icon">
+					${repeat(this.myMenuList, (plugin) => plugin.pluginNumber || plugin.url, (plugin, index) => html`
+						<div
+							class="app-icon"
+							draggable="true"
+							data-id=${plugin.pluginNumber}
+							@dragstart=${(e) => this.handleDragStart(e, plugin.pluginNumber)}
+							@dragover=${(e) => this.handleDragOver(e, plugin.pluginNumber)}
+							@dragleave=${this.handleDragLeave}
+							@drop=${(e) => this.handleDrop(e, plugin.pluginNumber)}
+							@dragend=${this.handleDragEnd}
+						>
 							<div class="app-icon-box">
 								${this.renderRemoveIcon(plugin.url, plugin.mwcicon, plugin.title, plugin.pluginNumber, plugin)}
 							</div>
 							${this.renderTitle(plugin.url, plugin.title)}
 						</div>
 					`)}
-					<div class="app-icon" @click="${() => this.openAddNewPlugin()}">
+					<div class="app-icon" draggable="false" @click="${() => this.openAddNewPlugin()}">
 						<div class="app-icon-box">
 							<mwc-icon class="menuIcon">add</mwc-icon>
 						</div>
@@ -905,23 +915,7 @@ class NavBar extends connect(store)(LitElement) {
 
 		await appDelay(250)
 
-		if (!isMinter) {
-			this.newMenuList = this.myMenuPlugins.filter((minter) => {
-				return minter.url !== 'minting'
-			})
-		} else {
-			this.newMenuList = this.myMenuPlugins.filter((minter) => {
-				return minter.url !== 'become-minter'
-			})
-		}
-
-		if (!isSponsor) {
-			this.myMenuList = this.newMenuList.filter((sponsor) => {
-				return sponsor.url !== 'sponsorship-list'
-			})
-		} else {
-			this.myMenuList = this.newMenuList
-		}
+		this.refreshMenuListsFromPlugins()
 
 		await appDelay(250)
 
@@ -938,6 +932,10 @@ class NavBar extends connect(store)(LitElement) {
 
 		this.myMenuPlugins = event.detail
 
+		this.refreshMenuListsFromPlugins()
+	}
+
+	refreshMenuListsFromPlugins() {
 		const addressInfo = this.addressInfo
 		const isMinter = addressInfo?.error !== 124 && +addressInfo?.level > 0
 		const isSponsor = +addressInfo?.level >= 5
@@ -1877,6 +1875,82 @@ class NavBar extends connect(store)(LitElement) {
 				composed: true
 			})
 		)
+	}
+
+	handleDragStart(event, pluginNumber) {
+		if (!pluginNumber) return
+
+		this._draggingId = pluginNumber
+
+		if (event.dataTransfer) {
+			event.dataTransfer.effectAllowed = 'move'
+			event.dataTransfer.setData('text/plain', pluginNumber)
+		}
+
+		event.currentTarget.classList.add('dragging')
+	}
+
+	handleDragOver(event, pluginNumber) {
+		if (!this._draggingId || this._draggingId === pluginNumber) return
+
+		event.preventDefault()
+		event.dataTransfer.dropEffect = 'move'
+		event.currentTarget.classList.add('drag-over')
+	}
+
+	handleDragLeave(event) {
+		event.currentTarget.classList.remove('drag-over')
+	}
+
+	handleDrop(event, targetPluginNumber) {
+		event.preventDefault()
+
+		const sourceId = this._draggingId
+
+		this.clearDragStyles()
+
+		if (!sourceId || !targetPluginNumber || sourceId === targetPluginNumber) return
+
+		this.reorderMenuList(sourceId, targetPluginNumber)
+	}
+
+	handleDragEnd() {
+		this.clearDragStyles()
+		this._draggingId = null
+	}
+
+	clearDragStyles() {
+		this.shadowRoot.querySelectorAll('.app-icon.drag-over, .app-icon.dragging').forEach((el) => {
+			el.classList.remove('drag-over')
+			el.classList.remove('dragging')
+		})
+	}
+
+	reorderMenuList(sourceId, targetId) {
+		const updatedList = [...this.myMenuList]
+		const fromIndex = updatedList.findIndex((item) => item.pluginNumber === sourceId)
+		const toIndex = updatedList.findIndex((item) => item.pluginNumber === targetId)
+
+		if (fromIndex === -1 || toIndex === -1) return
+
+		const [moved] = updatedList.splice(fromIndex, 1)
+		updatedList.splice(toIndex, 0, moved)
+
+		this.myMenuList = updatedList
+
+		const visibleIds = updatedList.map((item) => item.pluginNumber)
+		const hiddenItems = this.myMenuPlugins.filter((item) => !visibleIds.includes(item.pluginNumber))
+		this.myMenuPlugins = [...updatedList, ...hiddenItems]
+
+		this.persistMenuPlugins()
+	}
+
+	persistMenuPlugins() {
+		const copyPayload = [...this.myMenuPlugins]
+
+		localStorage.setItem('myMenuPlugs', JSON.stringify(this.myMenuPlugins))
+		this.saveSettingToTemp(copyPayload)
+		this.refreshMenuListsFromPlugins()
 	}
 
 	closeRemoveApp() {

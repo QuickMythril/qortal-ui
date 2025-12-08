@@ -22,7 +22,8 @@
 ## Other ideas
 
 - [ ] Make sidebar customizable
-- [ ] Make dashboard apps drag to re-sort
+- [ ] Make dashboard apps:
+  - [?] Allow dragging to re-sort
   - [ ] Allow custom buttons
   - [ ] Allow folders / groups
   - [ ] Add list view to icon view

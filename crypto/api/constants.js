@@ -117,7 +117,7 @@ const ERROR_CODES = {
 	70: 'Invalid asset owner',
 	71: 'AT is finished',
 	72: 'No flag permission',
-	73: 'Not minting accout',
+	73: 'Not minting account',
 
 	77: 'Invalid rewardshare percent',
 	78: 'Public key unknown',
