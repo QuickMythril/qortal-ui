@@ -23,18 +23,20 @@ const DEFAULT_INITIAL_STATE = {
 	loaded: false
 }
 
-const persistedState = loadStateFromLocalStorage('user') || {}
-const INITIAL_STATE = {
-	...DEFAULT_INITIAL_STATE,
-	...persistedState,
-	accountInfo: {
-		...DEFAULT_INITIAL_STATE.accountInfo,
-		...(persistedState.accountInfo || {})
-	},
-	accountInfoByAddress: persistedState.accountInfoByAddress || {}
+const getInitialState = () => {
+	const persistedState = loadStateFromLocalStorage('user') || {}
+	return {
+		...DEFAULT_INITIAL_STATE,
+		...persistedState,
+		accountInfo: {
+			...DEFAULT_INITIAL_STATE.accountInfo,
+			...(persistedState.accountInfo || {})
+		},
+		accountInfoByAddress: persistedState.accountInfoByAddress || {}
+	}
 }
 
-export default (state = INITIAL_STATE, action) => {
+export default (state = getInitialState(), action) => {
 	switch (action.type) {
 		case STORE_WALLET:
 			return {

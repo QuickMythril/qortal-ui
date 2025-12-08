@@ -55,6 +55,7 @@ describe('active name persistence', () => {
 		setupPersistence(storeWithPersistence)
 
 		const namesPayload = {
+			address: 'ADDR123',
 			primaryName: 'Name1',
 			allNames: [{ name: 'Name1' }, { name: 'Name2' }, { name: 'Name3' }],
 			activeName: 'Name3',
@@ -86,6 +87,7 @@ describe('active name persistence', () => {
 
 		const finalState = reloadedStore.getState()
 		expect(finalState.user.accountInfo.activeName).toBe('Name3')
+		expect(finalState.user.accountInfoByAddress['ADDR123'].activeName).toBe('Name3')
 		expect(finalState.app.accountInfo.activeName).toBe('Name3')
 		expect(global.fetch).toHaveBeenCalledTimes(2)
 	})
