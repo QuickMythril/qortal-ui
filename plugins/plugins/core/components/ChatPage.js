@@ -410,7 +410,7 @@ class ChatPage extends LitElement {
 							</div>
 						</div>
 						${(this.isUploadingImage || this.isDeletingImage) ?
-			html`
+		html`
 								<div class="dialogCustom">
 								<div class="dialogCustomInner">
 									<div class="dialog-container-loader">

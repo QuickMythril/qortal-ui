@@ -1840,9 +1840,7 @@ class NavBar extends connect(store)(LitElement) {
 					</div>
 					<div class="folder-icon-stack">
 						<div class="folder-preview">
-							${(appplugin.children || []).slice(0, 4).map(child => html`
-								<mwc-icon class="folder-preview-icon">${child.mwcicon || 'apps'}</mwc-icon>
-							`)}
+							${(appplugin.children || []).slice(0, 4).map(child => this.renderFolderPreviewIcon(child))}
 						</div>
 					</div>
 				</div>
@@ -2259,6 +2257,16 @@ class NavBar extends connect(store)(LitElement) {
 
 	isFolder(item) {
 		return item && item.type === 'folder'
+	}
+
+	renderFolderPreviewIcon(child) {
+		const isQapp = child?.url === 'myapp'
+
+		if (isQapp) {
+			return html`<app-avatar class="folder-preview-avatar" appicon=${child.mwcicon || 'apps'} appname=${child.title}></app-avatar>`
+		}
+
+		return html`<mwc-icon class="folder-preview-icon">${child?.mwcicon || 'apps'}</mwc-icon>`
 	}
 
 	getTopLevelItemById(id) {

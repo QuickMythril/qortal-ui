@@ -2971,10 +2971,29 @@ export const navBarStyles = css`
         pointer-events: none;
     }
 
+    .folder-preview-avatar {
+        width: 18px;
+        height: 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .folder-preview app-avatar img {
+        width: 18px !important;
+        height: 18px !important;
+        border-radius: 4px !important;
+        object-fit: cover !important;
+    }
+
+    .folder-preview app-avatar .menuIcon {
+        --mdc-icon-size: 14px;
+    }
+
     .folder-preview-icon {
         --mdc-icon-size: 14px;
-        color: var(--black);
-        background: rgba(255, 255, 255, 0.7);
+        color: var(--app-background-1);
+        background: var(--app-icon);
         border-radius: 4px;
         padding: 1px;
         display: inline-flex;
