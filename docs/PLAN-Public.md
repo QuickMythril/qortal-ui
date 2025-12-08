@@ -53,5 +53,5 @@
 - [?] Fix tooltip to be not line breaking.
 - [ ] Q-Apps plugin fails to load on public node; diagnose and fix while Websites works.
 - [?] When websites/apps loads it says "[cchange2]".
-- [ ] Update "default" apps
-- [ ] Hide Minting app tile?
+- [?] Update "default" apps
+- [ ] Rework Minting page

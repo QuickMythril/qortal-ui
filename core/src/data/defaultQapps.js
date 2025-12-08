@@ -97,5 +97,104 @@ export const defaultQappsTabs = [
         "pluginNumber": "plugin-GGJJPqW6pe",
         "menus": [],
         "parent": false
+    },
+    {
+        "url": "myapp",
+        "domain": "core",
+        "page": "qdn/browser/index.html?name=Q-Trade&service=APP",
+        "title": "Q-Trade",
+        "icon": "vaadin:external-browser",
+        "mwcicon": "apps",
+        "pluginNumber": "plugin-QTradeDefault",
+        "menus": [],
+        "parent": false
+    },
+    {
+        "url": "myapp",
+        "domain": "core",
+        "page": "qdn/browser/index.html?name=Q-Manager&service=APP",
+        "title": "Q-Manager",
+        "icon": "vaadin:external-browser",
+        "mwcicon": "apps",
+        "pluginNumber": "plugin-QManagerDefault",
+        "menus": [],
+        "parent": false
+    },
+    {
+        "url": "myapp",
+        "domain": "core",
+        "page": "qdn/browser/index.html?name=Q-Wallets&service=APP",
+        "title": "Q-Wallets",
+        "icon": "vaadin:external-browser",
+        "mwcicon": "apps",
+        "pluginNumber": "plugin-QWalletsDefault",
+        "menus": [],
+        "parent": false
+    },
+    {
+        "url": "myapp",
+        "domain": "core",
+        "page": "qdn/browser/index.html?name=Q-Search&service=APP",
+        "title": "Q-Search",
+        "icon": "vaadin:external-browser",
+        "mwcicon": "apps",
+        "pluginNumber": "plugin-QSearchDefault",
+        "menus": [],
+        "parent": false
+    },
+    {
+        "url": "myapp",
+        "domain": "core",
+        "page": "qdn/browser/index.html?name=Q-Node&service=APP",
+        "title": "Q-Node",
+        "icon": "vaadin:external-browser",
+        "mwcicon": "apps",
+        "pluginNumber": "plugin-QNodeDefault",
+        "menus": [],
+        "parent": false
+    },
+    {
+        "url": "myapp",
+        "domain": "core",
+        "page": "qdn/browser/index.html?name=Names&service=APP",
+        "title": "Names",
+        "icon": "vaadin:external-browser",
+        "mwcicon": "apps",
+        "pluginNumber": "plugin-NamesDefault",
+        "menus": [],
+        "parent": false
+    },
+    {
+        "url": "myapp",
+        "domain": "core",
+        "page": "qdn/browser/index.html?name=Q-Follow&service=APP",
+        "title": "Q-Follow",
+        "icon": "vaadin:external-browser",
+        "mwcicon": "apps",
+        "pluginNumber": "plugin-QFollowDefault",
+        "menus": [],
+        "parent": false
+    },
+    {
+        "url": "myapp",
+        "domain": "core",
+        "page": "qdn/browser/index.html?name=Q-Assets&service=APP",
+        "title": "Q-Assets",
+        "icon": "vaadin:external-browser",
+        "mwcicon": "apps",
+        "pluginNumber": "plugin-QAssetsDefault",
+        "menus": [],
+        "parent": false
+    },
+    {
+        "url": "myapp",
+        "domain": "core",
+        "page": "qdn/browser/index.html?name=Quitter&service=APP",
+        "title": "Quitter",
+        "icon": "vaadin:external-browser",
+        "mwcicon": "apps",
+        "pluginNumber": "plugin-QuitterDefault",
+        "menus": [],
+        "parent": false
     }
 ]
