@@ -179,6 +179,17 @@ class Chat extends LitElement {
 								>
 								</vaadin-tooltip>
 							</div>
+							<div id="viewPromotions" class="create-chat" @click=${() => { this.setActiveChatHeadUrl('') }}>
+								<mwc-icon style="color: var(--black);">campaign</mwc-icon>
+								<vaadin-tooltip
+									for="viewPromotions"
+									position="top"
+									hover-delay=${200}
+									hide-delay=${1}
+									text=${translate('welcomepage.promotionsTitle') || 'Group promotions'}
+								>
+								</vaadin-tooltip>
+							</div>
 						</div>
 					</div>
 					<ul>
