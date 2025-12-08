@@ -80,26 +80,26 @@ class PublishData extends LitElement {
 		this.service = urlParams.get('service')
 		this.identifier = urlParams.get('identifier')
 		this.category = urlParams.get('category')
-		this.uploadType = urlParams.get('uploadType') !== "null" ? urlParams.get('uploadType') : "file"
+		this.uploadType = urlParams.get('uploadType') !== 'null' ? urlParams.get('uploadType') : 'file'
 
-		if (urlParams.get('showName') === "true") {
+		if (urlParams.get('showName') === 'true') {
 			this.showName = true
 		}
 
-		if (urlParams.get('showService') === "true") {
+		if (urlParams.get('showService') === 'true') {
 			this.showService = true
 		}
 
-		if (urlParams.get('showIdentifier') === "true") {
+		if (urlParams.get('showIdentifier') === 'true') {
 			this.showIdentifier = true
 		}
 
-		if (urlParams.get('showMetadata') === "true") {
+		if (urlParams.get('showMetadata') === 'true') {
 			this.showMetadata = true
 		}
 
 		if (this.identifier != null) {
-			if (this.identifier === "null" || this.identifier.trim().length == 0) {
+			if (this.identifier === 'null' || this.identifier.trim().length == 0) {
 				this.identifier = null
 			}
 		}
@@ -170,7 +170,7 @@ class PublishData extends LitElement {
 		}
 
 		const fetchCategories = () => {
-			parentEpml.request('apiCall', { url: `/arbitrary/categories` }).then(res => {
+			parentEpml.request('apiCall', { url: '/arbitrary/categories' }).then(res => {
 				setTimeout(() => {
 					this.categories = res
 				}, 1)
@@ -180,7 +180,7 @@ class PublishData extends LitElement {
 		}
 
 		const fetchPeersSummary = () => {
-			parentEpml.request('apiCall', { url: `/peers/summary` }).then(res => {
+			parentEpml.request('apiCall', { url: '/peers/summary' }).then(res => {
 				setTimeout(() => {
 					this.portForwardingEnabled = (res.inboundConnections != null && res.inboundConnections > 0)
 				}, 1)
@@ -219,18 +219,18 @@ class PublishData extends LitElement {
 					<div class="address-bar">
 						<mwc-button @click=${() => this.goBack()} class="address-bar-button">
 							<mwc-icon>arrow_back_ios</mwc-icon>
-							${translate("general.back")}
+							${translate('general.back')}
 						</mwc-button>
 					</div>
 					<paper-card style="width:100%; max-width:740px;">
 						<div style="margin:0; margin-top:20px;">
-							<h3 style="margin:0; padding:8px 0; text-transform: capitalize; color: var(--black);">${translate("publishpage.pchange1")} / ${translate("publishpage.pchange2")} ${this.renderUploadCategory()}</h3>
-							<p style="font-style: italic; font-size: 14px; color: var(--black);" ?hidden="${this.portForwardingEnabled}">${translate("publishpage.pchange3")}</p>
+							<h3 style="margin:0; padding:8px 0; text-transform: capitalize; color: var(--black);">${translate('publishpage.pchange1')} / ${translate('publishpage.pchange2')} ${this.renderUploadCategory()}</h3>
+							<p style="font-style: italic; font-size: 14px; color: var(--black);" ?hidden="${this.portForwardingEnabled}">${translate('publishpage.pchange3')}</p>
 							<p style="font-style: italic; font-size: 14px; color: var(--black);">${this.renderUploadSize()}</p>
 						</div>
 					</paper-card>
 					<p style="display: ${this.showName ? 'block' : 'none'}">
-						<mwc-select id="registeredName" label="${translate("publishpage.pchange4")}" @selected=${(e) => this.selectName(e)} style="min-width: 130px; max-width:100%; width:100%;">
+						<mwc-select id="registeredName" label="${translate('publishpage.pchange4')}" @selected=${(e) => this.selectName(e)} style="min-width: 130px; max-width:100%; width:100%;">
 							<mwc-list-item ?selected=${!this.selectedName} value=""></mwc-list-item>
 							${(this.names || []).map((n) => html`
 								<mwc-list-item value="${n}" ?selected=${this.selectedName === n} style="color: var(--black);">${n}</mwc-list-item>
@@ -241,7 +241,7 @@ class PublishData extends LitElement {
 						<p>
 						<mwc-textfield
 								style="width:100%;"
-								label="${translate("publishpage.pchange5")}"
+								label="${translate('publishpage.pchange5')}"
 								id="title"
 								type="text"
 								.value="${this.titleValue || ''}"
@@ -254,7 +254,7 @@ class PublishData extends LitElement {
 						<p>
 							<mwc-textfield
 								style="width:100%;"
-								label="${translate("publishpage.pchange6")}"
+								label="${translate('publishpage.pchange6')}"
 								id="description"
 								type="text"
 								.value="${this.descriptionValue || ''}"
@@ -265,7 +265,7 @@ class PublishData extends LitElement {
 							<div style="text-align:right; font-size:12px; color: var(--black); margin-top:4px;">${this._byteLength(this.descriptionValue)}/240 bytes</div>
 						</p>
 						<p>
-							<mwc-select id="category" label="${translate("publishpage.pchange7")}" index="0" style="min-width: 130px; max-width:100%; width:100%;">
+							<mwc-select id="category" label="${translate('publishpage.pchange7')}" index="0" style="min-width: 130px; max-width:100%; width:100%;">
 								${this.categories.map((c, index) => html`
 									<mwc-list-item style="color:var(--black)" value="${c.id}">${c.name}</mwc-list-item>
 								`)}
@@ -279,7 +279,7 @@ class PublishData extends LitElement {
 										id="tag${num}"
 										type="text"
 										.value="${(this.tagValues[idx] || '')}"
-										placeholder="${translate("publishpage.pchange8")} ${num}"
+										placeholder="${translate('publishpage.pchange8')} ${num}"
 										maxLength="20"
 										@input=${(e) => this.onTagInput(e, idx)}
 										?disabled=${this.metadataLoading}
@@ -292,10 +292,10 @@ class PublishData extends LitElement {
 					</div>
 					${this.renderUploadField()}
 					<p style="display: ${this.showService ? 'block' : 'none'}">
-						<mwc-textfield style="width:100%;" label="${translate("publishpage.pchange9")}" id="service" type="text" value="${this.service}"></mwc-textfield>
+						<mwc-textfield style="width:100%;" label="${translate('publishpage.pchange9')}" id="service" type="text" value="${this.service}"></mwc-textfield>
 					</p>
 					<p style="display: ${this.showIdentifier ? 'block' : 'none'}">
-						<mwc-textfield style="width:100%;" label="${translate("publishpage.pchange10")}" id="identifier" type="text" value="${this.identifier != null ? this.identifier : ''}"></mwc-textfield>
+						<mwc-textfield style="width:100%;" label="${translate('publishpage.pchange10')}" id="identifier" type="text" value="${this.identifier != null ? this.identifier : ''}"></mwc-textfield>
 					</p>
 					<p style="break-word; color: var(--black);">${this.generalMessage}</p>
 					<p style="color:red">${this.errorMessage}</p>
@@ -305,23 +305,23 @@ class PublishData extends LitElement {
 					` : ''}
 					<div class="buttons">
 						<mwc-button ?disabled=${this.btnDisable} style="width:49%;" raised icon="science" @click=${(e) => {
-						this.doPublish(e, true, false)
-						}
-						}> ${translate("appspage.schange40")}</mwc-button>
+	this.doPublish(e, true, false)
+}
+}> ${translate('appspage.schange40')}</mwc-button>
 						<mwc-button ?disabled=${this.btnDisable} style="width:49%;" raised icon="send" @click=${(e) => {
-						this.doPublish(e, false, true)
-						}}> ${translate("publishpage.pchange11")}</mwc-button>
+	this.doPublish(e, false, true)
+}}> ${translate('publishpage.pchange11')}</mwc-button>
 					</div>
 				</div>
 			</div>
 			<!-- Publish With Fee Dialog -->
 			<mwc-dialog id="publishWithFeeDialog" scrimClickAction="" escapeKeyAction="">
-				<div style="text-align: center;">${translate("browserpage.bchange36")}<br>${translate("browserpage.bchange29")}</div>
+				<div style="text-align: center;">${translate('browserpage.bchange36')}<br>${translate('browserpage.bchange29')}</div>
 				<mwc-button slot="primaryAction" @click="${(e) => this.feeDialogNo(e, false, false)}" class="red">
-					${translate("general.no")}
+					${translate('general.no')}
 				</mwc-button>
 				<mwc-button slot="secondaryAction" @click="${(e) => this.feeDialogYes(e, false, true)}" class="green">
-					${translate("general.yes")}
+					${translate('general.yes')}
 				</mwc-button>
 			</mwc-dialog>
 		`
@@ -422,23 +422,23 @@ class PublishData extends LitElement {
 	}
 
 	renderUploadField() {
-		if (this.uploadType === "file") {
+		if (this.uploadType === 'file') {
 			return html`
 				<p>
 					<input style="width: 100%; background: var(--white); color: var(--black)" id="file" type="file">
 				</p>
 			`
-		} else if (this.uploadType === "zip") {
+		} else if (this.uploadType === 'zip') {
 			return html`
 				<p>
-					<span class="upload-text">${translate("publishpage.pchange12")}:</span><br />
+					<span class="upload-text">${translate('publishpage.pchange12')}:</span><br />
 					<input style="color: var(--black)" id="file" type="file" accept=".zip">
 				</p>
 			`
 		} else {
 			return html`
 				<p>
-					<mwc-textfield style="width:100%;" label="${translate("publishpage.pchange13")}" id="path" type="text" value="${this.path}"></mwc-textfield>
+					<mwc-textfield style="width:100%;" label="${translate('publishpage.pchange13')}" id="path" type="text" value="${this.path}"></mwc-textfield>
 				</p>
 			`
 		}
@@ -472,9 +472,9 @@ class PublishData extends LitElement {
 		let file
 		let path
 
-		if (this.uploadType === "file" || this.uploadType === "zip") {
+		if (this.uploadType === 'file' || this.uploadType === 'zip') {
 			file = this.shadowRoot.getElementById('file').files[0]
-		} else if (this.uploadType === "path") {
+		} else if (this.uploadType === 'path') {
 			path = this.shadowRoot.getElementById('path').value
 		}
 
@@ -484,19 +484,19 @@ class PublishData extends LitElement {
 
 		if (registeredName === '') {
 			this.showName = true
-			let err1string = get("publishpage.pchange14")
+			let err1string = get('publishpage.pchange14')
 			parentEpml.request('showSnackBar', `${err1string}`)
-		} else if (this.uploadType === "file" && file == null) {
-			let err2string = get("publishpage.pchange15")
+		} else if (this.uploadType === 'file' && file == null) {
+			let err2string = get('publishpage.pchange15')
 			parentEpml.request('showSnackBar', `${err2string}`)
-		} else if (this.uploadType === "zip" && file == null) {
-			let err3string = get("publishpage.pchange16")
+		} else if (this.uploadType === 'zip' && file == null) {
+			let err3string = get('publishpage.pchange16')
 			parentEpml.request('showSnackBar', `${err3string}`)
-		} else if (this.uploadType === "path" && path === '') {
-			let err4string = get("publishpage.pchange17")
+		} else if (this.uploadType === 'path' && path === '') {
+			let err4string = get('publishpage.pchange17')
 			parentEpml.request('showSnackBar', `${err4string}`)
 		} else if (service === '') {
-			let err5string = get("publishpage.pchange18")
+			let err5string = get('publishpage.pchange18')
 			parentEpml.request('showSnackBar', `${err5string}`)
 		} else {
 			try {
@@ -596,18 +596,18 @@ class PublishData extends LitElement {
 
 		const validate = async () => {
 			if (!ownedNames.includes(registeredName)) {
-				throw new Error(get("publishpage.pchange14"))
+				throw new Error(get('publishpage.pchange14'))
 			}
 
 			let validNameRes = await validateName(registeredName)
 
 			if (validNameRes.error) {
-				this.errorMessage = "Error: " + validNameRes.message
+				this.errorMessage = 'Error: ' + validNameRes.message
 				await showError(this.errorMessage)
 				throw new Error(this.errorMessage)
 			}
 
-			let err6string = get("publishpage.pchange19")
+			let err6string = get('publishpage.pchange19')
 
 			this.generalMessage = `${err6string}`
 
@@ -626,13 +626,13 @@ class PublishData extends LitElement {
 			let uploadDataRes = await uploadData(registeredName, path, file, preview, fee, feeAmount)
 
 			if (uploadDataRes.error) {
-				let err7string = get("publishpage.pchange20")
+				let err7string = get('publishpage.pchange20')
 				this.errorMessage = `${err7string}` + uploadDataRes.message
 				await showError(this.errorMessage)
 				throw new Error(this.errorMessage)
 			}
-			else if (uploadDataRes.includes("Error 500 Internal Server Error")) {
-				let err8string = get("publishpage.pchange21")
+			else if (uploadDataRes.includes('Error 500 Internal Server Error')) {
+				let err8string = get('publishpage.pchange21')
 				this.errorMessage = `${err8string}`
 				await showError(this.errorMessage)
 				throw new Error(this.errorMessage)
@@ -650,24 +650,24 @@ class PublishData extends LitElement {
 			}
 
 			if (fee) {
-				let err9string = get("publishpage.pchange26")
+				let err9string = get('publishpage.pchange26')
 				this.generalMessage = `${err9string}`
 
 			} else {
-				let err9string = get("publishpage.pchange22")
+				let err9string = get('publishpage.pchange22')
 				this.generalMessage = `${err9string}`
 			}
 
 			let signAndProcessRes = await signAndProcess(transactionBytes, fee, feeAmount)
 
 			if (signAndProcessRes.error) {
-				let err10string = get("publishpage.pchange20")
+				let err10string = get('publishpage.pchange20')
 				this.errorMessage = `${err10string}` + signAndProcessRes.message
 				await showError(this.errorMessage)
 				throw new Error(this.errorMessage)
 			}
 
-			let err11string = get("publishpage.pchange23")
+			let err11string = get('publishpage.pchange23')
 
 			this.btnDisable = false
 			this.loading = false
@@ -678,7 +678,7 @@ class PublishData extends LitElement {
 
 		const uploadData = async (registeredName, path, file, preview, fee, feeAmount) => {
 			let postBody = path
-			let urlSuffix = ""
+			let urlSuffix = ''
 
 			if (file != null) {
 				const isPublic = this.isSelectedNodePublic()
@@ -686,20 +686,20 @@ class PublishData extends LitElement {
 
 				if (file.size > maxSize) {
 					const errorMessage = isPublic
-						? get("publishpage.maxSizePublic")
-						: get("publishpage.maxSize")
+						? get('publishpage.maxSizePublic')
+						: get('publishpage.maxSize')
 					this.errorMessage = `${errorMessage}`
 					await showError(this.errorMessage)
 					throw new Error(this.errorMessage)
 				}
 
 				// If we're sending zipped data, make sure to use the /zip version of the POST /arbitrary/* API
-				if (this.uploadType === "zip") {
-					urlSuffix = "/zip"
+				if (this.uploadType === 'zip') {
+					urlSuffix = '/zip'
 				}
 				// If we're sending file data, use the /base64 version of the POST /arbitrary/* API
-				else if (this.uploadType === "file") {
-					urlSuffix = "/base64"
+				else if (this.uploadType === 'file') {
+					urlSuffix = '/base64'
 				}
 
 				// Base64 encode the file to work around compatibility issues between javascript and java byte arrays
@@ -745,7 +745,7 @@ class PublishData extends LitElement {
 			let tag4 = encodeURIComponent(tagsLimited[3])
 			let tag5 = encodeURIComponent(tagsLimited[4])
 			let metadataQueryString = `title=${title}&description=${description}&category=${category}&tags=${tag1}&tags=${tag2}&tags=${tag3}&tags=${tag4}&tags=${tag5}`
-			let uploadDataUrl = ``
+			let uploadDataUrl = ''
 
 			if (preview) {
 				uploadDataUrl = `/arbitrary/${this.service}/${registeredName}${urlSuffix}?${metadataQueryString}&apiKey=${this.getApiKey()}&preview=${new Boolean(preview).toString()}`
@@ -776,7 +776,7 @@ class PublishData extends LitElement {
 			return await parentEpml.request('apiCall', {
 				type: 'api',
 				method: 'POST',
-				url: `/transactions/convert`,
+				url: '/transactions/convert',
 				body: `${transactionBytesBase58}`
 			})
 		}
@@ -785,7 +785,7 @@ class PublishData extends LitElement {
 			let convertedBytesBase58 = await convertBytesForSigning(transactionBytesBase58)
 
 			if (convertedBytesBase58.error) {
-				let err12string = get("publishpage.pchange20")
+				let err12string = get('publishpage.pchange20')
 				this.errorMessage = `${err12string}` + convertedBytesBase58.message
 				await showError(this.errorMessage)
 				throw new Error(this.errorMessage)
@@ -829,7 +829,7 @@ class PublishData extends LitElement {
 
 			let myResponse = { error: '' }
 			if (response === false) {
-				let err13string = get("publishpage.pchange24")
+				let err13string = get('publishpage.pchange24')
 				myResponse.error = `${err13string}`
 			}
 			else {
@@ -842,7 +842,7 @@ class PublishData extends LitElement {
 	}
 
 	fetchResourceMetadata() {
-		let identifier = this.identifier != null ? this.identifier : "default"
+		let identifier = this.identifier != null ? this.identifier : 'default'
 
 		this.metadataLoading = true
 		parentEpml.request('apiCall', {
@@ -867,11 +867,11 @@ class PublishData extends LitElement {
 				if (categoryField) categoryField.value = (this.metadata && this.metadata.category) ? this.metadata.category : ''
 
 				const tags = (this.metadata && Array.isArray(this.metadata.tags)) ? this.metadata.tags : []
-			this.titleValue = this._limitUtf8((this.metadata && this.metadata.title) ? this.metadata.title : '', 80)
-			this.descriptionValue = this._limitUtf8((this.metadata && this.metadata.description) ? this.metadata.description : '', 240)
-			this.tagValues = [
-				tags[0] || '',
-				tags[1] || '',
+				this.titleValue = this._limitUtf8((this.metadata && this.metadata.title) ? this.metadata.title : '', 80)
+				this.descriptionValue = this._limitUtf8((this.metadata && this.metadata.description) ? this.metadata.description : '', 240)
+				this.tagValues = [
+					tags[0] || '',
+					tags[1] || '',
 					tags[2] || '',
 					tags[3] || '',
 					tags[4] || ''

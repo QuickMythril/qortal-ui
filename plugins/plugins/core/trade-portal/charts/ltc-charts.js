@@ -15,7 +15,7 @@ import '@polymer/paper-dialog/paper-dialog.js'
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../../core/translate'
 registerTranslateConfig({
-  loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
+	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
 })
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
@@ -50,7 +50,7 @@ class LtcCharts extends LitElement {
 		return html`
 			<paper-dialog id="loadChartDialog" class="chart-loading-wrapper" modal>
 				<div class="loadingContainer" style="display:${this.isLoadingTradesChart ? 'inline-block' : 'none'}">
-					<span style="color: var(--black);">${translate("login.loading")}</span>
+					<span style="color: var(--black);">${translate('login.loading')}</span>
 				</div>
 			</paper-dialog>
 			<paper-dialog id="ltcChartDialog" class="chart-info-wrapper">
@@ -88,7 +88,7 @@ class LtcCharts extends LitElement {
 	async getLtcTrades() {
 		let currentLtcTimestamp = Date.now()
 		const monthBackLtc = currentLtcTimestamp - 31556952000
-           	await parentEpml.request("apiCall", { url: `/crosschain/trades?foreignBlockchain=LITECOIN&minimumTimestamp=${monthBackLtc}&limit=0&reverse=false` }).then((res) => {
+           	await parentEpml.request('apiCall', { url: `/crosschain/trades?foreignBlockchain=LITECOIN&minimumTimestamp=${monthBackLtc}&limit=0&reverse=false` }).then((res) => {
 			this.ltcTrades = res
 		})
 		this.ltcPrice = this.ltcTrades.map(item => {
@@ -98,8 +98,8 @@ class LtcCharts extends LitElement {
 	}
 
 	enableLtcStockPriceChart() {
-            const ltcStockPriceData = this.ltcPrice
-            const header = 'QORT / LTC ' + get("tradepage.tchange49")
+		const ltcStockPriceData = this.ltcPrice
+		const header = 'QORT / LTC ' + get('tradepage.tchange49')
 		Highcharts.stockChart(this.shadowRoot.querySelector('#ltcStockPriceContainer'), {
 			accessibility: {
 				enabled: false
@@ -151,7 +151,7 @@ class LtcCharts extends LitElement {
 	changeTheme() {
 		const checkTheme = localStorage.getItem('qortalTheme')
 		this.theme = (checkTheme === 'dark') ? 'dark' : 'light'
-		document.querySelector('html').setAttribute('theme', this.theme);
+		document.querySelector('html').setAttribute('theme', this.theme)
 	}
 
 	changeLanguage() {

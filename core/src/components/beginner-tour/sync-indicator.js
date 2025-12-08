@@ -50,7 +50,7 @@ class SyncIndicator extends connect(store)(LitElement) {
 						</mwc-icon>
 					</span>
 					<p>
-						${translate("tour.tour17")}
+						${translate('tour.tour17')}
 					</p>
 				</div>
 			` : (this.blocksBehind > 1050 && this.isSynchronizing) ? html`
@@ -61,12 +61,12 @@ class SyncIndicator extends connect(store)(LitElement) {
 								<img src="/img/syncing.png" style="height: 24px; width: 24px;" />
 							</span>
 							<p>
-								${this.blocksBehind} ${translate("tour.tour20")}
+								${this.blocksBehind} ${translate('tour.tour20')}
 							</p>
 						</div>
 						<div class="row" style="justify-content: center">
 							<button class="bootstrap-button" @click="${() => {this.bootstrap()}}">
-								${translate("tour.tour18")}
+								${translate('tour.tour18')}
 							</button>
 						</div>
 					</div>
@@ -77,10 +77,10 @@ class SyncIndicator extends connect(store)(LitElement) {
 						<img src="/img/syncing.png" style="height: 24px; width: 24px;" />
 					</span>
 					<p>
-						${translate("tour.tour19")} ${this.blocksBehind ? this.blocksBehind : ""} ${this.blocksBehind ? translate("tour.tour21"): ""}
+						${translate('tour.tour19')} ${this.blocksBehind ? this.blocksBehind : ''} ${this.blocksBehind ? translate('tour.tour21'): ''}
 					</p>
 				</div>
-			` : "" }
+			` : '' }
 		`
 	}
 
@@ -153,7 +153,7 @@ class SyncIndicator extends connect(store)(LitElement) {
 			return
 		}
 		try {
-			const endpoint = buildRequestUrl(`/admin/bootstrap`, store.getState(), {
+			const endpoint = buildRequestUrl('/admin/bootstrap', store.getState(), {
 				usePublicFallback: false
 			})
 			const res = await fetch(endpoint)

@@ -33,12 +33,12 @@
  */
 (function (global, factory) {
 
-    /* AMD */ if (typeof define === 'function' && define["amd"])
-		define([], factory);
-    /* CommonJS */ else if (typeof require === 'function' && typeof module === "object" && module && module["exports"])
-		module["exports"] = factory();
-    /* Global */ else
-		(global["dcodeIO"] = global["dcodeIO"] || {})["bcrypt"] = factory();
+	/* AMD */ if (typeof define === 'function' && define['amd'])
+		define([], factory)
+	/* CommonJS */ else if (typeof require === 'function' && typeof module === 'object' && module && module['exports'])
+		module['exports'] = factory()
+	/* Global */ else
+		(global['dcodeIO'] = global['dcodeIO'] || {})['bcrypt'] = factory()
 
 }(this, function () {
 	// == Changed for ESM support == //
@@ -48,14 +48,14 @@
 	 * bcrypt namespace.
 	 * @type {Object.<string,*>}
 	 */
-	var bcrypt = {};
+	var bcrypt = {}
 
 	/**
 	 * The random implementation to use as a fallback.
 	 * @type {?function(number):!Array.<number>}
 	 * @inner
 	 */
-	var randomFallback = null;
+	var randomFallback = null
 
 	/**
 	 * Generates cryptographically secure random bytes.
@@ -66,28 +66,28 @@
 	 * @inner
 	 */
 	function random(len) {
-        /* node */ if (typeof module !== 'undefined' && module && module['exports'])
+		/* node */ if (typeof module !== 'undefined' && module && module['exports'])
 			try {
-				return require("crypto")['randomBytes'](len);
+				return require('crypto')['randomBytes'](len)
 			} catch (e) { }
-        /* WCA */ try {
-			var a; (self['crypto'] || self['msCrypto'])['getRandomValues'](a = new Uint32Array(len));
-			return Array.prototype.slice.call(a);
+		/* WCA */ try {
+			var a; (self['crypto'] || self['msCrypto'])['getRandomValues'](a = new Uint32Array(len))
+			return Array.prototype.slice.call(a)
 		} catch (e) { }
-        /* fallback */ if (!randomFallback)
-			throw Error("Neither WebCryptoAPI nor a crypto module is available. Use bcrypt.setRandomFallback to set an alternative");
-		return randomFallback(len);
+		/* fallback */ if (!randomFallback)
+			throw Error('Neither WebCryptoAPI nor a crypto module is available. Use bcrypt.setRandomFallback to set an alternative')
+		return randomFallback(len)
 	}
 
 	// Test if any secure randomness source is available
-	var randomAvailable = false;
+	var randomAvailable = false
 	try {
-		random(1);
-		randomAvailable = true;
+		random(1)
+		randomAvailable = true
 	} catch (e) { }
 
 	// Default fallback, if any
-	randomFallback = null;
+	randomFallback = null
 	/**
 	 * Sets the pseudo random number generator to use as a fallback if neither node's `crypto` module nor the Web Crypto
 	 *  API is available. Please note: It is highly important that the PRNG used is cryptographically secure and that it
@@ -98,8 +98,8 @@
 	 * @see http://www.w3.org/TR/WebCryptoAPI/
 	 */
 	bcrypt.setRandomFallback = function (random) {
-		randomFallback = random;
-	};
+		randomFallback = random
+	}
 
 	/**
 	 * Synchronously generates a salt.
@@ -110,22 +110,22 @@
 	 * @expose
 	 */
 	bcrypt.genSaltSync = function (rounds, seed_length) {
-		rounds = rounds || GENSALT_DEFAULT_LOG2_ROUNDS;
+		rounds = rounds || GENSALT_DEFAULT_LOG2_ROUNDS
 		if (typeof rounds !== 'number')
-			throw Error("Illegal arguments: " + (typeof rounds) + ", " + (typeof seed_length));
+			throw Error('Illegal arguments: ' + (typeof rounds) + ', ' + (typeof seed_length))
 		if (rounds < 4)
-			rounds = 4;
+			rounds = 4
 		else if (rounds > 31)
-			rounds = 31;
-		var salt = [];
-		salt.push("$2a$");
+			rounds = 31
+		var salt = []
+		salt.push('$2a$')
 		if (rounds < 10)
-			salt.push("0");
-		salt.push(rounds.toString());
-		salt.push('$');
-		salt.push(base64_encode(random(BCRYPT_SALT_LEN), BCRYPT_SALT_LEN)); // May throw
-		return salt.join('');
-	};
+			salt.push('0')
+		salt.push(rounds.toString())
+		salt.push('$')
+		salt.push(base64_encode(random(BCRYPT_SALT_LEN), BCRYPT_SALT_LEN)) // May throw
+		return salt.join('')
+	}
 
 	/**
 	 * Asynchronously generates a salt.
@@ -139,40 +139,40 @@
 	bcrypt.genSalt = function (rounds, seed_length, callback) {
 		if (typeof seed_length === 'function')
 			callback = seed_length,
-				seed_length = undefined; // Not supported.
+			seed_length = undefined // Not supported.
 		if (typeof rounds === 'function')
 			callback = rounds,
-				rounds = undefined;
+			rounds = undefined
 		if (typeof rounds === 'undefined')
-			rounds = GENSALT_DEFAULT_LOG2_ROUNDS;
+			rounds = GENSALT_DEFAULT_LOG2_ROUNDS
 		else if (typeof rounds !== 'number')
-			throw Error("illegal arguments: " + (typeof rounds));
+			throw Error('illegal arguments: ' + (typeof rounds))
 
 		function _async(callback) {
 			nextTick(function () { // Pretty thin, but salting is fast enough
 				try {
-					callback(null, bcrypt.genSaltSync(rounds));
+					callback(null, bcrypt.genSaltSync(rounds))
 				} catch (err) {
-					callback(err);
+					callback(err)
 				}
-			});
+			})
 		}
 
 		if (callback) {
 			if (typeof callback !== 'function')
-				throw Error("Illegal callback: " + typeof (callback));
-			_async(callback);
+				throw Error('Illegal callback: ' + typeof (callback))
+			_async(callback)
 		} else
 			return new Promise(function (resolve, reject) {
 				_async(function (err, res) {
 					if (err) {
-						reject(err);
-						return;
+						reject(err)
+						return
 					}
-					resolve(res);
-				});
-			});
-	};
+					resolve(res)
+				})
+			})
+	}
 
 	/**
 	 * Synchronously generates a hash for the given string.
@@ -183,13 +183,13 @@
 	 */
 	bcrypt.hashSync = function (s, salt) {
 		if (typeof salt === 'undefined')
-			salt = GENSALT_DEFAULT_LOG2_ROUNDS;
+			salt = GENSALT_DEFAULT_LOG2_ROUNDS
 		if (typeof salt === 'number')
-			salt = bcrypt.genSaltSync(salt);
+			salt = bcrypt.genSaltSync(salt)
 		if (typeof s !== 'string' || typeof salt !== 'string')
-			throw Error("Illegal arguments: " + (typeof s) + ', ' + (typeof salt));
-		return _hash(s, salt);
-	};
+			throw Error('Illegal arguments: ' + (typeof s) + ', ' + (typeof salt))
+		return _hash(s, salt)
+	}
 
 	/**
 	 * Asynchronously generates a hash for the given string.
@@ -207,29 +207,29 @@
 		function _async(callback) {
 			if (typeof s === 'string' && typeof salt === 'number')
 				bcrypt.genSalt(salt, function (err, salt) {
-					_hash(s, salt, callback, progressCallback);
-				});
+					_hash(s, salt, callback, progressCallback)
+				})
 			else if (typeof s === 'string' && typeof salt === 'string')
-				_hash(s, salt, callback, progressCallback);
+				_hash(s, salt, callback, progressCallback)
 			else
-				nextTick(callback.bind(this, Error("Illegal arguments: " + (typeof s) + ', ' + (typeof salt))));
+				nextTick(callback.bind(this, Error('Illegal arguments: ' + (typeof s) + ', ' + (typeof salt))))
 		}
 
 		if (callback) {
 			if (typeof callback !== 'function')
-				throw Error("Illegal callback: " + typeof (callback));
-			_async(callback);
+				throw Error('Illegal callback: ' + typeof (callback))
+			_async(callback)
 		} else
 			return new Promise(function (resolve, reject) {
 				_async(function (err, res) {
 					if (err) {
-						reject(err);
-						return;
+						reject(err)
+						return
 					}
-					resolve(res);
-				});
-			});
-	};
+					resolve(res)
+				})
+			})
+	}
 
 	/**
 	 * Compares two strings of the same length in constant time.
@@ -240,17 +240,17 @@
 	 */
 	function safeStringCompare(known, unknown) {
 		var right = 0,
-			wrong = 0;
+			wrong = 0
 		for (var i = 0, k = known.length; i < k; ++i) {
 			if (known.charCodeAt(i) === unknown.charCodeAt(i))
-				++right;
+				++right
 			else
-				++wrong;
+				++wrong
 		}
 		// Prevent removal of unused variables (never true, actually)
 		if (right < 0)
-			return false;
-		return wrong === 0;
+			return false
+		return wrong === 0
 	}
 
 	/**
@@ -262,12 +262,12 @@
 	 * @expose
 	 */
 	bcrypt.compareSync = function (s, hash) {
-		if (typeof s !== "string" || typeof hash !== "string")
-			throw Error("Illegal arguments: " + (typeof s) + ', ' + (typeof hash));
+		if (typeof s !== 'string' || typeof hash !== 'string')
+			throw Error('Illegal arguments: ' + (typeof s) + ', ' + (typeof hash))
 		if (hash.length !== 60)
-			return false;
-		return safeStringCompare(bcrypt.hashSync(s, hash.substr(0, hash.length - 31)), hash);
-	};
+			return false
+		return safeStringCompare(bcrypt.hashSync(s, hash.substr(0, hash.length - 31)), hash)
+	}
 
 	/**
 	 * Asynchronously compares the given data against the given hash.
@@ -283,37 +283,37 @@
 	bcrypt.compare = function (s, hash, callback, progressCallback) {
 
 		function _async(callback) {
-			if (typeof s !== "string" || typeof hash !== "string") {
-				nextTick(callback.bind(this, Error("Illegal arguments: " + (typeof s) + ', ' + (typeof hash))));
-				return;
+			if (typeof s !== 'string' || typeof hash !== 'string') {
+				nextTick(callback.bind(this, Error('Illegal arguments: ' + (typeof s) + ', ' + (typeof hash))))
+				return
 			}
 			if (hash.length !== 60) {
-				nextTick(callback.bind(this, null, false));
-				return;
+				nextTick(callback.bind(this, null, false))
+				return
 			}
 			bcrypt.hash(s, hash.substr(0, 29), function (err, comp) {
 				if (err)
-					callback(err);
+					callback(err)
 				else
-					callback(null, safeStringCompare(comp, hash));
-			}, progressCallback);
+					callback(null, safeStringCompare(comp, hash))
+			}, progressCallback)
 		}
 
 		if (callback) {
 			if (typeof callback !== 'function')
-				throw Error("Illegal callback: " + typeof (callback));
-			_async(callback);
+				throw Error('Illegal callback: ' + typeof (callback))
+			_async(callback)
 		} else
 			return new Promise(function (resolve, reject) {
 				_async(function (err, res) {
 					if (err) {
-						reject(err);
-						return;
+						reject(err)
+						return
 					}
-					resolve(res);
-				});
-			});
-	};
+					resolve(res)
+				})
+			})
+	}
 
 	/**
 	 * Gets the number of rounds used to encrypt the specified hash.
@@ -323,10 +323,10 @@
 	 * @expose
 	 */
 	bcrypt.getRounds = function (hash) {
-		if (typeof hash !== "string")
-			throw Error("Illegal arguments: " + (typeof hash));
-		return parseInt(hash.split("$")[2], 10);
-	};
+		if (typeof hash !== 'string')
+			throw Error('Illegal arguments: ' + (typeof hash))
+		return parseInt(hash.split('$')[2], 10)
+	}
 
 	/**
 	 * Gets the salt portion from a hash. Does not validate the hash.
@@ -337,11 +337,11 @@
 	 */
 	bcrypt.getSalt = function (hash) {
 		if (typeof hash !== 'string')
-			throw Error("Illegal arguments: " + (typeof hash));
+			throw Error('Illegal arguments: ' + (typeof hash))
 		if (hash.length !== 60)
-			throw Error("Illegal hash length: " + hash.length + " != 60");
-		return hash.substring(0, 29);
-	};
+			throw Error('Illegal hash length: ' + hash.length + ' != 60')
+		return hash.substring(0, 29)
+	}
 
 	/**
 	 * Continues with the callback on the next tick.
@@ -351,7 +351,7 @@
 	 */
 	var nextTick = typeof process !== 'undefined' && process && typeof process.nextTick === 'function'
 		? (typeof setImmediate === 'function' ? setImmediate : process.nextTick)
-		: setTimeout;
+		: setTimeout
 
 	/**
 	 * Converts a JavaScript string to UTF8 bytes.
@@ -361,14 +361,14 @@
 	 */
 	function stringToBytes(str) {
 		var out = [],
-			i = 0;
+			i = 0
 		utfx.encodeUTF16toUTF8(function () {
-			if (i >= str.length) return null;
-			return str.charCodeAt(i++);
+			if (i >= str.length) return null
+			return str.charCodeAt(i++)
 		}, function (b) {
-			out.push(b);
-		});
-		return out;
+			out.push(b)
+		})
+		return out
 	}
 
 	// A base64 implementation for the bcrypt algorithm. This is partly non-standard.
@@ -379,7 +379,7 @@
 	 * @const
 	 * @inner
 	 **/
-	var BASE64_CODE = "./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".split('');
+	var BASE64_CODE = './ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'.split('')
 
 	/**
 	 * @type {!Array.<number>}
@@ -387,19 +387,19 @@
 	 * @inner
 	 **/
 	var BASE64_INDEX = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0,
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0,
 		1, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, -1, -1, -1, -1, -1, -1,
-	-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+		-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
 		20, 21, 22, 23, 24, 25, 26, 27, -1, -1, -1, -1, -1, -1, 28, 29, 30,
 		31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47,
-		48, 49, 50, 51, 52, 53, -1, -1, -1, -1, -1];
+		48, 49, 50, 51, 52, 53, -1, -1, -1, -1, -1]
 
 	/**
 	 * @type {!function(...number):string}
 	 * @inner
 	 */
-	var stringFromCharCode = String.fromCharCode;
+	var stringFromCharCode = String.fromCharCode
 
 	/**
 	 * Encodes a byte array to base64 with up to len bytes of input.
@@ -411,31 +411,31 @@
 	function base64_encode(b, len) {
 		var off = 0,
 			rs = [],
-			c1, c2;
+			c1, c2
 		if (len <= 0 || len > b.length)
-			throw Error("Illegal len: " + len);
+			throw Error('Illegal len: ' + len)
 		while (off < len) {
-			c1 = b[off++] & 0xff;
-			rs.push(BASE64_CODE[(c1 >> 2) & 0x3f]);
-			c1 = (c1 & 0x03) << 4;
+			c1 = b[off++] & 0xff
+			rs.push(BASE64_CODE[(c1 >> 2) & 0x3f])
+			c1 = (c1 & 0x03) << 4
 			if (off >= len) {
-				rs.push(BASE64_CODE[c1 & 0x3f]);
-				break;
+				rs.push(BASE64_CODE[c1 & 0x3f])
+				break
 			}
-			c2 = b[off++] & 0xff;
-			c1 |= (c2 >> 4) & 0x0f;
-			rs.push(BASE64_CODE[c1 & 0x3f]);
-			c1 = (c2 & 0x0f) << 2;
+			c2 = b[off++] & 0xff
+			c1 |= (c2 >> 4) & 0x0f
+			rs.push(BASE64_CODE[c1 & 0x3f])
+			c1 = (c2 & 0x0f) << 2
 			if (off >= len) {
-				rs.push(BASE64_CODE[c1 & 0x3f]);
-				break;
+				rs.push(BASE64_CODE[c1 & 0x3f])
+				break
 			}
-			c2 = b[off++] & 0xff;
-			c1 |= (c2 >> 6) & 0x03;
-			rs.push(BASE64_CODE[c1 & 0x3f]);
-			rs.push(BASE64_CODE[c2 & 0x3f]);
+			c2 = b[off++] & 0xff
+			c1 |= (c2 >> 6) & 0x03
+			rs.push(BASE64_CODE[c1 & 0x3f])
+			rs.push(BASE64_CODE[c2 & 0x3f])
 		}
-		return rs.join('');
+		return rs.join('')
 	}
 
 	/**
@@ -450,41 +450,41 @@
 			slen = s.length,
 			olen = 0,
 			rs = [],
-			c1, c2, c3, c4, o, code;
+			c1, c2, c3, c4, o, code
 		if (len <= 0)
-			throw Error("Illegal len: " + len);
+			throw Error('Illegal len: ' + len)
 		while (off < slen - 1 && olen < len) {
-			code = s.charCodeAt(off++);
-			c1 = code < BASE64_INDEX.length ? BASE64_INDEX[code] : -1;
-			code = s.charCodeAt(off++);
-			c2 = code < BASE64_INDEX.length ? BASE64_INDEX[code] : -1;
+			code = s.charCodeAt(off++)
+			c1 = code < BASE64_INDEX.length ? BASE64_INDEX[code] : -1
+			code = s.charCodeAt(off++)
+			c2 = code < BASE64_INDEX.length ? BASE64_INDEX[code] : -1
 			if (c1 == -1 || c2 == -1)
-				break;
-			o = (c1 << 2) >>> 0;
-			o |= (c2 & 0x30) >> 4;
-			rs.push(stringFromCharCode(o));
+				break
+			o = (c1 << 2) >>> 0
+			o |= (c2 & 0x30) >> 4
+			rs.push(stringFromCharCode(o))
 			if (++olen >= len || off >= slen)
-				break;
-			code = s.charCodeAt(off++);
-			c3 = code < BASE64_INDEX.length ? BASE64_INDEX[code] : -1;
+				break
+			code = s.charCodeAt(off++)
+			c3 = code < BASE64_INDEX.length ? BASE64_INDEX[code] : -1
 			if (c3 == -1)
-				break;
-			o = ((c2 & 0x0f) << 4) >>> 0;
-			o |= (c3 & 0x3c) >> 2;
-			rs.push(stringFromCharCode(o));
+				break
+			o = ((c2 & 0x0f) << 4) >>> 0
+			o |= (c3 & 0x3c) >> 2
+			rs.push(stringFromCharCode(o))
 			if (++olen >= len || off >= slen)
-				break;
-			code = s.charCodeAt(off++);
-			c4 = code < BASE64_INDEX.length ? BASE64_INDEX[code] : -1;
-			o = ((c3 & 0x03) << 6) >>> 0;
-			o |= c4;
-			rs.push(stringFromCharCode(o));
-			++olen;
+				break
+			code = s.charCodeAt(off++)
+			c4 = code < BASE64_INDEX.length ? BASE64_INDEX[code] : -1
+			o = ((c3 & 0x03) << 6) >>> 0
+			o |= c4
+			rs.push(stringFromCharCode(o))
+			++olen
 		}
-		var res = [];
+		var res = []
 		for (off = 0; off < olen; off++)
-			res.push(rs[off].charCodeAt(0));
-		return res;
+			res.push(rs[off].charCodeAt(0))
+		return res
 	}
 
 	/**
@@ -501,14 +501,14 @@
 		 * @inner
 		 * @type {!Object.<string,*>}
 		 */
-		var utfx = {};
+		var utfx = {}
 
 		/**
 		 * Maximum valid code point.
 		 * @type {number}
 		 * @const
 		 */
-		utfx.MAX_CODEPOINT = 0x10FFFF;
+		utfx.MAX_CODEPOINT = 0x10FFFF
 
 		/**
 		 * Encodes UTF8 code points to UTF8 bytes.
@@ -517,28 +517,28 @@
 		 * @param {!function(number)} dst Bytes destination as a function successively called with the next byte
 		 */
 		utfx.encodeUTF8 = function (src, dst) {
-			var cp = null;
+			var cp = null
 			if (typeof src === 'number')
 				cp = src,
-					src = function () { return null; };
+				src = function () { return null }
 			while (cp !== null || (cp = src()) !== null) {
 				if (cp < 0x80)
-					dst(cp & 0x7F);
+					dst(cp & 0x7F)
 				else if (cp < 0x800)
 					dst(((cp >> 6) & 0x1F) | 0xC0),
-						dst((cp & 0x3F) | 0x80);
+					dst((cp & 0x3F) | 0x80)
 				else if (cp < 0x10000)
 					dst(((cp >> 12) & 0x0F) | 0xE0),
-						dst(((cp >> 6) & 0x3F) | 0x80),
-						dst((cp & 0x3F) | 0x80);
+					dst(((cp >> 6) & 0x3F) | 0x80),
+					dst((cp & 0x3F) | 0x80)
 				else
 					dst(((cp >> 18) & 0x07) | 0xF0),
-						dst(((cp >> 12) & 0x3F) | 0x80),
-						dst(((cp >> 6) & 0x3F) | 0x80),
-						dst((cp & 0x3F) | 0x80);
-				cp = null;
+					dst(((cp >> 12) & 0x3F) | 0x80),
+					dst(((cp >> 6) & 0x3F) | 0x80),
+					dst((cp & 0x3F) | 0x80)
+				cp = null
 			}
-		};
+		}
 
 		/**
 		 * Decodes UTF8 bytes to UTF8 code points.
@@ -551,27 +551,27 @@
 		 */
 		utfx.decodeUTF8 = function (src, dst) {
 			var a, b, c, d, fail = function (b) {
-				b = b.slice(0, b.indexOf(null));
-				var err = Error(b.toString());
-				err.name = "TruncatedError";
-				err['bytes'] = b;
-				throw err;
-			};
+				b = b.slice(0, b.indexOf(null))
+				var err = Error(b.toString())
+				err.name = 'TruncatedError'
+				err['bytes'] = b
+				throw err
+			}
 			while ((a = src()) !== null) {
 				if ((a & 0x80) === 0)
-					dst(a);
+					dst(a)
 				else if ((a & 0xE0) === 0xC0)
 					((b = src()) === null) && fail([a, b]),
-						dst(((a & 0x1F) << 6) | (b & 0x3F));
+					dst(((a & 0x1F) << 6) | (b & 0x3F))
 				else if ((a & 0xF0) === 0xE0)
 					((b = src()) === null || (c = src()) === null) && fail([a, b, c]),
-						dst(((a & 0x0F) << 12) | ((b & 0x3F) << 6) | (c & 0x3F));
+					dst(((a & 0x0F) << 12) | ((b & 0x3F) << 6) | (c & 0x3F))
 				else if ((a & 0xF8) === 0xF0)
 					((b = src()) === null || (c = src()) === null || (d = src()) === null) && fail([a, b, c, d]),
-						dst(((a & 0x07) << 18) | ((b & 0x3F) << 12) | ((c & 0x3F) << 6) | (d & 0x3F));
-				else throw RangeError("Illegal starting byte: " + a);
+					dst(((a & 0x07) << 18) | ((b & 0x3F) << 12) | ((c & 0x3F) << 6) | (d & 0x3F))
+				else throw RangeError('Illegal starting byte: ' + a)
 			}
-		};
+		}
 
 		/**
 		 * Converts UTF16 characters to UTF8 code points.
@@ -581,22 +581,22 @@
 		 *  point.
 		 */
 		utfx.UTF16toUTF8 = function (src, dst) {
-			var c1, c2 = null;
+			var c1, c2 = null
 			while (true) {
 				if ((c1 = c2 !== null ? c2 : src()) === null)
-					break;
+					break
 				if (c1 >= 0xD800 && c1 <= 0xDFFF) {
 					if ((c2 = src()) !== null) {
 						if (c2 >= 0xDC00 && c2 <= 0xDFFF) {
-							dst((c1 - 0xD800) * 0x400 + c2 - 0xDC00 + 0x10000);
-							c2 = null; continue;
+							dst((c1 - 0xD800) * 0x400 + c2 - 0xDC00 + 0x10000)
+							c2 = null; continue
 						}
 					}
 				}
-				dst(c1);
+				dst(c1)
 			}
-			if (false) dst(c2);
-		};
+			if (false) dst(c2)
+		}
 
 		/**
 		 * Converts UTF8 code points to UTF16 characters.
@@ -606,19 +606,19 @@
 		 * @throws {RangeError} If a code point is out of range
 		 */
 		utfx.UTF8toUTF16 = function (src, dst) {
-			var cp = null;
+			var cp = null
 			if (typeof src === 'number')
-				cp = src, src = function () { return null; };
+				cp = src, src = function () { return null }
 			while (cp !== null || (cp = src()) !== null) {
 				if (cp <= 0xFFFF)
-					dst(cp);
+					dst(cp)
 				else
 					cp -= 0x10000,
-						dst((cp >> 10) + 0xD800),
-						dst((cp % 0x400) + 0xDC00);
-				cp = null;
+					dst((cp >> 10) + 0xD800),
+					dst((cp % 0x400) + 0xDC00)
+				cp = null
 			}
-		};
+		}
 
 		/**
 		 * Converts and encodes UTF16 characters to UTF8 bytes.
@@ -628,9 +628,9 @@
 		 */
 		utfx.encodeUTF16toUTF8 = function (src, dst) {
 			utfx.UTF16toUTF8(src, function (cp) {
-				utfx.encodeUTF8(cp, dst);
-			});
-		};
+				utfx.encodeUTF8(cp, dst)
+			})
+		}
 
 		/**
 		 * Decodes and converts UTF8 bytes to UTF16 characters.
@@ -642,9 +642,9 @@
 		 */
 		utfx.decodeUTF8toUTF16 = function (src, dst) {
 			utfx.decodeUTF8(src, function (cp) {
-				utfx.UTF8toUTF16(cp, dst);
-			});
-		};
+				utfx.UTF8toUTF16(cp, dst)
+			})
+		}
 
 		/**
 		 * Calculates the byte length of an UTF8 code point.
@@ -652,8 +652,8 @@
 		 * @returns {number} Byte length
 		 */
 		utfx.calculateCodePoint = function (cp) {
-			return (cp < 0x80) ? 1 : (cp < 0x800) ? 2 : (cp < 0x10000) ? 3 : 4;
-		};
+			return (cp < 0x80) ? 1 : (cp < 0x800) ? 2 : (cp < 0x10000) ? 3 : 4
+		}
 
 		/**
 		 * Calculates the number of UTF8 bytes required to store UTF8 code points.
@@ -662,11 +662,11 @@
 		 * @returns {number} The number of UTF8 bytes required
 		 */
 		utfx.calculateUTF8 = function (src) {
-			var cp, l = 0;
+			var cp, l = 0
 			while ((cp = src()) !== null)
-				l += utfx.calculateCodePoint(cp);
-			return l;
-		};
+				l += utfx.calculateCodePoint(cp)
+			return l
+		}
 
 		/**
 		 * Calculates the number of UTF8 code points respectively UTF8 bytes required to store UTF16 char codes.
@@ -675,45 +675,45 @@
 		 * @returns {!Array.<number>} The number of UTF8 code points at index 0 and the number of UTF8 bytes required at index 1.
 		 */
 		utfx.calculateUTF16asUTF8 = function (src) {
-			var n = 0, l = 0;
+			var n = 0, l = 0
 			utfx.UTF16toUTF8(src, function (cp) {
-				++n; l += utfx.calculateCodePoint(cp);
-			});
-			return [n, l];
-		};
+				++n; l += utfx.calculateCodePoint(cp)
+			})
+			return [n, l]
+		}
 
-		return utfx;
-	}();
+		return utfx
+	}()
 
-	Date.now = Date.now || function () { return +new Date; };
-
-	/**
-	 * @type {number}
-	 * @const
-	 * @inner
-	 */
-	var BCRYPT_SALT_LEN = 16;
+	Date.now = Date.now || function () { return +new Date }
 
 	/**
 	 * @type {number}
 	 * @const
 	 * @inner
 	 */
-	var GENSALT_DEFAULT_LOG2_ROUNDS = 10;
+	var BCRYPT_SALT_LEN = 16
 
 	/**
 	 * @type {number}
 	 * @const
 	 * @inner
 	 */
-	var BLOWFISH_NUM_ROUNDS = 16;
+	var GENSALT_DEFAULT_LOG2_ROUNDS = 10
 
 	/**
 	 * @type {number}
 	 * @const
 	 * @inner
 	 */
-	var MAX_EXECUTION_TIME = 100;
+	var BLOWFISH_NUM_ROUNDS = 16
+
+	/**
+	 * @type {number}
+	 * @const
+	 * @inner
+	 */
+	var MAX_EXECUTION_TIME = 100
 
 	/**
 	 * @type {Array.<number>}
@@ -725,7 +725,7 @@
 		0x299f31d0, 0x082efa98, 0xec4e6c89, 0x452821e6, 0x38d01377,
 		0xbe5466cf, 0x34e90c6c, 0xc0ac29b7, 0xc97c50dd, 0x3f84d5b5,
 		0xb5470917, 0x9216d5d9, 0x8979fb1b
-	];
+	]
 
 	/**
 	 * @type {Array.<number>}
@@ -938,7 +938,7 @@
 		0x7aaaf9b0, 0x4cf9aa7e, 0x1948c25c, 0x02fb8a8c, 0x01c36ae4,
 		0xd6ebe1f9, 0x90d4f869, 0xa65cdea0, 0x3f09252d, 0xc208e69f,
 		0xb74e6132, 0xce77e25b, 0x578fdfe3, 0x3ac372e6
-	];
+	]
 
 	/**
 	 * @type {Array.<number>}
@@ -948,7 +948,7 @@
 	var C_ORIG = [
 		0x4f727068, 0x65616e42, 0x65686f6c, 0x64657253, 0x63727944,
 		0x6f756274
-	];
+	]
 
 	/**
 	 * @param {Array.<number>} lr
@@ -961,9 +961,9 @@
 	function _encipher(lr, off, P, S) { // This is our bottleneck: 1714/1905 ticks / 90% - see profile.txt
 		var n,
 			l = lr[off],
-			r = lr[off + 1];
+			r = lr[off + 1]
 
-		l ^= P[0];
+		l ^= P[0]
 
 		/*
 		for (var i=0, k=BLOWFISH_NUM_ROUNDS-2; i<=k;)
@@ -983,97 +983,97 @@
 
 		//The following is an unrolled version of the above loop.
 		//Iteration 0
-		n = S[l >>> 24];
-		n += S[0x100 | ((l >> 16) & 0xff)];
-		n ^= S[0x200 | ((l >> 8) & 0xff)];
-		n += S[0x300 | (l & 0xff)];
-		r ^= n ^ P[1];
-		n = S[r >>> 24];
-		n += S[0x100 | ((r >> 16) & 0xff)];
-		n ^= S[0x200 | ((r >> 8) & 0xff)];
-		n += S[0x300 | (r & 0xff)];
-		l ^= n ^ P[2];
+		n = S[l >>> 24]
+		n += S[0x100 | ((l >> 16) & 0xff)]
+		n ^= S[0x200 | ((l >> 8) & 0xff)]
+		n += S[0x300 | (l & 0xff)]
+		r ^= n ^ P[1]
+		n = S[r >>> 24]
+		n += S[0x100 | ((r >> 16) & 0xff)]
+		n ^= S[0x200 | ((r >> 8) & 0xff)]
+		n += S[0x300 | (r & 0xff)]
+		l ^= n ^ P[2]
 		//Iteration 1
-		n = S[l >>> 24];
-		n += S[0x100 | ((l >> 16) & 0xff)];
-		n ^= S[0x200 | ((l >> 8) & 0xff)];
-		n += S[0x300 | (l & 0xff)];
-		r ^= n ^ P[3];
-		n = S[r >>> 24];
-		n += S[0x100 | ((r >> 16) & 0xff)];
-		n ^= S[0x200 | ((r >> 8) & 0xff)];
-		n += S[0x300 | (r & 0xff)];
-		l ^= n ^ P[4];
+		n = S[l >>> 24]
+		n += S[0x100 | ((l >> 16) & 0xff)]
+		n ^= S[0x200 | ((l >> 8) & 0xff)]
+		n += S[0x300 | (l & 0xff)]
+		r ^= n ^ P[3]
+		n = S[r >>> 24]
+		n += S[0x100 | ((r >> 16) & 0xff)]
+		n ^= S[0x200 | ((r >> 8) & 0xff)]
+		n += S[0x300 | (r & 0xff)]
+		l ^= n ^ P[4]
 		//Iteration 2
-		n = S[l >>> 24];
-		n += S[0x100 | ((l >> 16) & 0xff)];
-		n ^= S[0x200 | ((l >> 8) & 0xff)];
-		n += S[0x300 | (l & 0xff)];
-		r ^= n ^ P[5];
-		n = S[r >>> 24];
-		n += S[0x100 | ((r >> 16) & 0xff)];
-		n ^= S[0x200 | ((r >> 8) & 0xff)];
-		n += S[0x300 | (r & 0xff)];
-		l ^= n ^ P[6];
+		n = S[l >>> 24]
+		n += S[0x100 | ((l >> 16) & 0xff)]
+		n ^= S[0x200 | ((l >> 8) & 0xff)]
+		n += S[0x300 | (l & 0xff)]
+		r ^= n ^ P[5]
+		n = S[r >>> 24]
+		n += S[0x100 | ((r >> 16) & 0xff)]
+		n ^= S[0x200 | ((r >> 8) & 0xff)]
+		n += S[0x300 | (r & 0xff)]
+		l ^= n ^ P[6]
 		//Iteration 3
-		n = S[l >>> 24];
-		n += S[0x100 | ((l >> 16) & 0xff)];
-		n ^= S[0x200 | ((l >> 8) & 0xff)];
-		n += S[0x300 | (l & 0xff)];
-		r ^= n ^ P[7];
-		n = S[r >>> 24];
-		n += S[0x100 | ((r >> 16) & 0xff)];
-		n ^= S[0x200 | ((r >> 8) & 0xff)];
-		n += S[0x300 | (r & 0xff)];
-		l ^= n ^ P[8];
+		n = S[l >>> 24]
+		n += S[0x100 | ((l >> 16) & 0xff)]
+		n ^= S[0x200 | ((l >> 8) & 0xff)]
+		n += S[0x300 | (l & 0xff)]
+		r ^= n ^ P[7]
+		n = S[r >>> 24]
+		n += S[0x100 | ((r >> 16) & 0xff)]
+		n ^= S[0x200 | ((r >> 8) & 0xff)]
+		n += S[0x300 | (r & 0xff)]
+		l ^= n ^ P[8]
 		//Iteration 4
-		n = S[l >>> 24];
-		n += S[0x100 | ((l >> 16) & 0xff)];
-		n ^= S[0x200 | ((l >> 8) & 0xff)];
-		n += S[0x300 | (l & 0xff)];
-		r ^= n ^ P[9];
-		n = S[r >>> 24];
-		n += S[0x100 | ((r >> 16) & 0xff)];
-		n ^= S[0x200 | ((r >> 8) & 0xff)];
-		n += S[0x300 | (r & 0xff)];
-		l ^= n ^ P[10];
+		n = S[l >>> 24]
+		n += S[0x100 | ((l >> 16) & 0xff)]
+		n ^= S[0x200 | ((l >> 8) & 0xff)]
+		n += S[0x300 | (l & 0xff)]
+		r ^= n ^ P[9]
+		n = S[r >>> 24]
+		n += S[0x100 | ((r >> 16) & 0xff)]
+		n ^= S[0x200 | ((r >> 8) & 0xff)]
+		n += S[0x300 | (r & 0xff)]
+		l ^= n ^ P[10]
 		//Iteration 5
-		n = S[l >>> 24];
-		n += S[0x100 | ((l >> 16) & 0xff)];
-		n ^= S[0x200 | ((l >> 8) & 0xff)];
-		n += S[0x300 | (l & 0xff)];
-		r ^= n ^ P[11];
-		n = S[r >>> 24];
-		n += S[0x100 | ((r >> 16) & 0xff)];
-		n ^= S[0x200 | ((r >> 8) & 0xff)];
-		n += S[0x300 | (r & 0xff)];
-		l ^= n ^ P[12];
+		n = S[l >>> 24]
+		n += S[0x100 | ((l >> 16) & 0xff)]
+		n ^= S[0x200 | ((l >> 8) & 0xff)]
+		n += S[0x300 | (l & 0xff)]
+		r ^= n ^ P[11]
+		n = S[r >>> 24]
+		n += S[0x100 | ((r >> 16) & 0xff)]
+		n ^= S[0x200 | ((r >> 8) & 0xff)]
+		n += S[0x300 | (r & 0xff)]
+		l ^= n ^ P[12]
 		//Iteration 6
-		n = S[l >>> 24];
-		n += S[0x100 | ((l >> 16) & 0xff)];
-		n ^= S[0x200 | ((l >> 8) & 0xff)];
-		n += S[0x300 | (l & 0xff)];
-		r ^= n ^ P[13];
-		n = S[r >>> 24];
-		n += S[0x100 | ((r >> 16) & 0xff)];
-		n ^= S[0x200 | ((r >> 8) & 0xff)];
-		n += S[0x300 | (r & 0xff)];
-		l ^= n ^ P[14];
+		n = S[l >>> 24]
+		n += S[0x100 | ((l >> 16) & 0xff)]
+		n ^= S[0x200 | ((l >> 8) & 0xff)]
+		n += S[0x300 | (l & 0xff)]
+		r ^= n ^ P[13]
+		n = S[r >>> 24]
+		n += S[0x100 | ((r >> 16) & 0xff)]
+		n ^= S[0x200 | ((r >> 8) & 0xff)]
+		n += S[0x300 | (r & 0xff)]
+		l ^= n ^ P[14]
 		//Iteration 7
-		n = S[l >>> 24];
-		n += S[0x100 | ((l >> 16) & 0xff)];
-		n ^= S[0x200 | ((l >> 8) & 0xff)];
-		n += S[0x300 | (l & 0xff)];
-		r ^= n ^ P[15];
-		n = S[r >>> 24];
-		n += S[0x100 | ((r >> 16) & 0xff)];
-		n ^= S[0x200 | ((r >> 8) & 0xff)];
-		n += S[0x300 | (r & 0xff)];
-		l ^= n ^ P[16];
+		n = S[l >>> 24]
+		n += S[0x100 | ((l >> 16) & 0xff)]
+		n ^= S[0x200 | ((l >> 8) & 0xff)]
+		n += S[0x300 | (l & 0xff)]
+		r ^= n ^ P[15]
+		n = S[r >>> 24]
+		n += S[0x100 | ((r >> 16) & 0xff)]
+		n ^= S[0x200 | ((r >> 8) & 0xff)]
+		n += S[0x300 | (r & 0xff)]
+		l ^= n ^ P[16]
 
-		lr[off] = r ^ P[BLOWFISH_NUM_ROUNDS + 1];
-		lr[off + 1] = l;
-		return lr;
+		lr[off] = r ^ P[BLOWFISH_NUM_ROUNDS + 1]
+		lr[off + 1] = l
+		return lr
 	}
 
 	/**
@@ -1085,8 +1085,8 @@
 	function _streamtoword(data, offp) {
 		for (var i = 0, word = 0; i < 4; ++i)
 			word = (word << 8) | (data[offp] & 0xff),
-				offp = (offp + 1) % data.length;
-		return { key: word, offp: offp };
+			offp = (offp + 1) % data.length
+		return { key: word, offp: offp }
 	}
 
 	/**
@@ -1100,19 +1100,19 @@
 			lr = [0, 0],
 			plen = P.length,
 			slen = S.length,
-			sw;
+			sw
 		for (var i = 0; i < plen; i++)
 			sw = _streamtoword(key, offset),
-				offset = sw.offp,
-				P[i] = P[i] ^ sw.key;
+			offset = sw.offp,
+			P[i] = P[i] ^ sw.key
 		for (i = 0; i < plen; i += 2)
 			lr = _encipher(lr, 0, P, S),
-				P[i] = lr[0],
-				P[i + 1] = lr[1];
+			P[i] = lr[0],
+			P[i + 1] = lr[1]
 		for (i = 0; i < slen; i += 2)
 			lr = _encipher(lr, 0, P, S),
-				S[i] = lr[0],
-				S[i + 1] = lr[1];
+			S[i] = lr[0],
+			S[i + 1] = lr[1]
 	}
 
 	/**
@@ -1128,32 +1128,32 @@
 			lr = [0, 0],
 			plen = P.length,
 			slen = S.length,
-			sw;
+			sw
 		for (var i = 0; i < plen; i++)
 			sw = _streamtoword(key, offp),
-				offp = sw.offp,
-				P[i] = P[i] ^ sw.key;
-		offp = 0;
+			offp = sw.offp,
+			P[i] = P[i] ^ sw.key
+		offp = 0
 		for (i = 0; i < plen; i += 2)
 			sw = _streamtoword(data, offp),
-				offp = sw.offp,
-				lr[0] ^= sw.key,
-				sw = _streamtoword(data, offp),
-				offp = sw.offp,
-				lr[1] ^= sw.key,
-				lr = _encipher(lr, 0, P, S),
-				P[i] = lr[0],
-				P[i + 1] = lr[1];
+			offp = sw.offp,
+			lr[0] ^= sw.key,
+			sw = _streamtoword(data, offp),
+			offp = sw.offp,
+			lr[1] ^= sw.key,
+			lr = _encipher(lr, 0, P, S),
+			P[i] = lr[0],
+			P[i + 1] = lr[1]
 		for (i = 0; i < slen; i += 2)
 			sw = _streamtoword(data, offp),
-				offp = sw.offp,
-				lr[0] ^= sw.key,
-				sw = _streamtoword(data, offp),
-				offp = sw.offp,
-				lr[1] ^= sw.key,
-				lr = _encipher(lr, 0, P, S),
-				S[i] = lr[0],
-				S[i + 1] = lr[1];
+			offp = sw.offp,
+			lr[0] ^= sw.key,
+			sw = _streamtoword(data, offp),
+			offp = sw.offp,
+			lr[1] ^= sw.key,
+			lr = _encipher(lr, 0, P, S),
+			S[i] = lr[0],
+			S[i + 1] = lr[1]
 	}
 
 	/**
@@ -1170,39 +1170,39 @@
 	function _crypt(b, salt, rounds, callback, progressCallback) {
 		var cdata = C_ORIG.slice(),
 			clen = cdata.length,
-			err;
+			err
 
 		// Validate
 		if (rounds < 4 || rounds > 31) {
-			err = Error("Illegal number of rounds (4-31): " + rounds);
+			err = Error('Illegal number of rounds (4-31): ' + rounds)
 			if (callback) {
-				nextTick(callback.bind(this, err));
-				return;
+				nextTick(callback.bind(this, err))
+				return
 			} else
-				throw err;
+				throw err
 		}
 		if (salt.length !== BCRYPT_SALT_LEN) {
-			err = Error("Illegal salt length: " + salt.length + " != " + BCRYPT_SALT_LEN);
+			err = Error('Illegal salt length: ' + salt.length + ' != ' + BCRYPT_SALT_LEN)
 			if (callback) {
-				nextTick(callback.bind(this, err));
-				return;
+				nextTick(callback.bind(this, err))
+				return
 			} else
-				throw err;
+				throw err
 		}
-		rounds = (1 << rounds) >>> 0;
+		rounds = (1 << rounds) >>> 0
 
-		var P, S, i = 0, j;
+		var P, S, i = 0, j
 
 		//Use typed arrays when available - huge speedup!
 		if (Int32Array) {
-			P = new Int32Array(P_ORIG);
-			S = new Int32Array(S_ORIG);
+			P = new Int32Array(P_ORIG)
+			S = new Int32Array(S_ORIG)
 		} else {
-			P = P_ORIG.slice();
-			S = S_ORIG.slice();
+			P = P_ORIG.slice()
+			S = S_ORIG.slice()
 		}
 
-		_ekskey(salt, b, P, S);
+		_ekskey(salt, b, P, S)
 
 		/**
 		 * Calcualtes the next round.
@@ -1211,46 +1211,46 @@
 		 */
 		function next() {
 			if (progressCallback)
-				progressCallback(i / rounds);
+				progressCallback(i / rounds)
 			if (i < rounds) {
-				var start = Date.now();
+				var start = Date.now()
 				for (; i < rounds;) {
-					i = i + 1;
-					_key(b, P, S);
-					_key(salt, P, S);
+					i = i + 1
+					_key(b, P, S)
+					_key(salt, P, S)
 					if (Date.now() - start > MAX_EXECUTION_TIME)
-						break;
+						break
 				}
 			} else {
 				for (i = 0; i < 64; i++)
 					for (j = 0; j < (clen >> 1); j++)
-						_encipher(cdata, j << 1, P, S);
-				var ret = [];
+						_encipher(cdata, j << 1, P, S)
+				var ret = []
 				for (i = 0; i < clen; i++)
 					ret.push(((cdata[i] >> 24) & 0xff) >>> 0),
-						ret.push(((cdata[i] >> 16) & 0xff) >>> 0),
-						ret.push(((cdata[i] >> 8) & 0xff) >>> 0),
-						ret.push((cdata[i] & 0xff) >>> 0);
+					ret.push(((cdata[i] >> 16) & 0xff) >>> 0),
+					ret.push(((cdata[i] >> 8) & 0xff) >>> 0),
+					ret.push((cdata[i] & 0xff) >>> 0)
 				if (callback) {
-					callback(null, ret);
-					return;
+					callback(null, ret)
+					return
 				} else
-					return ret;
+					return ret
 			}
 			if (callback)
-				nextTick(next);
+				nextTick(next)
 		}
 
 		// Async
 		if (typeof callback !== 'undefined') {
-			next();
+			next()
 
 			// Sync
 		} else {
-			var res;
+			var res
 			while (true)
 				if (typeof (res = next()) !== 'undefined')
-					return res || [];
+					return res || []
 		}
 	}
 
@@ -1265,61 +1265,61 @@
 	 * @inner
 	 */
 	function _hash(s, salt, callback, progressCallback) {
-		var err;
+		var err
 		if (typeof s !== 'string' || typeof salt !== 'string') {
-			err = Error("Invalid string / salt: Not a string");
+			err = Error('Invalid string / salt: Not a string')
 			if (callback) {
-				nextTick(callback.bind(this, err));
-				return;
+				nextTick(callback.bind(this, err))
+				return
 			}
 			else
-				throw err;
+				throw err
 		}
 
 		// Validate the salt
-		var minor, offset;
+		var minor, offset
 		if (salt.charAt(0) !== '$' || salt.charAt(1) !== '2') {
-			err = Error("Invalid salt version: " + salt.substring(0, 2));
+			err = Error('Invalid salt version: ' + salt.substring(0, 2))
 			if (callback) {
-				nextTick(callback.bind(this, err));
-				return;
+				nextTick(callback.bind(this, err))
+				return
 			}
 			else
-				throw err;
+				throw err
 		}
 		if (salt.charAt(2) === '$')
 			minor = String.fromCharCode(0),
-				offset = 3;
+			offset = 3
 		else {
-			minor = salt.charAt(2);
+			minor = salt.charAt(2)
 			if ((minor !== 'a' && minor !== 'b' && minor !== 'y') || salt.charAt(3) !== '$') {
-				err = Error("Invalid salt revision: " + salt.substring(2, 4));
+				err = Error('Invalid salt revision: ' + salt.substring(2, 4))
 				if (callback) {
-					nextTick(callback.bind(this, err));
-					return;
+					nextTick(callback.bind(this, err))
+					return
 				} else
-					throw err;
+					throw err
 			}
-			offset = 4;
+			offset = 4
 		}
 
 		// Extract number of rounds
 		if (salt.charAt(offset + 2) > '$') {
-			err = Error("Missing salt rounds");
+			err = Error('Missing salt rounds')
 			if (callback) {
-				nextTick(callback.bind(this, err));
-				return;
+				nextTick(callback.bind(this, err))
+				return
 			} else
-				throw err;
+				throw err
 		}
 		var r1 = parseInt(salt.substring(offset, offset + 1), 10) * 10,
 			r2 = parseInt(salt.substring(offset + 1, offset + 2), 10),
 			rounds = r1 + r2,
-			real_salt = salt.substring(offset + 3, offset + 25);
-		s += minor >= 'a' ? "\x00" : "";
+			real_salt = salt.substring(offset + 3, offset + 25)
+		s += minor >= 'a' ? '\x00' : ''
 
 		var passwordb = stringToBytes(s),
-			saltb = base64_decode(real_salt, BCRYPT_SALT_LEN);
+			saltb = base64_decode(real_salt, BCRYPT_SALT_LEN)
 
 		/**
 		 * Finishes hashing.
@@ -1328,32 +1328,32 @@
 		 * @inner
 		 */
 		function finish(bytes) {
-			var res = [];
-			res.push("$2");
+			var res = []
+			res.push('$2')
 			if (minor >= 'a')
-				res.push(minor);
-			res.push("$");
+				res.push(minor)
+			res.push('$')
 			if (rounds < 10)
-				res.push("0");
-			res.push(rounds.toString());
-			res.push("$");
-			res.push(base64_encode(saltb, saltb.length));
-			res.push(base64_encode(bytes, C_ORIG.length * 4 - 1));
-			return res.join('');
+				res.push('0')
+			res.push(rounds.toString())
+			res.push('$')
+			res.push(base64_encode(saltb, saltb.length))
+			res.push(base64_encode(bytes, C_ORIG.length * 4 - 1))
+			return res.join('')
 		}
 
 		// Sync
 		if (typeof callback == 'undefined')
-			return finish(_crypt(passwordb, saltb, rounds));
+			return finish(_crypt(passwordb, saltb, rounds))
 
 		// Async
 		else {
 			_crypt(passwordb, saltb, rounds, function (err, bytes) {
 				if (err)
-					callback(err, null);
+					callback(err, null)
 				else
-					callback(null, finish(bytes));
-			}, progressCallback);
+					callback(null, finish(bytes))
+			}, progressCallback)
 		}
 	}
 
@@ -1365,7 +1365,7 @@
 	 * @returns {string}
 	 * @expose
 	 */
-	bcrypt.encodeBase64 = base64_encode;
+	bcrypt.encodeBase64 = base64_encode
 
 	/**
 	 * Decodes a base64 encoded string to up to len bytes of output, using the custom bcrypt alphabet.
@@ -1375,7 +1375,7 @@
 	 * @returns {!Array.<number>}
 	 * @expose
 	 */
-	bcrypt.decodeBase64 = base64_decode;
+	bcrypt.decodeBase64 = base64_decode
 
-	return bcrypt;
-}));
+	return bcrypt
+}))

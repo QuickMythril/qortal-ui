@@ -24,7 +24,7 @@ const generateRollupConfig = (file, { outputDir, aliases }) => {
 				}),
 				replace({
 					preventAssignment: true,
-					"process.env.NODE_ENV": JSON.stringify("production"),
+					'process.env.NODE_ENV': JSON.stringify('production'),
 				}),
 				alias({
 					entries: Object.keys(aliases).map(find => {

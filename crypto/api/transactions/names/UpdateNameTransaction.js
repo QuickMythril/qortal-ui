@@ -51,7 +51,7 @@ export default class UpdateNameTransaction extends TransactionBase {
 	}
 
 	set newData(newData) {
-		this.newDataText = newData.length === 0 ? "Registered Name on the Qortal Chain" : newData
+		this.newDataText = newData.length === 0 ? 'Registered Name on the Qortal Chain' : newData
 		this._newDataBytes = this.constructor.utils.stringtoUTF8Array(this.newDataText)
 		this._newDataLength = this.constructor.utils.int32ToBytes(this._newDataBytes.length)
 	}

@@ -41,9 +41,9 @@ export class FriendItemActions extends connect(store)(LitElement) {
 					<div
 						class="send-message-button"
 						@click="${() => {
-							this.openEditFriend();
-							this.closePopover();
-						}}"
+		this.openEditFriend()
+		this.closePopover()
+	}}"
 					>
 						<mwc-icon style="color: var(--black)">edit</mwc-icon>
 						${translate('friends.friend10')}
@@ -51,38 +51,38 @@ export class FriendItemActions extends connect(store)(LitElement) {
 					<div
 						class="send-message-button"
 						@click="${async () => {
-							const address = await this.getUserAddress();
-							if (!address) return;
-							store.dispatch(
-								setNewTab({
-									url: `q-chat`,
-									id: this.uid.rnd(),
-									myPlugObj: {
-										url: 'q-chat',
-										domain: 'core',
-										page: 'q-chat/index.html',
-										title: 'Q-Chat',
-										icon: 'vaadin:chat',
-										mwcicon: 'forum',
-										pluginNumber: 'plugin-qhsyOnpRhT',
-										menus: [],
-										parent: false
-									},
-									openExisting: true
-								})
-							);
-							store.dispatch(
-								setSideEffectAction({
-									type: 'openPrivateChat',
-									data: {
-										address,
-										name: this.name
-									}
-								})
-							);
-							this.closePopover();
-							this.closeSidePanel();
-						}}"
+		const address = await this.getUserAddress()
+		if (!address) return
+		store.dispatch(
+			setNewTab({
+				url: 'q-chat',
+				id: this.uid.rnd(),
+				myPlugObj: {
+					url: 'q-chat',
+					domain: 'core',
+					page: 'q-chat/index.html',
+					title: 'Q-Chat',
+					icon: 'vaadin:chat',
+					mwcicon: 'forum',
+					pluginNumber: 'plugin-qhsyOnpRhT',
+					menus: [],
+					parent: false
+				},
+				openExisting: true
+			})
+		)
+		store.dispatch(
+			setSideEffectAction({
+				type: 'openPrivateChat',
+				data: {
+					address,
+					name: this.name
+				}
+			})
+		)
+		this.closePopover()
+		this.closeSidePanel()
+	}}"
 					>
 						<mwc-icon style="color: var(--black)">send</mwc-icon>
 						${translate('friends.friend8')}
@@ -90,27 +90,27 @@ export class FriendItemActions extends connect(store)(LitElement) {
 					<div
 						class="send-message-button"
 						@click="${() => {
-							const query = `?service=APP&name=Q-Mail/to/${this.name}`;
-							store.dispatch(
-								setNewTab({
-									url: `qdn/browser/index.html${query}`,
-									id: this.uid.rnd(),
-									myPlugObj: {
-										url: 'myapp',
-										domain: 'core',
-										page: `qdn/browser/index.html${query}`,
-										title: 'Q-Mail',
-										icon: 'vaadin:mailbox',
-										mwcicon: 'mail_outline',
-										menus: [],
-										parent: false
-									},
-									openExisting: true
-								})
-							);
-							this.closePopover();
-							this.closeSidePanel();
-						}}"
+		const query = `?service=APP&name=Q-Mail/to/${this.name}`
+		store.dispatch(
+			setNewTab({
+				url: `qdn/browser/index.html${query}`,
+				id: this.uid.rnd(),
+				myPlugObj: {
+					url: 'myapp',
+					domain: 'core',
+					page: `qdn/browser/index.html${query}`,
+					title: 'Q-Mail',
+					icon: 'vaadin:mailbox',
+					mwcicon: 'mail_outline',
+					menus: [],
+					parent: false
+				},
+				openExisting: true
+			})
+		)
+		this.closePopover()
+		this.closeSidePanel()
+	}}"
 					>
 						<mwc-icon style="color: var(--black)">mail</mwc-icon>
 						${translate('friends.friend9')}
@@ -118,11 +118,11 @@ export class FriendItemActions extends connect(store)(LitElement) {
 					<div
 						class="send-message-button"
 						@click="${() => {
-							const customEvent = new CustomEvent('open-visiting-profile', { detail: this.name });
-							window.dispatchEvent(customEvent);
-							this.closePopover();
-							this.closeSidePanel();
-						}}"
+		const customEvent = new CustomEvent('open-visiting-profile', { detail: this.name })
+		window.dispatchEvent(customEvent)
+		this.closePopover()
+		this.closeSidePanel()
+	}}"
 					>
 						<mwc-icon style="color: var(--black)">person</mwc-icon>
 						${translate('profile.profile18')}

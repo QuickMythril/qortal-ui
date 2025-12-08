@@ -17,7 +17,7 @@ class CoinBalancesController extends connect(store)(LitElement) {
 	}
 
 	constructor() {
-		super();
+		super()
 		this.coinList = {}
 		this._refreshNodeInfo()
 		this.fetchBalance = this.fetchBalance.bind(this)
@@ -55,7 +55,7 @@ class CoinBalancesController extends connect(store)(LitElement) {
 
 	async updateBtcWalletBalance() {
 		this._refreshNodeInfo()
-		let _url = buildRequestUrl(`/crosschain/btc/walletbalance`, store.getState())
+		let _url = buildRequestUrl('/crosschain/btc/walletbalance', store.getState())
 		let _body = store.getState().app.selectedAddress.btcWallet.derivedMasterPublicKey
 
 		await parentEpml.request('apiCall', {
@@ -81,7 +81,7 @@ class CoinBalancesController extends connect(store)(LitElement) {
 
 	async updateLtcWalletBalance() {
 		this._refreshNodeInfo()
-		let _url = buildRequestUrl(`/crosschain/ltc/walletbalance`, store.getState())
+		let _url = buildRequestUrl('/crosschain/ltc/walletbalance', store.getState())
 		let _body = store.getState().app.selectedAddress.ltcWallet.derivedMasterPublicKey
 
 		await parentEpml.request('apiCall', {
@@ -108,7 +108,7 @@ class CoinBalancesController extends connect(store)(LitElement) {
 
 	async updateDogeWalletBalance() {
 		this._refreshNodeInfo()
-		let _url = buildRequestUrl(`/crosschain/doge/walletbalance`, store.getState())
+		let _url = buildRequestUrl('/crosschain/doge/walletbalance', store.getState())
 		let _body = store.getState().app.selectedAddress.dogeWallet.derivedMasterPublicKey
 
 		await parentEpml.request('apiCall', {
@@ -134,7 +134,7 @@ class CoinBalancesController extends connect(store)(LitElement) {
 
 	async updateDgbWalletBalance() {
 		this._refreshNodeInfo()
-		let _url = buildRequestUrl(`/crosschain/dgb/walletbalance`, store.getState())
+		let _url = buildRequestUrl('/crosschain/dgb/walletbalance', store.getState())
 		let _body = store.getState().app.selectedAddress.dgbWallet.derivedMasterPublicKey
 
 		await parentEpml.request('apiCall', {
@@ -160,7 +160,7 @@ class CoinBalancesController extends connect(store)(LitElement) {
 
 	async updateRvnWalletBalance() {
 		this._refreshNodeInfo()
-		let _url = buildRequestUrl(`/crosschain/rvn/walletbalance`, store.getState())
+		let _url = buildRequestUrl('/crosschain/rvn/walletbalance', store.getState())
 		let _body = store.getState().app.selectedAddress.rvnWallet.derivedMasterPublicKey
 
 		await parentEpml.request('apiCall', {
@@ -187,7 +187,7 @@ class CoinBalancesController extends connect(store)(LitElement) {
 	async updateArrrWalletBalance() {
 		if (isSelectedNodePublic(store.getState())) return
 		this._refreshNodeInfo()
-		let _url = buildRequestUrl(`/crosschain/arrr/walletbalance`, store.getState())
+		let _url = buildRequestUrl('/crosschain/arrr/walletbalance', store.getState())
 		let _body = store.getState().app.selectedAddress.arrrWallet.seed58
 
 		await parentEpml.request('apiCall', {

@@ -9,7 +9,7 @@ export const cancelAllOffers = async (requestObject) => {
 
 	const getMyOpenOffers = async () => {
 		const res = await request('/crosschain/tradeoffers')
-		return await res.filter(order => order.mode === "OFFERING" && order.qortalCreator === address)
+		return await res.filter(order => order.mode === 'OFFERING' && order.qortalCreator === address)
 	}
 
 	const myOpenOffers = await getMyOpenOffers()

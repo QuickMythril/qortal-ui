@@ -18,7 +18,7 @@ const signChat = (chatBytes, nonce, keyPair) => {
 	const _nonce = utils.int32ToBytes(nonce)
 
 	if (chatBytes.length === undefined) {
-		const _chatBytesBuffer = Object.keys(chatBytes).map(function (key) { return chatBytes[key]; })
+		const _chatBytesBuffer = Object.keys(chatBytes).map(function (key) { return chatBytes[key] })
 
 		const chatBytesBuffer = new Uint8Array(_chatBytesBuffer)
 		chatBytesBuffer.set(_nonce, 112)

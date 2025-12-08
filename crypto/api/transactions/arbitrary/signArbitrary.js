@@ -16,10 +16,10 @@ const signArbitrary = (arbitraryBytesBase58, arbitraryBytesForSigningBase58, non
 	}
 
 	const arbitraryBytes = Base58.decode(arbitraryBytesBase58)
-	const _arbitraryBytesBuffer = Object.keys(arbitraryBytes).map(function (key) { return arbitraryBytes[key]; })
+	const _arbitraryBytesBuffer = Object.keys(arbitraryBytes).map(function (key) { return arbitraryBytes[key] })
 	const arbitraryBytesBuffer = new Uint8Array(_arbitraryBytesBuffer)
 	const arbitraryBytesForSigning = Base58.decode(arbitraryBytesForSigningBase58)
-	const _arbitraryBytesForSigningBuffer = Object.keys(arbitraryBytesForSigning).map(function (key) { return arbitraryBytesForSigning[key]; })
+	const _arbitraryBytesForSigningBuffer = Object.keys(arbitraryBytesForSigning).map(function (key) { return arbitraryBytesForSigning[key] })
 	const arbitraryBytesForSigningBuffer = new Uint8Array(_arbitraryBytesForSigningBuffer)
 	const _nonce = utils.int32ToBytes(nonce)
 

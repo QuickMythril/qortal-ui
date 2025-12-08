@@ -31,7 +31,7 @@ class ChatGroupSettings extends LitElement {
 
 	constructor() {
 		super()
-		this.isLoading = false;
+		this.isLoading = false
 		this.isOpenLeaveModal = false
 		this.leaveGroupObj = {}
 		this.leaveFee = 0.01
@@ -42,29 +42,29 @@ class ChatGroupSettings extends LitElement {
 
 	render() {
 		return html`
-			<vaadin-icon @click=${() => {this.isOpenLeaveModal = true;}} class="top-bar-icon" style="margin: 0px 20px" icon="vaadin:cog" slot="icon"></vaadin-icon>
+			<vaadin-icon @click=${() => {this.isOpenLeaveModal = true}} class="top-bar-icon" style="margin: 0px 20px" icon="vaadin:cog" slot="icon"></vaadin-icon>
 			<!-- Leave Group Dialog -->
 			<wrapper-modal
 				.removeImage=${() => {
-					if (this.isLoading) return
-					this.isOpenLeaveModal = false
-				}}
-				style=${(this.isOpenLeaveModal) ? "display: block" : "display: none"}
+		if (this.isLoading) return
+		this.isOpenLeaveModal = false
+	}}
+				style=${(this.isOpenLeaveModal) ? 'display: block' : 'display: none'}
 			>
 				<div style="text-align:center">
-					<h1>${translate("grouppage.gchange35")}</h1>
+					<h1>${translate('grouppage.gchange35')}</h1>
 					<hr>
 				</div>
 				<button @click=${() => this._convertToPrivate(this.leaveGroupObj.groupId, this.leaveGroupObj.groupName)}>Convert a public group to private</button>
 				<div style="text-align:right; height:36px;">
 					<span ?hidden="${!this.isLoading}">
 						<!-- loading message -->
-						${translate("grouppage.gchange36")} &nbsp;
+						${translate('grouppage.gchange36')} &nbsp;
 						<paper-spinner-lite style="margin-top:12px;" ?active="${this.isLoading}" alt="Leaving"></paper-spinner-lite>
 					</span>
 					<span ?hidden=${this.message === ''} style="${this.error ? 'color:red;' : ''}">${this.message}</span>
 				</div>
-				<button @click=${() => {this.isOpenLeaveModal = false;}} class="modal-button" ?disabled="${this.isLoading}">${translate("general.close")}</button>
+				<button @click=${() => {this.isOpenLeaveModal = false}} class="modal-button" ?disabled="${this.isLoading}">${translate('general.close')}</button>
 			</wrapper-modal >
 		`
 	}
@@ -86,7 +86,7 @@ class ChatGroupSettings extends LitElement {
 	}
 
 	renderErr9Text() {
-		return html`${translate("grouppage.gchange49")}`
+		return html`${translate('grouppage.gchange49')}`
 	}
 
 	async confirmRelationship() {
@@ -129,20 +129,20 @@ class ChatGroupSettings extends LitElement {
 				type: 'api',
 				url: `/addresses/lastreference/${this.selectedAddress.address}`
 			})
-		};
+		}
 
 		const validateReceiver = async () => {
-			let lastRef = await getLastRef();
+			let lastRef = await getLastRef()
 			let myTransaction = await makeTransactionRequest(lastRef)
 			getTxnRequestResponse(myTransaction)
 
 		}
 
 		const convertBytesForSigning = async (transactionBytesBase58) => {
-			return await parentEpml.request("apiCall", {
-				type: "api",
-				method: "POST",
-				url: `/transactions/convert`,
+			return await parentEpml.request('apiCall', {
+				type: 'api',
+				method: 'POST',
+				url: '/transactions/convert',
 				body: `${transactionBytesBase58}`
 			})
 		}
@@ -150,21 +150,21 @@ class ChatGroupSettings extends LitElement {
 
 		// Make Transaction Request
 		const makeTransactionRequest = async (lastRef) => {
-			let groupdialog3 = get("transactions.groupdialog3")
-			let groupdialog4 = get("transactions.groupdialog4")
+			let groupdialog3 = get('transactions.groupdialog3')
+			let groupdialog4 = get('transactions.groupdialog4')
 
 			const body = {
-				"timestamp": Date.now(),
-				"reference": lastRef,
-				"fee": leaveFeeInput,
-				"ownerPublicKey": window.parent.Base58.encode(window.parent.reduxStore.getState().app.selectedAddress.keyPair.publicKey),
-				"groupId": groupId,
-				"newOwner": "QdR4bQ1fJFnSZgswtW27eE8ToXwHqUQyaU",
-				"newIsOpen": false,
-				"newDescription": "my group for accounts I like",
-				"newApprovalThreshold": "NONE",
-				"newMinimumBlockDelay": 5,
-				"newMaximumBlockDelay": 60
+				'timestamp': Date.now(),
+				'reference': lastRef,
+				'fee': leaveFeeInput,
+				'ownerPublicKey': window.parent.Base58.encode(window.parent.reduxStore.getState().app.selectedAddress.keyPair.publicKey),
+				'groupId': groupId,
+				'newOwner': 'QdR4bQ1fJFnSZgswtW27eE8ToXwHqUQyaU',
+				'newIsOpen': false,
+				'newDescription': 'my group for accounts I like',
+				'newApprovalThreshold': 'NONE',
+				'newMinimumBlockDelay': 5,
+				'newMaximumBlockDelay': 60
 			}
 
 			return await parentEpml.request('transaction', {
@@ -174,12 +174,12 @@ class ChatGroupSettings extends LitElement {
 					_groupId: groupId,
 					lastReference: lastRef,
 					fee: leaveFeeInput,
-					"newOwner": "QdR4bQ1fJFnSZgswtW27eE8ToXwHqUQyaU",
-					"newIsOpen": false,
-					"newDescription": "my group for accounts I like",
-					"newApprovalThreshold": "NONE",
-					"newMinimumBlockDelay": 5,
-					"newMaximumBlockDelay": 60
+					'newOwner': 'QdR4bQ1fJFnSZgswtW27eE8ToXwHqUQyaU',
+					'newIsOpen': false,
+					'newDescription': 'my group for accounts I like',
+					'newApprovalThreshold': 'NONE',
+					'newMinimumBlockDelay': 5,
+					'newMaximumBlockDelay': 60
 				}
 			})
 		}
@@ -191,7 +191,7 @@ class ChatGroupSettings extends LitElement {
 				this.confirmRelationship()
 			} else {
 				this.error = true
-				this.message = ""
+				this.message = ''
 				throw new Error(txnResponse)
 			}
 		}

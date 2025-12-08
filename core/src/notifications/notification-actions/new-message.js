@@ -50,24 +50,24 @@ export const newMessageNotificationQapp = (data) => {
 			}
 
 			notify.onclick = (e) => {
-				const query = `?service=APP&name=Q-Mail`
+				const query = '?service=APP&name=Q-Mail'
 
 				store.dispatch(setNewTab({
 					url: `qdn/browser/index.html${query}`,
 					id: 'q-mail-notification',
 					myPlugObj: {
-						"url": "qapps",
-						"domain": "core",
-						"page": `qdn/browser/index.html${query}`,
-						"title": "Q-Mail",
-						"icon": "vaadin:desktop",
-						"menus": [],
-						"parent": false
+						'url': 'qapps',
+						'domain': 'core',
+						'page': `qdn/browser/index.html${query}`,
+						'title': 'Q-Mail',
+						'icon': 'vaadin:desktop',
+						'menus': [],
+						'parent': false
 					}
 				}))
 
 				if (!isElectron()) {
-					window.focus();
+					window.focus()
 				} else {
 					window.electronAPI.focusApp()
 				}
@@ -76,24 +76,24 @@ export const newMessageNotificationQapp = (data) => {
 			const notify = new Notification(data.title, data.options)
 
 			notify.onclick = (e) => {
-				const query = `?service=APP&name=Q-Mail`
+				const query = '?service=APP&name=Q-Mail'
 
 				store.dispatch(setNewTab({
 					url: `qdn/browser/index.html${query}`,
 					id: 'q-mail-notification',
 					myPlugObj: {
-						"url": "qapps",
-						"domain": "core",
-						"page": `qdn/browser/index.html${query}`,
-						"title": "Q-Mail",
-						"icon": "vaadin:desktop",
-						"menus": [],
-						"parent": false
+						'url': 'qapps',
+						'domain': 'core',
+						'page': `qdn/browser/index.html${query}`,
+						'title': 'Q-Mail',
+						'icon': 'vaadin:desktop',
+						'menus': [],
+						'parent': false
 					}
 				}))
 
 				if (!isElectron()) {
-					window.focus();
+					window.focus()
 				} else {
 					window.electronAPI.focusApp()
 				}
@@ -106,14 +106,14 @@ export const newMessageNotificationQapp = (data) => {
 }
 
 const extractComponents = async (url) => {
-	if (!url.startsWith("qortal://")) {
+	if (!url.startsWith('qortal://')) {
 		return null
 	}
 
-	url = url.replace(/^(qortal\:\/\/)/, "")
+	url = url.replace(/^(qortal\:\/\/)/, '')
 
-	if (url.includes("/")) {
-		let parts = url.split("/")
+	if (url.includes('/')) {
+		let parts = url.split('/')
 
 		const service = parts[0].toUpperCase()
 
@@ -142,13 +142,13 @@ const extractComponents = async (url) => {
 			}
 		}
 
-		const path = parts.join("/")
+		const path = parts.join('/')
 		const components = {}
 
-		components["service"] = service
-		components["name"] = name
-		components["identifier"] = identifier
-		components["path"] = path
+		components['service'] = service
+		components['name'] = name
+		components['identifier'] = identifier
+		components['path'] = path
 
 		return components
 	}
@@ -200,14 +200,14 @@ export const newMessageNotificationQappLocal = (data) => {
 					url: `qdn/browser/index.html${query}`,
 					id: uid.rnd(),
 					myPlugObj: {
-						"url": service === 'WEBSITE' ? "websites" : "qapps",
-						"domain": "core",
-						"page": `qdn/browser/index.html${query}`,
-						"title": name,
-						"icon": service === 'WEBSITE' ? 'vaadin:desktop' : 'vaadin:external-browser',
-						"mwcicon": service === 'WEBSITE' ? 'desktop_mac' : 'open_in_browser',
-						"menus": [],
-						"parent": false
+						'url': service === 'WEBSITE' ? 'websites' : 'qapps',
+						'domain': 'core',
+						'page': `qdn/browser/index.html${query}`,
+						'title': name,
+						'icon': service === 'WEBSITE' ? 'vaadin:desktop' : 'vaadin:external-browser',
+						'mwcicon': service === 'WEBSITE' ? 'desktop_mac' : 'open_in_browser',
+						'menus': [],
+						'parent': false
 					}
 				}
 
@@ -253,14 +253,14 @@ export const newMessageNotificationQappLocal = (data) => {
 					url: `qdn/browser/index.html${query}`,
 					id: uid.rnd(),
 					myPlugObj: {
-						"url": service === 'WEBSITE' ? "websites" : "qapps",
-						"domain": "core",
-						"page": `qdn/browser/index.html${query}`,
-						"title": name,
-						"icon": service === 'WEBSITE' ? 'vaadin:desktop' : 'vaadin:external-browser',
-						"mwcicon": service === 'WEBSITE' ? 'desktop_mac' : 'open_in_browser',
-						"menus": [],
-						"parent": false
+						'url': service === 'WEBSITE' ? 'websites' : 'qapps',
+						'domain': 'core',
+						'page': `qdn/browser/index.html${query}`,
+						'title': name,
+						'icon': service === 'WEBSITE' ? 'vaadin:desktop' : 'vaadin:external-browser',
+						'mwcicon': service === 'WEBSITE' ? 'desktop_mac' : 'open_in_browser',
+						'menus': [],
+						'parent': false
 					}
 				}
 

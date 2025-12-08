@@ -259,7 +259,7 @@ export default class AltcoinHDWallet {
 	}
 
 	generatePrivateKey(seedHash) {
-		const SECP256K1_CURVE_ORDER = new BigInteger("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141")
+		const SECP256K1_CURVE_ORDER = new BigInteger('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141')
 
 		const privateKeyHash = seedHash.slice(0, 32)
 
@@ -280,7 +280,7 @@ export default class AltcoinHDWallet {
 		const _privateKey = [...privateKey]
 		const privateKeyBigInt = BigInteger.fromByteArrayUnsigned(_privateKey)
 
-		const epCurve = EllipticCurve.getSECCurveByName("secp256k1")
+		const epCurve = EllipticCurve.getSECCurveByName('secp256k1')
 		const curvePoints = epCurve.getG().multiply(privateKeyBigInt)
 
 
@@ -482,7 +482,7 @@ export default class AltcoinHDWallet {
 			const _privateKey = [...this.childPrivateKey]
 			const privateKeyBigInt = BigInteger.fromByteArrayUnsigned(_privateKey)
 
-			const epCurve = EllipticCurve.getSECCurveByName("secp256k1")
+			const epCurve = EllipticCurve.getSECCurveByName('secp256k1')
 			const curvePoints = epCurve.getG().multiply(privateKeyBigInt)
 
 			const x = curvePoints.getX().toBigInteger()
@@ -518,14 +518,14 @@ export default class AltcoinHDWallet {
 
 			const s = [...this.publicKey].concat(ib)
 
-			const _hmacSha512 = new jsSHA("SHA-512", "UINT8ARRAY", { numRounds: 1, hmacKey: { value: this.chainCode, format: "UINT8ARRAY" } })
+			const _hmacSha512 = new jsSHA('SHA-512', 'UINT8ARRAY', { numRounds: 1, hmacKey: { value: this.chainCode, format: 'UINT8ARRAY' } })
 			_hmacSha512.update(new Uint8Array(s))
 
 			const IL = BigInteger.fromByteArrayUnsigned([..._hmacSha512.getHMAC('UINT8ARRAY').slice(0, 32)])
 			this.childChainCode = _hmacSha512.getHMAC('UINT8ARRAY').slice(32, 64) // IR according to the SPEC
 
 			// SECP256k1 init
-			const epCurve = EllipticCurve.getSECCurveByName("secp256k1")
+			const epCurve = EllipticCurve.getSECCurveByName('secp256k1')
 
 			const ki = IL.add(BigInteger.fromByteArrayUnsigned(this.privateKey)).mod(epCurve.getN()) // parse256(IL) + kpar (mod n) ==> ki
 			this.childPrivateKey = ki.toByteArrayUnsigned()
@@ -631,7 +631,7 @@ export default class AltcoinHDWallet {
 			const privateKeyBigInt = BigInteger.fromByteArrayUnsigned(_privateKey)
 
 
-			const epCurve = EllipticCurve.getSECCurveByName("secp256k1")
+			const epCurve = EllipticCurve.getSECCurveByName('secp256k1')
 			const curvePoints = epCurve.getG().multiply(privateKeyBigInt)
 
 			const x = curvePoints.getX().toBigInteger()
@@ -708,7 +708,7 @@ export default class AltcoinHDWallet {
 			const s = [...this.childPublicKey].concat(ib)
 
 
-			const _hmacSha512 = new jsSHA("SHA-512", "UINT8ARRAY", { numRounds: 1, hmacKey: { value: this.childChainCode, format: "UINT8ARRAY" } })
+			const _hmacSha512 = new jsSHA('SHA-512', 'UINT8ARRAY', { numRounds: 1, hmacKey: { value: this.childChainCode, format: 'UINT8ARRAY' } })
 			_hmacSha512.update(new Uint8Array(s))
 
 
@@ -716,7 +716,7 @@ export default class AltcoinHDWallet {
 			this.grandChildChainCode = _hmacSha512.getHMAC('UINT8ARRAY').slice(32, 64) // IR according to the SPEC
 
 			// SECP256k1 init
-			const epCurve = EllipticCurve.getSECCurveByName("secp256k1")
+			const epCurve = EllipticCurve.getSECCurveByName('secp256k1')
 
 
 			const ki = IL.add(BigInteger.fromByteArrayUnsigned(this.childPrivateKey)).mod(epCurve.getN()) // parse256(IL) + kpar (mod n) ==> ki

@@ -34,16 +34,16 @@ class MykeyPage extends connect(store)(LitElement) {
 
 	render() {
 		return html`
-			<mwc-dialog id="mykeyDialog" heading="${translate("apipage.achange1")}" opened=false>
+			<mwc-dialog id="mykeyDialog" heading="${translate('apipage.achange1')}" opened=false>
 				<div style="min-height:200px; min-width: 300px; box-sizing: border-box; position: relative;">
-					<mwc-textfield icon="fingerprint" id="mykeyInput" style="width:100%;" label="${translate("apipage.achange2")}"></mwc-textfield>
-					<p style="margin-top: 45px;">${translate("apipage.achange3")}</p>
+					<mwc-textfield icon="fingerprint" id="mykeyInput" style="width:100%;" label="${translate('apipage.achange2')}"></mwc-textfield>
+					<p style="margin-top: 45px;">${translate('apipage.achange3')}</p>
 				</div>
 				<mwc-button slot="secondaryAction" dialogAction="close" class="red">
-					${translate("apipage.achange4")}
+					${translate('apipage.achange4')}
 				</mwc-button>
 				<mwc-button slot="primaryAction" @click="${this.addMykey}">
-					${translate("apipage.achange5")}
+					${translate('apipage.achange5')}
 				</mwc-button>
 			</mwc-dialog>
 		`
@@ -70,7 +70,7 @@ class MykeyPage extends connect(store)(LitElement) {
 
 			localStorage.setItem('myQortalNodes', JSON.stringify(this.nodeConfig.knownNodes))
 
-			let snackbar1 = get("apipage.achange6")
+			let snackbar1 = get('apipage.achange6')
 
 			snackbar.add({
 				labelText: `${snackbar1}`,
@@ -80,7 +80,7 @@ class MykeyPage extends connect(store)(LitElement) {
 			this.shadowRoot.getElementById('mykeyInput').value = ''
 			this.shadowRoot.querySelector('#mykeyDialog').close()
 		} else {
-			let snackbar2 = get("apipage.achange7")
+			let snackbar2 = get('apipage.achange7')
 
 			snackbar.add({
 				labelText: `${snackbar2}`,

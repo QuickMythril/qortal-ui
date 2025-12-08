@@ -5,7 +5,7 @@ const replace = require('@rollup/plugin-replace')
 const globals = require('rollup-plugin-node-globals')
 const commonjs = require('@rollup/plugin-commonjs')
 const alias = require('@rollup/plugin-alias')
-const terser = require('@rollup/plugin-terser');
+const terser = require('@rollup/plugin-terser')
 const scss = require('rollup-plugin-scss')
 const webWorkerLoader = require('@qortal/rollup-plugin-web-worker-loader')
 const generateES5BuildConfig = require('./generateES5BuildConfig')
@@ -55,7 +55,7 @@ const generateBuildConfig = ({ elementComponents, functionalComponents, otherOut
 				}),
 				replace({
 					preventAssignment: true,
-					"process.env.NODE_ENV": JSON.stringify("production"),
+					'process.env.NODE_ENV': JSON.stringify('production'),
 				}),
 				commonjs(),
 				globals(),

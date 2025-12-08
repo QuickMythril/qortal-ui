@@ -41,14 +41,14 @@ class NotificationsView extends connect(store)(LitElement) {
 			<div class="sub-main">
 				<div class="notification-box">
 					<div class="content-box">
-						<h4>Q-Chat ${translate("settings.notifications")}</h4>
+						<h4>Q-Chat ${translate('settings.notifications')}</h4>
 						<div style="line-height: 3rem;">
 							<mwc-checkbox id="qChatPlaySound" @click=${e => this.setQChatNotificationConfig({ type: 'PLAY_SOUND', value: e.target.checked })} ?checked=${this.q_chatConfig.playSound}></mwc-checkbox>
 							<label
 								for="qChatPlaySound"
 								@click=${() => this.shadowRoot.getElementById('qChatPlaySound').click()}
 							>
-								${translate("settings.playsound")}
+								${translate('settings.playsound')}
 							</label>
 						</div>
 						<div style="line-height: 3rem;">
@@ -57,23 +57,23 @@ class NotificationsView extends connect(store)(LitElement) {
 								for="qChatShowNotification"
 								@click=${() => this.shadowRoot.getElementById('qChatShowNotification').click()}
 							>
-								${translate("settings.shownotifications")}
+								${translate('settings.shownotifications')}
 							</label>
 						</div>
 					</div>
 					<div class="content-box">
-						<h4>${translate("settings.qappNotification1")}</h4>
+						<h4>${translate('settings.qappNotification1')}</h4>
 						${this.appNotificationList.map((app) => html`
 							<div style="display: flex; justify-content: space-between; margin-top: 10px;">
 								${app}
-								<button class="remove-button" @click=${() => this.removeApp(app)}>${translate("rewardsharepage.rchange17")}</button>
+								<button class="remove-button" @click=${() => this.removeApp(app)}>${translate('rewardsharepage.rchange17')}</button>
 							</div>
 						`)}
 					</div>
 				</div>
 				<div class="checkbox-row">
 					<label for="syncIndicator" id="syncIndicatorLabel" style="color: var(--black);">
-						${translate("settings.sync_indicator")}
+						${translate('settings.sync_indicator')}
 					</label>
 					<mwc-checkbox style="margin-right: -15px;" id="syncIndicator" @click=${(e) => this.checkForSyncMessages(e)} ?checked=${store.getState().app.showSyncIndicator}></mwc-checkbox>
 				</div>
@@ -106,7 +106,7 @@ class NotificationsView extends connect(store)(LitElement) {
 
 		delete data[appName]
 
-		localStorage.setItem(id, JSON.stringify(data));
+		localStorage.setItem(id, JSON.stringify(data))
 	}
 
 	renderSetCoreButton() {
@@ -115,7 +115,7 @@ class NotificationsView extends connect(store)(LitElement) {
 		} else {
 			return html`
 				<div style="max-width: 500px; display: flex; justify-content: center; margin: auto;">
-					<div @click=${() => this.checkCoreSettings()} class="q-button">${translate("settings.core")}</div>
+					<div @click=${() => this.checkCoreSettings()} class="q-button">${translate('settings.core')}</div>
 				</div>
 			`
 		}

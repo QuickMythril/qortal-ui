@@ -159,13 +159,13 @@ class ChatPage extends LitElement {
 		this.setSelectedHead = this.setSelectedHead.bind(this)
 		this.setGifsLoading = this.setGifsLoading.bind(this)
 		this.selectedAddress = window.parent.reduxStore.getState().app.selectedAddress
-		this.userName = ""
+		this.userName = ''
 		this.chatId = ''
 		this.myAddress = ''
 		this.messages = []
 		this._messages = []
 		this.newMessages = []
-		this.hideMessages = JSON.parse(localStorage.getItem("MessageBlockedAddresses") || "[]")
+		this.hideMessages = JSON.parse(localStorage.getItem('MessageBlockedAddresses') || '[]')
 		this._publicKey = { key: '', hasPubKey: false }
 		this.messageSignature = ''
 		this._initialMessages = []
@@ -175,7 +175,7 @@ class ChatPage extends LitElement {
 		this.isLoading = false
 		this.isUserDown = false
 		this.isPasteMenuOpen = false
-		this.chatEditorPlaceholder = ""
+		this.chatEditorPlaceholder = ''
 		this.messagesRendered = {
 			messages: [],
 			type: ''
@@ -188,11 +188,11 @@ class ChatPage extends LitElement {
 		this.attachment = null
 		this.appFile = null
 		this.uid = new ShortUniqueId()
-		this.userLanguage = ""
+		this.userLanguage = ''
 		this.lastMessageRefVisible = false
 		this.isEditMessageOpen = false
 		this.emojiPicker = new EmojiPicker({
-			style: "twemoji",
+			style: 'twemoji',
 			twemojiBaseUrl: '/emoji/',
 			showPreview: false,
 			showVariants: false,
@@ -211,8 +211,8 @@ class ChatPage extends LitElement {
 		this.userFoundModalOpen = false
 		this.userFound = []
 		this.forwardActiveChatHeadUrl = {
-			url: "",
-			name: "",
+			url: '',
+			name: '',
 			selected: false
 		}
 		this.webWorker = null
@@ -252,39 +252,39 @@ class ChatPage extends LitElement {
 				<div class="chat-container" style="grid-template-rows: minmax(40px, auto) minmax(6%, 92vh) minmax(40px, auto); flex: 3;">
 					<div class="group-nav-container">
 						<div
-							@click=${()=> {if (+this._chatId === 0 || this.isReceipient) return; this._toggle();}}
+							@click=${()=> {if (+this._chatId === 0 || this.isReceipient) return; this._toggle()}}
 							style=${`height: 100%; display: flex; align-items: center;flex-grow: 1; cursor: pointer; cursor: ${+this._chatId === 0 || this.isReceipient ? 'default': 'pointer'}; user-select: none`}
 						>
 							${this.isReceipient ? '' : +this._chatId === 0 ?
-								html`
+		html`
 									<p class="group-name">Qortal General Chat</p>
 								`
-								:  html`
+		:  html`
 									<p class="group-name">${this.groupInfo && this.groupInfo.groupName}</p>
 								`
-							}
+}
 						</div>
 						<div style="display: flex; height: 100%; align-items: center">
 							<mwc-icon id="chatsettings" class="top-bar-icon" @click=${this._toggleSettings} style="margin: 0px 10px">settings</mwc-icon>
-							<vaadin-tooltip for="chatsettings" text=${translate("chatsettings.cs1")} position="start"></vaadin-tooltip>
+							<vaadin-tooltip for="chatsettings" text=${translate('chatsettings.cs1')} position="start"></vaadin-tooltip>
 							${(!this.isReceipient && +this._chatId !== 0) ?
-								html`
+		html`
 									<mwc-icon class="top-bar-icon" @click=${this.copyJoinGroupLinkToClipboard} style="margin: 0px 10px">link</mwc-icon>
 								`
-								: ''
-							}
+		: ''
+}
 							<mwc-icon class="top-bar-icon" @click=${this._toggleResources} style="margin: 0px 10px">photo_library</mwc-icon>
 							${(!this.isReceipient && +this._chatId !== 0) ?
-								html`
+		html`
 									<mwc-icon class="top-bar-icon" @click=${this._toggle} style="margin: 0px 10px">groups</mwc-icon>
 								`
-								: ''
-							}
+		: ''
+}
 						</div>
 					</div>
 					<div>
 						${this.isLoadingMessages ?
-							html`
+		html`
 								<div class="lds-grid">
 									<div></div>
 									<div></div>
@@ -297,35 +297,35 @@ class ChatPage extends LitElement {
 									<div></div>
 								</div>
 							`
-							: this.renderChatScroller()
-						}
+		: this.renderChatScroller()
+}
 					</div>
 					<div
 						class="gifs-backdrop"
-						@click=${() => {if (this.gifsLoading) return; this.setOpenGifModal(false); this.editor.commands.focus("end"); this.shadowRoot.querySelector("chat-gifs").clearGifSelections();}}
-						style=${this.openGifModal ? "visibility: visible; z-index: 4" : "visibility: hidden; z-index: -100"}
+						@click=${() => {if (this.gifsLoading) return; this.setOpenGifModal(false); this.editor.commands.focus('end'); this.shadowRoot.querySelector('chat-gifs').clearGifSelections()}}
+						style=${this.openGifModal ? 'visibility: visible; z-index: 4' : 'visibility: hidden; z-index: -100'}
 					>
 					</div>
 					<!-- main chat bar -->
 					${this.isLoadingGoToRepliedMessage && this.isLoadingGoToRepliedMessage.loading ?
-						html`
-							<div style="position: fixed; top:${parseInt(this.isLoadingGoToRepliedMessage.top)}px;left: ${parseInt(this.isLoadingGoToRepliedMessage.left)}px" class=${`smallLoading marginLoader`}></div>
+		html`
+							<div style="position: fixed; top:${parseInt(this.isLoadingGoToRepliedMessage.top)}px;left: ${parseInt(this.isLoadingGoToRepliedMessage.left)}px" class=${'smallLoading marginLoader'}></div>
 						`
-						: ''
-					}
-					<div class="chat-text-area" style="${`${(this.repliedToMessageObj || this.editedMessageObj) && "min-height: 120px"}`}">
+		: ''
+}
+					<div class="chat-text-area" style="${`${(this.repliedToMessageObj || this.editedMessageObj) && 'min-height: 120px'}`}">
 						<div class='last-message-ref' style=${(this.lastMessageRefVisible && !this.imageFile && !this.openGifModal) ? 'opacity: 1;' : 'opacity: 0;'}>
 							<vaadin-icon
 								class='arrow-down-icon'
 								icon='vaadin:arrow-circle-down' slot='icon'
 								@click=${() => {
-									const chatScrollerElement = this.shadowRoot.querySelector('chat-scroller');
-									if (chatScrollerElement && chatScrollerElement.disableAddingNewMessages) {
-										this.getLastestMessages();
-									} else {
-										this.shadowRoot.querySelector("chat-scroller").shadowRoot.getElementById("downObserver").scrollIntoView({behavior: 'smooth',});
-									}
-								}}
+		const chatScrollerElement = this.shadowRoot.querySelector('chat-scroller')
+		if (chatScrollerElement && chatScrollerElement.disableAddingNewMessages) {
+			this.getLastestMessages()
+		} else {
+			this.shadowRoot.querySelector('chat-scroller').shadowRoot.getElementById('downObserver').scrollIntoView({behavior: 'smooth',})
+		}
+	}}
 							>
 							</vaadin-icon>
 						</div>
@@ -338,47 +338,47 @@ class ChatPage extends LitElement {
 											<div class="repliedTo-message">
 												<p class="senderName">${this.repliedToMessageObj.senderName ? this.repliedToMessageObj.senderName : this.repliedToMessageObj.sender}</p>
 												${this.repliedToMessageObj.version.toString() === '1' ?
-													html`
+		html`
 														<span style="color: var(--black);">${this.repliedToMessageObj.message}</span>
 													`
-													: ''
-												}
+		: ''
+}
 												${+this.repliedToMessageObj.version > 1 ?
-													html`
+		html`
 														<span style="color: var(--black);">
 															${this.repliedToMessageObj.decodedMessage.includes('specialId') ?
-																this.convertHubMessageToJson(this.repliedToMessageObj.message) :
-																unsafeHTML(generateHTML(this.repliedToMessageObj.message, [StarterKit, Underline, Highlight, Mention]))
-															}
+		this.convertHubMessageToJson(this.repliedToMessageObj.message) :
+		unsafeHTML(generateHTML(this.repliedToMessageObj.message, [StarterKit, Underline, Highlight, Mention]))
+}
 														</span>
 													`
-													: ''
-												}
+		: ''
+}
 											</div>
 											<vaadin-icon class="close-icon" icon="vaadin:close-big" slot="icon" @click=${() => this.closeRepliedToContainer()}></vaadin-icon>
 										</div>
 									</div>
 								`
-							}
+}
 							${this.editedMessageObj &&
 								html`
 									<div class="repliedTo-container">
 										<div class="repliedTo-subcontainer">
 											<vaadin-icon class="reply-icon" icon="vaadin:pencil" slot="icon"></vaadin-icon>
 											<div class="repliedTo-message">
-												<p class="senderName">${translate("chatpage.cchange25")}</p>
+												<p class="senderName">${translate('chatpage.cchange25')}</p>
 												<span style="color: var(--black);">
 													${this.editedMessageObj.decodedMessage.includes('specialId') && !this.editedMessageObj.decodedMessage.includes('messageText') ?
-														this.convertHubMessageToJson(this.editedMessageObj.message) :
-														unsafeHTML(generateHTML(this.editedMessageObj.message, [StarterKit, Underline, Highlight, Mention]))
-													}
+		this.convertHubMessageToJson(this.editedMessageObj.message) :
+		unsafeHTML(generateHTML(this.editedMessageObj.message, [StarterKit, Underline, Highlight, Mention]))
+}
 												</span>
 											</div>
 											<vaadin-icon class="close-icon" icon="vaadin:close-big" slot="icon" @click=${() => this.closeEditMessageContainer()}></vaadin-icon>
 										</div>
 									</div>
 								`
-							}
+}
 							<div class="chatbar">
 								<chat-text-editor
 									?hasGlobalEvents=${true}
@@ -407,75 +407,75 @@ class ChatPage extends LitElement {
 						</div>
 					</div>
 					${(this.isUploadingImage || this.isDeletingImage) ?
-						html`
+		html`
 							<div class="dialogCustom">
 								<div class="dialogCustomInner">
 									<div class="dialog-container-loader">
-										<div class=${`smallLoading marginLoader`}></div>
-										<p>${this.isDeletingImage ? translate("chatpage.cchange31") : translate("chatpage.cchange30")}</p>
+										<div class=${'smallLoading marginLoader'}></div>
+										<p>${this.isDeletingImage ? translate('chatpage.cchange31') : translate('chatpage.cchange30')}</p>
 									</div>
 								</div>
 							</div>
 						`
-						: ''
-					}
+		: ''
+}
 					${(this.isUploadingGif || this.isDeletingGif) ?
-						html`
+		html`
 							<div class="dialogCustom">
 								<div class="dialogCustomInner">
 									<div class="dialog-container-loader">
-										<div class=${`smallLoading marginLoader`}></div>
-										<p>${this.isDeletingImage ? translate("chatpage.cchange104") : translate("chatpage.cchange103")}</p>
+										<div class=${'smallLoading marginLoader'}></div>
+										<p>${this.isDeletingImage ? translate('chatpage.cchange104') : translate('chatpage.cchange103')}</p>
 									</div>
 								</div>
 							</div>
 						`
-						: ''
-					}
+		: ''
+}
 					${(this.isUploadingAttachment || this.isDeletingAttachment) ?
-						html`
+		html`
 							<div class="dialogCustom">
 								<div class="dialogCustomInner">
 									<div class="dialog-container-loader">
-										<div class=${`smallLoading marginLoader`}></div>
-										<p>${this.isDeletingAttachment ? translate("chatpage.cchange76") : translate("chatpage.cchange75")}</p>
+										<div class=${'smallLoading marginLoader'}></div>
+										<p>${this.isDeletingAttachment ? translate('chatpage.cchange76') : translate('chatpage.cchange75')}</p>
 									</div>
 								</div>
 							</div>
 						`
-						: ''
-					}
+		: ''
+}
 					${(this.isUploadingAppFile || this.isDeletingAppFile) ?
-						html`
+		html`
 							<div class="dialogCustom">
 								<div class="dialogCustomInner">
 									<div class="dialog-container-loader">
-										<div class=${`smallLoading marginLoader`}></div>
-										<p>${this.isDeletingAppFile ? translate("chatpage.cchange99") : translate("chatpage.cchange98")}</p>
+										<div class=${'smallLoading marginLoader'}></div>
+										<p>${this.isDeletingAppFile ? translate('chatpage.cchange99') : translate('chatpage.cchange98')}</p>
 									</div>
 								</div>
 							</div>
 						`
-						: ''
-					}
-					<wrapper-modal .onClickFunc=${() => {this.removeImage();}} style=${(this.imageFile && !this.isUploadingImage) ? "visibility:visible; z-index:50" : "visibility: hidden;z-index:-100"}>
+		: ''
+}
+					<wrapper-modal .onClickFunc=${() => {this.removeImage()}} style=${(this.imageFile && !this.isUploadingImage) ? 'visibility:visible; z-index:50' : 'visibility: hidden;z-index:-100'}>
 						<div>
 							<div class="dialog-container">
-								<p class="dialog-container-title">${translate("chatpage.cchange110")}</p>
+								<p class="dialog-container-title">${translate('chatpage.cchange110')}</p>
 								${this.imageFile &&
 									html`
 										<img
 											src=${this.imageFile.identifier ?
-												`
+		`
 													${this.nodeUrl}/arbitrary/${this.imageFile.service}/${this.imageFile.name}/${this.imageFile.identifier}
 												`
-												: URL.createObjectURL(this.imageFile)
-											}
+		: URL.createObjectURL(this.imageFile)
+}
 											alt="dialog-img"
 											class="dialog-image"
 										>
 									`
-								}
+}
 								<div class="caption-container">
 									<chat-text-editor
 										iframeId="newChat"
@@ -494,40 +494,40 @@ class ChatPage extends LitElement {
 									</chat-text-editor>
 								</div>
 								<div class="modal-button-row">
-									<button class="modal-button-red" @click=${() => {this.removeImage();}}>
-										${translate("chatpage.cchange33")}
+									<button class="modal-button-red" @click=${() => {this.removeImage()}}>
+										${translate('chatpage.cchange33')}
 									</button>
 									<button
 										class="modal-button"
 										@click=${() => {
-											const chatTextEditor = this.shadowRoot.getElementById('chatTextCaption');
-											chatTextEditor.sendMessageFunc({type: 'image',});
-										}}
+		const chatTextEditor = this.shadowRoot.getElementById('chatTextCaption')
+		chatTextEditor.sendMessageFunc({type: 'image',})
+	}}
 									>
-										${translate("chatpage.cchange9")}
+										${translate('chatpage.cchange9')}
 									</button>
 								</div>
 							</div>
 						</div>
 					</wrapper-modal>
-					<wrapper-modal .onClickFunc=${() => {this.removeGif();}} style=${(this.gifFile && !this.isUploadingGif) ? "visibility:visible; z-index:50" : "visibility: hidden;z-index:-100"}>
+					<wrapper-modal .onClickFunc=${() => {this.removeGif()}} style=${(this.gifFile && !this.isUploadingGif) ? 'visibility:visible; z-index:50' : 'visibility: hidden;z-index:-100'}>
 						<div>
 							<div class="dialog-container">
-								<p class="dialog-container-title">${translate("chatpage.cchange111")}</p>
+								<p class="dialog-container-title">${translate('chatpage.cchange111')}</p>
 								${this.gifFile &&
 									html`
 										<img
 											src=${this.gifFile.identifier ?
-												`
+		`
 													${this.nodeUrl}/arbitrary/${this.gifFile.service}/${this.gifFile.name}/${this.gifFile.identifier}
 												`
-												: URL.createObjectURL(this.gifFile)
-											}
+		: URL.createObjectURL(this.gifFile)
+}
 											alt="dialog-gif"
 											class="dialog-image"
 										>
 									`
-								}
+}
 								<div class="caption-container">
 									<chat-text-editor
 										iframeId="newGifChat"
@@ -546,31 +546,31 @@ class ChatPage extends LitElement {
 									</chat-text-editor>
 								</div>
 								<div class="modal-button-row">
-									<button class="modal-button-red" @click=${() => {this.removeGif();}}>
-										${translate("chatpage.cchange33")}
+									<button class="modal-button-red" @click=${() => {this.removeGif()}}>
+										${translate('chatpage.cchange33')}
 									</button>
 									<button
 										class="modal-button"
 										@click=${() => {
-											const chatTextEditor = this.shadowRoot.getElementById('chatGifId');
-											chatTextEditor.sendMessageFunc({type: 'gif',});
-										}}
+		const chatTextEditor = this.shadowRoot.getElementById('chatGifId')
+		chatTextEditor.sendMessageFunc({type: 'gif',})
+	}}
 									>
-										${translate("chatpage.cchange9")}
+										${translate('chatpage.cchange9')}
 									</button>
 								</div>
 							</div>
 						</div>
 					</wrapper-modal>
-					<wrapper-modal .onClickFunc=${() => {this.removeAttachment();}} style=${this.attachment && !this.isUploadingAttachment ? "visibility: visible; z-index: 50" : "visibility: hidden; z-index: -100"}>
+					<wrapper-modal .onClickFunc=${() => {this.removeAttachment()}} style=${this.attachment && !this.isUploadingAttachment ? 'visibility: visible; z-index: 50' : 'visibility: hidden; z-index: -100'}>
 						<div>
 							<div class="dialog-container">
-								<p class="dialog-container-title">${translate("chatpage.cchange112")}</p>
+								<p class="dialog-container-title">${translate('chatpage.cchange112')}</p>
 								${this.attachment &&
 									html`
 										<div class="attachment-icon-container"><img src="/img/attachment-icon.png" alt="attachment-icon" class="attachment-icon" /></div>
 									`
-								}
+}
 								<p class="attachment-name">${this.attachment && this.attachment.name}</p>
 								<div class="caption-container">
 									<chat-text-editor
@@ -591,31 +591,31 @@ class ChatPage extends LitElement {
 									</chat-text-editor>
 								</div>
 								<div class="modal-button-row">
-									<button class="modal-button-red" @click=${() => {this.removeAttachment();}}>
-										${translate("chatpage.cchange33")}
+									<button class="modal-button-red" @click=${() => {this.removeAttachment()}}>
+										${translate('chatpage.cchange33')}
 									</button>
 									<button
 										class="modal-button"
 										@click=${() => {
-											const chatTextEditor = this.shadowRoot.getElementById('chatAttachmentId');
-											chatTextEditor.sendMessageFunc({type: 'attachment',});
-										}}
+		const chatTextEditor = this.shadowRoot.getElementById('chatAttachmentId')
+		chatTextEditor.sendMessageFunc({type: 'attachment',})
+	}}
 									>
-										${translate("chatpage.cchange9")}
+										${translate('chatpage.cchange9')}
 									</button>
 								</div>
 							</div>
 						</div>
 					</wrapper-modal>
-					<wrapper-modal .onClickFunc=${() => {this.removeAppFile();}} style=${this.appFile && !this.isUploadingAppFile ? "visibility: visible; z-index: 50" : "visibility: hidden; z-index: -100"}>
+					<wrapper-modal .onClickFunc=${() => {this.removeAppFile()}} style=${this.appFile && !this.isUploadingAppFile ? 'visibility: visible; z-index: 50' : 'visibility: hidden; z-index: -100'}>
 						<div>
 							<div class="dialog-container">
-								<p class="dialog-container-title">${translate("chatpage.cchange113")}</p>
+								<p class="dialog-container-title">${translate('chatpage.cchange113')}</p>
 								${this.appFile &&
 									html`
 										<div class="file-icon-container"><img src="/img/file-icon.png" alt="file-icon" class="file-icon"></div>
 									`
-								}
+}
 								<p class="attachment-name">${this.appFile && this.appFile.name}</p>
 								<div class="caption-container">
 									<chat-text-editor
@@ -635,35 +635,35 @@ class ChatPage extends LitElement {
 									</chat-text-editor>
 								</div>
 								<div class="modal-button-row">
-									<button class="modal-button-red" @click=${() => {this.removeAppFile();}}>
-										${translate("chatpage.cchange33")}
+									<button class="modal-button-red" @click=${() => {this.removeAppFile()}}>
+										${translate('chatpage.cchange33')}
 									</button>
 									<button
 										class="modal-button"
 										@click=${() => {
-											const chatTextEditor = this.shadowRoot.getElementById('chatFileId');
-											chatTextEditor.sendMessageFunc({type: 'file'});
-										}}
+		const chatTextEditor = this.shadowRoot.getElementById('chatFileId')
+		chatTextEditor.sendMessageFunc({type: 'file'})
+	}}
 									>
-										${translate("chatpage.cchange9")}
+										${translate('chatpage.cchange9')}
 									</button>
 								</div>
 							</div>
 						</div>
 					</wrapper-modal>
 					<paper-dialog class="warning" id="confirmDialog" modal>
-						<h2 style="color: var(--black);">${translate("chatpage.cchange41")}</h2>
+						<h2 style="color: var(--black);">${translate('chatpage.cchange41')}</h2>
 						<hr>
 						<br>
-						<h3 style="color: var(--black);">${translate("chatpage.cchange42")}</h3>
+						<h3 style="color: var(--black);">${translate('chatpage.cchange42')}</h3>
 						<div class="buttons">
-							<mwc-button @click=${() => {this.sendMessage(this.myMessageUnder4Qort);}} dialog-confirm>${translate("transpage.tchange3")}</mwc-button>
+							<mwc-button @click=${() => {this.sendMessage(this.myMessageUnder4Qort)}} dialog-confirm>${translate('transpage.tchange3')}</mwc-button>
 						</div>
 					</paper-dialog>
-					<wrapper-modal .onClickFunc=${() => {this.openForwardOpen = false; this.forwardActiveChatHeadUrl = {}; this.requestUpdate();}} style=${this.openForwardOpen ? "display: block" : "display: none"}>
+					<wrapper-modal .onClickFunc=${() => {this.openForwardOpen = false; this.forwardActiveChatHeadUrl = {}; this.requestUpdate()}} style=${this.openForwardOpen ? 'display: block' : 'display: none'}>
 						<div>
 							<div class="dialog-container">
-								<div><p class="dialog-container-title">${translate("blockpage.bcchange16")}</p></div>
+								<div><p class="dialog-container-title">${translate('blockpage.bcchange16')}</p></div>
 								<div class="divider"></div>
 								<div class="chat-head-container">
 									<div class="search-field">
@@ -671,26 +671,26 @@ class ChatPage extends LitElement {
 											type="text"
 											class="name-input"
 											id="sendTo"
-											placeholder="${translate("chatpage.cchange7")}"
+											placeholder="${translate('chatpage.cchange7')}"
 											@keydown=${() => {
-												if (this.forwardActiveChatHeadUrl.selected) {
-													this.forwardActiveChatHeadUrl = {};
-													this.requestUpdate();
-												}
-											}}
+		if (this.forwardActiveChatHeadUrl.selected) {
+			this.forwardActiveChatHeadUrl = {}
+			this.requestUpdate()
+		}
+	}}
 										>
 										${this.forwardActiveChatHeadUrl.selected ?
-											(html`
+		(html`
 												<div class="user-verified">
-													<p>${translate("chatpage.cchange38")}</p>
+													<p>${translate('chatpage.cchange38')}</p>
 													<vaadin-icon icon="vaadin:check-circle-o" slot="icon"></vaadin-icon>
 												</div>
 											`)
-											: (html`<vaadin-icon @click=${this.userSearch} slot="icon" icon="vaadin:open-book" class="search-icon"></vaadin-icon>`)
-										}
+		: (html`<vaadin-icon @click=${this.userSearch} slot="icon" icon="vaadin:open-book" class="search-icon"></vaadin-icon>`)
+}
 									</div>
 									${this.forwardActiveChatHeadUrl.selected ?
-										(html`
+		(html`
 											<div class="user-selected">
 												<p class="user-selected-name">
 													${this.forwardActiveChatHeadUrl.name}
@@ -704,52 +704,52 @@ class ChatPage extends LitElement {
 														icon="vaadin:close-big"
 														slot="icon"
 														@click=${() => {
-															this.userFound = [];
-															this.forwardActiveChatHeadUrl = {};
-															this.requestUpdate();
-															this.shadowRoot.getElementById("sendTo").value = "";
-														}}
+				this.userFound = []
+				this.forwardActiveChatHeadUrl = {}
+				this.requestUpdate()
+				this.shadowRoot.getElementById('sendTo').value = ''
+			}}
 													>
 													</vaadin-icon>
 												</div>
 											</div>
 										`)
-										: (html`
+		: (html`
 											${this.chatHeads.map((item) => {
-												return html`
+				return html`
 													<chat-select
 														activeChatHeadUrl=${this.forwardActiveChatHeadUrl.url}
 														.setActiveChatHeadUrl=${
-															(val) => {this.forwardActiveChatHeadUrl = {...this.forwardActiveChatHeadUrl, url: val}; this.userFound = [];}
-														}
+			(val) => {this.forwardActiveChatHeadUrl = {...this.forwardActiveChatHeadUrl, url: val}; this.userFound = []}
+			}
 														chatInfo=${JSON.stringify(item)}
 													>
 													</chat-select>
 												`
-											})}
+			})}
 										`)
-									}
+}
 								</div>
 								<div class="modal-button-row">
-									<button class="modal-button-red" @click=${() => {this.openForwardOpen = false; this.forwardActiveChatHeadUrl = {}; this.requestUpdate();}}>
-										${translate("chatpage.cchange33")}
+									<button class="modal-button-red" @click=${() => {this.openForwardOpen = false; this.forwardActiveChatHeadUrl = {}; this.requestUpdate()}}>
+										${translate('chatpage.cchange33')}
 									</button>
-									<button class="modal-button" @click=${() => {this.sendForwardMessage();}}>
-										${translate("blockpage.bcchange14")}
+									<button class="modal-button" @click=${() => {this.sendForwardMessage()}}>
+										${translate('blockpage.bcchange14')}
 									</button>
 								</div>
 							</div>
 							<div class="search-results-div">
 								<chat-search-results
 									.onClickFunc=${(result) => {
-										this.forwardActiveChatHeadUrl = {...this.forwardActiveChatHeadUrl, url: `direct/${result.owner}`, name: result.name, selected: true};
-										this.userFound = [];
-										this.userFoundModalOpen = false;
-									}}
+		this.forwardActiveChatHeadUrl = {...this.forwardActiveChatHeadUrl, url: `direct/${result.owner}`, name: result.name, selected: true}
+		this.userFound = []
+		this.userFoundModalOpen = false
+	}}
 									.closeFunc=${() => {
-										this.userFoundModalOpen = false;
-										this.userFound = [];
-									}}
+		this.userFoundModalOpen = false
+		this.userFound = []
+	}}
 									.searchResults=${this.userFound}
 									?isOpen=${this.userFoundModalOpen}
 									?loading=${this.isLoading}
@@ -758,10 +758,10 @@ class ChatPage extends LitElement {
 							</div>
 						</div>
 					</wrapper-modal>
-					<wrapper-modal .onClickFunc=${() => {this.setOpenTipUser(false)}} zIndex=${55} style=${this.openTipUser ? "display: block;" : "display: none;"}>
+					<wrapper-modal .onClickFunc=${() => {this.setOpenTipUser(false)}} zIndex=${55} style=${this.openTipUser ? 'display: block;' : 'display: none;'}>
 						<tip-user .closeTipUser=${!this.openTipUser} .userName=${this.userName} .setOpenTipUser=${(val) => this.setOpenTipUser(val)}></tip-user>
 					</wrapper-modal>
-					<wrapper-modal .onClickFunc=${() => {this.setOpenUserInfo(false); this.setUserName(""); this.setSelectedHead({});}} style=${this.openUserInfo ? "display: block" : "display: none"}>
+					<wrapper-modal .onClickFunc=${() => {this.setOpenUserInfo(false); this.setUserName(''); this.setSelectedHead({})}} style=${this.openUserInfo ? 'display: block' : 'display: none'}>
 						<user-info
 							.setOpenUserInfo=${(val) => this.setOpenUserInfo(val)}
 							.setOpenTipUser=${(val) => this.setOpenTipUser(val)}
@@ -772,7 +772,7 @@ class ChatPage extends LitElement {
 						</user-info>
 					</wrapper-modal>
 				</div>
-				<div class="chat-right-panel ${this.shifted ? "movedin" : "movedout"}" ${animate()}>
+				<div class="chat-right-panel ${this.shifted ? 'movedin' : 'movedout'}" ${animate()}>
 					<chat-right-panel
 						.getMoreMembers=${(val) => this.getMoreMembers(val)}
 						.toggle=${(val) => this._toggle(val)}
@@ -787,7 +787,7 @@ class ChatPage extends LitElement {
 					>
 					</chat-right-panel>
 				</div>
-				<div class="chat-right-panel ${this.shiftedResources ? "movedin" : "movedout"}" ${animate()}>
+				<div class="chat-right-panel ${this.shiftedResources ? 'movedin' : 'movedout'}" ${animate()}>
 					<chat-right-panel-resources
 						.getMoreMembers=${(val) => this.getMoreMembers(val)}
 						.toggle=${(val) => this._toggleResources(val)}
@@ -806,7 +806,7 @@ class ChatPage extends LitElement {
 					>
 					</chat-right-panel-resources>
 				</div>
-				<div class="chat-right-panel ${this.shiftedSettings ? "movedin" : "movedout"}" ${animate()}>
+				<div class="chat-right-panel ${this.shiftedSettings ? 'movedin' : 'movedout'}" ${animate()}>
 					<chat-right-panel-settings
 						.toggle=${(val) => this._toggleSettings(val)}
 					>
@@ -832,7 +832,7 @@ class ChatPage extends LitElement {
 
 			const checkLanguage = localStorage.getItem('qortalLanguage')
 			const checkTheme = localStorage.getItem('qortalTheme')
-			const arraySecretKeysWorkerNew = JSON.parse(localStorage.getItem("symKeysCurrent") || "[]")
+			const arraySecretKeysWorkerNew = JSON.parse(localStorage.getItem('symKeysCurrent') || '[]')
 
 			this.userLanguage = checkLanguage
 			this.secretKeysWorker = arraySecretKeysWorkerNew[0]
@@ -959,7 +959,7 @@ class ChatPage extends LitElement {
 				setTimeout(() => this.processQueue(), 2000) // Wait for 2 seconds before retrying
 			}
 		} catch (error) {
-			console.error("Failed to send message:", error)
+			console.error('Failed to send message:', error)
 			setTimeout(() => this.processQueue(), 10000) // Wait for 10 seconds before retrying
 		}
 	}
@@ -999,8 +999,8 @@ class ChatPage extends LitElement {
 
 	async getMoreMembers(groupId) {
 		try {
-			const getMembers = await parentEpml.request("apiCall", {
-				type: "api",
+			const getMembers = await parentEpml.request('apiCall', {
+				type: 'api',
 				url: `/groups/members/${groupId}?onlyAdmins=false&limit=20&offset=${this.pageNumber * 20}`
 			})
 			const getMembersWithName = (getMembers.members || []).map(async (member) => {
@@ -1056,12 +1056,12 @@ class ChatPage extends LitElement {
 			const nodesLines = []
 
 			splitLines.forEach(line => {
-				let nodeJson = {type: "paragraph"}
+				let nodeJson = {type: 'paragraph'}
 
 				if (line.length === 0) {
-					nodeJson.content = [{type: "hardBreak"}]
+					nodeJson.content = [{type: 'hardBreak'}]
 				} else if (line.length > 0) {
-					nodeJson.content = [{type: "text", text: line}]
+					nodeJson.content = [{type: 'text', text: line}]
 				}
 
 				let modifiedLine = Node.fromJSON(context.doc.type.schema, nodeJson)
@@ -1345,7 +1345,7 @@ class ChatPage extends LitElement {
 	initialChat(e) {
 		if (this.editor && !this.editor.isFocused && this.currentEditor === '_chatEditorDOM' && !this.openForwardOpen && !this.openTipUser && !this.openGifModal) {
 			// WARNING: Deprecated methods from KeyBoard Event
-			if (e.code === "Space" || e.keyCode === 32 || e.which === 32) { /* empty */ } else if (inputKeyCodes.includes(e.keyCode)) {
+			if (e.code === 'Space' || e.keyCode === 32 || e.which === 32) { /* empty */ } else if (inputKeyCodes.includes(e.keyCode)) {
 				this.editor.commands.insertContent(e.key)
 				this.editor.commands.focus('end')
 			} else {
@@ -1394,7 +1394,7 @@ class ChatPage extends LitElement {
 						e.preventDefault()
 					} catch (error) {
 						console.error(error)
-						let errorMsg = get("chatpage.cchange81")
+						let errorMsg = get('chatpage.cchange81')
 						parentEpml.request('showSnackBar', `${errorMsg}`)
 					}
 				} else {
@@ -1446,9 +1446,9 @@ class ChatPage extends LitElement {
 
 			const marginElements = Array.from(this.shadowRoot.querySelector('chat-scroller').shadowRoot.querySelectorAll('message-template'))
 			const findMessage2 = marginElements.find((item) =>
-					item.messageObj.signature === message.signature) || marginElements.find(
-						(item) => item.messageObj.originalSignature === message.signature
-					)
+				item.messageObj.signature === message.signature) || marginElements.find(
+				(item) => item.messageObj.originalSignature === message.signature
+			)
 					|| marginElements.find((item) => item.messageObj.signature === message.originalSignature)
 					|| marginElements.find((item) => item.messageObj.originalSignature === message.originalSignature)
 
@@ -1485,7 +1485,7 @@ class ChatPage extends LitElement {
 				loading: false
 			}
 
-			let errorMsg = get("chatpage.cchange66")
+			let errorMsg = get('chatpage.cchange66')
 
 			parentEpml.request('showSnackBar', `${errorMsg}`)
 		}
@@ -1516,7 +1516,7 @@ class ChatPage extends LitElement {
 			this.userFoundModalOpen = true
 		} catch (error) {
 			this.loading = false
-			let err4string = get("chatpage.cchange35")
+			let err4string = get('chatpage.cchange35')
 			parentEpml.request('showSnackBar', `${err4string}`)
 		}
 	}
@@ -1585,12 +1585,12 @@ class ChatPage extends LitElement {
 			return
 		} else if (acceptedAttachmentExtension.includes(fileExtension)){
 			this.attachment = file
-			this.currentEditor = "newAttachmentChat"
+			this.currentEditor = 'newAttachmentChat'
 			this.editorAttachment.commands.setContent('')
 			return
 		} else {
 			this.resetChatEditor()
-			parentEpml.request('showSnackBar', get("chatpage.cchange109"))
+			parentEpml.request('showSnackBar', get('chatpage.cchange109'))
 			return
 		}
 	}
@@ -1626,7 +1626,7 @@ class ChatPage extends LitElement {
 
 	async initUpdate() {
 		this.secretKeysWorker = {}
-		let arraySecretKeysWorkerInit = JSON.parse(localStorage.getItem("symKeysCurrent") || "[]")
+		let arraySecretKeysWorkerInit = JSON.parse(localStorage.getItem('symKeysCurrent') || '[]')
 		this.secretKeysWorker = arraySecretKeysWorkerInit[0]
 
 		if (this.webSocket) {
@@ -1674,18 +1674,18 @@ class ChatPage extends LitElement {
 
 		if (!isRecipient && groupId.toString() !== '0') {
 			try {
-				const getMembers = await parentEpml.request("apiCall", {
-					type: "api",
+				const getMembers = await parentEpml.request('apiCall', {
+					type: 'api',
 					url: `/groups/members/${groupId}?onlyAdmins=false&limit=20&offset=0`
 				})
 
-				const getMembersAdmins = await parentEpml.request("apiCall", {
-					type: "api",
+				const getMembersAdmins = await parentEpml.request('apiCall', {
+					type: 'api',
 					url: `/groups/members/${groupId}?onlyAdmins=true&limit=0`
 				})
 
-				const getGroupInfo = await parentEpml.request("apiCall", {
-					type: "api",
+				const getGroupInfo = await parentEpml.request('apiCall', {
+					type: 'api',
 					url: `/groups/${groupId}`
 				})
 
@@ -1797,8 +1797,8 @@ class ChatPage extends LitElement {
 
 	async getName(recipient) {
 		try {
-			const getNames = await parentEpml.request("apiCall", {
-				type: "api",
+			const getNames = await parentEpml.request('apiCall', {
+				type: 'api',
 				url: `/names/address/${recipient}`
 			})
 
@@ -1809,15 +1809,15 @@ class ChatPage extends LitElement {
 			}
 
 		} catch (error) {
-			return ""
+			return ''
 		}
 	}
 
 	async renderPlaceholder() {
 		const getName = async (recipient) => {
 			try {
-				const getNames = await parentEpml.request("apiCall", {
-					type: "api",
+				const getNames = await parentEpml.request('apiCall', {
+					type: 'api',
 					url: `/names/address/${recipient}`
 				})
 
@@ -1828,7 +1828,7 @@ class ChatPage extends LitElement {
 				}
 
 			} catch (error) {
-				return ""
+				return ''
 			}
 		}
 
@@ -1909,16 +1909,16 @@ class ChatPage extends LitElement {
 
 	updatePlaceholder(editor, text) {
 		editor.extensionManager.extensions.forEach((extension) => {
-			if (extension.name === "placeholder") {
-				extension.options["placeholder"] = text
+			if (extension.name === 'placeholder') {
+				extension.options['placeholder'] = text
 				editor.commands.focus('end')
 			}
 		})
 	}
 
 	async getOldMessageDynamic(limit, timestampClickedOnMessage, messageToGoTo) {
-		const findMsg = await parentEpml.request("apiCall", {
-			type: "api",
+		const findMsg = await parentEpml.request('apiCall', {
+			type: 'api',
 			url: `/chat/message/${messageToGoTo.originalSignature || messageToGoTo.signature}?encoding=BASE64`,
 		})
 
@@ -2542,13 +2542,13 @@ class ChatPage extends LitElement {
 				let decodedMessage = window.parent.Base64Message.decode(encodedMessageObj.data, symKeys)
 				decodedMessageObj = { ...encodedMessageObj, decodedMessage }
 			} else {
-				decodedMessageObj = { ...encodedMessageObj, decodedMessage: "Cannot Decrypt Message!" }
+				decodedMessageObj = { ...encodedMessageObj, decodedMessage: 'Cannot Decrypt Message!' }
 			}
 		} else {
 			// group chat
 			let decodedMessage
 
-			const noRef = "noref"
+			const noRef = 'noref'
 
 			if (encodedMessageObj.chatReference) {
 				decodedMessage = window.parent.Base64Message.decode(encodedMessageObj.data, symKeys, encodedMessageObj.chatReference)
@@ -2568,11 +2568,11 @@ class ChatPage extends LitElement {
 			let initial = 0
 			let directSocketTimeout
 			let myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
-			let nodeUrl = myNode.domain + ":" + myNode.port
+			let nodeUrl = myNode.domain + ':' + myNode.port
 			let nodeProtocol = myNode.protocol
 			let directSocketLink
 
-			if (nodeProtocol === "https") {
+			if (nodeProtocol === 'https') {
 				directSocketLink = `wss://${nodeUrl}/websockets/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${cid}&encoding=BASE64&limit=1`
 			} else {
 				// Fallback to http
@@ -2697,11 +2697,11 @@ class ChatPage extends LitElement {
 			let count = 0
 			let groupSocketTimeout
 			let myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
-			let nodeUrl = myNode.domain + ":" + myNode.port
+			let nodeUrl = myNode.domain + ':' + myNode.port
 			let nodeProtocol = myNode.protocol
 			let groupSocketLink
 
-			if (nodeProtocol === "https") {
+			if (nodeProtocol === 'https') {
 				groupSocketLink = `wss://${nodeUrl}/websockets/chat/messages?txGroupId=${groupId}&encoding=BASE64&limit=1`
 			} else {
 				// Fallback to http
@@ -2841,7 +2841,7 @@ class ChatPage extends LitElement {
 	async _sendMessage(outSideMsg, msg, messageQueue) {
 		const _chatId = this._chatId
 		const isReceipient = this.isReceipient
-		const str = "iVBORw0KGgoAAAANSUhEUgAAAsAAAAGMAQMAAADuk4YmAAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAADlJREFUeF7twDEBAAAAwiD7p7bGDlgYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAGJrAABgPqdWQAAAABJRU5ErkJggg=="
+		const str = 'iVBORw0KGgoAAAANSUhEUgAAAsAAAAGMAQMAAADuk4YmAAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAADlJREFUeF7twDEBAAAAwiD7p7bGDlgYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAGJrAABgPqdWQAAAABJRU5ErkJggg=='
 
 		let _publicKey = this._publicKey
 
@@ -2869,7 +2869,7 @@ class ChatPage extends LitElement {
 					} catch (error) { /* empty */ }
 
 					if (!hasPublicKey || !_publicKey.hasPubKey) {
-						let err4string = get("chatpage.cchange39")
+						let err4string = get('chatpage.cchange39')
 						parentEpml.request('showSnackBar', `${err4string}`)
 						return
 					}
@@ -2890,8 +2890,8 @@ class ChatPage extends LitElement {
 
 			const getName = async (recipient) => {
 				try {
-					const getNames = await parentEpml.request("apiCall", {
-						type: "api",
+					const getNames = await parentEpml.request('apiCall', {
+						type: 'api',
 						url: `/names/address/${recipient}`
 					})
 
@@ -2951,7 +2951,7 @@ class ChatPage extends LitElement {
 						quality: 0.6,
 						maxWidth: 500,
 						success(result) {
-							const file = new File([result], "name", {
+							const file = new File([result], 'name', {
 								type: 'image/png'
 							})
 
@@ -3062,7 +3062,7 @@ class ChatPage extends LitElement {
 						quality: 0.6,
 						maxWidth: 500,
 						success(result) {
-							const file = new File([result], "name", {
+							const file = new File([result], 'name', {
 								type: 'image/png'
 							})
 
@@ -3174,7 +3174,7 @@ class ChatPage extends LitElement {
 						quality: 0.6,
 						maxWidth: 500,
 						success(result) {
-							const file = new File([result], "name", {
+							const file = new File([result], 'name', {
 								type: 'image/png'
 							})
 
@@ -3286,7 +3286,7 @@ class ChatPage extends LitElement {
 						quality: 0.6,
 						maxWidth: 500,
 						success(result) {
-							const file = new File([result], "name", {
+							const file = new File([result], 'name', {
 								type: 'image/png'
 							})
 
@@ -3362,14 +3362,14 @@ class ChatPage extends LitElement {
 				const userName = await getName(this.selectedAddress.address)
 
 				if (!userName) {
-					parentEpml.request('showSnackBar', get("chatpage.cchange27"))
+					parentEpml.request('showSnackBar', get('chatpage.cchange27'))
 					this.isLoading = false
 					this.isUploadingImage = false
 					this.imageFile = null
 					return
 				}
 
-				let service = "QCHAT_IMAGE"
+				let service = 'QCHAT_IMAGE'
 				let name = userName
 				let identifier
 
@@ -3413,7 +3413,7 @@ class ChatPage extends LitElement {
 							maxWidth: 1200,
 							mimeType: 'image/webp',
 							success(result) {
-								const file = new File([result], "name", {
+								const file = new File([result], 'name', {
 									type: 'image/webp'
 								})
 								compressedFile = file
@@ -3427,7 +3427,7 @@ class ChatPage extends LitElement {
 					const fileSize = compressedFile.size
 
 					if (fileSize > 500000) {
-						parentEpml.request('showSnackBar', get("chatpage.cchange26"))
+						parentEpml.request('showSnackBar', get('chatpage.cchange26'))
 						this.isLoading = false
 						this.isUploadingImage = false
 						return
@@ -3483,7 +3483,7 @@ class ChatPage extends LitElement {
 				const userName = await getName(this.selectedAddress.address)
 
 				if (!userName) {
-					parentEpml.request('showSnackBar', get("chatpage.cchange27"))
+					parentEpml.request('showSnackBar', get('chatpage.cchange27'))
 					this.isLoading = false
 					this.isUploadingGif = false
 					this.gifFile = null
@@ -3514,7 +3514,7 @@ class ChatPage extends LitElement {
 				const fileSize = gifFile.size
 
 				if (fileSize > 3000000) {
-					parentEpml.request('showSnackBar', get("chatpage.cchange103"))
+					parentEpml.request('showSnackBar', get('chatpage.cchange103'))
 					this.isLoading = false
 					this.isUploadingGif = false
 					return
@@ -3577,7 +3577,7 @@ class ChatPage extends LitElement {
 				const userName = await getName(this.selectedAddress.address)
 
 				if (!userName) {
-					parentEpml.request('showSnackBar', get("chatpage.cchange27"))
+					parentEpml.request('showSnackBar', get('chatpage.cchange27'))
 					this.isUploadingAttachment = false
 					this.isLoading = false
 					this.attachment = null
@@ -3605,7 +3605,7 @@ class ChatPage extends LitElement {
 				const fileSize = attachment.size
 
 				if (fileSize > 10000000) {
-					parentEpml.request('showSnackBar', get("chatpage.cchange77"))
+					parentEpml.request('showSnackBar', get('chatpage.cchange77'))
 					this.isLoading = false
 					this.isUploadingAttachment = false
 					return
@@ -3670,7 +3670,7 @@ class ChatPage extends LitElement {
 				const userName = await getName(this.selectedAddress.address)
 
 				if (!userName) {
-					parentEpml.request('showSnackBar', get("chatpage.cchange27"))
+					parentEpml.request('showSnackBar', get('chatpage.cchange27'))
 					this.isUploadingAppFile = false
 					this.isLoading = false
 					this.appFile = null
@@ -3698,7 +3698,7 @@ class ChatPage extends LitElement {
 				const fileSize = appFile.size
 
 				if (fileSize > 125000000) {
-					parentEpml.request('showSnackBar', get("chatpage.cchange100"))
+					parentEpml.request('showSnackBar', get('chatpage.cchange100'))
 					this.isLoading = false
 					this.isUploadingAppFile = false
 					return
@@ -3952,9 +3952,9 @@ class ChatPage extends LitElement {
 		}
 
 		const sendForwardRequest = async () => {
-			const userInput = this.shadowRoot.getElementById("sendTo").value.trim()
+			const userInput = this.shadowRoot.getElementById('sendTo').value.trim()
 			if (!userInput && !this.forwardActiveChatHeadUrl.url) {
-				let err4string = get("chatpage.cchange65")
+				let err4string = get('chatpage.cchange65')
 				getSendChatResponse(false, true, err4string)
 				return
 			}
@@ -3985,9 +3985,9 @@ class ChatPage extends LitElement {
 				} catch (error) { /* empty */ }
 			}
 
-			if (!this.forwardActiveChatHeadUrl.selected && this.shadowRoot.getElementById("sendTo").value !== "") {
+			if (!this.forwardActiveChatHeadUrl.selected && this.shadowRoot.getElementById('sendTo').value !== '') {
 				try {
-					let userPubkey = ""
+					let userPubkey = ''
 					const validatedAddress = await parentEpml.request('apiCall', {
 						type: 'api',
 						url: `/addresses/validate/${userInput}`
@@ -4031,11 +4031,11 @@ class ChatPage extends LitElement {
 							this.forwardActiveChatHeadUrl = {
 								...this.forwardActiveChatHeadUrl,
 								url: `direct/${userInput}`,
-								name: "",
+								name: '',
 								selected: true
 							}
 						} else if (!validatedAddress && !validatedUsername.name) {
-							let err4string = get("chatpage.cchange62")
+							let err4string = get('chatpage.cchange62')
 							getSendChatResponse(false, true, err4string)
 							return
 						}
@@ -4059,7 +4059,7 @@ class ChatPage extends LitElement {
 			this.openForwardOpen = false
 			if (isRecipient === true) {
 				if (!publicKey.hasPubKey) {
-					let err4string = get("chatpage.cchange39")
+					let err4string = get('chatpage.cchange39')
 					parentEpml.request('showSnackBar', `${err4string}`)
 					getSendChatResponse(false)
 					return
@@ -4072,7 +4072,7 @@ class ChatPage extends LitElement {
 						recipient: recipientAddress,
 						recipientPublicKey: publicKey.key,
 						hasChatReference: 0,
-						chatReference: "",
+						chatReference: '',
 						message: messageText,
 						lastReference: reference,
 						proofOfWorkNonce: 0,
@@ -4140,15 +4140,15 @@ class ChatPage extends LitElement {
 		const getSendChatResponse = (response, isForward) => {
 			if (response === true) {
 				if (isForward) {
-					let successString = get("blockpage.bcchange15")
+					let successString = get('blockpage.bcchange15')
 					parentEpml.request('showSnackBar', `${successString}`)
 					this.resetChatEditor()
 					this.closeEditMessageContainer()
 					this.closeRepliedToContainer()
 					this.openForwardOpen = false
 					this.forwardActiveChatHeadUrl = {
-						url: "",
-						name: "",
+						url: '',
+						name: '',
 						selected: false
 					}
 					this.isLoading = false

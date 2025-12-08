@@ -29,10 +29,10 @@ class FragFileInput extends LitElement {
 				<slot name="info-text"></slot>
 				<div style="line-height: 40px; text-align: center;">
 					<slot id="trigger" name="inputTrigger" @click=${() => this.shadowRoot.getElementById('fileInput').click()} style="dispay:inline;">
-						<mwc-button><mwc-icon>cloud_upload</mwc-icon><span style="color: var(--black);">&nbsp; ${translate("fragfile.selectfile")}</span></mwc-button>
+						<mwc-button><mwc-icon>cloud_upload</mwc-icon><span style="color: var(--black);">&nbsp; ${translate('fragfile.selectfile')}</span></mwc-button>
 					</slot>
 					<br>
-					<span style="text-align: center; padding-top: 4px; color: var(--black);">${translate("fragfile.dragfile")}</span>
+					<span style="text-align: center; padding-top: 4px; color: var(--black);">${translate('fragfile.dragfile')}</span>
 				</div>
 			</div>
 			<input type="file" id="fileInput" accept="${this.accept}" @change="${e => this.readFile(e.target.files[0])}">

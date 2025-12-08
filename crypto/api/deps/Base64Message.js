@@ -34,8 +34,8 @@ Base64Message.decode = function (string, keys, ref) {
 	const decoder = new TextDecoder()
 	const decodedString = decoder.decode(bytes)
 
-	if (decodedString.includes("messageText") || decodedString === "4001") {
-		if (decodedString === "4001") {
+	if (decodedString.includes('messageText') || decodedString === '4001') {
+		if (decodedString === '4001') {
 			const firstString = 'First group key created.'
 			const hubString = '{"messageText":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"' + firstString + '"}]}]},"images":[""],"repliedTo":"","version":3}'
 			return hubString
@@ -52,7 +52,7 @@ Base64Message.decode = function (string, keys, ref) {
 		const decryptToUnit8Array = base64ToUint8Array(res)
 		const responseData = uint8ArrayToObject(decryptToUnit8Array)
 
-		if (responseData.type === "edit") {
+		if (responseData.type === 'edit') {
 			editStr = true
 		}
 
@@ -64,9 +64,9 @@ Base64Message.decode = function (string, keys, ref) {
 			hubSpecialId = responseData.specialId
 		}
 
-		if (responseData.type === "notification") {
+		if (responseData.type === 'notification') {
 			hubMessageStr = responseData.data.message
-		} else if (ref !== "noref" && responseData.type === "reaction") {
+		} else if (ref !== 'noref' && responseData.type === 'reaction') {
 			reactionStr = '"isReaction":true,'
 			repliedToStr = ref
 			hubMessageStr = responseData.content

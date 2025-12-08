@@ -69,66 +69,66 @@ class ChatRightPanel extends LitElement {
 					<div class="group-info">
 						<p class="group-description">${this.leaveGroupObj && this.leaveGroupObj.description}</p>
 						<p class="group-subheader">Members: <span class="group-data">${this.leaveGroupObj && this.leaveGroupObj.memberCount}</span></p>
-						<p class="group-subheader">Date created : <span class="group-data">${new Date(this.leaveGroupObj.created).toLocaleDateString("en-US")}</span></p>
+						<p class="group-subheader">Date created : <span class="group-data">${new Date(this.leaveGroupObj.created).toLocaleDateString('en-US')}</span></p>
 					</div>
 					<br />
 					<p class="chat-right-panel-label">GROUP OWNER</p>
 					${owner.map((item) => {
-						return html`
+		return html`
 							<chat-side-nav-heads
 								activeChatHeadUrl=""
 								.setActiveChatHeadUrl=${(val) => {
-									if (val.address === this.myAddress) return;
-									this.selectedHead = val;
-									this.setOpenUserInfo(true);
-									this.setUserName({
-										sender: val.address,
-										senderName: val.name ? val.name : ""
-									});
-								}}
+		if (val.address === this.myAddress) return
+		this.selectedHead = val
+		this.setOpenUserInfo(true)
+		this.setUserName({
+			sender: val.address,
+			senderName: val.name ? val.name : ''
+		})
+	}}
 								chatInfo=${JSON.stringify(item)}
 							>
 							</chat-side-nav-heads>
 						`
-					})}
+	})}
 					<p class="chat-right-panel-label">ADMINS</p>
 					${this.groupAdmin.map((item) => {
-						return html`
+		return html`
 							<chat-side-nav-heads
 								activeChatHeadUrl=""
 								.setActiveChatHeadUrl=${(val) => {
-									if (val.address === this.myAddress) return;
-									this.selectedHead = val;
-									this.setOpenUserInfo(true);
-									this.setUserName({
-										sender: val.address,
-										senderName: val.name ? val.name : ""
-									});
-								}}
+		if (val.address === this.myAddress) return
+		this.selectedHead = val
+		this.setOpenUserInfo(true)
+		this.setUserName({
+			sender: val.address,
+			senderName: val.name ? val.name : ''
+		})
+	}}
 								chatInfo=${JSON.stringify(item)}
 							>
 							</chat-side-nav-heads>
 						`
-					})}
+	})}
 					<p class="chat-right-panel-label">MEMBERS</p>
 					${this.groupMembers.map((item) => {
-						return html`
+		return html`
 							<chat-side-nav-heads
 								activeChatHeadUrl=""
 								.setActiveChatHeadUrl=${(val) => {
-									if (val.address === this.myAddress) return;
-									this.selectedHead = val;
-									this.setOpenUserInfo(true);
-									this.setUserName({
-										sender: val.address,
-										senderName: val.name ? val.name : ""
-									});
-								}}
+		if (val.address === this.myAddress) return
+		this.selectedHead = val
+		this.setOpenUserInfo(true)
+		this.setUserName({
+			sender: val.address,
+			senderName: val.name ? val.name : ''
+		})
+	}}
 								chatInfo=${JSON.stringify(item)}
 							>
 							</chat-side-nav-heads>
 						`
-					})}
+	})}
 					<div id='downObserver'></div>
 				</div>
 			</div>
@@ -193,4 +193,4 @@ class ChatRightPanel extends LitElement {
 	}
 }
 
-window.customElements.define("chat-right-panel", ChatRightPanel)
+window.customElements.define('chat-right-panel', ChatRightPanel)

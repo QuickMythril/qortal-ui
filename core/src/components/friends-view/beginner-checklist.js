@@ -58,46 +58,46 @@ class BeginnerChecklist extends connect(store)(LitElement) {
 							<div class="task-list-item">
 								<p>Are you synced?</p>
 								${this.syncPercentage === 100 ?
-									html`
+		html`
 										<mwc-icon id="checklist-general-icon" style="color: green; user-select:none">
 											task_alt
 										</mwc-icon>
 									`
-									: html`
+		: html`
 										<mwc-icon id="checklist-general-icon" style="color: red; user-select:none">
 											radio_button_unchecked
 										</mwc-icon>
 									`
-								}
+}
 							</div>
 							<div
 								class="task-list-item"
 								style="cursor:pointer"
 								@click=${() => {
-									store.dispatch(
-										setNewTab({
-											url: `group-management`,
-											id: this.uid.rnd(),
-											myPlugObj: {
-												url: 'name-registration',
-												domain: 'core',
-												page: 'name-registration/index.html',
-												title: 'Name Registration',
-												icon: 'vaadin:user-check',
-												mwcicon: 'manage_accounts',
-												pluginNumber: 'plugin-qCmtXAQmtu',
-												menus: [],
-												parent: false
-											},
-											openExisting: true
-										})
-									);
-									this.handleBlur();
-								}}
+		store.dispatch(
+			setNewTab({
+				url: 'group-management',
+				id: this.uid.rnd(),
+				myPlugObj: {
+					url: 'name-registration',
+					domain: 'core',
+					page: 'name-registration/index.html',
+					title: 'Name Registration',
+					icon: 'vaadin:user-check',
+					mwcicon: 'manage_accounts',
+					pluginNumber: 'plugin-qCmtXAQmtu',
+					menus: [],
+					parent: false
+				},
+				openExisting: true
+			})
+		)
+		this.handleBlur()
+	}}
 							>
 								<p>Do you have a name registered?</p>
 								${this.hasName ?
-									html`
+		html`
 										<mwc-icon id="checklist-general-icon" style="color: green; user-select:none">
 											task_alt
 										</mwc-icon>
@@ -106,13 +106,13 @@ class BeginnerChecklist extends connect(store)(LitElement) {
 											radio_button_unchecked
 										</mwc-icon>
 									`
-								}
+}
 							</div>
 						</div>
 					</div>
 				</div>
 			`
-		: ''
+			: ''
 	}
 
 	firstUpdated() {

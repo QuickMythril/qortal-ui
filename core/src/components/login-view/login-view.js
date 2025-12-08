@@ -300,7 +300,7 @@ class LoginView extends connect(store)(LitElement) {
 					<div class="login-card-center-container">
 						<div class="login-card" id="login-card">
 							<img class="qortal-logo" src="${this.config.coin.logo}">
-							<h5 ?hidden="${this.selectedPage != "welcome"}">UI: v${this.nodeConfig.version ? this.nodeConfig.version : ''}</h5>
+							<h5 ?hidden="${this.selectedPage != 'welcome'}">UI: v${this.nodeConfig.version ? this.nodeConfig.version : ''}</h5>
 							${this.renderSelectedNodeOnStart()}
 							<iron-pages selected="${this.selectedPage}" attr-for-selected="page" id="loginContainerPages">
 								<welcome-page @next=${e => this.selectedPageElement.next(e)} page="welcome"></welcome-page>

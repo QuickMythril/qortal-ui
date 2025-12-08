@@ -12,23 +12,23 @@ const GENERATE_BUILD_CONFIG = 'generate_build_config'
  */
 
 const uiCoreController = (type) => {
-    switch (type) {
-        case SERVER:
-            const { createServer } = require('./server/server.js')
-            return createServer
-        case BUILD:
+	switch (type) {
+		case SERVER:
+			const { createServer } = require('./server/server.js')
+			return createServer
+		case BUILD:
 			return require('./tooling/build.js')
-        case WATCH:
+		case WATCH:
 			return require('./tooling/watch.js')
-        case WATCH_INLINE:
+		case WATCH_INLINE:
 			return require('./tooling/watch-inlines.js')
-        case DEFAULT_CONFIG:
+		case DEFAULT_CONFIG:
 			return require('./config/config.js')
-        case GENERATE_BUILD_CONFIG:
+		case GENERATE_BUILD_CONFIG:
 			return require('./tooling/generateBuildConfig.js')
-        default:
-            return
-    }
+		default:
+			return
+	}
 }
 
 module.exports = uiCoreController

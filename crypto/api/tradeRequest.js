@@ -4,7 +4,7 @@ import TradeBotRespondRequest from './transactions/trade-portal/tradebot/TradeBo
 import signTradeBotTransaction from './transactions/trade-portal/tradebot/signTradeBotTransaction'
 import DeleteTradeOffer from './transactions/trade-portal/tradeoffer/DeleteTradeOffer'
 import { request } from './fetch-request'
-import TradeBotRespondMultipleRequest from "./transactions/trade-portal/tradebot/TradeBotRespondMultipleRequest";
+import TradeBotRespondMultipleRequest from './transactions/trade-portal/tradebot/TradeBotRespondMultipleRequest'
 import { isPublicNode } from '../../core/src/constants/nodes'
 
 const getSelectedNode = () => window.parent.reduxStore.getState().app.nodeConfig.knownNodes[

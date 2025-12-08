@@ -52,7 +52,7 @@ class ChatWelcomePage extends LitElement {
 		return html`
 			<div>
 				<div>
-					<span class="welcome-title">${translate("welcomepage.wcchange1")}</span>
+					<span class="welcome-title">${translate('welcomepage.wcchange1')}</span>
 					<hr style="color: #eee; border-radius: 80%; margin-bottom: 2rem;">
 				</div>
 				<div class="sub-main">
@@ -60,27 +60,27 @@ class ChatWelcomePage extends LitElement {
 							<mwc-icon class="img-icon">chat</mwc-icon><br>
 							<div class="name-line">${this.displayName}</div>
 							<div class="address-line">${this.myAddress.address || ''}</div>
-							<div class="start-chat" @click="${() => this.setOpenPrivateMessage({name: "", open: true})}">
-								${translate("welcomepage.wcchange2")}
+							<div class="start-chat" @click="${() => this.setOpenPrivateMessage({name: '', open: true})}">
+								${translate('welcomepage.wcchange2')}
 							</div>
 						</div>
 					</div>
 				<!-- Start Chatting Dialog -->
 				<mwc-dialog id="startSecondChatDialog" scrimClickAction="${this.isLoading ? '' : 'close'}">
 					<div style="text-align:center">
-						<h1>${translate("welcomepage.wcchange2")}</h1>
+						<h1>${translate('welcomepage.wcchange2')}</h1>
 						<hr>
 					</div>
-					<p>${translate("welcomepage.wcchange3")}</p>
-					<textarea class="input" ?disabled=${this.isLoading} id="sendTo" placeholder="${translate("welcomepage.wcchange4")}" rows="1"></textarea>
+					<p>${translate('welcomepage.wcchange3')}</p>
+					<textarea class="input" ?disabled=${this.isLoading} id="sendTo" placeholder="${translate('welcomepage.wcchange4')}" rows="1"></textarea>
 					<p style="margin-bottom:0;">
-						<textarea class="textarea" @keydown=${(e) => this._textArea(e)} ?disabled=${this.isLoading} id="messageBox" placeholder="${translate("welcomepage.wcchange5")}" rows="1"></textarea>
+						<textarea class="textarea" @keydown=${(e) => this._textArea(e)} ?disabled=${this.isLoading} id="messageBox" placeholder="${translate('welcomepage.wcchange5')}" rows="1"></textarea>
 					</p>
-					<mwc-button ?disabled="${this.isLoading}" slot="primaryAction" @click=${() => {this._sendMessage();}}>
-						${translate("welcomepage.wcchange6")}
+					<mwc-button ?disabled="${this.isLoading}" slot="primaryAction" @click=${() => {this._sendMessage()}}>
+						${translate('welcomepage.wcchange6')}
 					</mwc-button>
 					<mwc-button ?disabled="${this.isLoading}" slot="secondaryAction" dialogAction="cancel" class="red">
-						${translate("general.close")}
+						${translate('general.close')}
 					</mwc-button>
 				</mwc-dialog>
 			</div>
@@ -190,7 +190,7 @@ class ChatWelcomePage extends LitElement {
 	}
 
 	_sendMessage() {
-		this.isLoading = true;
+		this.isLoading = true
 		const recipient = this.shadowRoot.getElementById('sendTo').value
 		const messageBox = this.shadowRoot.getElementById('messageBox')
 		const messageText = messageBox.value
@@ -214,13 +214,13 @@ class ChatWelcomePage extends LitElement {
 		let recipient
 
 		const validateName = async (receiverName) => {
-			let myRes;
+			let myRes
 			let myNameRes = await parentEpml.request('apiCall', {
 				type: 'api',
 				url: `/names/${receiverName}`
-			});
+			})
 			if (myNameRes.error === 401) {
-				myRes = false;
+				myRes = false
 			} else {
 				myRes = myNameRes
 			}
@@ -255,7 +255,7 @@ class ChatWelcomePage extends LitElement {
 			if (addressPublicKey.error === 102) {
 				_publicKey = false
 				// Do something here...
-				let err1string = get("welcomepage.wcchange7")
+				let err1string = get('welcomepage.wcchange7')
 				parentEpml.request('showSnackBar', `${err1string}`)
 				this.isLoading = false
 			} else if (addressPublicKey !== false) {
@@ -296,7 +296,7 @@ class ChatWelcomePage extends LitElement {
 		}
 
 		const _computePow = async (chatBytes) => {
-			const _chatBytesArray = Object.keys(chatBytes).map(function (key) { return chatBytes[key]; })
+			const _chatBytesArray = Object.keys(chatBytes).map(function (key) { return chatBytes[key] })
 			const chatBytesArray = new Uint8Array(_chatBytesArray)
 			const chatBytesHash = new window.parent.Sha256().process(chatBytesArray).finish().result
 			const hashPtr = window.parent.sbrk(32, window.parent.heap)
@@ -321,15 +321,15 @@ class ChatWelcomePage extends LitElement {
 
 		const getSendChatResponse = (response) => {
 			if (response === true) {
-				messageBox.value = ""
-				let err2string = get("welcomepage.wcchange8")
+				messageBox.value = ''
+				let err2string = get('welcomepage.wcchange8')
 				parentEpml.request('showSnackBar', `${err2string}`)
 				this.isLoading = false
 			} else if (response.error) {
 				parentEpml.request('showSnackBar', response.message)
 				this.isLoading = false
 			} else {
-				let err3string = get("welcomepage.wcchange9")
+				let err3string = get('welcomepage.wcchange9')
 				parentEpml.request('showSnackBar', `${err3string}`)
 				this.isLoading = false
 			}

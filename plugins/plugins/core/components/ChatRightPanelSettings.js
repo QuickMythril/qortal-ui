@@ -47,13 +47,13 @@ class ChatRightPanelSettings extends LitElement {
 				</div>
 				<div class="container-body">
 					<div style="margin-top: 5px;">
-						<p class="group-name">${translate("chatsettings.cs2")}</p>
+						<p class="group-name">${translate('chatsettings.cs2')}</p>
 						<hr style="color: var(--black);">
 					</div>
 					<div class="group-info">
-						<p class="group-description">${translate("chatsettings.cs3")}</p>
+						<p class="group-description">${translate('chatsettings.cs3')}</p>
 						<div class="checkbox-row">
-							<label for="agoButton" id="agoButtonLabel" style="color: var(--black);">${translate("chatsettings.cs4")}</label>
+							<label for="agoButton" id="agoButtonLabel" style="color: var(--black);">${translate('chatsettings.cs4')}</label>
 							<mwc-checkbox
 								style="margin-right: -15px;"
 								id="agoButton"
@@ -62,7 +62,7 @@ class ChatRightPanelSettings extends LitElement {
 							></mwc-checkbox>
 						</div>
 						<div class="checkbox-row" style="margin-top: -20px;">
-							<label for="isoButton" id="isoButtonLabel" style="color: var(--black);">${translate("chatsettings.cs5")}</label>
+							<label for="isoButton" id="isoButtonLabel" style="color: var(--black);">${translate('chatsettings.cs5')}</label>
 							<mwc-checkbox
 								style="margin-right: -15px;"
 								id="agoButton"
@@ -71,7 +71,7 @@ class ChatRightPanelSettings extends LitElement {
 							></mwc-checkbox>
 						</div>
 						<div class="checkbox-row" style="margin-top: -20px;">
-							<label for="bothButton" id="bothButtonLabel" style="color: var(--black);">${translate("chatsettings.cs5")} + ${translate("chatsettings.cs4")}</label>
+							<label for="bothButton" id="bothButtonLabel" style="color: var(--black);">${translate('chatsettings.cs5')} + ${translate('chatsettings.cs4')}</label>
 							<mwc-checkbox
 								style="margin-right: -15px;"
 								id="agoButton"
@@ -82,9 +82,9 @@ class ChatRightPanelSettings extends LitElement {
 					</div>
 					<div><hr style="color: var(--black);"></div>
 					<div class="group-info">
-						<p class="group-description">${translate("chatsettings.cs6")}</p>
+						<p class="group-description">${translate('chatsettings.cs6')}</p>
 						<div class="checkbox-row">
-							<label for="font16Button" id="font16ButtonLabel" style="color: var(--black);">${translate("chatsettings.cs7")} 16${translate("chatsettings.cs8")}</label>
+							<label for="font16Button" id="font16ButtonLabel" style="color: var(--black);">${translate('chatsettings.cs7')} 16${translate('chatsettings.cs8')}</label>
 							<mwc-checkbox
 								style="margin-right: -15px;"
 								id="font16Button"
@@ -93,7 +93,7 @@ class ChatRightPanelSettings extends LitElement {
 							></mwc-checkbox>
 						</div>
 						<div class="checkbox-row" style="margin-top: -20px;">
-							<label for="font18Button" id="font18ButtonLabel" style="color: var(--black);">18${translate("chatsettings.cs8")}</label>
+							<label for="font18Button" id="font18ButtonLabel" style="color: var(--black);">18${translate('chatsettings.cs8')}</label>
 							<mwc-checkbox
 								style="margin-right: -15px;"
 								id="font18Button"
@@ -101,7 +101,7 @@ class ChatRightPanelSettings extends LitElement {
 								?checked=${this.currentFontSize18}
 							></mwc-checkbox>
 							<span style="color: var(--black)">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-							<label for="font24Button" id="font20ButtonLabel" style="color: var(--black);">20${translate("chatsettings.cs8")}</label>
+							<label for="font24Button" id="font20ButtonLabel" style="color: var(--black);">20${translate('chatsettings.cs8')}</label>
 							<mwc-checkbox
 								style="margin-right: -15px;"
 								id="font20Button"
@@ -109,7 +109,7 @@ class ChatRightPanelSettings extends LitElement {
 								?checked=${this.currentFontSize20}
 							></mwc-checkbox>
 							<span style="color: var(--black)">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-							<label for="font22Button" id="font22ButtonLabel" style="color: var(--black);">22${translate("chatsettings.cs8")}</label>
+							<label for="font22Button" id="font22ButtonLabel" style="color: var(--black);">22${translate('chatsettings.cs8')}</label>
 							<mwc-checkbox
 								style="margin-right: -15px;"
 								id="font22Button"

@@ -73,7 +73,7 @@ class LevelFounder extends LitElement {
 			html`
 				<img id="level-img" src=${`/img/badges/level-${addresslevel}.png`} alt=${`badge-${addresslevel}`} class="message-data-level" />
 				<paper-tooltip class="level-img-tooltip" for="level-img" position="top">
-					${translate("mintingpage.mchange27")} ${addresslevel}
+					${translate('mintingpage.mchange27')} ${addresslevel}
 				</paper-tooltip>
 			`
 			: ''

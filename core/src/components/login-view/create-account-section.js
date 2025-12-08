@@ -99,7 +99,7 @@ class CreateAccountSection extends connect(store)(LitElement) {
 					const rePassword = this.shadowRoot.getElementById('rePassword').value
 
 					if (password === '') {
-						let snackbar1string = get("login.pleaseenter")
+						let snackbar1string = get('login.pleaseenter')
 
 						snackbar.add({
 							labelText: `${snackbar1string}`,
@@ -110,7 +110,7 @@ class CreateAccountSection extends connect(store)(LitElement) {
 					}
 
 					if (password != rePassword) {
-						let snackbar2string = get("login.notmatch")
+						let snackbar2string = get('login.notmatch')
 
 						snackbar.add({
 							labelText: `${snackbar2string}`,
@@ -121,7 +121,7 @@ class CreateAccountSection extends connect(store)(LitElement) {
 					}
 
 					if (password.length < 8 && lastPassword !== password) {
-						let snackbar3string = get("login.lessthen8")
+						let snackbar3string = get('login.lessthen8')
 
 						snackbar.add({
 							labelText: `${snackbar3string}`,
@@ -134,7 +134,7 @@ class CreateAccountSection extends connect(store)(LitElement) {
 					}
 
 					if (this.saveAccount === true && nameInput === '') {
-						let snackbar4string = get("login.entername")
+						let snackbar4string = get('login.entername')
 
 						snackbar.add({
 							labelText: `${snackbar4string}`,
@@ -184,7 +184,7 @@ class CreateAccountSection extends connect(store)(LitElement) {
 			backup: {
 				next: e => {
 					if (!this.isDownloadedBackup) {
-						let snackbar5string = get("login.downloaded")
+						let snackbar5string = get('login.downloaded')
 
 						snackbar.add({
 							labelText: `${snackbar5string}`,
@@ -200,7 +200,7 @@ class CreateAccountSection extends connect(store)(LitElement) {
 								})).then(() => {
 									store.dispatch(doLogin(this._wallet))
 									store.dispatch(doSelectAddress(this._wallet.addresses[0]))
-									checkApiKey(this.nodeConfig);
+									checkApiKey(this.nodeConfig)
 									this.cleanup()
 									return ripple.fade()
 								}).catch(err => {
@@ -357,25 +357,25 @@ class CreateAccountSection extends connect(store)(LitElement) {
 					<div page="info">
 						<div id="infoContent" class="section-content">
 							<br>
-							<h3 style="text-align: center; margin-top: 0; color: var(--black); font-weight: 100; font-family: 'Roboto Mono', monospace;">${translate("login.createaccount")}</h3>
+							<h3 style="text-align: center; margin-top: 0; color: var(--black); font-weight: 100; font-family: 'Roboto Mono', monospace;">${translate('login.createaccount')}</h3>
 							<p style="color: var(--black);">
-								${translate("login.createwelcome")}
+								${translate('login.createwelcome')}
 							</p>
 							<p style="color: var(--black); margin-bottom:0;">
-								${translate("login.createa")} ‘
-								<paper-button id="myseedshow" @click=${() => this.shadowRoot.querySelector('#mySeedDialog').show()}>${translate("login.seedphrase")}</paper-button>
-								<paper-tooltip for="myseedshow" position="top" animation-delay="0">${translate("login.click")}</paper-tooltip>
-								’ ${translate("login.willbe")}
+								${translate('login.createa')} ‘
+								<paper-button id="myseedshow" @click=${() => this.shadowRoot.querySelector('#mySeedDialog').show()}>${translate('login.seedphrase')}</paper-button>
+								<paper-tooltip for="myseedshow" position="top" animation-delay="0">${translate('login.click')}</paper-tooltip>
+								’ ${translate('login.willbe')}
 							</p>
 							<p style="color: var(--black); margin-bottom: 0; text-align: center;">
-								${translate("login.clicknext")}
+								${translate('login.clicknext')}
 							</p>
 							<br>
 						</div>
 						<mwc-dialog id="mySeedDialog">
 							<div style="min-height:250px; min-width: 300px; box-sizing: border-box; position: relative;">
 								<div style="text-align: center;">
-									<h2 style="color: var(--black);">${translate("login.createdseed")}</h2>
+									<h2 style="color: var(--black);">${translate('login.createdseed')}</h2>
 									<hr>
 								</div>
 								<br>
@@ -402,31 +402,31 @@ class CreateAccountSection extends connect(store)(LitElement) {
 								</div>
 								<br>
 								<div class="horizontal-center">
-									<mwc-button raised label="${translate("login.saveseed")}" icon="save" @click=${() => this.downloadSeedphrase()}></mwc-button>
+									<mwc-button raised label="${translate('login.saveseed')}" icon="save" @click=${() => this.downloadSeedphrase()}></mwc-button>
 								</div>
 							</div>
-							<mwc-button slot="primaryAction" dialogAction="cancel" class="red">${translate("general.close")}</mwc-button>
+							<mwc-button slot="primaryAction" dialogAction="cancel" class="red">${translate('general.close')}</mwc-button>
 						</mwc-dialog>
 					</div>
 					<div page="password">
 						<div id="saveContent" class="section-content">
-							<h3 style="color: var(--black); text-align: center;">${translate("login.savein")}</h3>
-							<p style="color: var(--black); text-align: justify;">${translate("login.ready")}</p>
+							<h3 style="color: var(--black); text-align: center;">${translate('login.savein')}</h3>
+							<p style="color: var(--black); text-align: justify;">${translate('login.ready')}</p>
 							<div style="display:flex;" ?hidden="${!this.saveAccount}">
 								<mwc-icon style="color: var(--black); padding: 10px; padding-left:0; padding-top: 42px;">perm_identity</mwc-icon>
-								<vaadin-text-field style="width:100%;" label="${translate("login.name")}" id="nameInput"></vaadin-text-field>
+								<vaadin-text-field style="width:100%;" label="${translate('login.name')}" id="nameInput"></vaadin-text-field>
 							</div>
 							<div style="display:flex;">
 								<mwc-icon style="color: var(--black); padding: 10px; padding-left:0; padding-top: 42px;">password</mwc-icon>
-								<vaadin-password-field style="width:100%;" label="${translate("login.password")}" id="password" autofocus></vaadin-password-field>
+								<vaadin-password-field style="width:100%;" label="${translate('login.password')}" id="password" autofocus></vaadin-password-field>
 							</div>
 							<div style="display:flex;">
 								<mwc-icon style="color: var(--black); padding: 10px; padding-left:0; padding-top: 42px;">password</mwc-icon>
-								<vaadin-password-field style="width:100%;" label="${translate("login.confirmpass")}" id="rePassword"></vaadin-password-field>
+								<vaadin-password-field style="width:100%;" label="${translate('login.confirmpass')}" id="rePassword"></vaadin-password-field>
 							</div>
 							<div style="text-align:right; vertical-align: top; line-height: 40px; margin:0;">
 								<mwc-formfield alignEnd>
-									<label for="saveInBrowserCheckbox" @click=${() => this.shadowRoot.getElementById('saveInBrowserCheckbox').click()}><span style="color: var(--black);">${translate("login.save")}</span></label>
+									<label for="saveInBrowserCheckbox" @click=${() => this.shadowRoot.getElementById('saveInBrowserCheckbox').click()}><span style="color: var(--black);">${translate('login.save')}</span></label>
 									<mwc-checkbox style="display: inline; id="saveInBrowserCheckbox" @click=${e => { this.saveAccount = !e.target.checked }} ?checked=${this.saveAccount}></mwc-checkbox>
 								</mwc-formfield>
 							</div>
@@ -434,18 +434,18 @@ class CreateAccountSection extends connect(store)(LitElement) {
 					</div>
 					<div page="backup">
 						<div id="downloadBackup" class="section-content">
-							<h3 style="color: var(--black); text-align: center;">${translate("login.savewallet")}</h3>
-							<p style="color: var(--black); text-align: justify;">${translate("login.created1")}${this.saveAccount ? this.renderCreateSaveText() : '.'}</p>
-							<p style="color: var(--black); margin: 0;">${translate("login.backup")}</p>
+							<h3 style="color: var(--black); text-align: center;">${translate('login.savewallet')}</h3>
+							<p style="color: var(--black); text-align: justify;">${translate('login.created1')}${this.saveAccount ? this.renderCreateSaveText() : '.'}</p>
+							<p style="color: var(--black); margin: 0;">${translate('login.backup')}</p>
 							<br>
 							<div id="download-area">
 								<div style="line-height: 40px;">
-									<span style="color: var(--black); padding-top: 6px; margin-right: 10px; text-align: center;">${translate("login.downloadbackup")}</span>
+									<span style="color: var(--black); padding-top: 6px; margin-right: 10px; text-align: center;">${translate('login.downloadbackup')}</span>
 									<slot id="trigger" name="inputTrigger" @click=${() =>
-										this.downloadBackup(this._wallet)} style="dispay: inline; text-align: center;">
+		this.downloadBackup(this._wallet)} style="dispay: inline; text-align: center;">
 										<mwc-button>
 											<mwc-icon>cloud_download</mwc-icon>
-											&nbsp; ${translate("general.save")}
+											&nbsp; ${translate('general.save')}
 										</mwc-button>
 									</slot>
 								</div>
@@ -476,39 +476,39 @@ class CreateAccountSection extends connect(store)(LitElement) {
 	}
 
 	renderBackText() {
-		return html`${translate("general.back")}`
+		return html`${translate('general.back')}`
 	}
 
 	renderNextText() {
-		return html`${translate("general.next")}`
+		return html`${translate('general.next')}`
 	}
 
 	renderCreateText() {
-		return html`${translate("general.create")}`
+		return html`${translate('general.create')}`
 	}
 
 	renderContinueText() {
-		return html`${translate("general.continue")}`
+		return html`${translate('general.continue')}`
 	}
 
 	renderPrepareText() {
-		return html`${translate("login.prepare")}`
+		return html`${translate('login.prepare')}`
 	}
 
 	renderWelcomeText() {
-		return html`${translate("login.welmessage")}`
+		return html`${translate('login.welmessage')}`
 	}
 
 	renderLoadingText() {
-		return html`${translate("login.loading")}`
+		return html`${translate('login.loading')}`
 	}
 
 	renderCreateAccountText() {
-		return html`${translate("login.createaccount")}`
+		return html`${translate('login.createaccount')}`
 	}
 
 	renderCreateSaveText() {
-		return html`${translate("login.created2")}`
+		return html`${translate('login.created2')}`
 	}
 
 	_pageChange(newPage, oldPage) {
@@ -586,25 +586,25 @@ class CreateAccountSection extends connect(store)(LitElement) {
 	}
 
 	async downloadBackup(wallet) {
-		let backupname = ""
+		let backupname = ''
 
 		const state = store.getState()
 		const data = await wallet.generateSaveWalletData(this._pass, state.config.crypto.kdfThreads, () => { })
 		const dataString = JSON.stringify(data)
 		const blob = new Blob([dataString], { type: 'text/plain;charset=utf-8' })
 
-		backupname = "qortal_backup_" + wallet.addresses[0].address + ".json"
+		backupname = 'qortal_backup_' + wallet.addresses[0].address + '.json'
 
 		await this.saveFileToDisk(blob, backupname)
 	}
 
 	async downloadSeedphrase() {
-		let seedname = ""
+		let seedname = ''
 
 		const seed = this.shadowRoot.getElementById('randSentence').parsedString
 		const blob = new Blob([seed], { type: 'text/plain;charset=utf-8' })
 
-		seedname = "qortal_seedphrase.txt"
+		seedname = 'qortal_seedphrase.txt'
 
 		await this.saveFileToDisk(blob, seedname)
 	}
@@ -614,7 +614,7 @@ class CreateAccountSection extends connect(store)(LitElement) {
 			const fileHandle = await self.showSaveFilePicker({
 				suggestedName: fileName,
 				types: [{
-					description: "File"
+					description: 'File'
 				}]
 			})
 
@@ -625,9 +625,9 @@ class CreateAccountSection extends connect(store)(LitElement) {
 				await writable.close()
 			}
 
-			writeFile(fileHandle, blob).then(() => console.log("FILE SAVED"))
+			writeFile(fileHandle, blob).then(() => console.log('FILE SAVED'))
 
-			let snack4string = get("general.save")
+			let snack4string = get('general.save')
 
 			snackbar.add({
 				labelText: `${snack4string} ${fileName} ✅`,

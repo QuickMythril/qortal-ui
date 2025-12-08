@@ -3,7 +3,7 @@ import { asyncReplace } from 'lit/directives/async-replace.js'
 import { Epml } from '../../../epml'
 import { overviewPageStyles, startMintingNowStyles, myButtonStyles } from '../components/plugins-css'
 import isElectron from 'is-electron'
-import "@material/mwc-button"
+import '@material/mwc-button'
 import '@material/mwc-dialog'
 import '@polymer/paper-spinner/paper-spinner-lite.js'
 import '@vaadin/button'
@@ -68,7 +68,7 @@ class OverviewPage extends LitElement {
 		this.displayName = pickDisplayName(this.accountInfo)
 		this.avatarError = false
 		this.isPublic = false
-			}
+	}
 
 	render() {
 		return html`
@@ -86,7 +86,7 @@ class OverviewPage extends LitElement {
 								</div>
 									<div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
 									<div class="d-flex justify-content-between">
-										<span class="btn btn-sm btn-info mr-4">${translate("walletprofile.minterlevel")} ${this.accountInfo.addressInfo.level}</span>
+										<span class="btn btn-sm btn-info mr-4">${translate('walletprofile.minterlevel')} ${this.accountInfo.addressInfo.level}</span>
 										${this.isPublic ? '' : this.renderMintingStatus()}
 									</div>
 								</div>
@@ -97,7 +97,7 @@ class OverviewPage extends LitElement {
 											${this.accountInfo.addressInfo.address}
 										</div>
 																				<div class="h3 font-weight-400">
-											${translate("explorerpage.exp2")}: <span style="color: #03a9f4">${this.myBalance}</span> QORT
+											${translate('explorerpage.exp2')}: <span style="color: #03a9f4">${this.myBalance}</span> QORT
 										</div>
 									</div>
 									<div class="row">
@@ -105,39 +105,39 @@ class OverviewPage extends LitElement {
 											<div class="card-profile-stats d-flex justify-content-center">
 												<div>
 													<span class="heading">${this.accountInfo.addressInfo.blocksMinted + this.accountInfo.addressInfo.blocksMintedAdjustment}</span>
-													<span class="description">${translate("walletprofile.blocksminted")}</span>
+													<span class="description">${translate('walletprofile.blocksminted')}</span>
 												</div>
 											</div>
 										</div>
 									</div>
 									<div class="text-center">
 										<hr class="my-4" style="color: var(--black)">
-										<h2>${translate("walletprofile.wp3")}</h2>
+										<h2>${translate('walletprofile.wp3')}</h2>
 										<div class="row">
 											<div class="col">
 												<div class="card-profile-stats d-flex justify-content-center">
 													<div>
 														<span class="heading">${this.coreInfo.buildVersion ? this.coreInfo.buildVersion : ''}</span>
-														<span class="description">${translate("appinfo.coreversion")}</span>
+														<span class="description">${translate('appinfo.coreversion')}</span>
 													</div>
 													<div>
 														<span class="heading">${this.nodeInfo.height ? this.nodeInfo.height : ''}</span>
-														<span class="description">${translate("appinfo.blockheight")}</span>
+														<span class="description">${translate('appinfo.blockheight')}</span>
 													</div>
 													<div>
 														<span class="heading">${this.nodeInfo.numberOfConnections ? this.nodeInfo.numberOfConnections : ''}</span>
-														<span class="description">${translate("appinfo.peers")}</span>
+														<span class="description">${translate('appinfo.peers')}</span>
 													</div>
 													<div>
 														<span class="heading"><span class="${this.cssStatus2}">${this.renderSyncStatus()}</span></span>
-														<span class="description">${translate("walletprofile.wp5")}</span>
+														<span class="description">${translate('walletprofile.wp5')}</span>
 													</div>
 												</div>
 											</div>
 										</div>
 									</div>
 									<div class="h5 float-right opacity06">
-										${translate("appinfo.uiversion")}: <span style="color: #03a9f4">${this.nodeConfig.version ? this.nodeConfig.version : ''}</span>
+										${translate('appinfo.uiversion')}: <span style="color: #03a9f4">${this.nodeConfig.version ? this.nodeConfig.version : ''}</span>
 									</div>
 								</div>
 							</div>
@@ -230,7 +230,7 @@ class OverviewPage extends LitElement {
 	}
 
 	renderMyErrorMsg1() {
-		return html`${translate("startminting.smchange1")}`
+		return html`${translate('startminting.smchange1')}`
 	}
 
 	async refreshItems() {
@@ -288,9 +288,9 @@ class OverviewPage extends LitElement {
 
 	removeBlankKey(myPublicKey) {
 		if (isSelectedNodePublic(window.parent.reduxStore.getState())) return
-		parentEpml.request("apiCall", {
+		parentEpml.request('apiCall', {
 			url: `/admin/mintingaccounts?apiKey=${this.getApiKey()}`,
-			method: "DELETE",
+			method: 'DELETE',
 			body: myPublicKey,
 		}).then((res) => {
 			if (res === true) {
@@ -306,10 +306,10 @@ class OverviewPage extends LitElement {
 
 		if (this.nodeInfo.isMintingPossible === true && this.nodeInfo.isSynchronizing === true && this.check1 === true && this.check2 === true && addressInfo.level > 0) {
 			this.cssStatus = ''
-			return html`<span class="btn btn-sm btn-info float-right">${translate("walletprofile.wp1")}</span>`
+			return html`<span class="btn btn-sm btn-info float-right">${translate('walletprofile.wp1')}</span>`
 		} else if (this.nodeInfo.isMintingPossible === true && this.nodeInfo.isSynchronizing === false && this.check1 === true && this.check2 === true && addressInfo.level > 0) {
 			this.cssStatus = ''
-			return html`<span class="btn btn-sm btn-info float-right">${translate("walletprofile.wp1")}</span>`
+			return html`<span class="btn btn-sm btn-info float-right">${translate('walletprofile.wp1')}</span>`
 		} else if (this.nodeInfo.isMintingPossible === true && this.nodeInfo.isSynchronizing === false && this.check1 === false && this.check2 === true && addressInfo.level == 0 && addressInfo.blocksMinted < 7200) {
 			return html`<span class="float-right"><start-minting-now></start-minting-now></span>`
 		} else if (this.check1 === false && this.check2 === false && myMintingKey === true) {
@@ -322,10 +322,10 @@ class OverviewPage extends LitElement {
 	renderSyncStatus() {
 		if (this.nodeInfo.isSynchronizing === true) {
 			this.cssStatus2 = 'red'
-			return html`${translate("appinfo.synchronizing")}... ${this.nodeInfo.syncPercent !== undefined ? this.nodeInfo.syncPercent + '%' : ''}`
+			return html`${translate('appinfo.synchronizing')}... ${this.nodeInfo.syncPercent !== undefined ? this.nodeInfo.syncPercent + '%' : ''}`
 		} else if (this.nodeInfo.isSynchronizing === false) {
 			this.cssStatus2 = ''
-			return html`${translate("walletprofile.wp4")}`
+			return html`${translate('walletprofile.wp4')}`
 		}
 	}
 
@@ -679,11 +679,11 @@ class StartMintingNow extends LitElement {
 						label="${translate('becomeMinterPage.bchange18')}"
 						?isLoading=${false}
 						.onClick=${async () => {
-							await startMinting()
-							if (this.errorMsg) {
-								parentEpml.request('showSnackBar', `${this.errorMsg}`)
-							}
-						}}
+		await startMinting()
+		if (this.errorMsg) {
+			parentEpml.request('showSnackBar', `${this.errorMsg}`)
+		}
+	}}
 					>
 					</my-button>
 				</div>
@@ -702,21 +702,21 @@ class StartMintingNow extends LitElement {
 							<ul>
 								<li class="row between">
 									<p>
-										1. ${translate("startminting.smchange5")}
+										1. ${translate('startminting.smchange5')}
 									</p>
 									<div class=${`smallLoading marginLoader ${this.status !== 1 && 'hide'}`}></div>
 								</li>
 
 								<li class=${`row between ${this.status < 2 && 'inactiveText'}`}>
 									<p>
-										2. ${translate("startminting.smchange6")}
+										2. ${translate('startminting.smchange6')}
 									</p>
 									<div class=${`smallLoading marginLoader ${this.status !== 2 && 'hide'}`}></div>
 								</li>
 
 								<li class=${`row between ${this.status < 3 && 'inactiveText'}`}>
 									<p>
-										3. ${translate("startminting.smchange7")}
+										3. ${translate('startminting.smchange7')}
 									</p>
 									<div class="row no-width">
 										<div class=${`smallLoading marginLoader marginRight ${this.status !== 3 && 'hide'}`} ></div> <p>${asyncReplace(this.timer)}</p>
@@ -725,14 +725,14 @@ class StartMintingNow extends LitElement {
 
 								<li class=${`row between ${this.status < 4 && 'inactiveText'}`}>
 									<p>
-										4. ${translate("startminting.smchange8")}
+										4. ${translate('startminting.smchange8')}
 									</p>
 									<div class=${`smallLoading marginLoader ${this.status !== 4 && 'hide'}`}></div>
 								</li>
 
 								<li class=${`row between ${this.status < 5 && 'inactiveText'}`}>
 									<p>
-										5. ${translate("startminting.smchange9")}
+										5. ${translate('startminting.smchange9')}
 									</p>
 								</li>
 							</ul>
@@ -748,17 +748,17 @@ class StartMintingNow extends LitElement {
 								<mwc-button
 									slot="primaryAction"
 									@click=${() => {
-										this.openDialogRewardShare = false
-										this.errorMsg = ''
-									}}
+		this.openDialogRewardShare = false
+		this.errorMsg = ''
+	}}
 									class="red"
 								>
-									${translate("general.close")}
+									${translate('general.close')}
 								</mwc-button>
 							` : ''}
 						</div>
 					</div>
-				` : ""}
+				` : ''}
 			` : html`
 				<div class="start-minting-wrapper">
 					<a href="../become-minter/index.html">

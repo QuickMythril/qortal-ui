@@ -7,7 +7,7 @@ import { startMintingStyles } from '../styles/core-css'
 import { buildRequestUrl, isSelectedNodePublic } from '../utils/node'
 import { getPublicNodeBlockedMessage } from '../utils/i18n'
 import '../functional-components/my-button'
-import "@material/mwc-button"
+import '@material/mwc-button'
 import '@material/mwc-dialog'
 
 // Multi language support
@@ -90,19 +90,19 @@ class StartMinting extends connect(store)(LitElement) {
 	}
 
 	renderErrorMsg1() {
-		return html`${translate("startminting.smchange1")}`
+		return html`${translate('startminting.smchange1')}`
 	}
 
 	renderErrorMsg2() {
-		return html`${translate("startminting.smchange2")}`
+		return html`${translate('startminting.smchange2')}`
 	}
 
 	renderErrorMsg3() {
-		return html`${translate("startminting.smchange3")}`
+		return html`${translate('startminting.smchange3')}`
 	}
 
 	renderErrorMsg4() {
-		return html`${translate("startminting.smchange4")}`
+		return html`${translate('startminting.smchange4')}`
 	}
 
 	async getMintingAcccounts() {
@@ -110,7 +110,7 @@ class StartMinting extends connect(store)(LitElement) {
 			this.errorMsg = this.renderErrorMsg1()
 			return
 		}
-		const url = buildRequestUrl(`/admin/mintingaccounts`, store.getState())
+		const url = buildRequestUrl('/admin/mintingaccounts', store.getState())
 
 		try {
 			const res = await fetch(url)
@@ -126,7 +126,7 @@ class StartMinting extends connect(store)(LitElement) {
 			this.errorMsg = translate('publicNode.actionBlocked')
 			return
 		}
-		const mintingAccountsUrl = buildRequestUrl(`/admin/mintingaccounts`, store.getState())
+		const mintingAccountsUrl = buildRequestUrl('/admin/mintingaccounts', store.getState())
 		const address = this.address
 
 		this.status = value
@@ -285,7 +285,7 @@ class StartMinting extends connect(store)(LitElement) {
 			return await res.text()
 		}
 
-	const startMinting = async () => {
+		const startMinting = async () => {
 			if (isSelectedNodePublic(store.getState())) {
 				this.errorMsg = getPublicNodeBlockedMessage()
 				return
@@ -298,7 +298,7 @@ class StartMinting extends connect(store)(LitElement) {
 			const findMintingAccountsFromUser = this.mintingAccountData.filter((ma) => ma.recipientAccount === address && ma.mintingAccount === address)
 
 			if (findMintingAccountsFromUser.length > 2) {
-				this.errorMsg = translate("startminting.smchange10")
+				this.errorMsg = translate('startminting.smchange10')
 
 				return
 			}
@@ -321,13 +321,13 @@ class StartMinting extends connect(store)(LitElement) {
 						label="${translate('becomeMinterPage.bchange18')}"
 						?isLoading=${false}
 						.onClick=${async () => {
-							await startMinting();
-							if (this.errorMsg) {
-								await routes.showSnackBar({
-									data: this.errorMsg
-								});
-							}
-						}}
+		await startMinting()
+		if (this.errorMsg) {
+			await routes.showSnackBar({
+				data: this.errorMsg
+			})
+		}
+	}}
 					></my-button>
 				</div>
 				<!-- Dialog for tracking the progress of starting minting -->
@@ -344,26 +344,26 @@ class StartMinting extends connect(store)(LitElement) {
 							<div class="dialog-container">
 								<ul>
 									<li class="row between">
-										<p>1. ${translate("startminting.smchange5")}</p>
+										<p>1. ${translate('startminting.smchange5')}</p>
 										<div class=${`smallLoading marginLoader ${this.status !== 1 && 'hide'}`}></div>
 									</li>
 									<li class=${`row between ${this.status < 2 && 'inactiveText'}`}>
-										<p>2. ${translate("startminting.smchange6")}</p>
+										<p>2. ${translate('startminting.smchange6')}</p>
 										<div class=${`smallLoading marginLoader ${this.status !== 2 && 'hide'}`}></div>
 									</li>
 									<li class=${`row between ${this.status < 3 && 'inactiveText'}`}>
-										<p>3. ${translate("startminting.smchange7")}</p>
+										<p>3. ${translate('startminting.smchange7')}</p>
 										<div class="row no-width">
 											<div class=${`smallLoading marginLoader marginRight ${this.status !== 3 && 'hide'}`} ></div>
 											<p>${asyncReplace(this.timer)}</p>
 										</div>
 									</li>
 									<li class=${`row between ${this.status < 4 && 'inactiveText'}`}>
-										<p>4. ${translate("startminting.smchange8")}</p>
+										<p>4. ${translate('startminting.smchange8')}</p>
 										<div class=${`smallLoading marginLoader ${this.status !== 4 && 'hide'}`}></div>
 									</li>
 									<li class=${`row between ${this.status < 5 && 'inactiveText'}`}>
-										<p>5. ${translate("startminting.smchange9")}</p>
+										<p>5. ${translate('startminting.smchange9')}</p>
 									</li>
 								</ul>
 								<div class="warning column">
@@ -373,8 +373,8 @@ class StartMinting extends connect(store)(LitElement) {
 							</div>
 							<div class="modalFooter">
 								${this.errorMsg || this.status === 5 ? html`
-									<mwc-button slot="primaryAction" @click=${() => { this.openDialogRewardShare = false; this.errorMsg = '';}} class="red">
-										${translate("general.close")}
+									<mwc-button slot="primaryAction" @click=${() => { this.openDialogRewardShare = false; this.errorMsg = ''}} class="red">
+										${translate('general.close')}
 									</mwc-button>
 								` : ''}
 							</div>

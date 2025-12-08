@@ -15,7 +15,7 @@ import '@polymer/paper-dialog/paper-dialog.js'
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../../core/translate'
 registerTranslateConfig({
-  loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
+	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
 })
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
@@ -50,7 +50,7 @@ class BtcCharts extends LitElement {
 		return html`
 			<paper-dialog id="loadChartDialog" class="chart-loading-wrapper" modal>
 				<div class="loadingContainer" style="display:${this.isLoadingTradesChart ? 'inline-block' : 'none'}">
-					<span style="color: var(--black);">${translate("login.loading")}</span>
+					<span style="color: var(--black);">${translate('login.loading')}</span>
 				</div>
 			</paper-dialog>
 			<paper-dialog id="btcChartDialog" class="chart-info-wrapper">
@@ -88,7 +88,7 @@ class BtcCharts extends LitElement {
 	async getBtcTrades() {
 		let currentBtcTimestamp = Date.now()
 		const monthBackBtc = currentBtcTimestamp - 31556952000
-            await parentEpml.request("apiCall", { url: `/crosschain/trades?foreignBlockchain=BITCOIN&minimumTimestamp=${monthBackBtc}&limit=0&reverse=false` }).then((res) => {
+		await parentEpml.request('apiCall', { url: `/crosschain/trades?foreignBlockchain=BITCOIN&minimumTimestamp=${monthBackBtc}&limit=0&reverse=false` }).then((res) => {
 			this.btcTrades = res
 		})
 
@@ -99,8 +99,8 @@ class BtcCharts extends LitElement {
 	}
 
 	enableBtcStockPriceChart() {
-            const btcStockPriceData = this.btcPrice
-            const header = 'QORT / BTC ' + get("tradepage.tchange49")
+		const btcStockPriceData = this.btcPrice
+		const header = 'QORT / BTC ' + get('tradepage.tchange49')
 		Highcharts.stockChart(this.shadowRoot.querySelector('#btcStockPriceContainer'), {
 			accessibility: {
 				enabled: false
@@ -152,7 +152,7 @@ class BtcCharts extends LitElement {
 	changeTheme() {
 		const checkTheme = localStorage.getItem('qortalTheme')
 		this.theme = (checkTheme === 'dark') ? 'dark' : 'light'
-		document.querySelector('html').setAttribute('theme', this.theme);
+		document.querySelector('html').setAttribute('theme', this.theme)
 	}
 
 	changeLanguage() {

@@ -40,7 +40,7 @@ class QRLoginView extends connect(store)(LitElement) {
 					</p>
 					<div style="max-width: 500px; justify-content: center; margin: auto; display: ${this.isWalletStored() ? 'none' : 'flex'}">
 						<mwc-icon style="padding: 10px; padding-left:0; padding-top: 42px;">password</mwc-icon>
-						<vaadin-password-field id="newWalletPassword" style="width: 100%; color: var(--black);" label="${translate("settings.password")}"  autofocus></vaadin-password-field>
+						<vaadin-password-field id="newWalletPassword" style="width: 100%; color: var(--black);" label="${translate('settings.password')}"  autofocus></vaadin-password-field>
 					</div>
 					<div style="max-width: 600px; display: flex; justify-content: center; margin: auto;">
 						<div id="qr-toggle-button" @click=${() => this.showQRCode()} class="q-button outlined"> ${translate(this.translateButtonKey)} </div>

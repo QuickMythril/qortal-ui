@@ -107,17 +107,17 @@ class NameRegistration extends LitElement {
 		const dataBytes = encoder.encode(data || '')
 
 		if (nameBytes.length < 3 || nameBytes.length > 40) {
-			return translate("registernamepage.nchange_length_error") || "Name must be between 3 and 40 bytes"
+			return translate('registernamepage.nchange_length_error') || 'Name must be between 3 and 40 bytes'
 		}
 		if (dataBytes.length > 4000) {
-			return translate("registernamepage.nchange_data_length_error") || "Description/data must be 4000 bytes or less"
+			return translate('registernamepage.nchange_data_length_error') || 'Description/data must be 4000 bytes or less'
 		}
 		if (name.trim() !== name) {
-			return translate("registernamepage.nchange_whitespace_error") || "Name cannot have leading/trailing whitespace"
+			return translate('registernamepage.nchange_whitespace_error') || 'Name cannot have leading/trailing whitespace'
 		}
 		// Basic address-like check: starts with Q and length 25-34
 		if (this._looksLikeAddress(name)) {
-		return translate("registernamepage.nchange49") || "Name cannot look like a QORT address."
+			return translate('registernamepage.nchange49') || 'Name cannot look like a QORT address.'
 		}
 		return null
 	}
@@ -152,14 +152,14 @@ class NameRegistration extends LitElement {
 		return html`
 			<div id="name-registration-page">
 				<div style="min-height:48px; display: flex; padding-bottom: 6px; margin: 2px;">
-					<h3 style="margin: 0; flex: 1; padding-top: .1em; display: inline;">${translate("sidemenu.sm2")}</h3>
+					<h3 style="margin: 0; flex: 1; padding-top: .1em; display: inline;">${translate('sidemenu.sm2')}</h3>
 					<mwc-button style="float:right;" @click=${this.openRegisterNameDialog}>
 						<mwc-icon>add</mwc-icon>
-						${translate("registernamepage.nchange2")}
+						${translate('registernamepage.nchange2')}
 					</mwc-button>
 				</div>
 				<p style="margin: 4px 0; color: var(--black); font-size: 13px;">
-					${translate("registernamepage.nchange50")}
+					${translate('registernamepage.nchange50')}
 				</p>
 					<div class="divCard">
 						<div style="margin-bottom: 1em;">
@@ -171,7 +171,7 @@ class NameRegistration extends LitElement {
 					</div>
 				<mwc-dialog id="registerNameDialog" scrimClickAction="${this.registerNameLoading ? '' : 'close'}">
 					<div style="text-align:center">
-						<h1>${translate("registernamepage.nchange9")}</h1>
+						<h1>${translate('registernamepage.nchange9')}</h1>
 						<hr>
 						<br>
 					</div>
@@ -182,7 +182,7 @@ class NameRegistration extends LitElement {
 						required
 						outlined
 						id="nameInput"
-						label="${translate("registernamepage.nchange5")}"
+						label="${translate('registernamepage.nchange5')}"
 						type="text"
 						@input=${this.onRegisterNameInput}
 						>
@@ -196,7 +196,7 @@ class NameRegistration extends LitElement {
 						?disabled="${this.registerNameLoading}"
 						outlined
 						id="descInput"
-						label="${translate("registernamepage.nchange10")}"
+						label="${translate('registernamepage.nchange10')}"
 						type="text"
 						@input=${this.onRegisterDescInput}
 						>
@@ -205,17 +205,17 @@ class NameRegistration extends LitElement {
 					</p>
 					<div style="text-align:right; height:36px;">
 						<span ?hidden="${!this.registerNameLoading}">
-						${translate("registernamepage.nchange11")} &nbsp;
+						${translate('registernamepage.nchange11')} &nbsp;
 						<paper-spinner-lite
 						style="margin-top:12px;"
 						?active="${this.registerNameLoading}"
-						alt="${translate("registernamepage.nchange12")}"></paper-spinner-lite>
+						alt="${translate('registernamepage.nchange12')}"></paper-spinner-lite>
 						</span>
 						<span ?hidden=${this.message === ''} style="${this.error ? 'color:red;' : 'color:green;'}">
 						${this.message}
 						</span><br>
 						<span>
-						<b>${translate("registernamepage.nchange13")} ${this.fee} QORT.</b>
+						<b>${translate('registernamepage.nchange13')} ${this.fee} QORT.</b>
 						</span>
 					</div>
 					<mwc-button
@@ -223,7 +223,7 @@ class NameRegistration extends LitElement {
 						slot="primaryAction"
 						@click=${this.registerName}
 						>
-						${translate("registernamepage.nchange14")}
+						${translate('registernamepage.nchange14')}
 					</mwc-button>
 					<mwc-button
 						?disabled="${this.registerNameLoading}"
@@ -231,12 +231,12 @@ class NameRegistration extends LitElement {
 						dialogAction="cancel"
 						class="red"
 						>
-						${translate("general.close")}
+						${translate('general.close')}
 					</mwc-button>
 				</mwc-dialog>
 				<mwc-dialog id="updateNameDialog" scrimClickAction="" escapeKeyAction="">
 					<div style="text-align:center">
-						<h1>${translate("publishpage.pchange2")} ${translate("login.name")}</h1>
+						<h1>${translate('publishpage.pchange2')} ${translate('login.name')}</h1>
 						<hr>
 						<br>
 					</div>
@@ -246,7 +246,7 @@ class NameRegistration extends LitElement {
 						readOnly
 						outlined
 						id="oldNameInput"
-						label="${translate("registernamepage.nchange41")}"
+						label="${translate('registernamepage.nchange41')}"
 						type="text"
 						value="${this.toUpdateName}"
 						>
@@ -258,7 +258,7 @@ class NameRegistration extends LitElement {
 						required
 						outlined
 						id="newNameInput"
-						label="${translate("registernamepage.nchange42")}"
+						label="${translate('registernamepage.nchange42')}"
 						type="text"
 						@input=${this.onUpdateNameInput}
 						>
@@ -271,7 +271,7 @@ class NameRegistration extends LitElement {
 						style="width: 100%; color: var(--black);"
 						outlined
 						id="newDescInput"
-						label="${translate("registernamepage.nchange10")}"
+						label="${translate('registernamepage.nchange10')}"
 						type="text"
 						@input=${this.onUpdateDescInput}
 						>
@@ -283,14 +283,14 @@ class NameRegistration extends LitElement {
 						${this.message}
 						</span><br>
 						<span>
-						<b>${translate("walletpage.wchange21")} ${this.updateFee} QORT.</b>
+						<b>${translate('walletpage.wchange21')} ${this.updateFee} QORT.</b>
 						</span>
 					</div>
 					<mwc-button
 						slot="primaryAction"
 						@click="${() => this.updateName()}"
 						>
-						${translate("publishpage.pchange2")} ${translate("login.name")}
+						${translate('publishpage.pchange2')} ${translate('login.name')}
 					</mwc-button>
 					<mwc-button
 						slot="secondaryAction"
@@ -298,13 +298,13 @@ class NameRegistration extends LitElement {
 						class="red"
 						@click="${() => this.closeUpdateNameDialog()}"
 						>
-						${translate("general.close")}
+						${translate('general.close')}
 					</mwc-button>
 				</mwc-dialog>
 				<mwc-dialog id="sellNameDialog" scrimClickAction="" escapeKeyAction="">
 					<div class="manage-group-dialog">
 						<div style="text-align: center;">
-							<h2>${translate("registernamepage.nchange19")}</h2>
+							<h2>${translate('registernamepage.nchange19')}</h2>
 							<hr />
 							<br>
 						</div>
@@ -314,7 +314,7 @@ class NameRegistration extends LitElement {
 							readOnly
 							outlined
 							id="toSellName"
-							label="${translate("registernamepage.nchange25")}"
+							label="${translate('registernamepage.nchange25')}"
 							type="text"
 							value="${this.toSellName}"
 							>
@@ -326,14 +326,14 @@ class NameRegistration extends LitElement {
 							required
 							outlined
 							id="toSellPrice"
-							label="${translate("registernamepage.nchange23")} (QORT)"
+							label="${translate('registernamepage.nchange23')} (QORT)"
 							type="number"
 							value="${this.toSellPrice}"
 							>
 							</mwc-textfield>
 						</p>
 						<div style="margin-bottom: 10px;">
-							<p style="margin-bottom: 0;">${translate("walletpage.wchange21")} <span style="font-weight: bold;">${this.sellFee} QORT<span></p>
+							<p style="margin-bottom: 0;">${translate('walletpage.wchange21')} <span style="font-weight: bold;">${this.sellFee} QORT<span></p>
 							<br>
 						</div>
 						${this.renderClearSuccess()}
@@ -345,7 +345,7 @@ class NameRegistration extends LitElement {
 							<div>
 								<vaadin-button ?disabled="${this.btnDisable}" theme="primary medium" style="width: 100%;" @click=${() => this.createSellName()}>
 								<vaadin-icon icon="vaadin:exit" slot="prefix"></vaadin-icon>
-								${translate("registernamepage.nchange19")}
+								${translate('registernamepage.nchange19')}
 								</vaadin-button>
 							</div>
 						</div>
@@ -355,13 +355,13 @@ class NameRegistration extends LitElement {
 						@click="${() => this.closeSellNameDialog()}"
 						class="red"
 						>
-						${translate("general.close")}
+						${translate('general.close')}
 					</mwc-button>
 				</mwc-dialog>
 				<mwc-dialog id="cancelSellNameDialog" scrimClickAction="" escapeKeyAction="">
 					<div class="manage-group-dialog">
 						<div style="text-align: center;">
-							<h2>${translate("registernamepage.nchange20")} ${translate("registernamepage.nchange5")}</h2>
+							<h2>${translate('registernamepage.nchange20')} ${translate('registernamepage.nchange5')}</h2>
 							<hr />
 							<br>
 						</div>
@@ -371,14 +371,14 @@ class NameRegistration extends LitElement {
 							readOnly
 							outlined
 							id="toCancelSellName"
-							label="${translate("registernamepage.nchange29")}"
+							label="${translate('registernamepage.nchange29')}"
 							type="text"
 							value="${this.toCancelSellName}"
 							>
 							</mwc-textfield>
 						</p>
 						<div style="margin-bottom: 10px;">
-							<p style="margin-bottom: 0;">${translate("walletpage.wchange21")} <span style="font-weight: bold;">${this.cancelSellFee} QORT<span></p>
+							<p style="margin-bottom: 0;">${translate('walletpage.wchange21')} <span style="font-weight: bold;">${this.cancelSellFee} QORT<span></p>
 							<br>
 						</div>
 						${this.renderClearSuccess()}
@@ -390,7 +390,7 @@ class NameRegistration extends LitElement {
 							<div>
 								<vaadin-button ?disabled="${this.btnDisable}" theme="primary medium" style="width: 100%;" @click=${() => this.createCancelSellName()}>
 								<vaadin-icon icon="vaadin:close-circle-o" slot="prefix"></vaadin-icon>
-								${translate("registernamepage.nchange20")} ${translate("registernamepage.nchange5")}
+								${translate('registernamepage.nchange20')} ${translate('registernamepage.nchange5')}
 								</vaadin-button>
 							</div>
 						</div>
@@ -400,35 +400,35 @@ class NameRegistration extends LitElement {
 						@click="${() => this.closeCancelSellNameDialog()}"
 						class="red"
 						>
-						${translate("general.close")}
+						${translate('general.close')}
 					</mwc-button>
 				</mwc-dialog>
 				<mwc-dialog id="buyErrorNameDialog" scrimClickAction="" escapeKeyAction="">
 					<div class="card-container">
 						<mwc-icon class="error-icon">warning</mwc-icon>
-						<h2>${translate("registernamepage.nchange35")}</h2>
-						<h4>${translate("registernamepage.nchange36")}</h4>
+						<h2>${translate('registernamepage.nchange35')}</h2>
+						<h4>${translate('registernamepage.nchange36')}</h4>
 					</div>
 					<mwc-button
 						slot="primaryAction"
 						@click=${() => this.closeBuyErrorNameDialog()}
 						class="red"
 						>
-						${translate("general.close")}
+						${translate('general.close')}
 					</mwc-button>
 				</mwc-dialog>
 				<mwc-dialog id="buyErrorPriceDialog" scrimClickAction="" escapeKeyAction="">
 					<div class="card-container">
 						<mwc-icon class="error-icon">warning</mwc-icon>
-						<h2>${translate("registernamepage.nchange37")}</h2>
-						<h4>${translate("registernamepage.nchange38")}</h4>
+						<h2>${translate('registernamepage.nchange37')}</h2>
+						<h4>${translate('registernamepage.nchange38')}</h4>
 					</div>
 					<mwc-button
 						slot="primaryAction"
 						@click=${() => this.closeBuyErrorPriceDialog()}
 						class="red"
 						>
-						${translate("general.close")}
+						${translate('general.close')}
 					</mwc-button>
 				</mwc-dialog>
 			</div>
@@ -451,16 +451,16 @@ class NameRegistration extends LitElement {
 					parentEpml.request('apiCall', { url: `/names/address/${this.selectedAddress.address}?limit=0&reverse=false` }).catch(() => [])
 				])
 
-			let names = Array.isArray(namesRes) ? namesRes : []
-			const primaryName = (primaryRes && primaryRes.name) ? primaryRes.name : ''
-			if (primaryName && names.length) {
-				names = orderNamesWithPrimaryFirst(primaryName, names)
-			}
+				let names = Array.isArray(namesRes) ? namesRes : []
+				const primaryName = (primaryRes && primaryRes.name) ? primaryRes.name : ''
+				if (primaryName && names.length) {
+					names = orderNamesWithPrimaryFirst(primaryName, names)
+				}
 
-			setTimeout(() => {
-				this.primaryName = primaryName || (names[0] && names[0].name) || ''
-				this.names = names
-			}, 1)
+				setTimeout(() => {
+					this.primaryName = primaryName || (names[0] && names[0].name) || ''
+					this.names = names
+				}, 1)
 			} catch (error) {
 				console.error(error)
 				setTimeout(() => { this.names = [] }, 1)
@@ -472,7 +472,7 @@ class NameRegistration extends LitElement {
 
 		const fetchMarketSellNames = async () => {
 			await parentEpml.request('apiCall', {
-				url: `/names/forsale?limit=0&reverse=true`
+				url: '/names/forsale?limit=0&reverse=true'
 			}).then(res => {
 				this.marketSellNames = res
 			})
@@ -574,11 +574,11 @@ class NameRegistration extends LitElement {
 				<div class="successBox">
 					<span style="color: green; float: left; padding-top: 4px; padding-left: 7px;">${this.successMessage}</span>
 					<span style="padding-top: 4px: padding-right: 7px; float: right;">
-						<mwc-icon-button class="btn-clear-success" title="${translate("general.close")}" icon="close" @click="${() => this.successMessage = ''}"></mwc-icon-button>
+						<mwc-icon-button class="btn-clear-success" title="${translate('general.close')}" icon="close" @click="${() => this.successMessage = ''}"></mwc-icon-button>
 					</span>
 				</div>
 				<div style="margin-bottom: 15px;">
-					<p style="margin-bottom: 0;">${translate("walletpage.wchange43")}</p>
+					<p style="margin-bottom: 0;">${translate('walletpage.wchange43')}</p>
 				</div>
 			`
 		}
@@ -593,11 +593,11 @@ class NameRegistration extends LitElement {
 				<div class="errorBox">
 					<span style="color: red; float: left; padding-top: 4px; padding-left: 7px;">${this.errorMessage}</span>
 					<span style="padding-top: 4px: padding-right: 7px; float: right;">
-						<mwc-icon-button class="btn-clear-error" title="${translate("general.close")}" icon="close" @click="${() => this.errorMessage = ''}"></mwc-icon-button>
+						<mwc-icon-button class="btn-clear-error" title="${translate('general.close')}" icon="close" @click="${() => this.errorMessage = ''}"></mwc-icon-button>
 					</span>
 				</div>
 				<div style="margin-bottom: 15px;">
-					<p style="margin-bottom: 0;">${translate("walletpage.wchange44")}</p>
+					<p style="margin-bottom: 0;">${translate('walletpage.wchange44')}</p>
 				</div>
 			`
 		}
@@ -721,10 +721,10 @@ class NameRegistration extends LitElement {
 		if (updateDescCounter) {
 			updateDescCounter.textContent = `${this._byteLength(updateDescVal || '')}/4000`
 		}
-		const addressWarn = translate("registernamepage.nchange49") || "Name cannot look like a QORT address."
+		const addressWarn = translate('registernamepage.nchange49') || 'Name cannot look like a QORT address.'
 		const addressWarnText = (typeof addressWarn === 'string' && addressWarn.length > 0)
 			? addressWarn
-			: "Name cannot look like a QORT address."
+			: 'Name cannot look like a QORT address.'
 		if (registerAddressWarning) {
 			registerAddressWarning.textContent = this._looksLikeAddress(normalizedRegister) ? addressWarnText : ''
 		}
@@ -738,7 +738,7 @@ class NameRegistration extends LitElement {
 			? this.names.find(n => n.name === this.primaryName)
 			: (this.names[0] || null)
 		if (!primaryEntry) {
-			return html`<span style="color: var(--black);">${translate("registernamepage.nchange8")}</span>`
+			return html`<span style="color: var(--black);">${translate('registernamepage.nchange8')}</span>`
 		}
 		return html`
 			<vaadin-grid theme="large" .items="${[primaryEntry]}" all-rows-visible>
@@ -750,7 +750,7 @@ class NameRegistration extends LitElement {
 	renderAdditionalNamesSection() {
 		const additional = this.names.filter(n => n.name !== this.primaryName)
 		if (this.isEmptyArray(additional)) {
-			return html`<span style="color: var(--black);">${translate("registernamepage.nchange8")}</span>`
+			return html`<span style="color: var(--black);">${translate('registernamepage.nchange8')}</span>`
 		}
 		return html`
 			<vaadin-grid theme="large" .items="${additional}" all-rows-visible>
@@ -761,29 +761,29 @@ class NameRegistration extends LitElement {
 
 	renderNameColumns() {
 		return html`
-			<vaadin-grid-column width="5rem" flex-grow="0" header="${translate("registernamepage.nchange4")}" .renderer=${(root, column, data) => {
-				render(html`${this.renderAvatar(data.item)}`, root)
-			}}></vaadin-grid-column>
-			<vaadin-grid-column header="${translate("registernamepage.nchange5")}" path="name"></vaadin-grid-column>
-			<vaadin-grid-column header="${translate("registernamepage.nchange6")}" path="owner"></vaadin-grid-column>
-			<vaadin-grid-column width="14rem" flex-grow="0" header="${translate("registernamepage.nchange7")}" .renderer=${(root, column, data) => {
-				render(html`${this.renderAvatarButton(data.item)}`, root)
-			}}></vaadin-grid-column>
+			<vaadin-grid-column width="5rem" flex-grow="0" header="${translate('registernamepage.nchange4')}" .renderer=${(root, column, data) => {
+	render(html`${this.renderAvatar(data.item)}`, root)
+}}></vaadin-grid-column>
+			<vaadin-grid-column header="${translate('registernamepage.nchange5')}" path="name"></vaadin-grid-column>
+			<vaadin-grid-column header="${translate('registernamepage.nchange6')}" path="owner"></vaadin-grid-column>
+			<vaadin-grid-column width="14rem" flex-grow="0" header="${translate('registernamepage.nchange7')}" .renderer=${(root, column, data) => {
+	render(html`${this.renderAvatarButton(data.item)}`, root)
+}}></vaadin-grid-column>
 			<vaadin-grid-column width="14rem" flex-grow="0" .renderer=${(root, column, data) => {
-				render(html`${this.renderUpdateNameButton(data.item)}`, root)
-			}}></vaadin-grid-column>
+		render(html`${this.renderUpdateNameButton(data.item)}`, root)
+	}}></vaadin-grid-column>
 			<vaadin-grid-column width="14rem" flex-grow="0" .renderer=${(root, column, data) => {
-				const isPrimaryName = data.item.name === this.primaryName
-				const hasMultipleNames = (this.names || []).length > 1
-				const primaryBlocked = isPrimaryName && hasMultipleNames
-				if (this.marketSellNames.some(e => e.owner === this.selectedAddress.address)) {
-					render(html`${this.renderCancelSellNameButton(data.item)}`, root)
-				} else if (primaryBlocked) {
-					render(html`<mwc-button class="green" disabled title="${translate('registernamepage.nchange51')}"><mwc-icon>sell</mwc-icon>&nbsp;${translate('registernamepage.nchange19')}</mwc-button>`, root)
-				} else {
-					render(html`${this.renderSellNameButton(data.item)}`, root)
-				}
-			}}></vaadin-grid-column>
+		const isPrimaryName = data.item.name === this.primaryName
+		const hasMultipleNames = (this.names || []).length > 1
+		const primaryBlocked = isPrimaryName && hasMultipleNames
+		if (this.marketSellNames.some(e => e.owner === this.selectedAddress.address)) {
+			render(html`${this.renderCancelSellNameButton(data.item)}`, root)
+		} else if (primaryBlocked) {
+			render(html`<mwc-button class="green" disabled title="${translate('registernamepage.nchange51')}"><mwc-icon>sell</mwc-icon>&nbsp;${translate('registernamepage.nchange19')}</mwc-button>`, root)
+		} else {
+			render(html`${this.renderSellNameButton(data.item)}`, root)
+		}
+	}}></vaadin-grid-column>
 		`
 	}
 

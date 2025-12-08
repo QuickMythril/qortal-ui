@@ -45,7 +45,7 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 
 
 	async getNodeInfos() {
-		const nodeInfoUrl = buildRequestUrl(`/admin/status`, store.getState())
+		const nodeInfoUrl = buildRequestUrl('/admin/status', store.getState())
 
 		await fetch(nodeInfoUrl).then(response => {
 			return response.json()
@@ -57,7 +57,7 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 	}
 
 	async getCoreInfos() {
-		const coreInfoUrl = buildRequestUrl(`/admin/info`, store.getState())
+		const coreInfoUrl = buildRequestUrl('/admin/info', store.getState())
 
 		await fetch(coreInfoUrl).then(response => {
 			return response.json()
@@ -96,11 +96,11 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 				<div class="tooltip" style="display: inline;">
 					${iconWrapper('/img/syncing.png')}
 					<div class="bottom">
-						<h3>${translate("walletprofile.wp3")}</h3>
-						<h4 class="lineHeight">${translate("appinfo.coreversion")}: <span style="color: #03a9f4">${this.coreInfos.buildVersion ? (this.coreInfos.buildVersion).substring(0, 12) : ''}</span></h4>
-						<h4 class="lineHeight">${translate("appinfo.synchronizing")}... <span style="color: #03a9f4">${this.nodeInfos.syncPercent !== undefined ? this.nodeInfos.syncPercent + '%' : ''}</span></h4>
-						<h4 class="lineHeight">${translate("appinfo.blockheight")}: <span style="color: #03a9f4">${this.nodeInfos.height ? this.nodeInfos.height : ''}</span></h4>
-						<h4 class="lineHeight">${translate("appinfo.peers")}: <span style="color: #03a9f4">${this.nodeInfos.numberOfConnections ? this.nodeInfos.numberOfConnections : ''}</span></h4>
+						<h3>${translate('walletprofile.wp3')}</h3>
+						<h4 class="lineHeight">${translate('appinfo.coreversion')}: <span style="color: #03a9f4">${this.coreInfos.buildVersion ? (this.coreInfos.buildVersion).substring(0, 12) : ''}</span></h4>
+						<h4 class="lineHeight">${translate('appinfo.synchronizing')}... <span style="color: #03a9f4">${this.nodeInfos.syncPercent !== undefined ? this.nodeInfos.syncPercent + '%' : ''}</span></h4>
+						<h4 class="lineHeight">${translate('appinfo.blockheight')}: <span style="color: #03a9f4">${this.nodeInfos.height ? this.nodeInfos.height : ''}</span></h4>
+						<h4 class="lineHeight">${translate('appinfo.peers')}: <span style="color: #03a9f4">${this.nodeInfos.numberOfConnections ? this.nodeInfos.numberOfConnections : ''}</span></h4>
 						${nodeInfoSection}
 						<i></i>
 					</div>
@@ -111,11 +111,11 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 				<div class="tooltip" style="display: inline;">
 					${iconWrapper('/img/synced.png')}
 					<div class="bottom">
-						<h3>${translate("walletprofile.wp3")}</h3>
-						<h4 class="lineHeight">${translate("appinfo.coreversion")}: <span style="color: #03a9f4">${this.coreInfos.buildVersion ? (this.coreInfos.buildVersion).substring(0, 12) : ''}</span></h4>
-						<h4 class="lineHeight">${translate("walletprofile.wp4")} ${translate("walletprofile.wp2")}</h4>
-						<h4 class="lineHeight">${translate("appinfo.blockheight")}: <span style="color: #03a9f4">${this.nodeInfos.height ? this.nodeInfos.height : ''}</span></h4>
-						<h4 class="lineHeight">${translate("appinfo.peers")}: <span style="color: #03a9f4">${this.nodeInfos.numberOfConnections ? this.nodeInfos.numberOfConnections : ''}</span></h4>
+						<h3>${translate('walletprofile.wp3')}</h3>
+						<h4 class="lineHeight">${translate('appinfo.coreversion')}: <span style="color: #03a9f4">${this.coreInfos.buildVersion ? (this.coreInfos.buildVersion).substring(0, 12) : ''}</span></h4>
+						<h4 class="lineHeight">${translate('walletprofile.wp4')} ${translate('walletprofile.wp2')}</h4>
+						<h4 class="lineHeight">${translate('appinfo.blockheight')}: <span style="color: #03a9f4">${this.nodeInfos.height ? this.nodeInfos.height : ''}</span></h4>
+						<h4 class="lineHeight">${translate('appinfo.peers')}: <span style="color: #03a9f4">${this.nodeInfos.numberOfConnections ? this.nodeInfos.numberOfConnections : ''}</span></h4>
 						<i></i>
 					</div>
 				</div>
@@ -125,11 +125,11 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 				<div class="tooltip" style="display: inline;">
 					${iconWrapper('/img/synced.png')}
 					<div class="bottom">
-						<h3>${translate("walletprofile.wp3")}</h3>
-						<h4 class="lineHeight">${translate("appinfo.coreversion")}: <span style="color: #03a9f4">${this.coreInfos.buildVersion ? (this.coreInfos.buildVersion).substring(0, 12) : ''}</span></h4>
-						<h4 class="lineHeight">${translate("walletprofile.wp4")} ${translate("walletprofile.wp2")}</h4>
-						<h4 class="lineHeight">${translate("appinfo.blockheight")}: <span style="color: #03a9f4">${this.nodeInfos.height ? this.nodeInfos.height : ''}</span></h4>
-						<h4 class="lineHeight">${translate("appinfo.peers")}: <span style="color: #03a9f4">${this.nodeInfos.numberOfConnections ? this.nodeInfos.numberOfConnections : ''}</span></h4>
+						<h3>${translate('walletprofile.wp3')}</h3>
+						<h4 class="lineHeight">${translate('appinfo.coreversion')}: <span style="color: #03a9f4">${this.coreInfos.buildVersion ? (this.coreInfos.buildVersion).substring(0, 12) : ''}</span></h4>
+						<h4 class="lineHeight">${translate('walletprofile.wp4')} ${translate('walletprofile.wp2')}</h4>
+						<h4 class="lineHeight">${translate('appinfo.blockheight')}: <span style="color: #03a9f4">${this.nodeInfos.height ? this.nodeInfos.height : ''}</span></h4>
+						<h4 class="lineHeight">${translate('appinfo.peers')}: <span style="color: #03a9f4">${this.nodeInfos.numberOfConnections ? this.nodeInfos.numberOfConnections : ''}</span></h4>
 						${nodeInfoSection}
 						<i></i>
 					</div>
@@ -140,11 +140,11 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 				<div class="tooltip" style="display: inline;">
 					${iconWrapper('/img/synced_minting.png')}
 					<div class="bottom">
-						<h3>${translate("walletprofile.wp3")}</h3>
-						<h4 class="lineHeight">${translate("appinfo.coreversion")}: <span style="color: #03a9f4">${this.coreInfos.buildVersion ? (this.coreInfos.buildVersion).substring(0, 12) : ''}</span></h4>
-						<h4 class="lineHeight">${translate("walletprofile.wp4")} <span style="color: #03a9f4">( ${translate("walletprofile.wp1")} )</span></h4>
-						<h4 class="lineHeight">${translate("appinfo.blockheight")}: <span style="color: #03a9f4">${this.nodeInfos.height ? this.nodeInfos.height : ''}</span></h4>
-						<h4 class="lineHeight">${translate("appinfo.peers")}: <span style="color: #03a9f4">${this.nodeInfos.numberOfConnections ? this.nodeInfos.numberOfConnections : ''}</span></h4>
+						<h3>${translate('walletprofile.wp3')}</h3>
+						<h4 class="lineHeight">${translate('appinfo.coreversion')}: <span style="color: #03a9f4">${this.coreInfos.buildVersion ? (this.coreInfos.buildVersion).substring(0, 12) : ''}</span></h4>
+						<h4 class="lineHeight">${translate('walletprofile.wp4')} <span style="color: #03a9f4">( ${translate('walletprofile.wp1')} )</span></h4>
+						<h4 class="lineHeight">${translate('appinfo.blockheight')}: <span style="color: #03a9f4">${this.nodeInfos.height ? this.nodeInfos.height : ''}</span></h4>
+						<h4 class="lineHeight">${translate('appinfo.peers')}: <span style="color: #03a9f4">${this.nodeInfos.numberOfConnections ? this.nodeInfos.numberOfConnections : ''}</span></h4>
 						<i></i>
 					</div>
 				</div>
@@ -154,11 +154,11 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 				<div class="tooltip" style="display: inline;">
 					${iconWrapper('/img/synced_minting.png')}
 					<div class="bottom">
-						<h3>${translate("walletprofile.wp3")}</h3>
-						<h4 class="lineHeight">${translate("appinfo.coreversion")}: <span style="color: #03a9f4">${this.coreInfos.buildVersion ? (this.coreInfos.buildVersion).substring(0, 12) : ''}</span></h4>
-						<h4 class="lineHeight">${translate("walletprofile.wp4")} <span style="color: #03a9f4">( ${translate("walletprofile.wp1")} )</span></h4>
-						<h4 class="lineHeight">${translate("appinfo.blockheight")}: <span style="color: #03a9f4">${this.nodeInfos.height ? this.nodeInfos.height : ''}</span></h4>
-						<h4 class="lineHeight">${translate("appinfo.peers")}: <span style="color: #03a9f4">${this.nodeInfos.numberOfConnections ? this.nodeInfos.numberOfConnections : ''}</span></h4>
+						<h3>${translate('walletprofile.wp3')}</h3>
+						<h4 class="lineHeight">${translate('appinfo.coreversion')}: <span style="color: #03a9f4">${this.coreInfos.buildVersion ? (this.coreInfos.buildVersion).substring(0, 12) : ''}</span></h4>
+						<h4 class="lineHeight">${translate('walletprofile.wp4')} <span style="color: #03a9f4">( ${translate('walletprofile.wp1')} )</span></h4>
+						<h4 class="lineHeight">${translate('appinfo.blockheight')}: <span style="color: #03a9f4">${this.nodeInfos.height ? this.nodeInfos.height : ''}</span></h4>
+						<h4 class="lineHeight">${translate('appinfo.peers')}: <span style="color: #03a9f4">${this.nodeInfos.numberOfConnections ? this.nodeInfos.numberOfConnections : ''}</span></h4>
 						${nodeInfoSection}
 						<i></i>
 					</div>
@@ -169,11 +169,11 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 				<div class="tooltip" style="display: inline;">
 					${iconWrapper('/img/syncing.png')}
 					<div class="bottom">
-						<h3>${translate("walletprofile.wp3")}</h3>
-						<h4 class="lineHeight">${translate("appinfo.coreversion")}: <span style="color: #03a9f4">${this.coreInfos.buildVersion ? (this.coreInfos.buildVersion).substring(0, 12) : ''}</span></h4>
-						<h4 class="lineHeight">${translate("appinfo.synchronizing")}... <span style="color: #03a9f4">${this.nodeInfos.syncPercent !== undefined ? this.nodeInfos.syncPercent + '%' : ''}</span></h4>
-						<h4 class="lineHeight">${translate("appinfo.blockheight")}: <span style="color: #03a9f4">${this.nodeInfos.height ? this.nodeInfos.height : ''}</span></h4>
-						<h4 class="lineHeight">${translate("appinfo.peers")}: <span style="color: #03a9f4">${this.nodeInfos.numberOfConnections ? this.nodeInfos.numberOfConnections : ''}</span></h4>
+						<h3>${translate('walletprofile.wp3')}</h3>
+						<h4 class="lineHeight">${translate('appinfo.coreversion')}: <span style="color: #03a9f4">${this.coreInfos.buildVersion ? (this.coreInfos.buildVersion).substring(0, 12) : ''}</span></h4>
+						<h4 class="lineHeight">${translate('appinfo.synchronizing')}... <span style="color: #03a9f4">${this.nodeInfos.syncPercent !== undefined ? this.nodeInfos.syncPercent + '%' : ''}</span></h4>
+						<h4 class="lineHeight">${translate('appinfo.blockheight')}: <span style="color: #03a9f4">${this.nodeInfos.height ? this.nodeInfos.height : ''}</span></h4>
+						<h4 class="lineHeight">${translate('appinfo.peers')}: <span style="color: #03a9f4">${this.nodeInfos.numberOfConnections ? this.nodeInfos.numberOfConnections : ''}</span></h4>
 						${nodeInfoSection}
 						<i></i>
 					</div>

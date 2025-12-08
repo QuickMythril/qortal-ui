@@ -37,7 +37,7 @@ export default class RegisterNameTransaction extends TransactionBase {
 	}
 
 	set value(value) {
-		this.valueText = value.length === 0 ? "Registered Name on the Qortal Chain" : value
+		this.valueText = value.length === 0 ? 'Registered Name on the Qortal Chain' : value
 		this._valueBytes = this.constructor.utils.stringtoUTF8Array(this.valueText)
 		this._valueLength = this.constructor.utils.int32ToBytes(this._valueBytes.length)
 	}

@@ -30,7 +30,7 @@ class SearchModal extends LitElement {
 	render() {
 		return html`
 			<div style="display: inline;">
-				<paper-icon-button icon="icons:search" @click=${() => this.openSearch()} title="${translate("websitespage.schange35")}"></paper-icon-button></a>
+				<paper-icon-button icon="icons:search" @click=${() => this.openSearch()} title="${translate('websitespage.schange35')}"></paper-icon-button></a>
 			</div>
 
 			<paper-dialog id="searchSettingsDialog" class="searchSettings">
@@ -39,14 +39,14 @@ class SearchModal extends LitElement {
 						<vaadin-text-field
 							style="width: 350px"
 							id="searchContent"
-							placeholder="${translate("explorerpage.exp1")}"
+							placeholder="${translate('explorerpage.exp1')}"
 							value="${this.searchContentString}"
 							@keydown="${this.searchKeyListener}"
 							clear-button-visible
 						>
 						</vaadin-text-field>
-						<paper-icon-button icon="icons:search" @click="${() => this.openUserInfo()}" title="${translate("websitespage.schange35")}"></paper-icon-button>
-						<paper-icon-button icon="icons:close" @click="${() => this.closeSearch()}" title="${translate("general.close")}"></paper-icon-button>
+						<paper-icon-button icon="icons:search" @click="${() => this.openUserInfo()}" title="${translate('websitespage.schange35')}"></paper-icon-button>
+						<paper-icon-button icon="icons:close" @click="${() => this.closeSearch()}" title="${translate('general.close')}"></paper-icon-button>
 					</div>
 				</div>
 			</paper-dialog>
@@ -75,8 +75,8 @@ class SearchModal extends LitElement {
 		const checkvalue = this.shadowRoot.getElementById('searchContent').value
 
 		if (checkvalue.length < 1) {
-			let snackbar1string = get("publishpage.pchange20")
-			let snackbar2string = get("welcomepage.wcchange4")
+			let snackbar1string = get('publishpage.pchange20')
+			let snackbar2string = get('welcomepage.wcchange4')
 
 			snackbar.add({
 				labelText: `${snackbar1string} ${snackbar2string}`,

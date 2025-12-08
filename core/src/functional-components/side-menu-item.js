@@ -41,9 +41,9 @@ export class SideMenuItem extends LitElement {
 			return
 		}
 
-		this.collapseExpandIcon = document.createElement("vaadin-icon")
-		this.collapseExpandIcon.id = "collapse-button"
-		this.shadowRoot.getElementById("content").appendChild(this.collapseExpandIcon)
+		this.collapseExpandIcon = document.createElement('vaadin-icon')
+		this.collapseExpandIcon.id = 'collapse-button'
+		this.shadowRoot.getElementById('content').appendChild(this.collapseExpandIcon)
 		this._boundOutsideClickListener = this._outsideClickListener.bind(this)
 	}
 
@@ -67,42 +67,42 @@ export class SideMenuItem extends LitElement {
 	_tooltipTemplate() {
 		return html`
 			${this._getLevel === 0 && this.compact ?
-				html`
+		html`
 					<paper-tooltip for="itemLink" position="right" animation-delay="0">
 						${this.label}
 					</paper-tooltip>
 				` : undefined
-			}
+}
 		`
 	}
 
 	_childrenTemplate() {
 		return html`
 			${this.expanded ?
-				html`
+		html`
 					${this.compact ?
-						html`
+		html`
 							<div id="overlay"><slot></slot></div>
 						` : html`
 							<slot></slot>
 						`
-					}
+}
 				` : undefined
-			}
+}
 		`
 	}
 
 	updated(changedProperties) {
 		changedProperties.forEach((oldValue, propName) => {
-			if (propName === "compact") {
+			if (propName === 'compact') {
 				this._onCompactChanged()
 			}
 
-			if (propName === "expanded") {
+			if (propName === 'expanded') {
 				this._onExpandedChanged()
 			}
 
-			if (propName === "selected") {
+			if (propName === 'selected') {
 				if (oldValue === this.selected) {
 					return
 				}
@@ -123,9 +123,9 @@ export class SideMenuItem extends LitElement {
 		}
 
 		if (!this.compact) {
-			this.collapseExpandIcon["icon"] = "vaadin:chevron-down-small"
+			this.collapseExpandIcon['icon'] = 'vaadin:chevron-down-small'
 		} else {
-			this.collapseExpandIcon["icon"] = "vaadin:chevron-right-small"
+			this.collapseExpandIcon['icon'] = 'vaadin:chevron-right-small'
 		}
 	}
 
@@ -143,20 +143,20 @@ export class SideMenuItem extends LitElement {
 
 	_onHandleExpanded() {
 		if (!this.compact) {
-			this.collapseExpandIcon["icon"] = "vaadin:chevron-up-small"
+			this.collapseExpandIcon['icon'] = 'vaadin:chevron-up-small'
 		} else {
-			this.collapseExpandIcon["icon"] = "vaadin:chevron-left-small"
-			document.addEventListener("click", this._boundOutsideClickListener, true)
+			this.collapseExpandIcon['icon'] = 'vaadin:chevron-left-small'
+			document.addEventListener('click', this._boundOutsideClickListener, true)
 		}
 	}
 
 	_onHandleCollapsed() {
 		if (!this.compact) {
-			this.collapseExpandIcon["icon"] = "vaadin:chevron-down-small"
+			this.collapseExpandIcon['icon'] = 'vaadin:chevron-down-small'
 		} else {
-			this.collapseExpandIcon["icon"] = "vaadin:chevron-right-small"
+			this.collapseExpandIcon['icon'] = 'vaadin:chevron-right-small'
 			document.removeEventListener(
-				"click",
+				'click',
 				this._boundOutsideClickListener,
 				true
 			)
@@ -184,7 +184,7 @@ export class SideMenuItem extends LitElement {
 	_changeSelectedState(selected, sourceEvent) {
 		this.selected = selected
 
-		let evt = new CustomEvent("side-menu-item-select", {
+		let evt = new CustomEvent('side-menu-item-select', {
 			bubbles: true,
 			cancelable: true,
 			detail: { sourceEvent: sourceEvent }
@@ -194,11 +194,11 @@ export class SideMenuItem extends LitElement {
 	}
 
 	hasChildren() {
-		return !!this.querySelector("side-menu-item")
+		return !!this.querySelector('side-menu-item')
 	}
 
 	_markParentWithSelectedChild() {
-		let element = this.parentElement;
+		let element = this.parentElement
 		while (element instanceof SideMenuItem) {
 			element.setAttribute('hasSelectedChild', true)
 			element = element.parentElement
@@ -218,4 +218,4 @@ export class SideMenuItem extends LitElement {
 	}
 }
 
-window.customElements.define("side-menu-item", SideMenuItem)
+window.customElements.define('side-menu-item', SideMenuItem)

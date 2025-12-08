@@ -41,7 +41,7 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 	}
 
 	constructor() {
-		super();
+		super()
 		this.isOpen = false
 		this.isLoading = false
 		this.tagline = ''
@@ -67,8 +67,8 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 		this.hasFetchedArrr = false
 		this.isOpenCustomDataModal = false
 		this.customData = {}
-		this.newCustomDataKey = ""
-		this.newCustomDataValue = ""
+		this.newCustomDataKey = ''
+		this.newCustomDataValue = ''
 		this.newCustomDataField = {}
 		this.newFieldName = ''
 		this.isSaving = false
@@ -93,8 +93,8 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 							<textarea
 								class="input"
 								@change=${(e) => {
-									this.tagline = e.target.value;
-								}}
+		this.tagline = e.target.value
+	}}
 								.value=${this.tagline}
 								?disabled=${this.isLoading}
 								id="tagline"
@@ -114,8 +114,8 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 							<textarea
 								class="input"
 								@change=${(e) => {
-									this.bio = e.target.value;
-								}}
+		this.bio = e.target.value
+	}}
 								.value=${this.bio}
 								?disabled=${this.isLoading}
 								id="bio"
@@ -127,7 +127,7 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 						<p>${translate('profile.profile6')}</p>
 						<div style="display: flex;flex-direction: column;">
 							${Object.keys(this.wallets).map((key) => {
-								return html`
+		return html`
 									<div style="display:flex;justify-content:center;flex-direction:column">
 										<label
 											for=${key}
@@ -143,16 +143,16 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 												class="input"
 												.value=${this.wallets[key]}
 												@change=${(e) => {
-													this.wallets = {
-														...this.wallets,
-														[key]: e.target.value,
-													};
-												}}
+		this.wallets = {
+			...this.wallets,
+			[key]: e.target.value,
+		}
+	}}
 											/>
 											<mwc-icon
 												id=${`${key}-upload`}
 												@click=${() =>
-												this.fillAddress(key)}
+		this.fillAddress(key)}
 												style="color:var(--black);cursor:pointer"
 											>
 												upload_2
@@ -167,11 +167,11 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 										</div>
 									</div>
 								`
-							})}
+	})}
 						</div>
 						<div style="display: flex;flex-direction: column;">
 							${Object.keys(this.customData).map((key) => {
-								return html`
+		return html`
 									<div style="display:flex;justify-content:center;flex-direction:column;gap:25px">
 										<div style="display:flex;gap:15px;align-items:center">
 											<p style="color: var(--black);font-size:16px">${key}</p>
@@ -190,7 +190,7 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 										</div>
 									</div>
 								`
-							})}
+	})}
 						</div>
 					</div>
 					<div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px">
@@ -198,10 +198,10 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 							class="modal-button-red"
 							?disabled="${this.isLoading}"
 							@click="${() => {
-								this.setIsOpen(false);
-								this.clearFields();
-								this.onClose();
-							}}"
+		this.setIsOpen(false)
+		this.clearFields()
+		this.onClose()
+	}}"
 						>
 							${translate('general.close')}
 						</button>
@@ -210,8 +210,8 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 								?disabled="${this.isLoading}"
 								class="modal-button"
 								@click=${() => {
-									this.isOpenCustomDataModal = true;
-								}}
+		this.isOpenCustomDataModal = true
+	}}
 							>
 								${translate('profile.profile8')}
 							</button>
@@ -219,9 +219,9 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 								?disabled="${this.isLoading}"
 								class="modal-button"
 								@click=${() => {
-									if (this.isSaving) return
-									this.saveProfile();
-								}}
+		if (this.isSaving) return
+		this.saveProfile()
+	}}
 							>
 								${this.isSaving ? html`
 									<paper-spinner-lite active></paper-spinner-lite>
@@ -235,8 +235,8 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 			<!-- add custom vars -->
 			<div
 				class="modal-overlay ${this.isOpenCustomDataModal
-				? ''
-				: 'hidden'}"
+		? ''
+		: 'hidden'}"
 				style="z-index:1001"
 			>
 				<div class="modal-content" style="max-width: 950px">
@@ -260,23 +260,23 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 								<input
 									id="key-name"
 									placeholder=${translate(
-										'profile.profile9'
-									)}
+		'profile.profile9'
+	)}
 									?disabled=${!!this.qortalRequestCustomData}
 									class="input"
 									.value=${this.newCustomDataKey}
 									@change=${(e) => {
-										this.newCustomDataKey = e.target.value
-									}}
+		this.newCustomDataKey = e.target.value
+	}}
 								/>
 							</div>
 						</div>
-						<p style=${`${Object.keys(this.newCustomDataField).length ? "margin: 10px 0 10px 0;" : "margin: 10px 0 0 0;"}`}>
+						<p style=${`${Object.keys(this.newCustomDataField).length ? 'margin: 10px 0 10px 0;' : 'margin: 10px 0 0 0;'}`}>
 							${translate('profile.profile10')}
 						</p>
 						<div style="display: flex;flex-direction: column;">
 							${Object.keys(this.newCustomDataField).map((key) => {
-								return html`
+		return html`
 									<div style="display:flex;justify-content:center;flex-direction:column">
 										<label for=${key} id="taglineLabel" style="color: var(--black);font-size:16px">${key}</label>
 										<div style="display:flex;gap:15px;align-items:center">
@@ -286,11 +286,11 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 												class="input"
 												.value=${this.newCustomDataField[key]}
 												@change=${(e) => {
-													this.newCustomDataField = {
-														...this.newCustomDataField,
-														[key]: e.target.value,
-													};
-												}}
+		this.newCustomDataField = {
+			...this.newCustomDataField,
+			[key]: e.target.value,
+		}
+	}}
 											/>
 											<mwc-icon
 												@click=${() => this.removeField(key)}
@@ -301,17 +301,17 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 										</div>
 									</div>
 								`
-							})}
+	})}
 						</div>
-						<div style=${`display: flex; flex-direction: row; align-items: center;justify-content:space-between; ${Object.keys(this.newCustomDataField).length ? "margin-top: 10px" : ""}`}>
+						<div style=${`display: flex; flex-direction: row; align-items: center;justify-content:space-between; ${Object.keys(this.newCustomDataField).length ? 'margin-top: 10px' : ''}`}>
 							<div style="width:100%;display:flex; flex-direction: column; align-items: flex-start;justify-content:center;gap:10px;">
 								<input
 									placeholder=${translate('profile.profile12')}
 									class="input"
 									.value=${this.newFieldName}
 									@change=${(e) => {
-										this.newFieldName = e.target.value
-									}}
+		this.newFieldName = e.target.value
+	}}
 								/>
 								<input
 									id="value-name"
@@ -319,16 +319,16 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 									class="input"
 									.value=${this.newCustomDataValue}
 									@change=${(e) => {
-										this.newCustomDataValue = e.target.value;
-								}}
+		this.newCustomDataValue = e.target.value
+	}}
 								/>
 							</div>
 							<button
 								class="modal-button"
 								style="margin-top: 25px; width: 100px; min-height: 80px;"
 								@click=${() => {
-									this.addField();
-								}}
+		this.addField()
+	}}
 							>
 								${translate('profile.profile11')}
 							</button>
@@ -339,10 +339,10 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 							class="modal-button-red"
 							?disabled="${this.isLoading}"
 							@click="${() => {
-								this.isOpenCustomDataModal = false
-								this.newCustomDataKey = ""
-								this.newCustomDataField = {};
-							}}"
+		this.isOpenCustomDataModal = false
+		this.newCustomDataKey = ''
+		this.newCustomDataField = {}
+	}}"
 						>
 							${translate('general.close')}
 						</button>
@@ -350,8 +350,8 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 							?disabled="${this.isSaving}"
 							class="modal-button"
 							@click=${() => {
-								this.addCustomData();
-							}}
+		this.addCustomData()
+	}}
 						>
 							${translate('profile.profile8')}
 						</button>
@@ -386,7 +386,7 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 			this.wallets = formWallets
 
 			this.customData = { ...customData }
-			this.requestUpdate();
+			this.requestUpdate()
 		}
 		if (changedProperties && changedProperties.has('qortalRequestCustomData') && this.qortalRequestCustomData) {
 			this.isOpenCustomDataModal = true
@@ -403,7 +403,7 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 		}
 		switch (coin) {
 			case 'arrr':
-				const arrrWalletName = `${coin}Wallet`;
+				const arrrWalletName = `${coin}Wallet`
 
 				let res = await parentEpml.request('apiCall', {
 					url: buildRequestUrl(`/crosschain/${coin}/walletaddress`, store.getState()),
@@ -488,7 +488,7 @@ class ProfileModalUpdate extends connect(store)(LitElement) {
 
 	addField() {
 		if (!this.newFieldName || !this.newCustomDataValue) {
-			let snack5string = get("profile.profile24")
+			let snack5string = get('profile.profile24')
 			parentEpml.request('showSnackBar', `${snack5string}`)
 			return
 		}

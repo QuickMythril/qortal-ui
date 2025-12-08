@@ -39,10 +39,10 @@ class FriendsSidePanel extends connect(store)(LitElement) {
 						<span @click=${() => this.selected = 'feed'} class="${this.selected === 'feed' ? 'active' : 'default'}">${translate('friends.friend13')}</span>
 					</div>
 					<div style="display:flex;gap:15px;align-items:center">
-						<mwc-icon @click=${() => { this.refreshFeed(); }} style="color: var(--black); cursor:pointer;">
+						<mwc-icon @click=${() => { this.refreshFeed() }} style="color: var(--black); cursor:pointer;">
 							refresh
 						</mwc-icon>
-						<mwc-icon style="cursor:pointer" @click=${() => { this.setIsOpen(false); }}>
+						<mwc-icon style="cursor:pointer" @click=${() => { this.setIsOpen(false) }}>
 							close
 						</mwc-icon>
 					</div>

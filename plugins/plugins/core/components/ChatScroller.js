@@ -119,18 +119,18 @@ function processText(input) {
 								if (res.type && res.groupid && res.action === 'join') {
 									window.parent.reduxStore.dispatch(
 										window.parent.reduxAction.setNewTab({
-											url: `group-management`,
+											url: 'group-management',
 											id: uid.rnd(),
 											myPlugObj: {
-												"url": "group-management",
-												"domain": "core",
-												"page": "group-management/index.html",
-												"title": "Group Management",
-												"icon": "vaadin:group",
-												"mwcicon": "group",
-												"pluginNumber": "plugin-fJZNpyLGTl",
-												"menus": [],
-												"parent": false
+												'url': 'group-management',
+												'domain': 'core',
+												'page': 'group-management/index.html',
+												'title': 'Group Management',
+												'icon': 'vaadin:group',
+												'mwcicon': 'group',
+												'pluginNumber': 'plugin-fJZNpyLGTl',
+												'menus': [],
+												'parent': false
 											},
 											openExisting: true
 										})
@@ -283,19 +283,19 @@ class ChatScroller extends LitElement {
 
 		return html`
 			${this.isLoadingBefore
-				? html`
+		? html`
 						<div class="spinnerContainer">
 							<paper-spinner-lite active></paper-spinner-lite>
 						</div>
 				`
-				: ''
-			}
+		: ''
+}
 			<ul id="viewElement" class="chat-list clearfix">
 				<div id="upObserver"></div>
 				${repeat(formattedMessages, (formattedMessage) => formattedMessage.reference, (formattedMessage) =>
-					html`
+		html`
 						${repeat(formattedMessage.messages, (message) => message.signature, (message, indexMessage) =>
-							html`
+		html`
 								<message-template
 									.emojiPicker=${this.emojiPicker}
 									.escapeHTML=${this.escapeHTML}
@@ -323,32 +323,32 @@ class ChatScroller extends LitElement {
 								>
 								</message-template>
 								${message.isDivider ?
-									html`
+		html`
 										<div class="unread-divider" id="unread-divider-id">
 											${translate('chatpage.cchange92')}
 										</div>
 									`
-									: null
-								}
+		: null
+}
 							`
-						)}
+	)}
 					`
-				)}
+	)}
 				<div style=${this.messageQueue.filter((item) => this.chatId.includes(item._chatId)).length > 0 ? 'height: 1px' : 'height: 1px'} id="bottomObserverForFetchingMessages"></div>
 				<div style=${'height: 1px;'} id="downObserver"></div>
 				${this.isLoadingAfter ?
-					html`
+		html`
 						<div class="spinnerContainer">
 							<paper-spinner-lite active></paper-spinner-lite>
 						</div>
 					`
-					: ''
-				}
+		: ''
+}
 				${!this.disableAddingNewMessages ?
-					repeat(
-						this.messageQueue.filter((item) => this.chatId.includes(item._chatId)),
-						(message) => message.messageText,
-						(message) => html`
+		repeat(
+			this.messageQueue.filter((item) => this.chatId.includes(item._chatId)),
+			(message) => message.messageText,
+			(message) => html`
 							<message-template
 								.emojiPicker=${this.emojiPicker}
 								.escapeHTML=${this.escapeHTML}
@@ -376,9 +376,9 @@ class ChatScroller extends LitElement {
 							>
 							</message-template>
 						`
-					)
-					: ''
-				}
+		)
+		: ''
+}
 			</ul>
 		`
 	}
@@ -1148,8 +1148,8 @@ class MessageTemplate extends LitElement {
 			const gifHTMLRes = new Image()
 			gifHTMLRes.src = gif
 			gifHTMLRes.style = 'max-width:45vh; max-height:40vh; border-radius: 5px; cursor: pointer;'
-			gifHTMLRes.onclick = () => {this.openDialogGif = true;}
-			gifHTMLRes.onload = () => {this.isGifLoaded = true;}
+			gifHTMLRes.onclick = () => {this.openDialogGif = true}
+			gifHTMLRes.onload = () => {this.isGifLoaded = true}
 			gifHTMLRes.onerror = () => {
 				if (this.gifFetches < 4) {
 					setTimeout(() => {
@@ -1236,17 +1236,17 @@ class MessageTemplate extends LitElement {
 		}
 
 		if (this.fontSize === 'font16') {
-			this.messageFontSize = "font-size: 16px"
-			this.replyFontSize = "font-size: 14px"
+			this.messageFontSize = 'font-size: 16px'
+			this.replyFontSize = 'font-size: 14px'
 		} else if (this.fontSize === 'font18') {
-			this.messageFontSize = "font-size: 18px"
-			this.replyFontSize = "font-size: 16px"
+			this.messageFontSize = 'font-size: 18px'
+			this.replyFontSize = 'font-size: 16px'
 		} else if (this.fontSize === 'font20') {
-			this.messageFontSize = "font-size: 20px"
-			this.replyFontSize = "font-size: 18px"
+			this.messageFontSize = 'font-size: 20px'
+			this.replyFontSize = 'font-size: 18px'
 		} else if (this.fontSize === 'font22') {
-			this.messageFontSize = "font-size: 22px"
-			this.replyFontSize = "font-size: 20px"
+			this.messageFontSize = 'font-size: 22px'
+			this.replyFontSize = 'font-size: 20px'
 		}
 
 		edited = html`
@@ -1291,108 +1291,108 @@ class MessageTemplate extends LitElement {
 			<li
 				class="clearfix message-parent"
 				style="${
-					this.isSingleMessageInGroup === true
+	this.isSingleMessageInGroup === true
 					&& this.isLastMessageInGroup === false
 					&& reactions.length === 0 ?
-					'padding-bottom: 0;' : null
-				}
+		'padding-bottom: 0;' : null
+}
 				${this.isFirstMessage && 'margin-top: 20px;'}"
 			>
 				<div>
 					<div class="message-container" style="${this.isSingleMessageInGroup === true && this.isLastMessageInGroup === false && 'margin-bottom: 0'}">
 						<div class=${`message-subcontainer1 ${this.isInProgress ? 'message-sending' : ''}`}>
 							${this.isSingleMessageInGroup === false || (this.isSingleMessageInGroup === true && this.isLastMessageInGroup === true) ?
-								html`
+		html`
 									<div style=${this.myAddress === this.messageObj.sender ? 'cursor: auto;' : 'cursor: pointer;'}
 										@click=${() => {
-											if (this.myAddress === this.messageObj.sender) return;
-											this.setOpenUserInfo(true);
-											this.setUserName(this.messageObj);
-										}}
+		if (this.myAddress === this.messageObj.sender) return
+		this.setOpenUserInfo(true)
+		this.setUserName(this.messageObj)
+	}}
 										class="message-data-avatar"
 									>
 										${avatarImg}
 									</div>
 								`
-								: html`
+		: html`
 									<div class="message-data-avatar"></div>
 								`
-							}
+}
 							<div
 								class="${`
 									message-subcontainer2
 									${this.myAddress === this.messageObj.sender && 'message-myBg'}
 									${
-										(
-											(this.isFirstMessage === true && this.isSingleMessageInGroup === false)
+	(
+		(this.isFirstMessage === true && this.isSingleMessageInGroup === false)
 											|| (this.isSingleMessageInGroup === true && this.isLastMessageInGroup === true)
-										) && this.myAddress !== this.messageObj.sender ?
-											'message-triangle'
-										: (
-											(this.isFirstMessage === true && this.isSingleMessageInGroup === false)
+	) && this.myAddress !== this.messageObj.sender ?
+		'message-triangle'
+		: (
+			(this.isFirstMessage === true && this.isSingleMessageInGroup === false)
 											|| (this.isSingleMessageInGroup === true && this.isLastMessageInGroup === true)
-										) && this.myAddress === this.messageObj.sender ?
-											'message-myTriangle'
-										: null
-									}
+		) && this.myAddress === this.messageObj.sender ?
+			'message-myTriangle'
+			: null
+}
 								`}"
 								style="
 									${
-										this.isSingleMessageInGroup === true
+	this.isSingleMessageInGroup === true
 										&& this.isLastMessageInGroup === false ?
-											'margin-bottom: 0;'
-										: null
-									}
+		'margin-bottom: 0;'
+		: null
+}
 									${
-										this.isFirstMessage === false
+	this.isFirstMessage === false
 											&& this.isSingleMessageInGroup === true
 											&& this.isLastMessageInGroup === false ?
-											'border-radius: 8px 25px 25px 8px;'
-										: this.isFirstMessage === true
+		'border-radius: 8px 25px 25px 8px;'
+		: this.isFirstMessage === true
 											&& this.isSingleMessageInGroup === true
 											&& this.isLastMessageInGroup === false ?
-											'border-radius: 27px 25px 25px 12px;'
-										: this.isFirstMessage === false
+			'border-radius: 27px 25px 25px 12px;'
+			: this.isFirstMessage === false
 											&& this.isSingleMessageInGroup === true
 											&& this.isLastMessageInGroup === true ?
-											'border-radius: 10px 25px 25px 0;'
-										: this.isFirstMessage === true
+				'border-radius: 10px 25px 25px 0;'
+				: this.isFirstMessage === true
 											&& this.isSingleMessageInGroup === false
 											&& this.isLastMessageInGroup === true ?
-											'border-radius: 25px 25px 25px 0px;'
-										: null
-									}
+					'border-radius: 25px 25px 25px 0px;'
+					: null
+}
 								"
 							>
 								<div class="message-user-info">
 									${this.isFirstMessage ?
-										html`
+		html`
 											<span
 												style=${this.myAddress === this.messageObj.sender ? 'cursor: auto;' : 'cursor: pointer;'}
 												@click=${() => {
-													if (this.myAddress === this.messageObj.sender) return;
-													this.setOpenUserInfo(true);
-													this.setUserName(this.messageObj);
-												}}
+		if (this.myAddress === this.messageObj.sender) return
+		this.setOpenUserInfo(true)
+		this.setUserName(this.messageObj)
+	}}
 												class="message-data-name"
 											>
 												${nameMenu}
 											</span>
 										`
-										: null
-									}
+		: null
+}
 									${isForwarded ?
-										html`
+		html`
 											<span class="forwarded-text">${forwarded}</span>
 										`
-										: null
-									}
+		: null
+}
 									${this.isFirstMessage ?
-										html`
+		html`
 											<span class="message-data-level">${levelFounder}</span>
 										`
-										: null
-									}
+		: null
+}
 								</div>
 								${repliedToData &&
 									html`
@@ -1400,43 +1400,43 @@ class MessageTemplate extends LitElement {
 											id="replyNameSize"
 											class="original-message"
 											style=${this.replyFontSize}
-											@click=${() => {this.goToRepliedMessage(repliedToData, this.messageObj);}}
+											@click=${() => {this.goToRepliedMessage(repliedToData, this.messageObj)}}
 										>
 											<p
 												style=${'cursor: pointer; margin: 0 0 5px 0;'}
 												class=${
-													this.myAddress !== repliedToData.sender ?
-													'original-message-sender' : 'message-data-my-name'
-												}
+	this.myAddress !== repliedToData.sender ?
+		'original-message-sender' : 'message-data-my-name'
+}
 											>
 												${repliedToData.senderName ? repliedToData.senderName : cropAddress(repliedToData.sender)}
 											</p>
 											<p class="replied-message">
 												${version && version.toString() === '1' ?
-													html`
+		html`
 														<div id="replyFontSize" style=${this.replyFontSize}>
 															${repliedToData.decodedMessage.messageText}
 														</div>
 													`
-													: ''
-												}
+		: ''
+}
 												${+version > 1 && repliedToMessageText ?
-													html`
+		html`
 														<div id="replyFontSize" style=${this.replyFontSize}>
 															${unsafeHTML(repliedToMessageText)}
 														</div>
 													`
-													: ''
-												}
+		: ''
+}
 											</p>
 										</div>
 									`
-								}
+}
 								${image && !isImageDeleted && !this.viewImage && this.myAddress !== this.messageObj.sender ?
-									html`
+		html`
 										<div
-											@click=${() => {this.viewImage = true;}}
-											class=${[`image-container`, !this.isImageLoaded ? 'defaultSize' : '',].join(' ')}
+											@click=${() => {this.viewImage = true}}
+											class=${['image-container', !this.isImageLoaded ? 'defaultSize' : '',].join(' ')}
 											style=${this.isFirstMessage && 'margin-top: 10px;'}
 										>
 											<div
@@ -1454,14 +1454,14 @@ class MessageTemplate extends LitElement {
 											</div>
 										</div>
 									`
-									: html``
-								}
+		: html``
+}
 								${image && !isImageDeleted && (this.viewImage || this.myAddress === this.messageObj.sender) ?
-									html`
-										<div class=${[`image-container`,].join(' ')} style=${this.isFirstMessage && 'margin-top: 10px;'}>
+		html`
+										<div class=${['image-container',].join(' ')} style=${this.isFirstMessage && 'margin-top: 10px;'}>
 											${imageHTML}
 											${this.myAddress === this.messageObj.sender ?
-												html`
+		html`
 													<vaadin-icon
 														@click=${() => this.openDeleteImageDialog()}
 														icon="vaadin:close"
@@ -1469,12 +1469,12 @@ class MessageTemplate extends LitElement {
 														class="image-delete-icon"
 													></vaadin-icon>
 												`
-												: ''
-											}
+		: ''
+}
 										</div>
 									`
-									: image && isImageDeleted ?
-										html`
+		: image && isImageDeleted ?
+			html`
 											<div class="attachment-container">
 												<div class="attachment-info">
 													<p style=${'font-style: italic;'} class="attachment-name">
@@ -1483,13 +1483,13 @@ class MessageTemplate extends LitElement {
 												</div>
 											</div>
 										`
-									: html``
-								}
+			: html``
+}
 								${gif && !isGifDeleted && !this.viewImage && this.myAddress !== this.messageObj.sender ?
-									html`
+		html`
 										<div
-											@click=${() => {this.viewImage = true;}}
-											class=${[`image-container`, !this.isGifoaded ? 'defaultSize' : '', ].join(' ')}
+											@click=${() => {this.viewImage = true}}
+											class=${['image-container', !this.isGifoaded ? 'defaultSize' : '', ].join(' ')}
 											style=${this.isFirstMessage && 'margin-top: 10px;'}
 										>
 											<div
@@ -1507,19 +1507,19 @@ class MessageTemplate extends LitElement {
 											</div>
 										</div>
 									`
-									: html``
-								}
+		: html``
+}
 								${gif && !isGifDeleted && (this.viewImage || this.myAddress === this.messageObj.sender) ?
-									html`
+		html`
 										<div
 											class=${
-												[`image-container`, !this.isGifLoaded ? 'defaultSize' : '',].join(' ')
-											}
+	['image-container', !this.isGifLoaded ? 'defaultSize' : '',].join(' ')
+}
 											style=${this.isFirstMessage && 'margin-top: 10px;'}
 										>
 											${gifHTML}
 											${this.myAddress === this.messageObj.sender ?
-												html`
+		html`
 													<vaadin-icon
 														@click=${() => this.openDeleteGifDialog()}
 														icon="vaadin:close"
@@ -1527,12 +1527,12 @@ class MessageTemplate extends LitElement {
 														class="image-delete-icon"
 													></vaadin-icon>
 												`
-												: ''
-											}
+		: ''
+}
 										</div>
 									`
-									: gif && isGifDeleted ?
-										html`
+		: gif && isGifDeleted ?
+			html`
 											<div class="attachment-container">
 												<div class="attachment-info">
 													<p style=${'font-style: italic;'} class="attachment-name">
@@ -1541,10 +1541,10 @@ class MessageTemplate extends LitElement {
 												</div>
 											</div>
 										`
-									: html``
-								}
+			: html``
+}
 								${attachment && !isAttachmentDeleted ?
-									html`
+		html`
 										<div class="attachment-container">
 											<div class="attachment-icon-container">
 												<img src="/img/attachment-icon.png" alt="attachment-icon" class="attachment-icon" />
@@ -1554,7 +1554,7 @@ class MessageTemplate extends LitElement {
 													${attachment && attachment.attachmentName}
 												</p>
 												${attachment.attachmentSize > 0 ?
-												`<p class="attachment-size">
+		`<p class="attachment-size">
 													${roundToNearestDecimal(attachment.attachmentSize)} mb
 												</p>` : ''}
 											</div>
@@ -1565,7 +1565,7 @@ class MessageTemplate extends LitElement {
 												class="download-icon"
 											></vaadin-icon>
 											${this.myAddress === this.messageObj.sender ?
-												html`
+		html`
 													<vaadin-icon
 														@click=${() => this.openDeleteAttachmentDialog()}
 														class="image-delete-icon"
@@ -1574,12 +1574,12 @@ class MessageTemplate extends LitElement {
 													>
 													</vaadin-icon>
 												`
-												: html``
-											}
+		: html``
+}
 										</div>
 									`
-									: attachment && isAttachmentDeleted ?
-										html`
+		: attachment && isAttachmentDeleted ?
+			html`
 											<div class="attachment-container">
 												<div class="attachment-info">
 													<p style=${'font-style: italic;'} class="attachment-name">
@@ -1588,10 +1588,10 @@ class MessageTemplate extends LitElement {
 												</div>
 											</div>
 										`
-									: html``
-								}
+			: html``
+}
 								${file && !isFileDeleted ?
-									html`
+		html`
 										<div class="file-container">
 											<div class="file-icon-container">
 												<img src="/img/file-icon.png" alt="file-icon" class="file-icon" />
@@ -1611,7 +1611,7 @@ class MessageTemplate extends LitElement {
 												class="download-icon"
 											></vaadin-icon>
 											${this.myAddress === this.messageObj.sender ?
-												html`
+		html`
 													<vaadin-icon
 														@click=${() => this.openDeleteFileDialog()}
 														class="image-delete-icon"
@@ -1619,12 +1619,12 @@ class MessageTemplate extends LitElement {
 														slot="icon"
 													></vaadin-icon>
 												`
-												: html``
-											}
+		: html``
+}
 										</div>
 									`
-									: file && isFileDeleted ?
-										html`
+		: file && isFileDeleted ?
+			html`
 											<div class="attachment-container">
 												<div class="attachment-info">
 													<p style=${'font-style: italic;'} class="attachment-name">
@@ -1633,48 +1633,48 @@ class MessageTemplate extends LitElement {
 												</div>
 											</div>
 										`
-									: html``
-								}
+			: html``
+}
 								<div id="messageContent" class="message" style=${image && replacedMessage !== '' && 'margin-top: 15px;'}>
 									${+version > 1 ? messageVersion2WithLink ?
-										html`
+		html`
 											<div id="fontsize" style=${this.messageFontSize}>
 												${messageVersion2WithLink}
 											<div>
 										`
-										: html`
+		: html`
 											<div id="fontsize" style=${this.messageFontSize}>
 												${unsafeHTML(messageVersion2)}
 											<div>
 										`
-										: ''
-									}
+		: ''
+}
 									${version && version.toString() === '1' ?
-										html`
+		html`
 											<div id="fontsize" style=${this.messageFontSize}>
 												${unsafeHTML(this.emojiPicker.parse(replacedMessage))}
 											<div>
 										`
-										: ''
-									}
+		: ''
+}
 									${version && version.toString() === '0' ?
-										html`
+		html`
 											${unsafeHTML(this.emojiPicker.parse(replacedMessage))}
 										`
-										: ''
-									}
+		: ''
+}
 									<div
 										style=${isEdited ? 'justify-content: space-between;' : 'justify-content: flex-end;'}
 										class="${
-											(this.isFirstMessage === false
+	(this.isFirstMessage === false
 												&& this .isSingleMessageInGroup === true
 												&& this.isLastMessageInGroup === true
-											) ||
+	) ||
 											(this.isFirstMessage === true
 												&& this.isSingleMessageInGroup === false
 												&& this.isLastMessageInGroup === true
 											) ? 'message-data-time' : 'message-data-time-hidden'
-										}"
+}"
 									>
 										${isEdited ? html`<span>${edited}</span>` : ''}
 										${this.isInProgress ? html`
@@ -1714,12 +1714,12 @@ class MessageTemplate extends LitElement {
 													</div>
 												</div>
 											` : ''
-										}
+}
 								</div>
 							</div>
 						</div>
 						${this.isInProgress ? '' :
-							html`
+		html`
 								<chat-menu
 									tabindex="0"
 									class="chat-hover"
@@ -1748,11 +1748,11 @@ class MessageTemplate extends LitElement {
 								>
 								</chat-menu>
 							`
-						}
+}
 					</div>
 					<div class="message-reactions" style="${reactions.length > 0 && 'margin-top: 10px; margin-bottom: 5px;'}">
 						${reactions.map((reaction, index) => {
-							return html`
+		return html`
 								<span
 									@click=${() => this.sendMessage({type: 'reaction', editedMessageObj: this.messageObj, reaction: reaction.type,})}
 									id=${`reactions-${index}`}
@@ -1765,8 +1765,8 @@ class MessageTemplate extends LitElement {
 										hover-delay=${400}
 										hide-delay=${1}
 										text=${
-											reaction.users.length > 3 ?
-												`
+	reaction.users.length > 3 ?
+		`
 													${reaction.users[0].name ? reaction.users[0].nameMessageTemplate : cropAddress(reaction.users[0].address)},
 													${reaction.users[1].name ? reaction.users[1].name : cropAddress(reaction.users[1].address)},
 													${reaction.users[2].name ? reaction.users[2].name : cropAddress(reaction.users[2].address)} ${get('chatpage.cchange71')}
@@ -1775,8 +1775,8 @@ class MessageTemplate extends LitElement {
 													${get('chatpage.cchange74')}
 													${reaction.type}
 												`
-											: reaction.users.length === 3 ?
-												`
+		: reaction.users.length === 3 ?
+			`
 													${reaction.users[0].name ? reaction.users[0].name : cropAddress(reaction.users[0].address)},
 													${reaction.users[1].name ? reaction.users[1].name : cropAddress(reaction.users[1].address)}
 													${get('chatpage.cchange71')}
@@ -1784,27 +1784,27 @@ class MessageTemplate extends LitElement {
 													${get('chatpage.cchange74')}
 													${reaction.type}
 												`
-											: reaction.users.length === 2 ?
-												`
+			: reaction.users.length === 2 ?
+				`
 													${reaction.users[0].name ? reaction.users[0].name : cropAddress(reaction.users[0].address)}
 													${get('chatpage.cchange71')}
 													${reaction.users[1].name ? reaction.users[1].namMessageTemplatee : cropAddress(reaction.users[1].address)}
 													${get('chatpage.cchange74')}
 													${reaction.type}
 												`
-											: reaction.users.length === 1 ?
-												`
+				: reaction.users.length === 1 ?
+					`
 													${reaction.users[0].name ? reaction.users[0].name : cropAddress(reaction.users[0].address)}
 													${get('chatpage.cchange74')}
 													${reaction.type}
 												`
-											: ''
-										}
+					: ''
+}
 									>
 									</vaadin-tooltip>
 								</span>
 							`
-						})}
+	})}
 					</div>
 				</div>
 			</li>
@@ -1817,21 +1817,21 @@ class MessageTemplate extends LitElement {
 				toblockaddress=${this.messageObj.sender}
 			>
 			</chat-modals>
-			<mwc-dialog id="showDialogPublicKey" ?open=${this.openDialogImage} @closed=${() => {this.openDialogImage = false;}}>
+			<mwc-dialog id="showDialogPublicKey" ?open=${this.openDialogImage} @closed=${() => {this.openDialogImage = false}}>
 				<div class="dialog-header"></div>
 				<div class="dialog-container imageContainer">
 					${this.openDialogImage ? html`<img src=${imageUrl} style="height: auto; max-height: 80vh; width: auto; max-width: 80vw; object-fit: contain; border-radius: 5px;">` : ''}
 				</div>
-				<mwc-button slot="primaryAction" dialogAction="cancel" class="red" @click=${() => {this.openDialogImage = false;}}>
+				<mwc-button slot="primaryAction" dialogAction="cancel" class="red" @click=${() => {this.openDialogImage = false}}>
 					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
-			<mwc-dialog id="showDialogPublicKey" ?open=${this.openDialogGif} @closed=${() => {this.openDialogGif = false;}}>
+			<mwc-dialog id="showDialogPublicKey" ?open=${this.openDialogGif} @closed=${() => {this.openDialogGif = false}}>
 				<div class="dialog-header"></div>
 				<div class="dialog-container imageContainer">
 					${gifHTMLDialog}
 				</div>
-				<mwc-button slot="primaryAction" dialogAction="cancel" class="red" @click=${() => {this.openDialogGif = false;}}>
+				<mwc-button slot="primaryAction" dialogAction="cancel" class="red" @click=${() => {this.openDialogGif = false}}>
 					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
@@ -1844,9 +1844,9 @@ class MessageTemplate extends LitElement {
 						${translate('login.lp4')}
 					</button>
 					<button class="modal-button" @click=${() => {
-						this.sendMessage({type: 'delete', name: image.name, identifier: image.identifier, editedMessageObj: this.messageObj});
-						this.closeDeleteImageDialog();
-					}}>
+		this.sendMessage({type: 'delete', name: image.name, identifier: image.identifier, editedMessageObj: this.messageObj})
+		this.closeDeleteImageDialog()
+	}}>
 						${translate('general.yes')}
 					</button>
 				</div>
@@ -1860,9 +1860,9 @@ class MessageTemplate extends LitElement {
 						${translate('login.lp4')}
 					</button>
 					<button class="modal-button" @click=${() => {
-						this.sendMessage({type: 'deleteGif', gif: gif, name: gif.name, identifier: gif.identifier, editedMessageObj: this.messageObj});
-						this.closeDeleteGifDialog();
-					}}>
+		this.sendMessage({type: 'deleteGif', gif: gif, name: gif.name, identifier: gif.identifier, editedMessageObj: this.messageObj})
+		this.closeDeleteGifDialog()
+	}}>
 						${translate('general.yes')}
 					</button>
 				</div>
@@ -1876,9 +1876,9 @@ class MessageTemplate extends LitElement {
 						${translate('login.lp4')}
 					</button>
 					<button class="modal-button" @click=${() => {
-						this.sendMessage({type: 'deleteAttachment', attachment: attachment, name: attachment.name, identifier: attachment.identifier, editedMessageObj: this.messageObj});
-						this.closeDeleteAttachmentDialog();
-					}}>
+		this.sendMessage({type: 'deleteAttachment', attachment: attachment, name: attachment.name, identifier: attachment.identifier, editedMessageObj: this.messageObj})
+		this.closeDeleteAttachmentDialog()
+	}}>
 						${translate('general.yes')}
 					</button>
 				</div>
@@ -1892,15 +1892,15 @@ class MessageTemplate extends LitElement {
 						${translate('login.lp4')}
 					</button>
 					<button class="modal-button" @click=${() => {
-						this.sendMessage({type: 'deleteFile', file: file, name: file.name, identifier: file.identifier, editedMessageObj: this.messageObj});
-						this.closeDeleteFileDialog();
-					}}>
+		this.sendMessage({type: 'deleteFile', file: file, name: file.name, identifier: file.identifier, editedMessageObj: this.messageObj})
+		this.closeDeleteFileDialog()
+	}}>
 						${translate('general.yes')}
 					</button>
 				</div>
 			</mwc-dialog>
 			<paper-dialog id="downloadProgressDialog" class="progress" modal>
-				<span class="close-download"><paper-icon-button icon="icons:close" @click="${() => this.closeDownloadProgressDialog()}" title="${translate("general.close")}"></paper-icon-button></span>
+				<span class="close-download"><paper-icon-button icon="icons:close" @click="${() => this.closeDownloadProgressDialog()}" title="${translate('general.close')}"></paper-icon-button></span>
 				<div class="lds-roller">
 					<div></div>
 					<div></div>
@@ -1969,86 +1969,86 @@ class MessageTemplate extends LitElement {
 				if (this.messageFontSize === 'font16') {
 					const setFontSize16 = this.shadowRoot.querySelectorAll('#fontsize')
 					setFontSize16.forEach((replaceFontSizeTo16) => {
-						replaceFontSizeTo16.removeAttribute("style")
-						replaceFontSizeTo16.setAttribute("style", "font-size: 16px;")
+						replaceFontSizeTo16.removeAttribute('style')
+						replaceFontSizeTo16.setAttribute('style', 'font-size: 16px;')
 					})
 					const setNameSize16 = this.shadowRoot.querySelectorAll('#namesize')
 					setNameSize16.forEach((replaceNameSizeTo16) => {
-						replaceNameSizeTo16.removeAttribute("style")
-						replaceNameSizeTo16.setAttribute("style", "font-size: 16px;")
+						replaceNameSizeTo16.removeAttribute('style')
+						replaceNameSizeTo16.setAttribute('style', 'font-size: 16px;')
 					})
 					const setReplyFontSize16 = this.shadowRoot.querySelectorAll('#replyFontSize')
 					setReplyFontSize16.forEach((replaceReplayFontSizeTo16) => {
-						replaceReplayFontSizeTo16.removeAttribute("style")
-						replaceReplayFontSizeTo16.setAttribute("style", "font-size: 14px;")
+						replaceReplayFontSizeTo16.removeAttribute('style')
+						replaceReplayFontSizeTo16.setAttribute('style', 'font-size: 14px;')
 					})
 					const setReplyNameSize16 = this.shadowRoot.querySelectorAll('#replyNameSize')
 					setReplyNameSize16.forEach((replaceReplayNameSizeTo16) => {
-						replaceReplayNameSizeTo16.removeAttribute("style")
-						replaceReplayNameSizeTo16.setAttribute("style", "font-size: 14px;")
+						replaceReplayNameSizeTo16.removeAttribute('style')
+						replaceReplayNameSizeTo16.setAttribute('style', 'font-size: 14px;')
 					})
 				} else if (this.messageFontSize === 'font18') {
 					const setFontSize18 = this.shadowRoot.querySelectorAll('#fontsize')
 					setFontSize18.forEach((replaceFontSizeTo18) => {
-						replaceFontSizeTo18.removeAttribute("style")
-						replaceFontSizeTo18.setAttribute("style", "font-size: 18px;")
+						replaceFontSizeTo18.removeAttribute('style')
+						replaceFontSizeTo18.setAttribute('style', 'font-size: 18px;')
 					})
 					const setNameSize18 = this.shadowRoot.querySelectorAll('#namesize')
 					setNameSize18.forEach((replaceNameSizeTo18) => {
-						replaceNameSizeTo18.removeAttribute("style")
-						replaceNameSizeTo18.setAttribute("style", "font-size: 18px;")
+						replaceNameSizeTo18.removeAttribute('style')
+						replaceNameSizeTo18.setAttribute('style', 'font-size: 18px;')
 					})
 					const setReplyFontSize18 = this.shadowRoot.querySelectorAll('#replyFontSize')
 					setReplyFontSize18.forEach((replaceReplayFontSizeTo18) => {
-						replaceReplayFontSizeTo18.removeAttribute("style")
-						replaceReplayFontSizeTo18.setAttribute("style", "font-size: 16px;")
+						replaceReplayFontSizeTo18.removeAttribute('style')
+						replaceReplayFontSizeTo18.setAttribute('style', 'font-size: 16px;')
 					})
 					const setReplyNameSize18 = this.shadowRoot.querySelectorAll('#replyNameSize')
 					setReplyNameSize18.forEach((replaceReplayNameSizeTo18) => {
-						replaceReplayNameSizeTo18.removeAttribute("style")
-						replaceReplayNameSizeTo18.setAttribute("style", "font-size: 16px;")
+						replaceReplayNameSizeTo18.removeAttribute('style')
+						replaceReplayNameSizeTo18.setAttribute('style', 'font-size: 16px;')
 					})
 				} else if (this.messageFontSize === 'font20') {
 					const setFontSize20 = this.shadowRoot.querySelectorAll('#fontsize')
 					setFontSize20.forEach((replaceFontSizeTo20) => {
-						replaceFontSizeTo20.removeAttribute("style")
-						replaceFontSizeTo20.setAttribute("style", "font-size: 20px;")
+						replaceFontSizeTo20.removeAttribute('style')
+						replaceFontSizeTo20.setAttribute('style', 'font-size: 20px;')
 					})
 					const setNameSize20 = this.shadowRoot.querySelectorAll('#namesize')
 					setNameSize20.forEach((replaceNameSizeTo20) => {
-						replaceNameSizeTo20.removeAttribute("style")
-						replaceNameSizeTo20.setAttribute("style", "font-size: 20px;")
+						replaceNameSizeTo20.removeAttribute('style')
+						replaceNameSizeTo20.setAttribute('style', 'font-size: 20px;')
 					})
 					const setReplyFontSize20 = this.shadowRoot.querySelectorAll('#replyFontSize')
 					setReplyFontSize20.forEach((replaceReplayFontSizeTo20) => {
-						replaceReplayFontSizeTo20.removeAttribute("style")
-						replaceReplayFontSizeTo20.setAttribute("style", "font-size: 18px;")
+						replaceReplayFontSizeTo20.removeAttribute('style')
+						replaceReplayFontSizeTo20.setAttribute('style', 'font-size: 18px;')
 					})
 					const setReplyNameSize20 = this.shadowRoot.querySelectorAll('#replyNameSize')
 					setReplyNameSize20.forEach((replaceReplayNameSizeTo20) => {
-						replaceReplayNameSizeTo20.removeAttribute("style")
-						replaceReplayNameSizeTo20.setAttribute("style", "font-size: 18px;")
+						replaceReplayNameSizeTo20.removeAttribute('style')
+						replaceReplayNameSizeTo20.setAttribute('style', 'font-size: 18px;')
 					})
 				} else if (this.messageFontSize === 'font22') {
 					const setFontSize22 = this.shadowRoot.querySelectorAll('#fontsize')
 					setFontSize22.forEach((replaceFontSizeTo22) => {
-						replaceFontSizeTo22.removeAttribute("style")
-						replaceFontSizeTo22.setAttribute("style", "font-size: 22px;")
+						replaceFontSizeTo22.removeAttribute('style')
+						replaceFontSizeTo22.setAttribute('style', 'font-size: 22px;')
 					})
 					const setNameSize22 = this.shadowRoot.querySelectorAll('#namesize')
 					setNameSize22.forEach((replaceNameSizeTo22) => {
-						replaceNameSizeTo22.removeAttribute("style")
-						replaceNameSizeTo22.setAttribute("style", "font-size: 22px;")
+						replaceNameSizeTo22.removeAttribute('style')
+						replaceNameSizeTo22.setAttribute('style', 'font-size: 22px;')
 					})
 					const setReplyFontSize22 = this.shadowRoot.querySelectorAll('#replyFontSize')
 					setReplyFontSize22.forEach((replaceReplayFontSizeTo22) => {
-						replaceReplayFontSizeTo22.removeAttribute("style")
-						replaceReplayFontSizeTo22.setAttribute("style", "font-size: 20px;")
+						replaceReplayFontSizeTo22.removeAttribute('style')
+						replaceReplayFontSizeTo22.setAttribute('style', 'font-size: 20px;')
 					})
 					const setReplyNameSize22 = this.shadowRoot.querySelectorAll('#replyNameSize')
 					setReplyNameSize22.forEach((replaceReplayNameSizeTo22) => {
-						replaceReplayNameSizeTo22.removeAttribute("style")
-						replaceReplayNameSizeTo22.setAttribute("style", "font-size: 20px;")
+						replaceReplayNameSizeTo22.removeAttribute('style')
+						replaceReplayNameSizeTo22.setAttribute('style', 'font-size: 20px;')
 					})
 				}
 			}
@@ -2335,7 +2335,7 @@ class ChatMenu extends LitElement {
 				<div
 					class=${`menu-icon ${!this.firstMessageInChat ? 'tooltip' : ''}`}
 					data-text="${translate('blockpage.bcchange14')}"
-					@click="${() => {if (this.version === '0') {this.versionErrorSnack(); return;} this.messageForwardFunc();}}"
+					@click="${() => {if (this.version === '0') {this.versionErrorSnack(); return} this.messageForwardFunc()}}"
 				>
 					<vaadin-icon icon="vaadin:arrow-forward" slot="icon"></vaadin-icon>
 				</div>
@@ -2356,44 +2356,44 @@ class ChatMenu extends LitElement {
 				<div
 					class=${`menu-icon ${!this.firstMessageInChat ? 'tooltip' : ''}`}
 					data-text="${translate('blockpage.bcchange11')}"
-					@click="${() => {if (this.version === '0') {this.versionErrorSnack(); return;} this.setRepliedToMessageObj({...this.originalMessage, version: this.version,});}}"
+					@click="${() => {if (this.version === '0') {this.versionErrorSnack(); return} this.setRepliedToMessageObj({...this.originalMessage, version: this.version,})}}"
 				>
 					<vaadin-icon icon="vaadin:reply" slot="icon"></vaadin-icon>
 				</div>
 				${this.myAddress === this.originalMessage.sender && !this.gif ?
-					html`
+		html`
 						<div
 							class=${`menu-icon ${!this.firstMessageInChat ? 'tooltip' : ''}`}
 							data-text="${translate('blockpage.bcchange12')}"
 							@click=${() => {
-								if (this.version === '0') {
-									this.versionErrorSnack(); 
-									return;
-								}
-								this.setEditedMessageObj(this.originalMessage);
-							}}
+		if (this.version === '0') {
+			this.versionErrorSnack() 
+			return
+		}
+		this.setEditedMessageObj(this.originalMessage)
+	}}
 						>
 							<vaadin-icon icon="vaadin:pencil" slot="icon"></vaadin-icon>
 						</div>
 					`
-					: html`
+		: html`
 						<div></div>
 					`
-				}
+}
 				${this.myAddress !== this.originalMessage.sender ?
-					html`
+		html`
 						<div
 							class=${`menu-icon ${!this.firstMessageInChat ? 'tooltip' : ''}`}
 							data-text="${translate('blockpage.bcchange18')}"
-							@click=${(e) => {e.preventDefault(); this.setUserName(this.originalMessage); this.setOpenTipUser(true);}}
+							@click=${(e) => {e.preventDefault(); this.setUserName(this.originalMessage); this.setOpenTipUser(true)}}
 						>
 							<vaadin-icon icon="vaadin:dollar" slot="icon"></vaadin-icon>
 						</div>
 					`
-					: html`
+		: html`
 						<div></div>
 					`
-				}
+}
 				<div
 					class=${`menu-icon ${!this.firstMessageInChat ? 'tooltip' : ''}`}
 					data-text="${translate('blockpage.bcchange10')}"
@@ -2402,7 +2402,7 @@ class ChatMenu extends LitElement {
 					<vaadin-icon icon="vaadin:ellipsis-dots-h" slot="icon"></vaadin-icon>
 				</div>
 				${this.showBlockAddressIcon ?
-					html`
+		html`
 						<div class="block-user-container">
 							<div class="block-user" @click="${() => this.showBlockUserModal()}">
 								<p>${translate('blockpage.bcchange1')}</p>
@@ -2410,10 +2410,10 @@ class ChatMenu extends LitElement {
 							</div>
 						</div>
 					`
-					: html`
+		: html`
 						<div></div>
 					`
-				}
+}
 			</div>
 		`
 	}

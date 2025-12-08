@@ -34,13 +34,13 @@ class ConfirmTransactionDialog extends connect(store)(LitElement) {
 	render() {
 		return html`
 			<paper-dialog style="background: var(--white);" id="confirmDialog" modal>
-				<h2 style="color: var(--black);">${translate("transpage.tchange1")}</h2>
+				<h2 style="color: var(--black);">${translate('transpage.tchange1')}</h2>
 				<div id="txInfo">
 					${this.txInfo}
 				</div>
 				<div class="buttons">
-					<mwc-button class='decline' @click=${e => this.decline(e)} dialog-dismiss>${translate("transpage.tchange2")}</mwc-button>
-					<mwc-button class='confirm' @click=${e => this.confirm(e)} dialog-confirm autofocus>${translate("transpage.tchange3")}</mwc-button>
+					<mwc-button class='decline' @click=${e => this.decline(e)} dialog-dismiss>${translate('transpage.tchange2')}</mwc-button>
+					<mwc-button class='confirm' @click=${e => this.confirm(e)} dialog-confirm autofocus>${translate('transpage.tchange3')}</mwc-button>
 				</div>
 			</paper-dialog>
 		`
@@ -68,7 +68,7 @@ class ConfirmTransactionDialog extends connect(store)(LitElement) {
 	}
 
 	decline(e) {
-		const rejecterror = get("transactions.declined")
+		const rejecterror = get('transactions.declined')
 		this._reject(new Error(rejecterror))
 	}
 

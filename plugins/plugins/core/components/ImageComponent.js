@@ -37,32 +37,32 @@ export class ImageComponent extends LitElement {
 
 		return html`
 			${this.gif && !this.error ?
-				html`
+		html`
 					<img
 						class=${this.class}
 						src=${this.gif.url}
 						alt=${this.alt}
 						@click=${() => {
-							this.sendMessage({
-								type: 'gif',
-								identifier: this.gif.identifier,
-								name: this.gif.name,
-								filePath: this.gif.filePath,
-								service: 'GIF_REPOSITORY'
-							});
-							this.setOpenGifModal(false);
-						}}
+		this.sendMessage({
+			type: 'gif',
+			identifier: this.gif.identifier,
+			name: this.gif.name,
+			filePath: this.gif.filePath,
+			service: 'GIF_REPOSITORY'
+		})
+		this.setOpenGifModal(false)
+	}}
 						@error=${this._fetchImage}
 					/>
 				`
-				: this.error && this.attempts <= this.maxAttempts ?
-					html`
+		: this.error && this.attempts <= this.maxAttempts ?
+			html`
 						<p class="gif-error-msg">${translate('gifs.gchange15')}</p>
 					`
-				: html`
+			: html`
 					<p class="gif-error-msg">${translate('gifs.gchange16')}</p>
 				`
-			}
+}
 		`
 	}
 

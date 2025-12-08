@@ -32,10 +32,10 @@ class AppInfo extends connect(store)(LitElement) {
 	render() {
 		return html`
 			<div id="profileInMenu">
-				<span class="info">${translate("appinfo.uiversion")}: ${this.nodeConfig.version ? this.nodeConfig.version : ''}</span>
+				<span class="info">${translate('appinfo.uiversion')}: ${this.nodeConfig.version ? this.nodeConfig.version : ''}</span>
 				${this._renderCoreVersion()}
-				<span class="info">${translate("appinfo.blockheight")}: ${this.nodeInfo.height ? this.nodeInfo.height : ''}  <span class=${this.cssStatus}>${this._renderStatus()}</span></span>
-				<span class="info">${translate("appinfo.peers")}: ${this.nodeInfo.numberOfConnections ? this.nodeInfo.numberOfConnections : ''}
+				<span class="info">${translate('appinfo.blockheight')}: ${this.nodeInfo.height ? this.nodeInfo.height : ''}  <span class=${this.cssStatus}>${this._renderStatus()}</span></span>
+				<span class="info">${translate('appinfo.peers')}: ${this.nodeInfo.numberOfConnections ? this.nodeInfo.numberOfConnections : ''}
 			</div>
 		`
 	}
@@ -51,7 +51,7 @@ class AppInfo extends connect(store)(LitElement) {
 	}
 
 	async getNodeInfo() {
-		const url = buildRequestUrl(`/admin/status`, store.getState())
+		const url = buildRequestUrl('/admin/status', store.getState())
 
 		await fetch(url).then(response => {
 			return response.json()
@@ -64,7 +64,7 @@ class AppInfo extends connect(store)(LitElement) {
 
 	async getCoreInfo() {
 		if (this.blocked) return
-		const url = buildRequestUrl(`/admin/info`, store.getState())
+		const url = buildRequestUrl('/admin/info', store.getState())
 
 		await fetch(url).then(response => {
 			return response.json()
@@ -78,13 +78,13 @@ class AppInfo extends connect(store)(LitElement) {
 	_renderStatus() {
 		if (this.nodeInfo.isMintingPossible === true && this.nodeInfo.isSynchronizing === true) {
 			this.cssStatus = 'blue'
-			return html`${translate("appinfo.minting")}`
+			return html`${translate('appinfo.minting')}`
 		} else if (this.nodeInfo.isMintingPossible === true && this.nodeInfo.isSynchronizing === false) {
 			this.cssStatus = 'blue'
-			return html`${translate("appinfo.minting")}`
+			return html`${translate('appinfo.minting')}`
 		} else if (this.nodeInfo.isMintingPossible === false && this.nodeInfo.isSynchronizing === true) {
 			this.cssStatus = 'black'
-			return html`(${translate("appinfo.synchronizing")}... ${this.nodeInfo.syncPercent !== undefined ? this.nodeInfo.syncPercent + '%' : ''})`
+			return html`(${translate('appinfo.synchronizing')}... ${this.nodeInfo.syncPercent !== undefined ? this.nodeInfo.syncPercent + '%' : ''})`
 		} else if (this.nodeInfo.isMintingPossible === false && this.nodeInfo.isSynchronizing === false) {
 			this.cssStatus = 'black'
 			return ''
@@ -94,7 +94,7 @@ class AppInfo extends connect(store)(LitElement) {
 	}
 
 	_renderCoreVersion() {
-		return html`<span class="info">${translate("appinfo.coreversion")}: ${this.coreInfo.buildVersion ? this.coreInfo.buildVersion : ''}</span>`
+		return html`<span class="info">${translate('appinfo.coreversion')}: ${this.coreInfo.buildVersion ? this.coreInfo.buildVersion : ''}</span>`
 	}
 
 	stateChanged(state) {

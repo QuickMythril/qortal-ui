@@ -15,7 +15,7 @@ const log = require('electron-log')
 const path = require('path')
 const i18n = require('./lib/i18n.js')
 const fs = require('fs')
-const os = require("os")
+const os = require('os')
 const electronDl = require('electron-dl')
 const Store = require('electron-store')
 const extract = require('extract-zip')
@@ -39,16 +39,16 @@ crashReporter.start({
 
 if (myMemory > 16000000000) {
 	app.commandLine.appendSwitch('js-flags', '--max-old-space-size=8192')
-	log.info("Memory Size Is 16GB Using JS Memory Heap Size 8GB")
+	log.info('Memory Size Is 16GB Using JS Memory Heap Size 8GB')
 } else if (myMemory > 12000000000) {
 	app.commandLine.appendSwitch('js-flags', '--max-old-space-size=6144')
-	log.info("Memory Size Is 12GB Using JS Memory Heap Size 6GB")
+	log.info('Memory Size Is 12GB Using JS Memory Heap Size 6GB')
 } else if (myMemory > 7000000000) {
 	app.commandLine.appendSwitch('js-flags', '--max-old-space-size=4096')
-	log.info("Memory Size Is 8GB Using JS Memory Heap Size 4GB")
+	log.info('Memory Size Is 8GB Using JS Memory Heap Size 4GB')
 } else {
 	app.commandLine.appendSwitch('js-flags', '--max-old-space-size=2048')
-	log.info("Memory Size Is 4GB Using JS Memory Heap Size 2GB")
+	log.info('Memory Size Is 4GB Using JS Memory Heap Size 2GB')
 }
 
 setInterval(function () {
@@ -99,52 +99,52 @@ if (!store.has('askingCore')) {
 log.info('App starting...')
 log.info('App Platform is', process.platform)
 log.info('Platform arch is', process.arch)
-log.info("Memory Size", os.totalmem())
+log.info('Memory Size', os.totalmem())
 
 const winjar = String.raw`C:\Program Files\Qortal\qortal.jar`
-const winurl = "https://github.com/Qortal/qortal/releases/latest/download/qortal.exe"
-const winexe = downloadPath + "\\qortal.exe"
-const startWinCore = "C:\\Program Files\\Qortal\\qortal.exe"
+const winurl = 'https://github.com/Qortal/qortal/releases/latest/download/qortal.exe'
+const winexe = downloadPath + '\\qortal.exe'
+const startWinCore = 'C:\\Program Files\\Qortal\\qortal.exe'
 
 const zipdir = homePath
-const zipfile = homePath + "/qortal.zip"
-const zipurl = "https://github.com/Qortal/qortal/releases/latest/download/qortal.zip"
+const zipfile = homePath + '/qortal.zip'
+const zipurl = 'https://github.com/Qortal/qortal/releases/latest/download/qortal.zip'
 
-const qortaldir = homePath + "/qortal/"
-const qortaljar = homePath + "/qortal/qortal.jar"
-const qortalsettings = homePath + "/qortal/settings.json"
+const qortaldir = homePath + '/qortal/'
+const qortaljar = homePath + '/qortal/qortal.jar'
+const qortalsettings = homePath + '/qortal/settings.json'
 
-const javadir = homePath + "/jdk-17.0.2/"
+const javadir = homePath + '/jdk-17.0.2/'
 
-const linjavax64url = "https://download.qortal.online/openjdk-17.0.2_linux-x64_bin.zip"
-const linjavax64urlbackup = "https://cloud.qortal.org/s/aSxDWTskG8kBR5T/download/openjdk-17.0.2_linux-x64_bin.zip"
-const linjavax64file = homePath + "/openjdk-17.0.2_linux-x64_bin.zip"
-const linjavax64bindir = homePath + "/jdk-17.0.2/bin"
-const linjavax64binfile = homePath + "/jdk-17.0.2/bin/java"
+const linjavax64url = 'https://download.qortal.online/openjdk-17.0.2_linux-x64_bin.zip'
+const linjavax64urlbackup = 'https://cloud.qortal.org/s/aSxDWTskG8kBR5T/download/openjdk-17.0.2_linux-x64_bin.zip'
+const linjavax64file = homePath + '/openjdk-17.0.2_linux-x64_bin.zip'
+const linjavax64bindir = homePath + '/jdk-17.0.2/bin'
+const linjavax64binfile = homePath + '/jdk-17.0.2/bin/java'
 
-const linjavaarmurl = "https://download.qortal.online/openjdk-17.0.2_linux-arm_bin.zip"
-const linjavaarmurlbackup = "https://cloud.qortal.org/s/DAMFBEri469R3dj/download/openjdk-17.0.2_linux-arm_bin.zip"
-const linjavaarmfile = homePath + "/openjdk-17.0.2_linux-arm_bin.zip"
-const linjavaarmbindir = homePath + "/jdk-17.0.2/bin"
-const linjavaarmbinfile = homePath + "/jdk-17.0.2/bin/java"
+const linjavaarmurl = 'https://download.qortal.online/openjdk-17.0.2_linux-arm_bin.zip'
+const linjavaarmurlbackup = 'https://cloud.qortal.org/s/DAMFBEri469R3dj/download/openjdk-17.0.2_linux-arm_bin.zip'
+const linjavaarmfile = homePath + '/openjdk-17.0.2_linux-arm_bin.zip'
+const linjavaarmbindir = homePath + '/jdk-17.0.2/bin'
+const linjavaarmbinfile = homePath + '/jdk-17.0.2/bin/java'
 
-const linjavaarm64url = "https://download.qortal.online/openjdk-17.0.2_linux-arm64_bin.zip"
-const linjavaarm64urlbackup = "https://cloud.qortal.org/s/t7Kk9ZpEAroFmg2/download/openjdk-17.0.2_linux-arm64_bin.zip"
-const linjavaarm64file = homePath + "/openjdk-17.0.2_linux-arm64_bin.zip"
-const linjavaarm64bindir = homePath + "/jdk-17.0.2/bin"
-const linjavaarm64binfile = homePath + "/jdk-17.0.2/bin/java"
+const linjavaarm64url = 'https://download.qortal.online/openjdk-17.0.2_linux-arm64_bin.zip'
+const linjavaarm64urlbackup = 'https://cloud.qortal.org/s/t7Kk9ZpEAroFmg2/download/openjdk-17.0.2_linux-arm64_bin.zip'
+const linjavaarm64file = homePath + '/openjdk-17.0.2_linux-arm64_bin.zip'
+const linjavaarm64bindir = homePath + '/jdk-17.0.2/bin'
+const linjavaarm64binfile = homePath + '/jdk-17.0.2/bin/java'
 
-const macjavax64url = "https://download.qortal.online/openjdk-17.0.2_macos-x64_bin.zip"
-const macjavax64urlbackup = "https://cloud.qortal.org/s/7t9d6xPfk8tsDxB/download/openjdk-17.0.2_macos-x64_bin.zip"
-const macjavax64file = homePath + "/openjdk-17.0.2_macos-x64_bin.zip"
-const macjavax64bindir = homePath + "/jdk-17.0.2/Contents/Home/bin"
-const macjavax64binfile = homePath + "/jdk-17.0.2/Contents/Home/bin/java"
+const macjavax64url = 'https://download.qortal.online/openjdk-17.0.2_macos-x64_bin.zip'
+const macjavax64urlbackup = 'https://cloud.qortal.org/s/7t9d6xPfk8tsDxB/download/openjdk-17.0.2_macos-x64_bin.zip'
+const macjavax64file = homePath + '/openjdk-17.0.2_macos-x64_bin.zip'
+const macjavax64bindir = homePath + '/jdk-17.0.2/Contents/Home/bin'
+const macjavax64binfile = homePath + '/jdk-17.0.2/Contents/Home/bin/java'
 
-const macjavaaarch64url = "https://download.qortal.online/openjdk-17.0.2_macos-aarch64_bin.zip"
-const macjavaaarch64urlbackup = "https://cloud.qortal.org/s/GRE3CGqMospwtZP/download/openjdk-17.0.2_macos-aarch64_bin.zip"
-const macjavaaarch64file = homePath + "/openjdk-17.0.2_macos-aarch64_bin.zip"
-const macjavaaarch64bindir = homePath + "/jdk-17.0.2/Contents/Home/bin"
-const macjavaaarch64binfile = homePath + "/jdk-17.0.2/Contents/Home/bin/java"
+const macjavaaarch64url = 'https://download.qortal.online/openjdk-17.0.2_macos-aarch64_bin.zip'
+const macjavaaarch64urlbackup = 'https://cloud.qortal.org/s/GRE3CGqMospwtZP/download/openjdk-17.0.2_macos-aarch64_bin.zip'
+const macjavaaarch64file = homePath + '/openjdk-17.0.2_macos-aarch64_bin.zip'
+const macjavaaarch64bindir = homePath + '/jdk-17.0.2/Contents/Home/bin'
+const macjavaaarch64binfile = homePath + '/jdk-17.0.2/Contents/Home/bin/java'
 
 let win = BrowserWindow.getFocusedWindow()
 
@@ -153,9 +153,9 @@ const isRunning = (query, cb) => {
 	let cmd = ''
 
 	switch (platform) {
-		case 'win32': cmd = `tasklist`; break
-		case 'darwin': cmd = `ps -ax | grep [q]ortal.jar`; break
-		case 'linux': cmd = `ps ax | grep [q]ortal.jar`; break
+		case 'win32': cmd = 'tasklist'; break
+		case 'darwin': cmd = 'ps -ax | grep [q]ortal.jar'; break
+		case 'linux': cmd = 'ps ax | grep [q]ortal.jar'; break
 		default: break
 	}
 
@@ -170,23 +170,23 @@ function doesFileExist(urlToJavaFile) {
 	xhr.open('HEAD', urlToJavaFile, true)
 	xhr.send()
 
-	return xhr.status != "404";
+	return xhr.status != '404'
 }
 
 async function checkWin() {
 	if (fs.existsSync(winjar)) {
 		isRunning('qortal.exe', (status) => {
 			if (status == true) {
-				log.info("Core is running, perfect !")
+				log.info('Core is running, perfect !')
 			} else {
 				if (!store.get('askingCore')) {
 					const dialogOpts = {
 						type: 'info',
-						buttons: [i18n.__("electron_translate_13"), i18n.__("electron_translate_14")],
-						title: i18n.__("electron_translate_15"),
-						message: i18n.__("electron_translate_16"),
-						detail: i18n.__("electron_translate_17"),
-						checkboxLabel: i18n.__("electron_translate_28"),
+						buttons: [i18n.__('electron_translate_13'), i18n.__('electron_translate_14')],
+						title: i18n.__('electron_translate_15'),
+						message: i18n.__('electron_translate_16'),
+						detail: i18n.__('electron_translate_17'),
+						checkboxLabel: i18n.__('electron_translate_28'),
 						checkboxChecked: false
 					}
 
@@ -205,10 +205,10 @@ async function checkWin() {
 	} else {
 		const dialogOpts = {
 			type: 'info',
-			buttons: [i18n.__("electron_translate_18"), i18n.__("electron_translate_19")],
-			title: i18n.__("electron_translate_20"),
-			message: i18n.__("electron_translate_21"),
-			detail: i18n.__("electron_translate_22")
+			buttons: [i18n.__('electron_translate_18'), i18n.__('electron_translate_19')],
+			title: i18n.__('electron_translate_20'),
+			message: i18n.__('electron_translate_21'),
+			detail: i18n.__('electron_translate_22')
 		}
 
 		dialog.showMessageBox(dialogOpts).then((returnValue) => {
@@ -235,7 +235,7 @@ async function startElectronWin() {
 	if (fs.existsSync(winjar)) {
 		isRunning('qortal.exe', (status) => {
 			if (status == true) {
-				log.info("Core is running, perfect !")
+				log.info('Core is running, perfect !')
 			} else {
 				spawn(startWinCore, { detached: true })
 			}
@@ -243,10 +243,10 @@ async function startElectronWin() {
 	} else {
 		const dialogOpts = {
 			type: 'info',
-			buttons: [i18n.__("electron_translate_18"), i18n.__("electron_translate_19")],
-			title: i18n.__("electron_translate_20"),
-			message: i18n.__("electron_translate_21"),
-			detail: i18n.__("electron_translate_22")
+			buttons: [i18n.__('electron_translate_18'), i18n.__('electron_translate_19')],
+			title: i18n.__('electron_translate_20'),
+			message: i18n.__('electron_translate_21'),
+			detail: i18n.__('electron_translate_22')
 		}
 
 		dialog.showMessageBox(dialogOpts).then((returnValue) => {
@@ -263,7 +263,7 @@ function startElectronUnix() {
 	if (fs.existsSync(qortaljar)) {
 		isRunning('qortal.jar', (status) => {
 			if (status == true) {
-				log.info("Core is running, perfect !")
+				log.info('Core is running, perfect !')
 			} else {
 				startQortal()
 			}
@@ -271,10 +271,10 @@ function startElectronUnix() {
 	} else {
 		const dialogOpts = {
 			type: 'info',
-			buttons: [i18n.__("electron_translate_18"), i18n.__("electron_translate_19")],
-			title: i18n.__("electron_translate_20"),
-			message: i18n.__("electron_translate_21"),
-			detail: i18n.__("electron_translate_22")
+			buttons: [i18n.__('electron_translate_18'), i18n.__('electron_translate_19')],
+			title: i18n.__('electron_translate_20'),
+			message: i18n.__('electron_translate_21'),
+			detail: i18n.__('electron_translate_22')
 		}
 
 		dialog.showMessageBox(dialogOpts).then((returnValue) => {
@@ -303,7 +303,7 @@ async function downloadWindows() {
 
 	await electronDl.download(myWindow, winurl, {
 		directory: downloadPath,
-		onProgress: function () { log.info("Starting Download Qortal Core Installer") }
+		onProgress: function () { log.info('Starting Download Qortal Core Installer') }
 	})
 
 	winLoader.destroy()
@@ -353,7 +353,7 @@ async function checkResponseStatus(res) {
 }
 
 async function javaversion() {
-	let stderrChunks = [];
+	let stderrChunks = []
 	let checkJava = await spawn('java', ['-version'], { shell: true })
 
 	if (process.platform === 'linux') {
@@ -391,17 +391,17 @@ async function javaversion() {
 
 		const javaVersion = new RegExp('(java|openjdk) version').test(datres) ? datres.split(' ')[2].replace(/"/g, '') : false
 
-		log.info("Java Version", javaVersion)
+		log.info('Java Version', javaVersion)
 
 		if (javaVersion != false) {
 			checkQortal()
 		} else {
 			const dialogOpts = {
 				type: 'info',
-				buttons: [i18n.__("electron_translate_23"), i18n.__("electron_translate_24")],
-				title: i18n.__("electron_translate_25"),
-				message: i18n.__("electron_translate_26"),
-				detail: i18n.__("electron_translate_27")
+				buttons: [i18n.__('electron_translate_23'), i18n.__('electron_translate_24')],
+				title: i18n.__('electron_translate_25'),
+				message: i18n.__('electron_translate_26'),
+				detail: i18n.__('electron_translate_27')
 			}
 
 			dialog.showMessageBox(dialogOpts).then((returnValue) => {
@@ -435,7 +435,7 @@ async function installJava() {
 
 					await electronDl.download(myWindow, linjavax64url, {
 						directory: homePath,
-						onProgress: function () { log.info("Starting Download JAVA") }
+						onProgress: function () { log.info('Starting Download JAVA') }
 					})
 				} catch (err) {
 					splashLoader.destroy()
@@ -452,7 +452,7 @@ async function installJava() {
 
 					await electronDl.download(myWindow, linjavax64urlbackup, {
 						directory: homePath,
-						onProgress: function () { log.info("Starting Download JAVA") }
+						onProgress: function () { log.info('Starting Download JAVA') }
 					})
 				} catch (err) {
 					splashLoader.destroy()
@@ -471,7 +471,7 @@ async function installJava() {
 
 					await electronDl.download(myWindow, linjavaarm64url, {
 						directory: homePath,
-						onProgress: function () { log.info("Starting Download JAVA") }
+						onProgress: function () { log.info('Starting Download JAVA') }
 					})
 				} catch (err) {
 					splashLoader.destroy()
@@ -488,7 +488,7 @@ async function installJava() {
 
 					await electronDl.download(myWindow, linjavaarm64urlbackup, {
 						directory: homePath,
-						onProgress: function () { log.info("Starting Download JAVA") }
+						onProgress: function () { log.info('Starting Download JAVA') }
 					})
 				} catch (err) {
 					splashLoader.destroy()
@@ -507,7 +507,7 @@ async function installJava() {
 
 					await electronDl.download(myWindow, linjavaarmurl, {
 						directory: homePath,
-						onProgress: function () { log.info("Starting Download JAVA") }
+						onProgress: function () { log.info('Starting Download JAVA') }
 					})
 				} catch (err) {
 					splashLoader.destroy()
@@ -524,7 +524,7 @@ async function installJava() {
 
 					await electronDl.download(myWindow, linjavaarmurlbackup, {
 						directory: homePath,
-						onProgress: function () { log.info("Starting Download JAVA") }
+						onProgress: function () { log.info('Starting Download JAVA') }
 					})
 				} catch (err) {
 					splashLoader.destroy()
@@ -545,7 +545,7 @@ async function installJava() {
 
 					await electronDl.download(myWindow, macjavax64url, {
 						directory: homePath,
-						onProgress: function () { log.info("Starting Download JAVA") }
+						onProgress: function () { log.info('Starting Download JAVA') }
 					})
 				} catch (err) {
 					splashLoader.destroy()
@@ -562,7 +562,7 @@ async function installJava() {
 
 					await electronDl.download(myWindow, macjavax64urlbackup, {
 						directory: homePath,
-						onProgress: function () { log.info("Starting Download JAVA") }
+						onProgress: function () { log.info('Starting Download JAVA') }
 					})
 				} catch (err) {
 					splashLoader.destroy()
@@ -581,7 +581,7 @@ async function installJava() {
 
 					await electronDl.download(myWindow, macjavaaarch64url, {
 						directory: homePath,
-						onProgress: function () { log.info("Starting Download JAVA") }
+						onProgress: function () { log.info('Starting Download JAVA') }
 					})
 				} catch (err) {
 					splashLoader.destroy()
@@ -598,7 +598,7 @@ async function installJava() {
 
 					await electronDl.download(myWindow, macjavaaarch64urlbackup, {
 						directory: homePath,
-						onProgress: function () { log.info("Starting Download JAVA") }
+						onProgress: function () { log.info('Starting Download JAVA') }
 					})
 				} catch (err) {
 					splashLoader.destroy()
@@ -754,16 +754,16 @@ function checkQortal() {
 	if (fs.existsSync(qortaljar)) {
 		isRunning('qortal.jar', (status) => {
 			if (status == true) {
-				log.info("Core is running, perfect !")
+				log.info('Core is running, perfect !')
 			} else {
 				if (!store.get('askingCore')) {
 					const dialogOpts = {
 						type: 'info',
-						buttons: [i18n.__("electron_translate_13"), i18n.__("electron_translate_14")],
-						title: i18n.__("electron_translate_15"),
-						message: i18n.__("electron_translate_16"),
-						detail: i18n.__("electron_translate_17"),
-						checkboxLabel: i18n.__("electron_translate_28"),
+						buttons: [i18n.__('electron_translate_13'), i18n.__('electron_translate_14')],
+						title: i18n.__('electron_translate_15'),
+						message: i18n.__('electron_translate_16'),
+						detail: i18n.__('electron_translate_17'),
+						checkboxLabel: i18n.__('electron_translate_28'),
 						checkboxChecked: false
 					}
 
@@ -782,10 +782,10 @@ function checkQortal() {
 	} else {
 		const dialogOpts = {
 			type: 'info',
-			buttons: [i18n.__("electron_translate_18"), i18n.__("electron_translate_19")],
-			title: i18n.__("electron_translate_20"),
-			message: i18n.__("electron_translate_21"),
-			detail: i18n.__("electron_translate_22")
+			buttons: [i18n.__('electron_translate_18'), i18n.__('electron_translate_19')],
+			title: i18n.__('electron_translate_20'),
+			message: i18n.__('electron_translate_21'),
+			detail: i18n.__('electron_translate_22')
 		}
 
 		dialog.showMessageBox(dialogOpts).then((returnValue) => {
@@ -815,7 +815,7 @@ async function downloadQortal() {
 
 		await electronDl.download(myWindow, zipurl, {
 			directory: zipdir,
-			onProgress: function () { log.info("Starting Download Qortal") }
+			onProgress: function () { log.info('Starting Download Qortal') }
 		})
 	} catch (err) {
 		qortalLoader.destroy()
@@ -871,11 +871,11 @@ async function checkAndStart() {
 		if (!store.get('askingCore')) {
 			const dialogOpts = {
 				type: 'info',
-				buttons: [i18n.__("electron_translate_13"), i18n.__("electron_translate_14")],
-				title: i18n.__("electron_translate_15"),
-				message: i18n.__("electron_translate_16"),
-				detail: i18n.__("electron_translate_17"),
-				checkboxLabel: i18n.__("electron_translate_28"),
+				buttons: [i18n.__('electron_translate_13'), i18n.__('electron_translate_14')],
+				title: i18n.__('electron_translate_15'),
+				message: i18n.__('electron_translate_16'),
+				detail: i18n.__('electron_translate_17'),
+				checkboxLabel: i18n.__('electron_translate_28'),
 				checkboxChecked: false
 			}
 
@@ -923,7 +923,7 @@ async function startQortal() {
 						log.info('Start qortal error', err)
 					}
 				}
-				break;
+				break
 			case 'arm64':
 				if (fs.existsSync(linjavaarm64bindir)) {
 					try {
@@ -950,7 +950,7 @@ async function startQortal() {
 						log.info('Start qortal error', err)
 					}
 				}
-				break;
+				break
 			case 'arm':
 				if (fs.existsSync(linjavaarmbindir)) {
 					try {
@@ -977,7 +977,7 @@ async function startQortal() {
 						log.info('Start qortal error', err)
 					}
 				}
-				break;
+				break
 		}
 	} else if (process.platform === 'darwin') {
 		if (process.arch === 'x64') {
@@ -1039,24 +1039,24 @@ async function startQortal() {
 
 const editMenu = Menu.buildFromTemplate([
 	{
-		label: "Qortal",
+		label: 'Qortal',
 		submenu: [
-			{ label: "Quit", click() { app.quit() } }
+			{ label: 'Quit', click() { app.quit() } }
 		]
 	},
 	{
-		label: i18n.__("electron_translate_34"),
+		label: i18n.__('electron_translate_34'),
 		submenu: [{
-			label: i18n.__("electron_translate_31"),
+			label: i18n.__('electron_translate_31'),
 			click() {
 				const dialogOpts = {
 					type: 'info',
 					noLink: true,
-					buttons: [i18n.__("electron_translate_29"), i18n.__("electron_translate_30")],
-					title: i18n.__("electron_translate_31"),
-					message: i18n.__("electron_translate_32"),
-					detail: i18n.__("electron_translate_33"),
-					checkboxLabel: i18n.__("electron_translate_28"),
+					buttons: [i18n.__('electron_translate_29'), i18n.__('electron_translate_30')],
+					title: i18n.__('electron_translate_31'),
+					message: i18n.__('electron_translate_32'),
+					detail: i18n.__('electron_translate_33'),
+					checkboxLabel: i18n.__('electron_translate_28'),
 					checkboxChecked: store.get('askingCore')
 				}
 
@@ -1072,19 +1072,19 @@ const editMenu = Menu.buildFromTemplate([
 		}]
 	},
 	{
-		label: "Edit",
+		label: 'Edit',
 		submenu: [
-			{ label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
-			{ label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
-			{ type: "separator" },
-			{ label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
-			{ label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
-			{ label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
-			{ label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+			{ label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:' },
+			{ label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:' },
+			{ type: 'separator' },
+			{ label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:' },
+			{ label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:' },
+			{ label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:' },
+			{ label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:' }
 		]
 	},
 	{
-		label: "Check for update", click() { autoUpdater.checkForUpdatesAndNotify() }
+		label: 'Check for update', click() { autoUpdater.checkForUpdatesAndNotify() }
 	}
 ])
 
@@ -1104,7 +1104,7 @@ function createWindow() {
 		minWidth: 700,
 		minHeight: 640,
 		icon: path.join(__dirname + '/img/icons/png/256x256.png'),
-		title: "Qortal UI",
+		title: 'Qortal UI',
 		autoHideMenuBar: true,
 		webPreferences: {
 			partition: 'persist:webviewsession',
@@ -1172,7 +1172,7 @@ function createNewWindow() {
 		minWidth: 700,
 		minHeight: 640,
 		icon: path.join(__dirname + '/img/icons/png/256x256.png'),
-		title: "Qortal UI New Instance",
+		title: 'Qortal UI New Instance',
 		autoHideMenuBar: true,
 		webPreferences: {
 			partition: 'persist:webviewsession',
@@ -1206,16 +1206,16 @@ const createTray = () => {
 			type: 'separator'
 		},
 		{
-			label: i18n.__("electron_translate_31"),
+			label: i18n.__('electron_translate_31'),
 			click: function () {
 				const dialogOpts = {
 					type: 'info',
 					noLink: true,
-					buttons: [i18n.__("electron_translate_29"), i18n.__("electron_translate_30")],
-					title: i18n.__("electron_translate_31"),
-					message: i18n.__("electron_translate_32"),
-					detail: i18n.__("electron_translate_33"),
-					checkboxLabel: i18n.__("electron_translate_28"),
+					buttons: [i18n.__('electron_translate_29'), i18n.__('electron_translate_30')],
+					title: i18n.__('electron_translate_31'),
+					message: i18n.__('electron_translate_32'),
+					detail: i18n.__('electron_translate_33'),
+					checkboxLabel: i18n.__('electron_translate_28'),
 					checkboxChecked: store.get('askingCore')
 				}
 
@@ -1233,14 +1233,14 @@ const createTray = () => {
 			type: 'separator'
 		},
 		{
-			label: i18n.__("electron_translate_1"),
+			label: i18n.__('electron_translate_1'),
 			click: function () {
 				myWindow.maximize()
 				myWindow.show()
 			}
 		},
 		{
-			label: i18n.__("electron_translate_2"),
+			label: i18n.__('electron_translate_2'),
 			click: function () {
 				myTray.destroy()
 				app.quit()
@@ -1248,15 +1248,15 @@ const createTray = () => {
 		}
 	])
 
-	myTray.setTitle("QORTAL UI")
+	myTray.setTitle('QORTAL UI')
 	myTray.setToolTip(`Qortal UI v${app.getVersion()}`)
 	myTray.setContextMenu(contextMenu)
-	myTray.on("double-click", () => myWindow.maximize(), myWindow.show())
+	myTray.on('double-click', () => myWindow.maximize(), myWindow.show())
 }
 
 async function checkAll() {
 	if (process.platform === 'win32') {
-		app.setAppUserModelId("org.qortal.QortalUI")
+		app.setAppUserModelId('org.qortal.QortalUI')
 
 		await checkPort()
 	} else if (process.platform === 'darwin') {
@@ -1265,8 +1265,8 @@ async function checkAll() {
 		await checkPort()
 	} else {
 		const dl = new Notification({
-			title: "System Detector",
-			body: "No Supported Sytem Detected"
+			title: 'System Detector',
+			body: 'No Supported Sytem Detected'
 		})
 
 		dl.show()
@@ -1323,11 +1323,11 @@ if (!isLock) {
 		const dialogOpts = {
 			type: 'info',
 			noLink: true,
-			buttons: [i18n.__("electron_translate_29"), i18n.__("electron_translate_30")],
-			title: i18n.__("electron_translate_31"),
-			message: i18n.__("electron_translate_32"),
-			detail: i18n.__("electron_translate_33"),
-			checkboxLabel: i18n.__("electron_translate_28"),
+			buttons: [i18n.__('electron_translate_29'), i18n.__('electron_translate_30')],
+			title: i18n.__('electron_translate_31'),
+			message: i18n.__('electron_translate_32'),
+			detail: i18n.__('electron_translate_33'),
+			checkboxLabel: i18n.__('electron_translate_28'),
 			checkboxChecked: store.get('askingCore')
 		}
 
@@ -1350,8 +1350,8 @@ if (!isLock) {
 
 	ipcMain.on('check-for-update', (event) => {
 		const check = new Notification({
-			title: i18n.__("electron_translate_43"),
-			body: i18n.__("electron_translate_44")
+			title: i18n.__('electron_translate_43'),
+			body: i18n.__('electron_translate_44')
 		})
 
 		check.show()
@@ -1365,45 +1365,45 @@ if (!isLock) {
 	ipcMain.on('show-my-menu', (event) => {
 		let homePageOptions = Menu.buildFromTemplate([
 			{
-				label: i18n.__("electron_translate_35"),
+				label: i18n.__('electron_translate_35'),
 				role: 'copy'
 			},
 			{
-				label: i18n.__("electron_translate_36"),
+				label: i18n.__('electron_translate_36'),
 				role: 'paste'
 			},
 			{
-				type: "separator"
+				type: 'separator'
 			},
 			{
-				label: i18n.__("electron_translate_37"),
+				label: i18n.__('electron_translate_37'),
 				submenu: [
 					{
-						label: i18n.__("electron_translate_38"),
+						label: i18n.__('electron_translate_38'),
 						role: 'zoomIn'
 					},
 					{
-						label: i18n.__("electron_translate_39"),
+						label: i18n.__('electron_translate_39'),
 						role: 'zoomOut'
 					},
 					{
-						label: i18n.__("electron_translate_40"),
+						label: i18n.__('electron_translate_40'),
 						role: 'resetZoom'
 					},
 					{
 						type: 'separator'
 					},
 					{
-						label: i18n.__("electron_translate_41"),
+						label: i18n.__('electron_translate_41'),
 						role: 'togglefullscreen'
 					}
 				]
 			},
 			{
-				type: "separator"
+				type: 'separator'
 			},
 			{
-				label: i18n.__("electron_translate_42"),
+				label: i18n.__('electron_translate_42'),
 				click: function () {
 					createNewWindow()
 				},
@@ -1417,8 +1417,8 @@ if (!isLock) {
 		const downloadOpts = {
 			type: 'info',
 			buttons: ['YES', 'NO'],
-			title: i18n.__("electron_translate_3"),
-			detail: i18n.__("electron_translate_4")
+			title: i18n.__('electron_translate_3'),
+			detail: i18n.__('electron_translate_4')
 		}
 
 		dialog.showMessageBox(downloadOpts).then((returnValue) => {
@@ -1426,8 +1426,8 @@ if (!isLock) {
 				autoUpdater.downloadUpdate()
 
 				const dl = new Notification({
-					title: i18n.__("electron_translate_11"),
-					body: i18n.__("electron_translate_12")
+					title: i18n.__('electron_translate_11'),
+					body: i18n.__('electron_translate_12')
 				})
 
 				dl.show()
@@ -1437,7 +1437,7 @@ if (!isLock) {
 	})
 
 	autoUpdater.on('update-not-available', (event) => {
-		log.info("NO UPDATE")
+		log.info('NO UPDATE')
 	})
 
 	autoUpdater.on('download-progress', (progressObj) => {
@@ -1447,10 +1447,10 @@ if (!isLock) {
 	autoUpdater.on('update-downloaded', (event) => {
 		const dialogOpts = {
 			type: 'info',
-			buttons: [i18n.__("electron_translate_5"), i18n.__("electron_translate_6")],
-			title: i18n.__("electron_translate_7"),
-			message: i18n.__("electron_translate_8"),
-			detail: i18n.__("electron_translate_9")
+			buttons: [i18n.__('electron_translate_5'), i18n.__('electron_translate_6')],
+			title: i18n.__('electron_translate_7'),
+			message: i18n.__('electron_translate_8'),
+			detail: i18n.__('electron_translate_9')
 		}
 
 		dialog.showMessageBox(dialogOpts).then((returnValue) => {
@@ -1463,7 +1463,7 @@ if (!isLock) {
 
 	autoUpdater.on('error', (err) => {
 		const n = new Notification({
-			title: i18n.__("electron_translate_10"),
+			title: i18n.__('electron_translate_10'),
 			body: err
 		})
 
@@ -1480,6 +1480,6 @@ if (!isLock) {
 	})
 
 	process.on('uncaughtException', function (err) {
-		log.info("*** WHOOPS TIME ***" + err)
+		log.info('*** WHOOPS TIME ***' + err)
 	})
 }

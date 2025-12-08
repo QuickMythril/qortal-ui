@@ -36,13 +36,13 @@ class AccountView extends connect(store)(LitElement) {
 				<div class="center-box">
 					<div class="img-icon">${this.getAvatar()}</div>
 					<span id="accountName">
-						${this.displayName || get("general.noRegisteredName")}
+						${this.displayName || get('general.noRegisteredName')}
 					</span>
 					<div class="content-box">
-						<span class="title">${translate("settings.address")}: </span>
+						<span class="title">${translate('settings.address')}: </span>
 						<span class="value">${store.getState().app.selectedAddress.address}</span>
 						<br/>
-						<span class="title">${translate("settings.publickey")}: </span>
+						<span class="title">${translate('settings.publickey')}: </span>
 						<span class="value">${store.getState().app.selectedAddress.base58PublicKey}</span>
 					</div>
 				</div>

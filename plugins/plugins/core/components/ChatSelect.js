@@ -48,10 +48,10 @@ class ChatSelect extends LitElement {
 		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
 
 		if (groupString === 'Group_0') {
-			const avatarUrl = `/img/qgcgroup.png`
+			const avatarUrl = '/img/qgcgroup.png'
 			this.avatarImg = this.createImage(avatarUrl)
 		} else if (groupString === 'Group_1') {
-			const avatarUrl = `/img/qdcgroup.png`
+			const avatarUrl = '/img/qdcgroup.png'
 			this.avatarImg = this.createImage(avatarUrl)
 		} else if (this.chatInfo.name) {
 			const avatarUrl = `${nodeUrl}/arbitrary/THUMBNAIL/${this.chatInfo.name}/qortal_avatar?async=true`
@@ -70,7 +70,7 @@ class ChatSelect extends LitElement {
 				${this.isImageLoaded ? html`${this.avatarImg}` : html``}
 				${!this.isImageLoaded && !this.chatInfo.name && !this.chatInfo.groupName ? html`<mwc-icon class="img-icon">account_circle</mwc-icon>` : html``}
 				${!this.isImageLoaded && this.chatInfo.name ?
-					html`
+		html`
 						<div
 							style="width:40px; height:40px; float:left; border-radius:50%; background: ${this.activeChatHeadUrl === this.chatInfo.url ? 'var(--chatHeadBgActive)' : 'var(--chatHeadBg)'};
 							color: ${this.activeChatHeadUrl === this.chatInfo.url ? 'var(--chatHeadTextActive)' : 'var(--chatHeadText)'};
@@ -79,10 +79,10 @@ class ChatSelect extends LitElement {
 							${this.chatInfo.name.charAt(0)}
 						</div>
 					`
-					: ''
-				}
+		: ''
+}
 				${!this.isImageLoaded && this.chatInfo.groupName ?
-					html`
+		html`
 						<div
 							style="width:40px; height:40px; float:left; border-radius:50%; background: ${this.activeChatHeadUrl === this.chatInfo.url ? 'var(--chatHeadBgActive)' : 'var(--chatHeadBg)'};
 							color: ${this.activeChatHeadUrl === this.chatInfo.url ? 'var(--chatHeadTextActive)' : 'var(--chatHeadText)'};
@@ -91,8 +91,8 @@ class ChatSelect extends LitElement {
 							${this.chatInfo.groupName.charAt(0)}
 						</div>
 					`
-					: ''
-				}
+		: ''
+}
 				<div class="about">
 					<div class="name">
 						<span style="float:left; padding-left: 8px; color: var(--chat-group);">
@@ -130,7 +130,7 @@ class ChatSelect extends LitElement {
 		const imageHTMLRes = new Image()
 
 		imageHTMLRes.src = imageUrl
-		imageHTMLRes.style = "width:40px; height:40px; float: left; border-radius:50%"
+		imageHTMLRes.style = 'width:40px; height:40px; float: left; border-radius:50%'
 
 		imageHTMLRes.onclick = () => {
 			this.openDialogImage = true

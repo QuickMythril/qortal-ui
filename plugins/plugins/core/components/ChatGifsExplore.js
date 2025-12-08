@@ -27,7 +27,7 @@ class ChatGifsExplore extends LitElement {
 	}
 
 	constructor() {
-		super();
+		super()
 		this.searchCollectionName = ''
 		this.downObserverElement = ''
 		this.viewElement = ''
@@ -44,64 +44,64 @@ class ChatGifsExplore extends LitElement {
 						class='search-collection-name'
 						placeholder=${get('gifs.gchange9')}
 						.value=${this.searchCollectionName}
-						@change=${(e) => {this.searchCollectionName = e.target.value;}}
+						@change=${(e) => {this.searchCollectionName = e.target.value}}
 						@keyup=${async (e) => {
-							if (e.key === 'Enter' && this.searchCollectionName) {
-								await this.searchCollections();
-							}
-						}}
+		if (e.key === 'Enter' && this.searchCollectionName) {
+			await this.searchCollections()
+		}
+	}}
 					/>
 					${this.isSearched ?
-						(html`
+		(html`
 							<vaadin-icon
 								class='clear-search-icon'
 								@click=${async () => {
-									if (this.isLoading) return;
-									this.exploreCollections = await this.getAllCollections();
-									this.searchCollectionName = '';
-									this.isSearched = false;
-								}}
+				if (this.isLoading) return
+				this.exploreCollections = await this.getAllCollections()
+				this.searchCollectionName = ''
+				this.isSearched = false
+			}}
 								icon='vaadin:close-small'
 								slot='icon'
 							>
 							</vaadin-icon>
 						`)
-						: html`
+		: html`
 							<vaadin-icon
 								class='explore-collections-icon'
 								@click=${async () => {
-									if (this.isLoading || !this.searchCollectionName) return;
-									await this.searchCollections();
-								}}
+		if (this.isLoading || !this.searchCollectionName) return
+		await this.searchCollections()
+	}}
 								icon='vaadin:search'
 								slot='icon'
 							>
 							</vaadin-icon>
 						`
-					}
+}
 				</div>
 				<div class='collection-wrapper'>
 					${this.isLoading ?
-						html`
+		html`
 							<div style=${'margin-top: 10px;'}>
 								<p class='gifs-loading-message'>${translate('gifs.gchange18')}</p>
 								<div class='lds-circle'><div></div></div>
 							</div>
 						`
-						: this.isSearched && this.exploreCollections.length === 0 ?
-							(html`
+		: this.isSearched && this.exploreCollections.length === 0 ?
+			(html`
 								<p style=${'margin-top: 10px;'} class='gifs-loading-message'>${translate('gifs.gchange19')}</p>
 							`)
-						: (html`
+			: (html`
 							${this.exploreCollections.map((collection) => {
-								return html`
-									<div class='collection-card' @click=${() => {this.setCurrentCollection(collection);}}>
+					return html`
+									<div class='collection-card' @click=${() => {this.setCurrentCollection(collection)}}>
 										${collection.identifier}
 									</div>
 								`
-							})}
+				})}
 						`)
-					}
+}
 				</div>
 				<div id='downObserver'></div>
 			</div>

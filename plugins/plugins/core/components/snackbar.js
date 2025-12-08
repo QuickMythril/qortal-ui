@@ -37,11 +37,11 @@ class SnackQueue extends LitElement {
 			<mwc-snackbar id="snack" labelText="${this._labelText}" ?stacked=${this._stacked} ?leading=${this._leading} ?closeOnEscape=${this._closeOnEscape} timeoutMs=${this._timeoutMs}>
 				${this._action}
 				${this._dismiss ?
-					html`
+		html`
 						<mwc-icon-button icon="${this._dismissIcon}" slot="dismiss"></mwc-icon-button>
 					`
-					: ''
-				}
+		: ''
+}
 			</mwc-snackbar>
 		`
 	}

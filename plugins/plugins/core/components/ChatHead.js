@@ -61,13 +61,13 @@ class ChatHead extends LitElement {
 		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
 
 		if (groupString === 'Group_0') {
-			const avatarUrl = `/img/qgcgroup.png`
+			const avatarUrl = '/img/qgcgroup.png'
 			this.avatarImg = this.createImage(avatarUrl)
 		} else if (groupString === 'Group_1') {
-			const avatarUrl = `/img/qdcgroup.png`
+			const avatarUrl = '/img/qdcgroup.png'
 			this.avatarImg = this.createImage(avatarUrl)
 		} else if (groupString === 'Group_694') {
-			const avatarUrl = `/img/minter.png`
+			const avatarUrl = '/img/minter.png'
 			this.avatarImg = this.createImage(avatarUrl)
 		} else if (this.chatInfo.name) {
 			const avatarUrl = `${nodeUrl}/arbitrary/THUMBNAIL/${this.chatInfo.name}/qortal_avatar?async=true`
@@ -100,50 +100,50 @@ class ChatHead extends LitElement {
 				${this.isImageLoaded ? html`${this.avatarImg}` : html``}
 				${!this.isImageLoaded && !this.chatInfo.name && !this.chatInfo.groupName ? html`<mwc-icon class="img-icon">account_circle</mwc-icon>` : html``}
 				${!this.isImageLoaded && this.chatInfo.name ?
-					html`
+		html`
 						<div
 							style="width:40px; height:40px; flex-shrink: 0; border-radius:50%; background: ${this.activeChatHeadUrl === this.chatInfo.url ?
-							'var(--chatHeadBgActive)' : 'var(--chatHeadBg)'}; color: ${this.activeChatHeadUrl === this.chatInfo.url ? 'var(--chatHeadTextActive)' :
-							'var(--chatHeadText)'}; font-weight:bold; display: flex; justify-content: center; align-items: center; text-transform: capitalize"
+		'var(--chatHeadBgActive)' : 'var(--chatHeadBg)'}; color: ${this.activeChatHeadUrl === this.chatInfo.url ? 'var(--chatHeadTextActive)' :
+	'var(--chatHeadText)'}; font-weight:bold; display: flex; justify-content: center; align-items: center; text-transform: capitalize"
 						>
 							${this.chatInfo.name.charAt(0)}
 						</div>
 					`
-					: ''
-				}
+		: ''
+}
 				${!this.isImageLoaded && this.chatInfo.groupName ?
-					html`
+		html`
 						<div
 							style="width:40px; height:40px; flex-shrink: 0; border-radius:50%; background: ${this.activeChatHeadUrl === this.chatInfo.url ?
-							'var(--chatHeadBgActive)' : 'var(--chatHeadBg)'}; color: ${this.activeChatHeadUrl === this.chatInfo.url ? 'var(--chatHeadTextActive)' :
-							'var(--chatHeadText)'}; font-weight:bold; display: flex; justify-content: center; align-items: center; text-transform: capitalize"
+		'var(--chatHeadBgActive)' : 'var(--chatHeadBg)'}; color: ${this.activeChatHeadUrl === this.chatInfo.url ? 'var(--chatHeadTextActive)' :
+	'var(--chatHeadText)'}; font-weight:bold; display: flex; justify-content: center; align-items: center; text-transform: capitalize"
 						>
 							${this.chatInfo.groupName.charAt(0)}
 						</div>
 					`
-					: ''
-				}
+		: ''
+}
 				<div class="inner-container">
 					<div class="about">
 						<div class="name">
 							<span
 								style="font-weight: bold;float:left; padding-left: 8px; color: var(--chat-group);font-size:14px;word-break:${this.chatInfo.groupName ?
-								this.chatInfo.groupName : this.chatInfo.name !== undefined ? 'break-word' : 'break-all'}"
+		this.chatInfo.groupName : this.chatInfo.name !== undefined ? 'break-word' : 'break-all'}"
 							>
 								${this.chatInfo.groupName ? this.chatInfo.groupName : this.chatInfo.name !== undefined ? this.chatInfo.name : this.chatInfo.address.substr(0, 15)}
 							</span>
 								<mwc-icon
 									style="font-size:18px; color:${
-									this.chatInfo.groupId === undefined ? '#f0ad4e' :
-									this.chatInfo.isOpen === false ? '#198754' :
-									this.chatInfo.isOpen === true ? '#C6011F' : '#C6011F'}"
+	this.chatInfo.groupId === undefined ? '#f0ad4e' :
+		this.chatInfo.isOpen === false ? '#198754' :
+			this.chatInfo.isOpen === true ? '#C6011F' : '#C6011F'}"
 								>
 									${
-										this.chatInfo.groupId === undefined ? 'private_connectivity' :
-										this.chatInfo.isOpen === false ? 'lock_outline' :
-										this.chatInfo.isOpen === true ? 'lock_open' :
-									'lock_open'
-								}
+	this.chatInfo.groupId === undefined ? 'private_connectivity' :
+		this.chatInfo.isOpen === false ? 'lock_outline' :
+			this.chatInfo.isOpen === true ? 'lock_open' :
+				'lock_open'
+}
 							</mwc-icon>
 						</div>
 					</div>
@@ -215,7 +215,7 @@ class ChatHead extends LitElement {
 		const imageHTMLRes = new Image()
 
 		imageHTMLRes.src = imageUrl
-		imageHTMLRes.style = "width: 40px; height: 40px; float: left; border-radius: 50%;"
+		imageHTMLRes.style = 'width: 40px; height: 40px; float: left; border-radius: 50%;'
 
 		imageHTMLRes.onclick = () => {
 			this.openDialogImage = true

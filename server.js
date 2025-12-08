@@ -1,4 +1,4 @@
-const path = require("path")
+const path = require('path')
 const uiCore = require('./core/ui-core.js')
 const createServer = uiCore('server')
 const config = require('./config/config.js')

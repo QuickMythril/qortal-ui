@@ -97,7 +97,7 @@ class ExportKeys extends connect(store)(LitElement) {
 			<div style="position: relative;">
 				<div class="center-box">
 					<p>
-						${translate("settings.exp4")}
+						${translate('settings.exp4')}
 					</p>
 				</div>
 				<div class="sub-main">
@@ -106,101 +106,101 @@ class ExportKeys extends connect(store)(LitElement) {
 							<div style="display: flex; align-items: center; justify-content: center;">
 								<img src="/img/btc.png" style="width: 32px; height: 32px;">&nbsp;&nbsp;${this.btcWALLET}<br>
 							</div>
-							<div @click=${() => this.checkForPmkDownload(this.btcWALLET, this.btcPMK, this.btcName, this.btcShort)} class="export-button"> ${translate("settings.exp2")} </div>
+							<div @click=${() => this.checkForPmkDownload(this.btcWALLET, this.btcPMK, this.btcName, this.btcShort)} class="export-button"> ${translate('settings.exp2')} </div>
 						</div>
 						<div class="content-box">
 							<div style="display: flex; align-items: center; justify-content: center;">
 								<img src="/img/ltc.png" style="width: 32px; height: 32px;">&nbsp;&nbsp;${this.ltcWALLET}<br>
 							</div>
-							<div @click=${() => this.checkForPmkDownload(this.ltcWALLET, this.ltcPMK, this.ltcName, this.ltcShort)} class="export-button"> ${translate("settings.exp2")} </div>
+							<div @click=${() => this.checkForPmkDownload(this.ltcWALLET, this.ltcPMK, this.ltcName, this.ltcShort)} class="export-button"> ${translate('settings.exp2')} </div>
 						</div>
 						<div class="content-box">
 							<div style="display: flex; align-items: center; justify-content: center;">
 								<img src="/img/doge.png" style="width: 32px; height: 32px;">&nbsp;&nbsp;${this.dogeWALLET}<br>
 							</div>
-							<div @click=${() => this.checkForPmkDownload(this.dogeWALLET, this.dogePMK, this.dogeName, this.dogeShort)} class="export-button"> ${translate("settings.exp2")} </div>
+							<div @click=${() => this.checkForPmkDownload(this.dogeWALLET, this.dogePMK, this.dogeName, this.dogeShort)} class="export-button"> ${translate('settings.exp2')} </div>
 						</div>
 						<div class="content-box">
 							<div style="display: flex; align-items: center; justify-content: center;">
 								<img src="/img/dgb.png" style="width: 32px; height: 32px;">&nbsp;&nbsp;${this.dgbWALLET}<br>
 							</div>
-							<div @click=${() => this.checkForPmkDownload(this.dgbWALLET, this.dgbPMK, this.dgbName, this.dgbShort)} class="export-button"> ${translate("settings.exp2")} </div>
+							<div @click=${() => this.checkForPmkDownload(this.dgbWALLET, this.dgbPMK, this.dgbName, this.dgbShort)} class="export-button"> ${translate('settings.exp2')} </div>
 						</div>
 						<div class="content-box">
 							<div style="display: flex; align-items: center; justify-content: center;">
 								<img src="/img/rvn.png" style="width: 32px; height: 32px;">&nbsp;&nbsp;${this.rvnWALLET}<br>
 							</div>
-							<div @click=${() => this.checkForPmkDownload(this.rvnWALLET, this.rvnPMK, this.rvnName, this.rvnShort)} class="export-button"> ${translate("settings.exp2")} </div>
+							<div @click=${() => this.checkForPmkDownload(this.rvnWALLET, this.rvnPMK, this.rvnName, this.rvnShort)} class="export-button"> ${translate('settings.exp2')} </div>
 						</div>
 						<div class="content-box" style="display:${this.enableArrr ? 'block' : 'none'}">
 							<div style="display: flex; align-items: center; justify-content: center;">
 								<img src="/img/arrr.png" style="width: 32px; height: 32px;">&nbsp;&nbsp;${this.arrrWALLET}<br>
 							</div>
-							<div @click=${() => this.checkForPmkDownload(this.arrrWALLET, this.arrrPMK, this.arrrName, this.arrrShort)} class="export-button"> ${translate("settings.exp2")} </div>
+							<div @click=${() => this.checkForPmkDownload(this.arrrWALLET, this.arrrPMK, this.arrrName, this.arrrShort)} class="export-button"> ${translate('settings.exp2')} </div>
 						</div>
 					</div>
 				</div>
 				<hr style="margin-top: 20px;">
 				<div class="button-row">
-					<button class="repair-button" title="${translate('nodepage.nchange38')}" @click="${() => this.openRepairLTCDialog()}">${translate("nodepage.nchange38")}</button>
+					<button class="repair-button" title="${translate('nodepage.nchange38')}" @click="${() => this.openRepairLTCDialog()}">${translate('nodepage.nchange38')}</button>
 				</div>
 			</div>
 			<mwc-dialog id="savePkmDialog" scrimClickAction="" escapeKeyAction="">
 				<img src="/img/${this.dCoinShort}.png" style="width: 32px; height: 32px;">
-				<h3>${this.dCoinName} ${translate("settings.exp2")}</h3>
+				<h3>${this.dCoinName} ${translate('settings.exp2')}</h3>
 				<hr>
-				<h4>${translate("settings.address")}: ${this.dWalletAddress}</h4>
+				<h4>${translate('settings.address')}: ${this.dWalletAddress}</h4>
 				<mwc-button
 					slot="primaryAction"
 					@click="${() => this.closeSavePkmDialog()}"
 					class="red"
 				>
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 				<mwc-button
 					slot="secondaryAction"
 					@click="${() => this.exportKey(this.dPrivateKey, this.dCoinName, this.dWalletAddress)}"
 				>
-					${translate("settings.exp3")}
+					${translate('settings.exp3')}
 				</mwc-button>
 			</mwc-dialog>
 			<mwc-dialog id="arrrWalletNotSynced" scrimClickAction="" escapeKeyAction="">
 				<img src="/img/arrr.png" style="width: 32px; height: 32px;">
-				<h3>${translate("settings.arrr1")}</h3>
+				<h3>${translate('settings.arrr1')}</h3>
 				<hr>
-				<h4>${translate("settings.arrr2")}</h4>
+				<h4>${translate('settings.arrr2')}</h4>
 				<mwc-button
 					slot="primaryAction"
 					@click="${() => this.closeArrrWalletNotSynced()}"
 					class="red"
 				>
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
 			<mwc-dialog id="needCoreUpdate" scrimClickAction="" escapeKeyAction="">
 				<img src="/img/arrr.png" style="width: 32px; height: 32px;">
-				<h3>${translate("settings.arrr3")}</h3>
+				<h3>${translate('settings.arrr3')}</h3>
 				<hr>
-				<h4>${translate("settings.arrr4")}</h4>
+				<h4>${translate('settings.arrr4')}</h4>
 				<mwc-button
 					slot="primaryAction"
 					@click="${() => this.closeNeedCoreUpdate()}"
 					class="red"
 				>
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
 			<mwc-dialog id="repairLTCDialog" scrimClickAction="" escapeKeyAction="">
 				<img src="/img/ltc.png" style="width: 32px; height: 32px;">
-				<h3>${translate("nodepage.nchange38")}</h3>
+				<h3>${translate('nodepage.nchange38')}</h3>
 				<hr>
-				<h4>${translate("nodepage.nchange39")}</h4>
-				<h4>${translate("nodepage.nchange40")}</h4>
+				<h4>${translate('nodepage.nchange39')}</h4>
+				<h4>${translate('nodepage.nchange40')}</h4>
 				<mwc-button slot="primaryAction" @click="${() => this.repairLtcWallet()}" class="green">
-					${translate("general.continue")}
+					${translate('general.continue')}
 				</mwc-button>
 				<mwc-button slot="secondaryAction" @click="${() => this.closeRepairLTCDialog()}" class="red">
-					${translate("login.lp4")}
+					${translate('login.lp4')}
 				</mwc-button>
 			</mwc-dialog>
 			<mwc-dialog id="pleaseWaitDialog" scrimClickAction="" escapeKeyAction="">
@@ -214,19 +214,19 @@ class ExportKeys extends connect(store)(LitElement) {
 					<div></div>
 					<div></div>
 				</div>
-				<h2>${translate("nodepage.nchange41")}</h2>
+				<h2>${translate('nodepage.nchange41')}</h2>
 			</mwc-dialog>
 			<mwc-dialog id="okDialog" scrimClickAction="" escapeKeyAction="">
 				<img src="/img/ltc.png" style="width: 32px; height: 32px;">
-				<h3>${translate("nodepage.nchange38")}</h3>
+				<h3>${translate('nodepage.nchange38')}</h3>
 				<hr>
-				<h3>${translate("nodepage.nchange42")}</h3>
+				<h3>${translate('nodepage.nchange42')}</h3>
 			</mwc-dialog>
 			<mwc-dialog id="errorDialog" scrimClickAction="" escapeKeyAction="">
 				<img src="/img/ltc.png" style="width: 32px; height: 32px;">
-				<h3>${translate("nodepage.nchange38")}</h3>
+				<h3>${translate('nodepage.nchange38')}</h3>
 				<hr>
-				<h3>${translate("nodepage.nchange43")}</h3>
+				<h3>${translate('nodepage.nchange43')}</h3>
 			</mwc-dialog>
 		`
 	}
@@ -247,7 +247,7 @@ class ExportKeys extends connect(store)(LitElement) {
 		}
 
 		let resAD = await parentEpml.request('apiCall', {
-			url: buildRequestUrl(`/crosschain/arrr/walletaddress`, store.getState()),
+			url: buildRequestUrl('/crosschain/arrr/walletaddress', store.getState()),
 			method: 'POST',
 			body: `${store.getState().app.selectedAddress.arrrWallet.seed58}`
 		})
@@ -268,7 +268,7 @@ class ExportKeys extends connect(store)(LitElement) {
 			return
 		}
 
-		const privateKeyUrl = buildRequestUrl(`/crosschain/arrr/walletprivatekey`, store.getState())
+		const privateKeyUrl = buildRequestUrl('/crosschain/arrr/walletprivatekey', store.getState())
 
 		await fetch(privateKeyUrl, {
 			method: 'POST',
@@ -290,7 +290,7 @@ class ExportKeys extends connect(store)(LitElement) {
 		}
 
 		let resPK = await parentEpml.request('apiCall', {
-			url: buildRequestUrl(`/crosschain/arrr/walletprivatekey`, store.getState()),
+			url: buildRequestUrl('/crosschain/arrr/walletprivatekey', store.getState()),
 			method: 'POST',
 			body: `${store.getState().app.selectedAddress.arrrWallet.seed58}`
 		})
@@ -336,7 +336,7 @@ class ExportKeys extends connect(store)(LitElement) {
 		this.shadowRoot.querySelector('#repairLTCDialog').close()
 		this.shadowRoot.querySelector('#pleaseWaitDialog').show()
 
-		const url = buildRequestUrl(`/crosschain/ltc/repair`, store.getState())
+		const url = buildRequestUrl('/crosschain/ltc/repair', store.getState())
 		let resRepair = await parentEpml.request('apiCall', {
 			url,
 			method: 'POST',
@@ -404,7 +404,7 @@ class ExportKeys extends connect(store)(LitElement) {
 			const fileHandle = await self.showSaveFilePicker({
 				suggestedName: fileName,
 				types: [{
-					description: "File"
+					description: 'File'
 				}]
 			})
 
@@ -415,9 +415,9 @@ class ExportKeys extends connect(store)(LitElement) {
 				await writable.close()
 			}
 
-			writeFile(fileHandle, blob).then(() => console.log("FILE SAVED"))
+			writeFile(fileHandle, blob).then(() => console.log('FILE SAVED'))
 
-			let snack4string = get("general.save")
+			let snack4string = get('general.save')
 
 			snackbar.add({
 				labelText: `${snack4string} ${fileName} ✅`,

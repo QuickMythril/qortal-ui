@@ -49,7 +49,7 @@ import {
 import { initWorkersReducer } from './reducers/init-workers'
 import { loginReducer } from './reducers/login-reducer'
 import { addNode, editNode, removeNode, setNode } from './reducers/manage-node'
-import localForage from "localforage"
+import localForage from 'localforage'
 
 const chatLastSeen = localForage.createInstance({
 	name: 'chat-last-seen'
@@ -254,7 +254,7 @@ export default (state = INITIAL_STATE, action) => {
 		}
 
 		case ALLOW_QAPP_AUTO_AUTH: {
-			saveStateToLocalStorage("qAPPAutoAuth", true)
+			saveStateToLocalStorage('qAPPAutoAuth', true)
 			return {
 				...state,
 				qAPPAutoAuth: action.payload
@@ -262,7 +262,7 @@ export default (state = INITIAL_STATE, action) => {
 		}
 
 		case REMOVE_QAPP_AUTO_AUTH: {
-			saveStateToLocalStorage("qAPPAutoAuth", false)
+			saveStateToLocalStorage('qAPPAutoAuth', false)
 			return {
 				...state,
 				qAPPAutoAuth: action.payload
@@ -270,7 +270,7 @@ export default (state = INITIAL_STATE, action) => {
 		}
 
 		case ALLOW_QAPP_AUTO_BALANCE: {
-			saveStateToLocalStorage("qAPPAutoBalance", true)
+			saveStateToLocalStorage('qAPPAutoBalance', true)
 			return {
 				...state,
 				qAPPAutoBalance: action.payload
@@ -278,7 +278,7 @@ export default (state = INITIAL_STATE, action) => {
 		}
 
 		case REMOVE_QAPP_AUTO_BALANCE: {
-			saveStateToLocalStorage("qAPPAutoBalance", false)
+			saveStateToLocalStorage('qAPPAutoBalance', false)
 			return {
 				...state,
 				qAPPAutoBalance: action.payload
@@ -286,7 +286,7 @@ export default (state = INITIAL_STATE, action) => {
 		}
 
 		case ALLOW_QAPP_AUTO_TRANSACTIONS: {
-			saveStateToLocalStorage("qAPPAutoTransactions", true)
+			saveStateToLocalStorage('qAPPAutoTransactions', true)
 			return {
 				...state,
 				qAPPAutoTransactions: action.payload
@@ -294,7 +294,7 @@ export default (state = INITIAL_STATE, action) => {
 		}
 
 		case REMOVE_QAPP_AUTO_TRANSACTIONS: {
-			saveStateToLocalStorage("qAPPAutoTransactions", false)
+			saveStateToLocalStorage('qAPPAutoTransactions', false)
 			return {
 				...state,
 				qAPPAutoTransactions: action.payload
@@ -302,7 +302,7 @@ export default (state = INITIAL_STATE, action) => {
 		}
 
 		case ALLOW_QAPP_AUTO_LISTS: {
-			saveStateToLocalStorage("qAPPAutoLists", true)
+			saveStateToLocalStorage('qAPPAutoLists', true)
 			return {
 				...state,
 				qAPPAutoLists: action.payload
@@ -310,7 +310,7 @@ export default (state = INITIAL_STATE, action) => {
 		}
 
 		case REMOVE_QAPP_AUTO_LISTS: {
-			saveStateToLocalStorage("qAPPAutoLists", false)
+			saveStateToLocalStorage('qAPPAutoLists', false)
 			return {
 				...state,
 				qAPPAutoLists: action.payload
@@ -318,7 +318,7 @@ export default (state = INITIAL_STATE, action) => {
 		}
 
 		case ALLOW_QAPP_FRIENDS_LIST: {
-			saveStateToLocalStorage("qAPPFriendsList", true)
+			saveStateToLocalStorage('qAPPFriendsList', true)
 			return {
 				...state,
 				qAPPFriendsList: action.payload
@@ -326,7 +326,7 @@ export default (state = INITIAL_STATE, action) => {
 		}
 
 		case REMOVE_QAPP_FRIENDS_LIST: {
-			saveStateToLocalStorage("qAPPFriendsList", false)
+			saveStateToLocalStorage('qAPPFriendsList', false)
 			return {
 				...state,
 				qAPPFriendsList: action.payload
@@ -463,7 +463,7 @@ export default (state = INITIAL_STATE, action) => {
 		}
 
 		case ALLOW_SHOW_SYNC_INDICATOR: {
-			saveStateToLocalStorage("showSyncIndicator", true)
+			saveStateToLocalStorage('showSyncIndicator', true)
 
 			return {
 				...state,
@@ -472,7 +472,7 @@ export default (state = INITIAL_STATE, action) => {
 		}
 
 		case REMOVE_SHOW_SYNC_INDICATOR: {
-			saveStateToLocalStorage("showSyncIndicator", false)
+			saveStateToLocalStorage('showSyncIndicator', false)
 
 			return {
 				...state,

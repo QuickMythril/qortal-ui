@@ -47,7 +47,7 @@ class FriendsFeed extends connect(store)(LitElement) {
 	render() {
 		return html`
 			<div class="container">
-				<div id="viewElement" class="container-body" style=${"position: relative"}>
+				<div id="viewElement" class="container-body" style=${'position: relative'}>
 					${this.isLoading ? html`
 						<div style="width:100%;display: flex; justify-content:center">
 							<paper-spinner-lite active></paper-spinner-lite>
@@ -59,7 +59,7 @@ class FriendsFeed extends connect(store)(LitElement) {
 						</div>
 					` : ''}
 					${this.feedToRender.map((item) => {
-						return html`
+		return html`
 							<feed-item
 								.resource=${item}
 								appName=${'Q-Blog'}
@@ -67,7 +67,7 @@ class FriendsFeed extends connect(store)(LitElement) {
 							>
 							</feed-item>
 						`
-					})}
+	})}
 					<div id="downObserver"></div>
 				</div>
 			</div>
@@ -115,7 +115,7 @@ class FriendsFeed extends connect(store)(LitElement) {
 	}
 
 	async getSchemas() {
-		this.mySelectedFeeds = JSON.parse(localStorage.getItem('friends-my-selected-feeds') || "[]")
+		this.mySelectedFeeds = JSON.parse(localStorage.getItem('friends-my-selected-feeds') || '[]')
 		const schemas = this.mySelectedFeeds
 
 		const getAllSchemas = (schemas || []).map(
@@ -157,7 +157,7 @@ class FriendsFeed extends connect(store)(LitElement) {
 	async getEndpoints() {
 		const dynamicVars = { }
 		const schemas = await this.getSchemas()
-		const friendList = JSON.parse(localStorage.getItem('friends-my-friend-list') || "[]")
+		const friendList = JSON.parse(localStorage.getItem('friends-my-friend-list') || '[]')
 		const names = friendList.map(friend => `name=${friend.name}`).join('&')
 
 		if (names.length === 0) {
@@ -265,7 +265,7 @@ class FriendsFeed extends connect(store)(LitElement) {
 
 				// If we've already reached the desired count, break
 				if (remainingCount <= 0) {
-					break;
+					break
 				}
 
 				let fetchCount = Math.min(perEndpointCount, remainingCount)
@@ -329,7 +329,7 @@ class FriendsFeed extends connect(store)(LitElement) {
 			if (newItem.schema) {
 				const resource = newItem
 
-				let clickValue1 = newItem.schema.click;
+				let clickValue1 = newItem.schema.click
 
 				newItem.link = replacePlaceholders(clickValue1, resource, newItem.schema.customParams)
 				newData.push(newItem)
@@ -381,11 +381,11 @@ class FriendsFeed extends connect(store)(LitElement) {
 
 	async loadAndMergeData() {
 		let allData = this.feed
-		const newData = await this.initialLoad();
+		const newData = await this.initialLoad()
 		allData = await this.addExtraData(newData)
-		allData = this.mergeData(newData, allData);
-		allData.sort((a, b) => new Date(b.created) - new Date(a.created));  // Sort by timestamp, most recent first
-		allData = this.trimDataToLimit(allData, maxResultsInMemory);  // Trim to the maximum allowed in memory
+		allData = this.mergeData(newData, allData)
+		allData.sort((a, b) => new Date(b.created) - new Date(a.created))  // Sort by timestamp, most recent first
+		allData = this.trimDataToLimit(allData, maxResultsInMemory)  // Trim to the maximum allowed in memory
 		allData = this.removeDuplicates(allData)
 		this.feed = [...allData]
 		this.feedToRender = this.feed.slice(0, 20)

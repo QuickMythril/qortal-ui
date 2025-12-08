@@ -33,11 +33,11 @@ class LogoutView extends connect(store)(LitElement) {
 					<hr>
 				</div>
 				<div style="text-align: center;">
-					<h2 style="color: var(--black);">${translate("logout.confirmlogout")}</h2>
+					<h2 style="color: var(--black);">${translate('logout.confirmlogout')}</h2>
 				</div>
 				<div class="buttons">
-					<mwc-button class='decline' @click=${() => this.decline()} dialog-dismiss>${translate("general.no")}</mwc-button>
-					<mwc-button class='confirm' @click=${e => this.confirm(e)} dialog-confirm autofocus>${translate("general.yes")}</mwc-button>
+					<mwc-button class='decline' @click=${() => this.decline()} dialog-dismiss>${translate('general.no')}</mwc-button>
+					<mwc-button class='confirm' @click=${e => this.confirm(e)} dialog-confirm autofocus>${translate('general.yes')}</mwc-button>
 				</div>
 			</paper-dialog>
 		`
@@ -48,7 +48,7 @@ class LogoutView extends connect(store)(LitElement) {
 	}
 
 	async confirm(e) {
-		localStorage.removeItem("symKeysCurrent")
+		localStorage.removeItem('symKeysCurrent')
 		store.dispatch(doLogout())
 		e.stopPropagation()
 	}

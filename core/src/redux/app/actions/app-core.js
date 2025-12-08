@@ -125,31 +125,31 @@ export const removeQAPPAutoAuth = (payload) => {
 }
 
 export const allowQAPPAutoBalance = (payload) => {
-    return {
-        type: ALLOW_QAPP_AUTO_BALANCE,
-        payload
-    }
+	return {
+		type: ALLOW_QAPP_AUTO_BALANCE,
+		payload
+	}
 }
 
 export const removeQAPPAutoBalance = (payload) => {
-    return {
-        type: REMOVE_QAPP_AUTO_BALANCE,
-        payload
-    }
+	return {
+		type: REMOVE_QAPP_AUTO_BALANCE,
+		payload
+	}
 }
 
 export const allowQAPPAutoTransactions = (payload) => {
-    return {
-        type: ALLOW_QAPP_AUTO_TRANSACTIONS,
-        payload
-    }
+	return {
+		type: ALLOW_QAPP_AUTO_TRANSACTIONS,
+		payload
+	}
 }
 
 export const removeQAPPAutoTransactions = (payload) => {
-    return {
-        type: REMOVE_QAPP_AUTO_TRANSACTIONS,
-        payload
-    }
+	return {
+		type: REMOVE_QAPP_AUTO_TRANSACTIONS,
+		payload
+	}
 }
 
 export const allowQAPPAutoLists = (payload) => {

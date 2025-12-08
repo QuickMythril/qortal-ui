@@ -36,7 +36,7 @@ export default class ChatTransaction extends ChatBase {
 	}
 
 	set message(message) {
-		this.messageText = message;
+		this.messageText = message
 		this._message = this.constructor.utils.stringtoUTF8Array(message)
 		this._messageLength = this.constructor.utils.int32ToBytes(this._message.length)
 	}

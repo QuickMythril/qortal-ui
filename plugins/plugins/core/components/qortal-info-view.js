@@ -130,118 +130,118 @@ class QortalInfoView extends LitElement {
 				<p style="color: var(--black);"><b>${this.displayAddress}</b></p>
 				<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingCompleteInfo ? 'block' : 'none'}">
 					<div class="loading"></div>
-					<span style="color: var(--black);">${translate("login.loading")}</span>
+					<span style="color: var(--black);">${translate('login.loading')}</span>
 				</div>
 				<div class="data-info" style="display:${this.isLoadingCompleteInfo ? 'none' : ''}">
 					<ul>
 						<li>
-							<span class="data-items">${translate("mintingpage.mchange27")}</span> ${this.displayLevel}
+							<span class="data-items">${translate('mintingpage.mchange27')}</span> ${this.displayLevel}
 						</li>
 						<li>
-							<span class="data-items">${translate("walletprofile.blocksminted")}</span> ${this.addressResult.blocksMinted + this.addressResult.blocksMintedAdjustment}
+							<span class="data-items">${translate('walletprofile.blocksminted')}</span> ${this.addressResult.blocksMinted + this.addressResult.blocksMintedAdjustment}
 						</li>
 						<li>
-							<span class="data-items">${translate("explorerpage.exp15")}</span> ${this.startMintTime}
+							<span class="data-items">${translate('explorerpage.exp15')}</span> ${this.startMintTime}
 						</li>
 						<li>
-							<span class="data-items">${translate("general.balance")}</span> ${this.displayBalance} QORT
+							<span class="data-items">${translate('general.balance')}</span> ${this.displayBalance} QORT
 						</li>
 						<li>
-							<span class="data-items">${translate("explorerpage.exp6")}</span> ${this.founderStatus()}
+							<span class="data-items">${translate('explorerpage.exp6')}</span> ${this.founderStatus()}
 						</li>
 					</ul>
 				</div>
 				<div class="data-info" style="display:${this.isLoadingCompleteInfo ? 'none' : ''}">
 					<ul>
 						<li>
-							<span class="data-items">${translate("explorerpage.exp18")}</span> ${this.allPayments.length}
+							<span class="data-items">${translate('explorerpage.exp18')}</span> ${this.allPayments.length}
 						</li>
 						<li>
-							<span class="data-items">${translate("explorerpage.exp19")}</span> ${this.allSendPayments.length}
+							<span class="data-items">${translate('explorerpage.exp19')}</span> ${this.allSendPayments.length}
 						</li>
 						<li>
-							<span class="data-items">QORT ${translate("explorerpage.exp19")}</span> ${this.totalSent.toFixed(0)} QORT
+							<span class="data-items">QORT ${translate('explorerpage.exp19')}</span> ${this.totalSent.toFixed(0)} QORT
 						</li>
 						<li>
-							<span class="data-items">${translate("explorerpage.exp20")}</span> ${this.allReceivedPayments.length}
+							<span class="data-items">${translate('explorerpage.exp20')}</span> ${this.allReceivedPayments.length}
 						</li>
 						<li>
-							<span class="data-items">QORT ${translate("explorerpage.exp20")}</span> ${this.totalReceived.toFixed(0)} QORT
+							<span class="data-items">QORT ${translate('explorerpage.exp20')}</span> ${this.totalReceived.toFixed(0)} QORT
 						</li>
 					</ul>
 				</div>
 				<div class="explorer-trades">
 					<div class="box-info">
-						<header>${translate("explorerpage.exp17")}</header>
+						<header>${translate('explorerpage.exp17')}</header>
 						<div class="border-wrapper">
 							<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingCompleteInfo ? 'block' : 'none'}">
 								<div class="loading"></div>
-								<span style="color: var(--black);">${translate("login.loading")}</span>
+								<span style="color: var(--black);">${translate('login.loading')}</span>
 							</div>
 							<vaadin-grid theme="compact" id="allQortPaymentsGrid" ?hidden="${this.isEmptyArray(this.allPayments)}" .items="${this.allPayments}">
 								<vaadin-grid-column
 									auto-width
-									header="${translate("walletpage.wchange35")}"
+									header="${translate('walletpage.wchange35')}"
 									.renderer=${(root, column, data) => {
-										render(html`
-											${translate("walletpage.wchange40")} ${data.item.creatorAddress === this.displayAddress ?
-												html`
-													<span class="color-out">${translate("walletpage.wchange7")}</span>
+		render(html`
+											${translate('walletpage.wchange40')} ${data.item.creatorAddress === this.displayAddress ?
+	html`
+													<span class="color-out">${translate('walletpage.wchange7')}</span>
 												` : html`
-													<span class="color-in">${translate("walletpage.wchange8")}</span>
+													<span class="color-in">${translate('walletpage.wchange8')}</span>
 												`
-										} `, root)
-									}}
+} `, root)
+	}}
 								>
 								</vaadin-grid-column>
-								<vaadin-grid-column auto-width header="${translate("walletpage.wchange11")}" path="amount"></vaadin-grid-column>
+								<vaadin-grid-column auto-width header="${translate('walletpage.wchange11')}" path="amount"></vaadin-grid-column>
 								<vaadin-grid-column
 									auto-width
-									header="${translate("walletpage.wchange14")}"
+									header="${translate('walletpage.wchange14')}"
 									.renderer=${(root, column, data) => {
-										const dateString = new Date(data.item.timestamp).toLocaleDateString()
-										render(html`${dateString}`, root)
-									}}
+		const dateString = new Date(data.item.timestamp).toLocaleDateString()
+		render(html`${dateString}`, root)
+	}}
 								>
 								</vaadin-grid-column>
 								<vaadin-grid-column
 									auto-width
 									resizable
-									header="${translate("explorerpage.exp7")}"
+									header="${translate('explorerpage.exp7')}"
 									.renderer=${(root, column, data) => {
-										render(html`<span @click="${() => this.showPaymentDetails(data)}"><mwc-icon class="btn-info">info</mwc-icon></span>`, root)
-									}}
+		render(html`<span @click="${() => this.showPaymentDetails(data)}"><mwc-icon class="btn-info">info</mwc-icon></span>`, root)
+	}}
 								>
 								</vaadin-grid-column>
 							</vaadin-grid>
 							${this.isEmptyArray(this.allPayments) ? html`
-								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("walletpage.wchange38")}</span>
+								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate('walletpage.wchange38')}</span>
 							`: ''}
 						</div>
 					</div>
 				</div>
 				<div class="buttons">
-					<mwc-button @click=${() => this.openTrades()}>${translate("explorerpage.exp21")}</mwc-button>
-					<mwc-button class='decline' @click=${() => this.closeCompleteInfoDialog()} dialog-dismiss>${translate("general.close")}</mwc-button>
+					<mwc-button @click=${() => this.openTrades()}>${translate('explorerpage.exp21')}</mwc-button>
+					<mwc-button class='decline' @click=${() => this.closeCompleteInfoDialog()} dialog-dismiss>${translate('general.close')}</mwc-button>
 				</div>
 			</paper-dialog>
 			<paper-dialog style="background: var(--white); border: 1px solid var(--black); border-radius: 5px;" id="userErrorDialog" modal>
 				<div class="card-container">
 					<img class="badge" src="/img/notfound.png" />
-					<h2>${translate("explorerpage.exp4")}</h2>
-					<h4>${translate("explorerpage.exp5")}</h4>
+					<h2>${translate('explorerpage.exp4')}</h2>
+					<h4>${translate('explorerpage.exp5')}</h4>
 				</div>
 				<div class="buttons">
-					<mwc-button class='decline' @click=${() => this.closeErrorDialog()} dialog-dismiss>${translate("general.close")}</mwc-button>
+					<mwc-button class='decline' @click=${() => this.closeErrorDialog()} dialog-dismiss>${translate('general.close')}</mwc-button>
 				</div>
 			</paper-dialog>
 			<paper-dialog style="background: var(--white); border: 1px solid var(--black); border-radius: 5px;" id="userTrades" modal>
 				<div class="card-container-button">
-					<mwc-button dense unelevated label="${translate("explorerpage.exp8")}" @click=${() => this.openUserBoughtDialog()}></mwc-button><br><br>
-					<mwc-button dense unelevated label="${translate("explorerpage.exp9")}" @click=${() => this.openUserSoldDialog()}></mwc-button><br><br>
+					<mwc-button dense unelevated label="${translate('explorerpage.exp8')}" @click=${() => this.openUserBoughtDialog()}></mwc-button><br><br>
+					<mwc-button dense unelevated label="${translate('explorerpage.exp9')}" @click=${() => this.openUserSoldDialog()}></mwc-button><br><br>
 				</div>
 				<div class="buttons">
-					<mwc-button class='decline' @click=${() => this.closeTrades()} dialog-dismiss>${translate("general.close")}</mwc-button>
+					<mwc-button class='decline' @click=${() => this.closeTrades()} dialog-dismiss>${translate('general.close')}</mwc-button>
 				</div>
 			</paper-dialog>
 			<paper-dialog style="background: var(--white); border: 1px solid var(--black); border-radius: 5px;" id="userBoughtDialog">
@@ -260,7 +260,7 @@ class QortalInfoView extends LitElement {
 					</div>
 				</div>
 				<div class="buttons">
-					<mwc-button class='decline' @click=${() => this.closeBoughtDialog()} dialog-dismiss>${translate("general.close")}</mwc-button>
+					<mwc-button class='decline' @click=${() => this.closeBoughtDialog()} dialog-dismiss>${translate('general.close')}</mwc-button>
 				</div>
 			</paper-dialog>
 			<paper-dialog style="background: var(--white); border: 1px solid var(--black); border-radius: 5px; overflow: auto;" id="userSoldDialog">
@@ -279,49 +279,49 @@ class QortalInfoView extends LitElement {
 					</div>
 				</div>
 				<div class="buttons">
-					<mwc-button class='decline' @click=${() => this.closeSoldDialog()} dialog-dismiss>${translate("general.close")}</mwc-button>
+					<mwc-button class='decline' @click=${() => this.closeSoldDialog()} dialog-dismiss>${translate('general.close')}</mwc-button>
 				</div>
 			</paper-dialog>
 			<paper-dialog style="background: var(--white); border: 1px solid var(--black); border-radius: 5px;" id="showTxDetailsDialog" modal>
 				<div style="text-align: center; color: var(--black);">
-					<h1>${translate("walletpage.wchange5")}</h1>
+					<h1>${translate('walletpage.wchange5')}</h1>
 					<hr />
 				</div>
 				<div id="transactionList">
-					<span class="title"> ${translate("walletpage.wchange6")} </span>
+					<span class="title"> ${translate('walletpage.wchange6')} </span>
 					<br />
 					<div>
 						<span>
-							${translate("walletpage.wchange40")} ${this.txcreatorAddress === this.displayAddress ?
-								html`
-									<span class="color-out">${translate("walletpage.wchange7")}</span>
+							${translate('walletpage.wchange40')} ${this.txcreatorAddress === this.displayAddress ?
+	html`
+									<span class="color-out">${translate('walletpage.wchange7')}</span>
 								` : html`
-									<span class="color-in">${translate("walletpage.wchange8")}</span>
+									<span class="color-in">${translate('walletpage.wchange8')}</span>
 								`
-							}
+}
 						</span>
 					</div>
-					<span class="title">${translate("walletpage.wchange9")}</span>
+					<span class="title">${translate('walletpage.wchange9')}</span>
 					<br />
 					<div><span>${this.txcreatorAddress}</span></div>
-					<span class="title">${translate("walletpage.wchange10")}</span>
+					<span class="title">${translate('walletpage.wchange10')}</span>
 					<br />
 					<div><span>${this.txrecipient}</span></div>
-					<span class="title">${translate("walletpage.wchange12")}</span>
+					<span class="title">${translate('walletpage.wchange12')}</span>
 					<br />
 					<div><span>${this.txfee} QORT</span></div>
-					<span class="title">${translate("walletpage.wchange37")}</span>
+					<span class="title">${translate('walletpage.wchange37')}</span>
 					<br />
 					<div><span>${this.txamount} QORT</span></div>
-					<span class="title">${translate("walletpage.wchange13")}</span>
+					<span class="title">${translate('walletpage.wchange13')}</span>
 					<br />
 					<div><span>${this.txblockHeight}</span></div>
-					<span class="title"> ${translate("walletpage.wchange14")} </span>
+					<span class="title"> ${translate('walletpage.wchange14')} </span>
 					<br />
 					<div><span>${new Date(this.txtimestamp).toString()}</span></div>
 				</div>
 				<div class="buttons">
-					<mwc-button class='decline' @click=${() => this.closeSoldDialog()} dialog-dismiss>${translate("general.close")}</mwc-button>
+					<mwc-button class='decline' @click=${() => this.closeSoldDialog()} dialog-dismiss>${translate('general.close')}</mwc-button>
 				</div>
 			</paper-dialog>
 		`
@@ -338,41 +338,41 @@ class QortalInfoView extends LitElement {
 		return html`
 			<div class="explorer-trades">
 				<div class="box">
-					<header>${translate("explorerpage.exp10")} (BTC)</header>
+					<header>${translate('explorerpage.exp10')} (BTC)</header>
 					<div class="border-wrapper">
-						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingBoughtTradesBTC ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate("login.loading")}</span></div>
+						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingBoughtTradesBTC ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate('login.loading')}</span></div>
 						<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="explorerBTCTradesGrid" aria-label="Explorer Bought With BTC" ?hidden="${this.isEmptyArray(this.explorerBoughtBTCTrades)}" .items="${this.explorerBoughtBTCTrades}">
 							<vaadin-grid-column
 								width="170px"
 								flex-grow="0"
-								header="${translate("tradepage.tchange11")}"
+								header="${translate('tradepage.tchange11')}"
 								.renderer=${(root, column, data) => {
-									const dateString = new Date(data.item.timestamp).toLocaleDateString()
-									render(html`${dateString}`, root)
-								}}
+		const dateString = new Date(data.item.timestamp).toLocaleDateString()
+		render(html`${dateString}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange9")} (BTC)"
+								header="${translate('tradepage.tchange9')} (BTC)"
 								.renderer=${(root, column, data) => {
-									const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
-									render(html`${price}`, root)
-								}}
+		const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
+		render(html`${price}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange8")} (QORT)"
+								header="${translate('tradepage.tchange8')} (QORT)"
 								path="qortAmount"
 							>
 							</vaadin-grid-column>
 						</vaadin-grid>
 						<div style="display:${this.isLoadingBoughtTradesBTC ? 'none' : ''}; padding: 10px;">
 							${this.isEmptyArray(this.explorerBoughtBTCTrades) ? html`
-								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("explorerpage.exp12")}</span>
+								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate('explorerpage.exp12')}</span>
 							`: ''}
 						</div>
 					</div>
@@ -385,41 +385,41 @@ class QortalInfoView extends LitElement {
 		return html`
 			<div class="explorer-trades">
 				<div class="box">
-					<header>${translate("explorerpage.exp10")} (LTC)</header>
+					<header>${translate('explorerpage.exp10')} (LTC)</header>
 					<div class="border-wrapper">
-						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingBoughtTradesLTC ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate("login.loading")}</span></div>
+						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingBoughtTradesLTC ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate('login.loading')}</span></div>
 						<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="explorerLTCTradesGrid" aria-label="Explorer Bought With LTC" ?hidden="${this.isEmptyArray(this.explorerBoughtLTCTrades)}" .items="${this.explorerBoughtLTCTrades}">
 							<vaadin-grid-column
 								width="170px"
 								flex-grow="0"
-								header="${translate("tradepage.tchange11")}"
+								header="${translate('tradepage.tchange11')}"
 								.renderer=${(root, column, data) => {
-									const dateString = new Date(data.item.timestamp).toLocaleDateString()
-									render(html`${dateString}`, root)
-								}}
+		const dateString = new Date(data.item.timestamp).toLocaleDateString()
+		render(html`${dateString}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange9")} (LTC)"
+								header="${translate('tradepage.tchange9')} (LTC)"
 								.renderer=${(root, column, data) => {
-									const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
-									render(html`${price}`, root)
-								}}
+		const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
+		render(html`${price}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange8")} (QORT)"
+								header="${translate('tradepage.tchange8')} (QORT)"
 								path="qortAmount"
 							>
 							</vaadin-grid-column>
 						</vaadin-grid>
 						<div style="display:${this.isLoadingBoughtTradesLTC ? 'none' : ''}; padding: 10px;">
 							${this.isEmptyArray(this.explorerBoughtLTCTrades) ? html`
-								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("explorerpage.exp12")}</span>
+								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate('explorerpage.exp12')}</span>
 							`: ''}
 						</div>
 					</div>
@@ -432,41 +432,41 @@ class QortalInfoView extends LitElement {
 		return html`
 			<div class="explorer-trades">
 				<div class="box">
-					<header>${translate("explorerpage.exp10")} (DOGE)</header>
+					<header>${translate('explorerpage.exp10')} (DOGE)</header>
 					<div class="border-wrapper">
-						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingBoughtTradesDOGE ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate("login.loading")}</span></div>
+						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingBoughtTradesDOGE ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate('login.loading')}</span></div>
 						<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="explorerDOGETradesGrid" aria-label="Explorer Bought With DOGE" ?hidden="${this.isEmptyArray(this.explorerBoughtDOGETrades)}" .items="${this.explorerBoughtDOGETrades}">
 							<vaadin-grid-column
 								width="170px"
 								flex-grow="0"
-								header="${translate("tradepage.tchange11")}"
+								header="${translate('tradepage.tchange11')}"
 								.renderer=${(root, column, data) => {
-									const dateString = new Date(data.item.timestamp).toLocaleDateString()
-									render(html`${dateString}`, root)
-								}}
+		const dateString = new Date(data.item.timestamp).toLocaleDateString()
+		render(html`${dateString}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange9")} (DOGE)"
+								header="${translate('tradepage.tchange9')} (DOGE)"
 								.renderer=${(root, column, data) => {
-									const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
-									render(html`${price}`, root)
-								}}
+		const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
+		render(html`${price}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange8")} (QORT)"
+								header="${translate('tradepage.tchange8')} (QORT)"
 								path="qortAmount"
 							>
 							</vaadin-grid-column>
 						</vaadin-grid>
 						<div style="display:${this.isLoadingBoughtTradesDOGE ? 'none' : ''}; padding: 10px;">
 							${this.isEmptyArray(this.explorerBoughtDOGETrades) ? html`
-								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("explorerpage.exp12")}</span>
+								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate('explorerpage.exp12')}</span>
 							`: ''}
 						</div>
 					</div>
@@ -479,41 +479,41 @@ class QortalInfoView extends LitElement {
 		return html`
 			<div class="explorer-trades">
 				<div class="box">
-					<header>${translate("explorerpage.exp10")} (DGB)</header>
+					<header>${translate('explorerpage.exp10')} (DGB)</header>
 					<div class="border-wrapper">
-						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingBoughtTradesDGB ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate("login.loading")}</span></div>
+						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingBoughtTradesDGB ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate('login.loading')}</span></div>
 						<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="explorerDGBTradesGrid" aria-label="Explorer Bought With DGB" ?hidden="${this.isEmptyArray(this.explorerBoughtDGBTrades)}" .items="${this.explorerBoughtDGBTrades}">
 							<vaadin-grid-column
 								width="170px"
 								flex-grow="0"
-								header="${translate("tradepage.tchange11")}"
+								header="${translate('tradepage.tchange11')}"
 								.renderer=${(root, column, data) => {
-									const dateString = new Date(data.item.timestamp).toLocaleDateString()
-									render(html`${dateString}`, root)
-								}}
+		const dateString = new Date(data.item.timestamp).toLocaleDateString()
+		render(html`${dateString}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange9")} (DGB)"
+								header="${translate('tradepage.tchange9')} (DGB)"
 								.renderer=${(root, column, data) => {
-									const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
-									render(html`${price}`, root)
-								}}
+		const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
+		render(html`${price}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange8")} (QORT)"
+								header="${translate('tradepage.tchange8')} (QORT)"
 								path="qortAmount"
 							>
 							</vaadin-grid-column>
 						</vaadin-grid>
 						<div style="display:${this.isLoadingBoughtTradesDGB ? 'none' : ''}; padding: 10px;">
 							${this.isEmptyArray(this.explorerBoughtDGBTrades) ? html`
-								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("explorerpage.exp12")}</span>
+								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate('explorerpage.exp12')}</span>
 							`: ''}
 						</div>
 					</div>
@@ -526,41 +526,41 @@ class QortalInfoView extends LitElement {
 		return html`
 			<div class="explorer-trades">
 				<div class="box">
-					<header>${translate("explorerpage.exp10")} (RVN)</header>
+					<header>${translate('explorerpage.exp10')} (RVN)</header>
 					<div class="border-wrapper">
-						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingBoughtTradesRVN ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate("login.loading")}</span></div>
+						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingBoughtTradesRVN ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate('login.loading')}</span></div>
 						<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="explorerRVNTradesGrid" aria-label="Explorer Bought With RVN" ?hidden="${this.isEmptyArray(this.explorerBoughtRVNTrades)}" .items="${this.explorerBoughtRVNTrades}">
 							<vaadin-grid-column
 								width="170px"
 								flex-grow="0"
-								header="${translate("tradepage.tchange11")}"
+								header="${translate('tradepage.tchange11')}"
 								.renderer=${(root, column, data) => {
-									const dateString = new Date(data.item.timestamp).toLocaleDateString()
-									render(html`${dateString}`, root)
-								}}
+		const dateString = new Date(data.item.timestamp).toLocaleDateString()
+		render(html`${dateString}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange9")} (RVN)"
+								header="${translate('tradepage.tchange9')} (RVN)"
 								.renderer=${(root, column, data) => {
-									const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
-									render(html`${price}`, root)
-								}}
+		const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
+		render(html`${price}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange8")} (QORT)"
+								header="${translate('tradepage.tchange8')} (QORT)"
 								path="qortAmount"
 							>
 							</vaadin-grid-column>
 						</vaadin-grid>
 						<div style="display:${this.isLoadingBoughtTradesRVN ? 'none' : ''}; padding: 10px;">
 							${this.isEmptyArray(this.explorerBoughtRVNTrades) ? html`
-								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("explorerpage.exp12")}</span>
+								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate('explorerpage.exp12')}</span>
 							`: ''}
 						</div>
 					</div>
@@ -573,41 +573,41 @@ class QortalInfoView extends LitElement {
 		return html`
 			<div class="explorer-trades">
 				<div class="box">
-					<header>${translate("explorerpage.exp10")} (ARRR)</header>
+					<header>${translate('explorerpage.exp10')} (ARRR)</header>
 					<div class="border-wrapper">
-						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingBoughtTradesARRR ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate("login.loading")}</span></div>
+						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingBoughtTradesARRR ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate('login.loading')}</span></div>
 						<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="explorerARRRTradesGrid" aria-label="Explorer Bought With ARRR" ?hidden="${this.isEmptyArray(this.explorerBoughtARRRTrades)}" .items="${this.explorerBoughtARRRTrades}">
 							<vaadin-grid-column
 								width="170px"
 								flex-grow="0"
-								header="${translate("tradepage.tchange11")}"
+								header="${translate('tradepage.tchange11')}"
 								.renderer=${(root, column, data) => {
-									const dateString = new Date(data.item.timestamp).toLocaleDateString()
-									render(html`${dateString}`, root)
-								}}
+		const dateString = new Date(data.item.timestamp).toLocaleDateString()
+		render(html`${dateString}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange9")} (ARRR)"
+								header="${translate('tradepage.tchange9')} (ARRR)"
 								.renderer=${(root, column, data) => {
-									const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
-									render(html`${price}`, root)
-								}}
+		const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
+		render(html`${price}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange8")} (QORT)"
+								header="${translate('tradepage.tchange8')} (QORT)"
 								path="qortAmount"
 							>
 							</vaadin-grid-column>
 						</vaadin-grid>
 						<div style="display:${this.isLoadingBoughtTradesARRR ? 'none' : ''}; padding: 10px;">
 							${this.isEmptyArray(this.explorerBoughtARRRTrades) ? html`
-								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("explorerpage.exp12")}</span>
+								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate('explorerpage.exp12')}</span>
 							`: ''}
 						</div>
 					</div>
@@ -620,41 +620,41 @@ class QortalInfoView extends LitElement {
 		return html`
 			<div class="explorer-trades">
 				<div class="box">
-					<header>${translate("explorerpage.exp11")} (BTC)</header>
+					<header>${translate('explorerpage.exp11')} (BTC)</header>
 					<div class="border-wrapper">
-						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingSoldTradesBTC ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate("login.loading")}</span></div>
+						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingSoldTradesBTC ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate('login.loading')}</span></div>
 						<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="explorerBTCTradesGrid" aria-label="Explorer Sold With BTC" ?hidden="${this.isEmptyArray(this.explorerSoldBTCTrades)}" .items="${this.explorerSoldBTCTrades}">
 							<vaadin-grid-column
 								width="170px"
 								flex-grow="0"
-								header="${translate("tradepage.tchange11")}"
+								header="${translate('tradepage.tchange11')}"
 								.renderer=${(root, column, data) => {
-									const dateString = new Date(data.item.timestamp).toLocaleDateString()
-									render(html`${dateString}`, root)
-								}}
+		const dateString = new Date(data.item.timestamp).toLocaleDateString()
+		render(html`${dateString}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange9")} (BTC)"
+								header="${translate('tradepage.tchange9')} (BTC)"
 								.renderer=${(root, column, data) => {
-									const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
-									render(html`${price}`, root)
-								}}
+		const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
+		render(html`${price}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange8")} (QORT)"
+								header="${translate('tradepage.tchange8')} (QORT)"
 								path="qortAmount"
 							>
 							</vaadin-grid-column>
 						</vaadin-grid>
 						<div style="display:${this.isLoadingSoldTradesBTC ? 'none' : ''}; padding: 10px;">
 							${this.isEmptyArray(this.explorerSoldBTCTrades) ? html`
-								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("explorerpage.exp13")}</span>
+								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate('explorerpage.exp13')}</span>
 							`: ''}
 						</div>
 					</div>
@@ -667,41 +667,41 @@ class QortalInfoView extends LitElement {
 		return html`
 			<div class="explorer-trades">
 				<div class="box">
-					<header>${translate("explorerpage.exp11")} (LTC)</header>
+					<header>${translate('explorerpage.exp11')} (LTC)</header>
 					<div class="border-wrapper">
-						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingSoldTradesLTC ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate("login.loading")}</span></div>
+						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingSoldTradesLTC ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate('login.loading')}</span></div>
 						<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="explorerLTCTradesGrid" aria-label="Explorer Sold With LTC" ?hidden="${this.isEmptyArray(this.explorerSoldLTCTrades)}" .items="${this.explorerSoldLTCTrades}">
 							<vaadin-grid-column
 								width="170px"
 								flex-grow="0"
-								header="${translate("tradepage.tchange11")}"
+								header="${translate('tradepage.tchange11')}"
 								.renderer=${(root, column, data) => {
-									const dateString = new Date(data.item.timestamp).toLocaleDateString()
-									render(html`${dateString}`, root)
-								}}
+		const dateString = new Date(data.item.timestamp).toLocaleDateString()
+		render(html`${dateString}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange9")} (LTC)"
+								header="${translate('tradepage.tchange9')} (LTC)"
 								.renderer=${(root, column, data) => {
-									const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
-									render(html`${price}`, root)
-								}}
+		const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
+		render(html`${price}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange8")} (QORT)"
+								header="${translate('tradepage.tchange8')} (QORT)"
 								path="qortAmount"
 							>
 							</vaadin-grid-column>
 						</vaadin-grid>
 						<div style="display:${this.isLoadingSoldTradesLTC ? 'none' : ''}; padding: 10px;">
 							${this.isEmptyArray(this.explorerSoldLTCTrades) ? html`
-								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("explorerpage.exp13")}</span>
+								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate('explorerpage.exp13')}</span>
 							`: ''}
 						</div>
 					</div>
@@ -714,41 +714,41 @@ class QortalInfoView extends LitElement {
 		return html`
 			<div class="explorer-trades">
 				<div class="box">
-					<header>${translate("explorerpage.exp11")} (DOGE)</header>
+					<header>${translate('explorerpage.exp11')} (DOGE)</header>
 					<div class="border-wrapper">
-						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingSoldTradesDOGE ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate("login.loading")}</span></div>
+						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingSoldTradesDOGE ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate('login.loading')}</span></div>
 						<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="explorerDOGETradesGrid" aria-label="Explorer Sold With DOGE" ?hidden="${this.isEmptyArray(this.explorerSoldDOGETrades)}" .items="${this.explorerSoldDOGETrades}">
 						<vaadin-grid-column
 								width="170px"
 								flex-grow="0"
-								header="${translate("tradepage.tchange11")}"
+								header="${translate('tradepage.tchange11')}"
 								.renderer=${(root, column, data) => {
-									const dateString = new Date(data.item.timestamp).toLocaleDateString()
-									render(html`${dateString}`, root)
-								}}
+		const dateString = new Date(data.item.timestamp).toLocaleDateString()
+		render(html`${dateString}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange9")} (DOGE)"
+								header="${translate('tradepage.tchange9')} (DOGE)"
 								.renderer=${(root, column, data) => {
-									const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
-									render(html`${price}`, root)
-								}}
+		const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
+		render(html`${price}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange8")} (QORT)"
+								header="${translate('tradepage.tchange8')} (QORT)"
 								path="qortAmount"
 							>
 							</vaadin-grid-column>
 						</vaadin-grid>
 						<div style="display:${this.isLoadingSoldTradesDOGE ? 'none' : ''}; padding: 10px;">
 							${this.isEmptyArray(this.explorerSoldDOGETrades) ? html`
-								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("explorerpage.exp13")}</span>
+								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate('explorerpage.exp13')}</span>
 							`: ''}
 						</div>
 					</div>
@@ -761,41 +761,41 @@ class QortalInfoView extends LitElement {
 		return html`
 			<div class="explorer-trades">
 				<div class="box">
-					<header>${translate("explorerpage.exp11")} (DGB)</header>
+					<header>${translate('explorerpage.exp11')} (DGB)</header>
 					<div class="border-wrapper">
-						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingSoldTradesDGB ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate("login.loading")}</span></div>
+						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingSoldTradesDGB ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate('login.loading')}</span></div>
 						<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="explorerDGBTradesGrid" aria-label="Explorer Sold With DGB" ?hidden="${this.isEmptyArray(this.explorerSoldDGBTrades)}" .items="${this.explorerSoldDGBTrades}">
 							<vaadin-grid-column
 								width="170px"
 								flex-grow="0"
-								header="${translate("tradepage.tchange11")}"
+								header="${translate('tradepage.tchange11')}"
 								.renderer=${(root, column, data) => {
-									const dateString = new Date(data.item.timestamp).toLocaleDateString()
-									render(html`${dateString}`, root)
-								}}
+		const dateString = new Date(data.item.timestamp).toLocaleDateString()
+		render(html`${dateString}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange9")} (DGB)"
+								header="${translate('tradepage.tchange9')} (DGB)"
 								.renderer=${(root, column, data) => {
-									const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
-									render(html`${price}`, root)
-								}}
+		const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
+		render(html`${price}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange8")} (QORT)"
+								header="${translate('tradepage.tchange8')} (QORT)"
 								path="qortAmount"
 							>
 							</vaadin-grid-column>
 						</vaadin-grid>
 						<div style="display:${this.isLoadingSoldTradesDGB ? 'none' : ''}; padding: 10px;">
 							${this.isEmptyArray(this.explorerSoldDGBTrades) ? html`
-								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("explorerpage.exp13")}</span>
+								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate('explorerpage.exp13')}</span>
 							`: ''}
 						</div>
 					</div>
@@ -808,41 +808,41 @@ class QortalInfoView extends LitElement {
 		return html`
 			<div class="explorer-trades">
 				<div class="box">
-					<header>${translate("explorerpage.exp11")} (RVN)</header>
+					<header>${translate('explorerpage.exp11')} (RVN)</header>
 					<div class="border-wrapper">
-						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingSoldTradesRVN ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate("login.loading")}</span></div>
+						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingSoldTradesRVN ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate('login.loading')}</span></div>
 						<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="explorerRVNTradesGrid" aria-label="Explorer Sold With RVN" ?hidden="${this.isEmptyArray(this.explorerSoldRVNTrades)}" .items="${this.explorerSoldRVNTrades}">
 							<vaadin-grid-column
 								width="170px"
 								flex-grow="0"
-								header="${translate("tradepage.tchange11")}"
+								header="${translate('tradepage.tchange11')}"
 								.renderer=${(root, column, data) => {
-									const dateString = new Date(data.item.timestamp).toLocaleDateString()
-									render(html`${dateString}`, root)
-								}}
+		const dateString = new Date(data.item.timestamp).toLocaleDateString()
+		render(html`${dateString}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange9")} (RVN)"
+								header="${translate('tradepage.tchange9')} (RVN)"
 								.renderer=${(root, column, data) => {
-									const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
-									render(html`${price}`, root)
-								}}
+		const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
+		render(html`${price}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange8")} (QORT)"
+								header="${translate('tradepage.tchange8')} (QORT)"
 								path="qortAmount"
 							>
 							</vaadin-grid-column>
 						</vaadin-grid>
 						<div style="display:${this.isLoadingSoldTradesRVN ? 'none' : ''}; padding: 10px;">
 							${this.isEmptyArray(this.explorerSoldRVNTrades) ? html`
-								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("explorerpage.exp13")}</span>
+								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate('explorerpage.exp13')}</span>
 							`: ''}
 						</div>
 					</div>
@@ -855,41 +855,41 @@ class QortalInfoView extends LitElement {
 		return html`
 			<div class="explorer-trades">
 				<div class="box">
-					<header>${translate("explorerpage.exp11")} (ARRR)</header>
+					<header>${translate('explorerpage.exp11')} (ARRR)</header>
 					<div class="border-wrapper">
-						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingSoldTradesARRR ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate("login.loading")}</span></div>
+						<div class="loadingContainer" id="loadingExplorerTrades" style="display:${this.isLoadingSoldTradesARRR ? 'block' : 'none'}"><div class="loading"></div><span style="color: var(--black);">${translate('login.loading')}</span></div>
 						<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="explorerARRRTradesGrid" aria-label="Explorer Sold With ARRR" ?hidden="${this.isEmptyArray(this.explorerSoldARRRTrades)}" .items="${this.explorerSoldARRRTrades}">
 							<vaadin-grid-column
 								width="170px"
 								flex-grow="0"
-								header="${translate("tradepage.tchange11")}"
+								header="${translate('tradepage.tchange11')}"
 								.renderer=${(root, column, data) => {
-									const dateString = new Date(data.item.timestamp).toLocaleDateString()
-									render(html`${dateString}`, root)
-								}}
+		const dateString = new Date(data.item.timestamp).toLocaleDateString()
+		render(html`${dateString}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange9")} (ARRR)"
+								header="${translate('tradepage.tchange9')} (ARRR)"
 								.renderer=${(root, column, data) => {
-									const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
-									render(html`${price}`, root)
-								}}
+		const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
+		render(html`${price}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange8")} (QORT)"
+								header="${translate('tradepage.tchange8')} (QORT)"
 								path="qortAmount"
 							>
 							</vaadin-grid-column>
 						</vaadin-grid>
 							<div style="display:${this.isLoadingSoldTradesARRR ? 'none' : ''}; padding: 10px;">
 							${this.isEmptyArray(this.explorerSoldARRRTrades) ? html`
-								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate("explorerpage.exp13")}</span>
+								<span style="color: var(--black); font-size: 16px; text-align: center;">${translate('explorerpage.exp13')}</span>
 							`: ''}
 						</div>
 					</div>
@@ -983,7 +983,7 @@ class QortalInfoView extends LitElement {
 					this.imageName = item.name
 				})
 			} else {
-				this.infoAccountName = avatarAddress || translate("general.noRegisteredName")
+				this.infoAccountName = avatarAddress || translate('general.noRegisteredName')
 				this.imageName = this.infoAccountName
 			}
 		})
@@ -1015,7 +1015,7 @@ class QortalInfoView extends LitElement {
 		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
 
 		if (checkBlocks === 0) {
-			this.startMintTime = get("explorerpage.exp16")
+			this.startMintTime = get('explorerpage.exp16')
 		} else {
 			const blockheightUrl = `${nodeUrl}/blocks/height`
 
@@ -1046,7 +1046,7 @@ class QortalInfoView extends LitElement {
 
 	founderBadge() {
 		if (this.addressResult.flags === 1) {
-			return html`<span class="founder">${translate("explorerpage.exp6")}</span>`
+			return html`<span class="founder">${translate('explorerpage.exp6')}</span>`
 		} else {
 			return html``
 		}
@@ -1054,9 +1054,9 @@ class QortalInfoView extends LitElement {
 
 	founderStatus() {
 		if (this.addressResult.flags === 1) {
-			return html`${translate("general.yes")}`
+			return html`${translate('general.yes')}`
 		} else {
-			return html`${translate("general.no")}`
+			return html`${translate('general.no')}`
 		}
 	}
 
@@ -1077,7 +1077,7 @@ class QortalInfoView extends LitElement {
 
 		this.allPayments = paymentsAll.map(item => {
 			const searchType = item.type
-			if (searchType == "PAYMENT") {
+			if (searchType == 'PAYMENT') {
 				return {
 					timestamp: item.timestamp,
 					creatorAddress: item.creatorAddress,

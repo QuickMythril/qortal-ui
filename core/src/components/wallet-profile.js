@@ -44,16 +44,16 @@ class WalletProfile extends connect(store)(LitElement) {
 						&nbsp;&nbsp;&nbsp;
 						<div id="inline-block-child">
 							<div>
-								${this.displayName || translate("general.noRegisteredName")}
+								${this.displayName || translate('general.noRegisteredName')}
 							</div>
                             				<div>
 								${this.accountInfo.addressInfo ? html`
 									<span style="margin-bottom: 8px; display: inline-block; font-size: 14px;">
-										${translate("walletprofile.minterlevel")} - <span style="color: #03a9f4;">${this.accountInfo.addressInfo.level} ${this.accountInfo.addressInfo.flags === 1 ? html`<strong>(F)</strong>` : ''}
+										${translate('walletprofile.minterlevel')} - <span style="color: #03a9f4;">${this.accountInfo.addressInfo.level} ${this.accountInfo.addressInfo.flags === 1 ? html`<strong>(F)</strong>` : ''}
 									</span>
 								` : ''}
 							</div>
-                            				<p id="blocksMinted">${translate("walletprofile.blocksminted")} - ${this.accountInfo.addressInfo.blocksMinted + this.accountInfo.addressInfo.blocksMintedAdjustment}</p>
+                            				<p id="blocksMinted">${translate('walletprofile.blocksminted')} - ${this.accountInfo.addressInfo.blocksMinted + this.accountInfo.addressInfo.blocksMintedAdjustment}</p>
 						</div>
 					</div>
 					<p id="address">${this.wallet.addresses[0].address}</p>

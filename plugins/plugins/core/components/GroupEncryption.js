@@ -69,7 +69,7 @@ export function uint8ArrayToObject(uint8Array) {
 
 export function validateSecretKey(obj) {
 	// Check if the input is an object
-	if (typeof obj !== "object" || obj === null) {
+	if (typeof obj !== 'object' || obj === null) {
 		return false
 	}
 
@@ -84,17 +84,17 @@ export function validateSecretKey(obj) {
 		const value = obj[key]
 
 		// Check that value is an object and not null
-		if (typeof value !== "object" || value === null) {
+		if (typeof value !== 'object' || value === null) {
 			return false
 		}
 
 		// Check for messageKey 
-		if (!value.hasOwnProperty("messageKey")) {
+		if (!value.hasOwnProperty('messageKey')) {
 			return false
 		}
 
 		// Ensure messageKey and nonce are non-empty strings
-		if (typeof value.messageKey !== "string" || value.messageKey.trim() === "") {
+		if (typeof value.messageKey !== 'string' || value.messageKey.trim() === '') {
 			return false
 		}
 	}
@@ -166,7 +166,7 @@ export const encryptDataGroup = (data64, publicKeys, privateKey, userPublicKey, 
 			encryptedKeys.push(encryptedKey)
 		})
 
-		const str = "qortalGroupEncryptedData"
+		const str = 'qortalGroupEncryptedData'
 		const strEncoder = new TextEncoder()
 		const strUint8Array = strEncoder.encode(str)
 
@@ -204,7 +204,7 @@ export const encryptDataGroup = (data64, publicKeys, privateKey, userPublicKey, 
 		return uint8ArrayToBase64(combinedData)
 	} catch (error) {
 		console.log('error', error)
-		throw new Error("Error in encrypting data")
+		throw new Error('Error in encrypting data')
 	}
 }
 
@@ -283,10 +283,10 @@ export const decodeBase64ForUIChatMessages = (messages) => {
 			const decoded = atob(msg.data)
 			const parseDecoded =JSON.parse(decodeURIComponent(escape(decoded)))
 		
-				msgs.push({
-					...msg,
-					...parseDecoded
-				})
+			msgs.push({
+				...msg,
+				...parseDecoded
+			})
 		
 		} catch (error) {
 			
@@ -396,7 +396,7 @@ export function decryptSingle(data64, secretKeyObject, skipDecodeBase64) {
 
 export const decryptGroupEncryptionWithSharingKey = async (data64EncryptedData, key) => {
 	const allCombined = base64ToUint8Array(data64EncryptedData)
-	const str = "qortalGroupEncryptedData"
+	const str = 'qortalGroupEncryptedData'
 	const strEncoder = new TextEncoder()
 	const strUint8Array = strEncoder.encode(str)
 
@@ -438,7 +438,7 @@ export const decryptGroupEncryptionWithSharingKey = async (data64EncryptedData, 
 
 	// Check if decryption was successful
 	if (!decryptedData) {
-		throw new Error("Decryption failed")
+		throw new Error('Decryption failed')
 	}
 
 	// Convert the decrypted Uint8Array back to a Base64 string
@@ -447,7 +447,7 @@ export const decryptGroupEncryptionWithSharingKey = async (data64EncryptedData, 
 
 export function decryptGroupDataQortalRequest(data64EncryptedData, privateKey) {
 	const allCombined = base64ToUint8Array(data64EncryptedData)
-	const str = "qortalGroupEncryptedData"
+	const str = 'qortalGroupEncryptedData'
 	const strEncoder = new TextEncoder()
 	const strUint8Array = strEncoder.encode(str)
 
@@ -489,7 +489,7 @@ export function decryptGroupDataQortalRequest(data64EncryptedData, privateKey) {
 	const combinedKeys = allCombined.slice(encryptedDataEndPosition, encryptedDataEndPosition + (count * 48))
 
 	if (!privateKey) {
-		throw new Error("Unable to retrieve keys")
+		throw new Error('Unable to retrieve keys')
 	}
 
 	const decodedPrivateKey = Base58.decode(privateKey)
@@ -517,13 +517,13 @@ export function decryptGroupDataQortalRequest(data64EncryptedData, privateKey) {
 		}
 	}
 
-	throw new Error("Unable to decrypt data")
+	throw new Error('Unable to decrypt data')
 }
 
 
 export function decryptGroupData(data64EncryptedData, privateKey) {
 	const allCombined = base64ToUint8Array(data64EncryptedData)
-	const str = "qortalGroupEncryptedData"
+	const str = 'qortalGroupEncryptedData'
 	const strEncoder = new TextEncoder()
 	const strUint8Array = strEncoder.encode(str)
 
@@ -565,7 +565,7 @@ export function decryptGroupData(data64EncryptedData, privateKey) {
 	const combinedKeys = allCombined.slice(encryptedDataEndPosition, encryptedDataEndPosition + (count * 48))
 
 	if (!privateKey) {
-		throw new Error("Unable to retrieve keys")
+		throw new Error('Unable to retrieve keys')
 	}
 
 	const decodedPrivateKey = Base58.decode(privateKey)
@@ -593,7 +593,7 @@ export function decryptGroupData(data64EncryptedData, privateKey) {
 		}
 	}
 
-	throw new Error("Unable to decrypt data")
+	throw new Error('Unable to decrypt data')
 }
 
 export function uint8ArrayStartsWith(uint8Array, string) {
@@ -615,7 +615,7 @@ export function uint8ArrayStartsWith(uint8Array, string) {
 
 export function decryptDeprecatedSingle(uint8Array, publicKey, privateKey) {
 	const combinedData = uint8Array
-	const str = "qortalEncryptedData"
+	const str = 'qortalEncryptedData'
 	const strEncoder = new TextEncoder()
 	const strUint8Array = strEncoder.encode(str)
 	const strData = combinedData.slice(0, strUint8Array.length)
@@ -624,7 +624,7 @@ export function decryptDeprecatedSingle(uint8Array, publicKey, privateKey) {
 	const _publicKey = window.parent.Base58.decode(publicKey)
 
 	if (!privateKey || !_publicKey) {
-		throw new Error("Unable to retrieve keys")
+		throw new Error('Unable to retrieve keys')
 	}
 
 	const convertedPrivateKey = ed2curve.convertSecretKey(privateKey)
@@ -637,7 +637,7 @@ export function decryptDeprecatedSingle(uint8Array, publicKey, privateKey) {
 	const _decryptedData = nacl.secretbox.open(_encryptedData, nonce, _chatEncryptionSeed)
 
 	if (!_decryptedData) {
-		throw new Error("Unable to decrypt")
+		throw new Error('Unable to decrypt')
 	}
 
 	return uint8ArrayToBase64(_decryptedData)

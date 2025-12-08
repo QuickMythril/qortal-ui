@@ -49,12 +49,12 @@ export class AvatarComponent extends connect(store)(LitElement) {
 		return html`
 			<div>
 				${this.status.status !== 'READY' ?
-					html`
+		html`
 						<mwc-icon style="user-select:none;">account_circle</mwc-icon>
 					` : ''
-				}
+}
 				${this.status.status === 'READY' ?
-					html`
+		html`
 						<div style="height: 24px;width: 24px;overflow: hidden;">
 							<img
 								src="${buildRequestUrl(`/arbitrary/THUMBNAIL/${this.name}/qortal_avatar?async=true`, store.getState())}"
@@ -63,7 +63,7 @@ export class AvatarComponent extends connect(store)(LitElement) {
 							/>
 						</div>
 					` : ''
-				}
+}
 			</div>
 		`
 	}

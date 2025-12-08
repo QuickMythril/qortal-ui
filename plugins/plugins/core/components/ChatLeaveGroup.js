@@ -32,7 +32,7 @@ class ChatLeaveGroup extends LitElement {
 
 	constructor() {
 		super()
-		this.isLoading = false;
+		this.isLoading = false
 		this.isOpenLeaveModal = false
 		this.leaveGroupObj = {}
 		this.fee = null
@@ -43,53 +43,53 @@ class ChatLeaveGroup extends LitElement {
 
 	render() {
 		return html`
-			<vaadin-icon @click=${() => {this.isOpenLeaveModal = true;}} class="top-bar-icon" style="margin: 0px 20px" icon="vaadin:exit" slot="icon"></vaadin-icon>
+			<vaadin-icon @click=${() => {this.isOpenLeaveModal = true}} class="top-bar-icon" style="margin: 0px 20px" icon="vaadin:exit" slot="icon"></vaadin-icon>
 			<!-- Leave Group Dialog -->
 			<wrapper-modal
 				.removeImage=${() => {
-					if (this.isLoading) return
-					this.isOpenLeaveModal = false
-				}}
-				style=${(this.isOpenLeaveModal) ? "display: block" : "display: none"}
+		if (this.isLoading) return
+		this.isOpenLeaveModal = false
+	}}
+				style=${(this.isOpenLeaveModal) ? 'display: block' : 'display: none'}
 			>
 				<div style="text-align:center">
-					<h1>${translate("grouppage.gchange35")}</h1>
+					<h1>${translate('grouppage.gchange35')}</h1>
 					<hr>
 				</div>
 				<div class="itemList">
-					<span class="title">${translate("grouppage.gchange4")}</span>
+					<span class="title">${translate('grouppage.gchange4')}</span>
 					<br>
 					<div><span>${this.leaveGroupObj.groupName}</span></div>
-					<span class="title">${translate("grouppage.gchange5")}</span>
+					<span class="title">${translate('grouppage.gchange5')}</span>
 					<br>
 					<div><span>${this.leaveGroupObj.description}</span></div>
-					<span class="title">${translate("grouppage.gchange10")}</span>
+					<span class="title">${translate('grouppage.gchange10')}</span>
 					<br>
 					<div><span>${this.leaveGroupObj.owner}</span></div>
-					<span class="title">${translate("grouppage.gchange31")}</span>
+					<span class="title">${translate('grouppage.gchange31')}</span>
 					<br>
 					<div><span><time-ago datetime=${this.timeIsoString(this.leaveGroupObj.created)}></time-ago></span></div>
-					${!this.leaveGroupObj.updated ? "" :
-						html`
-							<span class="title">${translate("grouppage.gchange32")}</span>
+					${!this.leaveGroupObj.updated ? '' :
+		html`
+							<span class="title">${translate('grouppage.gchange32')}</span>
 							<br>
 							<div><span><time-ago datetime=${this.timeIsoString(this.leaveGroupObj.updated)}></time-ago></span></div>
 						`
-					}
+}
 				</div>
 				<div style="text-align:right; height:36px;">
 					<span ?hidden="${!this.isLoading}">
 						<!-- loading message -->
-						${translate("grouppage.gchange36")} &nbsp;
+						${translate('grouppage.gchange36')} &nbsp;
 						<paper-spinner-lite style="margin-top:12px;" ?active="${this.isLoading}" alt="Leaving"></paper-spinner-lite>
 					</span>
 					<span ?hidden=${this.message === ''} style="${this.error ? 'color:red;' : ''}">${this.message}</span>
 				</div>
 				<button class="modal-button" ?disabled="${this.isLoading}" @click=${() => this._leaveGroup(this.leaveGroupObj.groupId, this.leaveGroupObj.groupName)}>
-					${translate("grouppage.gchange37")}
+					${translate('grouppage.gchange37')}
 				</button>
-				<button class="modal-button" ?disabled="${this.isLoading}" @click=${() => {this.isOpenLeaveModal = false;}}>
-					${translate("general.close")}
+				<button class="modal-button" ?disabled="${this.isLoading}" @click=${() => {this.isOpenLeaveModal = false}}>
+					${translate('general.close')}
 				</button>
 			</wrapper-modal>
 		`
@@ -130,7 +130,7 @@ class ChatLeaveGroup extends LitElement {
 	}
 
 	renderErr9Text() {
-		return html`${translate("grouppage.gchange49")}`
+		return html`${translate('grouppage.gchange49')}`
 	}
 
 	async confirmRelationship() {
@@ -181,15 +181,15 @@ class ChatLeaveGroup extends LitElement {
 		}
 
 		const validateReceiver = async () => {
-			let lastRef = await getLastRef();
+			let lastRef = await getLastRef()
 			let myTransaction = await makeTransactionRequest(lastRef)
 			getTxnRequestResponse(myTransaction)
 		}
 
 		// Make Transaction Request
 		const makeTransactionRequest = async (lastRef) => {
-			let groupdialog3 = get("transactions.groupdialog3")
-			let groupdialog4 = get("transactions.groupdialog4")
+			let groupdialog3 = get('transactions.groupdialog3')
+			let groupdialog4 = get('transactions.groupdialog4')
 			return await parentEpml.request('transaction', {
 				type: 32,
 				nonce: this.selectedAddress.nonce,

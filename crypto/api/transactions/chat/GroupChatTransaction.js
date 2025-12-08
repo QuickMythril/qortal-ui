@@ -3,7 +3,7 @@ import { CHAT_REFERENCE_FEATURE_TRIGGER_TIMESTAMP } from '../../constants'
 
 export default class GroupChatTransaction extends ChatBase {
 	constructor() {
-		super();
+		super()
 		this.type = 18
 		this.fee = 0
 	}

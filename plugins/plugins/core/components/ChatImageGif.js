@@ -26,7 +26,7 @@ export class ChatImageGif extends LitElement {
 	}
 
 	constructor() {
-		super();
+		super()
 		this.resource = {
 			identifier: '',
 			name: '',
@@ -54,22 +54,22 @@ export class ChatImageGif extends LitElement {
 	render() {
 
 		return html`
-			<div class=${[`image-container`, this.status.status !== 'READY' ? 'defaultSize' : '', this.status.status !== 'READY' ? 'hideImg' : '',].join(' ')}>
+			<div class=${['image-container', this.status.status !== 'READY' ? 'defaultSize' : '', this.status.status !== 'READY' ? 'hideImg' : '',].join(' ')}>
     				${this.status.status !== 'READY' ?
-					html`
+		html`
 						<div style="display: flex; flex-direction: column; width:100%; height: 100%; justify-content: center; align-items: center; position: absolute;">
-							<div class=${`smallLoading`}></div>
+							<div class=${'smallLoading'}></div>
                             				<p style="color: var(--black)">${`${Math.round(this.status.percentLoaded || 0).toFixed(0)}% `}${translate('chatpage.cchange94')}</p>
 						</div>
 					`
-					: ''
-				}
+		: ''
+}
     				${this.status.status === 'READY' ?
-					html`
+		html`
       						${this.createGif(this.url)}
     					`
-					: ''
-				}
+		: ''
+}
 			</div>
 		`
 	}
@@ -82,8 +82,8 @@ export class ChatImageGif extends LitElement {
 		const gifHTMLRes = new Image()
 		gifHTMLRes.src = gif
 		gifHTMLRes.style = 'max-width:45vh; max-height:40vh; border-radius: 5px; cursor: pointer;'
-		gifHTMLRes.onclick = () => {this.setOpenDialogGif(true);}
-		gifHTMLRes.onload = () => {this.isGifLoaded = true;}
+		gifHTMLRes.onclick = () => {this.setOpenDialogGif(true)}
+		gifHTMLRes.onload = () => {this.isGifLoaded = true}
 		gifHTMLRes.onerror = () => {
 			if (this.gifFetches < 4) {
 				setTimeout(() => {

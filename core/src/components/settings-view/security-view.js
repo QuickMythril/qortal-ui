@@ -49,15 +49,15 @@ class SecurityView extends connect(store)(LitElement) {
 			<div style="position: relative;" >
 				<div class="center-box">
 					<p>
-						${translate("settings.choose")}
+						${translate('settings.choose')}
 					</p>
 					<div style="max-width: 500px; display: flex; justify-content: center; margin: auto;">
 						<mwc-icon style="padding: 10px; padding-left:0; padding-top: 42px;">password</mwc-icon>
 						<vaadin-password-field
 							style="width: 100%; color: var(--black);"
-							label="${translate("settings.password")}"
+							label="${translate('settings.password')}"
 							id="downloadBackupPassword"
-							helper-text="${translate("login.passwordhint")}"
+							helper-text="${translate('login.passwordhint')}"
 							autofocus
 						></vaadin-password-field>
 					</div>
@@ -65,7 +65,7 @@ class SecurityView extends connect(store)(LitElement) {
 						<mwc-icon style="padding: 10px; padding-left:0; padding-top: 42px;">password</mwc-icon>
 						<vaadin-password-field
 							style="width: 100%; color: var(--black);"
-							label="${translate("login.confirmpass")}"
+							label="${translate('login.confirmpass')}"
 							id="rePassword"
 						></vaadin-password-field>
 					</div>
@@ -73,7 +73,7 @@ class SecurityView extends connect(store)(LitElement) {
 						${this.backupErrorMessage}
 					</div>
 					<div style="max-width: 500px; display: flex; justify-content: center; margin: auto;">
-						<div @click=${() => this.checkForDownload()} class="q-button"> ${translate("settings.download")} </div>
+						<div @click=${() => this.checkForDownload()} class="q-button"> ${translate('settings.download')} </div>
 					</div>
 				</div>
 				<hr style="margin-top: 20px;">
@@ -161,11 +161,11 @@ class SecurityView extends connect(store)(LitElement) {
 		const rePass = this.shadowRoot.getElementById('rePassword').value
 
 		if (checkPass === '') {
-			this.backupErrorMessage = get("login.pleaseenter")
+			this.backupErrorMessage = get('login.pleaseenter')
 		} else if (checkPass.length < 5) {
-			this.backupErrorMessage = get("login.lessthen8-2")
+			this.backupErrorMessage = get('login.lessthen8-2')
 		} else if (checkPass != rePass) {
-			this.backupErrorMessage = get("login.notmatch")
+			this.backupErrorMessage = get('login.notmatch')
 		} else {
 			this.downloadBackup()
 		}
@@ -197,7 +197,7 @@ class SecurityView extends connect(store)(LitElement) {
 			const fileHandle = await self.showSaveFilePicker({
 				suggestedName: fileName,
 				types: [{
-					description: "File"
+					description: 'File'
 				}]
 			})
 
@@ -208,9 +208,9 @@ class SecurityView extends connect(store)(LitElement) {
 				await writable.close()
 			}
 
-			writeFile(fileHandle, blob).then(() => console.log("FILE SAVED"))
+			writeFile(fileHandle, blob).then(() => console.log('FILE SAVED'))
 
-			let snack4string = get("general.save")
+			let snack4string = get('general.save')
 
 			snackbar.add({
 				labelText: `${snack4string} ${fileName} ✅`,

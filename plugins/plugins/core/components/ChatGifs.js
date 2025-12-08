@@ -42,7 +42,7 @@ class ChatGifs extends LitElement {
 	}
 
 	constructor() {
-		super();
+		super()
 		this.uid = new ShortUniqueId()
 		this.selectedAddress = window.parent.reduxStore.getState().app.selectedAddress
 		this.myGifCollections = []
@@ -68,29 +68,29 @@ class ChatGifs extends LitElement {
 						id="create-collection-button"
 						class="create-collections-icon"
 						@click=${() => {
-							if (this.isLoading) return;
-							this.mode = 'newCollection';
-						}}
+		if (this.isLoading) return
+		this.mode = 'newCollection'
+	}}
 						icon="vaadin:plus"
 						slot="icon"
 					>
 					</vaadin-icon>
 					<div class="title-row">
 						<div
-							style=${((this.currentCollection && (this.mode === 'myCollection' || this.mode === 'subscribedCollection')) || this.mode === 'explore') ? "visibility: visible;" : "visibility: hidden;"}
+							style=${((this.currentCollection && (this.mode === 'myCollection' || this.mode === 'subscribedCollection')) || this.mode === 'explore') ? 'visibility: visible;' : 'visibility: hidden;'}
 							class='collection-back-button'
 							@click=${() => {
-								if (this.mode === 'explore' && !this.currentCollection) {
-									this.mode = 'myCollection';
-									this.currentCollection = null;
-								} else if (this.mode === 'explore' && this.currentCollection) {
-									this.mode = 'explore';
-									this.currentCollection = null;
-									this.isSubscribed = false;
-								} else {
-									this.currentCollection = null;
-								}
-							}}
+		if (this.mode === 'explore' && !this.currentCollection) {
+			this.mode = 'myCollection'
+			this.currentCollection = null
+		} else if (this.mode === 'explore' && this.currentCollection) {
+			this.mode = 'explore'
+			this.currentCollection = null
+			this.isSubscribed = false
+		} else {
+			this.currentCollection = null
+		}
+	}}
 						>
 							<vaadin-icon class='collection-back-button-arrow' icon='vaadin:arrow-left' slot='icon'></vaadin-icon>
 						</div>
@@ -100,10 +100,10 @@ class ChatGifs extends LitElement {
 							id="explore-collections-icon"
 							class="explore-collections-icon"
 							@click=${() => {
-								if (this.isLoading) return;
-								this.mode = 'explore';
-								this.currentCollection = null;
-							}}
+		if (this.isLoading) return
+		this.mode = 'explore'
+		this.currentCollection = null
+	}}
 							icon="vaadin:search"
 							slot="icon"
 						>
@@ -116,11 +116,11 @@ class ChatGifs extends LitElement {
 								id="my-collections-button"
 								class=${['my-collections-button', this.mode === 'myCollection' ? 'collections-button-active' : null,].join(' ')}
 								@click=${() => {
-									if (this.isLoading) return;
-									if (this.mode === 'myCollection') return;
-									this.mode = 'myCollection';
-									this.currentCollection = null;
-								}}
+		if (this.isLoading) return
+		if (this.mode === 'myCollection') return
+		this.mode = 'myCollection'
+		this.currentCollection = null
+	}}
 							>
 								${translate('gifs.gchange3')}
 							</div>
@@ -128,11 +128,11 @@ class ChatGifs extends LitElement {
 								id="subscribed-collections-button"
 								class=${['subscribed-collections-button', this.mode === 'subscribedCollection' ? 'collections-button-active' : null,].join(' ')}
 								@click=${() => {
-									if (this.isLoading) return;
-									if (this.mode === 'subscribedCollection') return;
-									this.mode = 'subscribedCollection';
-									this.currentCollection = null;
-								}}
+		if (this.isLoading) return
+		if (this.mode === 'subscribedCollection') return
+		this.mode = 'subscribedCollection'
+		this.currentCollection = null
+	}}
 							>
 								${translate('gifs.gchange4')}
 							</div>
@@ -140,57 +140,57 @@ class ChatGifs extends LitElement {
 					</div>
 					<div class="collection-wrapper">
 						${this.mode === 'myCollection' && !this.currentCollection ?
-							html`
+		html`
 								${this.isLoading === true ?
-									html`
+		html`
 										<div class="lds-circle"><div></div></div>
 									`
-									: ''
-								}
+		: ''
+}
 								${(this.myGifCollections.length === 0 && !this.isLoading) ?
-									(html`
+		(html`
 										<div class='no-collections'>${translate('gifs.gchange13')}</div>
 									`)
-									: (html`
+		: (html`
 										${(this.myGifCollections || []).map((collection) => {
-											return html`
-												<div @click=${() => {this.currentCollection = collection;}} class='collection-card'>
+				return html`
+												<div @click=${() => {this.currentCollection = collection}} class='collection-card'>
 													${collection.identifier}
 												</div>
 											`
-										})}
+			})}
 									`)
-								}
+}
 							`
-							: ''
-						}
+		: ''
+}
 						${this.mode === 'subscribedCollection' && !this.currentCollection ?
-							html`
+		html`
 								${this.isLoading === true ? html`<div class="lds-circle"><div></div></div>` : ''}
 								${(this.mySubscribedCollections.length === 0 && !this.isLoading) ?
-									(html`
+		(html`
 										<div class='no-collections'>${translate('gifs.gchange14')}</div>
 									`)
-									: (html`
+		: (html`
 										${this.mySubscribedCollections.map((collection) => {
-											return html`
-												<div @click=${() => {this.currentCollection = collection;}} class='collection-card'>
+				return html`
+												<div @click=${() => {this.currentCollection = collection}} class='collection-card'>
     													${collection.identifier}
     												</div>
     											`
-										})}
+			})}
     									`)
-								}
+}
 							`
-							: ''
-						}
+		: ''
+}
 						${this.mode === 'explore' && !this.currentCollection ?
-							html`
+		html`
 								${this.isLoading === true ?
-									html`
+		html`
 										<div class="lds-circle"><div></div></div>
 									`
-									: html`
+		: html`
 										<chat-gifs-explore
 											currentCollection=${this.currentCollection}
 											.getAllCollections=${(val) => this.getAllCollections(val)}
@@ -200,15 +200,15 @@ class ChatGifs extends LitElement {
 										>
 										</chat-gifs-explore>
 									`
-								}
+}
 							`
-							: ''
-						}
+		: ''
+}
 						${this.currentCollection && this.mode === 'myCollection' ?
-							html`
+		html`
 								<div class='collection-gifs'>
 									${this.currentCollection.gifUrls.map((gif) => {
-										return html`
+		return html`
 											<image-component
 												.sendMessage=${(val) => this.sendMessage(val)}
 												.setOpenGifModal=${(val) => this.setOpenGifModal(val)}
@@ -218,16 +218,16 @@ class ChatGifs extends LitElement {
 											>
 											</image-component>
 										`
-									})}
+	})}
 								</div>
 							`
-							: ''
-						}
+		: ''
+}
 						${this.currentCollection && this.mode === 'subscribedCollection' ?
-							html`
+		html`
 								<div class='collection-gifs'>
 									${this.currentCollection.gifUrls.map((gif) => {
-										return html`
+		return html`
 											<image-component
 												.sendMessage=${(val) => this.sendMessage(val)}
 												.setOpenGifModal=${(val) => this.setOpenGifModal(val)}
@@ -237,16 +237,16 @@ class ChatGifs extends LitElement {
 											>
 											</image-component>
 										`
-									})}
+	})}
     								</div>
 							`
-							: ''
-						}
+		: ''
+}
     						${this.currentCollection && this.mode === 'explore' ?
-							html`
+		html`
 								<div class="collection-gifs">
     									${this.currentCollection.gifUrls.map((gif) => {
-										return html`
+		return html`
 											<image-component
 												.sendMessage=${(val) => this.sendMessage(val)}
 												.setOpenGifModal=${(val) => this.setOpenGifModal(val)}
@@ -256,26 +256,26 @@ class ChatGifs extends LitElement {
 											>
 											</image-component>
     										`
-									})}
+	})}
 								</div>
 								${this.isSubscribed ?
-									(html`
+		(html`
 										<button class='unsubscribe-button' @click=${this.unsubscribeToCollection}>
 											${translate('gifs.gchange22')}
     										</button>
 									`)
-									: (html`
+		: (html`
 										<button class='subscribe-button' @click=${this.subscribeToCollection}>
 											${translate('gifs.gchange17')}
 										</button>
 									`)
-								}
+}
     					  		`
-							: ''
-						}
+		: ''
+}
     						${this.mode === 'newCollection' && this.isLoading === false ?
-							html`
-    								<div class="new-collection-row" style=${this.gifsToBeAdded.length === 0 ? "" : "flex: 1;"}>
+		html`
+    								<div class="new-collection-row" style=${this.gifsToBeAdded.length === 0 ? '' : 'flex: 1;'}>
     									<div class="new-collection-subrow">
     										<p class="new-collection-title">
     											${translate('gifs.gchange5')}
@@ -287,17 +287,17 @@ class ChatGifs extends LitElement {
     									<div
     										@click=${() => this.shadowRoot.getElementById('file-picker-gif').click()}
     										class="new-collection-container"
-    										style=${this.gifsToBeAdded.length > 0 ? "padding: 10px 0;" : "padding: 60px 0;"}
+    										style=${this.gifsToBeAdded.length > 0 ? 'padding: 10px 0;' : 'padding: 60px 0;'}
     									>
     										<vaadin-icon id="new-collection-icon" class="new-collection-icon" icon="vaadin:folder" slot="icon"></vaadin-icon>
     										<input
 											@change="${(e) => {
-												this.addGifs(Array.from(e.target.files));
-												const filePickerInput = this.shadowRoot.getElementById('file-picker-gif');
-												if (filePickerInput) {
-													filePickerInput.value = '';
-												}
-											}}"
+		this.addGifs(Array.from(e.target.files))
+		const filePickerInput = this.shadowRoot.getElementById('file-picker-gif')
+		if (filePickerInput) {
+			filePickerInput.value = ''
+		}
+	}}"
     											id="file-picker-gif"
     											?multiple=${true}
     											type="file"
@@ -308,53 +308,53 @@ class ChatGifs extends LitElement {
     									</div>
     									<input
 										class="upload-collection-name"
-    										style=${this.gifsToBeAdded.length === 0 ? "display: none;" : "display: block;"}
-    										placeholder=${get("gifs.gchange9")}
+    										style=${this.gifsToBeAdded.length === 0 ? 'display: none;' : 'display: block;'}
+    										placeholder=${get('gifs.gchange9')}
     										.value=${this.newCollectionName}
     										@change=${(e) => {
-											this.newCollectionName = e.target.value;
-										}}
+		this.newCollectionName = e.target.value
+	}}
     									/>
     									<div class="gifs-added-col">
     										<div class="gifs-added-row">
     											${this.gifsToBeAdded.map((gif, i) => {
-												return html`
+		return html`
     													<div class="gif-input">
     														<img class="gif-input-img" src=${URL.createObjectURL(gif.file)} />
 														<input
 															class="gif-input-field"
 															.value=${gif.name}
 															@change=${(e) => {
-																this.gifsToBeAdded[i] = {
-																	...gif,
-																	name: e.target.value
-																};
-															}}
+		this.gifsToBeAdded[i] = {
+			...gif,
+			name: e.target.value
+		}
+	}}
 														/>
 													</div>
 												`
-											})}
+	})}
 										</div>
 										<div class="upload-collection-row">
-											<button class="upload-back-button" @click=${() => {this.mode = 'myCollection'; this.gifsToBeAdded = [];}}>
+											<button class="upload-back-button" @click=${() => {this.mode = 'myCollection'; this.gifsToBeAdded = []}}>
     												${translate('general.back')}
     											</button>
-    											<button style=${this.gifsToBeAdded.length === 0 ? "display: none;" : "display: block;"} class="upload-button" @click=${() => {this.uploadGifCollection();}}>
+    											<button style=${this.gifsToBeAdded.length === 0 ? 'display: none;' : 'display: block;'} class="upload-button" @click=${() => {this.uploadGifCollection()}}>
 												${translate('gifs.gchange7')}
 											</button>
 										</div>
 									</div>
 								</div>
 							`
-							: this.mode === 'newCollection' && this.isLoading === true ?
-								(html`
+		: this.mode === 'newCollection' && this.isLoading === true ?
+			(html`
 									<div>
-										<p class='gifs-loading-message'>${translate("gifs.gchange11")}</p>
+										<p class='gifs-loading-message'>${translate('gifs.gchange11')}</p>
 										<div class="lds-circle"><div></div></div>
 									</div>
 								`)
-							: ''
-						}
+			: ''
+}
 					</div>
 				</div>
 			</div>
@@ -832,7 +832,7 @@ class ChatGifs extends LitElement {
 
 				const getAnswer = async () => {
 					if (!stop) {
-						stop = true;
+						stop = true
 						try {
 							let myCollection = await parentEpml.request('apiCall',
 								{

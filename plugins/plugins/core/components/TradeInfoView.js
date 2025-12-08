@@ -58,25 +58,25 @@ class TradeInfoView extends LitElement {
 			<paper-dialog class="pds" id="tradeInfoDialog" modal>
 				<div class="card">
 					<div class="card-header">
-						<h4 class="card-title">${translate("info.inf19")}</h4>
+						<h4 class="card-title">${translate('info.inf19')}</h4>
 					</div>
 					<div class="card-body">
 						<div class="d-sm-flex align-items-center justify-content-between">
 							<div class="d-flex mb-3">
 								${this.avatarSellerImage()}
 								<div class="ms-3">
-									<p class="fw-bold cfs-18 red">${translate("tradepage.tchange13")}</p>
+									<p class="fw-bold cfs-18 red">${translate('tradepage.tchange13')}</p>
 									<p class="fw-bold cfs-18">${this.infoSellerName}</p>
 									<span class="get-user-info cfs-14" @click="${() => this.requestUserInfo(this.sellerAddress)}">${this.sellerAddress}&nbsp;&nbsp;&nbsp;&nbsp;</span>
-									<p class="cfs-14">${translate("explorerpage.exp6")}:&nbsp;${this.founderSellerStatus()}</p>
+									<p class="cfs-14">${translate('explorerpage.exp6')}:&nbsp;${this.founderSellerStatus()}</p>
 								</div>
 							</div>
 							<div class="d-flex mb-3">
 								<div class="me-sm-3 ms-3 ms-sm-0 text-sm-end order-1 order-sm-0">
-									<p class="fw-bold cfs-18 green">${translate("info.inf20")}</p>
+									<p class="fw-bold cfs-18 green">${translate('info.inf20')}</p>
 									<p class="fw-bold cfs-18">${this.infoBuyerName}</p>
 									<span class="get-user-info cfs-14" @click="${() => this.requestUserInfo(this.buyerAddress)}">&nbsp;&nbsp;&nbsp;&nbsp;${this.buyerAddress}</span>
-									<p class="cfs-14">${translate("explorerpage.exp6")}:&nbsp;${this.founderBuyerStatus()}</p>
+									<p class="cfs-14">${translate('explorerpage.exp6')}:&nbsp;${this.founderBuyerStatus()}</p>
 								</div>
 								${this.avatarBuyerImage()}
 							</div>
@@ -85,23 +85,23 @@ class TradeInfoView extends LitElement {
 							<table class="table w-100 table-borderless cmw-30">
 								<tbody>
 									<tr class="text-primary fw-bold cfs-16">
-										<td>${translate("tradepage.tchange8")} ( QORT )</td>
+										<td>${translate('tradepage.tchange8')} ( QORT )</td>
 										<td class="text-end">${this.sellqortAmount} QORT</td>
 									</tr>
 									<tr class="fw-bold cfs-16">
-										<td>${translate("tradepage.tchange9")} ( ${this.coinCode} )</td>
+										<td>${translate('tradepage.tchange9')} ( ${this.coinCode} )</td>
 										<td class="text-end">${this.priceEach} ${this.coinCode}</td>
 									</tr>
 									<tr class="fw-bold cfs-16">
-										<td>${translate("tradepage.tchange10")} ( ${this.coinCode} )</td>
+										<td>${translate('tradepage.tchange10')} ( ${this.coinCode} )</td>
 										<td class="text-end">${this.buyforeignAmount} ${this.coinCode}</td>
 									</tr>
 									<tr class="fw-bold cfs-16">
-										<td>AT ${translate("settings.address")}</td>
+										<td>AT ${translate('settings.address')}</td>
 										<td class="text-end">${this.atAddress}</td>
 									</tr>
 									<tr class="fw-bold cfs-16">
-										<td>${translate("tradepage.tchange11")}</td>
+										<td>${translate('tradepage.tchange11')}</td>
 										<td class="text-end">${this.tradeTime}</td>
 									</tr>
 								</tbody>
@@ -110,7 +110,7 @@ class TradeInfoView extends LitElement {
 					</div>
 				</div>
 				<div class="buttons">
-					<span class="btn btn-sm btn-danger mt-2 px-3 border-0" @click="${() => this.closeTradeInfo()}" dialog-dismiss>${translate("general.close")}</span>
+					<span class="btn btn-sm btn-danger mt-2 px-3 border-0" @click="${() => this.closeTradeInfo()}" dialog-dismiss>${translate('general.close')}</span>
 				</div>
 			</paper-dialog>
 			<trader-info-view></trader-info-view>
@@ -187,7 +187,7 @@ class TradeInfoView extends LitElement {
 		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
 		const sellerName = await getUserNameFromAddress(seller)
 
-		this.infoSellerName = sellerName || get("general.noRegisteredName")
+		this.infoSellerName = sellerName || get('general.noRegisteredName')
 		this.sellerImageName = sellerName || seller
 		this.sellerImage = `${nodeUrl}/arbitrary/THUMBNAIL/${this.sellerImageName}/qortal_avatar?async=true}`
 	}
@@ -199,7 +199,7 @@ class TradeInfoView extends LitElement {
 		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
 		const buyerName = await getUserNameFromAddress(buyer)
 
-		this.infoBuyerName = buyerName || get("general.noRegisteredName")
+		this.infoBuyerName = buyerName || get('general.noRegisteredName')
 		this.buyerImageName = buyerName || buyer
 		this.buyerImage = `${nodeUrl}/arbitrary/THUMBNAIL/${this.buyerImageName}/qortal_avatar?async=true`
 	}
@@ -214,17 +214,17 @@ class TradeInfoView extends LitElement {
 
 	founderSellerStatus() {
 		if (this.addressSellerResult.flags === 1) {
-			return html`<span class="green">${translate("general.yes")}</span>`
+			return html`<span class="green">${translate('general.yes')}</span>`
 		} else {
-			return html`<span class="red">${translate("general.no")}</span>`
+			return html`<span class="red">${translate('general.no')}</span>`
 		}
 	}
 
 	founderBuyerStatus() {
 		if (this.addressBuyerResult.flags === 1) {
-			return html`<span class="green">${translate("general.yes")}</span>`
+			return html`<span class="green">${translate('general.yes')}</span>`
 		} else {
-			return html`<span class="red">${translate("general.no")}</span>`
+			return html`<span class="red">${translate('general.no')}</span>`
 		}
 	}
 

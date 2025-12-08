@@ -44,8 +44,8 @@ export const getUserNameFromAddress = async (address) => {
 		const primary = await getPrimaryName(address)
 		if (primary) return primary
 
-		const getNames = await parentEpml.request("apiCall", {
-			type: "api",
+		const getNames = await parentEpml.request('apiCall', {
+			type: 'api',
 			url: `/names/address/${address}`
 		})
 
@@ -62,8 +62,8 @@ export const getUserNameFromAddress = async (address) => {
 
 export const getPrimaryName = async (address) => {
 	try {
-		const res = await parentEpml.request("apiCall", {
-			type: "api",
+		const res = await parentEpml.request('apiCall', {
+			type: 'api',
 			url: `/names/primary/${address}`
 		})
 		if (res?.name) {
@@ -78,8 +78,8 @@ export const getPrimaryName = async (address) => {
 
 export const getAllUserNames = async (address) => {
 	try {
-		const res = await parentEpml.request("apiCall", {
-			type: "api",
+		const res = await parentEpml.request('apiCall', {
+			type: 'api',
 			url: `/names/address/${address}?limit=0&reverse=true`
 		})
 		if (Array.isArray(res)) {
@@ -148,8 +148,8 @@ export const replaceMessagesEdited = async ({ decodedMessages, parentEpml, isRec
 			}
 
 			// Find new messages first
-			const newMsgResponse = await parentEpml.request("apiCall", {
-				type: "api",
+			const newMsgResponse = await parentEpml.request('apiCall', {
+				type: 'api',
 				url: `/chat/messages?chatreference=${msg.signature}&reverse=true${msgQuery}&limit=1&sender=${msg.sender}&encoding=BASE64`
 			})
 
@@ -182,21 +182,21 @@ export const replaceMessagesEdited = async ({ decodedMessages, parentEpml, isRec
 				let originalReply
 
 				if (+parsedMessageObj.version > 2) {
-					originalReply = await parentEpml.request("apiCall", {
-						type: "api",
+					originalReply = await parentEpml.request('apiCall', {
+						type: 'api',
 						url: `/chat/message/${parsedMessageObj.repliedTo}?encoding=BASE64`
 					})
 				} else {
-					originalReply = await parentEpml.request("apiCall", {
-						type: "api",
+					originalReply = await parentEpml.request('apiCall', {
+						type: 'api',
 						url: `/chat/messages?reference=${parsedMessageObj.repliedTo}&reverse=true${msgQuery}&encoding=BASE64`
 					})
 				}
 
 				const originalReplyMessage = originalReply.timestamp ? originalReply : originalReply.length > 0 ? originalReply[0] : null
 
-				const replyResponse = await parentEpml.request("apiCall", {
-					type: "api",
+				const replyResponse = await parentEpml.request('apiCall', {
+					type: 'api',
 					url: `/chat/messages?chatreference=${parsedMessageObj.repliedTo}&reverse=true${msgQuery}&limit=1&sender=${originalReplyMessage.sender}&encoding=BASE64`
 				})
 

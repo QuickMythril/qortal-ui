@@ -53,28 +53,28 @@ class MintingInfo extends LitElement {
 			return html`
 				<div>
 					<div>
-						<span class="header-title">${translate("mintingpage.mchange1")}</span>
+						<span class="header-title">${translate('mintingpage.mchange1')}</span>
 						<hr style="color: #eee; border-radius: 80%; margin-bottom: 2rem;">
 					</div>
 					<div class="sub-main">
 						<div class="center-box">
 							<div>
-								<span class="level-black">${translate("mintingpage.mchange2")}</span>
+								<span class="level-black">${translate('mintingpage.mchange2')}</span>
 								<hr style="width: 50%; color: #eee; border-radius: 80%; margin-bottom: 2rem;">
 							</div>
 							<br>
 							<div class="content-box">
-								<span class="title">${translate("mintingpage.mchange3")}</span>
+								<span class="title">${translate('mintingpage.mchange3')}</span>
 								<hr style="color: #eee; border-radius: 90%; margin-bottom: 1rem;">
-								<h4>${this._averageBlockTime()} ${translate("mintingpage.mchange25")}</h4>
+								<h4>${this._averageBlockTime()} ${translate('mintingpage.mchange25')}</h4>
 							</div>
 							<div class="content-box">
-								<span class="title">${translate("mintingpage.mchange4")}</span>
+								<span class="title">${translate('mintingpage.mchange4')}</span>
 								<hr style="color: #eee; border-radius: 90%; margin-bottom: 1rem;">
-								<h4>${this._timeCalc()} ${translate("mintingpage.mchange26")}</h4>
+								<h4>${this._timeCalc()} ${translate('mintingpage.mchange26')}</h4>
 							</div>
 							<div class="content-box">
-								<span class="title">${translate("mintingpage.mchange5")}</span>
+								<span class="title">${translate('mintingpage.mchange5')}</span>
 								<hr style="color: #eee; border-radius: 90%; margin-bottom: 1rem;">
 								<h4>${this._dayReward()} QORT</h4>
 							</div>
@@ -87,28 +87,28 @@ class MintingInfo extends LitElement {
 			return html`
 				<div>
 					<div>
-						<span class="header-title">${translate("mintingpage.mchange1")}</span>
+						<span class="header-title">${translate('mintingpage.mchange1')}</span>
 						<hr style="color: #eee; border-radius: 80%; margin-bottom: 2rem;">
 					</div>
 					<div class="sub-main">
 						<div class="center-box">
 							<div>
-								<span class="level-black">${translate("mintingpage.mchange2")}</span>
+								<span class="level-black">${translate('mintingpage.mchange2')}</span>
 								<hr style="width: 50%; color: #eee; border-radius: 80%; margin-bottom: 2rem;">
 							</div>
 							<br>
 							<div class="content-box">
-								<span class="title">${translate("mintingpage.mchange3")}</span>
+								<span class="title">${translate('mintingpage.mchange3')}</span>
 								<hr style="color: #eee; border-radius: 90%; margin-bottom: 1rem;">
-								<h4>${this._averageBlockTime()} ${translate("mintingpage.mchange25")}</h4>
+								<h4>${this._averageBlockTime()} ${translate('mintingpage.mchange25')}</h4>
 							</div>
 							<div class="content-box">
-								<span class="title">${translate("mintingpage.mchange4")}</span>
+								<span class="title">${translate('mintingpage.mchange4')}</span>
 								<hr style="color: #eee; border-radius: 90%; margin-bottom: 1rem;">
-								<h4>${this._timeCalc()} ${translate("mintingpage.mchange26")}</h4>
+								<h4>${this._timeCalc()} ${translate('mintingpage.mchange26')}</h4>
 							</div>
 							<div class="content-box">
-								<span class="title">${translate("mintingpage.mchange5")}</span>
+								<span class="title">${translate('mintingpage.mchange5')}</span>
 								<hr style="color: #eee; border-radius: 90%; margin-bottom: 1rem;">
 								<h4>${this._dayReward()} QORT</h4>
 							</div>
@@ -119,58 +119,58 @@ class MintingInfo extends LitElement {
 							</div>
 							<br>
 							<div class="content-box">
-								<span class="title">${translate("mintingpage.mchange15")}</span>
+								<span class="title">${translate('mintingpage.mchange15')}</span>
 								<hr style="color: #eee; border-radius: 90%; margin-bottom: 1rem;">
 								<h4><span class=${this.cssMinting}>${this._mintingStatus()}</span></h4>
 							</div>
 							<div class="content-box">
-								<span class="title">${translate("mintingpage.mchange16")}</span>
+								<span class="title">${translate('mintingpage.mchange16')}</span>
 								<hr style="color: #eee; border-radius: 90%; margin-bottom: 1rem;">
-								<h4>${translate("mintingpage.mchange27")} ${this.addressInfo.level}</h4>
+								<h4>${translate('mintingpage.mchange27')} ${this.addressInfo.level}</h4>
 							</div>
 							<div class="content-box">
-								<span class="title">${translate("mintingpage.mchange17")}</span>
+								<span class="title">${translate('mintingpage.mchange17')}</span>
 								<hr style="color: #eee; border-radius: 90%; margin-bottom: 1rem;">
-								<h4>${this._levelUpBlocks()} ${translate("mintingpage.mchange26")}</h4>
+								<h4>${this._levelUpBlocks()} ${translate('mintingpage.mchange26')}</h4>
 							</div>
 							<br>
 							<div>
 								<span class="level-black">
-									${translate("mintingpage.mchange18")}
+									${translate('mintingpage.mchange18')}
 									<div class="level-blue">${this._levelUp()}</div>
-									${translate("mintingpage.mchange38")}
+									${translate('mintingpage.mchange38')}
 									<div class="level-blue">${this._levelUpDays()}</div>
-									${translate("mintingpage.mchange29")} !
+									${translate('mintingpage.mchange29')} !
 								</span>
 							</div>
 							<br><br><br>
 							<div>
-								<span class="level-black">${translate("mintingpage.mchange19")}</span>
+								<span class="level-black">${translate('mintingpage.mchange19')}</span>
 								<hr style="width: 50%; color: #eee; border-radius: 80%; margin-bottom: 2rem;">
 							</div>
 							<br>
 							<div class="content-box">
-								<span class="title">${translate("mintingpage.mchange20")}</span>
+								<span class="title">${translate('mintingpage.mchange20')}</span>
 								<hr style="color: #eee; border-radius: 90%; margin-bottom: 1rem;">
 								<h4>${this._currentTier()}</h4>
 							</div>
 							<div class="content-box">
-								<span class="title">${translate("mintingpage.mchange21")}</span>
+								<span class="title">${translate('mintingpage.mchange21')}</span>
 								<hr style="color: #eee; border-radius: 90%; margin-bottom: 1rem;">
-								<h4>${this._countLevels()} ${translate("mintingpage.mchange30")}</h4>
+								<h4>${this._countLevels()} ${translate('mintingpage.mchange30')}</h4>
 							</div>
 							<div class="content-box">
-								<span class="title">${translate("mintingpage.mchange22")}</span>
+								<span class="title">${translate('mintingpage.mchange22')}</span>
 								<hr style="color: #eee; border-radius: 90%; margin-bottom: 1rem;">
 								<h4>${this._tierPercent()} %</h4>
 							</div>
 							<div class="content-box">
-								<span class="title">${translate("mintingpage.mchange23")}</span>
+								<span class="title">${translate('mintingpage.mchange23')}</span>
 								<hr style="color: #eee; border-radius: 90%; margin-bottom: 1rem;">
 								<h4>${this._countReward()} QORT</h4>
 							</div>
 							<div class="content-box">
-								<span class="title">${translate("mintingpage.mchange24")}</span>
+								<span class="title">${translate('mintingpage.mchange24')}</span>
 								<hr style="color: #eee; border-radius: 90%; margin-bottom: 1rem;">
 								<h4>${this._countRewardDay()} QORT</h4>
 							</div>
@@ -179,22 +179,22 @@ class MintingInfo extends LitElement {
 					<!-- Become A Minter Dialog -->
 					<mwc-dialog id="becomeMinterDialog">
 						<div style="text-align:center">
-							<h2>${translate("mintingpage.mchange32")}</h2>
+							<h2>${translate('mintingpage.mchange32')}</h2>
 							<hr>
 						</div>
 						<div>
-							<h3>${translate("mintingpage.mchange33")}</h3>
+							<h3>${translate('mintingpage.mchange33')}</h3>
 							<br />
-							${translate("mintingpage.mchange34")}
+							${translate('mintingpage.mchange34')}
 						</div>
 						<div>
-							<h3>${translate("mintingpage.mchange35")}</h3>
+							<h3>${translate('mintingpage.mchange35')}</h3>
 							<br />
-							${translate("mintingpage.mchange36")}
+							${translate('mintingpage.mchange36')}
 							<br />
-							${translate("mintingpage.mchange37")}
+							${translate('mintingpage.mchange37')}
 						</div>
-						<mwc-button slot="primaryAction" dialogAction="cancel" class="red-button">${translate("general.close")}</mwc-button>
+						<mwc-button slot="primaryAction" dialogAction="cancel" class="red-button">${translate('general.close')}</mwc-button>
 					</mwc-dialog>
 				</div>
 			`
@@ -211,7 +211,7 @@ class MintingInfo extends LitElement {
 
 		const getAdminInfo = () => {
 			if (this.blocked) return
-			parentEpml.request('apiCall', { url: `/admin/info` }).then((res) => {
+			parentEpml.request('apiCall', { url: '/admin/info' }).then((res) => {
 				setTimeout(() => { this.adminInfo = res }, 1)
 			})
 			setTimeout(getAdminInfo, 30000)
@@ -219,7 +219,7 @@ class MintingInfo extends LitElement {
 
 		const getNodeInfo = () => {
 			if (this.blocked) return
-			parentEpml.request('apiCall', { url: `/admin/status` }).then((res) => {
+			parentEpml.request('apiCall', { url: '/admin/status' }).then((res) => {
 				this.nodeInfo = res
 				// Now look up the sample block
 				getSampleBlock()
@@ -307,7 +307,7 @@ class MintingInfo extends LitElement {
 
 	async getAddressLevel() {
 		this.addressLevel = await parentEpml.request('apiCall', {
-			url: `/addresses/online/levels`
+			url: '/addresses/online/levels'
 		})
 		this.tier4Online = parseFloat(this.addressLevel[7].count) + parseFloat(this.addressLevel[8].count)
 	}

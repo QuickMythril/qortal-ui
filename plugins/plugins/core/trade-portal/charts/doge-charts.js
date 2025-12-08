@@ -15,7 +15,7 @@ import '@polymer/paper-dialog/paper-dialog.js'
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../../core/translate'
 registerTranslateConfig({
-  loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
+	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
 })
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
@@ -50,7 +50,7 @@ class DogeCharts extends LitElement {
 		return html`
 			<paper-dialog id="loadChartDialog" class="chart-loading-wrapper" modal>
 				<div class="loadingContainer" style="display:${this.isLoadingTradesChart ? 'inline-block' : 'none'}">
-					<span style="color: var(--black);">${translate("login.loading")}</span>
+					<span style="color: var(--black);">${translate('login.loading')}</span>
 				</div>
 			</paper-dialog>
 			<paper-dialog id="dogeChartDialog" class="chart-info-wrapper">
@@ -88,7 +88,7 @@ class DogeCharts extends LitElement {
 	async getDogeTrades() {
 		let currentDogeTimestamp = Date.now()
 		const monthBackDoge = currentDogeTimestamp - 31556952000
-           	await parentEpml.request("apiCall", { url: `/crosschain/trades?foreignBlockchain=DOGECOIN&minimumTimestamp=${monthBackDoge}&limit=0&reverse=false` }).then((res) => {
+           	await parentEpml.request('apiCall', { url: `/crosschain/trades?foreignBlockchain=DOGECOIN&minimumTimestamp=${monthBackDoge}&limit=0&reverse=false` }).then((res) => {
 			this.dogeTrades = res
 		})
 		this.dogePrice = this.dogeTrades.map(item => {
@@ -98,8 +98,8 @@ class DogeCharts extends LitElement {
 	}
 
 	enableDogeStockPriceChart() {
-            const dogeStockPriceData = this.dogePrice
-            const header = 'QORT / DOGE ' + get("tradepage.tchange49")
+		const dogeStockPriceData = this.dogePrice
+		const header = 'QORT / DOGE ' + get('tradepage.tchange49')
 		Highcharts.stockChart(this.shadowRoot.querySelector('#dogeStockPriceContainer'), {
 			accessibility: {
 				enabled: false
@@ -151,7 +151,7 @@ class DogeCharts extends LitElement {
 	changeTheme() {
 		const checkTheme = localStorage.getItem('qortalTheme')
 		this.theme = (checkTheme === 'dark') ? 'dark' : 'light'
-		document.querySelector('html').setAttribute('theme', this.theme);
+		document.querySelector('html').setAttribute('theme', this.theme)
 	}
 
 	changeLanguage() {

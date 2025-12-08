@@ -69,7 +69,7 @@ class FriendsView extends connect(store)(LitElement) {
 	render() {
 		return html`
 			<div class="container">
-				<div id="viewElement" class="container-body" style=${"position: relative"}>
+				<div id="viewElement" class="container-body" style=${'position: relative'}>
 					<p class="group-name">My Friends</p>
 					<div class="search-field">
 						<input
@@ -77,13 +77,13 @@ class FriendsView extends connect(store)(LitElement) {
 							class="name-input"
 							?disabled=${this.isLoading}
 							id="sendTo"
-							placeholder="${translate("friends.friend1")}"
+							placeholder="${translate('friends.friend1')}"
 							value=${this.userSelected.name ? this.userSelected.name : ''}
 							@keypress=${(e) => {
-								if (e.key === 'Enter') {
-									this.userSearch()
-								}
-							}}
+		if (e.key === 'Enter') {
+			this.userSearch()
+		}
+	}}
 						>
 						<vaadin-icon
 							@click=${this.userSearch}
@@ -96,15 +96,15 @@ class FriendsView extends connect(store)(LitElement) {
 					<div class="search-results-div">
 						<chat-search-results
 							.onClickFunc=${(result) => {
-								this.userSelected = result;
-								this.isOpenAddFriendsModal = true
-								this.userFound = [];
-								this.userFoundModalOpen = false;
-							}}
+		this.userSelected = result
+		this.isOpenAddFriendsModal = true
+		this.userFound = []
+		this.userFoundModalOpen = false
+	}}
 							.closeFunc=${() => {
-								this.userFoundModalOpen = false;
-								this.userFound = [];
-							}}
+		this.userFoundModalOpen = false
+		this.userFound = []
+	}}
 							.searchResults=${this.userFound}
 							?isOpen=${this.userFoundModalOpen}
 							?loading=${this.isLoading}
@@ -112,7 +112,7 @@ class FriendsView extends connect(store)(LitElement) {
 						</chat-search-results>
 					</div>
 					${this.friendList.map((item) => {
-						return html`
+		return html`
 							<chat-side-nav-heads
 								activeChatHeadUrl=""
 								.setActiveChatHeadUrl=${(val) => { }}
@@ -122,15 +122,15 @@ class FriendsView extends connect(store)(LitElement) {
 							>
 							</chat-side-nav-heads>
 						`
-					})}
+	})}
 					<div id="downObserver"></div>
 				</div>
 			</div>
 			<add-friends-modal
 				?isOpen=${this.isOpenAddFriendsModal}
 				.setIsOpen=${(val) => {
-					this.isOpenAddFriendsModal = val
-				}}
+		this.isOpenAddFriendsModal = val
+	}}
 				.userSelected=${this.userSelected}
 				.onSubmit=${(val, isRemove) => this.addToFriendList(val, isRemove)}
 				.editContent=${this.editContent}
@@ -145,8 +145,8 @@ class FriendsView extends connect(store)(LitElement) {
 		this.viewElement = this.shadowRoot.getElementById('viewElement')
 		this.downObserverElement = this.shadowRoot.getElementById('downObserver')
 		this.elementObserver()
-		this.mySelectedFeeds = JSON.parse(localStorage.getItem('friends-my-selected-feeds') || "[]")
-		this.friendList = JSON.parse(localStorage.getItem('friends-my-friend-list') || "[]")
+		this.mySelectedFeeds = JSON.parse(localStorage.getItem('friends-my-selected-feeds') || '[]')
+		this.friendList = JSON.parse(localStorage.getItem('friends-my-friend-list') || '[]')
 	}
 
 	getMoreFriends() { }
@@ -161,7 +161,7 @@ class FriendsView extends connect(store)(LitElement) {
 	}
 
 	_addFriend(event) {
-		const name = event.detail;
+		const name = event.detail
 		const findFriend = this.friendList.find((friend) => friend.name === name)
 		if (findFriend) {
 			this.editContent = { ...findFriend, mySelectedFeeds: this.mySelectedFeeds }
@@ -216,7 +216,7 @@ class FriendsView extends connect(store)(LitElement) {
 
 		} else {
 			if (this.friendList.length < 20) {
-				return;
+				return
 			}
 
 			this.getMoreFriends()
@@ -229,7 +229,7 @@ class FriendsView extends connect(store)(LitElement) {
 		if (!nameValue) {
 			this.userFound = []
 			this.userFoundModalOpen = true
-			return;
+			return
 		}
 
 		try {
@@ -245,7 +245,7 @@ class FriendsView extends connect(store)(LitElement) {
 				]
 			}
 
-			this.userFoundModalOpen = true;
+			this.userFoundModalOpen = true
 		} catch (error) {
 			// let err4string = get("chatpage.cchange35")
 			// parentEpml.request('showSnackBar', `${err4string}`)
@@ -262,10 +262,10 @@ class FriendsView extends connect(store)(LitElement) {
 			name
 		]
 
-		let namesJsonString = JSON.stringify({ "items": items })
+		let namesJsonString = JSON.stringify({ 'items': items })
 
 		return await parentEpml.request('apiCall', {
-			url: buildRequestUrl(`/lists/followedNames`, store.getState()),
+			url: buildRequestUrl('/lists/followedNames', store.getState()),
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -284,10 +284,10 @@ class FriendsView extends connect(store)(LitElement) {
 			name
 		]
 
-		let namesJsonString = JSON.stringify({ "items": items })
+		let namesJsonString = JSON.stringify({ 'items': items })
 
 		return await parentEpml.request('apiCall', {
-			url: buildRequestUrl(`/lists/followedNames`, store.getState()),
+			url: buildRequestUrl('/lists/followedNames', store.getState()),
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json'
@@ -341,8 +341,8 @@ class FriendsView extends connect(store)(LitElement) {
 	}
 
 	setMyFriends(friendList) {
-		localStorage.setItem('friends-my-friend-list', JSON.stringify(friendList));
-		const tempSettingsData = JSON.parse(localStorage.getItem('temp-settings-data') || "{}")
+		localStorage.setItem('friends-my-friend-list', JSON.stringify(friendList))
+		const tempSettingsData = JSON.parse(localStorage.getItem('temp-settings-data') || '{}')
 		const newTemp = {
 			...tempSettingsData,
 			userLists: {
@@ -363,7 +363,7 @@ class FriendsView extends connect(store)(LitElement) {
 
 	setMySelectedFeeds(mySelectedFeeds) {
 		this.mySelectedFeeds = mySelectedFeeds
-		const tempSettingsData = JSON.parse(localStorage.getItem('temp-settings-data') || "{}")
+		const tempSettingsData = JSON.parse(localStorage.getItem('temp-settings-data') || '{}')
 
 		const newTemp = {
 			...tempSettingsData,
@@ -384,7 +384,7 @@ class FriendsView extends connect(store)(LitElement) {
 	}
 
 	onClose() {
-		this.isLoading = false;
+		this.isLoading = false
 		this.isOpenAddFriendsModal = false
 		this.editContent = null
 		this.userSelected = {}

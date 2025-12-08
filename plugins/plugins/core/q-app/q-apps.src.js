@@ -83,14 +83,14 @@ class QApps extends LitElement {
 		return html`
 			<div id="apps-list-page">
 				<mwc-tab-bar id="tabs-1" activeIndex="0">
-					<mwc-tab label="${translate("appspage.schange1")}" icon="travel_explore" @click="${(e) => this.displayTabContent('browse')}"></mwc-tab>
-					<mwc-tab label="${translate("appspage.schange2")}" icon="desktop_windows" @click="${(e) => this.displayTabContent('followed')}"></mwc-tab>
-					<mwc-tab label="${translate("appspage.schange3")}" icon="block" @click="${(e) => this.displayTabContent('blocked')}"></mwc-tab>
+					<mwc-tab label="${translate('appspage.schange1')}" icon="travel_explore" @click="${(e) => this.displayTabContent('browse')}"></mwc-tab>
+					<mwc-tab label="${translate('appspage.schange2')}" icon="desktop_windows" @click="${(e) => this.displayTabContent('followed')}"></mwc-tab>
+					<mwc-tab label="${translate('appspage.schange3')}" icon="block" @click="${(e) => this.displayTabContent('blocked')}"></mwc-tab>
 				</mwc-tab-bar>
 				<div id="tabs-1-content">
 					<div id="tab-browse-content">
 						<div style="min-height:48px; display: flex; padding-bottom: 6px; margin: 2px;">
-							<h2 style="margin: 0; padding-top: .5em; display: inline;">${translate("appspage.schange1")}</h2>
+							<h2 style="margin: 0; padding-top: .5em; display: inline;">${translate('appspage.schange1')}</h2>
 							<h2 style="margin: 0; flex: 6; padding-top: .5em; display: inline;">${this.renderSearchButton()}</h2>
 							<h2 style="margin: 0; padding-top: .5em; display: inline;">${this.renderPublishButton()}</h2>
 						</div>
@@ -104,7 +104,7 @@ class QApps extends LitElement {
 					</div>
 					<div id="tab-followed-content">
 						<div style="min-height:48px; display: flex; padding-bottom: 6px; margin: 2px;">
-							<h2 style="margin: 0; padding-top: .5em; display: inline;">${translate("appspage.schange11")}</h2>
+							<h2 style="margin: 0; padding-top: .5em; display: inline;">${translate('appspage.schange11')}</h2>
 							<h2 style="margin: 0; flex: 6; padding-top: .5em; display: inline;">${this.renderSearchButton()}</h2>
 							<h2 style="margin: 0; padding-top: .5em; display: inline;">${this.renderPublishButton()}</h2>
 						</div>
@@ -115,13 +115,13 @@ class QApps extends LitElement {
 							</div>
 						` : ''}
 						${this.isEmptyArray(this.followedResources) ? html`
-							<div class="relay-mode-notice">${translate("appspage.schange13")}</div>
+							<div class="relay-mode-notice">${translate('appspage.schange13')}</div>
 						` : ''}
 						${this.renderRelayModeText()}
 					</div>
 					<div id="tab-blocked-content">
 						<div style="min-height:48px; display: flex; padding-bottom: 6px; margin: 2px;">
-							<h2 style="margin: 0; padding-top: .5em; display: inline;">${translate("appspage.schange14")}</h2>
+							<h2 style="margin: 0; padding-top: .5em; display: inline;">${translate('appspage.schange14')}</h2>
 							<h2 style="margin: 0; flex: 6; padding-top: .5em; display: inline;">${this.renderSearchButton()}</h2>
 							<h2 style="margin: 0; padding-top: .5em; display: inline;">${this.renderPublishButton()}</h2>
 						</div>
@@ -132,7 +132,7 @@ class QApps extends LitElement {
 							</div>
 						` : ''}
 						${this.isEmptyArray(this.blockedResources) ? html`
-							<div class="relay-mode-notice">${translate("appspage.schange16")}</div>
+							<div class="relay-mode-notice">${translate('appspage.schange16')}</div>
 						` : ''}
 						${this.renderRelayModeText()}
 					</div>
@@ -144,20 +144,20 @@ class QApps extends LitElement {
 						<vaadin-text-field
 							style="width: 350px"
 							id="searchName"
-							placeholder="${translate("appspage.schange33")}"
+							placeholder="${translate('appspage.schange33')}"
 							value="${this.searchName}"
 							@keydown="${this.searchListener}"
 							clear-button-visible
 						>
 						</vaadin-text-field>
-						<paper-icon-button icon="icons:search" @click="${(e) => this.doSearch(e)}" title="${translate("appspage.schange35")}"></paper-icon-button>
-						<paper-icon-button icon="icons:close" @click="${() => this.closeSearchDialog()}" title="${translate("general.close")}"></paper-icon-button>
+						<paper-icon-button icon="icons:search" @click="${(e) => this.doSearch(e)}" title="${translate('appspage.schange35')}"></paper-icon-button>
+						<paper-icon-button icon="icons:close" @click="${() => this.closeSearchDialog()}" title="${translate('general.close')}"></paper-icon-button>
 					</div>
 				</div>
 				<div id="search-container" class="grid-container-search"></div>
 			</paper-dialog>
 			<paper-dialog id="downloadProgressDialog" class="progress" modal>
-				<span class="close-download"><paper-icon-button icon="icons:close" @click="${() => this.closeDownloadProgressDialog()}" title="${translate("general.close")}"></paper-icon-button></span>
+				<span class="close-download"><paper-icon-button icon="icons:close" @click="${() => this.closeDownloadProgressDialog()}" title="${translate('general.close')}"></paper-icon-button></span>
 				<div class="lds-roller">
 					<div></div>
 					<div></div>
@@ -168,20 +168,20 @@ class QApps extends LitElement {
 					<div></div>
 					<div></div>
 				</div>
-				<h2>${translate("appspage.schange41")}</h2>
+				<h2>${translate('appspage.schange41')}</h2>
 				<h3>${this.textProgress}</h3>
 			</paper-dialog>
 			<paper-dialog id="closeProgressDialog" class="close-progress" modal>
-				${translate("appspage.schange43")}
+				${translate('appspage.schange43')}
 			</paper-dialog>
 			<paper-dialog id="appInfoDialog" class="appinfo" modal>
 				<div class="card-container">
 					${this.appBlock}
-					<span class="close" @click=${() => this.closeAppInfoDialog()}>${translate("general.close")}</span>
+					<span class="close" @click=${() => this.closeAppInfoDialog()}>${translate('general.close')}</span>
 					<img src="${this.appIconUrl}" onerror="this.src='/img/incognito.png';">
 					<h3>${this.appTitle}</h3>
 					<h5>
-					${translate("appspage.schange7")}: ${this.appPublisher}</h6>
+					${translate('appspage.schange7')}: ${this.appPublisher}</h6>
 					<p>${this.appDescription}</p>
 					<div class="tags">
 						<h6>TAGS</h6>
@@ -198,11 +198,11 @@ class QApps extends LitElement {
 			<paper-dialog id="blockedInfodDialog" class="appinfo" modal>
 				<div class="card-container">
 					${this.appBlock}
-					<span class="close" @click=${() => this.closeBlockedInfoDialog()}>${translate("general.close")}</span>
+					<span class="close" @click=${() => this.closeBlockedInfoDialog()}>${translate('general.close')}</span>
 					<img src="${this.appIconUrl}" onerror="this.src='/img/incognito.png';">
 					<h3>${this.appTitle}</h3>
 					<h5>
-					${translate("appspage.schange7")}: ${this.appPublisher}</h6>
+					${translate('appspage.schange7')}: ${this.appPublisher}</h6>
 					<p>${this.appDescription}</p>
 					<div class="tags">
 						<h6>TAGS</h6>
@@ -359,7 +359,7 @@ class QApps extends LitElement {
 		this.appsArray = []
 
 		this.appsArray = await parentEpml.request('apiCall', {
-			url: `/arbitrary/resources?service=APP&default=true&limit=0&reverse=false&includestatus=true&includemetadata=true&excludeblocked=true`
+			url: '/arbitrary/resources?service=APP&default=true&limit=0&reverse=false&includestatus=true&includemetadata=true&excludeblocked=true'
 		})
 
 		this.isLoading = false
@@ -476,7 +476,7 @@ class QApps extends LitElement {
 		this.isLoading = true
 
 		this.followedResources = await parentEpml.request('apiCall', {
-			url: `/arbitrary/resources?service=APP&default=true&limit=0&reverse=false&includestatus=true&includemetadata=true&namefilter=followedNames`
+			url: '/arbitrary/resources?service=APP&default=true&limit=0&reverse=false&includestatus=true&includemetadata=true&namefilter=followedNames'
 		})
 
 		this.isLoading = false
@@ -596,7 +596,7 @@ class QApps extends LitElement {
 		this.blockedResources = []
 
 		this.blockedResources = await parentEpml.request('apiCall', {
-			url: `/arbitrary/resources?service=APP&default=true&limit=0&reverse=false&includestatus=true&includemetadata=true&namefilter=blockedNames`
+			url: '/arbitrary/resources?service=APP&default=true&limit=0&reverse=false&includestatus=true&includemetadata=true&namefilter=blockedNames'
 		})
 
 		this.isLoading = false

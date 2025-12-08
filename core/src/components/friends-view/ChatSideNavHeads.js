@@ -55,64 +55,64 @@ class ChatSideNavHeads extends connect(store)(LitElement) {
 			<li
 				style="display:flex; justify-content: space-between; align-items: center" 
 				@click=${(e) => {
-					const target = e.target
-					const popover = this.shadowRoot.querySelector('friend-item-actions');
-					if (popover) {
-						popover.openPopover(target);
-					}
-				}}
+		const target = e.target
+		const popover = this.shadowRoot.querySelector('friend-item-actions')
+		if (popover) {
+			popover.openPopover(target)
+		}
+	}}
 				class="clearfix" id=${`friend-item-parent-${this.chatInfo.name}`}
 			>
 				<div style="display:flex; flex-grow: 1; align-items: center">
 					${this.isImageLoaded ? html`${avatarImg}` : html``}
 					${!this.isImageLoaded && !this.chatInfo.name && !this.chatInfo.groupName ?
-						html`
+		html`
 							<mwc-icon class="img-icon">account_circle</mwc-icon>
 						`
-						: html``
-					}
+		: html``
+}
 					${!this.isImageLoaded && this.chatInfo.name ?
-						html`
+		html`
 							<div
 								style="width:30px; height:30px; float: left; border-radius:50%; background: ${this.activeChatHeadUrl === this.chatInfo.url
-								? "var(--chatHeadBgActive)"
-								: "var(--chatHeadBg)"}; color: ${this.activeChatHeadUrl === this.chatInfo.url
-								? "var(--chatHeadTextActive)"
-								: "var(--chatHeadText)"}; font-weight:bold; display: flex; justify-content: center; align-items: center; text-transform: capitalize"
+		? 'var(--chatHeadBgActive)'
+		: 'var(--chatHeadBg)'}; color: ${this.activeChatHeadUrl === this.chatInfo.url
+	? 'var(--chatHeadTextActive)'
+	: 'var(--chatHeadText)'}; font-weight:bold; display: flex; justify-content: center; align-items: center; text-transform: capitalize"
 							>
 								${this.chatInfo.name.charAt(0)}
 							</div>
 						` : ''
-					}
+}
 					${!this.isImageLoaded && this.chatInfo.groupName ?
-						html`
+		html`
 							<div
 								style="width:30px; height:30px; float: left; border-radius:50%; background: ${this.activeChatHeadUrl === this.chatInfo.url
-								? "var(--chatHeadBgActive)"
-								: "var(--chatHeadBg)"}; color: ${this.activeChatHeadUrl === this.chatInfo.url
-								? "var(--chatHeadTextActive)"
-								: "var(--chatHeadText)"}; font-weight:bold; display: flex; justify-content: center; align-items: center; text-transform: capitalize"
+		? 'var(--chatHeadBgActive)'
+		: 'var(--chatHeadBg)'}; color: ${this.activeChatHeadUrl === this.chatInfo.url
+	? 'var(--chatHeadTextActive)'
+	: 'var(--chatHeadText)'}; font-weight:bold; display: flex; justify-content: center; align-items: center; text-transform: capitalize"
 							>
 								${this.chatInfo.groupName.charAt(0)}
 							</div>
 						` : ''
-					}
+}
 					<div>
 						<div class="name">
 							<span style="float:left; padding-left: 8px; color: var(--chat-group);">
 								${this.chatInfo.groupName
-									? this.chatInfo.groupName
-									: this.chatInfo.name !== undefined
-									? (this.chatInfo.alias || this.chatInfo.name)
-									: this.chatInfo.address.substr(0, 15)
-								}
+		? this.chatInfo.groupName
+		: this.chatInfo.name !== undefined
+			? (this.chatInfo.alias || this.chatInfo.name)
+			: this.chatInfo.address.substr(0, 15)
+}
 							</span>
 						</div>
 					</div>
 				</div>
 				<div style="display:flex; align-items: center">
 					${this.chatInfo.willFollow ?
-						html`
+		html`
 							<mwc-icon id="willFollowIcon" style="color: var(--black)">connect_without_contact</mwc-icon>
 							<vaadin-tooltip
 								for="willFollowIcon"
@@ -122,15 +122,15 @@ class ChatSideNavHeads extends connect(store)(LitElement) {
 								text=${get('friends.friend11')}
 							></vaadin-tooltip>
 						` : ''
-					}
+}
 				</div>
 			</li>
 			<friend-item-actions
 				for=${`friend-item-parent-${this.chatInfo.name}`}
 				message=${get('notifications.explanation')}
 				.openEditFriend=${() => {
-					this.openEditFriend(this.chatInfo)
-				}}
+		this.openEditFriend(this.chatInfo)
+	}}
 				name=${this.chatInfo.name}
 				.closeSidePanel=${this.closeSidePanel}
 			></friend-item-actions>
@@ -144,7 +144,7 @@ class ChatSideNavHeads extends connect(store)(LitElement) {
 	createImage(imageUrl) {
 		const imageHTMLRes = new Image()
 		imageHTMLRes.src = imageUrl
-		imageHTMLRes.style = "width:30px; height:30px; float: left; border-radius:50%; font-size:14px"
+		imageHTMLRes.style = 'width:30px; height:30px; float: left; border-radius:50%; font-size:14px'
 
 		imageHTMLRes.onclick = () => {
 			this.openDialogImage = true

@@ -278,7 +278,7 @@ class LoginSection extends connect(store)(LitElement) {
 				<div id="pagesContainer">
 					<iron-pages style="padding: 0;" selected="${this.selectedPage}" attr-for-selected="page" id="loginPages">
 						<div page="loginOptions">
-							<h3 style="color: var(--black);">${translate("login.howlogin")}</h3>
+							<h3 style="color: var(--black);">${translate('login.howlogin')}</h3>
 							${this.loginOptions.map(({ page, linkText, icon }) => html`
 								<div class="login-option" @click=${() => { this.selectedPage = page }}>
 									<paper-ripple></paper-ripple>
@@ -289,12 +289,12 @@ class LoginSection extends connect(store)(LitElement) {
 						</div>
 						<div page="storedWallet" id="walletsPage">
 							<div style="text-align: center; padding-left:0;">
-								<h1 style="padding:0; color: var(--black);">${translate("login.youraccounts")}</h1>
-								<p style="margin:0; padding: 0 0 12px 0; color: var(--black);">${translate("login.clickto")}</p>
+								<h1 style="padding:0; color: var(--black);">${translate('login.youraccounts')}</h1>
+								<p style="margin:0; padding: 0 0 12px 0; color: var(--black);">${translate('login.clickto')}</p>
 							</div>
 							<div id="wallets">
 								${(Object.entries(this.wallets || {}).length < 1) ? html`
-									<p style="color: var(--black); padding: 0 0 6px 0;">${translate("login.needcreate")}</p>
+									<p style="color: var(--black); padding: 0 0 6px 0;">${translate('login.needcreate')}</p>
 								` : ''}
 								${Object.entries(this.wallets || {}).map(wallet => html`
 									<div class="wallet">
@@ -305,9 +305,9 @@ class LoginSection extends connect(store)(LitElement) {
 													<div class="wallet-avatar">
 														${this.getWalletAvatarTemplate(wallet[1].address0)}
 													</div>
-													<p class='walletName'><span style="color: var(--black);">${translate("login.name")}</span>${wallet[1].name || "No saved name"}</p>
+													<p class='walletName'><span style="color: var(--black);">${translate('login.name')}</span>${wallet[1].name || 'No saved name'}</p>
 												</div>
-												<p class="walletAddress"><span style="color: var(--black);">${translate("login.address")}</span>${wallet[1].address0}</p>
+												<p class="walletAddress"><span style="color: var(--black);">${translate('login.address')}</span>${wallet[1].address0}</p>
 											</div>
 										</div>
 										<mwc-icon-button class="removeWallet" @click="${(e) => this.toDeleteWallet(wallet[1].address0)}" icon="clear"></mwc-icon-button>
@@ -317,12 +317,12 @@ class LoginSection extends connect(store)(LitElement) {
 												<hr>
 											</div>
 											<br>
-											<p>${translate("login.areyousure")}</p>
+											<p>${translate('login.areyousure')}</p>
 											<mwc-button slot="primaryAction" @click="${(e) => this.removeWallet(this.myToDeleteWallet)}">
-												${translate("general.yes")}
+												${translate('general.yes')}
 											</mwc-button>
 											<mwc-button slot="secondaryAction" dialogAction="cancel" class="red">
-												${translate("general.no")}
+												${translate('general.no')}
 											</mwc-button>
 										</mwc-dialog>
 									</div>
@@ -333,7 +333,7 @@ class LoginSection extends connect(store)(LitElement) {
 							<div style="padding:0;">
 								<div style="display:flex;">
 									<mwc-icon style="padding: 10px; padding-left: 0; padding-top: 42px; color: var(--black);">short_text</mwc-icon>
-									<vaadin-password-field style="width:100%;" label="${translate("login.seed")}" id="existingSeedPhraseInput" @keydown="${e => this.seedListener(e)}" autofocus></vaadin-password-field>
+									<vaadin-password-field style="width:100%;" label="${translate('login.seed')}" id="existingSeedPhraseInput" @keydown="${e => this.seedListener(e)}" autofocus></vaadin-password-field>
 								</div>
 							</div>
 						</div>
@@ -341,7 +341,7 @@ class LoginSection extends connect(store)(LitElement) {
 							<div>
 								<div style="display: flex;">
 									<mwc-icon style="padding: 10px; padding-left: 0; padding-top: 42px; color: var(--black);">clear_all</mwc-icon>
-									<vaadin-password-field style="width: 100%;" label="${translate("login.qora")}" id="v1SeedInput" @keydown="${e => this.seedListener(e)}" autofocus></vaadin-password-field>
+									<vaadin-password-field style="width: 100%;" label="${translate('login.qora')}" id="v1SeedInput" @keydown="${e => this.seedListener(e)}" autofocus></vaadin-password-field>
 								</div>
 							</div>
 						</div>
@@ -354,26 +354,26 @@ class LoginSection extends connect(store)(LitElement) {
 						</div>
 						<div page="backedUpSeed">
 							${!this.backedUpSeedLoading ? html`
-								<h3 style="color: var(--black);">${translate("login.upload")}</h3>
+								<h3 style="color: var(--black);">${translate('login.upload')}</h3>
 								<frag-file-input accept=".zip,.json" @file-read-success="${e => this.loadBackup(e.detail.result)}"></frag-file-input>
 							` : html`
 								<paper-spinner-lite active style="display: block; margin: 0 auto;"></paper-spinner-lite>
 							`}
 						</div>
 						<div page="unlockBackedUpSeed">
-							<h3 style="text-align: center; color: var(--black);">${translate("login.decrypt")}</h3>
+							<h3 style="text-align: center; color: var(--black);">${translate('login.decrypt')}</h3>
 						</div>
 					</iron-pages>
 					<iron-collapse style="" ?opened=${this.showName(this.selectedPage)} id="passwordCollapse">
 						<div style="display:flex;">
 							<mwc-icon style="padding: 10px; padding-left: 0; padding-top: 42px; color: var(--black);">perm_identity</mwc-icon>
-							<vaadin-text-field style="width:100%;" label="${translate("login.name")}" id="nameInput"></vaadin-text-field>
+							<vaadin-text-field style="width:100%;" label="${translate('login.name')}" id="nameInput"></vaadin-text-field>
 						</div>
 					</iron-collapse>
 					<iron-collapse style="" ?opened=${this.showPassword(this.selectedPage)} id="passwordCollapse">
 						<div style="display:flex;">
 							<mwc-icon style="padding: 10px; padding-left: 0; padding-top: 42px; color: var(--black);">password</mwc-icon>
-							<vaadin-password-field style="width:100%;" label="${translate("login.password")}" id="password" @keyup=${e => this.keyupEnter(e, e => this.emitNext(e))} autofocus></vaadin-password-field>
+							<vaadin-password-field style="width:100%;" label="${translate('login.password')}" id="password" @keyup=${e => this.keyupEnter(e, e => this.emitNext(e))} autofocus></vaadin-password-field>
 						</div>
 					</iron-collapse>
 					<div style="text-align: right; color: var(--mdc-theme-error)">
@@ -382,7 +382,7 @@ class LoginSection extends connect(store)(LitElement) {
 					${this.showPasswordCheckboxPages.includes(this.selectedPage) ? html`
 						<div style="text-align: right; vertical-align: top; line-height: 40px; margin:0;">
 							<mwc-formfield alignEnd>
-								<label for="storeCheckbox" class="checkboxLabel" @click=${() => this.shadowRoot.getElementById('storeCheckbox').click()}><span style="color: var(--black);">${translate("login.save")}</span></label>
+								<label for="storeCheckbox" class="checkboxLabel" @click=${() => this.shadowRoot.getElementById('storeCheckbox').click()}><span style="color: var(--black);">${translate('login.save')}</span></label>
 								<mwc-checkbox style="display: inline;" id="storeCheckbox" @click=${e => { this.saveInBrowser = !e.target.checked }} ?checked="${this.saveInBrowser}"></mwc-checkbox>
 							</mwc-formfield>
 						</div>
@@ -416,47 +416,47 @@ class LoginSection extends connect(store)(LitElement) {
 	}
 
 	renderBackText() {
-		return html`${translate("general.back")}`
+		return html`${translate('general.back')}`
 	}
 
 	renderNextText() {
-		return html`${translate("general.next")}`
+		return html`${translate('general.next')}`
 	}
 
 	renderLoginText() {
-		return html`${translate("login.login")}`
+		return html`${translate('login.login')}`
 	}
 
 	renderSeedText() {
-		return html`${translate("login.seed")}`
+		return html`${translate('login.seed')}`
 	}
 
 	renderSavedText() {
-		return html`${translate("login.saved")}`
+		return html`${translate('login.saved')}`
 	}
 
 	renderQoraText() {
-		return html`${translate("login.qora")}`
+		return html`${translate('login.qora')}`
 	}
 
 	renderBackupText() {
-		return html`${translate("login.backup")}`
+		return html`${translate('login.backup')}`
 	}
 
 	renderPrepareText() {
-		return html`${translate("login.prepare")}`
+		return html`${translate('login.prepare')}`
 	}
 
 	renderError1Text() {
-		return html`${translate("login.error1")}`
+		return html`${translate('login.error1')}`
 	}
 
 	renderError2Text() {
-		return html`${translate("login.error2")}`
+		return html`${translate('login.error2')}`
 	}
 
 	renderError3Text() {
-		return html`${translate("login.lp8")}`
+		return html`${translate('login.lp8')}`
 	}
 
 	async renderLoginAvatar(renderAddress) {

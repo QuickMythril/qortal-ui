@@ -49,17 +49,17 @@ class TourComponent extends connect(store)(LitElement) {
 				<paper-dialog class="full-info-wrapper" ?opened="${this.dialogOpenedCongrats}">
 					<h3>Congratulations!</h3>
 					<div style="display:flex;gap:15px;justify-content:center;margin-top:10px">
-						${translate("tour.tour13")}
+						${translate('tour.tour13')}
 					</div>
 					<div style="display:flex;gap:15px;justify-content:center;margin-top:10px">
-						${translate("tour.tour14")}
+						${translate('tour.tour14')}
 					</div>
 					<div class="accept-button" @click=${this.visitQtube}>
-						${translate("tour.tour15")}
+						${translate('tour.tour15')}
 					</div>
 					<div style="width:100%;display:flex;justify-content:center;margin-top:10px">
 						<div class="close-button" @click=${() => { this.onClose() }}>
-							${translate("general.close")}
+							${translate('general.close')}
 						</div>
 					</div>
 				</paper-dialog>
@@ -103,22 +103,22 @@ class TourComponent extends connect(store)(LitElement) {
 
 			let steps = [{
 				popover: {
-					title: get("tour.tour6"),
+					title: get('tour.tour6'),
 					description: `
 						<div style="display:flex;justify-content:center;gap:15px">
 							<img style="height:40px;width:auto;margin:15px 0px;" src="/img/qort.png" />
 						</div>
 						<div style="display:flex;gap:15px;align-items:center;margin-top:15px;">
 							<div style="height:6px;width:6px;border-radius:50%;background:var(--black)"></div>
-							<p style="margin:0px;padding:0px">${get("tour.tour7")}</p>
+							<p style="margin:0px;padding:0px">${get('tour.tour7')}</p>
 						</div>
 						<div style="display:flex;gap:15px;align-items:center;margin-top:15px;">
 							<div style="height:6px;width:6px;border-radius:50%;background:var(--black)"></div>
-							<p style="margin:0px;padding:0px">${get("tour.tour8")}</p>
+							<p style="margin:0px;padding:0px">${get('tour.tour8')}</p>
 						</div>
 						<div style="display:flex;gap:15px;align-items:center;margin-top:15px;margin-bottom:30px">
 							<div style="height:6px;width:6px;border-radius:50%;background:var(--black)"></div>
-							<p style="margin:0px;padding:0px">${get("tour.tour9")}</p>
+							<p style="margin:0px;padding:0px">${get('tour.tour9')}</p>
 						</div>
 					`
 				}
@@ -132,22 +132,22 @@ class TourComponent extends connect(store)(LitElement) {
 				steps.push({
 					element: step2,
 					popover: {
-						title: get("tour.tour5"),
+						title: get('tour.tour5'),
 						description: `
 							<div style="display:flex;gap:15px;align-items:center;margin-top:15px;margin-bottom:30px">
-								<p style="margin:0px;padding:0px">${get("tour.tour1")}</p>
+								<p style="margin:0px;padding:0px">${get('tour.tour1')}</p>
 							</div>
 							<div style="display:flex;gap:15px;align-items:center;margin-top:15px;">
 								<span><img src="/img/synced.png" style="height: 24px; width: 24px; padding-top: 4px;" /></span>
-								<p style="margin:0px;padding:0px">${get("tour.tour2")}</p>
+								<p style="margin:0px;padding:0px">${get('tour.tour2')}</p>
 							</div>
 							<div style="display:flex;gap:15px;align-items:center;margin-top:15px;">
 								<span><img src="/img/synced_minting.png" style="height: 24px; width: 24px; padding-top: 4px;" /></span>
-								<p style="margin:0px;padding:0px">${get("tour.tour3")}</p>
+								<p style="margin:0px;padding:0px">${get('tour.tour3')}</p>
 							</div>
 							<div style="display:flex;gap:15px;align-items:center;margin-top:15px;margin-bottom:30px">
 								<span><img src="/img/syncing.png" style="height: 24px; width: 24px; padding-top: 4px;" /></span>
-								<p style="margin:0px;padding:0px">${get("tour.tour4")}</p>
+								<p style="margin:0px;padding:0px">${get('tour.tour4')}</p>
 							</div>
 
 						`
@@ -162,7 +162,7 @@ class TourComponent extends connect(store)(LitElement) {
 						title: 'Tab View',
 						description: `
 							<div style="display:flex;gap:15px;align-items:center;margin-top:15px;margin-bottom:30px">
-								<p style="margin:0px;padding:0px">${get("tour.tour10")}</p>
+								<p style="margin:0px;padding:0px">${get('tour.tour10')}</p>
 							</div>
 							<div style="display:flex;gap:15px;align-items:center;margin-top:15px;">
 								<span><img src="/img/addplugin.webp" style="height: 36px; width: 36px; padding-top: 4px;" /></span>
@@ -176,7 +176,7 @@ class TourComponent extends connect(store)(LitElement) {
 			}
 
 			if (step4) {
-				steps.push({ element: step4, popover: { title: get("tour.tour11"), description: get("tour.tour12")}})
+				steps.push({ element: step4, popover: { title: get('tour.tour11'), description: get('tour.tour12')}})
 				this.hasViewedTour
 			}
 
@@ -276,7 +276,7 @@ class TourComponent extends connect(store)(LitElement) {
 
 	visitQtube() {
 		this.onClose()
-		const query = `?service=APP&name=Q-Tube`
+		const query = '?service=APP&name=Q-Tube'
 		store.dispatch(
 			setNewTab({
 				url: `qdn/browser/index.html${query}`,

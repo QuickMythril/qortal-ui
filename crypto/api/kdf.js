@@ -12,10 +12,10 @@ export const kdf = async (seed, salt, status = () => { }) => {
 	const state = store.getState()
 	const config = state.config
 	const workers = state.app.workers.workers
-	const kst1 = get("login.lp17")
+	const kst1 = get('login.lp17')
 	status(kst1)
 	await stateAwait(state => state.app.workers.ready)
-	const kst2 = get("login.lp18")
+	const kst2 = get('login.lp18')
 	status(kst2)
 	salt = new Uint8Array(salt)
 	const seedParts = await Promise.all(workers.map((worker, index) => {
@@ -34,17 +34,17 @@ export const kdf = async (seed, salt, status = () => { }) => {
 			} catch (e) {
 				// ...
 			}
-			const kst3 = get("login.lp19")
+			const kst3 = get('login.lp19')
 			if (seed !== data.key) throw new Error(kst3 + seed + ' !== ' + data.key)
-			const kst4 = get("login.lp20")
+			const kst4 = get('login.lp20')
 			if (nonce !== data.nonce) throw new Error(kst4)
 			return data.result
 		})
 	}))
-	const kst5 = get("login.lp21")
+	const kst5 = get('login.lp21')
 	status(kst5)
 	const result = new Sha512().process(utils.stringtoUTF8Array(config.crypto.staticSalt + seedParts.reduce((a, c) => a + c))).finish().result
-	const kst6 = get("login.lp22")
+	const kst6 = get('login.lp22')
 	status(kst6)
 	return result
 }

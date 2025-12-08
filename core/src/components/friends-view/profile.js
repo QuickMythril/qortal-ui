@@ -90,20 +90,20 @@ class ProfileQdn extends connect(store)(LitElement) {
 	render() {
 		return html`
 			${this.isSaving || (!this.error && this.resourceExists === undefined) ?
-				html`
+		html`
 					<paper-spinner-lite active style="display: block; margin: 0 auto;"></paper-spinner-lite>
 				`
-				: !this.name ? html`
+		: !this.name ? html`
 					<mwc-icon
 						id="profile-icon"
 						class=${'notActive'}
 						@click=${() => {
-							const target = this.shadowRoot.getElementById('popover-notification');
-							const popover = this.shadowRoot.querySelector('popover-component');
-							if (popover) {
-								popover.openPopover(target);
-							}
-						}}
+		const target = this.shadowRoot.getElementById('popover-notification')
+		const popover = this.shadowRoot.querySelector('popover-component')
+		if (popover) {
+			popover.openPopover(target)
+		}
+	}}
 						style="user-select:none;cursor:pointer"
 					>
 						person
@@ -125,36 +125,36 @@ class ProfileQdn extends connect(store)(LitElement) {
 							<div
 								class="accept-button"
 								@click="${() => {
-									store.dispatch(
-										setNewTab({
-											url: `group-management`,
-											id: this.uid.rnd(),
-											myPlugObj: {
-												url: 'name-registration',
-												domain: 'core',
-												page: 'name-registration/index.html',
-												title: 'Name Registration',
-												icon: 'vaadin:user-check',
-												mwcicon: 'manage_accounts',
-												pluginNumber: 'plugin-qCmtXAQmtu',
-												menus: [],
-												parent: false
-											},
-											openExisting: true
-										})
-									);
-									const popover = this.shadowRoot.querySelector('popover-component');
-									if (popover) {
-										popover.closePopover();
-									}
-								}}"
+		store.dispatch(
+			setNewTab({
+				url: 'group-management',
+				id: this.uid.rnd(),
+				myPlugObj: {
+					url: 'name-registration',
+					domain: 'core',
+					page: 'name-registration/index.html',
+					title: 'Name Registration',
+					icon: 'vaadin:user-check',
+					mwcicon: 'manage_accounts',
+					pluginNumber: 'plugin-qCmtXAQmtu',
+					menus: [],
+					parent: false
+				},
+				openExisting: true
+			})
+		)
+		const popover = this.shadowRoot.querySelector('popover-component')
+		if (popover) {
+			popover.closePopover()
+		}
+	}}"
 							>
 								${translate('profile.profile2')}
 							</div>
 						</div>
 					</popover-component>
 				`
-					: this.error ? html`
+			: this.error ? html`
 						<mwc-icon id="profile-error" style="user-select:none;cursor:pointer;opacity:0.5">
 							person
 						</mwc-icon>
@@ -170,31 +170,31 @@ class ProfileQdn extends connect(store)(LitElement) {
 						<div
 							style="user-select:none;cursor:pointer"
 							@click=${() => {
-								if (this.resourceExists && this.profileData) {
-									this.editContent = this.profileData;
-							} else if (this.resourceExists && !this.profileData) {
-								return;
-							}
-							if (this.profileData) {
-								this.profileDataVisiting = this.profileData;
-								this.nameVisiting = this.name;
-								this.dialogOpenedProfile = true;
-								} else {
-									this.isOpenProfileModalUpdate = !this.isOpenProfileModalUpdate;
-								}
-							}}
+		if (this.resourceExists && this.profileData) {
+			this.editContent = this.profileData
+		} else if (this.resourceExists && !this.profileData) {
+			return
+		}
+		if (this.profileData) {
+			this.profileDataVisiting = this.profileData
+			this.nameVisiting = this.name
+			this.dialogOpenedProfile = true
+		} else {
+			this.isOpenProfileModalUpdate = !this.isOpenProfileModalUpdate
+		}
+	}}
 						>
 							<mwc-icon style="color: var(--black);">
 								person
 							</mwc-icon>
 						</div>
 					`
-				}
+}
 			<profile-modal-update
 				?isOpen=${this.isOpenProfileModalUpdate}
 				.setIsOpen=${(val) => {
-					this.isOpenProfileModalUpdate = val;
-				}}
+		this.isOpenProfileModalUpdate = val
+	}}
 				.onSubmit=${this.saveToQdn}
 				.editContent=${this.editContent}
 				.onClose=${(val) => this.onClose(val)}
@@ -202,7 +202,7 @@ class ProfileQdn extends connect(store)(LitElement) {
 			></profile-modal-update>
 			<!-- Profile read-view -->
 			${this.dialogOpenedProfile ?
-				html`
+		html`
 					<paper-dialog class="full-info-wrapper" ?opened="${this.dialogOpenedProfile}">
 						<div class="full-info-logo">
 							${this.avatarFullImage()}
@@ -210,41 +210,41 @@ class ProfileQdn extends connect(store)(LitElement) {
 						<h3>${this.nameVisiting}</h3>
 						<div style="display:flex;gap:15px;justify-content:center;margin-top:10px">
 							${this.nameVisiting !== this.name ?
-								html`
+		html`
 									<div
 										class="send-message-button"
 										@click="${async () => {
-											const address = await this.getUserAddress();
-											if (!address) return;
-											store.dispatch(
-												setNewTab({
-													url: `q-chat`,
-													id: this.uid.rnd(),
-													myPlugObj: {
-														url: 'q-chat',
-														domain: 'core',
-														page: 'q-chat/index.html',
-														title: 'Q-Chat',
-														icon: 'vaadin:chat',
-														mwcicon: 'forum',
-														pluginNumber: 'plugin-qhsyOnpRhT',
-														menus: [],
-														parent: false
-													},
-													openExisting: true
-												})
-											);
-											store.dispatch(
-												setSideEffectAction({
-													type: 'openPrivateChat',
-													data: {
-														address,
-														name: this.nameVisiting
-													}
-												})
-											);
-											this.dialogOpenedProfile = false;
-										}}"
+		const address = await this.getUserAddress()
+		if (!address) return
+		store.dispatch(
+			setNewTab({
+				url: 'q-chat',
+				id: this.uid.rnd(),
+				myPlugObj: {
+					url: 'q-chat',
+					domain: 'core',
+					page: 'q-chat/index.html',
+					title: 'Q-Chat',
+					icon: 'vaadin:chat',
+					mwcicon: 'forum',
+					pluginNumber: 'plugin-qhsyOnpRhT',
+					menus: [],
+					parent: false
+				},
+				openExisting: true
+			})
+		)
+		store.dispatch(
+			setSideEffectAction({
+				type: 'openPrivateChat',
+				data: {
+					address,
+					name: this.nameVisiting
+				}
+			})
+		)
+		this.dialogOpenedProfile = false
+	}}"
 									>
 										<mwc-icon id="send-chat-icon" style="color: var(--black)">send</mwc-icon>
 										<vaadin-tooltip
@@ -256,33 +256,33 @@ class ProfileQdn extends connect(store)(LitElement) {
 										></vaadin-tooltip>
 									</div>
 								`
-								: ''
-							}
+		: ''
+}
 							${this.nameVisiting !== this.name ?
-								html`
+		html`
 									<div
 										class="send-message-button"
 										@click="${() => {
-											const query = `?service=APP&name=Q-Mail/to/${this.nameVisiting}`;
-											store.dispatch(
-												setNewTab({
-													url: `qdn/browser/index.html${query}`,
-													id: this.uid.rnd(),
-													myPlugObj: {
-														url: 'myapp',
-														domain: 'core',
-														page: `qdn/browser/index.html${query}`,
-														title: 'Q-Mail',
-														icon: 'vaadin:mailbox',
-														mwcicon: 'mail_outline',
-														menus: [],
-														parent: false
-													},
-													openExisting: true
-												})
-											);
-											this.dialogOpenedProfile = false;
-										}}"
+		const query = `?service=APP&name=Q-Mail/to/${this.nameVisiting}`
+		store.dispatch(
+			setNewTab({
+				url: `qdn/browser/index.html${query}`,
+				id: this.uid.rnd(),
+				myPlugObj: {
+					url: 'myapp',
+					domain: 'core',
+					page: `qdn/browser/index.html${query}`,
+					title: 'Q-Mail',
+					icon: 'vaadin:mailbox',
+					mwcicon: 'mail_outline',
+					menus: [],
+					parent: false
+				},
+				openExisting: true
+			})
+		)
+		this.dialogOpenedProfile = false
+	}}"
 									>
 										<mwc-icon id="send-mail-icon" style="color: var(--black)">mail</mwc-icon>
 										<vaadin-tooltip
@@ -294,16 +294,16 @@ class ProfileQdn extends connect(store)(LitElement) {
 										></vaadin-tooltip>
 									</div>
 								`
-								: ''
-							}
+		: ''
+}
 							${this.nameVisiting !== this.name && this.isFriend === false ?
-								html`
+		html`
 									<div
 										class="send-message-button"
 										@click="${() => {
-											this.dispatchEvent(new CustomEvent('add-friend', {bubbles: true, composed: true, detail: this.nameVisiting}));
-											this.dialogOpenedProfile = false;
-										}}"
+		this.dispatchEvent(new CustomEvent('add-friend', {bubbles: true, composed: true, detail: this.nameVisiting}))
+		this.dialogOpenedProfile = false
+	}}"
 									>
 										<mwc-icon id="add-friend-icon" style="color: var(--black)">person_add</mwc-icon>
 										<vaadin-tooltip
@@ -315,16 +315,16 @@ class ProfileQdn extends connect(store)(LitElement) {
 										></vaadin-tooltip>
 									</div>
 								`
-								: ''
-							}
+		: ''
+}
 							${this.nameVisiting !== this.name && this.isFriend === true ?
-								html`
+		html`
 									<div
 										class="send-message-button"
 										@click="${() => {
-											this.dispatchEvent(new CustomEvent('add-friend', {bubbles: true, composed: true, detail: this.nameVisiting}));
-											this.dialogOpenedProfile = false;
-										}}"
+		this.dispatchEvent(new CustomEvent('add-friend', {bubbles: true, composed: true, detail: this.nameVisiting}))
+		this.dialogOpenedProfile = false
+	}}"
 									>
 										<mwc-icon id="add-friend-icon" style="color: green">person</mwc-icon>
 										<vaadin-tooltip
@@ -336,29 +336,29 @@ class ProfileQdn extends connect(store)(LitElement) {
 										></vaadin-tooltip>
 									</div>
 								`
-								: ''
-							}
+		: ''
+}
 						</div>
 						<div class="data-info">
 							${this.isLoadingVisitingProfile ?
-								html`
+		html`
 									<div style="width:100%;display:flex;justify-content:center">
 										<paper-spinner-lite active style="display: block; margin: 0 auto;"></paper-spinner-lite>
 									</div>
 								`
-								: this.resourceExistsVisiting === false ?
-									html`
+		: this.resourceExistsVisiting === false ?
+			html`
 										<div style="width:100%;display:flex;justify-content:center">
 											<p>${translate('profile.profile16')}</p>
 										</div>
 									`
-								: this.profileDataVisiting === null ?
-									html`
+			: this.profileDataVisiting === null ?
+				html`
 										<div style="width:100%;display:flex;justify-content:center">
 											<p>${translate('profile.profile17')}</p>
 										</div>
 									`
-								: html`
+				: html`
 									<p style="font-weight:bold;color:#03a9f4;font-size:17px">
 										${translate('profile.profile4')}
 									</p>
@@ -375,15 +375,15 @@ class ProfileQdn extends connect(store)(LitElement) {
 										${translate('profile.profile6')}
 									</p>
 									${Object.keys(this.profileDataVisiting.wallets).map((key, i) => {
-										return html`
+		return html`
 											<p>
 												<span style="font-weight:bold;text-transform: uppercase">${key}</span>:
 												<span>${this.profileDataVisiting.wallets[key] || translate('profile.profile15')}</span>
 											</p>
 										`
-									})}
+	})}
 								`
-							}
+}
 						</div>
 						<div>
 							<span class="paybutton">
@@ -391,16 +391,16 @@ class ProfileQdn extends connect(store)(LitElement) {
 							</span>
 							<span class="buttons">
 								${this.nameVisiting === this.name ?
-									html`
+		html`
 										<mwc-button @click=${() => this.openEdit()}>${translate('profile.profile3')}</mwc-button>
 									` : ''
-								}
-								<mwc-button class="decline" @click=${() => {this.dialogOpenedProfile = false;}}>${translate('general.close')}</mwc-button>
+}
+								<mwc-button class="decline" @click=${() => {this.dialogOpenedProfile = false}}>${translate('general.close')}</mwc-button>
 							</span>
 						</div>
 					</paper-dialog>
 				`: ''
-			}
+}
 		`
 	}
 
@@ -426,7 +426,7 @@ class ProfileQdn extends connect(store)(LitElement) {
 
 		try {
 			myFollowedNames = await parentEpml.request('apiCall', {
-				url: buildRequestUrl(`/lists/followedNames`, store.getState())
+				url: buildRequestUrl('/lists/followedNames', store.getState())
 			})
 		} catch (error) { }
 
@@ -442,7 +442,7 @@ class ProfileQdn extends connect(store)(LitElement) {
 		let namesJsonString = JSON.stringify({ items: names })
 
 		return await parentEpml.request('apiCall', {
-			url: buildRequestUrl(`/lists/followedNames`, store.getState()),
+			url: buildRequestUrl('/lists/followedNames', store.getState()),
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -495,7 +495,7 @@ class ProfileQdn extends connect(store)(LitElement) {
 			let data = ''
 
 			try {
-				data = await res.json();
+				data = await res.json()
 				if (Array.isArray(data)) {
 					data = data.filter(
 						(item) => item.identifier === 'qortal_profile'
@@ -748,7 +748,7 @@ class ProfileQdn extends connect(store)(LitElement) {
 		}
 
 		iframes.forEach((iframe) => {
-			const iframeWindow = iframe.contentWindow;
+			const iframeWindow = iframe.contentWindow
 			const customEvent = new CustomEvent('qortal-request-set-profile-data-response', { detail: detail })
 
 			iframeWindow.dispatchEvent(customEvent)

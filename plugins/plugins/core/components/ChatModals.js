@@ -224,7 +224,7 @@ class ChatModals extends LitElement {
 		}
 
 		const _computePow = async (chatBytes) => {
-			const _chatBytesArray = Object.keys(chatBytes).map(function (key) { return chatBytes[key]; })
+			const _chatBytesArray = Object.keys(chatBytes).map(function (key) { return chatBytes[key] })
 			const chatBytesArray = new Uint8Array(_chatBytesArray)
 			const chatBytesHash = new window.parent.Sha256().process(chatBytesArray).finish().result
 			const hashPtr = window.parent.sbrk(32, window.parent.heap)
@@ -280,7 +280,7 @@ class ChatModals extends LitElement {
 		const blockedAddressesUrl = `${nodeUrl}/lists/blockedAddresses?apiKey=${this.getApiKey()}`
 		const err3string = 'No regitered name'
 
-		localStorage.removeItem("ChatBlockedAddresses")
+		localStorage.removeItem('ChatBlockedAddresses')
 
 		var obj = []
 
@@ -302,7 +302,7 @@ class ChatModals extends LitElement {
 					} else {
 						obj.push(noName)
 					}
-					localStorage.setItem("ChatBlockedAddresses", JSON.stringify(obj))
+					localStorage.setItem('ChatBlockedAddresses', JSON.stringify(obj))
 				})
 			})
 		})
@@ -335,7 +335,7 @@ class ChatModals extends LitElement {
 			address
 		]
 
-		let addressJsonString = JSON.stringify({ "items": items })
+		let addressJsonString = JSON.stringify({ 'items': items })
 
 		let ret = await parentEpml.request('apiCall', {
 			url: `/lists/blockedAddresses?apiKey=${this.getApiKey()}`,
@@ -351,7 +351,7 @@ class ChatModals extends LitElement {
 			this.chatBlockedAddresses.push(address)
 			this.getChatBlockedList()
 			this.hideBlockUserModal()
-			let err1string = get("blockpage.bcchange2")
+			let err1string = get('blockpage.bcchange2')
 			snackbar.add({
 				labelText: `${err1string}`,
 				dismiss: true
@@ -359,7 +359,7 @@ class ChatModals extends LitElement {
 			this.relMessages()
 		} else {
 			this.hideBlockUserModal()
-			let err2string = get("blockpage.bcchange2")
+			let err2string = get('blockpage.bcchange2')
 			snackbar.add({
 				labelText: `${err2string}`,
 				dismiss: true

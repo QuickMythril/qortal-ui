@@ -19,7 +19,7 @@ const heap = new Uint8Array(memory.buffer)
 const computePow = async (chatBytes, path, difficulty) => {
 	let response = null
 	await new Promise((resolve, reject) => {
-		const _chatBytesArray = Object.keys(chatBytes).map(function (key) { return chatBytes[key]; })
+		const _chatBytesArray = Object.keys(chatBytes).map(function (key) { return chatBytes[key] })
 		const chatBytesArray = new Uint8Array(_chatBytesArray)
 		const chatBytesHash = new Sha256().process(chatBytesArray).finish().result
 		const hashPtr = sbrk(32, heap)

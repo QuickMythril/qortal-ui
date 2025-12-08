@@ -1,8 +1,8 @@
 import { supportsEmojiFlags } from './ChatTestEmojiFlags'
 
-export function supportCountryFlagEmojis(fontName = "Twemoji Country Flags", fontUrl = "/font/TwemojiCountryFlags.woff2") {
-	if (typeof window !== "undefined" && supportsEmojiFlags("😊") && !supportsEmojiFlags("🇨🇭")) {
-		const style = document.createElement("style")
+export function supportCountryFlagEmojis(fontName = 'Twemoji Country Flags', fontUrl = '/font/TwemojiCountryFlags.woff2') {
+	if (typeof window !== 'undefined' && supportsEmojiFlags('😊') && !supportsEmojiFlags('🇨🇭')) {
+		const style = document.createElement('style')
 
 		style.textContent = `@font-face {
 			font-family: "${fontName}";

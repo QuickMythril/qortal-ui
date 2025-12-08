@@ -187,64 +187,64 @@ class Chat extends LitElement {
 				</div>
 				<div class="chat">
 					<div id="newMessageBar" class="new-message-bar hide-new-message-bar clearfix" @click=${() => this.scrollToBottom()}>
-						<span style="flex: 1;">${translate("chatpage.cchange4")}</span>
-						<span>${translate("chatpage.cchange5")} <mwc-icon style="font-size: 16px; vertical-align: bottom;">keyboard_arrow_down</mwc-icon></span>
+						<span style="flex: 1;">${translate('chatpage.cchange4')}</span>
+						<span>${translate('chatpage.cchange5')} <mwc-icon style="font-size: 16px; vertical-align: bottom;">keyboard_arrow_down</mwc-icon></span>
 					</div>
 					<div class="chat-history">
 						${this.activeChatHeadUrl ?
-							html`${this.renderChatPage()}`
-							: this.isViewOpen ? html`${this.renderChatViewPage()}`
-							: html`${this.renderChatWelcomePage()}`
-						}
+		html`${this.renderChatPage()}`
+		: this.isViewOpen ? html`${this.renderChatViewPage()}`
+			: html`${this.renderChatWelcomePage()}`
+}
 					</div>
 				</div>
 				<!-- Start Chatting Dialog -->
 				<wrapper-modal
 					.onClickFunc=${() => {
-						this.resetChatEditor();
-						this.openPrivateMessage = false;
-						this.shadowRoot.getElementById('sendTo').value = '';
-						this.userFoundModalOpen = false;
-						this.userFound = [];
-					}}
-					style=${this.openPrivateMessage ? "visibility:visible;z-index:50" : "visibility: hidden;z-index:-100;position: relative"}
+		this.resetChatEditor()
+		this.openPrivateMessage = false
+		this.shadowRoot.getElementById('sendTo').value = ''
+		this.userFoundModalOpen = false
+		this.userFound = []
+	}}
+					style=${this.openPrivateMessage ? 'visibility:visible;z-index:50' : 'visibility: hidden;z-index:-100;position: relative'}
 				>
-					<div style=${"position: relative"}>
+					<div style=${'position: relative'}>
 						<div class="dialog-container">
 							<div class="dialog-header" style="text-align: center">
-								<h1>${translate("chatpage.cchange1")}</h1>
+								<h1>${translate('chatpage.cchange1')}</h1>
 								<hr>
 							</div>
-							<p class="dialog-subheader">${translate("chatpage.cchange6")}</p>
+							<p class="dialog-subheader">${translate('chatpage.cchange6')}</p>
 							<div class="search-field">
 								<input
 									type="text"
 									class="name-input"
 									?disabled=${this.isLoading}
 									id="sendTo"
-									placeholder="${translate("chatpage.cchange7")}"
+									placeholder="${translate('chatpage.cchange7')}"
 									value=${this.userSelected.name ? this.userSelected.name : ''}
 									@keypress=${() => {
-										this.userSelected = {};
-										this.requestUpdate()
-									}}
+		this.userSelected = {}
+		this.requestUpdate()
+	}}
 								/>
 								${this.userSelected.name ?
-									(html`
+		(html`
 										<div class="user-verified">
-											<p>${translate("chatpage.cchange38")}</p>
+											<p>${translate('chatpage.cchange38')}</p>
 											<vaadin-icon icon="vaadin:check-circle-o" slot="icon"></vaadin-icon>
 										</div>
 									`)
-									: (html`
+		: (html`
 										<vaadin-icon @click=${this.userSearch} slot="icon" icon="vaadin:open-book" class="search-icon"></vaadin-icon>
 									`)
-								}
+}
 							</div>
 							<chat-text-editor
 								iframeId="privateMessage"
 								?hasGlobalEvents=${false}
-								placeholder="${translate("chatpage.cchange8")}"
+								placeholder="${translate('chatpage.cchange8')}"
 								.imageFile=${this.imageFile}
 								._sendMessage=${this._sendMessage}
 								.insertImage=${this.insertImage}
@@ -259,19 +259,19 @@ class Chat extends LitElement {
 								<button
 									class="modal-button-red"
 									@click=${() => {
-										this.resetChatEditor();
-										this.openPrivateMessage = false;
-									}}
+		this.resetChatEditor()
+		this.openPrivateMessage = false
+	}}
 									?disabled="${this.isLoading}"
 								>
-									${translate("chatpage.cchange33")}
+									${translate('chatpage.cchange33')}
 								</button>
 								<button
 									class="modal-button"
 									@click=${() => {
-										const chatTextEditor = this.shadowRoot.getElementById('messageBox')
-										chatTextEditor.sendMessageFunc({ })
-									}}
+		const chatTextEditor = this.shadowRoot.getElementById('messageBox')
+		chatTextEditor.sendMessageFunc({ })
+	}}
 									?disabled="${this.isLoading}"
 								>
 									${this.isLoading === false ? this.renderSendText() : html`<paper-spinner-lite active></paper-spinner-lite>`}
@@ -281,14 +281,14 @@ class Chat extends LitElement {
 						<div class="search-results-div">
 							<chat-search-results
 								.onClickFunc=${(result) => {
-									this.userSelected = result;
-									this.userFound = [];
-									this.userFoundModalOpen = false;
-								}}
+		this.userSelected = result
+		this.userFound = []
+		this.userFoundModalOpen = false
+	}}
 								.closeFunc=${() => {
-									this.userFoundModalOpen = false;
-									this.userFound = [];
-								}}
+		this.userFoundModalOpen = false
+		this.userFound = []
+	}}
 								.searchResults=${this.userFound}
 								?isOpen=${this.userFoundModalOpen}
 								?loading=${this.isLoading}
@@ -300,28 +300,28 @@ class Chat extends LitElement {
 				<!-- Blocked User Dialog -->
 				<mwc-dialog id="blockedUserDialog">
 					<div style="text-align:center">
-						<h1>${translate("chatpage.cchange10")}</h1>
+						<h1>${translate('chatpage.cchange10')}</h1>
 						<hr>
 						<br>
 					</div>
 					<vaadin-grid theme="compact" id="blockedGrid" ?hidden="${this.isEmptyArray(this.blockedUserList)}" aria-label="Blocked List" .items="${this.blockedUserList}" all-rows-visible>
-						<vaadin-grid-column auto-width header="${translate("chatpage.cchange11")}" .renderer=${(root, column, data) => {
-							if (data.item.name === translate("general.noRegisteredName")) {
-								render(html`${translate("general.noRegisteredName")}`, root);
-							} else {
-								render(html`${data.item.name}`, root);
-							}
-						}}>
+						<vaadin-grid-column auto-width header="${translate('chatpage.cchange11')}" .renderer=${(root, column, data) => {
+	if (data.item.name === translate('general.noRegisteredName')) {
+		render(html`${translate('general.noRegisteredName')}`, root)
+	} else {
+		render(html`${data.item.name}`, root)
+	}
+}}>
 						</vaadin-grid-column>
-						<vaadin-grid-column auto-width header="${translate("chatpage.cchange12")}" path="owner"></vaadin-grid-column>
-						<vaadin-grid-column width="10rem" flex-grow="0" header="${translate("chatpage.cchange13")}" .renderer=${(root, column, data) => {
-							render(html`${this.renderUnblockButton(data.item)}`, root);
-						}}>
+						<vaadin-grid-column auto-width header="${translate('chatpage.cchange12')}" path="owner"></vaadin-grid-column>
+						<vaadin-grid-column width="10rem" flex-grow="0" header="${translate('chatpage.cchange13')}" .renderer=${(root, column, data) => {
+	render(html`${this.renderUnblockButton(data.item)}`, root)
+}}>
 						</vaadin-grid-column>
 					</vaadin-grid>
-					${this.isEmptyArray(this.blockedUserList) ? html`<span style="color: var(--black); text-align: center;">${translate("chatpage.cchange14")}</span>`: ''}
+					${this.isEmptyArray(this.blockedUserList) ? html`<span style="color: var(--black); text-align: center;">${translate('chatpage.cchange14')}</span>`: ''}
 					<mwc-button slot="primaryAction" dialogAction="cancel" class="red">
-						${translate("general.close")}
+						${translate('general.close')}
 					</mwc-button>
 				</mwc-dialog>
 				<!-- View Chat Over ID -->
@@ -333,14 +333,14 @@ class Chat extends LitElement {
 								id="groupIdInput"
 								required
 								allowed-char-pattern="[0-9]"
-								placeholder="${translate("modals.mpchange87")}"
+								placeholder="${translate('modals.mpchange87')}"
 								value=""
 								@keydown="${this.viewKeyListener}"
 								clear-button-visible
 							>
 							</vaadin-text-field>
-							<paper-icon-button icon="icons:visibility" @click="${() => this.switchChatID()}" title="${translate("general.view")}"></paper-icon-button>
-							<paper-icon-button icon="icons:close" @click="${() => this.closeView()}" title="${translate("general.close")}"></paper-icon-button>
+							<paper-icon-button icon="icons:visibility" @click="${() => this.switchChatID()}" title="${translate('general.view')}"></paper-icon-button>
+							<paper-icon-button icon="icons:close" @click="${() => this.closeView()}" title="${translate('general.close')}"></paper-icon-button>
 						</div>
 					</div>
 				</paper-dialog>
@@ -568,10 +568,10 @@ class Chat extends LitElement {
 		let gAddress = ''
 		let currentGroupId = url.substring(6)
 		let symIdentifier = 'symmetric-qchat-group-' + currentGroupId
-		let locateString = "Downloading and decrypt keys! Please wait..."
-		let keysToOld = "Wait until an admin re-encrypts the keys. Only unencrypted messages will be displayed."
-		let retryDownload = "Retry downloading and decrypt keys in 5 seconds! Please wait..."
-		let failDownload = "Error downloading and decrypt keys! Only unencrypted messages will be displayed. Please try again later..."
+		let locateString = 'Downloading and decrypt keys! Please wait...'
+		let keysToOld = 'Wait until an admin re-encrypts the keys. Only unencrypted messages will be displayed.'
+		let retryDownload = 'Retry downloading and decrypt keys in 5 seconds! Please wait...'
+		let failDownload = 'Error downloading and decrypt keys! Only unencrypted messages will be displayed. Please try again later...'
 		let all_ok = false
 		let counter = 0
 
@@ -580,8 +580,8 @@ class Chat extends LitElement {
 		const getNameUrl = `${nodeUrl}/arbitrary/resources?service=DOCUMENT_PRIVATE&identifier=${symIdentifier}&limit=0&reverse=true`
 		const getAdminUrl = `${nodeUrl}/groups/members/${currentGroupId}?onlyAdmins=true&limit=0`
 
-		if (localStorage.getItem("symKeysCurrent") === null) {
-			localStorage.setItem("symKeysCurrent", "")
+		if (localStorage.getItem('symKeysCurrent') === null) {
+			localStorage.setItem('symKeysCurrent', '')
 		}
 
 		supArray = await fetch(getNameUrl).then(response => {
@@ -664,16 +664,16 @@ class Chat extends LitElement {
 					const decryptedKeyToObject = uint8ArrayToObject(dataint8Array)
 
 					if (!validateSecretKey(decryptedKeyToObject)) {
-						throw new Error("SecretKey is not valid")
+						throw new Error('SecretKey is not valid')
 					}
 
-					localStorage.removeItem("symKeysCurrent")
-					localStorage.setItem("symKeysCurrent", "")
-					let oldSymIdentifier = JSON.parse(localStorage.getItem("symKeysCurrent") || "[]")
+					localStorage.removeItem('symKeysCurrent')
+					localStorage.setItem('symKeysCurrent', '')
+					let oldSymIdentifier = JSON.parse(localStorage.getItem('symKeysCurrent') || '[]')
 					oldSymIdentifier.push(decryptedKeyToObject)
-					localStorage.setItem("symKeysCurrent", JSON.stringify(oldSymIdentifier))
+					localStorage.setItem('symKeysCurrent', JSON.stringify(oldSymIdentifier))
 
-					let arraySecretKeys = JSON.parse(localStorage.getItem("symKeysCurrent") || "[]")
+					let arraySecretKeys = JSON.parse(localStorage.getItem('symKeysCurrent') || '[]')
 
 					this.secretKeys = arraySecretKeys[0]
 					this.activeChatHeadUrl = url
@@ -696,7 +696,7 @@ class Chat extends LitElement {
 				count: encryptedData.count
 			}
 		} catch (error) {
-			console.log("Error:", error.message)
+			console.log('Error:', error.message)
 		}
 	}
 
@@ -753,16 +753,16 @@ class Chat extends LitElement {
 				if (window.parent.location && window.parent.location.search) {
 					const queryString = window.parent.location.search
 					const params = new URLSearchParams(queryString)
-					const chat = params.get("chat")
+					const chat = params.get('chat')
 					if (chat && chat !== this.activeChatHeadUrl) {
 						let url = window.parent.location.href
-						let newUrl = url.split("?")[0]
-						window.parent.history.pushState({}, "", newUrl)
+						let newUrl = url.split('?')[0]
+						window.parent.history.pushState({}, '', newUrl)
 						this.setActiveChatHeadUrl(chat)
 					}
 				}
 
-					const myName = getMyNameFromStore({ allowActiveName: false })
+				const myName = getMyNameFromStore({ allowActiveName: false })
 				if (myName !== undefined && this.loggedInUserName !== myName) {
 					this.loggedInUserName = myName
 				}
@@ -796,7 +796,7 @@ class Chat extends LitElement {
 	openTabToGroupManagement() {
 		window.parent.reduxStore.dispatch(
 			window.parent.reduxAction.setNewTab({
-				url: `group-management`,
+				url: 'group-management',
 				id: this.uid.rnd(),
 				myPlugObj: {
 					'url': 'group-management',
@@ -860,7 +860,7 @@ class Chat extends LitElement {
 	}
 
 	redirectToGroups() {
-		window.location.href = `../../group-management/index.html`
+		window.location.href = '../../group-management/index.html'
 	}
 
 	async _sendMessage(outSideMsg, msg) {

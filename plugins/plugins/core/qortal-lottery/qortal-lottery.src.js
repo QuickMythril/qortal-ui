@@ -101,7 +101,7 @@ class QortalLottery extends LitElement {
 					<h3 style="margin: 0; margin-bottom: 1em; text-align: center;">${translate('lotterypage.lot1')}</h3>
 					<div class="loadingContainer" id="loadingOpenLotteries" style="display:${this.openLotteriesLoading ? 'block' : 'none'}">
 						<div class="loading"></div>
-						<div style="text-align: center;"><span style="color: var(--black);">${translate("login.loading")}</span></div>
+						<div style="text-align: center;"><span style="color: var(--black);">${translate('login.loading')}</span></div>
 					</div>
 					<vaadin-grid theme="compact, wrap-cell-content" id="lotteryGrid" ?hidden="${this.isEmptyArray(this.openLotteriesArray)}" aria-label="Open" .items="${this.openLotteriesArray}" all-rows-visible>
 						<vaadin-grid-column width="40%" header="${translate('grouppage.gchange5')}" path="description"></vaadin-grid-column>
@@ -110,8 +110,8 @@ class QortalLottery extends LitElement {
 						<vaadin-grid-column width="9%" header="${translate('lotterypage.lot4')}" path="endBlock"></vaadin-grid-column>
 						<vaadin-grid-column width="8%" header="${translate('lotterypage.lot13')}" path="joined"></vaadin-grid-column>
 						<vaadin-grid-column width="13%" header="${translate('grouppage.gchange7')}" .renderer=${(root, column, data) => {
-							render(html`${this.renderPlayButton(data.item)}`, root)
-						}}>
+	render(html`${this.renderPlayButton(data.item)}`, root)
+}}>
 						</vaadin-grid-column>
 					</vaadin-grid>
 					<div style="display:${this.openLotteriesLoading ? 'none' : 'block'}">
@@ -125,22 +125,22 @@ class QortalLottery extends LitElement {
 					<h3 style="margin: 0; margin-bottom: 1em; text-align: center;">${translate('lotterypage.lot6')}</h3>
 					<div class="loadingContainer" id="loadingClosedLotteries" style="display:${this.closedLotteriesLoading ? 'block' : 'none'}">
 						<div class="loading"></div>
-						<div style="text-align: center;"><span style="color: var(--black);">${translate("login.loading")}</span></div>
+						<div style="text-align: center;"><span style="color: var(--black);">${translate('login.loading')}</span></div>
 					</div>
 					<vaadin-grid theme="compact, wrap-cell-content" id="lotteryGrid" ?hidden="${this.isEmptyArray(this.closedLotteriesArray)}" aria-label="Finished" .items="${this.closedLotteriesArray}" all-rows-visible>
 						<vaadin-grid-column width="40%" header="${translate('grouppage.gchange5')}" path="description"></vaadin-grid-column>
 						<vaadin-grid-column width="9%" header="${translate('lotterypage.lot3')}" path="startblock"></vaadin-grid-column>
 						<vaadin-grid-column width="9%" header="${translate('lotterypage.lot4')}" path="endblock"></vaadin-grid-column>
 						<vaadin-grid-column width="12%" header="${translate('lotterypage.lot7')}" .renderer=${(root, column, data) => {
-							render(html`${data.item.jackpot} QORT`, root)
-						}}>
+	render(html`${data.item.jackpot} QORT`, root)
+}}>
 						</vaadin-grid-column>
 						<vaadin-grid-column width="22%" header="${translate('lotterypage.lot8')}" path="winner"></vaadin-grid-column>
 						<vaadin-grid-column width="8%" header="${translate('lotterypage.lot9')}" .renderer=${(root, column, data) => {
-							render(html`
+	render(html`
 								<mwc-icon style="color: #00C851">check</mwc-icon>
 							`, root)
-						}}>
+}}>
 						</vaadin-grid-column>
 					</vaadin-grid>
 					<div style="display:${this.closedLotteriesLoading ? 'none' : 'block'}">
@@ -156,11 +156,11 @@ class QortalLottery extends LitElement {
 							<hr />
 						</div>
 						<p>
-							<span>${translate("walletpage.wchange18")}:</span><br />
+							<span>${translate('walletpage.wchange18')}:</span><br />
 							<span style="font-weight: bold;">${window.parent.reduxStore.getState().app.selectedAddress.address}</span>
 						</p>
 						<p>
-							<span>${translate("walletpage.wchange19")}:</span><br />
+							<span>${translate('walletpage.wchange19')}:</span><br />
 							<span style="float: left; font-weight: bold; display: inline;">${this.balance} QORT</span>
 							<br>
 						</p>
@@ -170,7 +170,7 @@ class QortalLottery extends LitElement {
 								required
 								@input="${(e) => { this.checkQortAmount(e) }}"
 								id="amountInput"
-								label="${translate("walletpage.wchange11")} (QORT)"
+								label="${translate('walletpage.wchange11')} (QORT)"
 								type="number"
 								auto-validate="false"
 								value="${this.lotteryEnterAmount}"
@@ -183,14 +183,14 @@ class QortalLottery extends LitElement {
 								required
 								readOnly
 								id="recipient"
-								label="${translate("walletpage.wchange20")}"
+								label="${translate('walletpage.wchange20')}"
 								type="text"
 								value="${this.lotteryAtAddress}"
 							>
 							</mwc-textfield>
 						</p>
 						<div style="margin-bottom: 10px;">
-							<p style="margin-bottom: 0;">${translate("walletpage.wchange21")} <span style="font-weight: bold;">${this.sendQortFee} QORT<span></p>
+							<p style="margin-bottom: 0;">${translate('walletpage.wchange21')} <span style="font-weight: bold;">${this.sendQortFee} QORT<span></p>
 						</div>
 						${this.renderClearSuccess()}
 						${this.renderClearError()}
@@ -212,7 +212,7 @@ class QortalLottery extends LitElement {
 						@click="${() => this.closePlayLotteryDialog()}"
 						class="red"
 					>
-						${translate("general.close")}
+						${translate('general.close')}
 					</mwc-button>
 				</mwc-dialog>
 			</div>
@@ -312,7 +312,7 @@ class QortalLottery extends LitElement {
 		this.closedLotteriesAtArray = []
 
 		await parentEpml.request('apiCall', {
-			url: `/at/byfunction/GA2GF79hfJeTy1TezS4sUZWS4vxJKs4qqwJ49h3NN8H9?limit=0&reverse=true`
+			url: '/at/byfunction/GA2GF79hfJeTy1TezS4sUZWS4vxJKs4qqwJ49h3NN8H9?limit=0&reverse=true'
 		}).then(res => {
 			this.openLotteries = res.filter(function (ol) {
 				return ol.isSleeping === true
@@ -351,10 +351,10 @@ class QortalLottery extends LitElement {
 				this.openLotteriesFilterTx1 = []
 				this.openLotteriesFilterTx2 = []
 				this.openLotteriesFilterTx = res.filter(function (da) {
-					return da.type === "DEPLOY_AT"
+					return da.type === 'DEPLOY_AT'
 				})
 				this.openLotteriesFilterTx2 = res.filter(function (pm) {
-					return pm.type === "PAYMENT"
+					return pm.type === 'PAYMENT'
 				})
 				this.openLotteriesFilterTx.map(item2 => {
 					const sleep = item.sleepUntilHeight
@@ -393,10 +393,10 @@ class QortalLottery extends LitElement {
 				this.closedLotteriesFilterTx1 = []
 				this.closedLotteriesFilterTx2 = []
 				this.closedLotteriesFilterTx1 = res.filter(function (el) {
-					return el.type === "DEPLOY_AT"
+					return el.type === 'DEPLOY_AT'
 				})
 				this.closedLotteriesFilterTx2 = res.filter(function (el) {
-					return el.type === "AT"
+					return el.type === 'AT'
 				})
 
 				this.closedLotteriesFilterTx2.map(item1 => {
@@ -468,7 +468,7 @@ class QortalLottery extends LitElement {
 			this.qortWarning = true
 		}
 
-		this.shadowRoot.querySelector("#playLotteryDialog").show()
+		this.shadowRoot.querySelector('#playLotteryDialog').show()
 	}
 
 	async getWalletBalance() {
@@ -476,7 +476,7 @@ class QortalLottery extends LitElement {
 			url: `/addresses/balance/${window.parent.reduxStore.getState().app.selectedAddress.address}?apiKey=${this.getApiKey()}`,
 		}).then((res) => {
 			if (isNaN(Number(res))) {
-				let snack4string = get("walletpage.wchange32")
+				let snack4string = get('walletpage.wchange32')
 				parentEpml.request('showSnackBar', `${snack4string}`)
 			} else {
 				this.balance = Number(res).toFixed(8)
@@ -500,7 +500,7 @@ class QortalLottery extends LitElement {
 	}
 
 	closePlayLotteryDialog() {
-		this.shadowRoot.querySelector("#playLotteryDialog").close()
+		this.shadowRoot.querySelector('#playLotteryDialog').close()
 		this.balance = 0
 		this.lotteryAtAddress = ''
 		this.lotteryEnterAmount = 0
@@ -512,33 +512,33 @@ class QortalLottery extends LitElement {
 	}
 
 	renderWarning() {
-		return html`<span class="warning-text">${translate("tradepage.tchange48")} QORT</span>`
+		return html`<span class="warning-text">${translate('tradepage.tchange48')} QORT</span>`
 	}
 
 	renderReceiverText() {
-		return html`${translate("walletpage.wchange29")}`
+		return html`${translate('walletpage.wchange29')}`
 	}
 
 	renderSuccessText() {
-		return html`${translate("walletpage.wchange30")}`
+		return html`${translate('walletpage.wchange30')}`
 	}
 
 	renderFailText() {
-		return html`${translate("walletpage.wchange31")}`
+		return html`${translate('walletpage.wchange31')}`
 	}
 
 	renderClearSuccess() {
 		let strSuccessValue = this.successMessage
-		if (strSuccessValue === "") {
+		if (strSuccessValue === '') {
 			return html``
 		} else {
 			return html`
 				<div class="successBox">
 					<span style="color: green; float: left; padding-top: 4px; padding-left: 7px;">${this.successMessage}</span>
-					<span style="padding-top: 4px: padding-right: 7px; float: right;"><mwc-icon-button class="btn-clear-success" title="${translate("general.close")}" icon="close" @click="${() => this.successMessage = ''}"></mwc-icon-button></span>
+					<span style="padding-top: 4px: padding-right: 7px; float: right;"><mwc-icon-button class="btn-clear-success" title="${translate('general.close')}" icon="close" @click="${() => this.successMessage = ''}"></mwc-icon-button></span>
 				</div>
 				<div style="margin-bottom: 15px;">
-					<p style="margin-bottom: 0;">${translate("walletpage.wchange43")}</p>
+					<p style="margin-bottom: 0;">${translate('walletpage.wchange43')}</p>
 				</div>
 			`
 		}
@@ -546,16 +546,16 @@ class QortalLottery extends LitElement {
 
 	renderClearError() {
 		let strErrorValue = this.errorMessage
-		if (strErrorValue === "") {
+		if (strErrorValue === '') {
 			return html``
 		} else {
 			return html`
 				<div class="errorBox">
 					<span style="color: red; float: left; padding-top: 4px; padding-left: 7px;">${this.errorMessage}</span>
-					<span style="padding-top: 4px: padding-right: 7px; float: right;"><mwc-icon-button class="btn-clear-error" title="${translate("general.close")}" icon="close" @click="${() => this.errorMessage = ''}"></mwc-icon-button></span>
+					<span style="padding-top: 4px: padding-right: 7px; float: right;"><mwc-icon-button class="btn-clear-error" title="${translate('general.close')}" icon="close" @click="${() => this.errorMessage = ''}"></mwc-icon-button></span>
 				</div>
 				<div style="margin-bottom: 15px;">
-					<p style="margin-bottom: 0;">${translate("walletpage.wchange44")}</p>
+					<p style="margin-bottom: 0;">${translate('walletpage.wchange44')}</p>
 				</div>
 			`
 		}
@@ -654,7 +654,7 @@ class QortalLottery extends LitElement {
 		if (parseFloat(amount) + parseFloat(0.011) > parseFloat(this.balance)) {
 			this.sendQortLoading = false
 			this.btnDisable = false
-			let snack1string = get("walletpage.wchange26")
+			let snack1string = get('walletpage.wchange26')
 			parentEpml.request('showSnackBar', `${snack1string}`)
 			return false
 		}
@@ -662,7 +662,7 @@ class QortalLottery extends LitElement {
 		if (parseFloat(amount) <= 0) {
 			this.sendQortLoading = false
 			this.btnDisable = false
-			let snack2string = get("walletpage.wchange27")
+			let snack2string = get('walletpage.wchange27')
 			parentEpml.request('showSnackBar', `${snack2string}`)
 			return false
 		}
@@ -670,7 +670,7 @@ class QortalLottery extends LitElement {
 		if (recipient.length === 0) {
 			this.sendQortLoading = false
 			this.btnDisable = false
-			let snack3string = get("walletpage.wchange28")
+			let snack3string = get('walletpage.wchange28')
 			parentEpml.request('showSnackBar', `${snack3string}`)
 			return false
 		}
@@ -737,10 +737,10 @@ class QortalLottery extends LitElement {
 		const makeTransactionRequest = async (receiver, lastRef) => {
 			let myReceiver = receiver
 			let mylastRef = lastRef
-			let dialogamount = get("transactions.amount")
-			let dialogAddress = get("login.address")
-			let dialogName = get("login.name")
-			let dialogto = get("transactions.to")
+			let dialogamount = get('transactions.amount')
+			let dialogAddress = get('login.address')
+			let dialogName = get('login.name')
+			let dialogto = get('transactions.to')
 			let recipientName = await getName(myReceiver)
 			return await parentEpml.request('transaction', {
 				type: 2,

@@ -7,7 +7,7 @@ import nacl from './deps/nacl-fast'
 import utils from './deps/utils'
 import { generateSaveWalletData } from './storeWallet'
 import publicKeyToAddress from './wallet/publicKeyToAddress'
-import AltcoinHDWallet from "./bitcoin/AltcoinHDWallet"
+import AltcoinHDWallet from './bitcoin/AltcoinHDWallet'
 
 export default class PhraseWallet {
 	constructor(seed, walletVersion) {
@@ -85,13 +85,13 @@ export default class PhraseWallet {
 			addrSeed = this._genAddressSeed(addrSeed).slice(0, 32)
 		}
 
-		const addrKeyPair = nacl.sign.keyPair.fromSeed(new Uint8Array(addrSeed));
+		const addrKeyPair = nacl.sign.keyPair.fromSeed(new Uint8Array(addrSeed))
 
-		const address = publicKeyToAddress(addrKeyPair.publicKey);
-		const qoraAddress = publicKeyToAddress(addrKeyPair.publicKey, true);
+		const address = publicKeyToAddress(addrKeyPair.publicKey)
+		const qoraAddress = publicKeyToAddress(addrKeyPair.publicKey, true)
 
 		// Create Bitcoin HD Wallet
-		const btcSeed = [...addrSeed];
+		const btcSeed = [...addrSeed]
 		const btcWallet = new AltcoinHDWallet({
 			mainnet: {
 				private: 0x0488ADE4,
@@ -103,10 +103,10 @@ export default class PhraseWallet {
 				public: 0x043587CF,
 				prefix: 0x6F
 			}
-		}).createWallet(new Uint8Array(btcSeed), false);
+		}).createWallet(new Uint8Array(btcSeed), false)
 
 		// Create Litecoin HD Wallet
-		const ltcSeed = [...addrSeed];
+		const ltcSeed = [...addrSeed]
 		const ltcWallet = new AltcoinHDWallet({
 			mainnet: {
 				private: 0x0488ADE4,
@@ -118,10 +118,10 @@ export default class PhraseWallet {
 				public: 0x043587CF,
 				prefix: 0x6F
 			}
-		}).createWallet(new Uint8Array(ltcSeed), false, 'LTC');
+		}).createWallet(new Uint8Array(ltcSeed), false, 'LTC')
 
 		// Create Dogecoin HD Wallet
-		const dogeSeed = [...addrSeed];
+		const dogeSeed = [...addrSeed]
 		const dogeWallet = new AltcoinHDWallet({
 			mainnet: {
 				private: 0x02FAC398,
@@ -133,10 +133,10 @@ export default class PhraseWallet {
 				public: 0x043587CF,
 				prefix: 0x71
 			}
-		}).createWallet(new Uint8Array(dogeSeed), false, 'DOGE');
+		}).createWallet(new Uint8Array(dogeSeed), false, 'DOGE')
 
 		// Create Digibyte HD Wallet
-		const dgbSeed = [...addrSeed];
+		const dgbSeed = [...addrSeed]
 		const dgbWallet = new AltcoinHDWallet({
 			mainnet: {
 				private: 0x0488ADE4,
@@ -148,10 +148,10 @@ export default class PhraseWallet {
 				public: 0x043587CF,
 				prefix: 0x7E
 			}
-		}).createWallet(new Uint8Array(dgbSeed), false, 'DGB');
+		}).createWallet(new Uint8Array(dgbSeed), false, 'DGB')
 
 		// Create Ravencoin HD Wallet
-		const rvnSeed = [...addrSeed];
+		const rvnSeed = [...addrSeed]
 		const rvnWallet = new AltcoinHDWallet({
 			mainnet: {
 				private: 0x0488ADE4,
@@ -163,10 +163,10 @@ export default class PhraseWallet {
 				public: 0x043587CF,
 				prefix: 0x6F
 			}
-		}).createWallet(new Uint8Array(rvnSeed), false, 'RVN');
+		}).createWallet(new Uint8Array(rvnSeed), false, 'RVN')
 
 		// Create Pirate Chain HD Wallet
-		const arrrSeed = [...addrSeed];
+		const arrrSeed = [...addrSeed]
 		const arrrWallet = new AltcoinHDWallet({
 			mainnet: {
 				private: 0x0488ADE4,
@@ -178,7 +178,7 @@ export default class PhraseWallet {
 				public: 0x043587CF,
 				prefix: [0x14, 0x51]
 			}
-		}).createWallet(new Uint8Array(arrrSeed), false, 'ARRR');
+		}).createWallet(new Uint8Array(arrrSeed), false, 'ARRR')
 
 		this._addresses[nonce] = {
 			address,

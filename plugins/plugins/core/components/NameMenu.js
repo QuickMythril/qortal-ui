@@ -50,45 +50,45 @@ class NameMenu extends LitElement {
 		return html`
 			<div class="dropdown">
 				<a class="block" id="myNameMenu" href="#" @click="${() => this.myMenu()}">${this.nametodialog}</a>
-				<paper-tooltip class="custom" for="myNameMenu" position="right">${translate("blockpage.bcchange7")}</paper-tooltip>
+				<paper-tooltip class="custom" for="myNameMenu" position="right">${translate('blockpage.bcchange7')}</paper-tooltip>
 				<div id="myDropdown" class="dropdown-content">
 					<span>${this.nametodialog}</span>
 					<hr style="color: var(--nav-text-color); border-radius: 90%;">
-					<a href="#" @click="${() => this.shadowRoot.querySelector('#blockNameDialog').show()}">${translate("blockpage.bcchange1")}</a>
-					<a href="#" @click="${() => this.copyToClipboard(this.toblockaddress)}">${translate("blockpage.bcchange8")}</a>
-					<a href="#" @click="${() => this.shadowRoot.querySelector('#startPmDialog').show()}">${translate("blockpage.bcchange9")}</a>
-					<a class="block" href="#" @click="${() => this.myMenu()}">${translate("general.close")}</a>
+					<a href="#" @click="${() => this.shadowRoot.querySelector('#blockNameDialog').show()}">${translate('blockpage.bcchange1')}</a>
+					<a href="#" @click="${() => this.copyToClipboard(this.toblockaddress)}">${translate('blockpage.bcchange8')}</a>
+					<a href="#" @click="${() => this.shadowRoot.querySelector('#startPmDialog').show()}">${translate('blockpage.bcchange9')}</a>
+					<a class="block" href="#" @click="${() => this.myMenu()}">${translate('general.close')}</a>
 				</div>
 			</div>
 			<mwc-dialog id="blockNameDialog">
 				<div style="text-align:center">
-					<h1>${translate("blockpage.bcchange5")}</h1>
+					<h1>${translate('blockpage.bcchange5')}</h1>
 					<hr>
-					<h2>${translate("blockpage.bcchange6")}</h2><br>
+					<h2>${translate('blockpage.bcchange6')}</h2><br>
 					<h2>${this.nametodialog}</h2>
 				</div>
 				<mwc-button slot="secondaryAction" @click="${() => this.chatBlockAddress()}" class="block">
-					${translate("general.yes")}
+					${translate('general.yes')}
 				</mwc-button>
 				<mwc-button slot="primaryAction" @click="${() => this.myMenu()}" class="block red">
-					${translate("general.no")}
+					${translate('general.no')}
 				</mwc-button>
 			</mwc-dialog>
 			<mwc-dialog id="startPmDialog" scrimClickAction="${this.isLoading ? '' : 'close'}">
 				<div style="text-align:center">
-					<h1>${translate("welcomepage.wcchange2")}</h1>
+					<h1>${translate('welcomepage.wcchange2')}</h1>
 					<hr>
 				</div>
-				<p>${translate("welcomepage.wcchange3")}</p>
+				<p>${translate('welcomepage.wcchange3')}</p>
 				<textarea class="input" ?disabled=${this.isLoading} id="sendTo" rows="1">${this.nametodialog}</textarea>
 				<p style="margin-bottom:0;">
-					<textarea class="textarea" @keydown=${(e) => this._textArea(e)} ?disabled=${this.isLoading} id="messageBox" placeholder="${translate("welcomepage.wcchange5")}" rows="1"></textarea>
+					<textarea class="textarea" @keydown=${(e) => this._textArea(e)} ?disabled=${this.isLoading} id="messageBox" placeholder="${translate('welcomepage.wcchange5')}" rows="1"></textarea>
 				</p>
-				<mwc-button ?disabled="${this.isLoading}" slot="primaryAction" @click=${() => {this._sendMessage();}}>
-					${translate("welcomepage.wcchange6")}
+				<mwc-button ?disabled="${this.isLoading}" slot="primaryAction" @click=${() => {this._sendMessage()}}>
+					${translate('welcomepage.wcchange6')}
 				</mwc-button>
 				<mwc-button ?disabled="${this.isLoading}" slot="secondaryAction" @click="${() => this.myMenu()}" class="block red">
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
 		`
@@ -104,7 +104,7 @@ class NameMenu extends LitElement {
 		window.onclick = function (event) {
 			if (!event.target.matches('.block')) {
 				var dropdowns = document.getElementsByClassName('dropdown-content')
-				var i;
+				var i
 				for (i = 0; i < dropdowns.length; i++) {
 					var openDropdown = dropdowns[i]
 					if (openDropdown.classList.contains('showList')) {
@@ -155,7 +155,7 @@ class NameMenu extends LitElement {
 	closeMenu() {
 		this.shadowRoot.getElementById('myDropdown').classList.toggle('showList')
 
-		var dropdowns = document.getElementsByClassName('dropdown-content');
+		var dropdowns = document.getElementsByClassName('dropdown-content')
 		var i
 
 		for (i = 0; i < dropdowns.length; i++) {
@@ -168,12 +168,12 @@ class NameMenu extends LitElement {
 
 	async copyToClipboard(text) {
 		try {
-			let copyString1 = get("walletpage.wchange4")
+			let copyString1 = get('walletpage.wchange4')
 			await navigator.clipboard.writeText(text)
 			parentEpml.request('showSnackBar', `${copyString1}`)
 			this.closeMenu()
 		} catch (err) {
-			let copyString2 = get("walletpage.wchange39")
+			let copyString2 = get('walletpage.wchange39')
 			parentEpml.request('showSnackBar', `${copyString2}`)
 			console.error('Copy to clipboard error:', err)
 			this.closeMenu()
@@ -206,7 +206,7 @@ class NameMenu extends LitElement {
 			address
 		]
 
-		let addressJsonString = JSON.stringify({ "items": items })
+		let addressJsonString = JSON.stringify({ 'items': items })
 
 		let ret = await parentEpml.request('apiCall', {
 			url: `/lists/blockedAddresses?apiKey=${this.getApiKey()}`,
@@ -223,7 +223,7 @@ class NameMenu extends LitElement {
 			this.getChatBlockedList()
 			this.closeMenu()
 			this.shadowRoot.querySelector('#blockNameDialog').close()
-			let err1string = get("blockpage.bcchange2")
+			let err1string = get('blockpage.bcchange2')
 			snackbar.add({
 				labelText: `${err1string}`,
 				dismiss: true
@@ -232,7 +232,7 @@ class NameMenu extends LitElement {
 		} else {
 			this.closeMenu()
 			this.shadowRoot.querySelector('#blockNameDialog').close()
-			let err2string = get("blockpage.bcchange2")
+			let err2string = get('blockpage.bcchange2')
 			snackbar.add({
 				labelText: `${err2string}`,
 				dismiss: true
@@ -248,7 +248,7 @@ class NameMenu extends LitElement {
 		const blockedAddressesUrl = `${nodeUrl}/lists/blockedAddresses?apiKey=${this.getApiKey()}`
 		const err3string = translate('general.noRegisteredName')
 
-		localStorage.removeItem("ChatBlockedAddresses")
+		localStorage.removeItem('ChatBlockedAddresses')
 
 		var obj = []
 
@@ -270,7 +270,7 @@ class NameMenu extends LitElement {
 					} else {
 						obj.push(noName)
 					}
-					localStorage.setItem("ChatBlockedAddresses", JSON.stringify(obj))
+					localStorage.setItem('ChatBlockedAddresses', JSON.stringify(obj))
 				})
 			})
 		})
@@ -345,7 +345,7 @@ class NameMenu extends LitElement {
 			if (addressPublicKey.error === 102) {
 				_publicKey = false
 				// Do something here...
-				let err1string = get("welcomepage.wcchange7")
+				let err1string = get('welcomepage.wcchange7')
 				parentEpml.request('showSnackBar', `${err1string}`)
 				this.isLoading = false
 			} else if (addressPublicKey !== false) {
@@ -389,7 +389,7 @@ class NameMenu extends LitElement {
 		}
 
 		const _computePow = async (chatBytes) => {
-			const _chatBytesArray = Object.keys(chatBytes).map(function (key) { return chatBytes[key]; })
+			const _chatBytesArray = Object.keys(chatBytes).map(function (key) { return chatBytes[key] })
 			const chatBytesArray = new Uint8Array(_chatBytesArray)
 			const chatBytesHash = new window.parent.Sha256().process(chatBytesArray).finish().result
 			const hashPtr = window.parent.sbrk(32, window.parent.heap)
@@ -414,8 +414,8 @@ class NameMenu extends LitElement {
 
 		const getSendChatResponse = (response) => {
 			if (response === true) {
-				messageBox.value = ""
-				let err2string = get("welcomepage.wcchange8")
+				messageBox.value = ''
+				let err2string = get('welcomepage.wcchange8')
 				parentEpml.request('showSnackBar', `${err2string}`)
 				this.isLoading = false
 				this.closeMenu()
@@ -424,7 +424,7 @@ class NameMenu extends LitElement {
 				this.isLoading = false
 				this.closeMenu()
 			} else {
-				let err3string = get("welcomepage.wcchange9")
+				let err3string = get('welcomepage.wcchange9')
 				parentEpml.request('showSnackBar', `${err3string}`)
 				this.isLoading = false
 				this.closeMenu()
@@ -437,11 +437,11 @@ class NameMenu extends LitElement {
 
 	_textMenu(event) {
 		const getSelectedText = () => {
-			var text = ""
+			var text = ''
 
-			if (typeof window.getSelection != "undefined") {
+			if (typeof window.getSelection != 'undefined') {
 				text = window.getSelection().toString()
-			} else if (typeof this.shadowRoot.selection != "undefined" && this.shadowRoot.selection.type == "Text") {
+			} else if (typeof this.shadowRoot.selection != 'undefined' && this.shadowRoot.selection.type == 'Text') {
 				text = this.shadowRoot.selection.createRange().text
 			}
 

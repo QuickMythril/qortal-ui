@@ -34,7 +34,7 @@ class CheckForUpdate extends LitElement {
 		} else {
 			return html`
 				<div style="display: inline;">
-					<paper-icon-button icon="icons:get-app" @click=${() => this.checkupdate()} title="${translate("appspage.schange38")} UI"></paper-icon-button>
+					<paper-icon-button icon="icons:get-app" @click=${() => this.checkupdate()} title="${translate('appspage.schange38')} UI"></paper-icon-button>
 				</div>
 			`
 		}

@@ -43,13 +43,13 @@ class UserSettings extends connect(store)(LitElement) {
 				<div class="container">
 					<div class="wrapper">
 						<div class="leftBar" style="display: table; width: 100%;">
-							<div class="slug">Qortal UI ${translate("settings.settings")}</div>
+							<div class="slug">Qortal UI ${translate('settings.settings')}</div>
 							<ul>
-								<li @click=${() => this.setSettingsView('info')} ><a class=${this.selectedView.id === 'info' ? 'active' : ''} href="javascript:void(0)">${translate("settings.account")}</a></li>
-								<li @click=${() => this.setSettingsView('security')} ><a class=${this.selectedView.id === 'security' ? 'active' : ''} href="javascript:void(0)">${translate("settings.security")}</a></li>
-								<li @click=${() => this.setSettingsView('export')} ><a class=${this.selectedView.id === 'export' ? 'active' : ''} href="javascript:void(0)">${translate("settings.exp1")}</a></li>
-								<li @click=${() => this.setSettingsView('qr-login')} ><a class=${this.selectedView.id === 'qr-login' ? 'active' : ''} href="javascript:void(0)">${translate("settings.qr_login_menu_item")}</a></li>
-								<li @click=${() => this.setSettingsView('notification')} ><a class=${this.selectedView.id === 'notification' ? 'active' : ''} href="javascript:void(0)">${translate("settings.notifications")}</a></li>
+								<li @click=${() => this.setSettingsView('info')} ><a class=${this.selectedView.id === 'info' ? 'active' : ''} href="javascript:void(0)">${translate('settings.account')}</a></li>
+								<li @click=${() => this.setSettingsView('security')} ><a class=${this.selectedView.id === 'security' ? 'active' : ''} href="javascript:void(0)">${translate('settings.security')}</a></li>
+								<li @click=${() => this.setSettingsView('export')} ><a class=${this.selectedView.id === 'export' ? 'active' : ''} href="javascript:void(0)">${translate('settings.exp1')}</a></li>
+								<li @click=${() => this.setSettingsView('qr-login')} ><a class=${this.selectedView.id === 'qr-login' ? 'active' : ''} href="javascript:void(0)">${translate('settings.qr_login_menu_item')}</a></li>
+								<li @click=${() => this.setSettingsView('notification')} ><a class=${this.selectedView.id === 'notification' ? 'active' : ''} href="javascript:void(0)">${translate('settings.notifications')}</a></li>
 							</ul>
 						</div>
 						<div class="mainPage">
@@ -83,15 +83,15 @@ class UserSettings extends connect(store)(LitElement) {
 
 	renderHeaderViews() {
 		if (this.selectedView.id === 'info') {
-			return html`${translate("settings.generalinfo")}`
+			return html`${translate('settings.generalinfo')}`
 		} else if (this.selectedView.id === 'security') {
-			return html`${translate("settings.accountsecurity")}`
+			return html`${translate('settings.accountsecurity')}`
 		} else if (this.selectedView.id === 'export') {
-			return html`${translate("settings.exp1")}`
+			return html`${translate('settings.exp1')}`
 		} else if (this.selectedView.id === 'notification') {
-			return html`UI ${translate("settings.notifications")}`
+			return html`UI ${translate('settings.notifications')}`
 		} else if (this.selectedView.id === 'qr-login') {
-			return html`${translate("settings.qr_login_menu_item")}`
+			return html`${translate('settings.qr_login_menu_item')}`
 		}
 	}
 

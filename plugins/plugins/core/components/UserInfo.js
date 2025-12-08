@@ -42,48 +42,48 @@ export class UserInfo extends LitElement {
 
 		return html`
 			<div style="position: relative;">
-				<vaadin-icon class="close-icon" icon="vaadin:close-big"slot="icon" @click=${() => {this.setOpenUserInfo(false);}}></vaadin-icon>
+				<vaadin-icon class="close-icon" icon="vaadin:close-big"slot="icon" @click=${() => {this.setOpenUserInfo(false)}}></vaadin-icon>
 				${this.isImageLoaded ? html`<div class="avatar-container">${avatarImg}</div>` : html``}
 				${!this.isImageLoaded && this.selectedHead && this.selectedHead.name ?
-					html`
+		html`
 						<div class="avatar-container">
 							<div class="user-info-no-avatar">
 								${this.selectedHead.name.charAt(0)}
 							</div>
 						</div>
 					`
-					: ""
-				}
+		: ''
+}
 				${!this.isImageLoaded && this.selectedHead && !this.selectedHead.name ?
-					html`
+		html`
 						<div class="avatar-container">
 							<img src="/img/incognito.png" alt="avatar" />
 						</div>
 					`
-					: ""
-				}
+		: ''
+}
 				<div class="user-info-header">
 					${this.selectedHead && this.selectedHead.name ? this.selectedHead.name : this.selectedHead ? cropAddress(this.selectedHead.address) : null}
 				</div>
-				<div class="send-message-button" @click="${() => {this.setOpenPrivateMessage({name: this.userName, open: true}); this.setOpenUserInfo(false);}}">
-					${translate("chatpage.cchange58")}
+				<div class="send-message-button" @click="${() => {this.setOpenPrivateMessage({name: this.userName, open: true}); this.setOpenUserInfo(false)}}">
+					${translate('chatpage.cchange58')}
 				</div>
-				<div style="margin-top: 5px;" class="send-message-button" @click=${() => {this.setOpenTipUser(true); this.setOpenUserInfo(false);}}>
-					${translate("chatpage.cchange59")}
+				<div style="margin-top: 5px;" class="send-message-button" @click=${() => {this.setOpenTipUser(true); this.setOpenUserInfo(false)}}>
+					${translate('chatpage.cchange59')}
 				</div>
 				${this.userName ?
-					html`
+		html`
 						<div style="margin-top: 5px;text-transform: uppercase;" class="send-message-button" @click=${() => {
-							setTimeout(() => {
-								this.openProfile();
-							}, 250);
-							this.setOpenUserInfo(false);
-						}}>
-							${translate("profile.profile18")}
+		setTimeout(() => {
+			this.openProfile()
+		}, 250)
+		this.setOpenUserInfo(false)
+	}}>
+							${translate('profile.profile18')}
 						</div>
 					`
-					: ''
-				}
+		: ''
+}
 			</div>
 		`
 	}
@@ -96,7 +96,7 @@ export class UserInfo extends LitElement {
 		const imageHTMLRes = new Image()
 
 		imageHTMLRes.src = imageUrl
-		imageHTMLRes.classList.add("user-info-avatar")
+		imageHTMLRes.classList.add('user-info-avatar')
 
 		imageHTMLRes.onload = () => {
 			this.isImageLoaded = true

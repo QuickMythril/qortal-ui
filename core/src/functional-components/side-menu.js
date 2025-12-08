@@ -28,7 +28,7 @@ class SideMenu extends LitElement {
 	}
 
 	firstUpdated(_changedProperties) {
-		this.items = [...this.querySelectorAll("side-menu-item")]
+		this.items = [...this.querySelectorAll('side-menu-item')]
 	}
 
 	_handleSelect(event) {
@@ -51,10 +51,10 @@ class SideMenu extends LitElement {
 
 	updated(changedProperties) {
 		changedProperties.forEach((oldValue, propName) => {
-			if (propName === "compact") {
+			if (propName === 'compact') {
 				this.items.forEach(item => (item.compact = this.compact))
 
-				let evt = new CustomEvent("side-menu-compact-change", {
+				let evt = new CustomEvent('side-menu-compact-change', {
 					bubbles: true,
 					cancelable: true
 				})
@@ -65,4 +65,4 @@ class SideMenu extends LitElement {
 	}
 }
 
-window.customElements.define("side-menu", SideMenu)
+window.customElements.define('side-menu', SideMenu)

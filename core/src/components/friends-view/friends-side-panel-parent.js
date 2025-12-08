@@ -30,13 +30,13 @@ class FriendsSidePanelParent extends connect(store)(LitElement) {
 			<mwc-icon
 				id="friends-icon"
 				@click=${() => {
-					this.isOpen = !this.isOpen
-					if (this.isOpen && this.hasNewFeed) {
-						localStorage.setItem('lastSeenFeed', Date.now())
-						this.hasNewFeed = false
-						this.shadowRoot.querySelector("friends-side-panel").selected = 'feed'
-					}
-				}}
+		this.isOpen = !this.isOpen
+		if (this.isOpen && this.hasNewFeed) {
+			localStorage.setItem('lastSeenFeed', Date.now())
+			this.hasNewFeed = false
+			this.shadowRoot.querySelector('friends-side-panel').selected = 'feed'
+		}
+	}}
 				style="color: ${this.hasNewFeed ? 'green' : 'var(--black)'}; cursor:pointer;user-select:none"
 			>
 				group

@@ -77,18 +77,18 @@ for (var i = 0; i < 45; ++i) {
 }
 
 var MASKFUNCS = [
-	function (i, j) { return (i + j) % 2 == 0; },
-	function (i, j) { return i % 2 == 0; },
-	function (i, j) { return j % 3 == 0; },
-	function (i, j) { return (i + j) % 3 == 0; },
-	function (i, j) { return (((i / 2) | 0) + ((j / 3) | 0)) % 2 == 0; },
-	function (i, j) { return (i * j) % 2 + (i * j) % 3 == 0; },
-	function (i, j) { return ((i * j) % 2 + (i * j) % 3) % 2 == 0; },
-	function (i, j) { return ((i + j) % 2 + (i * j) % 3) % 2 == 0; }
+	function (i, j) { return (i + j) % 2 == 0 },
+	function (i, j) { return i % 2 == 0 },
+	function (i, j) { return j % 3 == 0 },
+	function (i, j) { return (i + j) % 3 == 0 },
+	function (i, j) { return (((i / 2) | 0) + ((j / 3) | 0)) % 2 == 0 },
+	function (i, j) { return (i * j) % 2 + (i * j) % 3 == 0 },
+	function (i, j) { return ((i * j) % 2 + (i * j) % 3) % 2 == 0 },
+	function (i, j) { return ((i + j) % 2 + (i * j) % 3) % 2 == 0 }
 ]
 
-var needsverinfo = function (ver) { return ver > 6; }
-var getsizebyver = function (ver) { return 4 * ver + 17; }
+var needsverinfo = function (ver) { return ver > 6 }
+var getsizebyver = function (ver) { return 4 * ver + 17 }
 
 var nfullbits = function (ver) {
 	var v = VERSIONS[ver]

@@ -61,51 +61,51 @@ class ChatTextEditor extends LitElement {
 
 	render() {
 		return html`
-			<div class=${["chatbar-container", "chatbar-buttons", this.iframeId !== "_chatEditorDOM" && 'hide-styling'].join(" ")} style="align-items: center; justify-content:space-between;">
+			<div class=${['chatbar-container', 'chatbar-buttons', this.iframeId !== '_chatEditorDOM' && 'hide-styling'].join(' ')} style="align-items: center; justify-content:space-between;">
 				<div style="display: flex; align-items: center;">
 					<button
 						@click=${() => this.editor.chain().focus().toggleBold().run()}
 						?disabled=${this.editor && !this.editor.can().chain().focus().toggleBold().run()}
-						class=${["chatbar-button-single", (this.editedMessageObj || this.repliedToMessageObj || this.openGifModal) && 'show-chatbar-buttons', this.editor && this.editor.isActive('bold') ? 'is-active' : ''].join(' ')}
+						class=${['chatbar-button-single', (this.editedMessageObj || this.repliedToMessageObj || this.openGifModal) && 'show-chatbar-buttons', this.editor && this.editor.isActive('bold') ? 'is-active' : ''].join(' ')}
 					>
 						<span class="material-symbols-outlined">&#xe238;</span>
 					</button>
 					<button
 						@click=${() => this.editor.chain().focus().toggleItalic().run()}
 						?disabled=${this.editor && !this.editor.can().chain().focus().toggleItalic().run()}
-						class=${["chatbar-button-single", (this.editedMessageObj || this.repliedToMessageObj || this.openGifModal) && 'show-chatbar-buttons', this.editor && this.editor.isActive('italic') ? 'is-active' : ''].join(' ')}
+						class=${['chatbar-button-single', (this.editedMessageObj || this.repliedToMessageObj || this.openGifModal) && 'show-chatbar-buttons', this.editor && this.editor.isActive('italic') ? 'is-active' : ''].join(' ')}
 					>
 						<span class="material-symbols-outlined">&#xe23f;</span>
 					</button>
 					<button
 						@click=${() => this.editor.chain().focus().toggleUnderline().run()}
-						class=${["chatbar-button-single", (this.editedMessageObj || this.repliedToMessageObj || this.openGifModal) && 'show-chatbar-buttons', this.editor && this.editor.isActive('underline') ? 'is-active' : ''].join(' ')}
+						class=${['chatbar-button-single', (this.editedMessageObj || this.repliedToMessageObj || this.openGifModal) && 'show-chatbar-buttons', this.editor && this.editor.isActive('underline') ? 'is-active' : ''].join(' ')}
 					>
 						<span class="material-symbols-outlined">&#xe249;</span>
 					</button>
 					<button
 						@click=${() => this.editor.chain().focus().toggleHighlight().run()}
-						class=${["chatbar-button-single", (this.editedMessageObj || this.repliedToMessageObj || this.openGifModal) && 'show-chatbar-buttons', this.editor && this.editor.isActive('highlight') ? 'is-active' : ''].join(' ')}
+						class=${['chatbar-button-single', (this.editedMessageObj || this.repliedToMessageObj || this.openGifModal) && 'show-chatbar-buttons', this.editor && this.editor.isActive('highlight') ? 'is-active' : ''].join(' ')}
 					>
 						<span class="material-symbols-outlined">&#xe22b;</span>
 					</button>
 					<button
 						@click=${() => this.editor.chain().focus().toggleCodeBlock().run()}
-						class=${["chatbar-button-single", (this.editedMessageObj || this.repliedToMessageObj || this.openGifModal) && 'show-chatbar-buttons', this.editor && this.editor.isActive('codeBlock') ? 'is-active' : ''].join(' ')}
+						class=${['chatbar-button-single', (this.editedMessageObj || this.repliedToMessageObj || this.openGifModal) && 'show-chatbar-buttons', this.editor && this.editor.isActive('codeBlock') ? 'is-active' : ''].join(' ')}
 					>
 						<span class="material-symbols-outlined">&#xe86f;</span>
 					</button>
 					<button
 						@click=${() => this.toggleEnableChatEnter()}
 						style="height: 26px; box-sizing: border-box;"
-						class=${["chatbar-button-single", (this.editedMessageObj || this.repliedToMessageObj || this.openGifModal) && 'show-chatbar-buttons', this.editor && this.editor.isActive('codeBlock') ? 'is-active' : ''].join(' ')}
+						class=${['chatbar-button-single', (this.editedMessageObj || this.repliedToMessageObj || this.openGifModal) && 'show-chatbar-buttons', this.editor && this.editor.isActive('codeBlock') ? 'is-active' : ''].join(' ')}
 					>
-						${this.isEnabledChatEnter ? html`${translate("chatpage.cchange63")}` : html`${translate("chatpage.cchange64")}`}
+						${this.isEnabledChatEnter ? html`${translate('chatpage.cchange63')}` : html`${translate('chatpage.cchange64')}`}
 					</button>
 				</div>
-				${this.iframeId === "_chatEditorDOM" ?
-					html`
-						<div style="height: 26px; box-sizing: border-box;" class=${["chatbar-button-single", "removeBg"].join(' ')}>
+				${this.iframeId === '_chatEditorDOM' ?
+		html`
+						<div style="height: 26px; box-sizing: border-box;" class=${['chatbar-button-single', 'removeBg'].join(' ')}>
 							<label for="qChatShowAutoMsg" @click=${() => this.shadowRoot.getElementById('qChatShowAutoMsg').click()}>
 								${translate('chatpage.cchange69')}
 							</label>
@@ -113,32 +113,32 @@ class ChatTextEditor extends LitElement {
 								style="margin-right: -15px;"
 								id="qChatShowAutoMsg"
 								@click=${e => {
-									if (e.target.checked) {
-										window.parent.reduxStore.dispatch(window.parent.reduxAction.removeAutoLoadImageChat(this.chatId))
-										return
-									}
-									window.parent.reduxStore.dispatch(window.parent.reduxAction.addAutoLoadImageChat(this.chatId))
-								}}
+		if (e.target.checked) {
+			window.parent.reduxStore.dispatch(window.parent.reduxAction.removeAutoLoadImageChat(this.chatId))
+			return
+		}
+		window.parent.reduxStore.dispatch(window.parent.reduxAction.addAutoLoadImageChat(this.chatId))
+	}}
 								?checked=${(window.parent.reduxStore.getState().app?.autoLoadImageChats || []).includes(this.chatId)}
 							>
 							</mwc-checkbox>
 						</div>
 					`
-					: ''
-				}
+		: ''
+}
 			</div>
-			<div class=${["chatbar-container", (this.iframeId === "newChat" || this.iframeId === "privateMessage") ? "chatbar-caption" : ""].join(" ")} style="align-items: flex-end; position: relative;">
-				<div style=${this.iframeId === "privateMessage" ? "display: none;" : "display: block;"} class="file-picker-container" @click=${(e) => {this.preventUserSendingImage(e)}}>
+			<div class=${['chatbar-container', (this.iframeId === 'newChat' || this.iframeId === 'privateMessage') ? 'chatbar-caption' : ''].join(' ')} style="align-items: flex-end; position: relative;">
+				<div style=${this.iframeId === 'privateMessage' ? 'display: none;' : 'display: block;'} class="file-picker-container" @click=${(e) => {this.preventUserSendingImage(e)}}>
 					<vaadin-icon class="paperclip-icon" icon="vaadin:paperclip" slot="icon"></vaadin-icon>
 					<div class="file-picker-input-container">
 						<input
 							@change="${e => {
-								this.insertFile(e.target.files[0])
-								const filePickerInput = this.shadowRoot.getElementById('file-picker')
-								if (filePickerInput) {
-									filePickerInput.value = ''
-								}
-							}}"
+		this.insertFile(e.target.files[0])
+		const filePickerInput = this.shadowRoot.getElementById('file-picker')
+		if (filePickerInput) {
+			filePickerInput.value = ''
+		}
+	}}"
 							id="file-picker"
 							class="file-picker-input"
 							type="file"
@@ -152,50 +152,50 @@ class ChatTextEditor extends LitElement {
 					</div>
 				</div>
 				<textarea style="color: var(--black);" tabindex='1' ?autofocus=${true} ?disabled=${this.isLoading || this.isLoadingMessages} id="messageBox" rows="1"></textarea>
-				<div id=${this.iframeId} class=${["element", this.iframeId === "privateMessage" ? "privateMessageMargin" : ""].join(" ")}></div>
+				<div id=${this.iframeId} class=${['element', this.iframeId === 'privateMessage' ? 'privateMessageMargin' : ''].join(' ')}></div>
 				<button class="emoji-button" ?disabled=${this.isLoading || this.isLoadingMessages}>
 					${html`<img class="emoji" draggable="false" alt="😀" src="/emoji/svg/1f600.svg">`}
 				</button>
 				${this.editedMessageObj ?
-					html`
+		html`
 						<div style="margin-bottom: 10px;">
 							${this.isLoading === false
-								? html`
+		? html`
 									<vaadin-icon class="checkmark-icon" icon="vaadin:check" slot="icon" @click=${() => {this.sendMessageFunc(this.messageQueue)}}></vaadin-icon>
 								` : html`
 									<paper-spinner-lite active></paper-spinner-lite>
 								`
-							}
+}
 						</div>
 					` : html`
 						<div style="margin-bottom: 10px; ${(
-							this.iframeId === 'newChat'
-							|| this.iframeId === "newImageChat"
-							|| this.iframeId === "newGifChat"
-							|| this.iframeId === "newAttachmentChat"
-							|| this.iframeId === "newFileChat"
-						) ? 'display: none;' : 'display: flex;'}">
+		this.iframeId === 'newChat'
+							|| this.iframeId === 'newImageChat'
+							|| this.iframeId === 'newGifChat'
+							|| this.iframeId === 'newAttachmentChat'
+							|| this.iframeId === 'newFileChat'
+	) ? 'display: none;' : 'display: flex;'}">
 							${this.isLoading === false
-								? html`
+		? html`
 									<img src="/img/qchat-send-message-icon.svg" alt="send-icon" class="send-icon" @click=${() => {this.sendMessageFunc(this.messageQueue)}}>
 								` : html`
 									<paper-spinner-lite active></paper-spinner-lite>
 								`
-							}
+}
 						</div>
 					`
-				}
+}
 			</div>
 			${this.chatMessageSize >= 750 ?
-				html`
-					<div class="message-size-container" style=${this.imageFile && "margin-top: 10px;"}>
+		html`
+					<div class="message-size-container" style=${this.imageFile && 'margin-top: 10px;'}>
 						<div class="message-size" style="${this.chatMessageSize > 4000 && 'color: #F44336'}">
 							${`Your message size is of ${this.chatMessageSize} bytes out of a maximum of 4000`}
 						</div>
 					</div>
 				`
-				: html``
-			}
+		: html``
+}
 		`
 	}
 
@@ -206,11 +206,11 @@ class ChatTextEditor extends LitElement {
 
 			if (checkTheme === 'dark') {
 				this.theme = 'dark'
-				chatbar.style.cssText = "color:#ffffff;"
+				chatbar.style.cssText = 'color:#ffffff;'
 
 			} else {
 				this.theme = 'light'
-				chatbar.style.cssText = "color:#080808;"
+				chatbar.style.cssText = 'color:#080808;'
 
 			}
 		})
@@ -220,7 +220,7 @@ class ChatTextEditor extends LitElement {
 		this.chatMessageInput = this.shadowRoot.querySelector('.element')
 
 		this.emojiPicker = new EmojiPicker({
-			style: "twemoji",
+			style: 'twemoji',
 			twemojiBaseUrl: '/emoji/',
 			showPreview: false,
 			showVariants: false,
@@ -248,7 +248,7 @@ class ChatTextEditor extends LitElement {
 		this.userName = getMyNameFromStore({ allowActiveName: false })
 		if (!this.userName) {
 			e.preventDefault()
-			parentEpml.request('showSnackBar', get("chatpage.cchange27"))
+			parentEpml.request('showSnackBar', get('chatpage.cchange27'))
 		}
 	}
 
@@ -272,7 +272,7 @@ class ChatTextEditor extends LitElement {
 			if (item) {
 				const blob = item && await item.getType(image_type)
 
-				var file = new File([blob], "name", {
+				var file = new File([blob], 'name', {
 					type: image_type
 				})
 
@@ -295,8 +295,8 @@ class ChatTextEditor extends LitElement {
 			this.updatePlaceholder(this.editor, this.placeholder)
 		}
 
-		if (changedProperties && changedProperties.has("imageFile")) {
-			this.chatMessageInput = "newChat"
+		if (changedProperties && changedProperties.has('imageFile')) {
+			this.chatMessageInput = 'newChat'
 		}
 	}
 
@@ -312,7 +312,7 @@ class ChatTextEditor extends LitElement {
 		this.getMessageSize(this.editor.getJSON())
 
 		if (this.chatMessageSize > 4000) {
-			parentEpml.request('showSnackBar', get("chatpage.cchange29"))
+			parentEpml.request('showSnackBar', get('chatpage.cchange29'))
 			return
 		}
 
@@ -356,7 +356,7 @@ class ChatTextEditor extends LitElement {
 				messageObject = {
 					messageText: trimmedMessage,
 					images: [{
-						service: "QCHAT_IMAGE",
+						service: 'QCHAT_IMAGE',
 						name: '123456789123456789123456789',
 						identifier: '123456'
 					}],
@@ -367,7 +367,7 @@ class ChatTextEditor extends LitElement {
 				messageObject = {
 					messageText: trimmedMessage,
 					images: [{
-						service: "IMAGE",
+						service: 'IMAGE',
 						name: '123456789123456789123456789',
 						identifier: '123456'
 					}],
@@ -378,11 +378,11 @@ class ChatTextEditor extends LitElement {
 				messageObject = {
 					messageText: trimmedMessage,
 					attachments: [{
-						service: "ATTACHMENT",
+						service: 'ATTACHMENT',
 						name: '123456789123456789123456789',
 						identifier: '123456',
-						attachmentName: "123456789123456789123456789",
-						attachmentSize: "123456"
+						attachmentName: '123456789123456789123456789',
+						attachmentSize: '123456'
 					}],
 					repliedTo: '',
 					version: 3
@@ -391,11 +391,11 @@ class ChatTextEditor extends LitElement {
 				messageObject = {
 					messageText: trimmedMessage,
 					files: [{
-						service: "FILE",
+						service: 'FILE',
 						name: '123456789123456789123456789',
 						identifier: '123456',
-						appFileName: "123456789123456789123456789",
-						appFileSize: "123456"
+						appFileName: '123456789123456789123456789',
+						appFileSize: '123456'
 					}],
 					repliedTo: '',
 					version: 3

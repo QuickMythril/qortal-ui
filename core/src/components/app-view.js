@@ -303,13 +303,13 @@ class AppView extends connect(store)(LitElement) {
 							<search-modal></search-modal>
 							<div>&nbsp;&nbsp;</div>
 							<div style="display: inline;">
-								<paper-icon-button icon="icons:settings" @click=${() => this.openSettings()} title="${translate("settings.settings")}"></paper-icon-button>
+								<paper-icon-button icon="icons:settings" @click=${() => this.openSettings()} title="${translate('settings.settings')}"></paper-icon-button>
 							</div>
 							<div>&nbsp;&nbsp;</div>
 							<check-for-update></check-for-update>
 							<div>&nbsp;</div>
 							<div style="display: inline;">
-								<paper-icon-button icon="icons:exit-to-app" @click=${() => this.openLogout()} title="${translate("logout.logout")}"></paper-icon-button>
+								<paper-icon-button icon="icons:exit-to-app" @click=${() => this.openLogout()} title="${translate('logout.logout')}"></paper-icon-button>
 							</div>
 							<div>&nbsp;&nbsp;</div>
 						</app-toolbar>
@@ -326,55 +326,55 @@ class AppView extends connect(store)(LitElement) {
 			<logout-view></logout-view>
 			<paper-dialog class="setpass-wrapper" id="setLockScreenPass" modal>
 				<div style="text-align: center;">
-					<h2 style="color: var(--black);">Qortal UI ${translate("login.lp1")}</h2>
+					<h2 style="color: var(--black);">Qortal UI ${translate('login.lp1')}</h2>
 					<hr>
 				</div>
 				<div style="text-align: center;">
-					<h3 style="color: var(--black);">${translate("login.lp2")}</h3>
-					<h4 style="color: var(--black);">${translate("login.lp3")}</h4>
+					<h3 style="color: var(--black);">${translate('login.lp2')}</h3>
+					<h4 style="color: var(--black);">${translate('login.lp3')}</h4>
 				</div>
 				<div style="display:flex;">
 					<mwc-icon style="padding: 10px; padding-left: 0; padding-top: 42px; color: var(--black);">password</mwc-icon>
-					<vaadin-password-field style="width: 100%;" label="${translate("login.password")}" id="lockPassword" autofocus></vaadin-password-field>
+					<vaadin-password-field style="width: 100%;" label="${translate('login.password')}" id="lockPassword" autofocus></vaadin-password-field>
 				</div>
 				<div style="display:flex;">
 					<mwc-icon style="padding: 10px; padding-left: 0; padding-top: 42px; color: var(--black);">password</mwc-icon>
-					<vaadin-password-field style="width: 100%;" label="${translate("login.confirmpass")}" id="lockPasswordConfirm"></vaadin-password-field>
+					<vaadin-password-field style="width: 100%;" label="${translate('login.confirmpass')}" id="lockPasswordConfirm"></vaadin-password-field>
 				</div>
 				<div style="display: flex; justify-content: space-between;">
-					<mwc-button class="red" @click="${() => this.closeSetScreenLockPass()}">${translate("login.lp4")}</mwc-button>
-					<mwc-button @click="${() => this.checkPass()}">${translate("login.lp5")}</mwc-button>
+					<mwc-button class="red" @click="${() => this.closeSetScreenLockPass()}">${translate('login.lp4')}</mwc-button>
+					<mwc-button @click="${() => this.checkPass()}">${translate('login.lp5')}</mwc-button>
 				</div>
 			</paper-dialog>
 			<paper-dialog class="setpass-wrapper" id="extraConfirmPass" modal>
 				<div style="text-align: center;">
-					<h2 style="color: var(--black);">Qortal UI ${translate("login.lp1")}</h2>
+					<h2 style="color: var(--black);">Qortal UI ${translate('login.lp1')}</h2>
 					<hr>
 				</div>
 				<div style="text-align: center;">
-					<h3 style="color: var(--black);">${translate("login.lessthen8")}</h3>
+					<h3 style="color: var(--black);">${translate('login.lessthen8')}</h3>
 				</div>
 				<div style="display: flex; justify-content: space-between;">
-					<mwc-button class="red" @click="${() => this.closExtraConfirmPass()}">${translate("login.lp4")}</mwc-button>
-					<mwc-button @click="${() => this.setNewScreenPass()}">${translate("login.lp5")}</mwc-button>
+					<mwc-button class="red" @click="${() => this.closExtraConfirmPass()}">${translate('login.lp4')}</mwc-button>
+					<mwc-button @click="${() => this.setNewScreenPass()}">${translate('login.lp5')}</mwc-button>
 				</div>
 			</paper-dialog>
 			<paper-dialog class="lock-wrapper" id="lockScreenActive" modal>
 				<div class="text-wrapper">
 					<span class="lock-title-white">UI </span><br/>
-					<span class="lock-title-white">${translate("login.lp9")} </span>
-					<span class="lock-title-red">${translate("login.lp10")}</span>
+					<span class="lock-title-white">${translate('login.lp9')} </span>
+					<span class="lock-title-red">${translate('login.lp10')}</span>
 				</div>
 				<div style="display:flex; margin-top: 5px;">
 					<mwc-icon style="padding: 10px; padding-left: 0; padding-top: 42px; color: var(--black);">password</mwc-icon>
-					<vaadin-password-field style="width: 45%;" label="${translate("login.password")}" id="unlockPassword" @keydown="${this.passKeyListener}" autofocus>
+					<vaadin-password-field style="width: 45%;" label="${translate('login.password')}" id="unlockPassword" @keydown="${this.passKeyListener}" autofocus>
 					<div slot="helper">
 						${this.helperMessage}
 					</div>
 					</vaadin-password-field>
 				</div>
 				<div style="display: flex; margin-top: 35px;">
-					<mwc-button dense unelevated label="${translate("login.lp7")}" icon="lock_open" @click="${() => this.closeLockScreenActive()}"></mwc-button>
+					<mwc-button dense unelevated label="${translate('login.lp7')}" icon="lock_open" @click="${() => this.closeLockScreenActive()}"></mwc-button>
 				</div>
 			</paper-dialog>
 			<coin-balances-controller></coin-balances-controller>
@@ -618,7 +618,7 @@ class AppView extends connect(store)(LitElement) {
 		}
 
 		const filterMyBotPriceTradesBTC = async () => {
-			const tradeBotBtcUrl = buildRequestUrl(`/crosschain/tradebot?foreignBlockchain=BITCOIN`, store.getState())
+			const tradeBotBtcUrl = buildRequestUrl('/crosschain/tradebot?foreignBlockchain=BITCOIN', store.getState())
 
 			this.tradeBotBtcAt = await fetch(tradeBotBtcUrl).then(response => {
 				return response.json()
@@ -819,7 +819,7 @@ class AppView extends connect(store)(LitElement) {
 		}
 
 		const filterMyBotPriceTradesLTC = async () => {
-			const tradeBotLtcUrl = buildRequestUrl(`/crosschain/tradebot?foreignBlockchain=LITECOIN`, store.getState())
+			const tradeBotLtcUrl = buildRequestUrl('/crosschain/tradebot?foreignBlockchain=LITECOIN', store.getState())
 
 			this.tradeBotLtcAt = await fetch(tradeBotLtcUrl).then(response => {
 				return response.json()
@@ -1009,7 +1009,7 @@ class AppView extends connect(store)(LitElement) {
 		}
 
 		const filterMyBotPriceTradesDOGE = async () => {
-			const tradeBotDogeUrl = buildRequestUrl(`/crosschain/tradebot?foreignBlockchain=DOGECOIN`, store.getState())
+			const tradeBotDogeUrl = buildRequestUrl('/crosschain/tradebot?foreignBlockchain=DOGECOIN', store.getState())
 
 			this.tradeBotDogeAt = await fetch(tradeBotDogeUrl).then(response => {
 				return response.json()
@@ -1199,7 +1199,7 @@ class AppView extends connect(store)(LitElement) {
 		}
 
 		const filterMyBotPriceTradesDGB = async () => {
-			const tradeBotDgbUrl = buildRequestUrl(`/crosschain/tradebot?foreignBlockchain=DIGIBYTE`, store.getState())
+			const tradeBotDgbUrl = buildRequestUrl('/crosschain/tradebot?foreignBlockchain=DIGIBYTE', store.getState())
 
 			this.tradeBotDgbAt = await fetch(tradeBotDgbUrl).then(response => {
 				return response.json()
@@ -1389,7 +1389,7 @@ class AppView extends connect(store)(LitElement) {
 		}
 
 		const filterMyBotPriceTradesRVN = async () => {
-			const tradeBotRvnUrl = buildRequestUrl(`/crosschain/tradebot?foreignBlockchain=RAVENCOIN`, store.getState())
+			const tradeBotRvnUrl = buildRequestUrl('/crosschain/tradebot?foreignBlockchain=RAVENCOIN', store.getState())
 
 			this.tradeBotRvnAt = await fetch(tradeBotRvnUrl).then(response => {
 				return response.json()
@@ -1578,7 +1578,7 @@ class AppView extends connect(store)(LitElement) {
 		}
 
 		const filterMyBotPriceTradesARRR = async () => {
-			const tradeBotArrrUrl = buildRequestUrl(`/crosschain/tradebot?foreignBlockchain=PIRATECHAIN`, store.getState())
+			const tradeBotArrrUrl = buildRequestUrl('/crosschain/tradebot?foreignBlockchain=PIRATECHAIN', store.getState())
 
 			this.tradeBotArrrAt = await fetch(tradeBotArrrUrl).then(response => {
 				return response.json()
@@ -1846,19 +1846,19 @@ class AppView extends connect(store)(LitElement) {
 		if (this.myLockScreenPass === false && this.myLockScreenSet === false) {
 			return html`
 				<div style="display: inline;">
-					<paper-icon-button icon="icons:lock-open" @click=${() => this.openSetScreenLockPass()} title="${translate("login.lp11")}"></paper-icon-button>
+					<paper-icon-button icon="icons:lock-open" @click=${() => this.openSetScreenLockPass()} title="${translate('login.lp11')}"></paper-icon-button>
 				</div>
 			`
 		} else if (this.myLockScreenSet === false) {
 			return html`
 				<div style="display: inline;">
-					<paper-icon-button icon="icons:lock-open" @click=${() => this.setLockQortal()} title="${translate("login.lp11")}"></paper-icon-button>
+					<paper-icon-button icon="icons:lock-open" @click=${() => this.setLockQortal()} title="${translate('login.lp11')}"></paper-icon-button>
 				</div>
 			`
 		} else if (this.myLockScreenSet === true) {
 			return html`
 				<div style="display: inline;">
-					<paper-icon-button icon="icons:lock" title="${translate("login.lp10")}"></paper-icon-button>
+					<paper-icon-button icon="icons:lock" title="${translate('login.lp10')}"></paper-icon-button>
 				</div>
 			`
 		}
@@ -1879,19 +1879,19 @@ class AppView extends connect(store)(LitElement) {
 		const rePassword = this.shadowRoot.getElementById('lockPasswordConfirm').value
 
 		if (password === '') {
-			let snackbar1string = get("login.pleaseenter")
+			let snackbar1string = get('login.pleaseenter')
 			parentEpml.request('showSnackBar', `${snackbar1string}`)
 			return
 		}
 
 		if (password != rePassword) {
-			let snackbar2string = get("login.notmatch")
+			let snackbar2string = get('login.notmatch')
 			parentEpml.request('showSnackBar', `${snackbar2string}`)
 			return
 		}
 
 		if (password.length < 8) {
-			let snackbar3string = get("login.lessthen8")
+			let snackbar3string = get('login.lessthen8')
 			parentEpml.request('showSnackBar', `${snackbar3string}`)
 			this.lowPass = ''
 			this.lowPass = password
@@ -1900,7 +1900,7 @@ class AppView extends connect(store)(LitElement) {
 
 		if (password.length >= 8) {
 			this.setNewScreenPass()
-			let snackbar4string = get("login.lp6")
+			let snackbar4string = get('login.lp6')
 			parentEpml.request('showSnackBar', `${snackbar4string}`)
 		}
 	}
@@ -1975,11 +1975,11 @@ class AppView extends connect(store)(LitElement) {
 	}
 
 	renderHelperPass() {
-		return html`<span style="color: #fff; font-size: 13px; font-weight: bold; float: left;">${translate("login.pleaseenter")}</span>`
+		return html`<span style="color: #fff; font-size: 13px; font-weight: bold; float: left;">${translate('login.pleaseenter')}</span>`
 	}
 
 	renderHelperErr() {
-		return html`<span style="color: var(--mdc-theme-error); font-size: 13px; font-weight: bold; float: right;">${translate("login.lp8")}</span>`
+		return html`<span style="color: var(--mdc-theme-error); font-size: 13px; font-weight: bold; float: right;">${translate('login.lp8')}</span>`
 	}
 
 	renderNodeManagement() {
@@ -2007,7 +2007,7 @@ class AppView extends connect(store)(LitElement) {
 	}
 
 	async updateBtcWalletBalance() {
-		let _url = buildRequestUrl(`/crosschain/btc/walletbalance`, store.getState())
+		let _url = buildRequestUrl('/crosschain/btc/walletbalance', store.getState())
 		let _body = store.getState().app.selectedAddress.btcWallet.derivedMasterPublicKey
 
 		await parentEpml.request('apiCall', {
@@ -2024,7 +2024,7 @@ class AppView extends connect(store)(LitElement) {
 	}
 
 	async updateLtcWalletBalance() {
-		let _url = buildRequestUrl(`/crosschain/ltc/walletbalance`, store.getState())
+		let _url = buildRequestUrl('/crosschain/ltc/walletbalance', store.getState())
 		let _body = store.getState().app.selectedAddress.ltcWallet.derivedMasterPublicKey
 
 		await parentEpml.request('apiCall', {
@@ -2041,7 +2041,7 @@ class AppView extends connect(store)(LitElement) {
 	}
 
 	async updateDogeWalletBalance() {
-		let _url = buildRequestUrl(`/crosschain/doge/walletbalance`, store.getState())
+		let _url = buildRequestUrl('/crosschain/doge/walletbalance', store.getState())
 		let _body = store.getState().app.selectedAddress.dogeWallet.derivedMasterPublicKey
 
 		await parentEpml.request('apiCall', {
@@ -2058,7 +2058,7 @@ class AppView extends connect(store)(LitElement) {
 	}
 
 	async updateDgbWalletBalance() {
-		let _url = buildRequestUrl(`/crosschain/dgb/walletbalance`, store.getState())
+		let _url = buildRequestUrl('/crosschain/dgb/walletbalance', store.getState())
 		let _body = store.getState().app.selectedAddress.dgbWallet.derivedMasterPublicKey
 
 		await parentEpml.request('apiCall', {
@@ -2075,7 +2075,7 @@ class AppView extends connect(store)(LitElement) {
 	}
 
 	async updateRvnWalletBalance() {
-		let _url = buildRequestUrl(`/crosschain/rvn/walletbalance`, store.getState())
+		let _url = buildRequestUrl('/crosschain/rvn/walletbalance', store.getState())
 		let _body = store.getState().app.selectedAddress.rvnWallet.derivedMasterPublicKey
 
 		await parentEpml.request('apiCall', {
@@ -2092,7 +2092,7 @@ class AppView extends connect(store)(LitElement) {
 	}
 
 	async updateArrrWalletBalance() {
-		let _url = buildRequestUrl(`/crosschain/arrr/walletbalance`, store.getState())
+		let _url = buildRequestUrl('/crosschain/arrr/walletbalance', store.getState())
 		let _body = store.getState().app.selectedAddress.arrrWallet.seed58
 
 		await parentEpml.request('apiCall', {

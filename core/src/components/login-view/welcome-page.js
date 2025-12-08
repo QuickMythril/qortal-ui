@@ -26,8 +26,8 @@ class WelcomePage extends LitElement {
 	render() {
 		return html`
 			<div class="welcome-page">
-				<mwc-button class="button-outline" @click=${() => this.navigate('login')} outlined>${translate("login.login")}</mwc-button>
-				<mwc-button class="button-outline" @click=${() => this.navigate('create-account')} outlined>${translate("login.createaccount")}</mwc-button>
+				<mwc-button class="button-outline" @click=${() => this.navigate('login')} outlined>${translate('login.login')}</mwc-button>
+				<mwc-button class="button-outline" @click=${() => this.navigate('create-account')} outlined>${translate('login.createaccount')}</mwc-button>
 			</div>
 		`
 	}

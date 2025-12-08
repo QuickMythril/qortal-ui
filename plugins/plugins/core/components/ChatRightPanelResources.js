@@ -83,7 +83,7 @@ class ChatRightPanelResources extends LitElement {
 		return html`
 			<div class="container">
 				<div class="close-row" style="margin-top: 15px">
-					<mwc-icon @click=${() => {this.getMoreImages(true);}} style="color: var(--black); cursor:pointer;">refresh</mwc-icon>
+					<mwc-icon @click=${() => {this.getMoreImages(true)}} style="color: var(--black); cursor:pointer;">refresh</mwc-icon>
 					<vaadin-icon class="top-bar-icon" @click=${() => this.toggle(false)} style="margin: 0px 10px" icon="vaadin:close" slot="icon"></vaadin-icon>
 				</div>
 				<div class="checkbox-row">
@@ -96,10 +96,10 @@ class ChatRightPanelResources extends LitElement {
 				</div>
 				<div id="viewElement" class="container-body">
 					${this.images.map((image) => {
-						return html`
+		return html`
 							<image-parent .repost=${this.repost} .image=${image} ?autoView=${this.autoView}></image-parent>
 						`
-					})}
+	})}
 					<div id='downObserver'></div>
 				</div>
 			</div>
@@ -275,47 +275,47 @@ class ImageParent extends LitElement {
 	render() {
 		return html`
 			${!this.autoView && !this.viewImage && this.myName !== this.image.name ?
-				html`
+		html`
 					<div class="message-myBg">
 						<div class="message-user-info">
 							<span class="message-data-name">${this.image.name}</span>
 						</div>
-						<div @click=${() => {this.viewImage = true;}} class=${[`image-container`].join(' ')} style="height: 200px">
+						<div @click=${() => {this.viewImage = true}} class=${['image-container'].join(' ')} style="height: 200px">
 							<div style="display:flex;width:100%;height:100%;justify-content:center;align-items:center;cursor:pointer;color:var(--black);">
 								${translate('chatpage.cchange40')}
 							</div>
 						</div>
 					</div>
 				`
-				: html``
-			}
+		: html``
+}
 			${this.autoView || this.viewImage || this.myName === this.image.name ?
-				html`
+		html`
 					<div class="message-myBg">
 						<div class="message-user-info">
 							<span class="message-data-name">${this.image.name}</span>
 						</div>
 						<reusable-image
 							.resource=${{
-								name: this.image.name,
-								service: this.image.service,
-								identifier: this.image.identifier
-							}}
+		name: this.image.name,
+		service: this.image.service,
+		identifier: this.image.identifier
+	}}
 							.onLoad=${() => this.onLoad()}
 						>
 						</reusable-image>
 						${this.isImgLoaded ?
-							html`
+		html`
 								<div class="actions-parent">
 									<button class="repost-btn" @click=${() => this.repost(this.image)}>repost</button>
 								</div>
 							`
-							: ''
-						}
+		: ''
+}
 					</div>
 				`
-				: ''
-			}
+		: ''
+}
 		`
 	}
 

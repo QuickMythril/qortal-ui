@@ -52,8 +52,8 @@ class AddFriendsModal extends connect(store)(LitElement) {
 						<div style="text-align:center">
 							<h1>
 								${this.editContent
-								? translate('friends.friend10')
-								: translate('friends.friend2')}
+		? translate('friends.friend10')
+		: translate('friends.friend2')}
 							</h1>
 							<hr />
 						</div>
@@ -70,8 +70,8 @@ class AddFriendsModal extends connect(store)(LitElement) {
 								style="margin-right: -15px;"
 								id="willFollow"
 								@change=${(e) => {
-									this.willFollow = e.target.checked;
-								}}
+		this.willFollow = e.target.checked
+	}}
 								?checked=${this.willFollow}
 							></mwc-checkbox>
 						</div>
@@ -106,8 +106,8 @@ class AddFriendsModal extends connect(store)(LitElement) {
 								class="input"
 								.value=${this.alias}
 								@change=${(e) => {
-									this.alias = e.target.value
-								}}
+		this.alias = e.target.value
+	}}
 							/>
 						</div>
 						<div style="height:15px"></div>
@@ -115,8 +115,8 @@ class AddFriendsModal extends connect(store)(LitElement) {
 							<textarea
 								class="input"
 								@change=${(e) => {
-									this.notes = e.target.value
-								}}
+		this.notes = e.target.value
+	}}
 								.value=${this.notes}
 								?disabled=${this.isLoading}
 								id="messageBoxAddFriend"
@@ -131,38 +131,38 @@ class AddFriendsModal extends connect(store)(LitElement) {
 						</div>
 						<div>
 							${this.isLoadingSchemas ?
-								html`
+		html`
 									<div style="width:100%;display: flex; justify-content:center">
 										<paper-spinner-lite active></paper-spinner-lite>
 									</div>
 								` : ''
-							}
+}
 							${this.availableFeeedSchemas.map((schema) => {
-								const isAlreadySelected = this.mySelectedFeeds.find((item) => item.name === schema.name);
-								let avatarImgApp;
-								const avatarUrl2 = buildRequestUrl(`/arbitrary/THUMBNAIL/${schema.name}/qortal_avatar?async=true`, store.getState());
-								avatarImgApp = html`<img src="${avatarUrl2}" style="max-width:100%; max-height:100%;" onerror="this.onerror=null; this.src='/img/incognito.png';"/>`;
-								return html`
+		const isAlreadySelected = this.mySelectedFeeds.find((item) => item.name === schema.name)
+		let avatarImgApp
+		const avatarUrl2 = buildRequestUrl(`/arbitrary/THUMBNAIL/${schema.name}/qortal_avatar?async=true`, store.getState())
+		avatarImgApp = html`<img src="${avatarUrl2}" style="max-width:100%; max-height:100%;" onerror="this.onerror=null; this.src='/img/incognito.png';"/>`
+		return html`
 									<div
 										class="app-name"
 										style="background:${isAlreadySelected ? 'lightblue' : ''}"
 										@click=${() => {
-											const copymySelectedFeeds = [...this.mySelectedFeeds];
-											const findIndex = copymySelectedFeeds.findIndex((item) => item.name === schema.name);
-											if (findIndex === -1) {
-												if (this.mySelectedFeeds.length > 4) return
-												copymySelectedFeeds.push({name: schema.name, identifier: schema.identifier, service: schema.service});
-												this.mySelectedFeeds = copymySelectedFeeds;
-											} else {
-												this.mySelectedFeeds = copymySelectedFeeds.filter((item) => item.name !== schema.name);
-											}
-										}}
+		const copymySelectedFeeds = [...this.mySelectedFeeds]
+		const findIndex = copymySelectedFeeds.findIndex((item) => item.name === schema.name)
+		if (findIndex === -1) {
+			if (this.mySelectedFeeds.length > 4) return
+			copymySelectedFeeds.push({name: schema.name, identifier: schema.identifier, service: schema.service})
+			this.mySelectedFeeds = copymySelectedFeeds
+		} else {
+			this.mySelectedFeeds = copymySelectedFeeds.filter((item) => item.name !== schema.name)
+		}
+	}}
 									>
 										<div class="avatar">${avatarImgApp}</div>
 										<span style="color:${isAlreadySelected ? 'var(--white)' : 'var(--black)'};font-size:16px">${schema.name}</span>
 									</div>
 								`
-							})}
+	})}
 						</div>
 					</div>
 					<div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px">
@@ -170,21 +170,21 @@ class AddFriendsModal extends connect(store)(LitElement) {
 							class="modal-button-red"
 							?disabled="${this.isLoading}"
 							@click="${() => {
-								this.setIsOpen(false);
-								this.clearFields();
-								this.onClose();
-							}}"
+		this.setIsOpen(false)
+		this.clearFields()
+		this.onClose()
+	}}"
 						>
 							${translate('general.close')}
 						</button>
 						${this.editContent ?
-							html`
-								<button ?disabled="${this.isLoading}" class="modal-button-red" @click=${() => {this.removeFriend();}}>
+		html`
+								<button ?disabled="${this.isLoading}" class="modal-button-red" @click=${() => {this.removeFriend()}}>
 									${translate('friends.friend14')}
 								</button>
 							` : ''
-						}
-						<button ?disabled="${this.isLoading}" class="modal-button" @click=${() => {this.addFriend();}}>
+}
+						<button ?disabled="${this.isLoading}" class="modal-button" @click=${() => {this.addFriend()}}>
 							${this.editContent ? translate('friends.friend10') : translate('friends.friend2')}
 						</button>
 					</div>
@@ -249,7 +249,7 @@ class AddFriendsModal extends connect(store)(LitElement) {
 	async getAvailableFeedSchemas() {
 		try {
 			this.isLoadingSchemas = true
-			const url = buildRequestUrl(`/arbitrary/resources/search?service=DOCUMENT&identifier=ui_schema_feed&prefix=true`, store.getState())
+			const url = buildRequestUrl('/arbitrary/resources/search?service=DOCUMENT&identifier=ui_schema_feed&prefix=true', store.getState())
 			const res = await fetch(url)
 			const data = await res.json()
 

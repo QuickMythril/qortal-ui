@@ -59,36 +59,36 @@ class Puzzles extends LitElement {
 		return html`
 			<div id="puzzle-page">
 				<div style="min-height:48px; display: flex; padding-bottom: 6px;">
-					<h3 style="margin: 0; flex: 1; padding-top: 8px; display: inline;">${translate("puzzlepage.pchange1")}</h3>
+					<h3 style="margin: 0; flex: 1; padding-top: 8px; display: inline;">${translate('puzzlepage.pchange1')}</h3>
 				</div>
 				<div class="divCard">
 					<vaadin-grid theme="compact, wrap-cell-content" id="puzzlesGrid" ?hidden="${this.isEmptyArray(this.puzzles)}" .items="${this.puzzles}" aria-label="Puzzles" all-rows-visible>
-						<vaadin-grid-column width="20em" header="${translate("puzzlepage.pchange2")}" .renderer=${(root, column, data) => {
-							if (data.item.isSolved) {
-								render(html`<span style="font-size: smaller;">${translate("puzzlepage.pchange3")}<br>${data.item.winner}</span>`, root)
-							} else {
-								render(html`<span>${data.item.reward} QORT</span>`, root)
-							}
-						}}>
+						<vaadin-grid-column width="20em" header="${translate('puzzlepage.pchange2')}" .renderer=${(root, column, data) => {
+	if (data.item.isSolved) {
+		render(html`<span style="font-size: smaller;">${translate('puzzlepage.pchange3')}<br>${data.item.winner}</span>`, root)
+	} else {
+		render(html`<span>${data.item.reward} QORT</span>`, root)
+	}
+}}>
 						</vaadin-grid-column>
-						<vaadin-grid-column width="16em" header="${translate("puzzlepage.pchange4")}" path="name"></vaadin-grid-column>
-						<vaadin-grid-column width="40%" header="${translate("puzzlepage.pchange5")}" path="description"></vaadin-grid-column>
-						<vaadin-grid-column width="24em" header="${translate("puzzlepage.pchange6")}" .renderer=${(root, column, data) => {
-							render(html`<span class="clue">${data.item.clue}</span>`, root)
-						}}>
+						<vaadin-grid-column width="16em" header="${translate('puzzlepage.pchange4')}" path="name"></vaadin-grid-column>
+						<vaadin-grid-column width="40%" header="${translate('puzzlepage.pchange5')}" path="description"></vaadin-grid-column>
+						<vaadin-grid-column width="24em" header="${translate('puzzlepage.pchange6')}" .renderer=${(root, column, data) => {
+	render(html`<span class="clue">${data.item.clue}</span>`, root)
+}}>
 						</vaadin-grid-column>
-						<vaadin-grid-column width="10em" header="${translate("puzzlepage.pchange7")}" .renderer=${(root, column, data) => {
-							if (data.item.isSolved) {
-								render(html``, root)
-							} else {
-								render(html`
+						<vaadin-grid-column width="10em" header="${translate('puzzlepage.pchange7')}" .renderer=${(root, column, data) => {
+	if (data.item.isSolved) {
+		render(html``, root)
+	} else {
+		render(html`
 									<mwc-button @click=${() => this.guessPuzzle(data.item)}>
 										<mwc-icon>queue</mwc-icon>
-										&nbsp;${translate("puzzlepage.pchange8")}
+										&nbsp;${translate('puzzlepage.pchange8')}
 									</mwc-button>
 								`, root)
-							}
-						}}>
+	}
+}}>
 						</vaadin-grid-column>
 					</vaadin-grid>
 					${this.loading ? html`
@@ -98,18 +98,18 @@ class Puzzles extends LitElement {
 					` : ''}
 				</div>
 				<mwc-dialog id="puzzleGuessDialog" scrimClickAction="${this.loading ? '' : 'close'}">
-					<div>${translate("puzzlepage.pchange9")} ${this.selectedPuzzle.reward} QORT:</div>
+					<div>${translate('puzzlepage.pchange9')} ${this.selectedPuzzle.reward} QORT:</div>
 					<br>
-					<div id="puzzleGuessName">${translate("puzzlepage.pchange4")}: ${this.selectedPuzzle.name}</div>
-					<div id="puzzleGuessDescription">${translate("puzzlepage.pchange5")}: ${this.selectedPuzzle.description}</div>
+					<div id="puzzleGuessName">${translate('puzzlepage.pchange4')}: ${this.selectedPuzzle.name}</div>
+					<div id="puzzleGuessDescription">${translate('puzzlepage.pchange5')}: ${this.selectedPuzzle.description}</div>
 					<div id="puzzleGuessClue" ?hidden=${!this.selectedPuzzle.clue}>Clue: <span class="clue">${this.selectedPuzzle.clue}</span></div>
 					<br>
-					<div id="puzzleGuessInputHint" style="font-size: smaller;">${translate("puzzlepage.pchange10")} <b>${translate("puzzlepage.pchange11")}</b> ${translate("puzzlepage.pchange12")}</div>
-					<mwc-textfield style="width:100%" ?disabled="${this.loading}" label="${translate("puzzlepage.pchange13")}" id="puzzleGuess" pattern="[1-9A-HJ-NP-Za-km-z]{43,44}" style="font-family: monospace;" maxLength="44" charCounter="true" autoValidate="true"></mwc-textfield>
+					<div id="puzzleGuessInputHint" style="font-size: smaller;">${translate('puzzlepage.pchange10')} <b>${translate('puzzlepage.pchange11')}</b> ${translate('puzzlepage.pchange12')}</div>
+					<mwc-textfield style="width:100%" ?disabled="${this.loading}" label="${translate('puzzlepage.pchange13')}" id="puzzleGuess" pattern="[1-9A-HJ-NP-Za-km-z]{43,44}" style="font-family: monospace;" maxLength="44" charCounter="true" autoValidate="true"></mwc-textfield>
 					<div style="text-align:right; height:36px;">
 						<span ?hidden="${!this.loading}">
 							<!-- loading message -->
-							${translate("puzzlepage.pchange14")} &nbsp;
+							${translate('puzzlepage.pchange14')} &nbsp;
 							<paper-spinner-lite
 								style="margin-top:12px;"
 								?active="${this.loading}"
@@ -126,7 +126,7 @@ class Puzzles extends LitElement {
 						slot="primaryAction"
 						@click=${this.submitPuzzleGuess}
 						>
-						${translate("puzzlepage.pchange15")}
+						${translate('puzzlepage.pchange15')}
 					</mwc-button>
 					<mwc-button
 						?disabled="${this.loading}"
@@ -134,7 +134,7 @@ class Puzzles extends LitElement {
 						dialogAction="cancel"
 						class="red"
 						>
-						${translate("general.close")}
+						${translate('general.close')}
 					</mwc-button>
 				</mwc-dialog>
 			</div>
@@ -177,7 +177,7 @@ class Puzzles extends LitElement {
 
 		const getPuzzleGroupMembers = async () => {
 			return await parentEpml.request('apiCall', {
-				url: `/groups/members/165`
+				url: '/groups/members/165'
 			})
 		}
 

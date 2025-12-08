@@ -32,11 +32,11 @@ class ChatMessage extends LitElement {
 	render() {
 		return html`
 			<li class="clearfix">
-				<div class="message-data ${this.message.sender === this.selectedAddress.address ? "align-right" : ""}">
+				<div class="message-data ${this.message.sender === this.selectedAddress.address ? 'align-right' : ''}">
 					<span class="message-data-name">${this.message.sender}</span> &nbsp;
 					<span class="message-data-time">10:10 AM, Today</span>
 				</div>
-				<div class="message ${this.message.sender === this.selectedAddress.address ? "my-message float-right" : "other-message float-left"}">
+				<div class="message ${this.message.sender === this.selectedAddress.address ? 'my-message float-right' : 'other-message float-left'}">
 					${this.message.decodedMessage}
 				</div>
 			</li>

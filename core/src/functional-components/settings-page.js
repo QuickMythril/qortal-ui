@@ -74,7 +74,7 @@ class SettingsPage extends connect(store)(LitElement) {
 							<div class="selected-left-side">
 								<mwc-icon style="margin-right: 10px">link</mwc-icon>
 								${this.selectedItem ?
-									html `
+		html `
 										<div>
 											<span class="name">${this.selectedItem.name}</span>
 											<span>${this.selectedItem.baseUrl || getNodeBaseUrl(this.selectedItem)}</span>
@@ -82,7 +82,7 @@ class SettingsPage extends connect(store)(LitElement) {
 									` : html`
 										${translate('settings.selectnode')}
 									`
-								}
+}
 							</div>
 							<mwc-icon>expand_more</mwc-icon>
 						</div>
@@ -98,22 +98,22 @@ class SettingsPage extends connect(store)(LitElement) {
 											<mwc-button
 												outlined
 												@click="${(e) => {
-													e.stopPropagation()
-													const currentValues = this.nodeConfig.knownNodes[index]
-													const dialog = this.shadowRoot.querySelector('#addNodeDialog')
+		e.stopPropagation()
+		const currentValues = this.nodeConfig.knownNodes[index]
+		const dialog = this.shadowRoot.querySelector('#addNodeDialog')
 
-													// Set the value for mwc-textfield elements
-													dialog.querySelector('#nameInput').value = currentValues.name
-													dialog.querySelector('#domainInput').value = currentValues.domain
-													dialog.querySelector('#portInput').value = currentValues.port
+		// Set the value for mwc-textfield elements
+		dialog.querySelector('#nameInput').value = currentValues.name
+		dialog.querySelector('#domainInput').value = currentValues.domain
+		dialog.querySelector('#portInput').value = currentValues.port
 
-													// Set the selected value for mwc-select
-													const protocolList = dialog.querySelector('#protocolList')
-													protocolList.value = currentValues.protocol
-													this.isBeingEdited = true
-													this.isBeingEditedIndex = index
-													this.shadowRoot.querySelector('#addNodeDialog').show()
-												}}"
+		// Set the selected value for mwc-select
+		const protocolList = dialog.querySelector('#protocolList')
+		protocolList.value = currentValues.protocol
+		this.isBeingEdited = true
+		this.isBeingEditedIndex = index
+		this.shadowRoot.querySelector('#addNodeDialog').show()
+	}}"
 											>
 												<mwc-icon class="buttonBlue">edit</mwc-icon>
 											</mwc-button>
@@ -356,7 +356,7 @@ class SettingsPage extends connect(store)(LitElement) {
 
 		store.dispatch(doSetNode(selectedNodeIndex))
 
-		localStorage.removeItem('mySelectedNode');
+		localStorage.removeItem('mySelectedNode')
 		localStorage.setItem('mySelectedNode', selectedNodeIndex)
 	}
 

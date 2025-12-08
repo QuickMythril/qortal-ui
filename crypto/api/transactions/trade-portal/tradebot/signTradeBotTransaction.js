@@ -14,7 +14,7 @@ const signTradeBotTransaction = (unsignedTxn, keyPair) => {
 	const txnBuffer = Base58.decode(unsignedTxn)
 
 	if (keyPair.privateKey.length === undefined) {
-		const _privateKey = Object.keys(keyPair.privateKey).map(function (key) { return keyPair.privateKey[key]; })
+		const _privateKey = Object.keys(keyPair.privateKey).map(function (key) { return keyPair.privateKey[key] })
 		const privateKey = new Uint8Array(_privateKey)
 		const signature = nacl.sign.detached(txnBuffer, privateKey)
 		return utils.appendBuffer(txnBuffer, signature)

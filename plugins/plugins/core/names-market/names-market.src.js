@@ -87,48 +87,48 @@ class NamesMarket extends LitElement {
 		return html`
 			<div id="name-registration-page">
 				<mwc-tab-bar id="tabs-1" activeIndex="0">
-					<mwc-tab label="${translate("registernamepage.nchange22")}" @click="${(e) => this.displayTabContent('sell')}"></mwc-tab>
-					<mwc-tab label="${translate("registernamepage.nchange46")}" @click="${(e) => this.displayTabContent('sold')}"></mwc-tab>
+					<mwc-tab label="${translate('registernamepage.nchange22')}" @click="${(e) => this.displayTabContent('sell')}"></mwc-tab>
+					<mwc-tab label="${translate('registernamepage.nchange46')}" @click="${(e) => this.displayTabContent('sold')}"></mwc-tab>
 				</mwc-tab-bar>
 				<div id="tabs-1-content">
 					<div id="tab-sell-content">
 						<div class="divCard">
 							<vaadin-text-field
-								placeholder="${translate("datapage.dchange4")}"
+								placeholder="${translate('datapage.dchange4')}"
 								style="width: 25%; margin-bottom: 20px;"
 								clear-button-visible
 								@value-changed="${(e) => {
-									this.searchSellNames = []
-									const searchTerm = (e.target.value || '').trim()
-									const keys = ['name', 'owner', 'salePrice']
-									const filtered = this.marketSellNames.filter((search) => keys.some((key) => search[key].toLowerCase().includes(searchTerm.toLowerCase())))
-									if (!e.target.value) {
-										this.updatePageSize()
-									} else {
-										this.searchSellNames = filtered
-										this.updatePageSizeSearch()
-									}
-								}}"
+		this.searchSellNames = []
+		const searchTerm = (e.target.value || '').trim()
+		const keys = ['name', 'owner', 'salePrice']
+		const filtered = this.marketSellNames.filter((search) => keys.some((key) => search[key].toLowerCase().includes(searchTerm.toLowerCase())))
+		if (!e.target.value) {
+			this.updatePageSize()
+		} else {
+			this.searchSellNames = filtered
+			this.updatePageSizeSearch()
+		}
+	}}"
 							>
 							<vaadin-icon slot="prefix" icon="vaadin:search"></vaadin-icon>
 							</vaadin-text-field><br>
 							<vaadin-grid theme="large" id="marketSellNames" ?hidden="${this.isEmptyArray(this.marketSellNames)}" aria-label="Names" page-size="20" all-rows-visible>
-								<vaadin-grid-column header="${translate("registernamepage.nchange5")}" path="name"></vaadin-grid-column>
-								<vaadin-grid-column header="${translate("registernamepage.nchange6")}" .renderer=${(root, column, data) => {
-									render(html`<span class="sellerAddress" @click=${() => this.openSellerInfo(data.item.owner)}>${data.item.owner}</span>`, root)
-								}}></vaadin-grid-column>
-								<vaadin-grid-column header="${translate("registernamepage.nchange23")} (QORT)" path="salePrice"></vaadin-grid-column>
-								<vaadin-grid-column width="14rem" flex-grow="0" header="${translate("registernamepage.nchange7")}" .renderer=${(root, column, data) => {
-									if (data.item.owner === this.selectedAddress.address) {
-										render(html`${this.renderCancelSellNameButton(data.item)}`, root)
-									} else {
-										render(html`${this.renderBuyNameButton(data.item)}`, root)
-									}
-								}}></vaadin-grid-column>
+								<vaadin-grid-column header="${translate('registernamepage.nchange5')}" path="name"></vaadin-grid-column>
+								<vaadin-grid-column header="${translate('registernamepage.nchange6')}" .renderer=${(root, column, data) => {
+	render(html`<span class="sellerAddress" @click=${() => this.openSellerInfo(data.item.owner)}>${data.item.owner}</span>`, root)
+}}></vaadin-grid-column>
+								<vaadin-grid-column header="${translate('registernamepage.nchange23')} (QORT)" path="salePrice"></vaadin-grid-column>
+								<vaadin-grid-column width="14rem" flex-grow="0" header="${translate('registernamepage.nchange7')}" .renderer=${(root, column, data) => {
+	if (data.item.owner === this.selectedAddress.address) {
+		render(html`${this.renderCancelSellNameButton(data.item)}`, root)
+	} else {
+		render(html`${this.renderBuyNameButton(data.item)}`, root)
+	}
+}}></vaadin-grid-column>
 							</vaadin-grid>
 							<div id="pages"></div>
 							${(this.isEmptyArray(this.marketSellNames) && !this.isLoading) ? html`
-								<span style="color: var(--black);">${translate("registernamepage.nchange24")}</span>
+								<span style="color: var(--black);">${translate('registernamepage.nchange24')}</span>
 							`: ''}
 							${this.isLoading ? html`
 								<div class="spinner">
@@ -140,26 +140,26 @@ class NamesMarket extends LitElement {
 					<div id="tab-sold-content">
 						<div class="divCard">
 							<vaadin-grid theme="large" id="marketSoldNames" ?hidden="${this.isEmptyArray(this.marketSoldNames)}" aria-label="Sold Names" page-size="20" all-rows-visible>
-								<vaadin-grid-column header="${translate("registernamepage.nchange5")}" path="name"></vaadin-grid-column>
-								<vaadin-grid-column header="${translate("registernamepage.nchange6")}" .renderer=${(root, column, data) => {
-									render(html`<span class="sellerAddress" @click=${() => this.openSellerInfo(data.item.seller)}>${data.item.seller}</span>`, root)
-								}}></vaadin-grid-column>
-								<vaadin-grid-column header="${translate("rewardsharepage.rchange6")}" .renderer=${(root, column, data) => {
-									render(html`<span class="buyerAddress" @click=${() => this.openSellerInfo(data.item.creatorAddress)}>${data.item.creatorAddress}</span>`, root)
-								}}></vaadin-grid-column>
-								<vaadin-grid-column header="${translate("registernamepage.nchange23")} (QORT)" path="amount"></vaadin-grid-column>
-								<vaadin-grid-column width="10rem" flex-grow="0" header="${translate("websitespage.schange28")}" .renderer=${(root, column, data) => {
-								render(html`
+								<vaadin-grid-column header="${translate('registernamepage.nchange5')}" path="name"></vaadin-grid-column>
+								<vaadin-grid-column header="${translate('registernamepage.nchange6')}" .renderer=${(root, column, data) => {
+	render(html`<span class="sellerAddress" @click=${() => this.openSellerInfo(data.item.seller)}>${data.item.seller}</span>`, root)
+}}></vaadin-grid-column>
+								<vaadin-grid-column header="${translate('rewardsharepage.rchange6')}" .renderer=${(root, column, data) => {
+	render(html`<span class="buyerAddress" @click=${() => this.openSellerInfo(data.item.creatorAddress)}>${data.item.creatorAddress}</span>`, root)
+}}></vaadin-grid-column>
+								<vaadin-grid-column header="${translate('registernamepage.nchange23')} (QORT)" path="amount"></vaadin-grid-column>
+								<vaadin-grid-column width="10rem" flex-grow="0" header="${translate('websitespage.schange28')}" .renderer=${(root, column, data) => {
+	render(html`
 									<span style="color: #F44336;">
 										<mwc-icon class="sold">sell</mwc-icon>
-										&nbsp;${translate("tradepage.tchange31")}
+										&nbsp;${translate('tradepage.tchange31')}
 									</span>
 								`, root)
-								}}></vaadin-grid-column>
+}}></vaadin-grid-column>
 							</vaadin-grid>
 							<div id="pagesSold"></div>
 							${(this.isEmptyArray(this.marketSoldNames) && !this.isLoading) ? html`
-								<span style="color: var(--black);">${translate("registernamepage.nchange24")}</span>
+								<span style="color: var(--black);">${translate('registernamepage.nchange24')}</span>
 							`: ''}
 							${this.isLoading ? html`
 								<div class="spinner">
@@ -172,7 +172,7 @@ class NamesMarket extends LitElement {
 				<mwc-dialog id="cancelSellNameDialog" scrimClickAction="" escapeKeyAction="">
 					<div class="manage-group-dialog">
 						<div style="text-align: center;">
-							<h2>${translate("registernamepage.nchange20")} ${translate("registernamepage.nchange5")}</h2>
+							<h2>${translate('registernamepage.nchange20')} ${translate('registernamepage.nchange5')}</h2>
 							<hr />
 							<br>
 						</div>
@@ -182,14 +182,14 @@ class NamesMarket extends LitElement {
 								readOnly
 								outlined
 								id="toCancelSellName"
-								label="${translate("registernamepage.nchange29")}"
+								label="${translate('registernamepage.nchange29')}"
 								type="text"
 								value="${this.toCancelSellName}"
 							>
 							</mwc-textfield>
 						</p>
 						<div style="margin-bottom: 10px;">
-							<p style="margin-bottom: 0;">${translate("walletpage.wchange21")} <span style="font-weight: bold;">${this.cancelSellFee} QORT<span></p>
+							<p style="margin-bottom: 0;">${translate('walletpage.wchange21')} <span style="font-weight: bold;">${this.cancelSellFee} QORT<span></p>
 							<br>
 						</div>
 						${this.renderClearSuccess()}
@@ -201,7 +201,7 @@ class NamesMarket extends LitElement {
 							<div>
 								<vaadin-button ?disabled="${this.btnDisable}" theme="primary medium" style="width: 100%;" @click=${() => this.createCancelSellName()}>
 									<vaadin-icon icon="vaadin:close-circle-o" slot="prefix"></vaadin-icon>
-									${translate("registernamepage.nchange20")} ${translate("registernamepage.nchange5")}
+									${translate('registernamepage.nchange20')} ${translate('registernamepage.nchange5')}
 								</vaadin-button>
 							</div>
 						</div>
@@ -211,13 +211,13 @@ class NamesMarket extends LitElement {
 						@click="${() => this.closeCancelSellNameDialog()}"
 						class="red"
 					>
-						${translate("general.close")}
+						${translate('general.close')}
 					</mwc-button>
 				</mwc-dialog>
 				<mwc-dialog id="buyNameDialog" scrimClickAction="" escapeKeyAction="">
 					<div class="manage-group-dialog">
 						<div style="text-align: center;">
-							<h2>${translate("registernamepage.nchange21")}</h2>
+							<h2>${translate('registernamepage.nchange21')}</h2>
 							<hr />
 							<br>
 						</div>
@@ -227,7 +227,7 @@ class NamesMarket extends LitElement {
 								readOnly
 								outlined
 								id="toBuyName"
-								label="${translate("registernamepage.nchange5")}"
+								label="${translate('registernamepage.nchange5')}"
 								type="text"
 								value="${this.toBuyName}"
 							>
@@ -239,7 +239,7 @@ class NamesMarket extends LitElement {
 								readOnly
 								outlined
 								id="toBuySeller"
-								label="${translate("registernamepage.nchange6")}"
+								label="${translate('registernamepage.nchange6')}"
 								type="text"
 								value="${this.toBuySeller}"
 							>
@@ -251,14 +251,14 @@ class NamesMarket extends LitElement {
 								readOnly
 								outlined
 								id="toBuyPrice"
-								label="${translate("registernamepage.nchange23")}"
+								label="${translate('registernamepage.nchange23')}"
 								type="number"
 								value="${this.toBuyPrice}"
 							>
 							</mwc-textfield>
 						</p>
 						<div style="margin-bottom: 10px;">
-							<p style="margin-bottom: 0;">${translate("walletpage.wchange21")} <span style="font-weight: bold;">${this.buyFee} QORT<span></p>
+							<p style="margin-bottom: 0;">${translate('walletpage.wchange21')} <span style="font-weight: bold;">${this.buyFee} QORT<span></p>
 							<br>
 						</div>
 						${this.renderClearSuccess()}
@@ -270,7 +270,7 @@ class NamesMarket extends LitElement {
 							<div>
 								<vaadin-button ?disabled="${this.btnDisable}" theme="primary medium" style="width: 100%;" @click=${() => this.openCheckFunds()}>
 									<vaadin-icon icon="vaadin:cart" slot="prefix"></vaadin-icon>
-									${translate("registernamepage.nchange21")}
+									${translate('registernamepage.nchange21')}
 								</vaadin-button>
 							</div>
 						</div>
@@ -280,35 +280,35 @@ class NamesMarket extends LitElement {
 						@click="${() => this.closeBuyNameDialog()}"
 						class="red"
 					>
-						${translate("general.close")}
+						${translate('general.close')}
 					</mwc-button>
 				</mwc-dialog>
 				<mwc-dialog id="buyErrorNameDialog" scrimClickAction="" escapeKeyAction="">
 					<div class="card-container">
 						<mwc-icon class="error-icon">warning</mwc-icon>
-						<h2>${translate("registernamepage.nchange35")}</h2>
-						<h4>${translate("registernamepage.nchange36")}</h4>
+						<h2>${translate('registernamepage.nchange35')}</h2>
+						<h4>${translate('registernamepage.nchange36')}</h4>
 					</div>
 					<mwc-button
 						slot="primaryAction"
 						@click=${() => this.closeBuyErrorNameDialog()}
 						class="red"
 					>
-						${translate("general.close")}
+						${translate('general.close')}
 					</mwc-button>
 				</mwc-dialog>
 				<mwc-dialog id="buyErrorPriceDialog" scrimClickAction="" escapeKeyAction="">
 					<div class="card-container">
 						<mwc-icon class="error-icon">warning</mwc-icon>
-						<h2>${translate("registernamepage.nchange37")}</h2>
-						<h4>${translate("registernamepage.nchange38")}</h4>
+						<h2>${translate('registernamepage.nchange37')}</h2>
+						<h4>${translate('registernamepage.nchange38')}</h4>
 					</div>
 					<mwc-button
 						slot="primaryAction"
 						@click=${() => this.closeBuyErrorPriceDialog()}
 						class="red"
 					>
-						${translate("general.close")}
+						${translate('general.close')}
 					</mwc-button>
 				</mwc-dialog>
 			</div>
@@ -329,7 +329,7 @@ class NamesMarket extends LitElement {
 		const fetchMarketSellNames = async () => {
 			this.isLoading = true
 			await parentEpml.request('apiCall', {
-				url: `/names/forsale?limit=0&reverse=true`
+				url: '/names/forsale?limit=0&reverse=true'
 			}).then(res => {
 				this.marketSellNames = res
 			})
@@ -341,7 +341,7 @@ class NamesMarket extends LitElement {
 		const fetchMarketSoldNames = async () => {
 			this.isLoading = true
 			await parentEpml.request('apiCall', {
-				url: `/transactions/search?txType=BUY_NAME&confirmationStatus=BOTH&limit=0&reverse=true`
+				url: '/transactions/search?txType=BUY_NAME&confirmationStatus=BOTH&limit=0&reverse=true'
 			}).then(res => {
 				this.marketSoldNames = res
 			})
@@ -445,7 +445,7 @@ class NamesMarket extends LitElement {
 	}
 
 	async setPages() {
-		this.namesGrid = this.shadowRoot.querySelector(`#marketSellNames`)
+		this.namesGrid = this.shadowRoot.querySelector('#marketSellNames')
 		this.pagesControl = this.shadowRoot.querySelector('#pages')
 		this.pages = undefined
 	}
@@ -459,7 +459,7 @@ class NamesMarket extends LitElement {
 	}
 
 	async setPagesSearch() {
-		this.namesGrid = this.shadowRoot.querySelector(`#marketSellNames`)
+		this.namesGrid = this.shadowRoot.querySelector('#marketSellNames')
 		this.pagesControl = this.shadowRoot.querySelector('#pages')
 		this.pages = undefined
 	}
@@ -473,7 +473,7 @@ class NamesMarket extends LitElement {
 	}
 
 	async setSoldPages() {
-		this.namesSoldGrid = this.shadowRoot.querySelector(`#marketSoldNames`)
+		this.namesSoldGrid = this.shadowRoot.querySelector('#marketSoldNames')
 		this.pagesSoldControl = this.shadowRoot.querySelector('#pagesSold')
 		this.soldPages = undefined
 	}
@@ -636,11 +636,11 @@ class NamesMarket extends LitElement {
 				<div class="successBox">
 					<span style="color: green; float: left; padding-top: 4px; padding-left: 7px;">${this.successMessage}</span>
 					<span style="padding-top: 4px: padding-right: 7px; float: right;">
-						<mwc-icon-button class="btn-clear-success" title="${translate("general.close")}" icon="close" @click="${() => this.successMessage = ''}"></mwc-icon-button>
+						<mwc-icon-button class="btn-clear-success" title="${translate('general.close')}" icon="close" @click="${() => this.successMessage = ''}"></mwc-icon-button>
 					</span>
 				</div>
 				<div style="margin-bottom: 15px;">
-					<p style="margin-bottom: 0;">${translate("walletpage.wchange43")}</p>
+					<p style="margin-bottom: 0;">${translate('walletpage.wchange43')}</p>
 				</div>
 			`
 		}
@@ -655,11 +655,11 @@ class NamesMarket extends LitElement {
 				<div class="errorBox">
 					<span style="color: red; float: left; padding-top: 4px; padding-left: 7px;">${this.errorMessage}</span>
 					<span style="padding-top: 4px: padding-right: 7px; float: right;">
-						<mwc-icon-button class="btn-clear-error" title="${translate("general.close")}" icon="close" @click="${() => this.errorMessage = ''}"></mwc-icon-button>
+						<mwc-icon-button class="btn-clear-error" title="${translate('general.close')}" icon="close" @click="${() => this.errorMessage = ''}"></mwc-icon-button>
 					</span>
 				</div>
 				<div style="margin-bottom: 15px;">
-					<p style="margin-bottom: 0;">${translate("walletpage.wchange44")}</p>
+					<p style="margin-bottom: 0;">${translate('walletpage.wchange44')}</p>
 				</div>
 			`
 		}

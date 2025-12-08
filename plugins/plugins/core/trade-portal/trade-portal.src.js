@@ -93,14 +93,14 @@ class TradePortal extends LitElement {
 			tradeStorageData: { type: String },
 			tradeLockScreenPass: { type: String },
 			tradeLockScreenSet: { type: String },
-				tradeLockPass: { type: String },
-				tradeLockSet: { type: String },
-				myTradeLockScreenPass: { type: String },
-				myTradeLockScreenSet: { type: String },
-				tradeHelperMessage: { type: String },
-				showNames: { type: Boolean }
-			}
+			tradeLockPass: { type: String },
+			tradeLockSet: { type: String },
+			myTradeLockScreenPass: { type: String },
+			myTradeLockScreenSet: { type: String },
+			tradeHelperMessage: { type: String },
+			showNames: { type: Boolean }
 		}
+	}
 
 	static get styles() {
 		return [tradePortalStyles]
@@ -109,17 +109,17 @@ class TradePortal extends LitElement {
 	constructor() {
 		super()
 		let qortal = {
-			name: "QORTAL",
-			balance: "0",
-			coinCode: "QORT",
+			name: 'QORTAL',
+			balance: '0',
+			coinCode: 'QORT',
 			coinAmount: this.amountString,
-			tradeFee: "0.02"
+			tradeFee: '0.02'
 		}
 
 		let bitcoin = {
-			name: "BITCOIN",
-			balance: "0",
-			coinCode: "BTC",
+			name: 'BITCOIN',
+			balance: '0',
+			coinCode: 'BTC',
 			openOrders: [],
 			openFilteredOrders: [],
 			historicTrades: [],
@@ -129,13 +129,13 @@ class TradePortal extends LitElement {
 			openTradeOrders: null,
 			tradeOffersSocketCounter: 1,
 			coinAmount: this.amountString,
-			tradeFee: "~0.0001"
+			tradeFee: '~0.0001'
 		}
 
 		let litecoin = {
-			name: "LITECOIN",
-			balance: "0",
-			coinCode: "LTC",
+			name: 'LITECOIN',
+			balance: '0',
+			coinCode: 'LTC',
 			openOrders: [],
 			openFilteredOrders: [],
 			historicTrades: [],
@@ -145,13 +145,13 @@ class TradePortal extends LitElement {
 			openTradeOrders: null,
 			tradeOffersSocketCounter: 1,
 			coinAmount: this.amountString,
-			tradeFee: "~0.00005"
+			tradeFee: '~0.00005'
 		}
 
 		let dogecoin = {
-			name: "DOGECOIN",
-			balance: "0",
-			coinCode: "DOGE",
+			name: 'DOGECOIN',
+			balance: '0',
+			coinCode: 'DOGE',
 			openOrders: [],
 			openFilteredOrders: [],
 			historicTrades: [],
@@ -161,13 +161,13 @@ class TradePortal extends LitElement {
 			openTradeOrders: null,
 			tradeOffersSocketCounter: 1,
 			coinAmount: this.amountString,
-			tradeFee: "~0.005"
+			tradeFee: '~0.005'
 		}
 
 		let digibyte = {
-			name: "DIGIBYTE",
-			balance: "0",
-			coinCode: "DGB",
+			name: 'DIGIBYTE',
+			balance: '0',
+			coinCode: 'DGB',
 			openOrders: [],
 			openFilteredOrders: [],
 			historicTrades: [],
@@ -177,13 +177,13 @@ class TradePortal extends LitElement {
 			openTradeOrders: null,
 			tradeOffersSocketCounter: 1,
 			coinAmount: this.amountString,
-			tradeFee: "~0.0005"
+			tradeFee: '~0.0005'
 		}
 
 		let ravencoin = {
-			name: "RAVENCOIN",
-			balance: "0",
-			coinCode: "RVN",
+			name: 'RAVENCOIN',
+			balance: '0',
+			coinCode: 'RVN',
 			openOrders: [],
 			openFilteredOrders: [],
 			historicTrades: [],
@@ -193,13 +193,13 @@ class TradePortal extends LitElement {
 			openTradeOrders: null,
 			tradeOffersSocketCounter: 1,
 			coinAmount: this.amountString,
-			tradeFee: "~0.006"
+			tradeFee: '~0.006'
 		}
 
 		let piratechain = {
-			name: "PIRATECHAIN",
-			balance: "0",
-			coinCode: "ARRR",
+			name: 'PIRATECHAIN',
+			balance: '0',
+			coinCode: 'ARRR',
 			openOrders: [],
 			openFilteredOrders: [],
 			historicTrades: [],
@@ -209,54 +209,54 @@ class TradePortal extends LitElement {
 			openTradeOrders: null,
 			tradeOffersSocketCounter: 1,
 			coinAmount: this.amountString,
-			tradeFee: "~0.0002"
+			tradeFee: '~0.0002'
 		}
 
 		this.listedCoins = new Map()
-		this.listedCoins.set("QORTAL", qortal)
-		this.listedCoins.set("BITCOIN", bitcoin)
-		this.listedCoins.set("LITECOIN", litecoin)
-		this.listedCoins.set("DOGECOIN", dogecoin)
-		this.listedCoins.set("DIGIBYTE", digibyte)
-		this.listedCoins.set("RAVENCOIN", ravencoin)
-		this.listedCoins.set("PIRATECHAIN", piratechain)
+		this.listedCoins.set('QORTAL', qortal)
+		this.listedCoins.set('BITCOIN', bitcoin)
+		this.listedCoins.set('LITECOIN', litecoin)
+		this.listedCoins.set('DOGECOIN', dogecoin)
+		this.listedCoins.set('DIGIBYTE', digibyte)
+		this.listedCoins.set('RAVENCOIN', ravencoin)
+		this.listedCoins.set('PIRATECHAIN', piratechain)
 
-		workers.set("QORTAL", {
+		workers.set('QORTAL', {
 			tradesConnectedWorker: null,
 			handleStuckTradesConnectedWorker: null
 		})
 
-		workers.set("BITCOIN", {
+		workers.set('BITCOIN', {
 			tradesConnectedWorker: null,
 			handleStuckTradesConnectedWorker: null
 		})
 
-		workers.set("LITECOIN", {
+		workers.set('LITECOIN', {
 			tradesConnectedWorker: null,
 			handleStuckTradesConnectedWorker: null
 		})
 
-		workers.set("DOGECOIN", {
+		workers.set('DOGECOIN', {
 			tradesConnectedWorker: null,
 			handleStuckTradesConnectedWorker: null
 		})
 
-		workers.set("DIGIBYTE", {
+		workers.set('DIGIBYTE', {
 			tradesConnectedWorker: null,
 			handleStuckTradesConnectedWorker: null
 		})
 
-		workers.set("RAVENCOIN", {
+		workers.set('RAVENCOIN', {
 			tradesConnectedWorker: null,
 			handleStuckTradesConnectedWorker: null
 		})
 
-		workers.set("PIRATECHAIN", {
+		workers.set('PIRATECHAIN', {
 			tradesConnectedWorker: null,
 			handleStuckTradesConnectedWorker: null
 		})
 
-		this.selectedCoin = "LITECOIN"
+		this.selectedCoin = 'LITECOIN'
 		this.selectedAddress = {}
 		this.nodeInfo = []
 		this.blockedTradesList = []
@@ -366,8 +366,8 @@ class TradePortal extends LitElement {
 		return html`
 			<div id="trade-portal-page">
 				<div style="min-height: 40px; display: flex; padding-bottom: 0px; margin: 2px 2px 0px 2px ;">
-					<h2 style="margin: 0 0 15px 0; line-height: 50px; display: inline;">Qortal ${translate("tradepage.tchange1")} - &nbsp;</h2>
-					<mwc-select outlined id="coinSelectionMenu" label="${translate("tradepage.tchange2")}">
+					<h2 style="margin: 0 0 15px 0; line-height: 50px; display: inline;">Qortal ${translate('tradepage.tchange1')} - &nbsp;</h2>
+					<mwc-select outlined id="coinSelectionMenu" label="${translate('tradepage.tchange2')}">
 						<mwc-list-item value="LITECOIN" selected><span class="coinName ltc" style="color: var(--black);">QORT / LTC</span></mwc-list-item>
 						<mwc-list-item value="BITCOIN"><span class="coinName btc" style="color: var(--black);">QORT / BTC</span></mwc-list-item>
 						<mwc-list-item value="DOGECOIN"><span class="coinName doge" style="color: var(--black);">QORT / DOGE</span></mwc-list-item>
@@ -376,7 +376,7 @@ class TradePortal extends LitElement {
 						<mwc-list-item value="PIRATECHAIN"><span class="coinName arrr" style="color: var(--black);">QORT / ARRR</span></mwc-list-item>
 					</mwc-select>
 					<div style="padding-left: 20px; padding-top: 5px;">
-						<mwc-fab mini icon="info" title="${translate("info.inf1")}" @click=${() => this.shadowRoot.getElementById('tradeInfoDialog').open()}></mwc-fab>
+						<mwc-fab mini icon="info" title="${translate('info.inf1')}" @click=${() => this.shadowRoot.getElementById('tradeInfoDialog').open()}></mwc-fab>
 					</div>
 					<div style="padding-left: 20px; padding-top: 15px;">
 						${this.chartShowCoin()}
@@ -403,9 +403,9 @@ class TradePortal extends LitElement {
 					<div id="third-trade-section">
 						<div></div>
 						<div style="text-align: center;">
-							<h2 style="color: var(--black);">${translate("tradepage.tchange33")} ${this.listedCoins.get(this.selectedCoin).coinCode} ${translate("tradepage.tchange40")}</h2>
+							<h2 style="color: var(--black);">${translate('tradepage.tchange33')} ${this.listedCoins.get(this.selectedCoin).coinCode} ${translate('tradepage.tchange40')}</h2>
 							<h3 style="color: var(--black);">1 <span style="color: #03a9f4;">QORT</span> = ${this.exchangeRateQort()} ${this.listedCoins.get(this.selectedCoin).coinCode}</h3>
-							<mwc-button dense unelevated label="${translate("tradepage.tchange47")}" @click=${() => this.setDefaultSellPrice()}></mwc-button>
+							<mwc-button dense unelevated label="${translate('tradepage.tchange47')}" @click=${() => this.setDefaultSellPrice()}></mwc-button>
 						</div>
 						<div></div>
 					</div>
@@ -414,82 +414,82 @@ class TradePortal extends LitElement {
 			<!-- Manage Stuck Orders Dialog -->
 			<mwc-dialog id="manageStuckOrdersDialog" scrimClickAction="${this.cancelStuckOfferBtnDisable ? '' : 'close'}">
 				<div style="text-align: center;">
-					<h1>${translate("tradepage.tchange7")}</h1>
+					<h1>${translate('tradepage.tchange7')}</h1>
 					<hr>
 				</div>
 				<div>
 					<vaadin-grid style="width: 500px" theme="compact column-borders row-stripes wrap-cell-content" id="stuckOrdersGrid" aria-label="My Offering Orders" .items="${this.listedCoins.get(this.selectedCoin).myOfferingOrders}">
-						<vaadin-grid-column auto-width resizable header="${translate("tradepage.tchange8")} (QORT)" path="qortAmount"></vaadin-grid-column>
-						<vaadin-grid-column auto-width resizable header="${translate("tradepage.tchange9")} (${this.listedCoins.get(this.selectedCoin).coinCode})" path="price"></vaadin-grid-column>
-						<vaadin-grid-column auto-width resizable header="${translate("tradepage.tchange10")} (${this.listedCoins.get(this.selectedCoin).coinCode})" path="expectedForeignAmount"></vaadin-grid-column>
-						<vaadin-grid-column auto-width resizable header="${translate("tradepage.tchange17")}" .renderer=${(root, column, data) => { render(html`${this.renderCancelStuckOfferButton(data.item)}`, root) }}></vaadin-grid-column>
+						<vaadin-grid-column auto-width resizable header="${translate('tradepage.tchange8')} (QORT)" path="qortAmount"></vaadin-grid-column>
+						<vaadin-grid-column auto-width resizable header="${translate('tradepage.tchange9')} (${this.listedCoins.get(this.selectedCoin).coinCode})" path="price"></vaadin-grid-column>
+						<vaadin-grid-column auto-width resizable header="${translate('tradepage.tchange10')} (${this.listedCoins.get(this.selectedCoin).coinCode})" path="expectedForeignAmount"></vaadin-grid-column>
+						<vaadin-grid-column auto-width resizable header="${translate('tradepage.tchange17')}" .renderer=${(root, column, data) => { render(html`${this.renderCancelStuckOfferButton(data.item)}`, root) }}></vaadin-grid-column>
 					</vaadin-grid>
 				</div>
-				<mwc-button slot="primaryAction" dialogAction="cancel" class="cancel">${translate("general.close")}</mwc-button>
+				<mwc-button slot="primaryAction" dialogAction="cancel" class="cancel">${translate('general.close')}</mwc-button>
 			</mwc-dialog>
 			<paper-dialog id="tradeInfoDialog" class="info" modal>
 				<div class="actions">
 					<h3></h3>
-					<mwc-icon class="close-icon" @click=${() => this.shadowRoot.getElementById('tradeInfoDialog').close()} title="${translate("info.inf2")}">highlight_off</mwc-icon>
+					<mwc-icon class="close-icon" @click=${() => this.shadowRoot.getElementById('tradeInfoDialog').close()} title="${translate('info.inf2')}">highlight_off</mwc-icon>
 				</div>
 				<div class="container">
-					<h1 style="color: #03a9f4; text-align: center;">${translate("info.inf1")}</h1>
-					<h2 style="text-align: center;">${translate("info.inf3")} ${this.listedCoins.get(this.selectedCoin).coinCode} ${translate("info.inf4")}</h2>
-					<h2 style="text-align: center;">${translate("info.inf5")} ${this.listedCoins.get(this.selectedCoin).coinCode}</h2>
-					<h2 style="text-align: center;">${translate("info.inf6")}</h2>
+					<h1 style="color: #03a9f4; text-align: center;">${translate('info.inf1')}</h1>
+					<h2 style="text-align: center;">${translate('info.inf3')} ${this.listedCoins.get(this.selectedCoin).coinCode} ${translate('info.inf4')}</h2>
+					<h2 style="text-align: center;">${translate('info.inf5')} ${this.listedCoins.get(this.selectedCoin).coinCode}</h2>
+					<h2 style="text-align: center;">${translate('info.inf6')}</h2>
 				</div>
 			</paper-dialog>
 			<paper-dialog class="setpass-wrapper" id="setTradeLockScreenPass" modal>
 				<div style="text-align: center;">
-					<h2 style="color: var(--black);">Qortal ${translate("tabmenu.tm4")} ${translate("login.lp1")}</h2>
+					<h2 style="color: var(--black);">Qortal ${translate('tabmenu.tm4')} ${translate('login.lp1')}</h2>
 					<hr>
 				</div>
 				<div style="text-align: center;">
-					<h3 style="color: var(--black);">${translate("login.lp2")}</h3>
-					<h4 style="color: var(--black);">${translate("login.lp3")}</h4>
+					<h3 style="color: var(--black);">${translate('login.lp2')}</h3>
+					<h4 style="color: var(--black);">${translate('login.lp3')}</h4>
 				</div>
 				<div style="display:flex;">
 					<mwc-icon style="padding: 10px; padding-left: 0; padding-top: 42px; color: var(--black);">password</mwc-icon>
-					<vaadin-password-field style="width: 100%;" label="${translate("login.password")}" id="tradeLockPassword" autofocus></vaadin-password-field>
+					<vaadin-password-field style="width: 100%;" label="${translate('login.password')}" id="tradeLockPassword" autofocus></vaadin-password-field>
 				</div>
 				<div style="display:flex;">
 					<mwc-icon style="padding: 10px; padding-left: 0; padding-top: 42px; color: var(--black);">password</mwc-icon>
-					<vaadin-password-field style="width: 100%;" label="${translate("login.confirmpass")}" id="tradeLockPasswordConfirm"></vaadin-password-field>
+					<vaadin-password-field style="width: 100%;" label="${translate('login.confirmpass')}" id="tradeLockPasswordConfirm"></vaadin-password-field>
 				</div>
 				<div style="display: flex; justify-content: space-between;">
-					<mwc-button class="red" @click="${() => this.closewTradeSetScreenLockPass()}">${translate("login.lp4")}</mwc-button>
-					<mwc-button @click="${() => this.tradeCheckPass()}">${translate("login.lp5")}</mwc-button>
+					<mwc-button class="red" @click="${() => this.closewTradeSetScreenLockPass()}">${translate('login.lp4')}</mwc-button>
+					<mwc-button @click="${() => this.tradeCheckPass()}">${translate('login.lp5')}</mwc-button>
 				</div>
 			</paper-dialog>
 			<paper-dialog class="setpass-wrapper" id="tradeExtraConfirmPass" modal>
 				<div style="text-align: center;">
-					<h2 style="color: var(--black);">Qortal ${translate("tabmenu.tm4")} ${translate("login.lp1")}</h2>
+					<h2 style="color: var(--black);">Qortal ${translate('tabmenu.tm4')} ${translate('login.lp1')}</h2>
 					<hr>
 				</div>
 				<div style="text-align: center;">
-					<h3 style="color: var(--black);">${translate("login.lessthen8")}</h3>
+					<h3 style="color: var(--black);">${translate('login.lessthen8')}</h3>
 				</div>
 				<div style="display: flex; justify-content: space-between;">
-					<mwc-button class="red" @click="${() => this.closTradeExtraConfirmPass()}">${translate("login.lp4")}</mwc-button>
-					<mwc-button @click="${() => this.setTradeNewScreenPass()}">${translate("login.lp5")}</mwc-button>
+					<mwc-button class="red" @click="${() => this.closTradeExtraConfirmPass()}">${translate('login.lp4')}</mwc-button>
+					<mwc-button @click="${() => this.setTradeNewScreenPass()}">${translate('login.lp5')}</mwc-button>
 				</div>
 			</paper-dialog>
 			<paper-dialog class="lock-wrapper" id="tradeLockScreenActive" modal>
 				<div class="text-wrapper">
-					<span class="lock-title-white">${translate("sidemenu.tradeportal")}</span><br/>
-					<span class="lock-title-white">${translate("login.lp9")} </span>
-					<span class="lock-title-red">${translate("login.lp10")}</span>
+					<span class="lock-title-white">${translate('sidemenu.tradeportal')}</span><br/>
+					<span class="lock-title-white">${translate('login.lp9')} </span>
+					<span class="lock-title-red">${translate('login.lp10')}</span>
 				</div>
 				<div style="display:flex; margin-top: 5px;">
 					<mwc-icon style="padding: 10px; padding-left: 0; padding-top: 42px; color: var(--black);">password</mwc-icon>
-					<vaadin-password-field style="width: 45%;" label="${translate("login.password")}" id="tradeUnlockPassword" @keydown="${this.tradePassKeyListener}" autofocus>
+					<vaadin-password-field style="width: 45%;" label="${translate('login.password')}" id="tradeUnlockPassword" @keydown="${this.tradePassKeyListener}" autofocus>
 					<div slot="helper">
 						${this.tradeHelperMessage}
 					</div>
 					</vaadin-password-field>
 				</div>
 				<div style="display: flex; margin-top: 35px;">
-					<mwc-button dense unelevated label="${translate("login.lp7")}" icon="lock_open" @click="${() => this.closeTradeLockScreenActive()}"></mwc-button>
+					<mwc-button dense unelevated label="${translate('login.lp7')}" icon="lock_open" @click="${() => this.closeTradeLockScreenActive()}"></mwc-button>
 				</div>
 			</paper-dialog>
 			<trader-info-view></trader-info-view>
@@ -554,17 +554,17 @@ class TradePortal extends LitElement {
 
 		this._openOrdersGrid = this.shadowRoot.getElementById('openOrdersGrid')
 
-		this._openOrdersGrid.addEventListener("selected-items-changed", function(event){
-			_this.fillBuyFormMultiple(event.detail.value);
-		});
+		this._openOrdersGrid.addEventListener('selected-items-changed', function(event){
+			_this.fillBuyFormMultiple(event.detail.value)
+		})
 
 		this._openOrdersGrid.querySelector('#priceColumn').headerRenderer = function (root) {
-			const priceString = get("tradepage.tchange9")
+			const priceString = get('tradepage.tchange9')
 			root.innerHTML = '<vaadin-grid-sorter path="price" direction="asc">' + priceString + ' (' + _this.listedCoins.get(_this.selectedCoin).coinCode + ')</vaadin-grid-sorter>'
 		}
 
 		this._openOrdersGrid.querySelector('#qortAmountColumn').headerRenderer = function (root) {
-			const amountString = get("tradepage.tchange8")
+			const amountString = get('tradepage.tchange8')
 			root.innerHTML = '<vaadin-grid-sorter path="qortAmount">' + amountString + ' (QORT)</vaadin-grid-sorter>'
 		}
 
@@ -581,7 +581,7 @@ class TradePortal extends LitElement {
 				this.sellBtnDisable = false
 				return
 			}
-			parentEpml.request("apiCall", { url: `/admin/status` }).then((res) => {
+			parentEpml.request('apiCall', { url: '/admin/status' }).then((res) => {
 				this.nodeInfo = res
 				getSellButtonStatus()
 			})
@@ -591,46 +591,46 @@ class TradePortal extends LitElement {
 		const getSellButtonStatus = () => {
 			if (this.nodeInfo.isSynchronizing === true) {
 				this.sellBtnDisable = true
-			} else this.sellBtnDisable = this.nodeInfo.isSynchronizing !== false;
+			} else this.sellBtnDisable = this.nodeInfo.isSynchronizing !== false
 		}
 
 		const getQortBtcPrice = () => {
-			parentEpml.request("apiCall", { url: `/crosschain/price/BITCOIN?inverse=true` }).then((res) => {
+			parentEpml.request('apiCall', { url: '/crosschain/price/BITCOIN?inverse=true' }).then((res) => {
 				this.qortbtc = (Number(res) / 1e8).toFixed(8)
 			})
 			setTimeout(getQortBtcPrice, 300000)
 		}
 
 		const getQortLtcPrice = () => {
-			parentEpml.request("apiCall", { url: `/crosschain/price/LITECOIN?inverse=true` }).then((res) => {
+			parentEpml.request('apiCall', { url: '/crosschain/price/LITECOIN?inverse=true' }).then((res) => {
 				this.qortltc = (Number(res) / 1e8).toFixed(8)
 			})
 			setTimeout(getQortLtcPrice, 300000)
 		}
 
 		const getQortDogePrice = () => {
-			parentEpml.request("apiCall", { url: `/crosschain/price/DOGECOIN?inverse=true` }).then((res) => {
+			parentEpml.request('apiCall', { url: '/crosschain/price/DOGECOIN?inverse=true' }).then((res) => {
 				this.qortdoge = (Number(res) / 1e8).toFixed(8)
 			})
 			setTimeout(getQortDogePrice, 300000)
 		}
 
 		const getQortDgbPrice = () => {
-			parentEpml.request("apiCall", { url: `/crosschain/price/DIGIBYTE?inverse=true` }).then((res) => {
+			parentEpml.request('apiCall', { url: '/crosschain/price/DIGIBYTE?inverse=true' }).then((res) => {
 				this.qortdgb = (Number(res) / 1e8).toFixed(8)
 			})
 			setTimeout(getQortDgbPrice, 300000)
 		}
 
 		const getQortRvnPrice = () => {
-			parentEpml.request("apiCall", { url: `/crosschain/price/RAVENCOIN?inverse=true` }).then((res) => {
+			parentEpml.request('apiCall', { url: '/crosschain/price/RAVENCOIN?inverse=true' }).then((res) => {
 				this.qortrvn = (Number(res) / 1e8).toFixed(8)
 			})
 			setTimeout(getQortRvnPrice, 300000)
 		}
 
 		const getQortArrrPrice = () => {
-			parentEpml.request("apiCall", { url: `/crosschain/price/PIRATECHAIN?inverse=true` }).then((res) => {
+			parentEpml.request('apiCall', { url: '/crosschain/price/PIRATECHAIN?inverse=true' }).then((res) => {
 				this.qortarrr = (Number(res) / 1e8).toFixed(8)
 			})
 			setTimeout(getQortArrrPrice, 300000)
@@ -730,7 +730,7 @@ class TradePortal extends LitElement {
 				}
 			})
 
-			let coinSelectionMenu = this.shadowRoot.getElementById("coinSelectionMenu")
+			let coinSelectionMenu = this.shadowRoot.getElementById('coinSelectionMenu')
 
 			coinSelectionMenu.addEventListener('change', function () {
 				_this.setForeignCoin(coinSelectionMenu.value, false)
@@ -758,39 +758,39 @@ class TradePortal extends LitElement {
 		return html`
 			<div class="historic-trades myhover">
 				<div class="box">
-					<header><span>${translate("tradepage.tchange3")}</span></header>
+					<header><span>${translate('tradepage.tchange3')}</span></header>
 					<div class="border-wrapper">
 						<div class="loadingContainer" id="loadingHistoricTrades" style="display:${this.isLoadingHistoricTrades ? 'block' : 'none'}">
 							<div class="loading"></div>
-							<span style="color: var(--black);">${translate("login.loading")}</span>
+							<span style="color: var(--black);">${translate('login.loading')}</span>
 						</div>
 						<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="historicTradesGrid" aria-label="Historic Trades" .items="${this.listedCoins.get(this.selectedCoin).historicTrades}">
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange8")} (QORT)"
+								header="${translate('tradepage.tchange8')} (QORT)"
 								.renderer=${(root, column, data) => {
-									render(html`<span style="cursor: pointer;" @click="${() => this.requestTradeInfo(data)}">${data.item.qortAmount}</span>`, root)
-								}}
+		render(html`<span style="cursor: pointer;" @click="${() => this.requestTradeInfo(data)}">${data.item.qortAmount}</span>`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange9")} (${this.listedCoins.get(this.selectedCoin).coinCode})"
+								header="${translate('tradepage.tchange9')} (${this.listedCoins.get(this.selectedCoin).coinCode})"
 								.renderer=${(root, column, data) => {
-									const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
-									render(html`<span style="cursor: pointer;" @click="${() => this.requestTradeInfo(data)}">${price}</span>`, root)
-								}}
+		const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
+		render(html`<span style="cursor: pointer;" @click="${() => this.requestTradeInfo(data)}">${price}</span>`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange10")} (${this.listedCoins.get(this.selectedCoin).coinCode})"
+								header="${translate('tradepage.tchange10')} (${this.listedCoins.get(this.selectedCoin).coinCode})"
 								.renderer=${(root, column, data) => {
-									render(html`<span style="cursor: pointer;" @click="${() => this.requestTradeInfo(data)}">${data.item.foreignAmount}</span>`, root)
-								}}
+		render(html`<span style="cursor: pointer;" @click="${() => this.requestTradeInfo(data)}">${data.item.foreignAmount}</span>`, root)
+	}}
 							>
 							</vaadin-grid-column>
 						</vaadin-grid>
@@ -823,11 +823,11 @@ class TradePortal extends LitElement {
 		return html`
 			<div class="open-trades myhover">
 				<div class="box">
-					<header><span>${translate("tradepage.tchange5")}</span></header>
+					<header><span>${translate('tradepage.tchange5')}</span></header>
 					<div class="border-wrapper">
 						<div class="loadingContainer" id="loadingHistoricTrades" style="display:${this.isLoadingOpenTrades ? 'block' : 'none'}">
 							<div class="loading"></div>
-							<span style="color: var(--black);">${translate("login.loading")}</span>
+							<span style="color: var(--black);">${translate('login.loading')}</span>
 						</div>
 							<vaadin-grid
 								multi-sort="true"
@@ -841,54 +841,54 @@ class TradePortal extends LitElement {
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange8")} (QORT)"
+								header="${translate('tradepage.tchange8')} (QORT)"
 								id="qortAmountColumn"
 								.renderer=${(root, column, data) => {
-									render(html`<span style="cursor: pointer;" @click="${() => this.clickHandler(data)}">${this.round(data.item.qortAmount)}</span>`, root)
-								}}
+		render(html`<span style="cursor: pointer;" @click="${() => this.clickHandler(data)}">${this.round(data.item.qortAmount)}</span>`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange9")} (${this.listedCoins.get(this.selectedCoin).coinCode})"
+								header="${translate('tradepage.tchange9')} (${this.listedCoins.get(this.selectedCoin).coinCode})"
 								id="priceColumn"
 								.renderer=${(root, column, data) => {
-									render(html`<span style="cursor: pointer;" @click="${() => this.clickHandler(data)}">${this.round(data.item.price)}</span>`, root)
-								}}
+		render(html`<span style="cursor: pointer;" @click="${() => this.clickHandler(data)}">${this.round(data.item.price)}</span>`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange10")} (${this.listedCoins.get(this.selectedCoin).coinCode})"
+								header="${translate('tradepage.tchange10')} (${this.listedCoins.get(this.selectedCoin).coinCode})"
 								id="foreignAmountColumn"
 								.renderer=${(root, column, data) => {
-									render(html`<span style="cursor: pointer;" @click="${() => this.clickHandler(data)}">${data.item.foreignAmount}</span>`, root)
-								}}
+		render(html`<span style="cursor: pointer;" @click="${() => this.clickHandler(data)}">${data.item.foreignAmount}</span>`, root)
+	}}
 							>
 							</vaadin-grid-column>
 								<vaadin-grid-column
 									auto-width
 									resizable
-									header="${translate("tradepage.tchange13")}"
+									header="${translate('tradepage.tchange13')}"
 									id="qortalCreatorColumn"
 									.renderer=${(root, column, data) => {
-										render(html`<span style="cursor: pointer;" @click="${() => this.clickHandler(data)}">${this.getDisplayIdentity(data.item.qortalCreator)}</span>`, root)
-									}}
+		render(html`<span style="cursor: pointer;" @click="${() => this.clickHandler(data)}">${this.getDisplayIdentity(data.item.qortalCreator)}</span>`, root)
+	}}
 								>
 								</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("explorerpage.exp7")}"
+								header="${translate('explorerpage.exp7')}"
 								.renderer=${(root, column, data) => {
-									render(html`
+		render(html`
 										<span style="cursor: pointer;" @click="${() => this.requestTraderInfo(data.item.qortalCreator)}">
 											<mwc-icon class="btn-info">info</mwc-icon>
 										</span>
 									`, root)
-								}}
+	}}
 							>
 							</vaadin-grid-column>
 						</vaadin-grid>
@@ -903,16 +903,16 @@ class TradePortal extends LitElement {
 			<div class="open-market-container">
 				<div class="box">
 					<mwc-tab-bar id="tabs-1" activeIndex="0">
-						<mwc-tab id="tab-buy" label="${translate("tradepage.tchange18")} QORT" @click="${(e) => this.displayTabContent('buy')}"></mwc-tab>
-						<mwc-tab id="tab-sell" label="${translate("tradepage.tchange19")} QORT" @click="${(e) => this.displayTabContent('sell')}"></mwc-tab>
+						<mwc-tab id="tab-buy" label="${translate('tradepage.tchange18')} QORT" @click="${(e) => this.displayTabContent('buy')}"></mwc-tab>
+						<mwc-tab id="tab-sell" label="${translate('tradepage.tchange19')} QORT" @click="${(e) => this.displayTabContent('sell')}"></mwc-tab>
 					</mwc-tab-bar>
 					<div id="tabs-1-content">
 						<div id="tab-buy-content">
 							<div class="card">
 								<div style="margin-left: auto">
-									<mwc-icon-button class="btn-clear" title="${translate("tradepage.tchange15")}" icon="clear_all" @click="${() => this.clearBuyForm()}"></mwc-icon-button>
+									<mwc-icon-button class="btn-clear" title="${translate('tradepage.tchange15')}" icon="clear_all" @click="${() => this.clearBuyForm()}"></mwc-icon-button>
 								</div>
-								<span class="tab-text">${translate("tradepage.tchange8")} (QORT)*</span>
+								<span class="tab-text">${translate('tradepage.tchange8')} (QORT)*</span>
 								<p>
 									<mwc-textfield
 										style="width: 100%; color: var(--black);"
@@ -926,7 +926,7 @@ class TradePortal extends LitElement {
 									>
 									</mwc-textfield>
 								</p>
-								<span class="tab-text">${translate("tradepage.tchange14")} (${this.listedCoins.get(this.selectedCoin).coinCode})*</span>
+								<span class="tab-text">${translate('tradepage.tchange14')} (${this.listedCoins.get(this.selectedCoin).coinCode})*</span>
 								<p>
 									<mwc-textfield
 										style="width: 100%; color: var(--black);"
@@ -940,7 +940,7 @@ class TradePortal extends LitElement {
 									>
 									</mwc-textfield>
 								</p>
-								<span class="tab-text">${translate("tradepage.tchange10")} (${this.listedCoins.get(this.selectedCoin).coinCode})*</span>
+								<span class="tab-text">${translate('tradepage.tchange10')} (${this.listedCoins.get(this.selectedCoin).coinCode})*</span>
 								<p>
 									<mwc-textfield
 										style="width: 100%; color: var(--black);"
@@ -965,13 +965,13 @@ class TradePortal extends LitElement {
 									</mwc-textfield>
 								</p>
 								<span class="amt-text">
-								<span class="balance-text">${translate("tradepage.tchange16")}: ${this.listedCoins.get(this.selectedCoin).balance} ${this.listedCoins.get(this.selectedCoin).coinCode}</span>
-								<span class="fee-text">${translate("walletpage.wchange12")}: ${this.listedCoins.get(this.selectedCoin).tradeFee} ${this.listedCoins.get(this.selectedCoin).coinCode}</span>
+								<span class="balance-text">${translate('tradepage.tchange16')}: ${this.listedCoins.get(this.selectedCoin).balance} ${this.listedCoins.get(this.selectedCoin).coinCode}</span>
+								<span class="fee-text">${translate('walletpage.wchange12')}: ${this.listedCoins.get(this.selectedCoin).tradeFee} ${this.listedCoins.get(this.selectedCoin).coinCode}</span>
 								</span>
 								<div class="buttons">
 									<div>
 										<mwc-button class="buy-button" ?disabled="${this.buyBtnDisable}" style="width:100%;" raised @click="${(e) => this.buyAction(e)}">
-											${this.isBuyLoading === false ? html`${translate("tradepage.tchange18")}` : html`
+											${this.isBuyLoading === false ? html`${translate('tradepage.tchange18')}` : html`
 												<paper-spinner-lite active></paper-spinner-lite>
 											`}
 										</mwc-button>
@@ -982,9 +982,9 @@ class TradePortal extends LitElement {
 						<div id="tab-sell-content">
 							<div class="card">
 								<div style="margin-left: auto">
-									<mwc-icon-button class="btn-clear" title="${translate("tradepage.tchange15")}" icon="clear_all" @click="${() => this.clearSellForm()}"></mwc-icon-button>
+									<mwc-icon-button class="btn-clear" title="${translate('tradepage.tchange15')}" icon="clear_all" @click="${() => this.clearSellForm()}"></mwc-icon-button>
 								</div>
-								<span class="tab-text">${translate("tradepage.tchange8")} (QORT)*</span>
+								<span class="tab-text">${translate('tradepage.tchange8')} (QORT)*</span>
 								<p>
 									<mwc-textfield
 										style="width: 100%; color: var(--black);"
@@ -999,7 +999,7 @@ class TradePortal extends LitElement {
 									>
 									</mwc-textfield>
 								</p>
-								<span class="tab-text">${translate("tradepage.tchange14")} (${this.listedCoins.get(this.selectedCoin).coinCode})*</span>
+								<span class="tab-text">${translate('tradepage.tchange14')} (${this.listedCoins.get(this.selectedCoin).coinCode})*</span>
 								<p>
 									<mwc-textfield
 										style="width: 100%; color: var(--black);"
@@ -1014,7 +1014,7 @@ class TradePortal extends LitElement {
 									>
 									</mwc-textfield>
 								</p>
-								<span class="tab-text">${translate("tradepage.tchange10")} (${this.listedCoins.get(this.selectedCoin).coinCode})*</span>
+								<span class="tab-text">${translate('tradepage.tchange10')} (${this.listedCoins.get(this.selectedCoin).coinCode})*</span>
 								<p>
 									<mwc-textfield
 										style="width: 100%; color: var(--black);"
@@ -1029,13 +1029,13 @@ class TradePortal extends LitElement {
 									</mwc-textfield>
 								</p>
 								<span class="amt-text">
-								<span class="balance-text">${translate("tradepage.tchange16")}: ${this.listedCoins.get("QORTAL").balance} QORT</span>
-								<span class="fee-text">${translate("walletpage.wchange12")}: ${this.listedCoins.get("QORTAL").tradeFee} QORT</span>
+								<span class="balance-text">${translate('tradepage.tchange16')}: ${this.listedCoins.get('QORTAL').balance} QORT</span>
+								<span class="fee-text">${translate('walletpage.wchange12')}: ${this.listedCoins.get('QORTAL').tradeFee} QORT</span>
 								</span>
 								<div class="buttons">
 									<div>
 										<mwc-button class="sell-button" ?disabled="${this.sellBtnDisable}" style="width:100%;" raised @click="${(e) => this.sellAction()}">
-											${this.isSellLoading === false ? html`${translate("tradepage.tchange19")}` : html`
+											${this.isSellLoading === false ? html`${translate('tradepage.tchange19')}` : html`
 												<paper-spinner-lite active></paper-spinner-lite>
 											`}
 										</mwc-button>
@@ -1053,61 +1053,61 @@ class TradePortal extends LitElement {
 		return html`
 			<div class="my-open-orders">
 				<div class="box">
-					<header><span>${translate("tradepage.tchange6")}</span><mwc-icon-button title="${translate("tradepage.tchange7")}" icon="more_vert" @click=${() => this.showStuckOrdersDialog()}></mwc-icon-button></header>
+					<header><span>${translate('tradepage.tchange6')}</span><mwc-icon-button title="${translate('tradepage.tchange7')}" icon="more_vert" @click=${() => this.showStuckOrdersDialog()}></mwc-icon-button></header>
 					<div class="border-wrapper">
 						<div class="loadingContainer" id="loadingHistoricTrades" style="display:${this.isLoadingMyOpenOrders ? 'block' : 'none'}">
 							<div class="loading"></div>
-							<span style="color: var(--black);">${translate("login.loading")}</span>
+							<span style="color: var(--black);">${translate('login.loading')}</span>
 						</div>
 						<vaadin-grid multi-sort="true" theme="compact column-borders row-stripes wrap-cell-content" id="myOrdersGrid" aria-label="My Orders" .items="${this.listedCoins.get(this.selectedCoin).myOrders}">
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange11")}"
+								header="${translate('tradepage.tchange11')}"
 								.renderer=${(root, column, data) => {
-									const dateString = new Date(data.item.timestamp).toLocaleString()
-									render(html`${dateString}`, root)
-								}}
+		const dateString = new Date(data.item.timestamp).toLocaleString()
+		render(html`${dateString}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange12")}"
+								header="${translate('tradepage.tchange12')}"
 								.renderer=${(root, column, data) => {
-									render(html`<span id="${data.item.atAddress}"> ${data.item._tradeState} </span>`, root)
-								}}
+		render(html`<span id="${data.item.atAddress}"> ${data.item._tradeState} </span>`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange9")} (${this.listedCoins.get(this.selectedCoin).coinCode})"
+								header="${translate('tradepage.tchange9')} (${this.listedCoins.get(this.selectedCoin).coinCode})"
 								.renderer=${(root, column, data) => {
-									const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
-									render(html`${price}`, root)
-								}}
+		const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
+		render(html`${price}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange8")} (QORT)" path="qortAmount"
+								header="${translate('tradepage.tchange8')} (QORT)" path="qortAmount"
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange10")} (${this.listedCoins.get(this.selectedCoin).coinCode})" path="foreignAmount"
+								header="${translate('tradepage.tchange10')} (${this.listedCoins.get(this.selectedCoin).coinCode})" path="foreignAmount"
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange17")}"
+								header="${translate('tradepage.tchange17')}"
 								.renderer=${(root, column, data) => {
-									render(html`${this.renderCancelButton(data.item)}`, root)
-								}}
+		render(html`${this.renderCancelButton(data.item)}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 						</vaadin-grid>
@@ -1121,53 +1121,53 @@ class TradePortal extends LitElement {
 		return html`
 			<div class="my-historic-trades">
 				<div class="box">
-					<header>${translate("tradepage.tchange4")}</header>
+					<header>${translate('tradepage.tchange4')}</header>
 					<div class="border-wrapper">
 						<vaadin-grid theme="compact column-borders row-stripes wrap-cell-content" id="myHistoricTradesGrid" aria-label="My Open Orders" .items="${this.listedCoins.get(this.selectedCoin).myHistoricTrades}">
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange11")}"
+								header="${translate('tradepage.tchange11')}"
 								.renderer=${(root, column, data) => {
-									const dateString = new Date(data.item.timestamp).toLocaleString()
-									render(html`${dateString}`, root)
-								}}
+		const dateString = new Date(data.item.timestamp).toLocaleString()
+		render(html`${dateString}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange12")}"
+								header="${translate('tradepage.tchange12')}"
 								.renderer=${(root, column, data) => {
-									if (data.item.mode === 'SOLD') return render(html`<span style="color: red"> ${translate("tradepage.tchange31")} </span>`, root)
-									if (data.item.mode === 'BOUGHT') return render(html`<span style="color: green"> ${translate("tradepage.tchange32")} </span>`, root)
-									return render(html`<span> ${data.item.mode} </span>`, root)
-								}}
+		if (data.item.mode === 'SOLD') return render(html`<span style="color: red"> ${translate('tradepage.tchange31')} </span>`, root)
+		if (data.item.mode === 'BOUGHT') return render(html`<span style="color: green"> ${translate('tradepage.tchange32')} </span>`, root)
+		return render(html`<span> ${data.item.mode} </span>`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange9")} (${this.listedCoins.get(this.selectedCoin).coinCode})"
+								header="${translate('tradepage.tchange9')} (${this.listedCoins.get(this.selectedCoin).coinCode})"
 								.renderer=${(root, column, data) => {
-									const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
-									render(html`${price}`, root)
-								}}
+		const price = this.round(parseFloat(data.item.foreignAmount) / parseFloat(data.item.qortAmount))
+		render(html`${price}`, root)
+	}}
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange8")} (QORT)" path="qortAmount"
+								header="${translate('tradepage.tchange8')} (QORT)" path="qortAmount"
 							>
 							</vaadin-grid-column>
 							<vaadin-grid-column
 								auto-width
 								resizable
-								header="${translate("tradepage.tchange10")} (${this.listedCoins.get(this.selectedCoin).coinCode})"
+								header="${translate('tradepage.tchange10')} (${this.listedCoins.get(this.selectedCoin).coinCode})"
 								.renderer=${(root, column, data) => {
-									render(html`<span> ${data.item.foreignAmount} </span>`, root)
-								}}
+		render(html`<span> ${data.item.foreignAmount} </span>`, root)
+	}}
 							>
 							</vaadin-grid-column>
 						</vaadin-grid>
@@ -1230,19 +1230,19 @@ class TradePortal extends LitElement {
 		if (this.myTradeLockScreenPass === false && this.myTradeLockScreenSet === false) {
 			return html`
 				<div style="display: inline;">
-					<paper-icon-button style="padding-bottom: 12px;" icon="icons:lock-open" @click=${() => this.openTradeSetScreenLockPass()} title="${translate("login.lp11")}"></paper-icon-button>
+					<paper-icon-button style="padding-bottom: 12px;" icon="icons:lock-open" @click=${() => this.openTradeSetScreenLockPass()} title="${translate('login.lp11')}"></paper-icon-button>
 				</div>
 			`
 		} else if (this.myTradeLockScreenSet === false) {
 			return html`
 				<div style="display: inline;">
-					<paper-icon-button style="padding-bottom: 12px;" icon="icons:lock-open" @click=${() => this.setTradeLockQortal()} title="${translate("login.lp11")}"></paper-icon-button>
+					<paper-icon-button style="padding-bottom: 12px;" icon="icons:lock-open" @click=${() => this.setTradeLockQortal()} title="${translate('login.lp11')}"></paper-icon-button>
 				</div>
 			`
 		} else if (this.myTradeLockScreenSet === true) {
 			return html`
 				<div style="display: inline;">
-					<paper-icon-button style="padding-bottom: 12px;" icon="icons:lock" title="${translate("login.lp10")}"></paper-icon-button>
+					<paper-icon-button style="padding-bottom: 12px;" icon="icons:lock" title="${translate('login.lp10')}"></paper-icon-button>
 				</div>
 			`
 		}
@@ -1263,26 +1263,26 @@ class TradePortal extends LitElement {
 		const tradeRePassword = this.shadowRoot.getElementById('tradeLockPasswordConfirm').value
 
 		if (tradePassword === '') {
-			let snackbar1string = get("login.pleaseenter")
+			let snackbar1string = get('login.pleaseenter')
 			parentEpml.request('showSnackBar', `${snackbar1string}`)
 			return
 		}
 
 		if (tradePassword != tradeRePassword) {
-			let snackbar2string = get("login.notmatch")
+			let snackbar2string = get('login.notmatch')
 			parentEpml.request('showSnackBar', `${snackbar2string}`)
 			return
 		}
 
 		if (tradePassword.length < 8) {
-			let snackbar3string = get("login.lessthen8")
+			let snackbar3string = get('login.lessthen8')
 			parentEpml.request('showSnackBar', `${snackbar3string}`)
 			this.tradeExtraConfirm()
 		}
 
 		if (tradePassword.length >= 8) {
 			this.setTradeNewScreenPass()
-			let snackbar4string = get("login.lp6")
+			let snackbar4string = get('login.lp6')
 			parentEpml.request('showSnackBar', `${snackbar4string}`)
 		}
 	}
@@ -1350,11 +1350,11 @@ class TradePortal extends LitElement {
 	}
 
 	renderTradeHelperPass() {
-		return html`<span style="color: #fff; font-weight: bold; font-size: 13px; float: left;">${translate("login.pleaseenter")}</span>`
+		return html`<span style="color: #fff; font-weight: bold; font-size: 13px; float: left;">${translate('login.pleaseenter')}</span>`
 	}
 
 	renderTradeHelperErr() {
-		return html`<span style="color: var(--mdc-theme-error); font-weight: bold;  font-size: 13px; float: right;">${translate("login.lp8")}</span>`
+		return html`<span style="color: var(--mdc-theme-error); font-weight: bold;  font-size: 13px; float: right;">${translate('login.lp8')}</span>`
 	}
 
 	requestTraderInfo(traderAddress) {
@@ -1385,7 +1385,7 @@ class TradePortal extends LitElement {
 	changeTheme() {
 		const checkTheme = localStorage.getItem('qortalTheme')
 		this.theme = (checkTheme === 'dark') ? 'dark' : 'light'
-		document.querySelector('html').setAttribute('theme', this.theme);
+		document.querySelector('html').setAttribute('theme', this.theme)
 	}
 
 	changeLanguage() {
@@ -1399,7 +1399,7 @@ class TradePortal extends LitElement {
 	}
 
 	renderFetchText() {
-		return html`${translate("walletpage.wchange1")}`
+		return html`${translate('walletpage.wchange1')}`
 	}
 
 	renderWarning() {
@@ -1408,23 +1408,23 @@ class TradePortal extends LitElement {
 
 	chartShowCoin() {
 		switch (this.listedCoins.get(this.selectedCoin).coinCode) {
-			case "BTC":
-				return html`<mwc-button dense unelevated label="BTC ${translate("tradepage.tchange49")}" @click=${() => chartsbtc.open()}></mwc-button>`
+			case 'BTC':
+				return html`<mwc-button dense unelevated label="BTC ${translate('tradepage.tchange49')}" @click=${() => chartsbtc.open()}></mwc-button>`
 				break
-			case "LTC":
-				return html`<mwc-button dense unelevated label="LTC ${translate("tradepage.tchange49")}" @click=${() => chartsltc.open()}></mwc-button>`
+			case 'LTC':
+				return html`<mwc-button dense unelevated label="LTC ${translate('tradepage.tchange49')}" @click=${() => chartsltc.open()}></mwc-button>`
 				break
-			case "DOGE":
-				return html`<mwc-button dense unelevated label="DOGE ${translate("tradepage.tchange49")}" @click=${() => chartsdoge.open()}></mwc-button>`
+			case 'DOGE':
+				return html`<mwc-button dense unelevated label="DOGE ${translate('tradepage.tchange49')}" @click=${() => chartsdoge.open()}></mwc-button>`
 				break
-			case "DGB":
-				return html`<mwc-button dense unelevated label="DGB ${translate("tradepage.tchange49")}" @click=${() => chartsdgb.open()}></mwc-button>`
+			case 'DGB':
+				return html`<mwc-button dense unelevated label="DGB ${translate('tradepage.tchange49')}" @click=${() => chartsdgb.open()}></mwc-button>`
 				break
-			case "RVN":
-				return html`<mwc-button dense unelevated label="RVN ${translate("tradepage.tchange49")}" @click=${() => chartsrvn.open()}></mwc-button>`
+			case 'RVN':
+				return html`<mwc-button dense unelevated label="RVN ${translate('tradepage.tchange49')}" @click=${() => chartsrvn.open()}></mwc-button>`
 				break
-			case "ARRR":
-				return html`<mwc-button dense unelevated label="ARRR ${translate("tradepage.tchange49")}" @click=${() => chartsarrr.open()}></mwc-button>`
+			case 'ARRR':
+				return html`<mwc-button dense unelevated label="ARRR ${translate('tradepage.tchange49')}" @click=${() => chartsarrr.open()}></mwc-button>`
 				break
 			default:
 				break
@@ -1433,22 +1433,22 @@ class TradePortal extends LitElement {
 
 	exchangeRateQort() {
 		switch (this.listedCoins.get(this.selectedCoin).coinCode) {
-			case "BTC":
+			case 'BTC':
 				this.qortRatio = this.qortbtc
 				break
-			case "LTC":
+			case 'LTC':
 				this.qortRatio = this.qortltc
 				break
-			case "DOGE":
+			case 'DOGE':
 				this.qortRatio = this.qortdoge
 				break
-			case "DGB":
+			case 'DGB':
 				this.qortRatio = this.qortdgb
 				break
-			case "RVN":
+			case 'RVN':
 				this.qortRatio = this.qortrvn
 				break
-			case "ARRR":
+			case 'ARRR':
 				this.qortRatio = this.qortarrr
 				break
 			default:
@@ -1458,44 +1458,44 @@ class TradePortal extends LitElement {
 	}
 
 	exchangeRateForeign() {
-		if (this.listedCoins.get(this.selectedCoin).coinCode === "BTC") {
+		if (this.listedCoins.get(this.selectedCoin).coinCode === 'BTC') {
 			parentEpml.request('apiCall', {
-				url: `/crosschain/price/BITCOIN?inverse=false`
+				url: '/crosschain/price/BITCOIN?inverse=false'
 			}).then((res) => {
 				this.btcqort = (Number(res) / 1e8).toFixed(8)
 			})
 			return html`${this.btcqort}`
-		} else if (this.listedCoins.get(this.selectedCoin).coinCode === "LTC") {
+		} else if (this.listedCoins.get(this.selectedCoin).coinCode === 'LTC') {
 			parentEpml.request('apiCall', {
-				url: `/crosschain/price/LITECOIN?inverse=false`
+				url: '/crosschain/price/LITECOIN?inverse=false'
 			}).then((res) => {
 				this.ltcqort = (Number(res) / 1e8).toFixed(8)
 			})
 			return html`${this.ltcqort}`
-		} else if (this.listedCoins.get(this.selectedCoin).coinCode === "DOGE") {
+		} else if (this.listedCoins.get(this.selectedCoin).coinCode === 'DOGE') {
 			parentEpml.request('apiCall', {
-				url: `/crosschain/price/DOGECOIN?inverse=false`
+				url: '/crosschain/price/DOGECOIN?inverse=false'
 			}).then((res) => {
 				this.dogeqort = (Number(res) / 1e8).toFixed(8)
 			})
 			return html`${this.dogeqort}`
-		} else if (this.listedCoins.get(this.selectedCoin).coinCode === "DGB") {
+		} else if (this.listedCoins.get(this.selectedCoin).coinCode === 'DGB') {
 			parentEpml.request('apiCall', {
-				url: `/crosschain/price/DIGIBYTE?inverse=false`
+				url: '/crosschain/price/DIGIBYTE?inverse=false'
 			}).then((res) => {
 				this.dgbqort = (Number(res) / 1e8).toFixed(8)
 			})
 			return html`${this.dgbqort}`
-		} else if (this.listedCoins.get(this.selectedCoin).coinCode === "RVN") {
+		} else if (this.listedCoins.get(this.selectedCoin).coinCode === 'RVN') {
 			parentEpml.request('apiCall', {
-				url: `/crosschain/price/RAVENCOIN?inverse=false`
+				url: '/crosschain/price/RAVENCOIN?inverse=false'
 			}).then((res) => {
 				this.rvnqort = (Number(res) / 1e8).toFixed(8)
 			})
 			return html`${this.rvnqort}`
-		} else if (this.listedCoins.get(this.selectedCoin).coinCode === "ARRR") {
+		} else if (this.listedCoins.get(this.selectedCoin).coinCode === 'ARRR') {
 			parentEpml.request('apiCall', {
-				url: `/crosschain/price/PIRATECHAIN?inverse=false`
+				url: '/crosschain/price/PIRATECHAIN?inverse=false'
 			}).then((res) => {
 				this.arrrqort = (Number(res) / 1e8).toFixed(8)
 			})
@@ -1504,7 +1504,7 @@ class TradePortal extends LitElement {
 	}
 
 	async updateWalletBalance() {
-		let _url = ``
+		let _url = ''
 		let _body = null
 
 		switch (this.selectedCoin) {
@@ -1576,17 +1576,17 @@ class TradePortal extends LitElement {
 		let _this = this
 		this.selectedCoin = coin
 
-		let coinSelectionMenu = this.shadowRoot.getElementById("coinSelectionMenu")
+		let coinSelectionMenu = this.shadowRoot.getElementById('coinSelectionMenu')
 
 		if (beingInitialized) {
 			coinSelectionMenu.shadowRoot.querySelector('.mdc-select--outlined .mdc-select__anchor').setAttribute('style', 'padding-left: 60px;')
-			let pairIconContainer = document.createElement("span")
+			let pairIconContainer = document.createElement('span')
 			let pairicon = (_this.listedCoins.get(_this.selectedCoin).coinCode).toLowerCase()
-			pairIconContainer.setAttribute("class", "pairIconContainer")
+			pairIconContainer.setAttribute('class', 'pairIconContainer')
 			pairIconContainer.setAttribute('style', 'left: 10px;top: 50%;transform: translate(0, -50%);height: 26px;width: 45px;position: absolute;background-repeat: no-repeat;background-size: cover;background-image: url(/img/qort' + pairicon + '.png);')
 			coinSelectionMenu.shadowRoot.querySelector('.mdc-select--outlined .mdc-select__anchor').appendChild(pairIconContainer)
 		} else {
-			let pairIconContainer = coinSelectionMenu.shadowRoot.querySelector(".mdc-select--outlined .mdc-select__anchor span.pairIconContainer")
+			let pairIconContainer = coinSelectionMenu.shadowRoot.querySelector('.mdc-select--outlined .mdc-select__anchor span.pairIconContainer')
 			let pairicon = (_this.listedCoins.get(_this.selectedCoin).coinCode).toLowerCase()
 			pairIconContainer.style.backgroundImage = 'url(/img/qort' + pairicon + '.png)'
 		}
@@ -1595,7 +1595,7 @@ class TradePortal extends LitElement {
 		this.isLoadingOpenTrades = true
 		this.createConnection()
 		this._openOrdersGrid.querySelector('#priceColumn').headerRenderer = function (root) {
-			const priceString2 = get("tradepage.tchange9")
+			const priceString2 = get('tradepage.tchange9')
 			root.innerHTML = '<vaadin-grid-sorter path="price" direction="asc">' + priceString2 + ' (' + _this.listedCoins.get(_this.selectedCoin).coinCode + ')</vaadin-grid-sorter>'
 		}
 		this.clearSellForm()
@@ -1605,8 +1605,8 @@ class TradePortal extends LitElement {
 	}
 
 	displayTabContent(tab) {
-		const tabPane = this.shadowRoot.getElementById("tabs-1")
-		tabPane.setAttribute("activeIndex", (tab === 'buy') ? '0' : '1')
+		const tabPane = this.shadowRoot.getElementById('tabs-1')
+		tabPane.setAttribute('activeIndex', (tab === 'buy') ? '0' : '1')
 
 		const tabBuyContent = this.shadowRoot.getElementById('tab-buy-content')
 		tabBuyContent.style.display = (tab === 'buy') ? 'block' : 'none'
@@ -1634,11 +1634,11 @@ class TradePortal extends LitElement {
 	}
 
 	reSelectOpenOrders() {
-		const qortalATAddressesString = this.shadowRoot.getElementById('qortalAtAddress').value;
-		const qortalATAddresses = qortalATAddressesString.split(',');
-		const itemsToSelect = this.tradesPresenceCleaned.filter((order) => qortalATAddresses.includes(order.qortalAtAddress));
-		this._openOrdersGrid.selectedItems = [...itemsToSelect];
-		this.fillBuyFormMultiple(itemsToSelect);
+		const qortalATAddressesString = this.shadowRoot.getElementById('qortalAtAddress').value
+		const qortalATAddresses = qortalATAddressesString.split(',')
+		const itemsToSelect = this.tradesPresenceCleaned.filter((order) => qortalATAddresses.includes(order.qortalAtAddress))
+		this._openOrdersGrid.selectedItems = [...itemsToSelect]
+		this.fillBuyFormMultiple(itemsToSelect)
 	}
 
 	async reRenderMyOpenOrders() {
@@ -1657,14 +1657,14 @@ class TradePortal extends LitElement {
 	}
 
 	fillBuyFormMultiple(sellerRequests) {
-		let qortalATAddresses = [];
-		let qortAmount = 0;
-		let foreignAmount = 0;
+		let qortalATAddresses = []
+		let qortAmount = 0
+		let foreignAmount = 0
 
 		sellerRequests.forEach((item, index) => {
-			qortalATAddresses.push(item.qortalAtAddress);
-			qortAmount += parseFloat(item.qortAmount);
-			foreignAmount += parseFloat(item.foreignAmount);
+			qortalATAddresses.push(item.qortalAtAddress)
+			qortAmount += parseFloat(item.qortAmount)
+			foreignAmount += parseFloat(item.foreignAmount)
 		})
 
 		this.shadowRoot.getElementById('buyAmountInput').value = qortAmount
@@ -1708,7 +1708,7 @@ class TradePortal extends LitElement {
 				this.listedCoins.get(offer.foreignBlockchain).tradeOffersSocketCounter > 1 ? this._openOrdersGrid.clearCache() : null
 			}
 		} catch (e) {
-			console.log("Error adding offer from " + offer.foreignBlockchain)
+			console.log('Error adding offer from ' + offer.foreignBlockchain)
 		}
 	}
 
@@ -1745,7 +1745,7 @@ class TradePortal extends LitElement {
 
 			}
 		} catch (e) {
-			console.log("Error processing redeemed trade offer from " + offer.foreignBlockchain)
+			console.log('Error processing redeemed trade offer from ' + offer.foreignBlockchain)
 		}
 	}
 
@@ -1765,7 +1765,7 @@ class TradePortal extends LitElement {
 				this.listedCoins.get(offer.foreignBlockchain).openOrders = this.listedCoins.get(offer.foreignBlockchain).openOrders.filter((order) => order.qortalAtAddress !== offer.qortalAtAddress)
 			}
 		} catch (e) {
-			console.log("Error processing trading trade offer from " + offer.foreignBlockchain)
+			console.log('Error processing trading trade offer from ' + offer.foreignBlockchain)
 		}
 	}
 
@@ -1783,7 +1783,7 @@ class TradePortal extends LitElement {
 
 			}
 		} catch (e) {
-			console.log("Error processing refunded trade offer from " + offer.foreignBlockchain)
+			console.log('Error processing refunded trade offer from ' + offer.foreignBlockchain)
 		}
 	}
 
@@ -1813,7 +1813,7 @@ class TradePortal extends LitElement {
 				})
 			}
 		} catch (e) {
-			console.log("Error processing cancelled trade offer from " + offer.foreignBlockchain)
+			console.log('Error processing cancelled trade offer from ' + offer.foreignBlockchain)
 		}
 	}
 
@@ -2187,7 +2187,7 @@ class TradePortal extends LitElement {
 	}
 
 	initSocket() {
-		let _relatedCoin = ""
+		let _relatedCoin = ''
 		let tradePresenceTxns = null
 		let offeringTrades = null
 
@@ -2212,7 +2212,7 @@ class TradePortal extends LitElement {
 		}
 
 		const filterOffersUsingTradePresence = (offeringTrade) => {
-			return offeringTrade.tradePresenceExpiry > Date.now();
+			return offeringTrade.tradePresenceExpiry > Date.now()
 		}
 
 		const processOffersWithPresence = () => {
@@ -2243,7 +2243,7 @@ class TradePortal extends LitElement {
 		const initTradeOffersWebSocket = (restarted = false) => {
 			let tradeOffersSocketCounter = 0
 			let socketTimeout
-			let socketLink = `PROTOCOL://NODEURL/websockets/crosschain/tradeoffers?foreignBlockchain=FOREIGN_BLOCKCHAIN&includeHistoric=true`
+			let socketLink = 'PROTOCOL://NODEURL/websockets/crosschain/tradeoffers?foreignBlockchain=FOREIGN_BLOCKCHAIN&includeHistoric=true'
 			const socket = new WebSocket(socketLink)
 			socket.onopen = () => {
 				setTimeout(pingSocket, 50)
@@ -2275,7 +2275,7 @@ class TradePortal extends LitElement {
 
 		const initTradeBotWebSocket = (restarted = false) => {
 			let socketTimeout
-			let socketLink = `PROTOCOL://NODEURL/websockets/crosschain/tradebot?foreignBlockchain=FOREIGN_BLOCKCHAIN`
+			let socketLink = 'PROTOCOL://NODEURL/websockets/crosschain/tradebot?foreignBlockchain=FOREIGN_BLOCKCHAIN'
 			const socket = new WebSocket(socketLink)
 			socket.onopen = () => {
 				setTimeout(pingSocket, 50)
@@ -2304,7 +2304,7 @@ class TradePortal extends LitElement {
 
 		const initTradePresenceWebSocket = (restarted = false) => {
 			let socketTimeout
-			let socketLink = `PROTOCOL://NODEURL/websockets/crosschain/tradepresence`
+			let socketLink = 'PROTOCOL://NODEURL/websockets/crosschain/tradepresence'
 			const socket = new WebSocket(socketLink)
 			socket.onopen = () => {
 				setTimeout(pingSocket, 50)
@@ -2397,20 +2397,20 @@ class TradePortal extends LitElement {
 			} else if (response === false) {
 				this.isSellLoading = false
 				this.sellBtnDisable = false
-				let snack2string = get("tradepage.tchange20")
+				let snack2string = get('tradepage.tchange20')
 				parentEpml.request('showSnackBar', `${snack2string}`)
 			} else {
 				this.isSellLoading = false
 				this.sellBtnDisable = false
-				let snack3string = get("tradepage.tchange21")
+				let snack3string = get('tradepage.tchange21')
 				parentEpml.request('showSnackBar', `${snack3string}: ${response.message}`)
 			}
 		}
 
-		if (this.round(parseFloat(fundingQortAmount) + parseFloat(this.listedCoins.get("QORTAL").tradeFee)) > parseFloat(this.listedCoins.get("QORTAL").balance)) {
+		if (this.round(parseFloat(fundingQortAmount) + parseFloat(this.listedCoins.get('QORTAL').tradeFee)) > parseFloat(this.listedCoins.get('QORTAL').balance)) {
 			this.isSellLoading = false
 			this.sellBtnDisable = false
-			let snack4string = get("tradepage.tchange22")
+			let snack4string = get('tradepage.tchange22')
 			parentEpml.request('showSnackBar', `${snack4string}`)
 			return false
 		} else {
@@ -2423,7 +2423,7 @@ class TradePortal extends LitElement {
 		this.isBuyLoading = true
 		this.buyBtnDisable = true
 		const qortalAtAddress = this.shadowRoot.getElementById('qortalAtAddress').value
-		let _foreignKey = ""
+		let _foreignKey = ''
 
 		switch (this.selectedCoin) {
 			case 'BITCOIN':
@@ -2474,17 +2474,17 @@ class TradePortal extends LitElement {
 				this.shadowRoot.getElementById('buyPriceInput').value = this.initialAmount
 				this.shadowRoot.getElementById('buyTotalInput').value = this.initialAmount
 				this.shadowRoot.getElementById('qortalAtAddress').value = ''
-				let snack5string = get("tradepage.tchange23")
+				let snack5string = get('tradepage.tchange23')
 				parentEpml.request('showSnackBar', `${snack5string}`)
 			} else if (response === false) {
 				this.isBuyLoading = false
 				this.buyBtnDisable = false
-				let snack6string = get("tradepage.tchange24")
+				let snack6string = get('tradepage.tchange24')
 				parentEpml.request('showSnackBar', `${snack6string}`)
 			} else {
 				this.isBuyLoading = false
 				this.buyBtnDisable = false
-				let snack7string = get("tradepage.tchange25")
+				let snack7string = get('tradepage.tchange25')
 				parentEpml.request('showSnackBar', `${snack7string}: ${response.message}`)
 			}
 		}
@@ -2494,7 +2494,7 @@ class TradePortal extends LitElement {
 
 	async cancelAction(state) {
 		const button = this.shadowRoot.querySelector(`mwc-button#${state.atAddress}`)
-		button.innerHTML = `<paper-spinner-lite active></paper-spinner-lite>`
+		button.innerHTML = '<paper-spinner-lite active></paper-spinner-lite>'
 		this.cancelBtnDisable = true
 
 		const makeRequest = async () => {
@@ -2508,17 +2508,17 @@ class TradePortal extends LitElement {
 			if (response === true) {
 				button.remove()
 				this.cancelBtnDisable = false
-				let snack8string = get("tradepage.tchange26")
+				let snack8string = get('tradepage.tchange26')
 				parentEpml.request('showSnackBar', `${snack8string}`)
 			} else if (response === false) {
 				button.innerHTML = 'CANCEL'
 				this.cancelBtnDisable = false
-				let snack9string = get("tradepage.tchange27")
+				let snack9string = get('tradepage.tchange27')
 				parentEpml.request('showSnackBar', `${snack9string}`)
 			} else {
 				button.innerHTML = 'CANCEL'
 				this.cancelBtnDisable = false
-				let snack10string = get("tradepage.tchange28")
+				let snack10string = get('tradepage.tchange28')
 				parentEpml.request('showSnackBar', `${snack10string}: ${response.message}`)
 			}
 		}
@@ -2531,14 +2531,14 @@ class TradePortal extends LitElement {
 		parentEpml.request('apiCall', {
 			url: `/addresses/balance/${this.selectedAddress.address}?apiKey=${this.getApiKey()}`,
 		}).then((res) => {
-			this.listedCoins.get("QORTAL").balance = res
+			this.listedCoins.get('QORTAL').balance = res
 			this.updateAccountBalanceTimeout = setTimeout(() => this.updateAccountBalance(), 10000)
 		})
 	}
 
 	renderCancelButton(stateItem) {
 		if (stateItem.tradeState === 'BOB_WAITING_FOR_MESSAGE') {
-			return html`<mwc-button id="${stateItem.atAddress}" ?disabled=${this.cancelBtnDisable} class="cancel" @click=${(e) => this.cancelAction(stateItem)}>${translate("tradepage.tchange29")}</mwc-button>`
+			return html`<mwc-button id="${stateItem.atAddress}" ?disabled=${this.cancelBtnDisable} class="cancel" @click=${(e) => this.cancelAction(stateItem)}>${translate('tradepage.tchange29')}</mwc-button>`
 		} else {
 			return ''
 		}
@@ -2561,15 +2561,15 @@ class TradePortal extends LitElement {
 		const manageResponse = (response) => {
 			if (response === true) {
 				this.cancelStuckOfferBtnDisable = false
-				let snack11string = get("tradepage.tchange26")
+				let snack11string = get('tradepage.tchange26')
 				parentEpml.request('showSnackBar', `${snack11string}`)
 			} else if (response === false) {
 				this.cancelStuckOfferBtnDisable = false
-				let snack12string = get("tradepage.tchange27")
+				let snack12string = get('tradepage.tchange27')
 				parentEpml.request('showSnackBar', `${snack12string}`)
 			} else {
 				this.cancelStuckOfferBtnDisable = false
-				let snack13string = get("tradepage.tchange28")
+				let snack13string = get('tradepage.tchange28')
 				parentEpml.request('showSnackBar', `${snack13string}: ${response.message}`)
 			}
 		}
@@ -2686,7 +2686,7 @@ class TradePortal extends LitElement {
 			}
 			return Promise.reject(response)
 		}).then((json) => {
-			this.listedCoins.get("QORTAL").tradeFee = (Number(json) * 2) / 1e8
+			this.listedCoins.get('QORTAL').tradeFee = (Number(json) * 2) / 1e8
 		})
 	}
 
@@ -2719,7 +2719,7 @@ class TradePortal extends LitElement {
 	*/
 
 	inlineWorker(passedFunction, modifiers) {
-		let parsedFunction = ``
+		let parsedFunction = ''
 
 		modifiers.forEach((modifier) => {
 			let regex = new RegExp(modifier.searchValue, 'g')
@@ -2754,16 +2754,16 @@ class TradePortal extends LitElement {
 						this.processTradeOffers(JSON.parse(message.data))
 						this.listedCoins.get(this.selectedCoin).tradeOffersSocketCounter === 1 ? this.clearPaneCache() : null
 						workers.get(this.selectedCoin).tradesConnectedWorker.postMessage(this.listedCoins.get(this.selectedCoin).openOrders)
-						workers.get(this.selectedCoin).tradesConnectedWorker.postMessage({ type: "open_orders", content: this.listedCoins.get(this.selectedCoin).openOrders })
+						workers.get(this.selectedCoin).tradesConnectedWorker.postMessage({ type: 'open_orders', content: this.listedCoins.get(this.selectedCoin).openOrders })
 					}
 					return null
 				case 'TRADE_BOT':
 					if (!message.isRestarted) this.processTradeBotStates(JSON.parse(message.data))
 					return null
-					case 'PRESENCE':
-						this.tradesPresenceCleaned = []
-						this.listedCoins.get(message.data.relatedCoin).openOrders = message.data.offers
-						this.tradesPresenceCleaned = message.data.filteredOffers
+				case 'PRESENCE':
+					this.tradesPresenceCleaned = []
+					this.listedCoins.get(message.data.relatedCoin).openOrders = message.data.offers
+					this.tradesPresenceCleaned = message.data.filteredOffers
 
 					const filterPresenceList = () => {
 						this.blockedTradesList.forEach(item => {
@@ -2774,13 +2774,13 @@ class TradePortal extends LitElement {
 						})
 					}
 
-						filterPresenceList()
-						this.listedCoins.get(message.data.relatedCoin).openFilteredOrders = this.tradesPresenceCleaned
-						this.ensureOpenOrderNames(this.listedCoins.get(message.data.relatedCoin).openFilteredOrders)
-						this.reRenderOpenFilteredOrders()
-						if( this.selectedCoin != 'PIRATECHAIN') {
-							this.reSelectOpenOrders()
-						}
+					filterPresenceList()
+					this.listedCoins.get(message.data.relatedCoin).openFilteredOrders = this.tradesPresenceCleaned
+					this.ensureOpenOrderNames(this.listedCoins.get(message.data.relatedCoin).openFilteredOrders)
+					this.reRenderOpenFilteredOrders()
+					if( this.selectedCoin != 'PIRATECHAIN') {
+						this.reSelectOpenOrders()
+					}
 					return null
 				default:
 					break
@@ -2792,7 +2792,7 @@ class TradePortal extends LitElement {
 		let nodeProtocol = myNode.protocol
 		let checkProtocol
 
-		if (nodeProtocol === "https") {
+		if (nodeProtocol === 'https') {
 			checkProtocol = 'wss'
 		} else {
 			checkProtocol = 'ws'
@@ -2808,7 +2808,7 @@ class TradePortal extends LitElement {
 
 		workers.get(this.selectedCoin).tradesConnectedWorker.addEventListener('message', function (event) { handleMessage(event.data) }, { passive: true })
 
-		workers.get(this.selectedCoin).tradesConnectedWorker.postMessage({ type: "set_coin", content: this.selectedCoin })
+		workers.get(this.selectedCoin).tradesConnectedWorker.postMessage({ type: 'set_coin', content: this.selectedCoin })
 
 	}
 
@@ -2834,7 +2834,7 @@ class TradePortal extends LitElement {
 						addBlockedTrades.push(addBlocked)
 					}
 				})
-				localStorage.setItem("failedTrades", JSON.stringify(addBlockedTrades))
+				localStorage.setItem('failedTrades', JSON.stringify(addBlockedTrades))
 				this.blockedTradesList = JSON.parse(localStorage.getItem('failedTrades') || '[]')
 			})
 		}
@@ -2848,8 +2848,8 @@ class TradePortal extends LitElement {
 				}
 				return newArray
 			}, [])
-			localStorage.setItem("failedTrades", JSON.stringify(cleanBlockedTrades))
-			this.blockedTradesList = JSON.parse(localStorage.getItem("failedTrades") || "[]")
+			localStorage.setItem('failedTrades', JSON.stringify(cleanBlockedTrades))
+			this.blockedTradesList = JSON.parse(localStorage.getItem('failedTrades') || '[]')
 		}
 
 		await filterUnconfirmedTransactionsList()
@@ -2863,7 +2863,7 @@ class TradePortal extends LitElement {
 		})
 
 		const getCompletedTrades = async () => {
-			const url = `PROTOCOL://NODEURL/crosschain/trades?limit=25&reverse=true&foreignBlockchain=FOREIGN_BLOCKCHAIN`
+			const url = 'PROTOCOL://NODEURL/crosschain/trades?limit=25&reverse=true&foreignBlockchain=FOREIGN_BLOCKCHAIN'
 			const res = await fetch(url)
 			const historicTrades = await res.json()
 			const compareFn = (a, b) => {
@@ -2882,7 +2882,7 @@ class TradePortal extends LitElement {
 		}
 
 		const getOffers = async () => {
-			const url = `PROTOCOL://NODEURL/crosschain/tradeoffers?foreignBlockchain=FOREIGN_BLOCKCHAIN`
+			const url = 'PROTOCOL://NODEURL/crosschain/tradeoffers?foreignBlockchain=FOREIGN_BLOCKCHAIN'
 			const res = await fetch(url)
 			const openTradeOrders = await res.json()
 			const myOpenTradeOrders = await openTradeOrders.filter((order) => order.mode === 'OFFERING' && order.qortalCreator === 'SELECTED_ADDRESS')
@@ -2899,7 +2899,7 @@ class TradePortal extends LitElement {
 			return
 		}
 
-		this.shadowRoot.getElementById('loadingHistoricTrades').style.display = "block";
+		this.shadowRoot.getElementById('loadingHistoricTrades').style.display = 'block'
 		let isHandleTradesDone = false
 		let isHandleStuckOffersDone = false
 
@@ -2947,7 +2947,7 @@ class TradePortal extends LitElement {
 		let nodeProtocol = myNode.protocol
 		let checkProtocol
 
-		if (nodeProtocol === "https") {
+		if (nodeProtocol === 'https') {
 			checkProtocol = 'https'
 		} else {
 			checkProtocol = 'http'

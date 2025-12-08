@@ -56,13 +56,13 @@ class BecomeMinter extends LitElement {
 		const isAlreadySponsored = this.addressInfo?.error !== 124 && this.addressInfo?.level === 0 && this.addressInfo?.blocksMinted > 0 && this.addressInfo?.blocksMinted < 7200
 		return html`
 			${this.isPageLoading
-				? html`
+		? html`
 					<div class="loadingContainer">
 						<div class="loading"></div>
 					</div>
 					<div class="backdrop"></div>
 				`
-			: ''}
+		: ''}
 			<div class="page-container">
 				<h1 class="header-title">
 					${translate('mintingpage.mchange32')}
@@ -71,8 +71,8 @@ class BecomeMinter extends LitElement {
 					<hr class="divider" />
 				</div>
 				${isAlreadySponsored
-				? ''
-				: html`
+		? ''
+		: html`
 					<not-sponsored
 						.blocked=${this.blocked}
 						.blockedMessage=${this.blockedMessage}
@@ -81,11 +81,11 @@ class BecomeMinter extends LitElement {
 					</not-sponsored>
 				`}
 				${!isAlreadySponsored
-				? ''
-				: html`
+		? ''
+		: html`
 					<yes-sponsored
 						.rewardSharePublicKey=${this
-						.rewardSharePublicKey}
+		.rewardSharePublicKey}
 							.addressInfo=${this.addressInfo}
 							.isMinting=${!!findMintingAccount}
 					>
@@ -151,13 +151,13 @@ class BecomeMinter extends LitElement {
 
 	async getNodeInfo() {
 		return await parentEpml.request('apiCall', {
-			url: `/admin/status`
+			url: '/admin/status'
 		})
 	}
 
 	async getMintingAcccounts() {
 		return await parentEpml.request('apiCall', {
-			url: `/admin/mintingaccounts`
+			url: '/admin/mintingaccounts'
 		})
 	}
 

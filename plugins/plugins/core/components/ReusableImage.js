@@ -62,36 +62,36 @@ export class ResuableImage extends LitElement {
 		return html`
 			<div>
 				${this.status.status !== 'READY' ?
-					html`
+		html`
 						<div style="display:flex;flex-direction:column;width:100%;height:100%;justify-content:center;align-items:center;">
-							<div class=${`smallLoading`}></div>
+							<div class=${'smallLoading'}></div>
 							<p style="color: var(--black)">
 								${`${Math.round(this.status.percentLoaded || 0).toFixed(0)}% `}${translate('chatpage.cchange94')}
 							</p>
 						</div>
 					`
-					: ''
-				}
+		: ''
+}
 				${this.status.status === 'READY' ?
-					html`
-						<div style="position:relative; cursor:pointer" @click=${() => {this.openDialogImage = true;}}>
+		html`
+						<div style="position:relative; cursor:pointer" @click=${() => {this.openDialogImage = true}}>
 							<img crossorigin="anonymous" src=${this.url} />
 						</div>
 					`
-					: ''
-				}
+		: ''
+}
 			</div>
-			<mwc-dialog id="showDialogPublicKey" ?open=${this.openDialogImage} @closed=${() => {this.openDialogImage = false;}}>
+			<mwc-dialog id="showDialogPublicKey" ?open=${this.openDialogImage} @closed=${() => {this.openDialogImage = false}}>
 				<div class="dialog-header"></div>
 				<div class="dialog-container imageContainer">
 					${this.openDialogImage ?
-						html`
+		html`
 							<img src=${this.url} style="height: auto; max-height: 80vh; width: auto; max-width: 80vw; object-fit: contain; border-radius: 5px;"/>
 						`
-						: ''
-					}
+		: ''
+}
 				</div>
-				<mwc-button slot="primaryAction" dialogAction="cancel" class="red" @click=${() => {this.openDialogImage = false;}}>
+				<mwc-button slot="primaryAction" dialogAction="cancel" class="red" @click=${() => {this.openDialogImage = false}}>
 					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
@@ -130,7 +130,7 @@ export class ResuableImage extends LitElement {
 	}
 
 	async fetchVideoUrl() {
-		await this.fetchResource();
+		await this.fetchResource()
 		this.url = `${this.nodeUrl}/arbitrary/${this.resource.service}/${this.resource.name}/${this.resource.identifier}?async=true`
 	}
 
@@ -176,7 +176,7 @@ export class ResuableImage extends LitElement {
 					}
 
 					if (timer < 0) {
-						timer = 24;
+						timer = 24
 						isCalling = true
 
 						this.status = {

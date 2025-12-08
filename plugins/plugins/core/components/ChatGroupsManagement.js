@@ -39,7 +39,7 @@ class ChatGroupsManagement extends LitElement {
 
 	constructor() {
 		super()
-		this.isLoading = false;
+		this.isLoading = false
 		this.isOpenLeaveModal = false
 		this.leaveGroupObj = {}
 		this.fee = null
@@ -55,11 +55,11 @@ class ChatGroupsManagement extends LitElement {
 			<!-- Leave Group Dialog -->
 			<wrapper-modal
 				.removeImage=${() => {
-					if (this.isLoading) return
-					this.isOpenLeaveModal = false
-				}}
-				customStyle=${"width: 90%; max-width: 900px; height: 90%"}
-				style=${(this.isOpenLeaveModal) ? "display: block" : "display: none"}
+		if (this.isLoading) return
+		this.isOpenLeaveModal = false
+	}}
+				customStyle=${'width: 90%; max-width: 900px; height: 90%'}
+				style=${(this.isOpenLeaveModal) ? 'display: block' : 'display: none'}
 			>
 				<div style="width: 100%;height: 100%;display: flex; flex-direction: column;background:var(--mdc-theme-surface)">
 					<div style="height: 50px;display: flex; flex:0">
@@ -72,7 +72,7 @@ class ChatGroupsManagement extends LitElement {
 					</div>
 					<div style="width: 100%;display: flex; flex-direction: column; flex-grow: 1; overflow:auto;background:var(--mdc-theme-surface)">
 						${this.currentTab === 0 ?
-							html`
+		html`
 								<div>
 									<!-- Groups tab -->
 									<!-- Search groups and be able to join -->
@@ -82,15 +82,15 @@ class ChatGroupsManagement extends LitElement {
 									<p>Current groups as member</p>
 								</div>
 							`
-							: ''
-						}
+		: ''
+}
 					</div>
 					<div style="width: 100%;height: 50;display: flex; flex: 0">
 						<button class="modal-button" ?disabled="${this.isLoading}" @click=${() => this._leaveGroup(this.leaveGroupObj.groupId, this.leaveGroupObj.groupName)}>
-							${translate("grouppage.gchange37")}
+							${translate('grouppage.gchange37')}
 						</button>
-						<button class="modal-button" ?disabled="${this.isLoading}" @click=${() => {this.isOpenLeaveModal = false;}}>
-							${translate("general.close")}
+						<button class="modal-button" ?disabled="${this.isLoading}" @click=${() => {this.isOpenLeaveModal = false}}>
+							${translate('general.close')}
 						</button>
 					</div>
 				</div>
@@ -145,7 +145,7 @@ class ChatGroupsManagement extends LitElement {
 	}
 
 	renderErr9Text() {
-		return html`${translate("grouppage.gchange49")}`
+		return html`${translate('grouppage.gchange49')}`
 	}
 
 	async confirmRelationship() {
@@ -156,7 +156,7 @@ class ChatGroupsManagement extends LitElement {
 			const currentChats = this.chatHeads
 
 			if (!stop) {
-				stop = true;
+				stop = true
 				try {
 					const findGroup = currentChats.find((item) => item.groupId === this.leaveGroupObj.groupId)
 					if (!findGroup) {
@@ -204,8 +204,8 @@ class ChatGroupsManagement extends LitElement {
 
 		// Make Transaction Request
 		const makeTransactionRequest = async (lastRef) => {
-			let groupdialog3 = get("transactions.groupdialog3")
-			let groupdialog4 = get("transactions.groupdialog4")
+			let groupdialog3 = get('transactions.groupdialog3')
+			let groupdialog4 = get('transactions.groupdialog4')
 
 			return await parentEpml.request('transaction', {
 				type: 32,

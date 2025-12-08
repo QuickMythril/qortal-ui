@@ -43,35 +43,35 @@ export class TipUser extends LitElement {
 		return html`
 			<div class="tip-user-header">
 				<img src="/img/qort.png" width="32" height="32">
-				<p class="tip-user-header-font">${translate("chatpage.cchange43")} ${this.userName}</p>
+				<p class="tip-user-header-font">${translate('chatpage.cchange43')} ${this.userName}</p>
 			</div>
 			<div class="tip-user-body">
-				<p class="tip-available">${translate("chatpage.cchange47")}: ${this.walletBalance} QORT</p>
-				<input id="amountInput" class="tip-input" type="number" placeholder="${translate("chatpage.cchange46")}" />
-				<p class="tip-available">${translate("chatpage.cchange49")}: ${this.qortPaymentFee} QORT</p>
+				<p class="tip-available">${translate('chatpage.cchange47')}: ${this.walletBalance} QORT</p>
+				<input id="amountInput" class="tip-input" type="number" placeholder="${translate('chatpage.cchange46')}" />
+				<p class="tip-available">${translate('chatpage.cchange49')}: ${this.qortPaymentFee} QORT</p>
 				${this.sendMoneyLoading ?
-					html`
+		html`
 						<paper-progress indeterminate style="width: 100%; margin: 4px;"></paper-progress>
 					`
-					: html`
-						<div style=${"text-align: center;"}>
+		: html`
+						<div style=${'text-align: center;'}>
 							<vaadin-button ?disabled=${this.btnDisable} theme="primary medium" style="width: 100%; cursor: pointer" @click=${() => this.sendQort()}>
 								<vaadin-icon icon="vaadin:arrow-forward" slot="prefix"></vaadin-icon>
-								${translate("chatpage.cchange50")} QORT
+								${translate('chatpage.cchange50')} QORT
 							</vaadin-button>
 						</div>
 					`
-				}
+}
 				${this.successMessage ?
-					html`
+		html`
 						<p class="success-msg">${this.successMessage}</p>
 					`
-					: this.errorMessage ?
-						html`
+		: this.errorMessage ?
+			html`
 							<p class="error-msg">${this.errorMessage}</p>
 						`
-					: null
-				}
+			: null
+}
 			</div>
 		`
 	}
@@ -82,9 +82,9 @@ export class TipUser extends LitElement {
 	}
 
 	updated(changedProperties) {
-		if (changedProperties && changedProperties.has("closeTipUser")) {
+		if (changedProperties && changedProperties.has('closeTipUser')) {
 			if (this.closeTipUser) {
-				this.shadowRoot.getElementById("amountInput").value = ''
+				this.shadowRoot.getElementById('amountInput').value = ''
 				this.errorMessage = ''
 				this.successMessage = ''
 			}
@@ -92,16 +92,16 @@ export class TipUser extends LitElement {
 	}
 
 	async getLastRef() {
-		return await parentEpml.request("apiCall", {
-			type: "api",
+		return await parentEpml.request('apiCall', {
+			type: 'api',
 			url: `/addresses/lastreference/${this.myAddress.address}`
 		})
 	}
 
 	async getSendQortFee() {
 		let sendFee = await parentEpml.request('apiCall', {
-			type: "api",
-			url: `/transactions/unitfee?txType=PAYMENT`
+			type: 'api',
+			url: '/transactions/unitfee?txType=PAYMENT'
 		})
 
 		return (Number(sendFee) / 1e8).toFixed(8)
@@ -123,11 +123,11 @@ export class TipUser extends LitElement {
 	}
 
 	renderSuccessText() {
-		return html`${translate("chatpage.cchange55")}`
+		return html`${translate('chatpage.cchange55')}`
 	}
 
 	renderReceiverText() {
-		return html`${translate("chatpage.cchange54")}`
+		return html`${translate('chatpage.cchange54')}`
 	}
 
 	async fetchWalletDetails() {
@@ -135,7 +135,7 @@ export class TipUser extends LitElement {
 	}
 
 	async sendQort() {
-		const amount = this.shadowRoot.getElementById("amountInput").value
+		const amount = this.shadowRoot.getElementById('amountInput').value
 		const recipient = this.userName
 
 		this.sendMoneyLoading = true
@@ -149,21 +149,21 @@ export class TipUser extends LitElement {
 
 		if (parseFloat(amount) + parseFloat(0.011) > parseFloat(this.walletBalance)) {
 			resetState()
-			const snack1string = get("chatpage.cchange51")
+			const snack1string = get('chatpage.cchange51')
 			parentEpml.request('showSnackBar', `${snack1string}`)
 			return false
 		}
 
 		if (parseFloat(amount) <= 0) {
 			resetState()
-			const snack2string = get("chatpage.cchange52")
+			const snack2string = get('chatpage.cchange52')
 			parentEpml.request('showSnackBar', `${snack2string}`)
 			return false
 		}
 
 		if (recipient.length === 0) {
 			resetState()
-			const snack3string = get("chatpage.cchange53")
+			const snack3string = get('chatpage.cchange53')
 			parentEpml.request('showSnackBar', `${snack3string}`)
 			return false
 		}
@@ -182,10 +182,10 @@ export class TipUser extends LitElement {
 		}
 
 		const makeTransactionRequest = async (receiver, lastRef) => {
-			const dialogAmount = get("transactions.amount")
-			const dialogAddress = get("login.address")
-			const dialogName = get("login.name")
-			const dialogTo = get("transactions.to")
+			const dialogAmount = get('transactions.amount')
+			const dialogAddress = get('login.address')
+			const dialogName = get('login.name')
+			const dialogTo = get('transactions.to')
 			const recipientName = await getUserNameFromAddress(receiver)
 
 			return await parentEpml.request('transaction', {
@@ -216,7 +216,7 @@ export class TipUser extends LitElement {
 				this.successMessage = this.renderSuccessText()
 				resetState()
 				setTimeout(() => {
-					this.setOpenTipUser(false);
+					this.setOpenTipUser(false)
 					this.successMessage = ''
 				}, 3000)
 			} else {

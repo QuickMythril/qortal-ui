@@ -15,7 +15,7 @@ import '@polymer/paper-dialog/paper-dialog.js'
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../../core/translate'
 registerTranslateConfig({
-  loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
+	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
 })
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
@@ -50,7 +50,7 @@ class ArrrCharts extends LitElement {
 		return html`
 			<paper-dialog id="loadChartDialog" class="chart-loading-wrapper" modal>
 				<div class="loadingContainer" style="display:${this.isLoadingTradesChart ? 'inline-block' : 'none'}">
-					<span style="color: var(--black);">${translate("login.loading")}</span>
+					<span style="color: var(--black);">${translate('login.loading')}</span>
 				</div>
 			</paper-dialog>
 			<paper-dialog id="arrrChartDialog" class="chart-info-wrapper">
@@ -88,7 +88,7 @@ class ArrrCharts extends LitElement {
 	async getArrrTrades() {
 		let currentArrrTimestamp = Date.now()
 		const monthBackArrr = currentArrrTimestamp - 31556952000
-            await parentEpml.request("apiCall", { url: `/crosschain/trades?foreignBlockchain=PIRATECHAIN&minimumTimestamp=${monthBackArrr}&limit=0&reverse=false` }).then((res) => {
+		await parentEpml.request('apiCall', { url: `/crosschain/trades?foreignBlockchain=PIRATECHAIN&minimumTimestamp=${monthBackArrr}&limit=0&reverse=false` }).then((res) => {
 			this.arrrTrades = res
 		})
 		this.arrrPrice = this.arrrTrades.map(item => {
@@ -98,8 +98,8 @@ class ArrrCharts extends LitElement {
 	}
 
 	enableArrrStockPriceChart() {
-            const arrrStockPriceData = this.arrrPrice
-            const header = 'QORT / ARRR ' + get("tradepage.tchange49")
+		const arrrStockPriceData = this.arrrPrice
+		const header = 'QORT / ARRR ' + get('tradepage.tchange49')
 		Highcharts.stockChart(this.shadowRoot.querySelector('#arrrStockPriceContainer'), {
 			accessibility: {
 				enabled: false
@@ -151,7 +151,7 @@ class ArrrCharts extends LitElement {
 	changeTheme() {
 		const checkTheme = localStorage.getItem('qortalTheme')
 		this.theme = (checkTheme === 'dark') ? 'dark' : 'light'
-		document.querySelector('html').setAttribute('theme', this.theme);
+		document.querySelector('html').setAttribute('theme', this.theme)
 	}
 
 	changeLanguage() {

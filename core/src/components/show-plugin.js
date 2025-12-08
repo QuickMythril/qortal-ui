@@ -78,116 +78,116 @@ class ShowPlugin extends connect(store)(LitElement) {
 			<div id="showPluginId" style="width:0px"></div>
 			<div class="tabs">
 				${this.tabs.map((tab, index) => {
-					let title = ''
-					let icon = ''
-					let count = 0
+		let title = ''
+		let icon = ''
+		let count = 0
 
-					if (tab.myPlugObj && tab.myPlugObj.title === "Overview Page") {
-						title = html`${translate('tabmenu.tm28')}`
-					} else if (tab.myPlugObj && tab.myPlugObj.title === "Minting Details") {
-						title = html`${translate('tabmenu.tm1')}`
-					} else if (tab.myPlugObj && tab.myPlugObj.title === "Become a Minter") {
-						title = html`${translate('tabmenu.tm2')}`
-					} else if (tab.myPlugObj && tab.myPlugObj.title === "Sponsorship List") {
-						title = html`${translate('tabmenu.tm3')}`
-					} else if (tab.myPlugObj && tab.myPlugObj.title === "Wallets") {
-						title = html`${translate('tabmenu.tm4')}`
-					} else if (tab.myPlugObj && tab.myPlugObj.title === "Trade Portal") {
-						title = html`${translate('tabmenu.tm5')}`
-					} else if (tab.myPlugObj && tab.myPlugObj.title === "Auto Buy") {
-						title = html`${translate('tabmenu.tm6')}`
-					} else if (tab.myPlugObj && tab.myPlugObj.title === "Reward Share") {
-						title = html`${translate('tabmenu.tm7')}`
-					} else if (tab.myPlugObj && tab.myPlugObj.title === "Q-Chat") {
-						title = html`${translate('tabmenu.tm8')}`
-					} else if (tab.myPlugObj && tab.myPlugObj.title === "Name Registration") {
-						title = html`${translate('tabmenu.tm9')}`
-					} else if (tab.myPlugObj && tab.myPlugObj.title === "Names Market") {
-						title = html`${translate('tabmenu.tm10')}`
-					} else if (tab.myPlugObj && tab.myPlugObj.title === "Websites") {
-						title = html`${translate('tabmenu.tm11')}`
-					} else if (tab.myPlugObj && tab.myPlugObj.title === "Q-Apps") {
-						title = html`${translate('tabmenu.tm12')}`
-					} else if (tab.myPlugObj && tab.myPlugObj.title === "Group Management") {
-						title = html`${translate('tabmenu.tm13')}`
-					} else if (tab.myPlugObj && tab.myPlugObj.title === "Data Management") {
-						title = html`${translate('tabmenu.tm14')}`
-					} else if (tab.myPlugObj && tab.myPlugObj.title === "Puzzles") {
-						title = html`${translate('tabmenu.tm15')}`
-					} else if (tab.myPlugObj && tab.myPlugObj.title === "Node Management") {
-						title = html`${translate('tabmenu.tm16')}`
-					} else if (tab.myPlugObj && tab.myPlugObj.title === "Qortal Lottery") {
-						title = html`${translate('tabmenu.tm42')}`
-					} else if (tab.myPlugObj && tab.myPlugObj.url === "myapp") {
-						title = tab.myPlugObj && tab.myPlugObj.title
-					} else if (tab.myPlugObj && tab.myPlugObj.url === "devmode") {
-						title = html`${translate('tabmenu.tm38')}`
+		if (tab.myPlugObj && tab.myPlugObj.title === 'Overview Page') {
+			title = html`${translate('tabmenu.tm28')}`
+		} else if (tab.myPlugObj && tab.myPlugObj.title === 'Minting Details') {
+			title = html`${translate('tabmenu.tm1')}`
+		} else if (tab.myPlugObj && tab.myPlugObj.title === 'Become a Minter') {
+			title = html`${translate('tabmenu.tm2')}`
+		} else if (tab.myPlugObj && tab.myPlugObj.title === 'Sponsorship List') {
+			title = html`${translate('tabmenu.tm3')}`
+		} else if (tab.myPlugObj && tab.myPlugObj.title === 'Wallets') {
+			title = html`${translate('tabmenu.tm4')}`
+		} else if (tab.myPlugObj && tab.myPlugObj.title === 'Trade Portal') {
+			title = html`${translate('tabmenu.tm5')}`
+		} else if (tab.myPlugObj && tab.myPlugObj.title === 'Auto Buy') {
+			title = html`${translate('tabmenu.tm6')}`
+		} else if (tab.myPlugObj && tab.myPlugObj.title === 'Reward Share') {
+			title = html`${translate('tabmenu.tm7')}`
+		} else if (tab.myPlugObj && tab.myPlugObj.title === 'Q-Chat') {
+			title = html`${translate('tabmenu.tm8')}`
+		} else if (tab.myPlugObj && tab.myPlugObj.title === 'Name Registration') {
+			title = html`${translate('tabmenu.tm9')}`
+		} else if (tab.myPlugObj && tab.myPlugObj.title === 'Names Market') {
+			title = html`${translate('tabmenu.tm10')}`
+		} else if (tab.myPlugObj && tab.myPlugObj.title === 'Websites') {
+			title = html`${translate('tabmenu.tm11')}`
+		} else if (tab.myPlugObj && tab.myPlugObj.title === 'Q-Apps') {
+			title = html`${translate('tabmenu.tm12')}`
+		} else if (tab.myPlugObj && tab.myPlugObj.title === 'Group Management') {
+			title = html`${translate('tabmenu.tm13')}`
+		} else if (tab.myPlugObj && tab.myPlugObj.title === 'Data Management') {
+			title = html`${translate('tabmenu.tm14')}`
+		} else if (tab.myPlugObj && tab.myPlugObj.title === 'Puzzles') {
+			title = html`${translate('tabmenu.tm15')}`
+		} else if (tab.myPlugObj && tab.myPlugObj.title === 'Node Management') {
+			title = html`${translate('tabmenu.tm16')}`
+		} else if (tab.myPlugObj && tab.myPlugObj.title === 'Qortal Lottery') {
+			title = html`${translate('tabmenu.tm42')}`
+		} else if (tab.myPlugObj && tab.myPlugObj.url === 'myapp') {
+			title = tab.myPlugObj && tab.myPlugObj.title
+		} else if (tab.myPlugObj && tab.myPlugObj.url === 'devmode') {
+			title = html`${translate('tabmenu.tm38')}`
+		} else {
+			title = html`${translate('tabmenu.tm17')}`
+		}
+
+		if (tab.myPlugObj && tab.myPlugObj.mwcicon) {
+			icon = tab.myPlugObj.mwcicon
+		} else {
+			icon = 'tab'
+		}
+
+		if (tab.myPlugObj && (tab.myPlugObj.url === 'myapp') && this.tabInfo[tab.id]) {
+			title = this.tabInfo[tab.id].name
+		}
+
+		if (tab.myPlugObj && (tab.myPlugObj.url === 'myapp') && this.tabInfo[tab.id]) {
+			count = this.tabInfo[tab.id].count
+		}
+
+		if (tab.myPlugObj && tab.myPlugObj.url === 'q-chat') {
+			for (const chat of this.chatHeads) {
+				const lastReadMessage = this.chatLastSeen.find((ch) => {
+					let id
+
+					if (chat.groupId === 0) {
+						id = chat.groupId
+					} else if (chat.groupId) {
+						id = chat.groupId
 					} else {
-						title = html`${translate('tabmenu.tm17')}`
+						id = chat.address
 					}
 
-					if (tab.myPlugObj && tab.myPlugObj.mwcicon) {
-						icon = tab.myPlugObj.mwcicon
-					} else {
-						icon = 'tab'
-					}
+					return ch.key.includes(id)
+				})
 
-					if (tab.myPlugObj && (tab.myPlugObj.url === 'myapp') && this.tabInfo[tab.id]) {
-						title = this.tabInfo[tab.id].name
-					}
+				if (lastReadMessage && lastReadMessage.timestamp < chat.timestamp) {
+					count = count + 1
+				}
+			}
+		}
 
-					if (tab.myPlugObj && (tab.myPlugObj.url === 'myapp') && this.tabInfo[tab.id]) {
-						count = this.tabInfo[tab.id].count
-					}
-
-					if (tab.myPlugObj && tab.myPlugObj.url === 'q-chat') {
-						for (const chat of this.chatHeads) {
-							const lastReadMessage = this.chatLastSeen.find((ch) => {
-								let id
-
-								if (chat.groupId === 0) {
-									id = chat.groupId
-								} else if (chat.groupId) {
-									id = chat.groupId
-								} else {
-									id = chat.address
-								}
-
-								return ch.key.includes(id)
-							})
-
-							if (lastReadMessage && lastReadMessage.timestamp < chat.timestamp) {
-								count = count + 1
-							}
-						}
-					}
-
-					return html`
+		return html`
 						<div
 							id="tab-${tab.id}"
 							class="tab ${this.currentTab === index ? 'active' : ''}"
 							@click="${() => {
-								this.currentTab = index
-							}}"
+		this.currentTab = index
+	}}"
 							@mousedown="${(event) => {
-								if (event.button === 1) {
-									event.preventDefault();
-									this.removeTab(index, tab.id);
-								}
-							}}"
+		if (event.button === 1) {
+			event.preventDefault()
+			this.removeTab(index, tab.id)
+		}
+	}}"
 						>
-							<div id="icon-${tab.id}" class="${this.currentTab === index ? "iconActive" : "iconInactive"}">
-								${tab.myPlugObj && tab.myPlugObj.url === "myapp" ?
-									html`
+							<div id="icon-${tab.id}" class="${this.currentTab === index ? 'iconActive' : 'iconInactive'}">
+								${tab.myPlugObj && tab.myPlugObj.url === 'myapp' ?
+		html`
 										<tab-avatar appname=${title} appicon=${icon}></tab-avatar>
 									` : html`
 										<mwc-icon>${icon}</mwc-icon>
 									`
-								}
+}
 							</div>
 							<div class="tabCard">
 								${count ?
-									html`
+		html`
 										<span class="tabTitle ml-30">${title}</span>
 										<span class="count ml-5">${count}</span>
 										<span class="show ml-25">
@@ -203,65 +203,65 @@ class ShowPlugin extends connect(store)(LitElement) {
 											</mwc-icon>
 										</span>
 									`
-								}
+}
 							</div>
 						</div>
 					`
-				})}
+	})}
 				<button
 					class="add-tab-button"
 					title="${translate('tabmenu.tm18')}"
 					@click=${() => {
-						const lengthOfTabs = this.tabs.length
-						this.addTab({
-							url: '',
-							id: this.uid.rnd()
-						})
-						this.currentTab = lengthOfTabs
-					}}
+		const lengthOfTabs = this.tabs.length
+		this.addTab({
+			url: '',
+			id: this.uid.rnd()
+		})
+		this.currentTab = lengthOfTabs
+	}}
 				>+</button>
 			</div>
 			${repeat(this.tabs, (tab) => tab.id, (tab, index) =>
-				html`
-					<div id="frame-${tab.id}" class=${this.currentTab === index ? "showIframe" : "hideIframe"}>
+		html`
+					<div id="frame-${tab.id}" class=${this.currentTab === index ? 'showIframe' : 'hideIframe'}>
 						<iframe
 							src="${plugSrc(tab.myPlugObj)}"
 							data-id=${tab.id}
 							id="showPluginFrame${index}" 
 							style="width:100%; height: calc(var(--window-height) - 102px); border: 0; padding: 0; margin: 0;"
-							class=${!tab.myPlugObj ? "hideIframe" : ""}
+							class=${!tab.myPlugObj ? 'hideIframe' : ''}
 						></iframe>
 						<nav-bar
 							id="plug-${tab.id}"
-							class=${!tab.myPlugObj ? "showIframe" : "hideIframe"}
+							class=${!tab.myPlugObj ? 'showIframe' : 'hideIframe'}
 							.registeredUrls=${this.registeredUrls}
 							.changePage=${(val) => this.changePage(val)}
 						></nav-bar>
 					</div>
 				`
-			)}
+	)}
 			<mwc-dialog
 				id="addDevDialog"
 				?open=${this.isOpenDevDialog}
 				@closed=${() => {
-					this.shadowRoot.getElementById('domainInput').value = ''
-					this.shadowRoot.getElementById('portInput').value = ''
-					this.isOpenDevDialog = false
-					store.dispatch(setIsOpenDevDialog(false))
-				}}
+		this.shadowRoot.getElementById('domainInput').value = ''
+		this.shadowRoot.getElementById('portInput').value = ''
+		this.isOpenDevDialog = false
+		store.dispatch(setIsOpenDevDialog(false))
+	}}
 			>
 				<div style="text-align: center;">
 					<h2>${translate('tabmenu.tm39')}</h2>
 					<hr>
 				</div>
 				<p>
-					<mwc-textfield id="domainInput" style="width:100%; color: var(--black);" required outlined label="${translate("settings.domain")}"></mwc-textfield>
+					<mwc-textfield id="domainInput" style="width:100%; color: var(--black);" required outlined label="${translate('settings.domain')}"></mwc-textfield>
 				</p>
 				<p>
-					<mwc-textfield id="portInput" style="width:100%; color: var(--black);" required outlined label="${translate("settings.port")}"></mwc-textfield>
+					<mwc-textfield id="portInput" style="width:100%; color: var(--black);" required outlined label="${translate('settings.port')}"></mwc-textfield>
 				</p>
 				<mwc-button slot="secondaryAction" dialogAction="close" class="red">
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 				<mwc-button slot="primaryAction" @click="${this.getProxyPort}">
 					${translate('tabmenu.tm40')}
@@ -321,14 +321,14 @@ class ShowPlugin extends connect(store)(LitElement) {
 		if (domain.length >= 3 && port.length >= 2) {
 			framework = domain + ':' + port
 		} else {
-			let errorString = get("tabmenu.tm41")
+			let errorString = get('tabmenu.tm41')
 			parentEpml.request('showSnackBar', `${errorString}`)
 
 			return
 		}
 
 		let framePort = await parentEpml.request('apiCall', {
-			url: `/developer/proxy/start`,
+			url: '/developer/proxy/start',
 			method: 'POST',
 			headers: {
 				'Content-Type': 'text/plain'
@@ -348,17 +348,17 @@ class ShowPlugin extends connect(store)(LitElement) {
 		const myFrameNodeUrl = proxyUrl.origin
 
 		this.changePage({
-			"url": "devmode",
-			"domain": "core",
-			"page": `qdn/browser/index.html?link=${myFrameNodeUrl}&dev=FRAMEWORK`,
-			"title": "Dev Server",
-			"icon": "vaadin:desktop",
-			"mwcicon": "api",
-			"menus": [],
-			"parent": false
+			'url': 'devmode',
+			'domain': 'core',
+			'page': `qdn/browser/index.html?link=${myFrameNodeUrl}&dev=FRAMEWORK`,
+			'title': 'Dev Server',
+			'icon': 'vaadin:desktop',
+			'mwcicon': 'api',
+			'menus': [],
+			'parent': false
 		})
 
-		this.shadowRoot.querySelector("#addDevDialog").close()
+		this.shadowRoot.querySelector('#addDevDialog').close()
 	}
 
 	async addTab(tab) {
@@ -698,10 +698,10 @@ class NavBar extends connect(store)(LitElement) {
 	render() {
 		return html`
 			<div class="parent">
-				<mwc-icon class="resetIcon" @click="${() => this.resetMenu()}" title="${translate("tabmenu.tm29")}">reset_tv</mwc-icon>
-				<mwc-icon class="searchIcon" @click="${() => this.openNameSearch()}" title="${translate("tabmenu.tm30")}">person_search</mwc-icon>
-				<mwc-icon class="importIcon" @click="${() => this.openImportDialog()}" title="${translate("tabmenu.tm33")}">upload</mwc-icon>
-				<mwc-icon class="exportIcon" @click="${() => this.exportTabMenu()}" title="${translate("tabmenu.tm34")}">download</mwc-icon>
+				<mwc-icon class="resetIcon" @click="${() => this.resetMenu()}" title="${translate('tabmenu.tm29')}">reset_tv</mwc-icon>
+				<mwc-icon class="searchIcon" @click="${() => this.openNameSearch()}" title="${translate('tabmenu.tm30')}">person_search</mwc-icon>
+				<mwc-icon class="importIcon" @click="${() => this.openImportDialog()}" title="${translate('tabmenu.tm33')}">upload</mwc-icon>
+				<mwc-icon class="exportIcon" @click="${() => this.exportTabMenu()}" title="${translate('tabmenu.tm34')}">download</mwc-icon>
 				<div class="navbar">
 					<input @keydown=${this._handleKeyDown} id="linkInput" type="text" placeholder="qortal://">
 					<button @click="${this.handlePasteLink}">${translate('general.open')}</button>
@@ -719,28 +719,28 @@ class NavBar extends connect(store)(LitElement) {
 						<div class="app-icon-box">
 							<mwc-icon class="menuIcon">add</mwc-icon>
 						</div>
-						<span class="text" title="${translate("tabmenu.tm19")}">${translate("tabmenu.tm19")}</span>
+						<span class="text" title="${translate('tabmenu.tm19')}">${translate('tabmenu.tm19')}</span>
 					</div>
 				</div>
 			</div>
 			<mwc-dialog id="addNewPlugin" scrimClickAction="" escapeKeyAction="">
 				<div style="text-align:center">
-					<h2>${translate("tabmenu.tm26")}</h2>
+					<h2>${translate('tabmenu.tm26')}</h2>
 					<hr>
 					<br>
 				</div>
 				<p>
-					${translate("tabmenu.tm24")}
+					${translate('tabmenu.tm24')}
 					<select
 						required
 						@change="${() => this.val()}"
-						validationMessage="${translate("grouppage.gchange14")}"
+						validationMessage="${translate('grouppage.gchange14')}"
 						id="pluginTypeInput"
-						label="${translate("tabmenu.tm24")}"
+						label="${translate('tabmenu.tm24')}"
 					>
-						<option value="reject" selected>${translate("grouppage.gchange15")}</option>
-						<option style="margin-top: 10px;" value="0">${translate("tabmenu.tm20")}</option>
-						<option style="margin-top: 10px;" value="1">${translate("tabmenu.tm21")}</option>
+						<option value="reject" selected>${translate('grouppage.gchange15')}</option>
+						<option style="margin-top: 10px;" value="0">${translate('tabmenu.tm20')}</option>
+						<option style="margin-top: 10px;" value="1">${translate('tabmenu.tm21')}</option>
 						<option disabled style="font-size: 0.25em;"></option>
 						<option disabled style="background: #666; font-size: 0.1px;"></option>
 						<option disabled style="font-size: 0.50em;"></option>
@@ -753,31 +753,31 @@ class NavBar extends connect(store)(LitElement) {
 						style="width: 100%; color: var(--black);"
 						outlined
 						id="pluginNameInput"
-						label="${translate("login.name")}"
+						label="${translate('login.name')}"
 						type="text"
 						value="${this.initialName}"
 					></mwc-textfield>
 				</p>
 				<mwc-button slot="primaryAction" @click=${this.addToMyMenuPlugins}>
-					${translate("tabmenu.tm19")}
+					${translate('tabmenu.tm19')}
 				</mwc-button>
 				<mwc-button slot="secondaryAction" dialogAction="cancel" class="red">
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
 			<mwc-dialog id="removePlugin" scrimClickAction="" escapeKeyAction="">
 				<div style="text-align:center">
-					<h2>${translate("tabmenu.tm27")}</h2>
+					<h2>${translate('tabmenu.tm27')}</h2>
 					<hr>
 					<br>
 				</div>
-				<p style="text-align:center">${translate("tabmenu.tm23")}</p>
+				<p style="text-align:center">${translate('tabmenu.tm23')}</p>
 				<h3 style="text-align:center">${this.removeTitle}</h3>
 				<mwc-button slot="primaryAction" @click=${this.removeAppFromArray}>
-					${translate("general.yes")}
+					${translate('general.yes')}
 				</mwc-button>
 				<mwc-button slot="secondaryAction" dialogAction="cancel" class="red">
-					${translate("general.no")}
+					${translate('general.no')}
 				</mwc-button>
 			</mwc-dialog>
 			<paper-dialog id="searchNameDialog" class="searchSettings" vertical-align="top" horizontal-align="center" dynamic-align>
@@ -786,14 +786,14 @@ class NavBar extends connect(store)(LitElement) {
 						<vaadin-text-field
 							style="width: 350px"
 							id="searchNameContent"
-							placeholder="${translate("appspage.schange33")}"
+							placeholder="${translate('appspage.schange33')}"
 							value="${this.searchNameContentString}"
 							@keydown="${this.searchNameKeyListener}"
 							clear-button-visible
 							autofocus
 						></vaadin-text-field>
-						<paper-icon-button icon="icons:search" @click="${() => this.searchNameResult()}" title="${translate("websitespage.schange35")}"></paper-icon-button>
-						<paper-icon-button icon="icons:close" @click="${() => this.closeNameSearch()}" title="${translate("general.close")}"></paper-icon-button>
+						<paper-icon-button icon="icons:search" @click="${() => this.searchNameResult()}" title="${translate('websitespage.schange35')}"></paper-icon-button>
+						<paper-icon-button icon="icons:close" @click="${() => this.closeNameSearch()}" title="${translate('general.close')}"></paper-icon-button>
 					</div>
 				</div>
 				<br>
@@ -801,89 +801,89 @@ class NavBar extends connect(store)(LitElement) {
 					<vaadin-grid theme="wrap-cell-content" id="searchNameGrid" ?hidden="${this.isEmptyArray(this.searchNameResources)}" .items="${this.searchNameResources}" aria-label="Search Name">
 						<vaadin-grid-column
 							width="6rem"
-							flex-grow="0" header="${translate("appspage.schange5")}"
+							flex-grow="0" header="${translate('appspage.schange5')}"
 							.renderer=${(root, column, data) => {
-								render(html`${this.renderNameAvatar(data.item)}`, root)
-							}}
+		render(html`${this.renderNameAvatar(data.item)}`, root)
+	}}
 						></vaadin-grid-column>
 						<vaadin-grid-column
 							width="12rem"
 							flex-grow="0"
-							header="${translate("datapage.dchange5")}"
+							header="${translate('datapage.dchange5')}"
 							.renderer=${(root, column, data) => {
-								render(html`${data.item.name}`, root)
-							}}
+		render(html`${data.item.name}`, root)
+	}}
 						></vaadin-grid-column>
 						<vaadin-grid-column
 							width="10rem"
 							flex-grow="0"
-							header="${translate("appspage.schange8")}"
+							header="${translate('appspage.schange8')}"
 							.renderer=${(root, column, data) => {
-								render(html`${this.renderMyFollowUnfollowButton(data.item)}`, root)
-							}}
+		render(html`${this.renderMyFollowUnfollowButton(data.item)}`, root)
+	}}
 						></vaadin-grid-column>
 					</vaadin-grid>
 					${this.isEmptyArray(this.searchNameResources) ? html`
-						<span style="color: var(--black); text-align: center; font-size: 16px;">${translate("login.entername")}</span>
+						<span style="color: var(--black); text-align: center; font-size: 16px;">${translate('login.entername')}</span>
 					`: ''}
 				</div>
 				<div style="text-align: right;">
-					<button @click="${this.openMyFollowedNames}">${translate("tabmenu.tm31")}</button>
+					<button @click="${this.openMyFollowedNames}">${translate('tabmenu.tm31')}</button>
 				</div>
 			</paper-dialog>
 			<paper-dialog id="myFollowedNamesDialog" class="searchSettings" vertical-align="top" horizontal-align="center" dynamic-align>
 				<div style="text-align:center">
-					<h2>${translate("tabmenu.tm31")}</h2>
+					<h2>${translate('tabmenu.tm31')}</h2>
 					<hr>
 				</div>
 				<div class="divCard">
 					<vaadin-grid theme="wrap-cell-content" id="followedNameGrid" ?hidden="${this.isEmptyArray(this.myFollowedNamesList)}" .items="${this.myFollowedNamesList}" aria-label="My Followed Bames">
 						<vaadin-grid-column
 							width="6rem"
-							flex-grow="0" header="${translate("appspage.schange5")}"
+							flex-grow="0" header="${translate('appspage.schange5')}"
 							.renderer=${(root, column, data) => {
-								render(html`${this.renderNameAvatar(data.item)}`, root)
-							}}
+		render(html`${this.renderNameAvatar(data.item)}`, root)
+	}}
 						></vaadin-grid-column>
 						<vaadin-grid-column
 							width="12rem"
 							flex-grow="0"
-							header="${translate("datapage.dchange5")}"
+							header="${translate('datapage.dchange5')}"
 							.renderer=${(root, column, data) => {
-								render(html`${data.item.name}`, root)
-							}}
+		render(html`${data.item.name}`, root)
+	}}
 						></vaadin-grid-column>
 						<vaadin-grid-column
 							width="10rem"
 							flex-grow="0"
-							header="${translate("appspage.schange8")}"
+							header="${translate('appspage.schange8')}"
 							.renderer=${(root, column, data) => {
-								render(html`${this.renderMyFollowUnfollowButton(data.item)}`, root)
-							}}
+		render(html`${this.renderMyFollowUnfollowButton(data.item)}`, root)
+	}}
 						></vaadin-grid-column>
 					</vaadin-grid>
 					${this.isEmptyArray(this.myFollowedNamesList) ? html`
-						<span style="color: var(--black); text-align: center; font-size: 16px;">${translate("tabmenu.tm32")}</span>
+						<span style="color: var(--black); text-align: center; font-size: 16px;">${translate('tabmenu.tm32')}</span>
 					`: ''}
 				</div>
 				<div style="display: flex; justify-content: space-between;">
-					<button @click="${this.openNameSearch}">${translate("websitespage.schange35")}</button>
-					<button style="background-color: red;" @click="${this.closeMyFollowedNames}">${translate("general.close")}</button>
+					<button @click="${this.openNameSearch}">${translate('websitespage.schange35')}</button>
+					<button style="background-color: red;" @click="${this.closeMyFollowedNames}">${translate('general.close')}</button>
 				</div>
 			</paper-dialog>
 			<mwc-dialog id="importTabMenutDialog">
 				<div style="text-align:center">
-					<h2>${translate("tabmenu.tm33")}</h2>
+					<h2>${translate('tabmenu.tm33')}</h2>
 					<hr>
 					<br>
 				</div>
 				<div style="min-height: 150px; min-width: 500px; box-sizing: border-box; position: relative;">
 					<frag-file-input accept=".tabmenu" @file-read-success="${(e) => this.importTabMenu(e.detail.result)}"></frag-file-input>
-					<h4 style="color: #F44336; text-align: center;">${translate("walletpage.wchange56")}</h4>
-					<h5 style="text-align: center;">${translate("tabmenu.tm35")}</h5>
+					<h4 style="color: #F44336; text-align: center;">${translate('walletpage.wchange56')}</h4>
+					<h5 style="text-align: center;">${translate('tabmenu.tm35')}</h5>
 				</div>
 				<mwc-button slot="primaryAction" dialogAction="cancel" class="red">
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
 		`
@@ -1072,7 +1072,7 @@ class NavBar extends connect(store)(LitElement) {
 		}
 
 		this.myFollowedNames = await parentEpml.request('apiCall', {
-			url: buildRequestUrl(`/lists/followedNames`, store.getState())
+			url: buildRequestUrl('/lists/followedNames', store.getState())
 		})
 	}
 
@@ -1088,7 +1088,7 @@ class NavBar extends connect(store)(LitElement) {
 			return
 		}
 
-		const followedNamesUrl = buildRequestUrl(`/lists/followedNames`, store.getState())
+		const followedNamesUrl = buildRequestUrl('/lists/followedNames', store.getState())
 
 		var myFollowedNamesNew = []
 
@@ -1152,9 +1152,9 @@ class NavBar extends connect(store)(LitElement) {
 		}
 
 		if (this.myFollowedNames.indexOf(name) === -1) {
-			return html`<mwc-button @click=${() => this.myFollowName(nameObj)}><mwc-icon>add_to_queue</mwc-icon>&nbsp;${translate("appspage.schange29")}</mwc-button>`
+			return html`<mwc-button @click=${() => this.myFollowName(nameObj)}><mwc-icon>add_to_queue</mwc-icon>&nbsp;${translate('appspage.schange29')}</mwc-button>`
 		} else {
-			return html`<mwc-button @click=${() => this.myUnfollowName(nameObj)}><mwc-icon>remove_from_queue</mwc-icon>&nbsp;${translate("appspage.schange30")}</mwc-button>`
+			return html`<mwc-button @click=${() => this.myUnfollowName(nameObj)}><mwc-icon>remove_from_queue</mwc-icon>&nbsp;${translate('appspage.schange30')}</mwc-button>`
 		}
 	}
 
@@ -1173,7 +1173,7 @@ class NavBar extends connect(store)(LitElement) {
 		let namesJsonString = JSON.stringify({ 'items': items })
 
 		let ret = await parentEpml.request('apiCall', {
-			url: buildRequestUrl(`/lists/followedNames`, store.getState()),
+			url: buildRequestUrl('/lists/followedNames', store.getState()),
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -1209,7 +1209,7 @@ class NavBar extends connect(store)(LitElement) {
 		let namesJsonString = JSON.stringify({ 'items': items })
 
 		let ret = await parentEpml.request('apiCall', {
-			url: buildRequestUrl(`/lists/followedNames`, store.getState()),
+			url: buildRequestUrl('/lists/followedNames', store.getState()),
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json'
@@ -1415,61 +1415,61 @@ class NavBar extends connect(store)(LitElement) {
 
 		if (!isMinterSelect) {
 			return html`
-				<option value="overview-page">${translate("tabmenu.tm28")}</option>
-				<option style="padding-top: 10px;" value="become-minter">${translate("tabmenu.tm2")}</option>
-				<option style="padding-top: 10px;" value="wallet">${translate("tabmenu.tm4")}</option>
-				<option style="padding-top: 10px;" value="trade-portal">${translate("tabmenu.tm5")}</option>
-				<option style="padding-top: 10px;" value="trade-bot-portal">${translate("tabmenu.tm6")}</option>
-				<option style="padding-top: 10px;" value="reward-share">${translate("tabmenu.tm7")}</option>
-				<option style="padding-top: 10px;" value="q-chat">${translate("tabmenu.tm8")}</option>
-				<option style="padding-top: 10px;" value="name-registration">${translate("tabmenu.tm9")}</option>
-				<option style="padding-top: 10px;" value="names-market">${translate("tabmenu.tm10")}</option>
-				<option style="padding-top: 10px;" value="websites">${translate("tabmenu.tm11")}</option>
-				<option style="padding-top: 10px;" value="qapps">${translate("tabmenu.tm12")}</option>
-				<option style="padding-top: 10px;" value="group-management">${translate("tabmenu.tm13")}</option>
-				<option style="padding-top: 10px;" value="data-management">${translate("tabmenu.tm14")}</option>
-				<option style="padding-top: 10px;" value="puzzles">${translate("tabmenu.tm15")}</option>
-				<option style="padding-top: 10px;" value="node-management">${translate("tabmenu.tm16")}</option>
-				<option style="padding-top: 10px;" value="lottery">${translate("tabmenu.tm42")}</option>
+				<option value="overview-page">${translate('tabmenu.tm28')}</option>
+				<option style="padding-top: 10px;" value="become-minter">${translate('tabmenu.tm2')}</option>
+				<option style="padding-top: 10px;" value="wallet">${translate('tabmenu.tm4')}</option>
+				<option style="padding-top: 10px;" value="trade-portal">${translate('tabmenu.tm5')}</option>
+				<option style="padding-top: 10px;" value="trade-bot-portal">${translate('tabmenu.tm6')}</option>
+				<option style="padding-top: 10px;" value="reward-share">${translate('tabmenu.tm7')}</option>
+				<option style="padding-top: 10px;" value="q-chat">${translate('tabmenu.tm8')}</option>
+				<option style="padding-top: 10px;" value="name-registration">${translate('tabmenu.tm9')}</option>
+				<option style="padding-top: 10px;" value="names-market">${translate('tabmenu.tm10')}</option>
+				<option style="padding-top: 10px;" value="websites">${translate('tabmenu.tm11')}</option>
+				<option style="padding-top: 10px;" value="qapps">${translate('tabmenu.tm12')}</option>
+				<option style="padding-top: 10px;" value="group-management">${translate('tabmenu.tm13')}</option>
+				<option style="padding-top: 10px;" value="data-management">${translate('tabmenu.tm14')}</option>
+				<option style="padding-top: 10px;" value="puzzles">${translate('tabmenu.tm15')}</option>
+				<option style="padding-top: 10px;" value="node-management">${translate('tabmenu.tm16')}</option>
+				<option style="padding-top: 10px;" value="lottery">${translate('tabmenu.tm42')}</option>
 			`
 		} else if (isMinterSelect && isSponsorSelect) {
 			return html`
-				<option value="overview-page">${translate("tabmenu.tm28")}</option>
-				<option style="padding-top: 10px;" value="minting">${translate("tabmenu.tm1")}</option>
-				<option style="padding-top: 10px;" value="sponsorship-list">${translate("tabmenu.tm3")}</option>
-				<option style="padding-top: 10px;" value="wallet">${translate("tabmenu.tm4")}</option>
-				<option style="padding-top: 10px;" value="trade-portal">${translate("tabmenu.tm5")}</option>
-				<option style="padding-top: 10px;" value="trade-bot-portal">${translate("tabmenu.tm6")}</option>
-				<option style="padding-top: 10px;" value="reward-share">${translate("tabmenu.tm7")}</option>
-				<option style="padding-top: 10px;" value="q-chat">${translate("tabmenu.tm8")}</option>
-				<option style="padding-top: 10px;" value="name-registration">${translate("tabmenu.tm9")}</option>
-				<option style="padding-top: 10px;" value="names-market">${translate("tabmenu.tm10")}</option>
-				<option style="padding-top: 10px;" value="websites">${translate("tabmenu.tm11")}</option>
-				<option style="padding-top: 10px;" value="qapps">${translate("tabmenu.tm12")}</option>
-				<option style="padding-top: 10px;" value="group-management">${translate("tabmenu.tm13")}</option>
-				<option style="padding-top: 10px;" value="data-management">${translate("tabmenu.tm14")}</option>
-				<option style="padding-top: 10px;" value="puzzles">${translate("tabmenu.tm15")}</option>
-				<option style="padding-top: 10px;" value="node-management">${translate("tabmenu.tm16")}</option>
-				<option style="padding-top: 10px;" value="lottery">${translate("tabmenu.tm42")}</option>
+				<option value="overview-page">${translate('tabmenu.tm28')}</option>
+				<option style="padding-top: 10px;" value="minting">${translate('tabmenu.tm1')}</option>
+				<option style="padding-top: 10px;" value="sponsorship-list">${translate('tabmenu.tm3')}</option>
+				<option style="padding-top: 10px;" value="wallet">${translate('tabmenu.tm4')}</option>
+				<option style="padding-top: 10px;" value="trade-portal">${translate('tabmenu.tm5')}</option>
+				<option style="padding-top: 10px;" value="trade-bot-portal">${translate('tabmenu.tm6')}</option>
+				<option style="padding-top: 10px;" value="reward-share">${translate('tabmenu.tm7')}</option>
+				<option style="padding-top: 10px;" value="q-chat">${translate('tabmenu.tm8')}</option>
+				<option style="padding-top: 10px;" value="name-registration">${translate('tabmenu.tm9')}</option>
+				<option style="padding-top: 10px;" value="names-market">${translate('tabmenu.tm10')}</option>
+				<option style="padding-top: 10px;" value="websites">${translate('tabmenu.tm11')}</option>
+				<option style="padding-top: 10px;" value="qapps">${translate('tabmenu.tm12')}</option>
+				<option style="padding-top: 10px;" value="group-management">${translate('tabmenu.tm13')}</option>
+				<option style="padding-top: 10px;" value="data-management">${translate('tabmenu.tm14')}</option>
+				<option style="padding-top: 10px;" value="puzzles">${translate('tabmenu.tm15')}</option>
+				<option style="padding-top: 10px;" value="node-management">${translate('tabmenu.tm16')}</option>
+				<option style="padding-top: 10px;" value="lottery">${translate('tabmenu.tm42')}</option>
 			`
 		} else {
 			return html`
-				<option value="overview-page">${translate("tabmenu.tm28")}</option>
-				<option style="padding-top: 10px;" value="minting">${translate("tabmenu.tm1")}</option>
-				<option style="padding-top: 10px;" value="wallet">${translate("tabmenu.tm4")}</option>
-				<option style="padding-top: 10px;" value="trade-portal">${translate("tabmenu.tm5")}</option>
-				<option style="padding-top: 10px;" value="trade-bot-portal">${translate("tabmenu.tm6")}</option>
-				<option style="padding-top: 10px;" value="reward-share">${translate("tabmenu.tm7")}</option>
-				<option style="padding-top: 10px;" value="q-chat">${translate("tabmenu.tm8")}</option>
-				<option style="padding-top: 10px;" value="name-registration">${translate("tabmenu.tm9")}</option>
-				<option style="padding-top: 10px;" value="names-market">${translate("tabmenu.tm10")}</option>
-				<option style="padding-top: 10px;" value="websites">${translate("tabmenu.tm11")}</option>
-				<option style="padding-top: 10px;" value="qapps">${translate("tabmenu.tm12")}</option>
-				<option style="padding-top: 10px;" value="group-management">${translate("tabmenu.tm13")}</option>
-				<option style="padding-top: 10px;" value="data-management">${translate("tabmenu.tm14")}</option>
-				<option style="padding-top: 10px;" value="puzzles">${translate("tabmenu.tm15")}</option>
-				<option style="padding-top: 10px;" value="node-management">${translate("tabmenu.tm16")}</option>
-				<option style="padding-top: 10px;" value="lottery">${translate("tabmenu.tm42")}</option>
+				<option value="overview-page">${translate('tabmenu.tm28')}</option>
+				<option style="padding-top: 10px;" value="minting">${translate('tabmenu.tm1')}</option>
+				<option style="padding-top: 10px;" value="wallet">${translate('tabmenu.tm4')}</option>
+				<option style="padding-top: 10px;" value="trade-portal">${translate('tabmenu.tm5')}</option>
+				<option style="padding-top: 10px;" value="trade-bot-portal">${translate('tabmenu.tm6')}</option>
+				<option style="padding-top: 10px;" value="reward-share">${translate('tabmenu.tm7')}</option>
+				<option style="padding-top: 10px;" value="q-chat">${translate('tabmenu.tm8')}</option>
+				<option style="padding-top: 10px;" value="name-registration">${translate('tabmenu.tm9')}</option>
+				<option style="padding-top: 10px;" value="names-market">${translate('tabmenu.tm10')}</option>
+				<option style="padding-top: 10px;" value="websites">${translate('tabmenu.tm11')}</option>
+				<option style="padding-top: 10px;" value="qapps">${translate('tabmenu.tm12')}</option>
+				<option style="padding-top: 10px;" value="group-management">${translate('tabmenu.tm13')}</option>
+				<option style="padding-top: 10px;" value="data-management">${translate('tabmenu.tm14')}</option>
+				<option style="padding-top: 10px;" value="puzzles">${translate('tabmenu.tm15')}</option>
+				<option style="padding-top: 10px;" value="node-management">${translate('tabmenu.tm16')}</option>
+				<option style="padding-top: 10px;" value="lottery">${translate('tabmenu.tm42')}</option>
             `
 		}
 	}
@@ -1773,19 +1773,19 @@ class NavBar extends connect(store)(LitElement) {
 					class="removeIconPos"
 					title="${translate('tabmenu.tm22')}"
 					@click="${(event) => {
-						event.stopPropagation();
-						this.openRemoveApp(appname, appid, appurl);
-					}}"
+		event.stopPropagation()
+		this.openRemoveApp(appname, appid, appurl)
+	}}"
 				>
 					<mwc-icon class="removeIcon">backspace</mwc-icon>
 				</div>
 				${appurl === 'myapp' ?
-					html`
+		html`
 						<app-avatar appicon=${appicon} appname=${appname}></app-avatar>
 					` : html`
 						<mwc-icon class="menuIcon">${appicon}</mwc-icon>
 					`
-				}
+}
 			</div>
 		`
 	}
@@ -2047,7 +2047,7 @@ class AppAvatar extends connect(store)(LitElement) {
 
 		if (this.appname) {
 			const appAvatarNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const appAvatarNodeUrl = appAvatarNode?.baseUrl
+			const appAvatarNodeUrl = appAvatarNode?.baseUrl
 			const appAvatarUrl = `${appAvatarNodeUrl}/arbitrary/THUMBNAIL/${this.appname}/qortal_avatar?async=true`
 
 			appAvatarImg = this.createImage(appAvatarUrl)
@@ -2055,12 +2055,12 @@ class AppAvatar extends connect(store)(LitElement) {
 
 		return html`
 			${this.isImageLoaded ?
-				html`
+		html`
 					${appAvatarImg}
 				` : html`
 					<mwc-icon class="menuIcon">${this.appicon}</mwc-icon>
 				`
-			}
+}
 		`
 	}
 
@@ -2072,7 +2072,7 @@ class AppAvatar extends connect(store)(LitElement) {
 		const imageHTMLRes = new Image()
 
 		imageHTMLRes.src = imageUrl
-		imageHTMLRes.style = "border-radius:10px; font-size:14px; object-fit: fill;height:60px;width:60px;"
+		imageHTMLRes.style = 'border-radius:10px; font-size:14px; object-fit: fill;height:60px;width:60px;'
 
 		imageHTMLRes.onload = () => {
 			this.isImageLoaded = true
@@ -2117,7 +2117,7 @@ class TabAvatar extends connect(store)(LitElement) {
 
 		if (this.appname) {
 			const tabAvatarNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
-		const tabAvatarNodeUrl = tabAvatarNode?.baseUrl
+			const tabAvatarNodeUrl = tabAvatarNode?.baseUrl
 			const tabAvatarUrl = `${tabAvatarNodeUrl}/arbitrary/THUMBNAIL/${this.appname}/qortal_avatar?async=true`
 
 			tabAvatarImg = this.createImage(tabAvatarUrl)
@@ -2125,12 +2125,12 @@ class TabAvatar extends connect(store)(LitElement) {
 
 		return html`
 			${this.isImageLoaded ?
-				html`
+		html`
 					${tabAvatarImg}
 				` : html`
 					<mwc-icon>${this.appicon}</mwc-icon>
 				`
-			}
+}
 		`
 	}
 
@@ -2142,7 +2142,7 @@ class TabAvatar extends connect(store)(LitElement) {
 		const imageHTMLRes = new Image()
 
 		imageHTMLRes.src = imageUrl
-		imageHTMLRes.style = "border-radius:4px; font-size:14px; object-fit: fill;height:24px;width:24px;"
+		imageHTMLRes.style = 'border-radius:4px; font-size:14px; object-fit: fill;height:24px;width:24px;'
 
 		imageHTMLRes.onload = () => {
 			this.isImageLoaded = true

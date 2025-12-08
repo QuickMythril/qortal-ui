@@ -28,7 +28,7 @@ export class ChatImage extends LitElement {
 	}
 
 	constructor() {
-		super();
+		super()
 		this.resource = {
 			identifier: '',
 			name: '',
@@ -55,18 +55,18 @@ export class ChatImage extends LitElement {
 
 	render() {
 		return html`
-			<div class=${[`image-container`, this.status.status !== 'READY' ? 'defaultSize' : '', this.status.status !== 'READY' ? 'hideImg' : '',].join(' ')}>
+			<div class=${['image-container', this.status.status !== 'READY' ? 'defaultSize' : '', this.status.status !== 'READY' ? 'hideImg' : '',].join(' ')}>
     				${this.status.status !== 'READY' ?
-					html`
+		html`
 						<div style="display:flex;flex-direction:column;width:100%;height:100%;justify-content:center;align-items:center;position:absolute;">
-							<div class=${`smallLoading`}></div>
+							<div class=${'smallLoading'}></div>
                             				<p style="color: var(--black)">${`${Math.round(this.status.percentLoaded || 0).toFixed(0)}% `}${translate('chatpage.cchange94')}</p>
 						</div>
 					`
-					: ''
-				}
+		: ''
+}
     				${this.status.status === 'READY' ?
-					html`
+		html`
     						<div class="customContextMenuDiv" @contextmenu="${this.showContextMenu}" style="position:relative">
       							<img crossOrigin="anonymous"  @click=${() => this.setOpenDialogImage(true)} src=${this.url} />
       							<mwc-menu id="contextMenu" @blur="${this.handleMenuBlur}">
@@ -74,8 +74,8 @@ export class ChatImage extends LitElement {
       							</mwc-menu>
     						</div>
     					`
-					: ''
-				}
+		: ''
+}
 			</div>
 		`
 	}
@@ -231,7 +231,7 @@ export class ChatImage extends LitElement {
 				const clipboardItem = new ClipboardItem({ 'image/png': blob })
 
 				navigator.clipboard.write([clipboardItem]).then(() => {
-					const msg = get("chatpage.cchange93")
+					const msg = get('chatpage.cchange93')
 					parentEpml.request('showSnackBar', msg)
 					console.log('Image copied to clipboard')
 				}).catch(err => {

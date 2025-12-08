@@ -35,9 +35,9 @@ export class FeedItem extends connect(store)(LitElement) {
 	constructor() {
 		super()
 		this.resource = {
-			identifier: "",
-			name: "",
-			service: ""
+			identifier: '',
+			name: '',
+			service: ''
 		}
 		this.status = {
 			status: ''
@@ -69,22 +69,22 @@ export class FeedItem extends connect(store)(LitElement) {
 
 		return html`
 			<div
-				class=${[`image-container`, this.status.status !== 'READY' ? 'defaultSize' : '', this.status.status !== 'READY' ? 'hideImg' : '',].join(' ')}
+				class=${['image-container', this.status.status !== 'READY' ? 'defaultSize' : '', this.status.status !== 'READY' ? 'hideImg' : '',].join(' ')}
 				style=" box-sizing: border-box;"
 			>
 				${this.status.status !== 'READY' ?
-					html`
+		html`
 						<div style="display:flex;flex-direction:column;width:100%;height:100%;justify-content:center;align-items:center; box-sizing: border-box;">
-							<div class=${`smallLoading`}></div>
+							<div class=${'smallLoading'}></div>
 							<p style="color: var(--black)">
 								${`${Math.round(this.status.percentLoaded || 0).toFixed(0)}% `}${translate('chatpage.cchange94')}
 							</p>
 						</div>
 					`
-					: ''
-				}
+		: ''
+}
 				${this.status.status === 'READY' && this.feedItem ?
-					html`
+		html`
 						<div class="parent-feed-item"  style="position:relative" @click=${this.goToFeedLink}>
 							<div style="display:flex;gap:10px;margin-bottom:5px">
 								<div class="avatar">${avatarImg}</div>
@@ -99,8 +99,8 @@ export class FeedItem extends connect(store)(LitElement) {
 							</div>
 						</div>
 					`
-					: ''
-				}
+		: ''
+}
 			</div>
 		`
 	}
@@ -144,13 +144,13 @@ export class FeedItem extends connect(store)(LitElement) {
 				if (p1.startsWith('rawdata.')) {
 					const dataKey = p1.split('.')[1]
 					if (rawdata[dataKey] === undefined) {
-						console.error("rawdata key not found:", dataKey)
+						console.error('rawdata key not found:', dataKey)
 					}
 					return rawdata[dataKey] || match
 				} else if (p1.startsWith('resource.')) {
 					const resourceKey = p1.split('.')[1]
 					if (resource[resourceKey] === undefined) {
-						console.error("resource key not found:", resourceKey)
+						console.error('resource key not found:', resourceKey)
 					}
 					return resource[resourceKey] || match
 				}
@@ -272,14 +272,14 @@ export class FeedItem extends connect(store)(LitElement) {
 				url: `qdn/browser/index.html${query}`,
 				id: this.uid.rnd(),
 				myPlugObj: {
-					"url": "myapp",
-					"domain": "core",
-					"page": `qdn/browser/index.html${query}`,
-					"title": name,
-					"icon": 'vaadin:external-browser',
-					"mwcicon": 'open_in_browser',
-					"menus": [],
-					"parent": false
+					'url': 'myapp',
+					'domain': 'core',
+					'page': `qdn/browser/index.html${query}`,
+					'title': name,
+					'icon': 'vaadin:external-browser',
+					'mwcicon': 'open_in_browser',
+					'menus': [],
+					'parent': false
 				},
 				openExisting: true
 			}))
@@ -289,14 +289,14 @@ export class FeedItem extends connect(store)(LitElement) {
 	}
 
 	async extractComponents(url) {
-		if (!url.startsWith("qortal://")) {
+		if (!url.startsWith('qortal://')) {
 			return null
 		}
 
-		url = url.replace(/^(qortal\:\/\/)/, "")
+		url = url.replace(/^(qortal\:\/\/)/, '')
 
-		if (url.includes("/")) {
-			let parts = url.split("/")
+		if (url.includes('/')) {
+			let parts = url.split('/')
 			const service = parts[0].toUpperCase()
 			parts.shift()
 			const name = parts[0]
@@ -308,8 +308,8 @@ export class FeedItem extends connect(store)(LitElement) {
 				// Check if a resource exists with this service, name and identifier combination
 				const url = buildRequestUrl(`/arbitrary/resource/status/${service}/${name}/${identifier}`, store.getState())
 
-				const res = await fetch(url);
-				const data = await res.json();
+				const res = await fetch(url)
+				const data = await res.json()
 				if (data.totalChunkCount > 0) {
 					// Identifier exists, so don't include it in the path
 					parts.shift()
@@ -319,13 +319,13 @@ export class FeedItem extends connect(store)(LitElement) {
 				}
 			}
 
-			const path = parts.join("/")
+			const path = parts.join('/')
 
 			const components = {}
-			components["service"] = service
-			components["name"] = name
-			components["identifier"] = identifier
-			components["path"] = path
+			components['service'] = service
+			components['name'] = name
+			components['identifier'] = identifier
+			components['path'] = path
 			return components
 		}
 		return null

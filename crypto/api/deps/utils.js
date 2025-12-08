@@ -63,10 +63,10 @@ const utils = {
 
 		for (var index = 0; index < byteArray.length; index++) {
 			_byteArrayToHex.push((byteArray[index] >>> 4).toString(16))
-			_byteArrayToHex.push((byteArray[index] & 15).toString(16));
+			_byteArrayToHex.push((byteArray[index] & 15).toString(16))
 		}
 
-		return _byteArrayToHex.join("")
+		return _byteArrayToHex.join('')
 	}
 }
 

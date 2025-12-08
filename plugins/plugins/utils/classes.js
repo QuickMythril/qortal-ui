@@ -92,10 +92,10 @@ export const requestQueueGetAtAddresses = new RequestQueueWithPromise(10)
 
 export class Loader {
 	constructor() {
-		this.loader = document.createElement("div")
-		this.loader.className = "loader"
-		this.loader.innerHTML = `<div class="loader-spinner"></div>`
-		this.styles = document.createElement("style")
+		this.loader = document.createElement('div')
+		this.loader.className = 'loader'
+		this.loader.innerHTML = '<div class="loader-spinner"></div>'
+		this.styles = document.createElement('style')
 		this.styles.innerHTML = `
 			.loader {
 				position: fixed;
@@ -176,8 +176,8 @@ export class ModalHelper {
 
 	createModal(data) {
 		const modal = document.createElement('div')
-		modal.id = "backdrop"
-		modal.classList.add("backdrop")
+		modal.id = 'backdrop'
+		modal.classList.add('backdrop')
 
 		modal.innerHTML = `
 			<div class="modal my-modal-class">
@@ -190,8 +190,8 @@ export class ModalHelper {
 						</div>
 					</div>
 					<div class="modal-buttons">
-						<button id="cancel-button">${get("browserpage.bchange27")}</button>
-						<button id="ok-button">${get("browserpage.bchange28")}</button>
+						<button id="cancel-button">${get('browserpage.bchange27')}</button>
+						<button id="ok-button">${get('browserpage.bchange28')}</button>
 					</div>
 				</div>
 			</div>
@@ -435,8 +435,8 @@ export class WarningModal {
 	createModal(data) {
 		const modal = document.createElement('div')
 
-		modal.id = "backdrop"
-		modal.classList.add("backdrop")
+		modal.id = 'backdrop'
+		modal.classList.add('backdrop')
 
 		modal.innerHTML = `
 			<div class="modal my-modal-class">
@@ -449,8 +449,8 @@ export class WarningModal {
 						</div>
 					</div>
 					<div class="modal-buttons">
-						<button id="cancel-button">${get("general.close")}</button>
-						<button id="ok-button">${get("general.continue")}</button>
+						<button id="cancel-button">${get('general.close')}</button>
+						<button id="ok-button">${get('general.continue')}</button>
 					</div>
 				</div>
 			</div>
@@ -841,9 +841,9 @@ export const processTransactionV2 = async (bytes) => {
 	const url = `${baseUrl}/transactions/process?apiVersion=2`
 
 	const doProcess = await fetch(url, {
-		method: "POST",
+		method: 'POST',
 		headers: {
-			"Content-Type": "application/json",
+			'Content-Type': 'application/json',
 		},
 		body: bytes
 	})
@@ -888,7 +888,7 @@ export const publishData = async ({
 		return await parentEpml.request('apiCall', {
 			type: 'api',
 			method: 'POST',
-			url: `/transactions/convert`,
+			url: '/transactions/convert',
 			body: `${transactionBytesBase58}`
 		})
 	}
@@ -1057,7 +1057,7 @@ export const publishData = async ({
 
 				if (!isBase64) {
 					let fileBuffer = new Uint8Array(await file.arrayBuffer())
-					postBody = Buffer.from(fileBuffer).toString("base64")
+					postBody = Buffer.from(fileBuffer).toString('base64')
 				}
 
 			}
@@ -1151,14 +1151,14 @@ export async function getNameInfo(address) {
 }
 
 export const getPublishesFromAdmins = async (admins, groupId) => {
-	const queryString = admins.map((name) => `name=${name}`).join("&")
+	const queryString = admins.map((name) => `name=${name}`).join('&')
 	const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 	const nodeUrl = `${myNode.protocol}://${myNode.domain}:${myNode.port}`
 	const url = `${nodeUrl}/arbitrary/resources/searchsimple?mode=ALL&service=DOCUMENT_PRIVATE&identifier=symmetric-qchat-group-${groupId}&exactmatchnames=true&limit=0&reverse=true&${queryString}&prefix=true`
 	const response = await fetch(url)
 
 	if (!response.ok) {
-		console.error("network error")
+		console.error('network error')
 		return false
 	}
 
@@ -1215,7 +1215,7 @@ export const getGroupAdmins = async (groupNumber) => {
 }
 
 export const getPublishesFromAdminsAdminSpace = async (admins, groupId) => {
-	const queryString = admins.map((name) => `name=${name}`).join("&")
+	const queryString = admins.map((name) => `name=${name}`).join('&')
 	const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 	const nodeUrl = `${myNode.protocol}://${myNode.domain}:${myNode.port}`
 
@@ -1223,7 +1223,7 @@ export const getPublishesFromAdminsAdminSpace = async (admins, groupId) => {
 	const response = await fetch(url)
 
 	if (!response.ok) {
-		console.error("network error")
+		console.error('network error')
 		return false
 	}
 
@@ -1262,17 +1262,17 @@ export const isUsingPublicNode = async () => {
 
 export const getForeignKey = (foreignBlockchain) => {
 	switch (foreignBlockchain) {
-		case "LITECOIN":
+		case 'LITECOIN':
 			return window.parent.reduxStore.getState().app.selectedAddress.ltcWallet.derivedMasterPrivateKey
-		case "DOGECOIN":
+		case 'DOGECOIN':
 			return window.parent.reduxStore.getState().app.selectedAddress.dogeWallet.derivedMasterPrivateKey
-		case "BITCOIN":
+		case 'BITCOIN':
 			return window.parent.reduxStore.getState().app.selectedAddress.btcWallet.derivedMasterPrivateKey
-		case "DIGIBYTE":
+		case 'DIGIBYTE':
 			return window.parent.reduxStore.getState().app.selectedAddress.dgbWallet.derivedMasterPrivateKey
-		case "RAVENCOIN":
+		case 'RAVENCOIN':
 			return window.parent.reduxStore.getState().app.selectedAddress.rvnWallet.derivedMasterPrivateKey
-		case "PIRATECHAIN":
+		case 'PIRATECHAIN':
 			return window.parent.reduxStore.getState().app.selectedAddress.arrrWallet.seed58
 		default:
 			return null
@@ -1286,7 +1286,7 @@ export async function getQortalBalanceInfo() {
 	const url = `${nodeUrl}/addresses/balance/${address}`
 	const res = await fetch(url)
 
-	if (!response.ok) throw new Error("Cannot fetch Qortal balance")
+	if (!response.ok) throw new Error('Cannot fetch Qortal balance')
 
 	const balance = await res.json()
 
@@ -1300,14 +1300,14 @@ export async function getBitcoinBalanceInfo() {
 	const url = `${nodeUrl}/crosschain/btc/walletbalance?apiKey=${myApiKey}`
 
 	const res = await fetch(url, {
-		method: "POST",
+		method: 'POST',
 		headers: {
-			"Content-Type": "application/json"
+			'Content-Type': 'application/json'
 		},
 		body: `${window.parent.reduxStore.getState().app.selectedAddress.btcWallet.derivedMasterPublicKey}`
 	})
 
-	if (!res.ok) throw new Error("Cannot fetch Bitcoin balance")
+	if (!res.ok) throw new Error('Cannot fetch Bitcoin balance')
 
 	const balance = await res.json()
 
@@ -1322,14 +1322,14 @@ export async function getLitecoinBalanceInfo() {
 	const url = `${nodeUrl}/crosschain/ltc/walletbalance?apiKey=${myApiKey}`
 
 	const res = await fetch(url, {
-		method: "POST",
+		method: 'POST',
 		headers: {
-			"Content-Type": "application/json"
+			'Content-Type': 'application/json'
 		},
 		body: `${window.parent.reduxStore.getState().app.selectedAddress.ltcWallet.derivedMasterPublicKey}`
 	})
 
-	if (!res.ok) throw new Error("Cannot fetch Litecoin balance")
+	if (!res.ok) throw new Error('Cannot fetch Litecoin balance')
 
 	const balance = await res.json()
 
@@ -1374,9 +1374,9 @@ export async function createBuyOrderTx({ crosschainAtInfo, isGateway, foreignBlo
 			}
 
 			const responseFetch = await fetch(url, {
-				method: "POST",
+				method: 'POST',
 				headers: {
-					"Content-Type": "application/json"
+					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify(txn)
 			})
@@ -1403,7 +1403,7 @@ export async function createBuyOrderTx({ crosschainAtInfo, isGateway, foreignBlo
 				responseMessage = {
 					callResponse: responseVar.success,
 					extra: {
-						message: "Buy order message sended successfully!",
+						message: 'Buy order message sended successfully!',
 						atAddresses: foreignBlockchain === 'PIRATECHAIN' ? [crosschainAtInfo[0].qortalAtAddress]  : crosschainAtInfo.map((order)=> order.qortalAtAddress),
 						senderAddress: address,
 						node: nodeUrl
@@ -1413,7 +1413,7 @@ export async function createBuyOrderTx({ crosschainAtInfo, isGateway, foreignBlo
 				responseMessage = {
 					callResponse: responseVar.success,
 					extra: {
-						message: "Unable to execute buy order!",
+						message: 'Unable to execute buy order!',
 						atAddresses: foreignBlockchain === 'PIRATECHAIN' ? [crosschainAtInfo[0].qortalAtAddress]  : crosschainAtInfo.map((order)=> order.qortalAtAddress),
 						senderAddress: address,
 						node: nodeUrl
@@ -1427,7 +1427,7 @@ export async function createBuyOrderTx({ crosschainAtInfo, isGateway, foreignBlo
 			responseMessage = {
 				callResponse: responseVar.success,
 				extra: {
-					message: "Unable to send buy order message over Gateway!",
+					message: 'Unable to send buy order message over Gateway!',
 					atAddresses: foreignBlockchain === 'PIRATECHAIN' ? [crosschainAtInfo[0].qortalAtAddress]  : crosschainAtInfo.map((order)=> order.qortalAtAddress),
 					senderAddress: address,
 					node: nodeUrl
@@ -1462,47 +1462,47 @@ export const getUserWalletFunc = async (coin) => {
 	let userWallet = {}
 
 	switch (coin) {
-		case "QORT":
-			userWallet["address"] = window.parent.reduxStore.getState().app.selectedAddress.address
-			userWallet["publickey"] = Base58.encode(window.parent.reduxStore.getState().app.selectedAddress.keyPair.publicKey)
-			userWallet["privatekey"] = Base58.encode(window.parent.reduxStore.getState().app.selectedAddress.keyPair.privateKey)
+		case 'QORT':
+			userWallet['address'] = window.parent.reduxStore.getState().app.selectedAddress.address
+			userWallet['publickey'] = Base58.encode(window.parent.reduxStore.getState().app.selectedAddress.keyPair.publicKey)
+			userWallet['privatekey'] = Base58.encode(window.parent.reduxStore.getState().app.selectedAddress.keyPair.privateKey)
 			break
-		case "BTC":
-		case "BITCOIN":
-			userWallet["address"] = window.parent.reduxStore.getState().app.selectedAddress.btcWallet.address
-			userWallet["publickey"] = window.parent.reduxStore.getState().app.selectedAddress.btcWallet.derivedMasterPublicKey
-			userWallet["privatekey"] = window.parent.reduxStore.getState().app.selectedAddress.btcWallet.derivedMasterPrivateKey
+		case 'BTC':
+		case 'BITCOIN':
+			userWallet['address'] = window.parent.reduxStore.getState().app.selectedAddress.btcWallet.address
+			userWallet['publickey'] = window.parent.reduxStore.getState().app.selectedAddress.btcWallet.derivedMasterPublicKey
+			userWallet['privatekey'] = window.parent.reduxStore.getState().app.selectedAddress.btcWallet.derivedMasterPrivateKey
 			break
-		case "LTC":
-		case "LITECOIN":
-			userWallet["address"] = window.parent.reduxStore.getState().app.selectedAddress.ltcWallet.address
-			userWallet["publickey"] = window.parent.reduxStore.getState().app.selectedAddress.ltcWallet.derivedMasterPublicKey
-			userWallet["privatekey"] = window.parent.reduxStore.getState().app.selectedAddress.ltcWallet.derivedMasterPrivateKey
+		case 'LTC':
+		case 'LITECOIN':
+			userWallet['address'] = window.parent.reduxStore.getState().app.selectedAddress.ltcWallet.address
+			userWallet['publickey'] = window.parent.reduxStore.getState().app.selectedAddress.ltcWallet.derivedMasterPublicKey
+			userWallet['privatekey'] = window.parent.reduxStore.getState().app.selectedAddress.ltcWallet.derivedMasterPrivateKey
 			break
-		case "DOGE":
-		case "DOGECOIN":
-			userWallet["address"] = window.parent.reduxStore.getState().app.selectedAddress.dogeWallet.address
-			userWallet["publickey"] = window.parent.reduxStore.getState().app.selectedAddress.dogeWallet.derivedMasterPublicKey
-			userWallet["privatekey"] = window.parent.reduxStore.getState().app.selectedAddress.dogeWallet.derivedMasterPrivateKey
+		case 'DOGE':
+		case 'DOGECOIN':
+			userWallet['address'] = window.parent.reduxStore.getState().app.selectedAddress.dogeWallet.address
+			userWallet['publickey'] = window.parent.reduxStore.getState().app.selectedAddress.dogeWallet.derivedMasterPublicKey
+			userWallet['privatekey'] = window.parent.reduxStore.getState().app.selectedAddress.dogeWallet.derivedMasterPrivateKey
 			break
-		case "DGB":
-		case "DIGIBYTE":
-			userWallet["address"] = window.parent.reduxStore.getState().app.selectedAddress.dgbWallet.address
-			userWallet["publickey"] = window.parent.reduxStore.getState().app.selectedAddress.dgbWallet.derivedMasterPublicKey
-			userWallet["privatekey"] = window.parent.reduxStore.getState().app.selectedAddress.dgbWallet.derivedMasterPrivateKey
+		case 'DGB':
+		case 'DIGIBYTE':
+			userWallet['address'] = window.parent.reduxStore.getState().app.selectedAddress.dgbWallet.address
+			userWallet['publickey'] = window.parent.reduxStore.getState().app.selectedAddress.dgbWallet.derivedMasterPublicKey
+			userWallet['privatekey'] = window.parent.reduxStore.getState().app.selectedAddress.dgbWallet.derivedMasterPrivateKey
 			break
-		case "RVN":
-		case "RAVENCOIN":
-			userWallet["address"] = window.parent.reduxStore.getState().app.selectedAddress.rvnWallet.address
-			userWallet["publickey"] = window.parent.reduxStore.getState().app.selectedAddress.rvnWallet.derivedMasterPublicKey
-			userWallet["privatekey"] = window.parent.reduxStore.getState().app.selectedAddress.rvnWallet.derivedMasterPrivateKey
+		case 'RVN':
+		case 'RAVENCOIN':
+			userWallet['address'] = window.parent.reduxStore.getState().app.selectedAddress.rvnWallet.address
+			userWallet['publickey'] = window.parent.reduxStore.getState().app.selectedAddress.rvnWallet.derivedMasterPublicKey
+			userWallet['privatekey'] = window.parent.reduxStore.getState().app.selectedAddress.rvnWallet.derivedMasterPrivateKey
 			break
-		case "ARRR":
-		case "PIRATECHAIN":
+		case 'ARRR':
+		case 'PIRATECHAIN':
 			const arrrAddress = await getPirateWalletAddress(window.parent.reduxStore.getState().app.selectedAddress.arrrWallet.seed58)
-			userWallet["address"] = arrrAddress
-			userWallet["publickey"] = ""
-			userWallet["privatekey"] = ""
+			userWallet['address'] = arrrAddress
+			userWallet['publickey'] = ''
+			userWallet['privatekey'] = ''
 			break
 		default:
 			break
@@ -1536,14 +1536,14 @@ export const tradeBotCreateRequest = async (body, keyPair) => {
 	const bodyToString = JSON.stringify(txn)
 
 	const unsignedTxnResponse = await fetch(url, {
-		method: "POST",
+		method: 'POST',
 		headers: {
-			"Content-Type": "application/json"
+			'Content-Type': 'application/json'
 		},
 		body: bodyToString
 	})
 
-	if (!unsignedTxnResponse.ok) throw new Error("Unable to create tradebot")
+	if (!unsignedTxnResponse.ok) throw new Error('Unable to create tradebot')
 
 	const unsignedTxn = await unsignedTxnResponse.text()
 	const signedTxnBytes = await signTransaction(unsignedTxn, keyPair)
@@ -1552,7 +1552,7 @@ export const tradeBotCreateRequest = async (body, keyPair) => {
 	if (resProcess.signature) {
 		return resProcess
 	} else {
-		throw new Error("Failed to Create Sell Order. Try again!")
+		throw new Error('Failed to Create Sell Order. Try again!')
 	}
 }
 
@@ -1565,14 +1565,14 @@ export const cancelTradeOfferTradeBot = async (body, keyPair) => {
 	const bodyToString = JSON.stringify(txn)
 
 	const deleteTradeBotResponse = await fetch(url, {
-		method: "DELETE",
+		method: 'DELETE',
 		headers: {
-			"Content-Type": "application/json"
+			'Content-Type': 'application/json'
 		},
 		body: bodyToString
 	})
 
-	if (!deleteTradeBotResponse.ok) throw new Error("Unable to update tradebot")
+	if (!deleteTradeBotResponse.ok) throw new Error('Unable to update tradebot')
 
 	const unsignedTxn = await deleteTradeBotResponse.text()
 	const signedTxnBytes = await signTransaction(unsignedTxn, keyPair)
@@ -1581,7 +1581,7 @@ export const cancelTradeOfferTradeBot = async (body, keyPair) => {
 	if (resProcess.signature) {
 		return resProcess
 	} else {
-		throw new Error("Failed to Cancel Sell Order. Try again!")
+		throw new Error('Failed to Cancel Sell Order. Try again!')
 	}
 }
 
@@ -1594,9 +1594,9 @@ export const getArrrSyncStatus = async () => {
 
 	try {
 		const response = await fetch(url, {
-			method: "POST",
+			method: 'POST',
 			headers: {
-				Accept: "*/*"
+				Accept: '*/*'
 			},
 			body: arrrSeed
 		})
@@ -1611,7 +1611,7 @@ export const getArrrSyncStatus = async () => {
 
 		return res
 	} catch (error) {
-		console.error(error.message || "Error in retrieving arrr sync status")
+		console.error(error.message || 'Error in retrieving arrr sync status')
 	}
 }
 
@@ -1623,13 +1623,13 @@ export const getNodeInfo = async () => {
 
 	try {
 		const response = await fetch(url, {
-			method: "GET",
+			method: 'GET',
 			headers: {
-				Accept: "*/*"
+				Accept: '*/*'
 			}
 		})
 
-		if (!response.ok) console.error("Failed to retrieve node info")
+		if (!response.ok) console.error('Failed to retrieve node info')
 
 		let res
 
@@ -1645,7 +1645,7 @@ export const getNodeInfo = async () => {
 
 		return res
 	} catch (error) {
-		console.error(error.message || "Error in retrieving node info")
+		console.error(error.message || 'Error in retrieving node info')
 	}
 }
  
@@ -1657,13 +1657,13 @@ export const getNodeStatus = async () => {
 
 	try {
 		const response = await fetch(url, {
-			method: "GET",
+			method: 'GET',
 			headers: {
-				Accept: "*/*"
+				Accept: '*/*'
 			}
 		})
 
-		if (!response.ok) console.error("Failed to retrieve node status")
+		if (!response.ok) console.error('Failed to retrieve node status')
 
 		let res
 
@@ -1679,6 +1679,6 @@ export const getNodeStatus = async () => {
 
 		return res
 	} catch (error) {
-		console.error(error.message || "Error in retrieving node status")
+		console.error(error.message || 'Error in retrieving node status')
 	}
 }

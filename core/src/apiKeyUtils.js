@@ -31,7 +31,7 @@ export const checkApiKey = async (nodeConfig) => {
 		nodeConfig.knownNodes[nodeConfig.node] = selectedNode
 		localStorage.setItem('myQortalNodes', JSON.stringify(nodeConfig.knownNodes))
 	} else {
-		console.log("Unable to generate API key")
+		console.log('Unable to generate API key')
 	}
 
 	// Now test the API key

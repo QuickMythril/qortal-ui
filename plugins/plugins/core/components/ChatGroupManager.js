@@ -85,7 +85,7 @@ class ChatGroupsManager extends LitElement {
 		return html`
 			<div class="container">
 				<div class="close-row" style="margin-top: 15px">
-					<mwc-icon @click=${() => {this.getGroups();}} style="color: var(--black); cursor:pointer;">refresh</mwc-icon>
+					<mwc-icon @click=${() => {this.getGroups()}} style="color: var(--black); cursor:pointer;">refresh</mwc-icon>
 				</div>
 				<div class="checkbox-row">
 					<label for="authButton" id="authButtonLabel" style="color: var(--black);">${get('chatpage.cchange69')}</label>
@@ -108,7 +108,7 @@ class ChatGroupsManager extends LitElement {
 
 	async getGroups() {
 		try {
-			let endpoint = `/groups`
+			let endpoint = '/groups'
 
 			this.groups = await parentEpml.request('apiCall', {
 				type: 'api',

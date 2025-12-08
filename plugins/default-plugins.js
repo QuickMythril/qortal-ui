@@ -7,22 +7,22 @@ const WATCH = 'watch'
  * @param { String } type
  */
 const pluginsController = (type) => {
-    switch (type) {
-        case PLUGINS:
-            const path = require('path')
+	switch (type) {
+		case PLUGINS:
+			const path = require('path')
 			return [
 				{
 					folder: path.join(__dirname, 'plugins/core'),
 					name: 'core'
 				}
 			]
-        case BUILD:
+		case BUILD:
 			return require('./build.js')
-        case WATCH:
+		case WATCH:
 			return require('./watch.js')
-        default:
-            return
-    }
+		default:
+			return
+	}
 }
 
 module.exports = pluginsController

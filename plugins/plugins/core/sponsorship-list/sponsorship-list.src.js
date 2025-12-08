@@ -91,14 +91,14 @@ class SponsorshipList extends LitElement {
 	render() {
 		return html`
 			${this.isPageLoading ?
-				html`
+		html`
 					<div class='loadingContainer'>
 						<div class='loading'></div>
 					</div>
 					<div class='backdrop'></div>
 				`
-				: ''
-			}
+		: ''
+}
 			<div class='page-container'>
 				<h1 class='header-title'>
 					${translate('mintingpage.mchange35')}
@@ -305,12 +305,12 @@ class SponsorshipList extends LitElement {
 					<mwc-button
                         			slot='primaryAction'
 						@click=${()=>{
-							this.openDialogRewardShare = false
-							this.errorMessage = ''
-							this.isLoadingCreateSponsorship = false
-							this.privateRewardShareKey = ''
-							this.atMount()
-						}}
+		this.openDialogRewardShare = false
+		this.errorMessage = ''
+		this.isLoadingCreateSponsorship = false
+		this.privateRewardShareKey = ''
+		this.atMount()
+	}}
                         			class='red'
                     			>
 						${translate('general.close')}
@@ -340,9 +340,9 @@ class SponsorshipList extends LitElement {
 								theme='primary'
 								?disabled='${!this.lookupAddressValue}'
 								@click='${()=> {
-									this.lookupPublicAddressValue = ''
-									this.lookUpPublicAddressFunc()
-								}}'
+		this.lookupPublicAddressValue = ''
+		this.lookUpPublicAddressFunc()
+	}}'
 							>
 								${translate('sponsorshipspage.schange10')}
 							</vaadin-button>
@@ -367,12 +367,12 @@ class SponsorshipList extends LitElement {
 						dialogAction='cancel'
 						class='red'
 						@click=${()=>{
-							this.lookupAddressValue = ''
-							this.lookupPublicAddressValue = ''
-							this.isOpenDialogPublicKeyLookup = false
-							this.errorLookup = ''
+		this.lookupAddressValue = ''
+		this.lookupPublicAddressValue = ''
+		this.isOpenDialogPublicKeyLookup = false
+		this.errorLookup = ''
 
-						}}
+	}}
 					>
 						${translate('general.close')}
 					</mwc-button>
@@ -469,7 +469,7 @@ class SponsorshipList extends LitElement {
 	async getNodeInfo() {
 		if (this.blocked) return {}
 		return await parentEpml.request('apiCall', {
-			url: `/admin/status`
+			url: '/admin/status'
 		})
 	}
 
@@ -673,21 +673,21 @@ class SponsorshipList extends LitElement {
 			}
 
 			let lastRef = await getLastRef()
-				if (accountDetails.level >= 5 || accountDetails.flags === 1) {
-					this.status = 1
+			if (accountDetails.level >= 5 || accountDetails.flags === 1) {
+				this.status = 1
 
-					this.errorMessage = ''
+				this.errorMessage = ''
 
-					try {
-						const myTransaction = await makeTransactionRequest(lastRef)
-						getTxnRequestResponse(myTransaction)
-					} catch (error) {
-						this.errorMessage = error
-					}
-				} else {
-					let err5string = get('rewardsharepage.rchange20')
-					this.errorMessage = `${err5string} ${accountDetails.level}`
+				try {
+					const myTransaction = await makeTransactionRequest(lastRef)
+					getTxnRequestResponse(myTransaction)
+				} catch (error) {
+					this.errorMessage = error
 				}
+			} else {
+				let err5string = get('rewardsharepage.rchange20')
+				this.errorMessage = `${err5string} ${accountDetails.level}`
+			}
 
 		}
 

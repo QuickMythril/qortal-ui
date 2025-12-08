@@ -65,19 +65,19 @@ class SaveSettingsQdn extends connect(store)(LitElement) {
 	render() {
 		return html`
 			${this.isSaving || (!this.error && this.resourceExists === undefined) ?
-				html`
+		html`
 					<paper-spinner-lite active style="display: block; margin: 0 auto;"></paper-spinner-lite>
 				` : !this.name ? html`
 					<mwc-icon
 						id="profile-icon"
 						class=${'notActive'}
 						@click=${() => {
-							const target = this.shadowRoot.getElementById('popover-notification');
-							const popover = this.shadowRoot.querySelector('popover-component');
-							if (popover) {
-								popover.openPopover(target);
-							}
-						}}
+		const target = this.shadowRoot.getElementById('popover-notification')
+		const popover = this.shadowRoot.querySelector('popover-component')
+		if (popover) {
+			popover.openPopover(target)
+		}
+	}}
 						style="user-select:none;cursor:pointer"
 					>
 						save
@@ -100,29 +100,29 @@ class SaveSettingsQdn extends connect(store)(LitElement) {
 							<div
 								class="accept-button"
 								@click="${() => {
-									store.dispatch(
-										setNewTab({
-											url: `group-management`,
-											id: this.uid.rnd(),
-											myPlugObj: {
-												url: 'name-registration',
-												domain: 'core',
-												page: 'name-registration/index.html',
-												title: 'Name Registration',
-												icon: 'vaadin:user-check',
-												mwcicon: 'manage_accounts',
-												pluginNumber: 'plugin-qCmtXAQmtu',
-												menus: [],
-												parent: fals
-											},
-											openExisting: true
-										})
-									);
-									const popover = this.shadowRoot.querySelector('popover-component');
-									if (popover) {
-										popover.closePopover();
-									}
-								}}"
+		store.dispatch(
+			setNewTab({
+				url: 'group-management',
+				id: this.uid.rnd(),
+				myPlugObj: {
+					url: 'name-registration',
+					domain: 'core',
+					page: 'name-registration/index.html',
+					title: 'Name Registration',
+					icon: 'vaadin:user-check',
+					mwcicon: 'manage_accounts',
+					pluginNumber: 'plugin-qCmtXAQmtu',
+					menus: [],
+					parent: fals
+				},
+				openExisting: true
+			})
+		)
+		const popover = this.shadowRoot.querySelector('popover-component')
+		if (popover) {
+			popover.closePopover()
+		}
+	}}"
 							>
 								${translate('profile.profile2')}
 							</div>
@@ -133,15 +133,15 @@ class SaveSettingsQdn extends connect(store)(LitElement) {
 						id="save-icon"
 						class=${Object.values(this.valuesToBeSavedOnQdn).length > 0 || this.resourceExists === false? 'active' : 'notActive'}
 						@click=${() => {
-							if (Object.values(this.valuesToBeSavedOnQdn).length > 0 || this.resourceExists === false) {
-								if (!this.fee) return;
-								const target = this.shadowRoot.getElementById('popover-notification');
-								const popover = this.shadowRoot.querySelector('popover-component');
-								if (popover) {
-									popover.openPopover(target);
-								}
-							}
-						}}
+		if (Object.values(this.valuesToBeSavedOnQdn).length > 0 || this.resourceExists === false) {
+			if (!this.fee) return
+			const target = this.shadowRoot.getElementById('popover-notification')
+			const popover = this.shadowRoot.querySelector('popover-component')
+			if (popover) {
+				popover.openPopover(target)
+			}
+		}
+	}}
 						style="user-select:none"
 					>
 						save
@@ -152,10 +152,10 @@ class SaveSettingsQdn extends connect(store)(LitElement) {
 						hover-delay=${300}
 						hide-delay=${1}
 						text=${
-							this.error ? translate('save.saving1')
-							: Object.values(this.valuesToBeSavedOnQdn).length > 0 || this.resourceExists === false
-							? translate('save.saving3') : translate('save.saving2')
-						}
+	this.error ? translate('save.saving1')
+		: Object.values(this.valuesToBeSavedOnQdn).length > 0 || this.resourceExists === false
+			? translate('save.saving3') : translate('save.saving2')
+}
 					></vaadin-tooltip>
 					<popover-component for="save-icon" message="">
 						<div style="margin-bottom:20px">
@@ -167,33 +167,33 @@ class SaveSettingsQdn extends connect(store)(LitElement) {
 							<div
 								class="undo-button"
 								@click="${() => {
-									localStorage.setItem('temp-settings-data', JSON.stringify({}));
-									this.valuesToBeSavedOnQdn = {};
-									const popover = this.shadowRoot.querySelector('popover-component');
-									if (popover) {
-										popover.closePopover();
-									}
-									this.getGeneralSettingsQdn();
-								}}"
+		localStorage.setItem('temp-settings-data', JSON.stringify({}))
+		this.valuesToBeSavedOnQdn = {}
+		const popover = this.shadowRoot.querySelector('popover-component')
+		if (popover) {
+			popover.closePopover()
+		}
+		this.getGeneralSettingsQdn()
+	}}"
 							>
 								${translate('save.saving4')}
 							</div>
 							<div
 								class="accept-button"
 								@click="${() => {
-									this.saveToQdn();
-									const popover = this.shadowRoot.querySelector('popover-component');
-									if (popover) {
-										popover.closePopover();
-									}
-								}}"
+		this.saveToQdn()
+		const popover = this.shadowRoot.querySelector('popover-component')
+		if (popover) {
+			popover.closePopover()
+		}
+	}}"
 							>
 								${translate('browserpage.bchange28')}
 							</div>
 						</div>
 					</popover-component>
 				`
-			}
+}
 		`
 	}
 
@@ -220,7 +220,7 @@ class SaveSettingsQdn extends connect(store)(LitElement) {
 
 		try {
 			myFollowedNames = await parentEpml.request('apiCall', {
-				url: buildRequestUrl(`/lists/followedNames`, store.getState())
+				url: buildRequestUrl('/lists/followedNames', store.getState())
 			})
 		} catch (error) { }
 
@@ -233,10 +233,10 @@ class SaveSettingsQdn extends connect(store)(LitElement) {
 			return false
 		}
 
-		let namesJsonString = JSON.stringify({ "items": names })
+		let namesJsonString = JSON.stringify({ 'items': names })
 
 		return await parentEpml.request('apiCall', {
-			url: buildRequestUrl(`/lists/followedNames`, store.getState()),
+			url: buildRequestUrl('/lists/followedNames', store.getState()),
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -335,7 +335,7 @@ class SaveSettingsQdn extends connect(store)(LitElement) {
 
 	async getGeneralSettingsQdn() {
 		try {
-			this.error = ""
+			this.error = ''
 			this.fee = await this.getArbitraryFee()
 			this.hasAttemptedToFetchResource = true
 			let resource

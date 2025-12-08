@@ -72,24 +72,24 @@ class NotificationBell extends connect(store)(LitElement) {
 							<div
 								class="notification-item"
 								@click=${() => {
-									const query = `?service=APP&name=Q-Mail`
-									store.dispatch(setNewTab({
-										url: `qdn/browser/index.html${query}`,
-										id: 'q-mail-notification',
-										myPlugObj: {
-											"url": "myapp",
-											"domain": "core",
-											"page": `qdn/browser/index.html${query}`,
-											"title": "Q-Mail",
-											"icon": "vaadin:mailbox",
-											"mwcicon": "mail_outline",
-											"menus": [],
-											"parent": false
-										}
-									}))
-									this.showNotifications = false
-									this.notifications = []
-								}}
+		const query = '?service=APP&name=Q-Mail'
+		store.dispatch(setNewTab({
+			url: `qdn/browser/index.html${query}`,
+			id: 'q-mail-notification',
+			myPlugObj: {
+				'url': 'myapp',
+				'domain': 'core',
+				'page': `qdn/browser/index.html${query}`,
+				'title': 'Q-Mail',
+				'icon': 'vaadin:mailbox',
+				'mwcicon': 'mail_outline',
+				'menus': [],
+				'parent': false
+			}
+		}))
+		this.showNotifications = false
+		this.notifications = []
+	}}
 							>
 								<div>
 									<p>Q-Mail</p>
@@ -144,7 +144,7 @@ class NotificationBell extends connect(store)(LitElement) {
 				stop = true
 
 				try {
-					const address = window.parent.reduxStore.getState().app?.selectedAddress?.address;
+					const address = window.parent.reduxStore.getState().app?.selectedAddress?.address
 					const name = pickDisplayNameOrAddress(window.parent.reduxStore.getState().app?.accountInfo)
 
 					if (!name || !address) return
@@ -154,7 +154,7 @@ class NotificationBell extends connect(store)(LitElement) {
 					let notificationsToShow = []
 
 					if (mailArray.length > 0) {
-						const lastVisited = localStorage.getItem("Q-Mail-last-visited")
+						const lastVisited = localStorage.getItem('Q-Mail-last-visited')
 
 						if (lastVisited) {
 							mailArray.forEach((mail) => {
@@ -234,20 +234,20 @@ class NotificationBell extends connect(store)(LitElement) {
 	}
 
 	_openTabQmail() {
-		const query = `?service=APP&name=Q-Mail`
+		const query = '?service=APP&name=Q-Mail'
 
 		store.dispatch(setNewTab({
 			url: `qdn/browser/index.html${query}`,
 			id: 'q-mail-notification',
 			myPlugObj: {
-				"url": "myapp",
-				"domain": "core",
-				"page": `qdn/browser/index.html${query}`,
-				"title": "Q-Mail",
-				"icon": "vaadin:mailbox",
-				"mwcicon": "mail_outline",
-				"menus": [],
-				"parent": false
+				'url': 'myapp',
+				'domain': 'core',
+				'page': `qdn/browser/index.html${query}`,
+				'title': 'Q-Mail',
+				'icon': 'vaadin:mailbox',
+				'mwcicon': 'mail_outline',
+				'menus': [],
+				'parent': false
 			}
 		}))
 	}

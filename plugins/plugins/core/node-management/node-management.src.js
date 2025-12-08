@@ -77,130 +77,130 @@ class NodeManagement extends LitElement {
 		return html`
 			<div id="node-management-page">
 				<div class="node-card">
-					<h2>${translate("nodepage.nchange1")} ${this.nodeDomain}</h2>
+					<h2>${translate('nodepage.nchange1')} ${this.nodeDomain}</h2>
 					${this.blocked ? html`<div class="warning-text">${getPublicNodeBlockedMessage()}</div>` : ''}
 					${this.renderButtons()}
-					<span class="sblack"><br>${translate("nodepage.nchange2")} ${this.upTime}</span>
+					<span class="sblack"><br>${translate('nodepage.nchange2')} ${this.upTime}</span>
 					<br><br>
 					<div id="minting">
 						<div style="min-height:48px; display: flex; padding-bottom: 6px;">
-							<h3 style="margin: 0; flex: 1; padding-top: 8px; display: inline;">${translate("nodepage.nchange3")}</h3>
+							<h3 style="margin: 0; flex: 1; padding-top: 8px; display: inline;">${translate('nodepage.nchange3')}</h3>
 							<mwc-button style="float: right;" ?disabled=${this.blocked} @click=${() => this.shadowRoot.getElementById('addMintingAccountDialog').show()}>
 								<mwc-icon>add</mwc-icon>
-								${translate("nodepage.nchange4")}
+								${translate('nodepage.nchange4')}
 							</mwc-button>
 						</div>
 							<vaadin-grid theme="large" id="mintingAccountsGrid" ?hidden="${this.isEmptyArray(this.mintingAccounts)}" .items="${this.mintingAccounts}" aria-label="Minting Accounts" all-rows-visible>
-								<vaadin-grid-column auto-width header="${translate("nodepage.nchange9")}" .renderer=${(root, column, data) => {
-									const name = data.item.mintingName
-									const addr = data.item.mintingAccount
-									render(html`
+								<vaadin-grid-column auto-width header="${translate('nodepage.nchange9')}" .renderer=${(root, column, data) => {
+	const name = data.item.mintingName
+	const addr = data.item.mintingAccount
+	render(html`
 										<div>
-											<div class="name-line">${name && name !== addr ? name : translate("general.noRegisteredName")}</div>
+											<div class="name-line">${name && name !== addr ? name : translate('general.noRegisteredName')}</div>
 											<div class="address-line">${addr}</div>
 										</div>
 									`, root)
-								}}></vaadin-grid-column>
-								<vaadin-grid-column auto-width header="${translate("nodepage.nchange10")}" .renderer=${(root, column, data) => {
-									const name = data.item.recipientName
-									const addr = data.item.recipientAccount
-									render(html`
+}}></vaadin-grid-column>
+								<vaadin-grid-column auto-width header="${translate('nodepage.nchange10')}" .renderer=${(root, column, data) => {
+	const name = data.item.recipientName
+	const addr = data.item.recipientAccount
+	render(html`
 										<div>
-											<div class="name-line">${name && name !== addr ? name : translate("general.noRegisteredName")}</div>
+											<div class="name-line">${name && name !== addr ? name : translate('general.noRegisteredName')}</div>
 											<div class="address-line">${addr}</div>
 										</div>
 									`, root)
-								}}></vaadin-grid-column>
-							<vaadin-grid-column width="12em" header="${translate("nodepage.nchange11")}" .renderer=${(root, column, data) => {
-							render(html`
+}}></vaadin-grid-column>
+							<vaadin-grid-column width="12em" header="${translate('nodepage.nchange11')}" .renderer=${(root, column, data) => {
+	render(html`
 								<mwc-button class="red" ?disabled=${this.removeMintingAccountLoading || this.blocked} @click=${() => this.removeMintingAccount(data.item.publicKey)}>
 									<mwc-icon>create</mwc-icon>
-									&nbsp;${translate("nodepage.nchange12")}
+									&nbsp;${translate('nodepage.nchange12')}
 								</mwc-button>
 							`, root)
-							}}></vaadin-grid-column>
+}}></vaadin-grid-column>
 						</vaadin-grid>
-						${this.isEmptyArray(this.mintingAccounts) ? html`<span style="color: var(--black);">${translate("nodepage.nchange13")}</span>` : ''}
+						${this.isEmptyArray(this.mintingAccounts) ? html`<span style="color: var(--black);">${translate('nodepage.nchange13')}</span>` : ''}
 					</div>
 					<br>
 					<div id="peers">
 						<div style="min-height: 48px; display: flex; padding-bottom: 6px;">
 							<h3 style="margin: 0; flex: 1; padding-top: 8px; display: inline;">
-								<span>${translate("nodepage.nchange14")}</span>
+								<span>${translate('nodepage.nchange14')}</span>
 								<span>(${this.peers.length})</span>
 							</h3>
 							<mwc-button ?disabled=${this.blocked} @click=${() => this.shadowRoot.getElementById('addPeerDialog').show()}>
 								<mwc-icon>add</mwc-icon>
-								&nbsp;${translate("nodepage.nchange15")}
+								&nbsp;${translate('nodepage.nchange15')}
 							</mwc-button>
 						</div>
 						<vaadin-grid theme="large" id="peersGrid" ?hidden="${this.isEmptyArray(this.peers)}" .items="${this.peers}" aria-label="Peers" all-rows-visible>
-							<vaadin-grid-column header="${translate("nodepage.nchange18")}" path="address"></vaadin-grid-column>
-							<vaadin-grid-column header="${translate("nodepage.nchange19")}" path="lastHeight"></vaadin-grid-column>
-							<vaadin-grid-column header="${translate("nodepage.nchange20")}" path="version"></vaadin-grid-column>
-							<vaadin-grid-column header="${translate("nodepage.nchange21")}" path="age"></vaadin-grid-column>
-							<vaadin-grid-column width="12em" header="${translate("nodepage.nchange22")}" .renderer=${(root, column, data) => {
-							render(html`
+							<vaadin-grid-column header="${translate('nodepage.nchange18')}" path="address"></vaadin-grid-column>
+							<vaadin-grid-column header="${translate('nodepage.nchange19')}" path="lastHeight"></vaadin-grid-column>
+							<vaadin-grid-column header="${translate('nodepage.nchange20')}" path="version"></vaadin-grid-column>
+							<vaadin-grid-column header="${translate('nodepage.nchange21')}" path="age"></vaadin-grid-column>
+							<vaadin-grid-column width="12em" header="${translate('nodepage.nchange22')}" .renderer=${(root, column, data) => {
+	render(html`
 								<mwc-button class="red" ?disabled=${this.blocked} @click=${() => this.removePeer(data.item.address, data.index)}>
 									<mwc-icon>delete</mwc-icon>
-									&nbsp;${translate("nodepage.nchange12")}
+									&nbsp;${translate('nodepage.nchange12')}
 								</mwc-button>
 								<mwc-button class="green" ?disabled=${this.blocked} @click=${() => this.forceSyncPeer(data.item.address, data.index)}>
-									&nbsp;${translate("nodepage.nchange23")}
+									&nbsp;${translate('nodepage.nchange23')}
 								</mwc-button>
 							`, root)
-							}}></vaadin-grid-column>
+}}></vaadin-grid-column>
 						</vaadin-grid>
-						${this.isEmptyArray(this.peers) ? html`<span style="color: var(--black);">${translate("nodepage.nchange24")}</span>` : ''}
+						${this.isEmptyArray(this.peers) ? html`<span style="color: var(--black);">${translate('nodepage.nchange24')}</span>` : ''}
 					</div>
 					<br>
 				</div>
 			</div>
 			<mwc-dialog id="addPeerDialog" scrimClickAction='' escapeKeyAction=''>
-				<div>${translate("nodepage.nchange16")}</div>
+				<div>${translate('nodepage.nchange16')}</div>
 				<br>
-				<mwc-textfield ?disabled="${this.addPeerLoading || this.blocked}" label="${translate("nodepage.nchange17")}" id="addPeerAddress" ></mwc-textfield>
+				<mwc-textfield ?disabled="${this.addPeerLoading || this.blocked}" label="${translate('nodepage.nchange17')}" id="addPeerAddress" ></mwc-textfield>
 				<div style="text-align: center; height: 36px;" ?hidden="${!this.addPeerLoading}">
 					<span>
 						<paper-spinner-lite style="margin-top: 12px;" ?active="${this.addPeerLoading}" alt="Adding new peer"></paper-spinner-lite>
 					</span>
 				</div>
 				<mwc-button ?disabled="${this.addPeerLoading || this.blocked}" @click="${this.addPeer}" slot="primaryAction">
-					${translate("nodepage.nchange8")}
+					${translate('nodepage.nchange8')}
 				</mwc-button>
 				<mwc-button slot="secondaryAction" ?disabled="${this.addPeerLoading}" @click="${() => this.closeAddPeerDialog()}" class="red">
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
-			<mwc-dialog id="addMintingAccountDialog" scrimClickAction="${this.addMintingAccountLoading ? '' : "close"}">
-				<div>${translate("nodepage.nchange5")}</div>
+			<mwc-dialog id="addMintingAccountDialog" scrimClickAction="${this.addMintingAccountLoading ? '' : 'close'}">
+				<div>${translate('nodepage.nchange5')}</div>
 				<br>
-				<mwc-textfield ?disabled="${this.addMintingAccountLoading || this.blocked}" label="${translate("nodepage.nchange6")}" id="addMintingAccountKey"></mwc-textfield>
+				<mwc-textfield ?disabled="${this.addMintingAccountLoading || this.blocked}" label="${translate('nodepage.nchange6')}" id="addMintingAccountKey"></mwc-textfield>
 				<div style="text-align:right; height:36px;" ?hidden=${this.addMintingAccountMessage === ''}>
 					<span ?hidden="${this.addMintingAccountLoading}">
 						${this.addMintingAccountMessage}&nbsp;
 					</span>
 					<span ?hidden="${!this.addMintingAccountLoading}">
-						${translate("nodepage.nchange7")} &nbsp;
+						${translate('nodepage.nchange7')} &nbsp;
 						<paper-spinner-lite style="margin-top:12px;" ?active="${this.addMintingAccountLoading}" alt="Adding minting account"></paper-spinner-lite>
 					</span>
 				</div>
 				<mwc-button ?disabled="${this.addMintingAccountLoading || this.blocked}" slot="primaryAction" @click=${this.addMintingAccount}>
-					${translate("nodepage.nchange8")}
+					${translate('nodepage.nchange8')}
 				</mwc-button>
 				<mwc-button ?disabled="${this.addMintingAccountLoading}" slot="secondaryAction" dialogAction="cancel" class="red">
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
 			<mwc-dialog id="bootstrapDialog" scrimClickAction='' escapeKeyAction=''>
-				<div style="text-align: center;">${translate("tour.tour18")}</div>
+				<div style="text-align: center;">${translate('tour.tour18')}</div>
 				<br>
-				<div style="text-align: center;">${translate("nodepage.nchange37")}</div>
+				<div style="text-align: center;">${translate('nodepage.nchange37')}</div>
 				<mwc-button @click="${() => this.bootstrapNode()}" slot="primaryAction">
-					${translate("general.continue")}
+					${translate('general.continue')}
 				</mwc-button>
 				<mwc-button slot="secondaryAction" @click="${() => this.closeBootstrapDialog()}" class="red">
-					${translate("login.lp4")}
+					${translate('login.lp4')}
 				</mwc-button>
 			</mwc-dialog>
 		`
@@ -259,7 +259,7 @@ class NodeManagement extends LitElement {
 		const getNodeUpTime = () => {
 			this.upTime = ''
 			parentEpml.request('apiCall', {
-				url: `/admin/uptime`
+				url: '/admin/uptime'
 			}).then((res) => {
 				this.upTime = convertMsToTime(res)
 			})
@@ -269,7 +269,7 @@ class NodeManagement extends LitElement {
 		const updatePeers = () => {
 			this.peers = []
 			parentEpml.request('apiCall', {
-				url: `/peers`
+				url: '/peers'
 			}).then((res) => {
 				this.peers = res
 			})
@@ -375,18 +375,18 @@ class NodeManagement extends LitElement {
 	renderButtons() {
 		if (!isElectron()) {
 			return html`
-				<mwc-button style="float:right;" class="red" ?hidden="${(this.upTime === "offline")}" ?disabled=${this.blocked} @click=${() => this.stopNode()}><mwc-icon>dangerous</mwc-icon>&nbsp;${translate("nodepage.nchange31")}</mwc-button>
-				<mwc-button style="float:right;" ?hidden="${(this.upTime === "offline")}" ?disabled=${this.blocked} @click=${() => this.openBootstrapDialog()}><mwc-icon>restart_alt</mwc-icon>&nbsp;${translate("tour.tour18")}</mwc-button>
-				<mwc-button style="float:right;" ?hidden="${(this.upTime === "offline")}" ?disabled=${this.blocked} @click=${() => this.restartNode()}><mwc-icon>360</mwc-icon>&nbsp;${translate("nodepage.nchange33")}</mwc-button>
+				<mwc-button style="float:right;" class="red" ?hidden="${(this.upTime === 'offline')}" ?disabled=${this.blocked} @click=${() => this.stopNode()}><mwc-icon>dangerous</mwc-icon>&nbsp;${translate('nodepage.nchange31')}</mwc-button>
+				<mwc-button style="float:right;" ?hidden="${(this.upTime === 'offline')}" ?disabled=${this.blocked} @click=${() => this.openBootstrapDialog()}><mwc-icon>restart_alt</mwc-icon>&nbsp;${translate('tour.tour18')}</mwc-button>
+				<mwc-button style="float:right;" ?hidden="${(this.upTime === 'offline')}" ?disabled=${this.blocked} @click=${() => this.restartNode()}><mwc-icon>360</mwc-icon>&nbsp;${translate('nodepage.nchange33')}</mwc-button>
 			`
 		} else {
-			if (this.upTime === "offline") {
-				return html`<mwc-button style="float:right;" class="green" ?disabled=${this.blocked} @click=${() => this.startNode()}><mwc-icon>play_circle</mwc-icon>&nbsp;${translate("nodepage.nchange35")}</mwc-button>`
+			if (this.upTime === 'offline') {
+				return html`<mwc-button style="float:right;" class="green" ?disabled=${this.blocked} @click=${() => this.startNode()}><mwc-icon>play_circle</mwc-icon>&nbsp;${translate('nodepage.nchange35')}</mwc-button>`
 			} else {
 				return html`
-					<mwc-button style="float:right;" class="red" ?disabled=${this.blocked} @click=${() => this.stopNode()}><mwc-icon>stop_circle</mwc-icon>&nbsp;${translate("nodepage.nchange31")}</mwc-button>
-					<mwc-button style="float:right;" ?disabled=${this.blocked} @click=${() => this.openBootstrapDialog()}><mwc-icon>restart_alt</mwc-icon>&nbsp;${translate("tour.tour18")}</mwc-button>
-					<mwc-button style="float:right;" ?disabled=${this.blocked} @click=${() => this.restartNode()}><mwc-icon>360</mwc-icon>&nbsp;${translate("nodepage.nchange33")}</mwc-button>
+					<mwc-button style="float:right;" class="red" ?disabled=${this.blocked} @click=${() => this.stopNode()}><mwc-icon>stop_circle</mwc-icon>&nbsp;${translate('nodepage.nchange31')}</mwc-button>
+					<mwc-button style="float:right;" ?disabled=${this.blocked} @click=${() => this.openBootstrapDialog()}><mwc-icon>restart_alt</mwc-icon>&nbsp;${translate('tour.tour18')}</mwc-button>
+					<mwc-button style="float:right;" ?disabled=${this.blocked} @click=${() => this.restartNode()}><mwc-icon>360</mwc-icon>&nbsp;${translate('nodepage.nchange33')}</mwc-button>
 				`
 			}
 		}
@@ -516,38 +516,38 @@ class NodeManagement extends LitElement {
 		})
 	}
 
-		async updateMintingAccounts() {
-			if (this.blocked) {
+	async updateMintingAccounts() {
+		if (this.blocked) {
+			this.mintingAccounts = []
+			return
+		}
+		this.mintingAccounts = []
+
+		try {
+			const res = await parentEpml.request('apiCall', {
+				url: `/admin/mintingaccounts?apiKey=${this.getApiKey()}`,
+				method: 'GET'
+			})
+
+			if (!Array.isArray(res)) {
 				this.mintingAccounts = []
 				return
 			}
+
+			const enriched = await Promise.all(res.map(async (item) => {
+				const [mintingName, recipientName] = await Promise.all([
+					getUserNameFromAddress(item.mintingAccount),
+					getUserNameFromAddress(item.recipientAccount)
+				])
+				return { ...item, mintingName, recipientName }
+			}))
+
+			this.mintingAccounts = enriched
+		} catch (error) {
+			console.error('Failed to load minting accounts', error)
 			this.mintingAccounts = []
-
-			try {
-				const res = await parentEpml.request('apiCall', {
-					url: `/admin/mintingaccounts?apiKey=${this.getApiKey()}`,
-					method: 'GET'
-				})
-
-				if (!Array.isArray(res)) {
-					this.mintingAccounts = []
-					return
-				}
-
-				const enriched = await Promise.all(res.map(async (item) => {
-					const [mintingName, recipientName] = await Promise.all([
-						getUserNameFromAddress(item.mintingAccount),
-						getUserNameFromAddress(item.recipientAccount)
-					])
-					return { ...item, mintingName, recipientName }
-				}))
-
-				this.mintingAccounts = enriched
-			} catch (error) {
-				console.error('Failed to load minting accounts', error)
-				this.mintingAccounts = []
-			}
 		}
+	}
 
 	removeMintingAccount(publicKey) {
 		if (this.blocked) return

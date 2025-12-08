@@ -2,20 +2,20 @@ const rollup = require('rollup')
 const configs = require('./build-config.js')()
 
 const watch = () => {
-    configs.forEach(async file => {
-        const watchOptions = {
-            ...file.inputOptions,
-            output: [file.outputOptions],
-            watch: {}
-        }
+	configs.forEach(async file => {
+		const watchOptions = {
+			...file.inputOptions,
+			output: [file.outputOptions],
+			watch: {}
+		}
 
-        const watcher = rollup.watch(watchOptions)
+		const watcher = rollup.watch(watchOptions)
 
-        watcher.on('event', event => {
-            // ...
-        })
-    })
-    console.log('WATCH PLUGINS ==> Write Bundle : Done 🎉')
+		watcher.on('event', event => {
+			// ...
+		})
+	})
+	console.log('WATCH PLUGINS ==> Write Bundle : Done 🎉')
 }
 
 module.exports = watch

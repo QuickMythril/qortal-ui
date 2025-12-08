@@ -178,16 +178,16 @@ class GroupManagement extends LitElement {
 		return html`
 			<div id="group-management-page">
 				<div style="min-height: 48px; display: flex; padding-bottom: 6px; margin: 2px;">
-					<h2 style="margin: 0; flex: 1; padding-top: .1em; display: inline;">${translate("grouppage.gchange1")}</h2>
+					<h2 style="margin: 0; flex: 1; padding-top: .1em; display: inline;">${translate('grouppage.gchange1')}</h2>
 					<div style="float: right;">
 						<mwc-button @click=${() => this.shadowRoot.querySelector('#createGroupDialog').show()}>
 							<mwc-icon>add</mwc-icon>
-							${translate("grouppage.gchange2")}
+							${translate('grouppage.gchange2')}
 						</mwc-button>
 					</div>
 				</div>
 				<div class="divCard">
-					<h3 style="margin: 0; margin-bottom: 1em; text-align: left;">${translate("grouppage.gchange55")}</h3>
+					<h3 style="margin: 0; margin-bottom: 1em; text-align: left;">${translate('grouppage.gchange55')}</h3>
 					<div id="search">
 						<vaadin-text-field
 							theme="medium"
@@ -195,7 +195,7 @@ class GroupManagement extends LitElement {
 							minlength="3"
 							maxlength="32"
 							id="searchGroupName"
-							placeholder="${translate("grouppage.gchange56")}"
+							placeholder="${translate('grouppage.gchange56')}"
 							value="${this.searchGroupName}"
 							@keydown="${this.searchGroupListener}"
 							clear-button-visible
@@ -204,121 +204,121 @@ class GroupManagement extends LitElement {
 						</vaadin-text-field>&nbsp;&nbsp;<br>
 						<vaadin-button theme="medium" @click="${(e) => this.doGroupSearch(e)}">
 							<vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
-							${translate("websitespage.schange35")}
+							${translate('websitespage.schange35')}
 						</vaadin-button>
 					</div>
 					<br />
 					<vaadin-grid theme="large" id="priveGroupSearchGrid" ?hidden="${this.isEmptyArray(this.privateGroupSearch)}" .items="${this.privateGroupSearch}" aria-label="My Search Result" all-rows-visible>
-						<vaadin-grid-column width="8rem" flex-grow="0" header="${translate("grouppage.gchange54")}" path="memberCount"></vaadin-grid-column>
-						<vaadin-grid-column width="20rem" flex-grow="0" header="${translate("grouppage.gchange4")}" path="groupName"></vaadin-grid-column>
-						<vaadin-grid-column header="${translate("managegroup.mg42")}" .renderer=${(root, column, data) => {
-							if (data.item.isOpen === true) {
-								render(html`${translate("managegroup.mg44")}`, root)
-							} else {
-								render(html`${translate("managegroup.mg45")}`, root)
-							}
-						}}></vaadin-grid-column>
-						<vaadin-grid-column header="${translate("grouppage.gchange5")}" path="description"></vaadin-grid-column>
-						<vaadin-grid-column header="${translate("grouppage.gchange10")}" path="owner"></vaadin-grid-column>
-						<vaadin-grid-column width="11rem" flex-grow="0" header="${translate("datapage.dchange8")}" .renderer=${(root, column, data) => {
-							render(html`
+						<vaadin-grid-column width="8rem" flex-grow="0" header="${translate('grouppage.gchange54')}" path="memberCount"></vaadin-grid-column>
+						<vaadin-grid-column width="20rem" flex-grow="0" header="${translate('grouppage.gchange4')}" path="groupName"></vaadin-grid-column>
+						<vaadin-grid-column header="${translate('managegroup.mg42')}" .renderer=${(root, column, data) => {
+	if (data.item.isOpen === true) {
+		render(html`${translate('managegroup.mg44')}`, root)
+	} else {
+		render(html`${translate('managegroup.mg45')}`, root)
+	}
+}}></vaadin-grid-column>
+						<vaadin-grid-column header="${translate('grouppage.gchange5')}" path="description"></vaadin-grid-column>
+						<vaadin-grid-column header="${translate('grouppage.gchange10')}" path="owner"></vaadin-grid-column>
+						<vaadin-grid-column width="11rem" flex-grow="0" header="${translate('datapage.dchange8')}" .renderer=${(root, column, data) => {
+	render(html`
 								<mwc-button @click=${() => this.openJoinGroup(data.item)}>
 									<mwc-icon>queue</mwc-icon>
-									&nbsp;${translate("grouppage.gchange51")}
+									&nbsp;${translate('grouppage.gchange51')}
 								</mwc-button>
 							`, root)
-						}}></vaadin-grid-column>
+}}></vaadin-grid-column>
 					</vaadin-grid>
 				</div>
 				<div class="divCard">
-					<h3 style="margin: 0; margin-bottom: 1em; text-align: center;">${translate("grouppage.gchange3")}</h3>
+					<h3 style="margin: 0; margin-bottom: 1em; text-align: center;">${translate('grouppage.gchange3')}</h3>
 					<vaadin-grid theme="large" id="joinedGroupsGrid" ?hidden="${this.isEmptyArray(this.joinedGroups)}" .items="${this.joinedGroups}" aria-label="Joined Groups" all-rows-visible>
-						<vaadin-grid-sort-column width="8rem" flex-grow="0" header="${translate("managegroup.mg8")}" path="groupId"></vaadin-grid-sort-column>
-						<vaadin-grid-sort-column width="8rem" flex-grow="0" header="${translate("grouppage.gchange54")}" path="memberCount"></vaadin-grid-sort-column>
-						<vaadin-grid-sort-column width="20rem" flex-grow="0" header="${translate("grouppage.gchange4")}" path="groupName"></vaadin-grid-sort-column>
-						<vaadin-grid-sort-column header="${translate("grouppage.gchange5")}" path="description"></vaadin-grid-sort-column>
-						<vaadin-grid-column width="12rem" flex-grow="0" header="${translate("grouppage.gchange6")}" .renderer=${(root, column, data) => {
-							render(html`${this.renderRole(data.item)}`, root)
-						}}></vaadin-grid-column>
-						<vaadin-grid-column width="15rem" flex-grow="0" header="${translate("datapage.dchange8")}" .renderer=${(root, column, data) => {
-							render(html`${this.renderManageButton(data.item)}`, root)
-						}}></vaadin-grid-column>
+						<vaadin-grid-sort-column width="8rem" flex-grow="0" header="${translate('managegroup.mg8')}" path="groupId"></vaadin-grid-sort-column>
+						<vaadin-grid-sort-column width="8rem" flex-grow="0" header="${translate('grouppage.gchange54')}" path="memberCount"></vaadin-grid-sort-column>
+						<vaadin-grid-sort-column width="20rem" flex-grow="0" header="${translate('grouppage.gchange4')}" path="groupName"></vaadin-grid-sort-column>
+						<vaadin-grid-sort-column header="${translate('grouppage.gchange5')}" path="description"></vaadin-grid-sort-column>
+						<vaadin-grid-column width="12rem" flex-grow="0" header="${translate('grouppage.gchange6')}" .renderer=${(root, column, data) => {
+	render(html`${this.renderRole(data.item)}`, root)
+}}></vaadin-grid-column>
+						<vaadin-grid-column width="15rem" flex-grow="0" header="${translate('datapage.dchange8')}" .renderer=${(root, column, data) => {
+	render(html`${this.renderManageButton(data.item)}`, root)
+}}></vaadin-grid-column>
 					</vaadin-grid>
 					${this.isEmptyArray(this.joinedGroups) ? html`
 						<div style="text-align: center;">
-							<span style="color: var(--black);">${translate("grouppage.gchange8")}</span>
+							<span style="color: var(--black);">${translate('grouppage.gchange8')}</span>
 						</div>
 					`: ''}
 				</div>
 				<div class="divCard">
-					<h3 style="margin: 0; margin-bottom: 1em; text-align: center;">${translate("managegroup.mg36")}</h3>
+					<h3 style="margin: 0; margin-bottom: 1em; text-align: center;">${translate('managegroup.mg36')}</h3>
 					<vaadin-grid theme="large" id="openGroupInvitesGrid" ?hidden="${this.isEmptyArray(this.groupInvites)}" .items="${this.groupInvites}" aria-label="My Group Invites" all-rows-visible>
-						<vaadin-grid-column width="8rem" flex-grow="0" header="${translate("grouppage.gchange54")}" path="memberCount"></vaadin-grid-column>
-						<vaadin-grid-column width="20rem" flex-grow="0" header="${translate("grouppage.gchange4")}" path="groupName"></vaadin-grid-column>
-						<vaadin-grid-column header="${translate("managegroup.mg42")}" .renderer=${(root, column, data) => {
-							if (data.item.isOpen === true) {
-								render(html`${translate("managegroup.mg44")}`, root)
-							} else {
-								render(html`${translate("managegroup.mg45")}`, root)
-							}
-						}}></vaadin-grid-column>
-						<vaadin-grid-column header="${translate("managegroup.mg43")}" .renderer=${(root, column, data) => {
-							const expiryString = new Date(data.item.expiry).toLocaleString()
-							render(html`${expiryString}`, root)
-						}}></vaadin-grid-column>
-						<vaadin-grid-column width="12rem" flex-grow="0" header="${translate("datapage.dchange8")}" .renderer=${(root, column, data) => {
-							render(html`
+						<vaadin-grid-column width="8rem" flex-grow="0" header="${translate('grouppage.gchange54')}" path="memberCount"></vaadin-grid-column>
+						<vaadin-grid-column width="20rem" flex-grow="0" header="${translate('grouppage.gchange4')}" path="groupName"></vaadin-grid-column>
+						<vaadin-grid-column header="${translate('managegroup.mg42')}" .renderer=${(root, column, data) => {
+	if (data.item.isOpen === true) {
+		render(html`${translate('managegroup.mg44')}`, root)
+	} else {
+		render(html`${translate('managegroup.mg45')}`, root)
+	}
+}}></vaadin-grid-column>
+						<vaadin-grid-column header="${translate('managegroup.mg43')}" .renderer=${(root, column, data) => {
+	const expiryString = new Date(data.item.expiry).toLocaleString()
+	render(html`${expiryString}`, root)
+}}></vaadin-grid-column>
+						<vaadin-grid-column width="12rem" flex-grow="0" header="${translate('datapage.dchange8')}" .renderer=${(root, column, data) => {
+	render(html`
 								<mwc-button @click=${() => this.openJoinGroup(data.item)}>
 									<mwc-icon>queue</mwc-icon>
-									&nbsp;${translate("grouppage.gchange51")}
+									&nbsp;${translate('grouppage.gchange51')}
 								</mwc-button>
 							`, root)
-						}}></vaadin-grid-column>
+}}></vaadin-grid-column>
 					</vaadin-grid>
 					${this.isEmptyArray(this.groupInvites) ? html`
 						<div style="text-align: center;">
-							<span style="color: var(--black);">${translate("managegroup.mg35")}</span>
+							<span style="color: var(--black);">${translate('managegroup.mg35')}</span>
 						</div>
 					`: ''}
 				</div>
 				<div class="divCard">
-					<h3 style="margin: 0; margin-bottom: 1em; text-align: center;">${translate("grouppage.gchange9")}</h3>
+					<h3 style="margin: 0; margin-bottom: 1em; text-align: center;">${translate('grouppage.gchange9')}</h3>
 					<vaadin-text-field
-						placeholder="${translate("datapage.dchange4")}"
+						placeholder="${translate('datapage.dchange4')}"
 						style="width: 25%; margin-bottom: 20px;"
 						clear-button-visible
 						@value-changed="${(e) => {
-							this.filteredItems = []
-							const searchTerm = (e.target.value || '').trim()
-							const keys = ['groupName', 'description', 'owner']
-							this.filteredItems = this.publicGroups.filter((search) => keys.some((key) => search[key].toLowerCase().includes(searchTerm.toLowerCase())))
-						}}"
+		this.filteredItems = []
+		const searchTerm = (e.target.value || '').trim()
+		const keys = ['groupName', 'description', 'owner']
+		this.filteredItems = this.publicGroups.filter((search) => keys.some((key) => search[key].toLowerCase().includes(searchTerm.toLowerCase())))
+	}}"
 					>
 						<vaadin-icon slot="prefix" icon="vaadin:search"></vaadin-icon>
 					</vaadin-text-field><br>
 					<vaadin-grid theme="large" id="publicGroupsGrid" .items="${this.filteredItems}" aria-label="Public Open Groups" all-rows-visible>
-						<vaadin-grid-sort-column width="8rem" flex-grow="0" header="${translate("managegroup.mg8")}" path="groupId"></vaadin-grid-sort-column>
-						<vaadin-grid-sort-column width="8rem" flex-grow="0" header="${translate("grouppage.gchange54")}" path="memberCount"></vaadin-grid-sort-column>
-						<vaadin-grid-sort-column width="20rem" flex-grow="0" header="${translate("grouppage.gchange4")}" path="groupName"></vaadin-grid-sort-column>
-						<vaadin-grid-sort-column header="${translate("grouppage.gchange5")}" path="description"></vaadin-grid-sort-column>
-						<vaadin-grid-sort-column header="${translate("grouppage.gchange10")}" path="owner"></vaadin-grid-sort-column>
-						<vaadin-grid-column width="12rem" flex-grow="0" header="${translate("datapage.dchange8")}" .renderer=${(root, column, data) => {
-							render(html`
+						<vaadin-grid-sort-column width="8rem" flex-grow="0" header="${translate('managegroup.mg8')}" path="groupId"></vaadin-grid-sort-column>
+						<vaadin-grid-sort-column width="8rem" flex-grow="0" header="${translate('grouppage.gchange54')}" path="memberCount"></vaadin-grid-sort-column>
+						<vaadin-grid-sort-column width="20rem" flex-grow="0" header="${translate('grouppage.gchange4')}" path="groupName"></vaadin-grid-sort-column>
+						<vaadin-grid-sort-column header="${translate('grouppage.gchange5')}" path="description"></vaadin-grid-sort-column>
+						<vaadin-grid-sort-column header="${translate('grouppage.gchange10')}" path="owner"></vaadin-grid-sort-column>
+						<vaadin-grid-column width="12rem" flex-grow="0" header="${translate('datapage.dchange8')}" .renderer=${(root, column, data) => {
+	render(html`
 								<mwc-button @click=${() => this.openJoinGroup(data.item)}>
 									<mwc-icon>queue</mwc-icon>
-									&nbsp;${translate("grouppage.gchange51")}
+									&nbsp;${translate('grouppage.gchange51')}
 								</mwc-button>
 							`, root)
-						}}></vaadin-grid-column>
+}}></vaadin-grid-column>
 					</vaadin-grid>
 					${this.isEmptyArray(this.publicGroups) ? html`
-						<span style="color: var(--black);">${translate("grouppage.gchange11")}</span>
+						<span style="color: var(--black);">${translate('grouppage.gchange11')}</span>
 					`: ''}
 				</div>
 				<!-- Create Group Dialog -->
 				<mwc-dialog id="createGroupDialog" scrimClickAction="${this.isLoading ? '' : 'close'}">
 					<div style="text-align:center">
-						<h1>${translate("grouppage.gchange12")}</h1>
+						<h1>${translate('grouppage.gchange12')}</h1>
 						<hr>
 					</div>
 					<p>
@@ -330,9 +330,9 @@ class GroupManagement extends LitElement {
 							minlength="3"
 							maxlength="32"
 							id="groupNameInput"
-							label="${translate("grouppage.gchange4")}"
-							placeholder="${translate("grouppage.gchange60")}"
-							helper-text="${translate("managegroup.mg51")}"
+							label="${translate('grouppage.gchange4')}"
+							placeholder="${translate('grouppage.gchange60')}"
+							helper-text="${translate('managegroup.mg51')}"
 							allowed-char-pattern="[0-9a-zA-Z'() #.:,_<>+\u002D\u3000-\u303F\u3400-\u4DBF\u4E00-\u9FFF\u3040-\u309F\u30A0-\u30FF\u0400-\u04FF\u0900-\u097F\u2000-\u3300\u1F600-\u1FFFF]"
 							clear-button-visible
 						>
@@ -346,28 +346,28 @@ class GroupManagement extends LitElement {
 							style="width: 100%; --vaadin-input-field-border-width: 1px; --vaadin-input-field-border-color: var(--border3);"
 							maxlength="128"
 							id="groupDescInput"
-							label="${translate("grouppage.gchange5")}"
-							placeholder="${translate("grouppage.gchange61")}"
-							helper-text="${translate("managegroup.mg52")}"
+							label="${translate('grouppage.gchange5')}"
+							placeholder="${translate('grouppage.gchange61')}"
+							helper-text="${translate('managegroup.mg52')}"
 							allowed-char-pattern="[0-9a-zA-Z'() #.:,_<>+\u002D\u3000-\u303F\u3400-\u4DBF\u4E00-\u9FFF\u3040-\u309F\u30A0-\u30FF\u0400-\u04FF\u0900-\u097F\u2000-\u3300\u1F600-\u1FFFF]"
 							clear-button-visible
 						>
 						</vaadin-text-field>
 					</p>
 					<p>
-						<div><h6>${translate("grouppage.gchange13")}:</h6></div>
-						<select required validationMessage="${translate("grouppage.gchange14")}" id="groupTypeInput" label="Group Type">
-							<option value="reject" selected>${translate("grouppage.gchange15")}</option>
-							<option value="1">${translate("grouppage.gchange16")}</option>
-							<option value="0">${translate("grouppage.gchange17")}</option>
+						<div><h6>${translate('grouppage.gchange13')}:</h6></div>
+						<select required validationMessage="${translate('grouppage.gchange14')}" id="groupTypeInput" label="Group Type">
+							<option value="reject" selected>${translate('grouppage.gchange15')}</option>
+							<option value="1">${translate('grouppage.gchange16')}</option>
+							<option value="0">${translate('grouppage.gchange17')}</option>
 						</select>
 					</p>
 					<p>
-						<div><h6>${translate("grouppage.gchange18")}</h6></div>
-						<select required validationMessage="${translate("grouppage.gchange14")}" id="groupApprovalInput" label="Group Type">
-							<option value="reject" selected>${translate("grouppage.gchange15")}</option>
-							<option value="0">${translate("grouppage.gchange19")}</option>
-							<option value="1">${translate("grouppage.gchange20")}</option>
+						<div><h6>${translate('grouppage.gchange18')}</h6></div>
+						<select required validationMessage="${translate('grouppage.gchange14')}" id="groupApprovalInput" label="Group Type">
+							<option value="reject" selected>${translate('grouppage.gchange15')}</option>
+							<option value="0">${translate('grouppage.gchange19')}</option>
+							<option value="1">${translate('grouppage.gchange20')}</option>
 							<option value="20">20%</option>
 							<option value="40">40%</option>
 							<option value="60">60%</option>
@@ -376,44 +376,44 @@ class GroupManagement extends LitElement {
 						</select>
 					</p>
 					<p>
-						<div><h6>${translate("grouppage.gchange21")}</h6></div>
-						<select required validationMessage="${translate("grouppage.gchange14")}" id="groupMinDelayInput" label="Group Type">
-							<option value="reject" selected>${translate("grouppage.gchange15")}</option>
-							<option value="5">5 ${translate("grouppage.gchange22")}</option>
-							<option value="10">10 ${translate("grouppage.gchange22")}</option>
-							<option value="30">30 ${translate("grouppage.gchange22")}</option>
-							<option value="60">1 ${translate("grouppage.gchange23")}</option>
-							<option value="180">3 ${translate("grouppage.gchange24")}</option>
-							<option value="300">5 ${translate("grouppage.gchange24")}</option>
-							<option value="420">7 ${translate("grouppage.gchange24")}</option>
-							<option value="720">12 ${translate("grouppage.gchange24")}</option>
-							<option value="1440">1 ${translate("grouppage.gchange25")}</option>
-							<option value="4320">3 ${translate("grouppage.gchange26")}</option>
-							<option value="7200">5 ${translate("grouppage.gchange26")}</option>
-							<option value="10080">7 ${translate("grouppage.gchange26")}</option>
+						<div><h6>${translate('grouppage.gchange21')}</h6></div>
+						<select required validationMessage="${translate('grouppage.gchange14')}" id="groupMinDelayInput" label="Group Type">
+							<option value="reject" selected>${translate('grouppage.gchange15')}</option>
+							<option value="5">5 ${translate('grouppage.gchange22')}</option>
+							<option value="10">10 ${translate('grouppage.gchange22')}</option>
+							<option value="30">30 ${translate('grouppage.gchange22')}</option>
+							<option value="60">1 ${translate('grouppage.gchange23')}</option>
+							<option value="180">3 ${translate('grouppage.gchange24')}</option>
+							<option value="300">5 ${translate('grouppage.gchange24')}</option>
+							<option value="420">7 ${translate('grouppage.gchange24')}</option>
+							<option value="720">12 ${translate('grouppage.gchange24')}</option>
+							<option value="1440">1 ${translate('grouppage.gchange25')}</option>
+							<option value="4320">3 ${translate('grouppage.gchange26')}</option>
+							<option value="7200">5 ${translate('grouppage.gchange26')}</option>
+							<option value="10080">7 ${translate('grouppage.gchange26')}</option>
 						</select>
 					</p>
 					<p>
-						<div><h6>${translate("grouppage.gchange27")}</h6></div>
-						<select required validationMessage="${translate("grouppage.gchange14")}" id="groupMaxDelayInput" label="Group Type">
-							<option value="reject" selected>${translate("grouppage.gchange15")}</option>
-							<option value="60">1 ${translate("grouppage.gchange23")}</option>
-							<option value="180">3 ${translate("grouppage.gchange24")}</option>
-							<option value="300">5 ${translate("grouppage.gchange24")}</option>
-							<option value="420">7 ${translate("grouppage.gchange24")}</option>
-							<option value="720">12 ${translate("grouppage.gchange24")}</option>
-							<option value="1440">1 ${translate("grouppage.gchange25")}</option>
-							<option value="4320">3 ${translate("grouppage.gchange26")}</option>
-							<option value="7200">5 ${translate("grouppage.gchange26")}</option>
-							<option value="10080">7 ${translate("grouppage.gchange26")}</option>
-							<option value="14400">10 ${translate("grouppage.gchange26")}</option>
-							<option value="21600">15 ${translate("grouppage.gchange26")}</option>
+						<div><h6>${translate('grouppage.gchange27')}</h6></div>
+						<select required validationMessage="${translate('grouppage.gchange14')}" id="groupMaxDelayInput" label="Group Type">
+							<option value="reject" selected>${translate('grouppage.gchange15')}</option>
+							<option value="60">1 ${translate('grouppage.gchange23')}</option>
+							<option value="180">3 ${translate('grouppage.gchange24')}</option>
+							<option value="300">5 ${translate('grouppage.gchange24')}</option>
+							<option value="420">7 ${translate('grouppage.gchange24')}</option>
+							<option value="720">12 ${translate('grouppage.gchange24')}</option>
+							<option value="1440">1 ${translate('grouppage.gchange25')}</option>
+							<option value="4320">3 ${translate('grouppage.gchange26')}</option>
+							<option value="7200">5 ${translate('grouppage.gchange26')}</option>
+							<option value="10080">7 ${translate('grouppage.gchange26')}</option>
+							<option value="14400">10 ${translate('grouppage.gchange26')}</option>
+							<option value="21600">15 ${translate('grouppage.gchange26')}</option>
 						</select>
 					</p>
 					<div style="text-align:right; height:36px;">
 						<span ?hidden="${!this.isLoading}">
 							<!-- loading message -->
-							${translate("grouppage.gchange28")} &nbsp;
+							${translate('grouppage.gchange28')} &nbsp;
 							<paper-spinner-lite
 								style="margin-top:12px;"
 								?active="${this.isLoading}"
@@ -425,7 +425,7 @@ class GroupManagement extends LitElement {
 							${this.message}
 						</span><br>
 						<span>
-							<b>${translate("walletpage.wchange21")} ${this.createGroupFee} QORT.</b>
+							<b>${translate('walletpage.wchange21')} ${this.createGroupFee} QORT.</b>
 						</span>
 					</div>
 					<mwc-button
@@ -433,7 +433,7 @@ class GroupManagement extends LitElement {
 						slot="primaryAction"
 						@click=${this.createGroup}
 					>
-						${translate("grouppage.gchange29")}
+						${translate('grouppage.gchange29')}
 					</mwc-button>
 					<mwc-button
 						?disabled="${this.isLoading}"
@@ -441,26 +441,26 @@ class GroupManagement extends LitElement {
 						dialogAction="cancel"
 						class="red"
 					>
-						${translate("general.close")}
+						${translate('general.close')}
 					</mwc-button>
 				</mwc-dialog>
 				<!-- Join Group Dialog -->
 				<mwc-dialog id="joinDialog" scrimClickAction="${this.isLoading ? '' : 'close'}">
 					<div style="text-align:center">
-						<h1>${translate("grouppage.gchange30")}</h1>
+						<h1>${translate('grouppage.gchange30')}</h1>
 						<hr>
 					</div>
 					<div class="itemList">
-						<span class="title">${translate("grouppage.gchange4")}</span>
+						<span class="title">${translate('grouppage.gchange4')}</span>
 						<br>
 						<div><span>${this.joinGroupObj.groupName}</span></div>
-						<span class="title">${translate("grouppage.gchange5")}</span>
+						<span class="title">${translate('grouppage.gchange5')}</span>
 						<br>
 						<div><span>${this.joinGroupObj.description}</span></div>
-						<span class="title">${translate("grouppage.gchange10")}</span>
+						<span class="title">${translate('grouppage.gchange10')}</span>
 						<br>
 						<div><span>${this.joinGroupObj.owner}</span></div>
-						<span class="title">${translate("grouppage.gchange31")}</span>
+						<span class="title">${translate('grouppage.gchange31')}</span>
 						<br>
 						<div>
 							<span>
@@ -470,7 +470,7 @@ class GroupManagement extends LitElement {
 					</div>
 					<div style="text-align:right; height:36px;">
 						<span ?hidden="${!this.isLoading}">
-							${translate("grouppage.gchange33")} &nbsp;
+							${translate('grouppage.gchange33')} &nbsp;
 							<paper-spinner-lite
 								style="margin-top:12px;"
 								?active="${this.isLoading}"
@@ -482,7 +482,7 @@ class GroupManagement extends LitElement {
 							${this.message}
 						</span><br>
 						<span>
-							<b>${translate("walletpage.wchange21")} ${this.joinGroupFee} QORT.</b>
+							<b>${translate('walletpage.wchange21')} ${this.joinGroupFee} QORT.</b>
 						</span>
 					</div>
 					<mwc-button
@@ -490,7 +490,7 @@ class GroupManagement extends LitElement {
 						slot="primaryAction"
 						@click=${() => this.joinGroup(this.joinGroupObj.groupId, this.joinGroupObj.groupName)}
 					>
-						${translate("grouppage.gchange34")}
+						${translate('grouppage.gchange34')}
 					</mwc-button>
 					<mwc-button
 						?disabled="${this.isLoading}"
@@ -498,34 +498,34 @@ class GroupManagement extends LitElement {
 						dialogAction="cancel"
 						class="red"
 					>
-						${translate("general.close")}
+						${translate('general.close')}
 					</mwc-button>
 				</mwc-dialog>
 				<!-- Leave Group Dialog -->
 				<mwc-dialog id="leaveDialog" scrimClickAction="${this.isLoading ? '' : 'close'}">
 					<div style="text-align:center">
-						<h1>${translate("grouppage.gchange35")}</h1>
+						<h1>${translate('grouppage.gchange35')}</h1>
 						<hr>
 					</div>
 					<div class="itemList">
-						<span class="title">${translate("grouppage.gchange4")}</span>
+						<span class="title">${translate('grouppage.gchange4')}</span>
 						<br>
 						<div><span>${this.leaveGroupObj.groupName}</span></div>
-						<span class="title">${translate("grouppage.gchange5")}</span>
+						<span class="title">${translate('grouppage.gchange5')}</span>
 						<br>
 						<div><span>${this.leaveGroupObj.description}</span></div>
-						<span class="title">${translate("grouppage.gchange10")}</span>
+						<span class="title">${translate('grouppage.gchange10')}</span>
 						<br>
 						<div><span>${this.leaveGroupObj.owner}</span></div>
-						<span class="title">${translate("grouppage.gchange31")}</span>
+						<span class="title">${translate('grouppage.gchange31')}</span>
 						<br>
 						<div>
 							<span>
 								<time-ago datetime=${this.timeIsoString(this.leaveGroupObj.created)}></time-ago>
 							</span>
 						</div>
-						${!this.leaveGroupObj.updated ? "" : html`
-							<span class="title">${translate("grouppage.gchange32")}</span>
+						${!this.leaveGroupObj.updated ? '' : html`
+							<span class="title">${translate('grouppage.gchange32')}</span>
 							<br>
 							<div>
 								<span>
@@ -537,7 +537,7 @@ class GroupManagement extends LitElement {
 					<div style="text-align:right; height:36px;">
 						<span ?hidden="${!this.isLoading}">
 							<!-- loading message -->
-							${translate("grouppage.gchange36")} &nbsp;
+							${translate('grouppage.gchange36')} &nbsp;
 							<paper-spinner-lite
 								style="margin-top:12px;"
 								?active="${this.isLoading}"
@@ -549,7 +549,7 @@ class GroupManagement extends LitElement {
 							${this.message}
 						</span><br>
 						<span>
-							<b>${translate("walletpage.wchange21")} ${this.leaveGroupFee} QORT.</b>
+							<b>${translate('walletpage.wchange21')} ${this.leaveGroupFee} QORT.</b>
 						</span>
 					</div>
 					<mwc-button
@@ -557,7 +557,7 @@ class GroupManagement extends LitElement {
 						slot="primaryAction"
 						@click=${() => this.leaveGroup(this.leaveGroupObj.groupId, this.leaveGroupObj.groupName)}
 					>
-						${translate("grouppage.gchange37")}
+						${translate('grouppage.gchange37')}
 					</mwc-button>
 					<mwc-button
 						?disabled="${this.isLoading}"
@@ -565,24 +565,24 @@ class GroupManagement extends LitElement {
 						dialogAction="cancel"
 						class="red"
 					>
-						${translate("general.close")}
+						${translate('general.close')}
 					</mwc-button>
 				</mwc-dialog>
 				<paper-dialog id="manageGroupOwnerDialog" class="nanage-group" modal>
 					<div class="actions">
 						<div style="width: 32px; height: 32px; background: var(--white); border: 1px solid var(--black); border-radius: 50%;">${this.renderGroupAvatar()}</div>
-						<h2>${translate("grouppage.gchange4")}: ${this.manageGroupName} / ${translate("managegroup.mg8")}: ${this.manageGroupId} / ${translate("grouppage.gchange54")}: ${this.manageGroupCount}</h2>
-						<mwc-icon class="close-icon" @click=${() => this.closeManageGroupOwnerDialog()} title="${translate("managegroup.mg5")}">highlight_off</mwc-icon>
+						<h2>${translate('grouppage.gchange4')}: ${this.manageGroupName} / ${translate('managegroup.mg8')}: ${this.manageGroupId} / ${translate('grouppage.gchange54')}: ${this.manageGroupCount}</h2>
+						<mwc-icon class="close-icon" @click=${() => this.closeManageGroupOwnerDialog()} title="${translate('managegroup.mg5')}">highlight_off</mwc-icon>
 					</div>
 					<div class="container">
 						<div class="wrapper">
 							<div class="leftBar" style="display: table; width: 100%;">
-								<div class="slug">${translate("grouppage.gchange40")}</div>
+								<div class="slug">${translate('grouppage.gchange40')}</div>
 								<ul>
-									<li @click=${() => this.setManageGroupView('group-members')}><a class=${this.selectedView.id === 'group-members' ? 'active' : ''} href="javascript:void(0)">${translate("managegroup.mg1")}</a></li>
-									<li @click=${() => this.setManageGroupView('group-banned')}><a class=${this.selectedView.id === 'group-banned' ? 'active' : ''} href="javascript:void(0)">${translate("managegroup.mg25")}</a></li>
-									<li @click=${() => this.setManageGroupView('group-admin')}><a class=${this.selectedView.id === 'group-admin' ? 'active' : ''} href="javascript:void(0)">${translate("managegroup.mg3")}</a></li>
-									<li @click=${() => this.setManageGroupView('group-invite')}><a class=${this.selectedView.id === 'group-invite' ? 'active' : ''} href="javascript:void(0)">${translate("managegroup.mg2")}</a></li>
+									<li @click=${() => this.setManageGroupView('group-members')}><a class=${this.selectedView.id === 'group-members' ? 'active' : ''} href="javascript:void(0)">${translate('managegroup.mg1')}</a></li>
+									<li @click=${() => this.setManageGroupView('group-banned')}><a class=${this.selectedView.id === 'group-banned' ? 'active' : ''} href="javascript:void(0)">${translate('managegroup.mg25')}</a></li>
+									<li @click=${() => this.setManageGroupView('group-admin')}><a class=${this.selectedView.id === 'group-admin' ? 'active' : ''} href="javascript:void(0)">${translate('managegroup.mg3')}</a></li>
+									<li @click=${() => this.setManageGroupView('group-invite')}><a class=${this.selectedView.id === 'group-invite' ? 'active' : ''} href="javascript:void(0)">${translate('managegroup.mg2')}</a></li>
 									${this.renderDisplayUpdateGroup(this.theGroupOwner)}
 								</ul>
 							</div>
@@ -597,28 +597,28 @@ class GroupManagement extends LitElement {
 				</paper-dialog>
 				<!-- Manage Group Admin Dialog -->
 				<mwc-dialog id="manageGroupAdminDialog" scrimClickAction="${this.isLoading ? '' : 'close'}">
-					<div>${translate("grouppage.gchange39")} ${this.manageGroupObj.groupName}</div>
+					<div>${translate('grouppage.gchange39')} ${this.manageGroupObj.groupName}</div>
 					<mwc-button
 						?disabled="${this.isLoading}"
 						slot="secondaryAction"
 						dialogAction="cancel"
 						class="red"
 					>
-						${translate("general.close")}
+						${translate('general.close')}
 					</mwc-button>
 				</mwc-dialog>
 				<mwc-dialog id="privateGroupErrorDialog" scrimClickAction="" escapeKeyAction="">
 					<div style="text-align: center;">
 						<mwc-icon class="error-icon">warning</mwc-icon>
-						<h2>${translate("grouppage.gchange57")}</h2>
-						<h4>${translate("grouppage.gchange58")}</h4>
+						<h2>${translate('grouppage.gchange57')}</h2>
+						<h4>${translate('grouppage.gchange58')}</h4>
 					</div>
 					<mwc-button
 						slot="primaryAction"
 						@click=${() => this.closePrivateGroupErrorDialog()}
 						class="red"
 					>
-						${translate("general.close")}
+						${translate('general.close')}
 					</mwc-button>
 				</mwc-dialog>
 			</div>
@@ -634,7 +634,7 @@ class GroupManagement extends LitElement {
 					<div></div>
 					<div></div>
 				</div>
-				<h2>${translate("chatpage.cchange2")}</h2>
+				<h2>${translate('chatpage.cchange2')}</h2>
 			</paper-dialog>
 		`
 	}
@@ -646,14 +646,14 @@ class GroupManagement extends LitElement {
 
 		const getOpenPublicGroups = async () => {
 			let openG = await parentEpml.request('apiCall', {
-				url: `/groups?limit=0&reverse=true`
+				url: '/groups?limit=0&reverse=true'
 			})
 			return openG.filter(myG => myG.isOpen === true)
 		}
 
 		const getPrivateGroups = async () => {
 			let privateG = await parentEpml.request('apiCall', {
-				url: `/groups?limit=0&reverse=true`
+				url: '/groups?limit=0&reverse=true'
 			})
 			return privateG.filter(myP => myP.isOpen === false)
 		}
@@ -830,54 +830,54 @@ class GroupManagement extends LitElement {
 				<vaadin-grid-column
 					width="6rem"
 					flex-grow="0"
-					header="${translate("websitespage.schange5")}"
+					header="${translate('websitespage.schange5')}"
 					.renderer=${(root, column, data) => {
-						render(html`${this.renderAvatar(data.item)}`, root)
-					}}
+		render(html`${this.renderAvatar(data.item)}`, root)
+	}}
 				></vaadin-grid-column>
 				<vaadin-grid-column
 					width="12rem"
 					flex-grow="0"
-					header="${translate("puzzlepage.pchange4")}"
+					header="${translate('puzzlepage.pchange4')}"
 					.renderer=${(root, column, data) => {
-						render(html`${data.item.name}`, root)
-					}}
+		render(html`${data.item.name}`, root)
+	}}
 				></vaadin-grid-column>
 				<vaadin-grid-column
 					width="22rem"
 					flex-grow="0"
-					header="${translate("login.address")}"
+					header="${translate('login.address')}"
 					.renderer=${(root, column, data) => {
-						render(html`${data.item.owner}`, root)
-					}}
+		render(html`${data.item.owner}`, root)
+	}}
 				></vaadin-grid-column>
 				<vaadin-grid-column
 					width="9rem"
 					flex-grow="0"
-					header="${translate("websitespage.schange8")}"
+					header="${translate('websitespage.schange8')}"
 					.renderer=${(root, column, data) => {
-						render(html`${this.renderBanButton(data.item)}`, root)
-					}}
-				></vaadin-grid-column>
-				<vaadin-grid-column
-					width="9rem"
-					flex-grow="0"
-					.renderer=${(root, column, data) => {
-						render(html`${this.renderKickGroupMemberButton(data.item)}`, root)
-					}}
+		render(html`${this.renderBanButton(data.item)}`, root)
+	}}
 				></vaadin-grid-column>
 				<vaadin-grid-column
 					width="9rem"
 					flex-grow="0"
 					.renderer=${(root, column, data) => {
-						render(html`${this.renderMakeAdminButton(data.item.owner)}`, root)
-					}}
+		render(html`${this.renderKickGroupMemberButton(data.item)}`, root)
+	}}
+				></vaadin-grid-column>
+				<vaadin-grid-column
+					width="9rem"
+					flex-grow="0"
+					.renderer=${(root, column, data) => {
+		render(html`${this.renderMakeAdminButton(data.item.owner)}`, root)
+	}}
 				></vaadin-grid-column>
 			</vaadin-grid>
 			<mwc-dialog id="createBanMemberDialog" scrimClickAction="" escapeKeyAction="">
 				<div class="manage-group-dialog">
 					<div style="text-align: center;">
-						<h2>${translate("managegroup.mg17")}</h2>
+						<h2>${translate('managegroup.mg17')}</h2>
 						<hr />
 						<br>
 					</div>
@@ -887,7 +887,7 @@ class GroupManagement extends LitElement {
 							readOnly
 							outlined
 							id="toBanName"
-							label="${translate("managegroup.mg18")}"
+							label="${translate('managegroup.mg18')}"
 							type="text"
 							value="${this.toBanName}"
 						>
@@ -900,7 +900,7 @@ class GroupManagement extends LitElement {
 							readOnly
 							outlined
 							id="toBanAddress"
-							label="${translate("managegroup.mg19")}"
+							label="${translate('managegroup.mg19')}"
 							type="text"
 							value="${this.toBanAddress}"
 						>
@@ -912,31 +912,31 @@ class GroupManagement extends LitElement {
 							required
 							outlined
 							id="banReason"
-							label="${translate("managegroup.mg21")}"
+							label="${translate('managegroup.mg21')}"
 							type="text"
 							value="${this.banReason}"
 						>
 						</mwc-textfield>
 					</p>
 					<p>
-						${translate("managegroup.mg20")}
-						<select required validationMessage="${translate("grouppage.gchange14")}" id="banMemberTime" label="Ban Time">
-							<option value="reject" selected>${translate("grouppage.gchange15")}</option>
-							<option value="10800">3 ${translate("grouppage.gchange24")}</option>
-							<option value="21600">6 ${translate("grouppage.gchange24")}</option>
-							<option value="43200">12 ${translate("grouppage.gchange24")}</option>
-							<option value="86400">1 ${translate("grouppage.gchange25")}</option>
-							<option value="259200">3 ${translate("grouppage.gchange26")}</option>
-							<option value="432000">5 ${translate("grouppage.gchange26")}</option>
-							<option value="604800">7 ${translate("grouppage.gchange26")}</option>
-							<option value="864000">10 ${translate("grouppage.gchange26")}</option>
-							<option value="1296000">15 ${translate("grouppage.gchange26")}</option>
-							<option value="2592000">30 ${translate("grouppage.gchange26")}</option>
-							<option value="0">${translate("managegroup.mg24")}</option>
+						${translate('managegroup.mg20')}
+						<select required validationMessage="${translate('grouppage.gchange14')}" id="banMemberTime" label="Ban Time">
+							<option value="reject" selected>${translate('grouppage.gchange15')}</option>
+							<option value="10800">3 ${translate('grouppage.gchange24')}</option>
+							<option value="21600">6 ${translate('grouppage.gchange24')}</option>
+							<option value="43200">12 ${translate('grouppage.gchange24')}</option>
+							<option value="86400">1 ${translate('grouppage.gchange25')}</option>
+							<option value="259200">3 ${translate('grouppage.gchange26')}</option>
+							<option value="432000">5 ${translate('grouppage.gchange26')}</option>
+							<option value="604800">7 ${translate('grouppage.gchange26')}</option>
+							<option value="864000">10 ${translate('grouppage.gchange26')}</option>
+							<option value="1296000">15 ${translate('grouppage.gchange26')}</option>
+							<option value="2592000">30 ${translate('grouppage.gchange26')}</option>
+							<option value="0">${translate('managegroup.mg24')}</option>
 						</select>
 					</p>
 					<div style="margin-bottom: 10px;">
-						<p style="margin-bottom: 0;">${translate("walletpage.wchange21")} <span style="font-weight: bold;">${this.createBanFee} QORT<span></p>
+						<p style="margin-bottom: 0;">${translate('walletpage.wchange21')} <span style="font-weight: bold;">${this.createBanFee} QORT<span></p>
 						<br>
 					</div>
 					${this.renderClearSuccess()}
@@ -948,7 +948,7 @@ class GroupManagement extends LitElement {
 						<div>
 							<vaadin-button ?disabled="${this.btnDisable}" theme="primary medium" style="width: 100%;" @click=${() => this.createBanMember(this.manageGroupId)}>
 								<vaadin-icon icon="vaadin:ban" slot="prefix"></vaadin-icon>
-								${translate("managegroup.mg17")}
+								${translate('managegroup.mg17')}
 							</vaadin-button>
 						</div>
 					</div>
@@ -958,13 +958,13 @@ class GroupManagement extends LitElement {
 					@click="${() => this.closeCreateBanMemberDialog()}"
 					class="red"
 				>
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
 			<mwc-dialog id="kickGroupMemberDialog" scrimClickAction="" escapeKeyAction="">
 				<div class="manage-group-dialog">
 					<div style="text-align: center;">
-						<h2>${translate("managegroup.mg31")}</h2>
+						<h2>${translate('managegroup.mg31')}</h2>
 						<hr />
 						<br>
 					</div>
@@ -974,7 +974,7 @@ class GroupManagement extends LitElement {
 							readOnly
 							outlined
 							id="toKickMemberName"
-							label="${translate("managegroup.mg18")}"
+							label="${translate('managegroup.mg18')}"
 							type="text"
 							value="${this.toKickMemberName}"
 						>
@@ -987,7 +987,7 @@ class GroupManagement extends LitElement {
 							readOnly
 							outlined
 							id="toKickMemberAddress"
-							label="${translate("managegroup.mg19")}"
+							label="${translate('managegroup.mg19')}"
 							type="text"
 							value="${this.toKickMemberAddress}"
 						>
@@ -999,14 +999,14 @@ class GroupManagement extends LitElement {
 							required
 							outlined
 							id="kickMemberReason"
-							label="${translate("managegroup.mg32")}"
+							label="${translate('managegroup.mg32')}"
 							type="text"
 							value="${this.kickMemberReason}"
 						>
 						</mwc-textfield>
 					</p>
 					<div style="margin-bottom: 10px;">
-						<p style="margin-bottom: 0;">${translate("walletpage.wchange21")} <span style="font-weight: bold;">${this.kickGroupMemberFee} QORT<span></p>
+						<p style="margin-bottom: 0;">${translate('walletpage.wchange21')} <span style="font-weight: bold;">${this.kickGroupMemberFee} QORT<span></p>
 						<br>
 					</div>
 					${this.renderClearSuccess()}
@@ -1018,7 +1018,7 @@ class GroupManagement extends LitElement {
 						<div>
 							<vaadin-button ?disabled="${this.btnDisable}" theme="primary medium" style="width: 100%;" @click=${() => this.kickGroupMember(this.manageGroupId)}>
 								<vaadin-icon icon="vaadin:exit" slot="prefix"></vaadin-icon>
-								${translate("managegroup.mg31")}
+								${translate('managegroup.mg31')}
 							</vaadin-button>
 						</div>
 					</div>
@@ -1028,13 +1028,13 @@ class GroupManagement extends LitElement {
 					@click="${() => this.closeKickGroupMemberDialog()}"
 					class="red"
 				>
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
 			<mwc-dialog id="addGroupAdminDialog" scrimClickAction="" escapeKeyAction="">
 				<div class="manage-group-dialog">
 					<div style="text-align: center;">
-						<h2>${translate("managegroup.mg10")}</h2>
+						<h2>${translate('managegroup.mg10')}</h2>
 						<hr />
 						<br>
 					</div>
@@ -1045,14 +1045,14 @@ class GroupManagement extends LitElement {
 							readOnly
 							outlined
 							id="memberToAdmin"
-							label="${translate("walletpage.wchange23")}"
+							label="${translate('walletpage.wchange23')}"
 							type="text"
 							value="${this.memberToAdmin}"
 						>
 						</mwc-textfield>
 					</p>
 					<div style="margin-bottom: 10px;">
-						<p style="margin-bottom: 0;">${translate("walletpage.wchange21")} <span style="font-weight: bold;">${this.addGroupAdminFee} QORT<span></p>
+						<p style="margin-bottom: 0;">${translate('walletpage.wchange21')} <span style="font-weight: bold;">${this.addGroupAdminFee} QORT<span></p>
 						<br>
 					</div>
 					${this.renderClearSuccess()}
@@ -1064,7 +1064,7 @@ class GroupManagement extends LitElement {
 						<div>
 							<vaadin-button ?disabled="${this.btnDisable}" theme="primary medium" style="width: 100%;" @click=${() => this.addGroupAdmin(this.manageGroupId)}>
 								<vaadin-icon icon="vaadin:plus-circle-o" slot="prefix"></vaadin-icon>
-								${translate("managegroup.mg10")}
+								${translate('managegroup.mg10')}
 							</vaadin-button>
 						</div>
 					</div>
@@ -1074,7 +1074,7 @@ class GroupManagement extends LitElement {
 					@click="${() => this.closeAddGroupAdminDialog()}"
 					class="red"
 				>
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
 		`
@@ -1086,49 +1086,49 @@ class GroupManagement extends LitElement {
 				<vaadin-grid-column
 					width="6rem"
 					flex-grow="0"
-					header="${translate("websitespage.schange5")}"
+					header="${translate('websitespage.schange5')}"
 					.renderer=${(root, column, data) => {
-						render(html`${this.renderAvatar(data.item)}`, root)
-					}}
+		render(html`${this.renderAvatar(data.item)}`, root)
+	}}
 				></vaadin-grid-column>
 				<vaadin-grid-column
 					width="12rem"
 					flex-grow="0"
-					header="${translate("puzzlepage.pchange4")}"
+					header="${translate('puzzlepage.pchange4')}"
 					.renderer=${(root, column, data) => {
-						render(html`${data.item.name}`, root)
-					}}
+		render(html`${data.item.name}`, root)
+	}}
 				></vaadin-grid-column>
 				<vaadin-grid-column
 					width="22rem"
 					flex-grow="0"
-					header="${translate("login.address")}"
+					header="${translate('login.address')}"
 					.renderer=${(root, column, data) => {
-						render(html`${data.item.owner}`, root)
-					}}
+		render(html`${data.item.owner}`, root)
+	}}
 				></vaadin-grid-column>
 				<vaadin-grid-column
 					width="14rem"
 					flex-grow="0"
-					header="${translate("managegroup.mg27")}"
+					header="${translate('managegroup.mg27')}"
 					.renderer=${(root, column, data) => {
-						const dateString = new Date(data.item.expiry).toLocaleString()
-						render(html`${dateString}`, root)
-					}}
+		const dateString = new Date(data.item.expiry).toLocaleString()
+		render(html`${dateString}`, root)
+	}}
 				></vaadin-grid-column>
 				<vaadin-grid-column
 					width="12rem"
 					flex-grow="0"
-					header="${translate("websitespage.schange8")}"
+					header="${translate('websitespage.schange8')}"
 					.renderer=${(root, column, data) => {
-						render(html`${this.renderCancelBanButton(data.item)}`, root)
-					}}
+		render(html`${this.renderCancelBanButton(data.item)}`, root)
+	}}
 				></vaadin-grid-column>
 			</vaadin-grid>
 			<mwc-dialog id="cancelBanMemberDialog" scrimClickAction="" escapeKeyAction="">
 				<div class="manage-group-dialog">
 					<div style="text-align: center;">
-						<h2>${translate("managegroup.mg28")}</h2>
+						<h2>${translate('managegroup.mg28')}</h2>
 						<hr />
 						<br>
 					</div>
@@ -1138,7 +1138,7 @@ class GroupManagement extends LitElement {
 							readOnly
 							outlined
 							id="toCancelBanName"
-							label="${translate("managegroup.mg18")}"
+							label="${translate('managegroup.mg18')}"
 							type="text"
 							value="${this.toCancelBanName}"
 						>
@@ -1151,14 +1151,14 @@ class GroupManagement extends LitElement {
 							readOnly
 							outlined
 							id="toCancelBanAddress"
-							label="${translate("managegroup.mg19")}"
+							label="${translate('managegroup.mg19')}"
 							type="text"
 							value="${this.toCancelBanAddress}"
 						>
 						</mwc-textfield>
 					</p>
 					<div style="margin-bottom: 10px;">
-						<p style="margin-bottom: 0;">${translate("walletpage.wchange21")} <span style="font-weight: bold;">${this.cancelBanFee} QORT<span></p>
+						<p style="margin-bottom: 0;">${translate('walletpage.wchange21')} <span style="font-weight: bold;">${this.cancelBanFee} QORT<span></p>
 						<br>
 					</div>
 					${this.renderClearSuccess()}
@@ -1170,7 +1170,7 @@ class GroupManagement extends LitElement {
 						<div>
 							<vaadin-button ?disabled="${this.btnDisable}" theme="primary medium" style="width: 100%;" @click=${() => this.cancelBanMember(this.manageGroupId)}>
 								<vaadin-icon icon="vaadin:unlock" slot="prefix"></vaadin-icon>
-								${translate("managegroup.mg28")}
+								${translate('managegroup.mg28')}
 							</vaadin-button>
 						</div>
 					</div>
@@ -1180,7 +1180,7 @@ class GroupManagement extends LitElement {
 					@click="${() => this.closeCancelBanMemberDialog()}"
 					class="red"
 				>
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
 		`
@@ -1188,110 +1188,110 @@ class GroupManagement extends LitElement {
 
 	groupInviteTemplate() {
 		return html`
-			<h3 style="margin: 0; margin-bottom: 1em; text-align: center;">${translate("managegroup.mg36")}</h3>
+			<h3 style="margin: 0; margin-bottom: 1em; text-align: center;">${translate('managegroup.mg36')}</h3>
 			<vaadin-grid theme="large" id="groupInvitesGrid" ?hidden="${this.isEmptyArray(this.newGroupInvitesList)}" .items="${this.newGroupInvitesList}" aria-label="Group Invites" all-rows-visible>
 				<vaadin-grid-column
 					width="6rem"
 					flex-grow="0"
-					header="${translate("websitespage.schange5")}"
+					header="${translate('websitespage.schange5')}"
 					.renderer=${(root, column, data) => {
-						render(html`${this.renderAvatar(data.item)}`, root)
-					}}
+		render(html`${this.renderAvatar(data.item)}`, root)
+	}}
 				></vaadin-grid-column>
 				<vaadin-grid-column
 					auto-width
 					resizable
-					header="${translate("puzzlepage.pchange4")}"
+					header="${translate('puzzlepage.pchange4')}"
 					.renderer=${(root, column, data) => {
-						render(html`${data.item.name}`, root)
-					}}
+		render(html`${data.item.name}`, root)
+	}}
 				></vaadin-grid-column>
 				<vaadin-grid-column
 					auto-width
 					resizable
-					header="${translate("login.address")}"
+					header="${translate('login.address')}"
 					.renderer=${(root, column, data) => {
-						render(html`${data.item.owner}`, root)
-					}}
+		render(html`${data.item.owner}`, root)
+	}}
 				></vaadin-grid-column>
 				<vaadin-grid-column
-					header="${translate("managegroup.mg43")}"
+					header="${translate('managegroup.mg43')}"
 					.renderer=${(root, column, data) => {
-						const expiryString = new Date(data.item.expiry).toLocaleString()
-						render(html`${expiryString}`, root)
-					}}
+		const expiryString = new Date(data.item.expiry).toLocaleString()
+		render(html`${expiryString}`, root)
+	}}
 				></vaadin-grid-column>
 				<vaadin-grid-column
 					width="9rem"
 					flex-grow="0"
-					header="${translate("websitespage.schange8")}"
+					header="${translate('websitespage.schange8')}"
 					.renderer=${(root, column, data) => {
-						render(html`${this.renderCancelInviteButton(data.item)}`, root)
-					}}
+		render(html`${this.renderCancelInviteButton(data.item)}`, root)
+	}}
 				></vaadin-grid-column>
 			</vaadin-grid>
 			${this.isEmptyArray(this.newGroupInvitesList) ? html`
-				<span style="color: var(--black);">${translate("managegroup.mg35")}</span>
+				<span style="color: var(--black);">${translate('managegroup.mg35')}</span>
 			` : html``}
 			<br>
 			<hr>
 			<br>
-			<h3 style="margin: 0; margin-bottom: 1em; text-align: center;">${translate("managegroup.mg53")}</h3>
+			<h3 style="margin: 0; margin-bottom: 1em; text-align: center;">${translate('managegroup.mg53')}</h3>
 			<vaadin-grid theme="large" id="groupJoinsGrid" ?hidden="${this.isEmptyArray(this.newGroupJoinsList)}" .items="${this.newGroupJoinsList}" aria-label="Group Join Requests" all-rows-visible>
 				<vaadin-grid-column
 					width="6rem"
 					flex-grow="0"
-					header="${translate("websitespage.schange5")}"
+					header="${translate('websitespage.schange5')}"
 					.renderer=${(root, column, data) => {
-						render(html`${this.renderAvatar(data.item)}`, root)
-					}}
+		render(html`${this.renderAvatar(data.item)}`, root)
+	}}
 				></vaadin-grid-column>
 				<vaadin-grid-column
 					auto-width
 					resizable
-					header="${translate("puzzlepage.pchange4")}"
+					header="${translate('puzzlepage.pchange4')}"
 					.renderer=${(root, column, data) => {
-						render(html`${data.item.name}`, root)
-					}}
+		render(html`${data.item.name}`, root)
+	}}
 				></vaadin-grid-column>
 				<vaadin-grid-column
 					auto-width
 					resizable
-					header="${translate("login.address")}"
+					header="${translate('login.address')}"
 					.renderer=${(root, column, data) => {
-						render(html`${data.item.owner}`, root)
-					}}
+		render(html`${data.item.owner}`, root)
+	}}
 				></vaadin-grid-column>
 				<vaadin-grid-column
 					width="12rem"
 					flex-grow="0"
-					header="${translate("websitespage.schange8")}"
+					header="${translate('websitespage.schange8')}"
 					.renderer=${(root, column, data) => {
-						render(html`${this.renderConfirmRequestButton(data.item)}`, root)
-					}}
+		render(html`${this.renderConfirmRequestButton(data.item)}`, root)
+	}}
 				></vaadin-grid-column>
 				<vaadin-grid-column
 					width="12rem"
 					flex-grow="0"
 					.renderer=${(root, column, data) => {
-						render(html`${this.renderDeclineRequestButton(data.item)}`, root)
-					}}
+		render(html`${this.renderDeclineRequestButton(data.item)}`, root)
+	}}
 				></vaadin-grid-column>
 			</vaadin-grid>
 			${this.isEmptyArray(this.newGroupJoinsList) ? html`
-				<span style="color: var(--black);">${translate("managegroup.mg54")}</span>
+				<span style="color: var(--black);">${translate('managegroup.mg54')}</span>
 			` : html``}
 			<br>
 			<hr>
 			<div style="padding-top: 20px;">
 				<vaadin-button theme="primary medium" @click=${() => this.openInviteMemberToGroupDialog()}>
-					${translate("managegroup.mg2")}
+					${translate('managegroup.mg2')}
 				</vaadin-button>
 			</div>
 			<mwc-dialog id="inviteMemberToGroupDialog" scrimClickAction="" escapeKeyAction="">
 				<div class="manage-group-dialog">
 					<div style="text-align: center;">
-						<h2>${translate("managegroup.mg2")}</h2>
+						<h2>${translate('managegroup.mg2')}</h2>
 						<hr />
 						<br>
 					</div>
@@ -1301,29 +1301,29 @@ class GroupManagement extends LitElement {
 							required
 							outlined
 							id="toInviteMemberToGroup"
-							label="${translate("managegroup.mg37")}"
+							label="${translate('managegroup.mg37')}"
 							type="text"
 							value="${this.toInviteMemberToGroup}"
 						>
 						</mwc-textfield>
 					</p>
-					${translate("managegroup.mg38")}
-					<select required validationMessage="${translate("grouppage.gchange14")}" id="inviteMemberTime" label="Expiry Time">
-						<option value="reject" selected>${translate("grouppage.gchange15")}</option>
-						<option value="10800">3 ${translate("grouppage.gchange24")}</option>
-						<option value="21600">6 ${translate("grouppage.gchange24")}</option>
-						<option value="43200">12 ${translate("grouppage.gchange24")}</option>
-						<option value="86400">1 ${translate("grouppage.gchange25")}</option>
-						<option value="259200">3 ${translate("grouppage.gchange26")}</option>
-						<option value="432000">5 ${translate("grouppage.gchange26")}</option>
-						<option value="604800">7 ${translate("grouppage.gchange26")}</option>
-						<option value="864000">10 ${translate("grouppage.gchange26")}</option>
-						<option value="1296000">15 ${translate("grouppage.gchange26")}</option>
-						<option value="2592000">30 ${translate("grouppage.gchange26")}</option>
+					${translate('managegroup.mg38')}
+					<select required validationMessage="${translate('grouppage.gchange14')}" id="inviteMemberTime" label="Expiry Time">
+						<option value="reject" selected>${translate('grouppage.gchange15')}</option>
+						<option value="10800">3 ${translate('grouppage.gchange24')}</option>
+						<option value="21600">6 ${translate('grouppage.gchange24')}</option>
+						<option value="43200">12 ${translate('grouppage.gchange24')}</option>
+						<option value="86400">1 ${translate('grouppage.gchange25')}</option>
+						<option value="259200">3 ${translate('grouppage.gchange26')}</option>
+						<option value="432000">5 ${translate('grouppage.gchange26')}</option>
+						<option value="604800">7 ${translate('grouppage.gchange26')}</option>
+						<option value="864000">10 ${translate('grouppage.gchange26')}</option>
+						<option value="1296000">15 ${translate('grouppage.gchange26')}</option>
+						<option value="2592000">30 ${translate('grouppage.gchange26')}</option>
 					</select>
 					</p>
 					<div style="margin-bottom: 10px;">
-						<p style="margin-bottom: 0;">${translate("walletpage.wchange21")} <span style="font-weight: bold;">${this.inviteGroupMemberFee} QORT<span></p>
+						<p style="margin-bottom: 0;">${translate('walletpage.wchange21')} <span style="font-weight: bold;">${this.inviteGroupMemberFee} QORT<span></p>
 						<br>
 					</div>
 					${this.renderClearSuccess()}
@@ -1335,7 +1335,7 @@ class GroupManagement extends LitElement {
 						<div>
 							<vaadin-button ?disabled="${this.btnDisable}" theme="primary medium" style="width: 100%;" @click=${() => this.openMemberInfo(this.manageGroupId)}>
 								<vaadin-icon icon="vaadin:user-check" slot="prefix"></vaadin-icon>
-								${translate("managegroup.mg2")}
+								${translate('managegroup.mg2')}
 							</vaadin-button>
 						</div>
 					</div>
@@ -1345,13 +1345,13 @@ class GroupManagement extends LitElement {
 					@click="${() => this.closeInviteMemberToGroupDialog()}"
 					class="red"
 				>
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
 			<mwc-dialog id="cancelInviteMemberToGroupDialog" scrimClickAction="" escapeKeyAction="">
 				<div class="manage-group-dialog">
 					<div style="text-align: center;">
-						<h2>${translate("managegroup.mg47")}</h2>
+						<h2>${translate('managegroup.mg47')}</h2>
 						<hr />
 						<br>
 					</div>
@@ -1361,7 +1361,7 @@ class GroupManagement extends LitElement {
 							readOnly
 							outlined
 							id="toCancelInviteMemberName"
-							label="${translate("managegroup.mg18")}"
+							label="${translate('managegroup.mg18')}"
 							type="text"
 							value="${this.toCancelInviteMemberName}"
 						>
@@ -1374,14 +1374,14 @@ class GroupManagement extends LitElement {
 							readOnly
 							outlined
 							id="toCancelInviteMemberAddress"
-							label="${translate("managegroup.mg19")}"
+							label="${translate('managegroup.mg19')}"
 							type="text"
 							value="${this.toCancelInviteMemberAddress}"
 						>
 						</mwc-textfield>
 					</p>
 					<div style="margin-bottom: 10px;">
-						<p style="margin-bottom: 0;">${translate("walletpage.wchange21")} <span style="font-weight: bold;">${this.cancelInviteGroupMemberFee} QORT<span></p>
+						<p style="margin-bottom: 0;">${translate('walletpage.wchange21')} <span style="font-weight: bold;">${this.cancelInviteGroupMemberFee} QORT<span></p>
 						<br>
 					</div>
 					${this.renderClearSuccess()}
@@ -1393,7 +1393,7 @@ class GroupManagement extends LitElement {
 						<div>
 							<vaadin-button ?disabled="${this.btnDisable}" theme="primary medium" style="width: 100%;" @click=${() => this.cancelInviteGroupMember(this.manageGroupId)}>
 								<vaadin-icon icon="vaadin:exit" slot="prefix"></vaadin-icon>
-								${translate("managegroup.mg47")}
+								${translate('managegroup.mg47')}
 							</vaadin-button>
 						</div>
 					</div>
@@ -1403,93 +1403,93 @@ class GroupManagement extends LitElement {
 					@click="${() => this.closeCancelInviteMemberToGroupDialog()}"
 					class="red"
 				>
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
 			<mwc-dialog id="userErrorDialog" scrimClickAction="" escapeKeyAction="">
 				<div class="card-container">
 					<mwc-icon class="error-icon">warning</mwc-icon>
-					<h2>${translate("explorerpage.exp4")}</h2>
-					<h4>${translate("explorerpage.exp5")}</h4>
+					<h2>${translate('explorerpage.exp4')}</h2>
+					<h4>${translate('explorerpage.exp5')}</h4>
 				</div>
 				<mwc-button
 					slot="primaryAction"
 					@click=${() => this.closeErrorDialog()}
 					class="red"
 				>
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
 			<mwc-dialog id="fieldErrorDialog" scrimClickAction="" escapeKeyAction="">
 				<div>
 					<mwc-icon class="error-icon">warning</mwc-icon>
-					<h2>${translate("managegroup.mg39")}</h2>
-					<h4>${translate("walletpage.wchange44")}</h4>
+					<h2>${translate('managegroup.mg39')}</h2>
+					<h4>${translate('walletpage.wchange44')}</h4>
 				</div>
 				<mwc-button
 					slot="primaryAction"
 					@click=${() => this.closeFieldErrorDialog()}
 					class="red"
 				>
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
 			<mwc-dialog id="successJoinDialog" scrimClickAction="" escapeKeyAction="">
 				<div class="card-container">
 					<mwc-icon class="success-icon">group_add</mwc-icon>
-					<h2>${translate("managegroup.mg57")}</h2>
-					<h4>${translate("walletpage.wchange43")}</h4>
+					<h2>${translate('managegroup.mg57')}</h2>
+					<h4>${translate('walletpage.wchange43')}</h4>
 				</div>
 				<mwc-button
 					slot="primaryAction"
 					@click=${() => this.closeSuccessJoinDialog()}
 					class="red"
 				>
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
 			<mwc-dialog id="errorJoinDialog" scrimClickAction="" escapeKeyAction="">
 				<div class="card-container">
 					<mwc-icon class="error-icon">warning</mwc-icon>
-					<h2>${translate("managegroup.mg58")}</h2>
+					<h2>${translate('managegroup.mg58')}</h2>
 					<h4>${this.errorMessage}</h4>
-					<h4>${translate("walletpage.wchange44")}</h4>
+					<h4>${translate('walletpage.wchange44')}</h4>
 				</div>
 				<mwc-button
 					slot="primaryAction"
 					@click=${() => this.closeErrorJoinDialog()}
 					class="red"
 				>
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
 			<mwc-dialog id="cancelSuccessJoinDialog" scrimClickAction="" escapeKeyAction="">
 				<div class="card-container">
 					<mwc-icon class="success-icon">person_remove</mwc-icon>
-					<h2>${translate("managegroup.mg59")}</h2>
-					<h4>${translate("walletpage.wchange43")}</h4>
+					<h2>${translate('managegroup.mg59')}</h2>
+					<h4>${translate('walletpage.wchange43')}</h4>
 				</div>
 				<mwc-button
 					slot="primaryAction"
 					@click=${() => this.closeCancelSuccessJoinDialog()}
 					class="red"
 				>
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
 			<mwc-dialog id="cancelErrorJoinDialog" scrimClickAction="" escapeKeyAction="">
 				<div class="card-container">
 					<mwc-icon class="error-icon">warning</mwc-icon>
-					<h2>${translate("managegroup.mg58")}</h2>
+					<h2>${translate('managegroup.mg58')}</h2>
 					<h4>${this.errorMessage}</h4>
-					<h4>${translate("walletpage.wchange44")}</h4>
+					<h4>${translate('walletpage.wchange44')}</h4>
 				</div>
 				<mwc-button
 					slot="primaryAction"
 					@click=${() => this.closeCancelErrorJoinDialog()}
 					class="red"
 				>
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
 		`
@@ -1501,53 +1501,53 @@ class GroupManagement extends LitElement {
 				<vaadin-grid-column
 					width="6rem"
 					flex-grow="0"
-					header="${translate("websitespage.schange5")}"
+					header="${translate('websitespage.schange5')}"
 					.renderer=${(root, column, data) => {
-						render(html`${this.renderAvatar(data.item)}`, root)
-					}}
+		render(html`${this.renderAvatar(data.item)}`, root)
+	}}
 				></vaadin-grid-column>
 				<vaadin-grid-column
 					auto-width
 					resizable
-					header="${translate("puzzlepage.pchange4")}"
+					header="${translate('puzzlepage.pchange4')}"
 					.renderer=${(root, column, data) => {
-						render(html`${data.item.name}`, root)
-					}}
+		render(html`${data.item.name}`, root)
+	}}
 				></vaadin-grid-column>
 				<vaadin-grid-column
 					auto-width
 					resizable
-					header="${translate("login.address")}"
+					header="${translate('login.address')}"
 					.renderer=${(root, column, data) => {
-						render(html`${data.item.owner}`, root)
-					}}
+		render(html`${data.item.owner}`, root)
+	}}
 				></vaadin-grid-column>
 				<vaadin-grid-column
 					auto-width
 					resizable
-					header="${translate("managegroup.mg9")}"
+					header="${translate('managegroup.mg9')}"
 					.renderer=${(root, column, data) => {
-						const dateString = new Date(data.item.joined).toLocaleDateString()
-						render(html`${dateString}`, root)
-					}}
+		const dateString = new Date(data.item.joined).toLocaleDateString()
+		render(html`${dateString}`, root)
+	}}
 				></vaadin-grid-column>
 				<vaadin-grid-column
 					width="9rem"
 					flex-grow="0"
-					header="${translate("websitespage.schange8")}"
+					header="${translate('websitespage.schange8')}"
 					.renderer=${(root, column, data) => {
-						if (this.theGroupOwner === data.item.owner) {
-							render(html``, root)
-						} else {
-							render(html`${this.renderKickAdminButton(data.item.owner)}`, root)
-						}
-					}}
+		if (this.theGroupOwner === data.item.owner) {
+			render(html``, root)
+		} else {
+			render(html`${this.renderKickAdminButton(data.item.owner)}`, root)
+		}
+	}}
 				></vaadin-grid-column>
 			</vaadin-grid>
 			<mwc-dialog id="removeGroupAdminDialog" scrimClickAction="" escapeKeyAction="">
 				<div class="manage-group-dialog">
 					<div style="text-align: center;">
-						<h2>${translate("managegroup.mg13")}</h2>
+						<h2>${translate('managegroup.mg13')}</h2>
 						<hr />
 						<br>
 					</div>
@@ -1558,14 +1558,14 @@ class GroupManagement extends LitElement {
 							readOnly
 							outlined
 							id="removeGroupAdminAddress"
-							label="${translate("managegroup.mg14")}"
+							label="${translate('managegroup.mg14')}"
 							type="text"
 							value="${this.removeGroupAdminAddress}"
 						>
 						</mwc-textfield>
 					</p>
 					<div style="margin-bottom: 10px;">
-						<p style="margin-bottom: 0;">${translate("walletpage.wchange21")} <span style="font-weight: bold;">${this.removeGroupAdminFee} QORT<span></p>
+						<p style="margin-bottom: 0;">${translate('walletpage.wchange21')} <span style="font-weight: bold;">${this.removeGroupAdminFee} QORT<span></p>
 						<br>
 					</div>
 					${this.renderClearSuccess()}
@@ -1577,7 +1577,7 @@ class GroupManagement extends LitElement {
 						<div>
 							<vaadin-button ?disabled="${this.btnDisable}" theme="primary medium" style="width: 100%;" @click=${() => this.removeGroupAdmin(this.manageGroupId)}>
 								<vaadin-icon icon="vaadin:minus-circle-o" slot="prefix"></vaadin-icon>
-								${translate("managegroup.mg13")}
+								${translate('managegroup.mg13')}
 							</vaadin-button>
 						</div>
 					</div>
@@ -1587,7 +1587,7 @@ class GroupManagement extends LitElement {
 					@click="${() => this.closeRemoveGroupAdminDialog()}"
 					class="red"
 				>
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
 		`
@@ -1597,7 +1597,7 @@ class GroupManagement extends LitElement {
 		return html`
 			<div style="padding-top: 20px;">
 				<vaadin-button theme="primary medium" @click=${() => this.openUpdateGroupDialog()}>
-					${translate("managegroup.mg4")}
+					${translate('managegroup.mg4')}
 				</vaadin-button>
 				&nbsp;&nbsp;&nbsp;
 				${this.haveName ? this.renderAvatarButton() : ''}
@@ -1605,7 +1605,7 @@ class GroupManagement extends LitElement {
 			<!-- Update Group Dialog -->
 			<mwc-dialog id="updateGroupDialog" scrimClickAction="${this.isLoading ? '' : 'close'}">
 				<div style="text-align:center">
-					<h1>${translate("managegroup.mg4")}</h1>
+					<h1>${translate('managegroup.mg4')}</h1>
 					<hr>
 				</div>
 				<p>
@@ -1616,7 +1616,7 @@ class GroupManagement extends LitElement {
 							readonly
 							style="width: 50%; --vaadin-input-field-border-width: 1px; --vaadin-input-field-border-color: var(--border3);"
 							id="newGroupNameInput"
-							label="${translate("grouppage.gchange4")}"
+							label="${translate('grouppage.gchange4')}"
 							value="${this.manageGroupName}"
 						>
 						</vaadin-text-field>
@@ -1627,7 +1627,7 @@ class GroupManagement extends LitElement {
 							readonly
 							style="width: 50%; --vaadin-input-field-border-width: 1px; --vaadin-input-field-border-color: var(--border3);"
 							id="newGroupIdInput"
-							label="${translate("managegroup.mg8")}"
+							label="${translate('managegroup.mg8')}"
 							value="${this.manageGroupId}"
 						>
 						</vaadin-text-field>
@@ -1641,9 +1641,9 @@ class GroupManagement extends LitElement {
 						style="width: 100%; --vaadin-input-field-border-width: 1px; --vaadin-input-field-border-color: var(--border3);"
 						maxlength="34"
 						id="newGroupOwnerInput"
-						label="${translate("grouppage.gchange64")}"
+						label="${translate('grouppage.gchange64')}"
 						value="${this.selectedAddress.address}"
-						helper-text="${translate("grouppage.gchange65")}"
+						helper-text="${translate('grouppage.gchange65')}"
 						allowed-char-pattern="[0-9a-zA-Z]"
 						clear-button-visible
 					>
@@ -1657,27 +1657,27 @@ class GroupManagement extends LitElement {
 						style="width: 100%; --vaadin-input-field-border-width: 1px; --vaadin-input-field-border-color: var(--border3);"
 						maxlength="128"
 						id="newGroupDescInput"
-						label="${translate("grouppage.gchange5")}"
+						label="${translate('grouppage.gchange5')}"
 						value="${this.manageGroupDescription}"
-						helper-text="${translate("managegroup.mg52")}"
+						helper-text="${translate('managegroup.mg52')}"
 						allowed-char-pattern="[0-9a-zA-Z'() #.:,_<>+\u002D\u3000-\u303F\u3400-\u4DBF\u4E00-\u9FFF\u3040-\u309F\u30A0-\u30FF\u0400-\u04FF\u0900-\u097F\u2000-\u3300\u1F600-\u1FFFF]"
 						clear-button-visible
 					>
 					</vaadin-text-field>
 				<p>
-					<div style="text-align: left;"><h6>${translate("grouppage.gchange13")}:</h6></div>
-					<select required validationMessage="${translate("grouppage.gchange14")}" id="newGroupTypeInput" label="Group Type">
-						<option value="reject" selected>${translate("grouppage.gchange15")}</option>
-						<option value="1">${translate("grouppage.gchange16")}</option>
-						<option value="0">${translate("grouppage.gchange17")}</option>
+					<div style="text-align: left;"><h6>${translate('grouppage.gchange13')}:</h6></div>
+					<select required validationMessage="${translate('grouppage.gchange14')}" id="newGroupTypeInput" label="Group Type">
+						<option value="reject" selected>${translate('grouppage.gchange15')}</option>
+						<option value="1">${translate('grouppage.gchange16')}</option>
+						<option value="0">${translate('grouppage.gchange17')}</option>
 					</select>
 				</p>
 				<p>
-					<div style="text-align: left;"><h6>${translate("grouppage.gchange18")}</h6></div>
-					<select required validationMessage="${translate("grouppage.gchange14")}" id="newGroupApprovalInput" label="Group Type">
-						<option value="reject" selected>${translate("grouppage.gchange15")}</option>
-						<option value="0">${translate("grouppage.gchange19")}</option>
-						<option value="1">${translate("grouppage.gchange20")}</option>
+					<div style="text-align: left;"><h6>${translate('grouppage.gchange18')}</h6></div>
+					<select required validationMessage="${translate('grouppage.gchange14')}" id="newGroupApprovalInput" label="Group Type">
+						<option value="reject" selected>${translate('grouppage.gchange15')}</option>
+						<option value="0">${translate('grouppage.gchange19')}</option>
+						<option value="1">${translate('grouppage.gchange20')}</option>
 						<option value="20">20%</option>
 						<option value="40">40%</option>
 						<option value="60">60%</option>
@@ -1686,44 +1686,44 @@ class GroupManagement extends LitElement {
 					</select>
 				</p>
 				<p>
-					<div style="text-align: left;"><h6>${translate("grouppage.gchange21")}</h6></div>
-					<select required validationMessage="${translate("grouppage.gchange14")}" id="newGroupMinDelayInput" label="Group Type">
-						<option value="reject" selected>${translate("grouppage.gchange15")}</option>
-						<option value="5">5 ${translate("grouppage.gchange22")}</option>
-						<option value="10">10 ${translate("grouppage.gchange22")}</option>
-						<option value="30">30 ${translate("grouppage.gchange22")}</option>
-						<option value="60">1 ${translate("grouppage.gchange23")}</option>
-						<option value="180">3 ${translate("grouppage.gchange24")}</option>
-						<option value="300">5 ${translate("grouppage.gchange24")}</option>
-						<option value="420">7 ${translate("grouppage.gchange24")}</option>
-						<option value="720">12 ${translate("grouppage.gchange24")}</option>
-						<option value="1440">1 ${translate("grouppage.gchange25")}</option>
-						<option value="4320">3 ${translate("grouppage.gchange26")}</option>
-						<option value="7200">5 ${translate("grouppage.gchange26")}</option>
-						<option value="10080">7 ${translate("grouppage.gchange26")}</option>
+					<div style="text-align: left;"><h6>${translate('grouppage.gchange21')}</h6></div>
+					<select required validationMessage="${translate('grouppage.gchange14')}" id="newGroupMinDelayInput" label="Group Type">
+						<option value="reject" selected>${translate('grouppage.gchange15')}</option>
+						<option value="5">5 ${translate('grouppage.gchange22')}</option>
+						<option value="10">10 ${translate('grouppage.gchange22')}</option>
+						<option value="30">30 ${translate('grouppage.gchange22')}</option>
+						<option value="60">1 ${translate('grouppage.gchange23')}</option>
+						<option value="180">3 ${translate('grouppage.gchange24')}</option>
+						<option value="300">5 ${translate('grouppage.gchange24')}</option>
+						<option value="420">7 ${translate('grouppage.gchange24')}</option>
+						<option value="720">12 ${translate('grouppage.gchange24')}</option>
+						<option value="1440">1 ${translate('grouppage.gchange25')}</option>
+						<option value="4320">3 ${translate('grouppage.gchange26')}</option>
+						<option value="7200">5 ${translate('grouppage.gchange26')}</option>
+						<option value="10080">7 ${translate('grouppage.gchange26')}</option>
 					</select>
 				</p>
 				<p>
-					<div style="text-align: left;"><h6>${translate("grouppage.gchange27")}</h6></div>
-					<select required validationMessage="${translate("grouppage.gchange14")}" id="newGroupMaxDelayInput" label="Group Type">
-						<option value="reject" selected>${translate("grouppage.gchange15")}</option>
-						<option value="60">1 ${translate("grouppage.gchange23")}</option>
-						<option value="180">3 ${translate("grouppage.gchange24")}</option>
-						<option value="300">5 ${translate("grouppage.gchange24")}</option>
-						<option value="420">7 ${translate("grouppage.gchange24")}</option>
-						<option value="720">12 ${translate("grouppage.gchange24")}</option>
-						<option value="1440">1 ${translate("grouppage.gchange25")}</option>
-						<option value="4320">3 ${translate("grouppage.gchange26")}</option>
-						<option value="7200">5 ${translate("grouppage.gchange26")}</option>
-						<option value="10080">7 ${translate("grouppage.gchange26")}</option>
-						<option value="14400">10 ${translate("grouppage.gchange26")}</option>
-						<option value="21600">15 ${translate("grouppage.gchange26")}</option>
+					<div style="text-align: left;"><h6>${translate('grouppage.gchange27')}</h6></div>
+					<select required validationMessage="${translate('grouppage.gchange14')}" id="newGroupMaxDelayInput" label="Group Type">
+						<option value="reject" selected>${translate('grouppage.gchange15')}</option>
+						<option value="60">1 ${translate('grouppage.gchange23')}</option>
+						<option value="180">3 ${translate('grouppage.gchange24')}</option>
+						<option value="300">5 ${translate('grouppage.gchange24')}</option>
+						<option value="420">7 ${translate('grouppage.gchange24')}</option>
+						<option value="720">12 ${translate('grouppage.gchange24')}</option>
+						<option value="1440">1 ${translate('grouppage.gchange25')}</option>
+						<option value="4320">3 ${translate('grouppage.gchange26')}</option>
+						<option value="7200">5 ${translate('grouppage.gchange26')}</option>
+						<option value="10080">7 ${translate('grouppage.gchange26')}</option>
+						<option value="14400">10 ${translate('grouppage.gchange26')}</option>
+						<option value="21600">15 ${translate('grouppage.gchange26')}</option>
 					</select>
 				</p>
 				<div style="text-align:right; height:36px;">
 					<span ?hidden="${!this.isLoading}">
 						<!-- loading message -->
-						${translate("grouppage.gchange28")} &nbsp;
+						${translate('grouppage.gchange28')} &nbsp;
 						<paper-spinner-lite
 							style="margin-top:12px;"
 							?active="${this.isLoading}"
@@ -1735,7 +1735,7 @@ class GroupManagement extends LitElement {
 						${this.message}
 					</span><br>
 					<span>
-						<b>${translate("walletpage.wchange21")} ${this.updateGroupFee} QORT.</b>
+						<b>${translate('walletpage.wchange21')} ${this.updateGroupFee} QORT.</b>
 					</span>
 				</div>
 				<mwc-button
@@ -1743,7 +1743,7 @@ class GroupManagement extends LitElement {
 					slot="primaryAction"
 					@click=${this.updateGroup}
 				>
-					${translate("managegroup.mg4")}
+					${translate('managegroup.mg4')}
 				</mwc-button>
 				<mwc-button
 					?disabled="${this.isLoading}"
@@ -1751,7 +1751,7 @@ class GroupManagement extends LitElement {
 					class="red"
 					@click=${this.closeUpdateGroupDialog}
 				>
-					${translate("general.close")}
+					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
 		`
@@ -1823,11 +1823,11 @@ class GroupManagement extends LitElement {
 	}
 
 	renderErr10Text() {
-		return html`${translate("grouppage.gchange66")}`
+		return html`${translate('grouppage.gchange66')}`
 	}
 
 	renderErr11Text() {
-		return html`${translate("grouppage.gchange67")}`
+		return html`${translate('grouppage.gchange67')}`
 	}
 
 	renderSuccessText() {
@@ -1843,11 +1843,11 @@ class GroupManagement extends LitElement {
 				<div class="successBox">
 					<span style="color: green; float: left; padding-top: 4px; padding-left: 7px;">${this.successMessage}</span>
 					<span style="padding-top: 4px: padding-right: 7px; float: right;">
-						<mwc-icon-button class="btn-clear-success" title="${translate("general.close")}" icon="close" @click="${() => this.successMessage = ''}"></mwc-icon-button>
+						<mwc-icon-button class="btn-clear-success" title="${translate('general.close')}" icon="close" @click="${() => this.successMessage = ''}"></mwc-icon-button>
 					</span>
 				</div>
 				<div style="margin-bottom: 15px;">
-					<p style="margin-bottom: 0;">${translate("walletpage.wchange43")}</p>
+					<p style="margin-bottom: 0;">${translate('walletpage.wchange43')}</p>
 				</div>
 			`
 		}
@@ -1862,11 +1862,11 @@ class GroupManagement extends LitElement {
 				<div class="errorBox">
 					<span style="color: red; float: left; padding-top: 4px; padding-left: 7px;">${this.errorMessage}</span>
 					<span style="padding-top: 4px: padding-right: 7px; float: right;">
-						<mwc-icon-button class="btn-clear-error" title="${translate("general.close")}" icon="close" @click="${() => this.errorMessage = ''}"></mwc-icon-button>
+						<mwc-icon-button class="btn-clear-error" title="${translate('general.close')}" icon="close" @click="${() => this.errorMessage = ''}"></mwc-icon-button>
 					</span>
 				</div>
 				<div style="margin-bottom: 15px;">
-					<p style="margin-bottom: 0;">${translate("walletpage.wchange44")}</p>
+					<p style="margin-bottom: 0;">${translate('walletpage.wchange44')}</p>
 				</div>
 			`
 		}
@@ -1929,7 +1929,7 @@ class GroupManagement extends LitElement {
 
 		return html`
 			<vaadin-button theme="primary medium" @click=${() => this.uploadAvatar(nameForAvatar, indentifierForAvatar)}>
-				${translate("grouppage.gchange68")}
+				${translate('grouppage.gchange68')}
 			</vaadin-button>
 		`
 	}
@@ -1963,7 +1963,7 @@ class GroupManagement extends LitElement {
 
 	renderBanButton(groupObj) {
 		if (this.theGroupOwner === this.selectedAddress.address) {
-			return html`<mwc-button class="red" @click=${() => this.openCreateBanMemberDialog(groupObj)}><mwc-icon>hardware</mwc-icon>&nbsp;${translate("managegroup.mg6")}</mwc-button>`
+			return html`<mwc-button class="red" @click=${() => this.openCreateBanMemberDialog(groupObj)}><mwc-icon>hardware</mwc-icon>&nbsp;${translate('managegroup.mg6')}</mwc-button>`
 		} else {
 			return html``
 		}
@@ -1995,7 +1995,7 @@ class GroupManagement extends LitElement {
 
 	renderCancelBanButton(groupObj) {
 		if (this.theGroupOwner === this.selectedAddress.address) {
-			return html`<mwc-button class="warning" title="${translate("managegroup.mg26")}" @click=${() => this.openCancelBanMemberDialog(groupObj)}><mwc-icon>person_remove</mwc-icon>&nbsp;&nbsp;${translate("managegroup.mg26")}</mwc-button>`
+			return html`<mwc-button class="warning" title="${translate('managegroup.mg26')}" @click=${() => this.openCancelBanMemberDialog(groupObj)}><mwc-icon>person_remove</mwc-icon>&nbsp;&nbsp;${translate('managegroup.mg26')}</mwc-button>`
 		} else {
 			return html``
 		}
@@ -2021,7 +2021,7 @@ class GroupManagement extends LitElement {
 
 	renderKickGroupMemberButton(groupObj) {
 		if (this.theGroupOwner === this.selectedAddress.address) {
-			return html`<mwc-button class="warning" title="${translate("managegroup.mg31")}" @click=${() => this.openKickGroupMemberDialog(groupObj)}><mwc-icon>exit_to_app</mwc-icon>&nbsp;${translate("managegroup.mg7")}</mwc-button>`
+			return html`<mwc-button class="warning" title="${translate('managegroup.mg31')}" @click=${() => this.openKickGroupMemberDialog(groupObj)}><mwc-icon>exit_to_app</mwc-icon>&nbsp;${translate('managegroup.mg7')}</mwc-button>`
 		} else {
 			return html``
 		}
@@ -2050,7 +2050,7 @@ class GroupManagement extends LitElement {
 
 	renderMakeAdminButton(groupObj) {
 		if (this.theGroupOwner === this.selectedAddress.address) {
-			return html`<mwc-button class="green" title="${translate("managegroup.mg10")}" @click=${() => this.openAddGroupAdminDialog(groupObj)}><mwc-icon>queue</mwc-icon>&nbsp;${translate("grouppage.gchange52")}</mwc-button>`
+			return html`<mwc-button class="green" title="${translate('managegroup.mg10')}" @click=${() => this.openAddGroupAdminDialog(groupObj)}><mwc-icon>queue</mwc-icon>&nbsp;${translate('grouppage.gchange52')}</mwc-button>`
 		} else {
 			return html``
 		}
@@ -2072,7 +2072,7 @@ class GroupManagement extends LitElement {
 
 	renderKickAdminButton(groupObj) {
 		if (this.theGroupOwner === this.selectedAddress.address) {
-			return html`<mwc-button class="red" title="${translate("managegroup.mg13")}" @click=${() => this.openRemoveGroupAdminDialog(groupObj)}><mwc-icon>exit_to_app</mwc-icon>&nbsp;${translate("rewardsharepage.rchange17")}</mwc-button>`
+			return html`<mwc-button class="red" title="${translate('managegroup.mg13')}" @click=${() => this.openRemoveGroupAdminDialog(groupObj)}><mwc-icon>exit_to_app</mwc-icon>&nbsp;${translate('rewardsharepage.rchange17')}</mwc-button>`
 		} else {
 			return html``
 		}
@@ -2112,7 +2112,7 @@ class GroupManagement extends LitElement {
 	}
 
 	renderCancelInviteButton(groupObj) {
-		return html`<mwc-button class="red" title="${translate("managegroup.mg46")}" @click=${() => this.openCancelInviteMemberToGroupDialog(groupObj)}><mwc-icon>cancel_schedule_send</mwc-icon>&nbsp;${translate("apipage.achange4")}</mwc-button>`
+		return html`<mwc-button class="red" title="${translate('managegroup.mg46')}" @click=${() => this.openCancelInviteMemberToGroupDialog(groupObj)}><mwc-icon>cancel_schedule_send</mwc-icon>&nbsp;${translate('apipage.achange4')}</mwc-button>`
 	}
 
 	openCancelInviteMemberToGroupDialog(groupObj) {
@@ -2155,11 +2155,11 @@ class GroupManagement extends LitElement {
 	}
 
 	renderConfirmRequestButton(joinObj) {
-		return html`<mwc-button class="green" @click=${() => this.createAcceptJoinGroupMember(joinObj)}><mwc-icon>add_task</mwc-icon>&nbsp;${translate("transpage.tchange3")}</mwc-button>`
+		return html`<mwc-button class="green" @click=${() => this.createAcceptJoinGroupMember(joinObj)}><mwc-icon>add_task</mwc-icon>&nbsp;${translate('transpage.tchange3')}</mwc-button>`
 	}
 
 	renderDeclineRequestButton(joinObj) {
-		return html`<mwc-button class="red" @click=${() => this.kickJoinGroupMember(joinObj)}><mwc-icon>cancel</mwc-icon>&nbsp;${translate("transpage.tchange2")}</mwc-button>`
+		return html`<mwc-button class="red" @click=${() => this.kickJoinGroupMember(joinObj)}><mwc-icon>cancel</mwc-icon>&nbsp;${translate('transpage.tchange2')}</mwc-button>`
 	}
 
 	closeSuccessJoinDialog() {
@@ -2433,7 +2433,7 @@ class GroupManagement extends LitElement {
 								obj.push(objToAdd)
 							})
 						} else {
-								const noName = translate('general.noRegisteredName')
+							const noName = translate('general.noRegisteredName')
 							const noNameObj = {
 								name: noName,
 								owner: a.member,
@@ -2459,7 +2459,7 @@ class GroupManagement extends LitElement {
 								obj1.push(obj1ToAdd)
 							})
 						} else {
-								const noName = translate('general.noRegisteredName')
+							const noName = translate('general.noRegisteredName')
 							const noNameObj1 = {
 								name: noName,
 								owner: a.member,
@@ -2750,21 +2750,21 @@ class GroupManagement extends LitElement {
 
 	renderManageButton(groupObj) {
 		if (groupObj.owner === this.selectedAddress.address) {
-			return html`<mwc-button class="warning" @click=${() => this.manageGroupOwner(groupObj)}><mwc-icon>create</mwc-icon>&nbsp;${translate("grouppage.gchange40")}</mwc-button>`
+			return html`<mwc-button class="warning" @click=${() => this.manageGroupOwner(groupObj)}><mwc-icon>create</mwc-icon>&nbsp;${translate('grouppage.gchange40')}</mwc-button>`
 		} else if (groupObj.isAdmin === true) {
 			return html`
-				<mwc-button class="warning" @click=${() => this.manageGroupAdmin(groupObj)}><mwc-icon>create</mwc-icon>&nbsp;${translate("grouppage.gchange40")}</mwc-button>
+				<mwc-button class="warning" @click=${() => this.manageGroupAdmin(groupObj)}><mwc-icon>create</mwc-icon>&nbsp;${translate('grouppage.gchange40')}</mwc-button>
 				<br>
-				<mwc-button @click=${() => this.openLeaveGroup(groupObj)}><mwc-icon>exit_to_app</mwc-icon>&nbsp;${translate("grouppage.gchange50")}</mwc-button>
+				<mwc-button @click=${() => this.openLeaveGroup(groupObj)}><mwc-icon>exit_to_app</mwc-icon>&nbsp;${translate('grouppage.gchange50')}</mwc-button>
 			`
 		} else {
-			return html`<mwc-button @click=${() => this.openLeaveGroup(groupObj)}><mwc-icon>exit_to_app</mwc-icon>&nbsp;${translate("grouppage.gchange50")}</mwc-button>`
+			return html`<mwc-button @click=${() => this.openLeaveGroup(groupObj)}><mwc-icon>exit_to_app</mwc-icon>&nbsp;${translate('grouppage.gchange50')}</mwc-button>`
 		}
 	}
 
 	renderDisplayUpdateGroup(owner) {
 		if (owner === this.selectedAddress.address) {
-			return html`<li @click=${() => this.setManageGroupView('group-update')}><a class=${this.selectedView.id === 'group-update' ? 'active' : ''} href="javascript:void(0)">${translate("managegroup.mg4")}</a></li>`
+			return html`<li @click=${() => this.setManageGroupView('group-update')}><a class=${this.selectedView.id === 'group-update' ? 'active' : ''} href="javascript:void(0)">${translate('managegroup.mg4')}</a></li>`
 		} else {
 			return html``
 		}

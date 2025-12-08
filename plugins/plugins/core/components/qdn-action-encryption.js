@@ -42,7 +42,7 @@ export const fileToBase64 = (file) => new Promise(async (resolve, reject) => {
 	reader.onload = () => {
 		const dataUrl = reader.result
 
-		if (typeof dataUrl === "string") {
+		if (typeof dataUrl === 'string') {
 			const base64String = dataUrl.split(',')[1]
 			reader.onload = null
 			reader.onerror = null
@@ -66,7 +66,7 @@ export const fileToBase64 = (file) => new Promise(async (resolve, reject) => {
 export function uint8ArrayToBase64(uint8Array) {
 	const length = uint8Array.length
 	let binaryString = ''
-	const chunkSize = 1024 * 1024; // Process 1MB at a time
+	const chunkSize = 1024 * 1024 // Process 1MB at a time
 	for (let i = 0; i < length; i += chunkSize) {
 		const chunkEnd = Math.min(i + chunkSize, length)
 		const chunk = uint8Array.subarray(i, chunkEnd)
@@ -130,7 +130,7 @@ export const encryptData = ({ data64, recipientPublicKey }) => {
 	try {
 		const privateKey = window.parent.reduxStore.getState().app.selectedAddress.keyPair.privateKey
 		if (!privateKey) {
-			throw new Error("Unable to retrieve keys")
+			throw new Error('Unable to retrieve keys')
 		}
 		const publicKeyUnit8Array = window.parent.Base58.decode(recipientPublicKey)
 		const convertedPrivateKey = ed2curve.convertSecretKey(privateKey)
@@ -141,7 +141,7 @@ export const encryptData = ({ data64, recipientPublicKey }) => {
 		const nonce = new Uint8Array(24)
 		window.crypto.getRandomValues(nonce)
 		const encryptedData = nacl.secretbox(uint8Array, nonce, chatEncryptionSeed)
-		const str = "qortalEncryptedData"
+		const str = 'qortalEncryptedData'
 		const strEncoder = new TextEncoder()
 		const strUint8Array = strEncoder.encode(str)
 		const combinedData = new Uint8Array(strUint8Array.length + nonce.length + encryptedData.length)
@@ -154,7 +154,7 @@ export const encryptData = ({ data64, recipientPublicKey }) => {
 			recipientPublicKey
 		}
 	} catch (error) {
-		throw new Error("Error in encrypting data")
+		throw new Error('Error in encrypting data')
 	}
 }
 
@@ -172,7 +172,7 @@ export const encryptDataGroup = ({ data64, publicKeys }) => {
 	try {
 		const privateKey = window.parent.reduxStore.getState().app.selectedAddress.keyPair.privateKey
 		if (!privateKey) {
-			throw new Error("Unable to retrieve keys")
+			throw new Error('Unable to retrieve keys')
 		}
 		// Generate a random symmetric key for the message.
 		const messageKey = new Uint8Array(32)
@@ -201,7 +201,7 @@ export const encryptDataGroup = ({ data64, publicKeys }) => {
 
 			encryptedKeys.push(encryptedKey)
 		})
-		const str = "qortalGroupEncryptedData"
+		const str = 'qortalGroupEncryptedData'
 		const strEncoder = new TextEncoder()
 		const strUint8Array = strEncoder.encode(str)
 		// Convert sender's public key to Uint8Array and add to the message
@@ -230,7 +230,7 @@ export const encryptDataGroup = ({ data64, publicKeys }) => {
 		combinedData.set(countArray, combinedData.length - 4)
 		return uint8ArrayToBase64(combinedData)
 	} catch (error) {
-		throw new Error("Error in encrypting data")
+		throw new Error('Error in encrypting data')
 	}
 }
 
@@ -288,7 +288,7 @@ export const encryptDataGroupNew = (data64, publicKeys, privateKey, userPublicKe
 			encryptedKeys.push(encryptedKey)
 		})
 
-		const str = "qortalGroupEncryptedData"
+		const str = 'qortalGroupEncryptedData'
 		const strEncoder = new TextEncoder()
 		const strUint8Array = strEncoder.encode(str)
 
@@ -326,7 +326,7 @@ export const encryptDataGroupNew = (data64, publicKeys, privateKey, userPublicKe
 		return uint8ArrayToBase64(combinedData)
 	} catch (error) {
 		console.log('error', error)
-		throw new Error("Error in encrypting data")
+		throw new Error('Error in encrypting data')
 	}
 }
 
@@ -346,7 +346,7 @@ export function uint8ArrayStartsWith(uint8Array, string) {
 
 export function decryptDeprecatedSingle(uint8Array, publicKey) {
 	const combinedData = uint8Array
-	const str = "qortalEncryptedData"
+	const str = 'qortalEncryptedData'
 	const strEncoder = new TextEncoder()
 	const strUint8Array = strEncoder.encode(str)
 	const strData = combinedData.slice(0, strUint8Array.length)
@@ -355,7 +355,7 @@ export function decryptDeprecatedSingle(uint8Array, publicKey) {
 	const privateKey = window.parent.reduxStore.getState().app.selectedAddress.keyPair.privateKey
 	const _publicKey = window.parent.Base58.decode(publicKey)
 	if (!privateKey || !_publicKey) {
-		throw new Error("Unable to retrieve keys")
+		throw new Error('Unable to retrieve keys')
 	}
 	const convertedPrivateKey = ed2curve.convertSecretKey(privateKey)
 	const convertedPublicKey = ed2curve.convertPublicKey(_publicKey)
@@ -364,14 +364,14 @@ export function decryptDeprecatedSingle(uint8Array, publicKey) {
 	const _chatEncryptionSeed = new window.parent.Sha256().process(sharedSecret).finish().result
 	const _decryptedData = nacl.secretbox.open(_encryptedData, nonce, _chatEncryptionSeed)
 	if (!_decryptedData) {
-		throw new Error("Unable to decrypt")
+		throw new Error('Unable to decrypt')
 	}
 	return uint8ArrayToBase64(_decryptedData)
 }
 
 export function decryptGroupData(data64EncryptedData) {
 	const allCombined = base64ToUint8Array(data64EncryptedData)
-	const str = "qortalGroupEncryptedData"
+	const str = 'qortalGroupEncryptedData'
 	const strEncoder = new TextEncoder()
 	const strUint8Array = strEncoder.encode(str)
 	// Extract the nonce
@@ -399,7 +399,7 @@ export function decryptGroupData(data64EncryptedData) {
 	const combinedKeys = allCombined.slice(encryptedDataEndPosition, encryptedDataEndPosition + (count * 48))
 	const privateKey = window.parent.reduxStore.getState().app.selectedAddress.keyPair.privateKey
 	if (!privateKey) {
-		throw new Error("Unable to retrieve keys")
+		throw new Error('Unable to retrieve keys')
 	}
 	const convertedPrivateKey = ed2curve.convertSecretKey(privateKey)
 	const convertedSenderPublicKey = ed2curve.convertPublicKey(senderPublicKey)
@@ -419,12 +419,12 @@ export function decryptGroupData(data64EncryptedData) {
 			}
 		}
 	}
-	throw new Error("Unable to decrypt data")
+	throw new Error('Unable to decrypt data')
 }
 
 export function decryptGroupDataNew(data64EncryptedData, privateKey) {
 	const allCombined = base64ToUint8Array(data64EncryptedData)
-	const str = "qortalGroupEncryptedData"
+	const str = 'qortalGroupEncryptedData'
 	const strEncoder = new TextEncoder()
 	const strUint8Array = strEncoder.encode(str)
 
@@ -466,7 +466,7 @@ export function decryptGroupDataNew(data64EncryptedData, privateKey) {
 	const combinedKeys = allCombined.slice(encryptedDataEndPosition, encryptedDataEndPosition + (count * 48))
 
 	if (!privateKey) {
-		throw new Error("Unable to retrieve keys")
+		throw new Error('Unable to retrieve keys')
 	}
 
 	const decodedPrivateKey = Base58.decode(privateKey)
@@ -478,9 +478,9 @@ export function decryptGroupDataNew(data64EncryptedData, privateKey) {
 
 	for (let i = 0; i < count; i++) {
 		const encryptedKey = combinedKeys.slice(i * 48, (i + 1) * 48)
-		console.log("Encrypted KEY", encryptedKey)
-		console.log("KEY NONCE", keyNonce)
-		console.log("SHARED SECRET", sharedSecret)
+		console.log('Encrypted KEY', encryptedKey)
+		console.log('KEY NONCE', keyNonce)
+		console.log('SHARED SECRET', sharedSecret)
 		// Decrypt the symmetric key.
 		const decryptedKey = nacl.secretbox.open(encryptedKey, keyNonce, sharedSecret)
 	
@@ -496,10 +496,10 @@ export function decryptGroupDataNew(data64EncryptedData, privateKey) {
 		}
 	}
 
-	throw new Error("Unable to decrypt data")
+	throw new Error('Unable to decrypt data')
 }
 
-export const base64ToBlobUrl = (base64, mimeType = "image/png") => {
+export const base64ToBlobUrl = (base64, mimeType = 'image/png') => {
 	const binary = atob(base64)
 	const array = []
 

@@ -69,21 +69,21 @@ class NotificationBellGeneral extends connect(store)(LitElement) {
 							<p style="font-size: 16px; width: 100%; text-align:center;margin-top:20px;">${translate('notifications.notify3')}</p>
 						` : ''}
 						${repeat(
-							this.notifications,
-							(notification) => notification.reference.signature, // key function
-							(notification) => html`
+		this.notifications,
+		(notification) => notification.reference.signature, // key function
+		(notification) => html`
 								<notification-item-tx
 									.changeStatus=${(val1, val2) =>
-										this.changeStatus(val1, val2)}
+		this.changeStatus(val1, val2)}
 										status=${notification.status}
 										timestamp=${notification.timestamp}
 										type=${notification.type}
 										signature=${notification.reference
-										.signature
-									}
+		.signature
+}
 								></notification-item-tx>
 							`
-						)}
+	)}
 					</div>
 				</div>
 			</div>
@@ -154,11 +154,11 @@ class NotificationBellGeneral extends connect(store)(LitElement) {
 	}
 
 	_toggleNotifications() {
-		this.showNotifications = !this.showNotifications;
+		this.showNotifications = !this.showNotifications
 		if (this.showNotifications) {
 			requestAnimationFrame(() => {
-				this.shadowRoot.getElementById('notification-panel').focus();
-			});
+				this.shadowRoot.getElementById('notification-panel').focus()
+			})
 		}
 	}
 }
