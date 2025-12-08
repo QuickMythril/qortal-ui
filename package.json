@@ -15,7 +15,7 @@
 	"main": "electron.js",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/Qortal/qortal-ui.git"
+		"url": "git+https://github.com/Qortal-Community/qortal-ui.git"
 	},
 	"homepage": "https://qortal.org",
 	"author": "QORTAL <admin@qortal.org>",
@@ -59,7 +59,7 @@
 		"electron-log": "5.3.2",
 		"electron-store": "8.2.0",
 		"electron-updater": "6.3.9",
-		"emoji-picker-js": "https://github.com/Qortal/emoji-picker-js",
+		"emoji-picker-js": "https://github.com/Qortal-Community/emoji-picker-js",
 		"extract-zip": "2.0.1",
 		"jssha": "3.3.1",
 		"localforage": "1.10.0",

@@ -135,5 +135,5 @@ directories:
 
 publish:
   provider: github
-  owner: Qortal
+  owner: Qortal-Community
   repo: qortal-ui
