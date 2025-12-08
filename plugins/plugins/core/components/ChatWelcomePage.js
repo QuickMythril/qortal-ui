@@ -62,15 +62,16 @@ class ChatWelcomePage extends LitElement {
 					<hr style="color: #eee; border-radius: 80%; margin-bottom: 2rem;">
 				</div>
 				<div class="sub-main">
-						<div class="center-box">
-							<mwc-icon class="img-icon">chat</mwc-icon><br>
+					<div class="center-box">
+						<div class="user-box">
 							<div class="name-line">${this.displayName}</div>
 							<div class="address-line">${this.myAddress.address || ''}</div>
-							<div class="start-chat" @click="${() => this.setOpenPrivateMessage({name: '', open: true})}">
-								${translate('welcomepage.wcchange2')}
-							</div>
+						</div>
+						<div class="start-chat" @click="${() => this.setOpenPrivateMessage({name: '', open: true})}">
+							${translate('welcomepage.wcchange2')}
 						</div>
 					</div>
+				</div>
 
 				<div class="promotions-section">
 					<div class="promotions-header">

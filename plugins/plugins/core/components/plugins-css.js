@@ -3616,7 +3616,7 @@ export const chatWelcomePageStyles = css`
         display: block;
         overflow: hidden;
         font-size: 40px;
-        color: var(--black);
+        color: var(--mdc-theme-on-background, var(--black));
         font-weight: 400;
         text-align: center;
         white-space: pre-wrap;
@@ -3639,14 +3639,21 @@ export const chatWelcomePageStyles = css`
         transform: none;
         text-align: center;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
-        gap: 0.5rem;
+        gap: 16px;
     }
 
-    .img-icon {
-        font-size: 150px;
-        color: var(--black);
+    .user-box {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .name-line,
+    .address-line {
+        color: var(--mdc-theme-on-background, var(--black));
     }
 
     .start-chat {
