@@ -232,7 +232,8 @@ class ChatWelcomePage extends LitElement {
 			this.promotionsLoading = true
 			this.promotionsError = ''
 			const baseUrl = this.getNodeBaseUrl()
-			const searchUrl = `${baseUrl}/arbitrary/resources/searchsimple?mode=ALL&service=DOCUMENT&identifier=group-promotions-ui24-&limit=100&includemetadata=false&reverse=true&prefix=true`
+			const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000
+			const searchUrl = `${baseUrl}/arbitrary/resources/searchsimple?mode=ALL&service=DOCUMENT&identifier=group-promotions-ui24-&limit=100&includemetadata=false&reverse=true&prefix=true&after=${oneWeekAgo}`
 			const response = await fetch(searchUrl)
 			if (!response.ok) throw new Error('Unable to load promotions')
 			const promos = await response.json()
@@ -259,7 +260,6 @@ class ChatWelcomePage extends LitElement {
 				}
 			}))
 
-			const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000
 			const recent = mapped
 				.filter((item) => item && (item.created || 0) >= oneWeekAgo)
 				.sort((a, b) => (b.created || 0) - (a.created || 0))
