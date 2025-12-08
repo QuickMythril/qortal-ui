@@ -1,4 +1,5 @@
-import { parseQortalEmbedLink, embedToString } from '../qdn-action-constants'
+import { parseQortalEmbedLink, embedToString, extractImageEmbedFromMessage } from '../qdn-action-constants'
+import { processText } from '../chat-link-utils'
 
 describe('parseQortalEmbedLink', () => {
 	test('parses IMAGE embed link with required params', () => {
@@ -57,4 +58,60 @@ describe('embedToString', () => {
 	})
 })
 
-// Future: add integration-like tests for ChatScroller rendering once IMAGE embeds are reintroduced.
+describe('extractImageEmbedFromMessage', () => {
+	test('detects image embed and keeps normal qortal links', () => {
+		const msg = 'Check link qortal://APP/Q-Assets/trade/28 and embed qortal://use-embed/IMAGE?name=alice&service=IMAGE&identifier=abc123'
+		const { cleanText, embedData } = extractImageEmbedFromMessage(msg)
+
+		expect(embedData).toEqual({
+			type: 'IMAGE',
+			name: 'alice',
+			service: 'IMAGE',
+			identifier: 'abc123'
+		})
+		expect(cleanText).toContain('qortal://APP/Q-Assets/trade/28')
+		expect(cleanText).not.toContain('qortal://use-embed/IMAGE')
+	})
+
+	test('returns original text when no valid embed is present', () => {
+		const msg = 'No embeds here, just text'
+		const result = extractImageEmbedFromMessage(msg)
+		expect(result.embedData).toBeNull()
+		expect(result.cleanText).toBe(msg)
+	})
+})
+
+describe('processText', () => {
+	let originalDocument
+	let originalNode
+	let dom
+
+	beforeAll(() => {
+		const { JSDOM } = require('jsdom')
+		dom = new JSDOM('<!doctype html><html><body></body></html>')
+		originalDocument = global.document
+		originalNode = global.Node
+		global.document = dom.window.document
+		global.Node = dom.window.Node
+	})
+
+	afterAll(() => {
+		global.document = originalDocument
+		global.Node = originalNode
+	})
+
+	test('wraps qortal links in clickable spans', () => {
+		const clicks = []
+		const wrapper = processText('See qortal://APP/Q-Assets/trade/28 now', (url) => clicks.push(url))
+		const spans = wrapper.querySelectorAll('span[data-url]')
+
+		expect(spans.length).toBe(1)
+		expect(spans[0].getAttribute('data-url')).toBe('qortal://APP/Q-Assets/trade/28')
+		expect(spans[0].style.textDecoration).toBe('underline')
+		expect(spans[0].style.cursor).toBe('pointer')
+
+		// Simulate click
+		spans[0].dispatchEvent(new dom.window.Event('click'))
+		expect(clicks).toEqual(['qortal://APP/Q-Assets/trade/28'])
+	})
+})

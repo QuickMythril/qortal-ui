@@ -178,6 +178,31 @@ export const parseQortalEmbedLink = (link) => {
 	return { type, ...params }
 }
 
+export const extractImageEmbedFromMessage = (text) => {
+	if (typeof text !== 'string') {
+		return { cleanText: typeof text === 'string' ? text : '', embedData: null }
+	}
+
+	const regexEmbed = /qortal:\/\/use-embed\/[^\s<"]+/i
+	const foundEmbed = text.match(regexEmbed)
+	if (!foundEmbed || !foundEmbed[0]) {
+		return { cleanText: text, embedData: null }
+	}
+
+	const embedLink = foundEmbed[0]
+	try {
+		const parsed = parseQortalEmbedLink(embedLink)
+		if (parsed.type === 'IMAGE' && parsed.name && parsed.service && parsed.identifier) {
+			return {
+				cleanText: text.replace(embedLink, ''),
+				embedData: parsed
+			}
+		}
+	} catch (error) { /* ignore invalid embed */ }
+
+	return { cleanText: text, embedData: null }
+}
+
 export const embedToString = (embed) => {
 	let embedString = ''
 	let embedService = ''

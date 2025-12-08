@@ -15,7 +15,8 @@ import Mention from '@tiptap/extension-mention'
 import ShortUniqueId from 'short-unique-id'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
-import { parseQortalEmbedLink } from './qdn-action-constants'
+import { extractImageEmbedFromMessage } from './qdn-action-constants'
+import { processText } from './chat-link-utils'
 import './ChatModals'
 import './LevelFounder'
 import './NameMenu'
@@ -93,118 +94,6 @@ const extractComponents = async (url) => {
 		return components
 	}
 	return null
-}
-
-function processText(input) {
-	const linkRegex = /(qortal:\/\/\S+)/g
-	// Build a DOM tree that converts qortal:// links into clickable spans with handlers
-	function processNode(node) {
-		if (node.nodeType === Node.TEXT_NODE) {
-			const parts = node.textContent.split(linkRegex)
-			if (parts.length > 0) {
-				const fragment = document.createDocumentFragment()
-				parts.forEach((part) => {
-					if (part.startsWith('qortal://')) {
-						const link = document.createElement('span')
-
-						// Store the URL in a data attribute
-						link.setAttribute('data-url', part)
-						link.textContent = part
-						link.style.color = 'var(--code-block-text-color)'
-						link.style.textDecoration = 'underline'
-						link.style.cursor = 'pointer'
-
-						link.addEventListener('click', async (e) => {
-							e.preventDefault()
-							try {
-								const res = await extractComponents(part)
-
-								if (!res) return
-
-								if (res.type && res.groupid && res.action === 'join') {
-									window.parent.reduxStore.dispatch(
-										window.parent.reduxAction.setNewTab({
-											url: 'group-management',
-											id: uid.rnd(),
-											myPlugObj: {
-												'url': 'group-management',
-												'domain': 'core',
-												'page': 'group-management/index.html',
-												'title': 'Group Management',
-												'icon': 'vaadin:group',
-												'mwcicon': 'group',
-												'pluginNumber': 'plugin-fJZNpyLGTl',
-												'menus': [],
-												'parent': false
-											},
-											openExisting: true
-										})
-									)
-									window.parent.reduxStore.dispatch(
-										window.parent.reduxAction.setSideEffectAction({
-											type: 'openJoinGroupModal',
-											data: res.groupid
-										})
-									)
-									return
-								}
-								const { service, name, identifier, path } = res
-								let query = `?service=${service}`
-								if (name) {
-									query = query + `&name=${name}`
-								}
-								if (identifier) {
-									query = query + `&identifier=${identifier}`
-								}
-								if (path) {
-									query = query + `&path=${path}`
-								}
-								window.parent.reduxStore.dispatch(
-									window.parent.reduxAction.setNewTab({
-										url: `qdn/browser/index.html${query}`,
-										id: uid.rnd(),
-										myPlugObj: {
-											url: 'myapp',
-											domain: 'core',
-											page: `qdn/browser/index.html${query}`,
-											title: name,
-											icon:
-												service === 'WEBSITE'
-													? 'vaadin:desktop'
-													: 'vaadin:external-browser',
-											mwcicon:
-												service === 'WEBSITE'
-													? 'desktop_mac'
-													: 'open_in_browser',
-											menus: [],
-											parent: false
-										}
-									})
-								)
-							} catch (error) {
-								console.error({ error })
-							}
-						})
-
-						fragment.appendChild(link)
-					} else {
-						const textNode = document.createTextNode(part)
-						fragment.appendChild(textNode)
-					}
-				})
-
-				node.replaceWith(fragment)
-			}
-		} else {
-			for (const childNode of Array.from(node.childNodes)) {
-				processNode(childNode)
-			}
-		}
-	}
-	const wrapper = document.createElement('div')
-	wrapper.innerHTML = input
-	processNode(wrapper)
-	return wrapper
 }
 
 class ChatScroller extends LitElement {
@@ -1075,7 +964,6 @@ class MessageTemplate extends LitElement {
 		let messageVersion2 = ''
 		let messageVersion2WithLink = null
 		let messageVersion2Node = null
-		let embedLink = null
 		let embedData = null
 		let reactions = []
 		let repliedToData = null
@@ -1113,8 +1001,79 @@ class MessageTemplate extends LitElement {
 				}
 
 				if (typeof messageVersion2 === 'string') {
+					const handleLinkClick = async (part) => {
+						try {
+							const res = await extractComponents(part)
+
+							if (!res) return
+
+							if (res.type && res.groupid && res.action === 'join') {
+								window.parent.reduxStore.dispatch(
+									window.parent.reduxAction.setNewTab({
+										url: 'group-management',
+										id: uid.rnd(),
+										myPlugObj: {
+											'url': 'group-management',
+											'domain': 'core',
+											'page': 'group-management/index.html',
+											'title': 'Group Management',
+											'icon': 'vaadin:group',
+											'mwcicon': 'group',
+											'pluginNumber': 'plugin-fJZNpyLGTl',
+											'menus': [],
+											'parent': false
+										},
+										openExisting: true
+									})
+								)
+								window.parent.reduxStore.dispatch(
+									window.parent.reduxAction.setSideEffectAction({
+										type: 'openJoinGroupModal',
+										data: res.groupid
+									})
+								)
+								return
+							}
+							const { service, name, identifier, path } = res
+							let query = `?service=${service}`
+							if (name) {
+								query = query + `&name=${name}`
+							}
+							if (identifier) {
+								query = query + `&identifier=${identifier}`
+							}
+							if (path) {
+								query = query + `&path=${path}`
+							}
+							window.parent.reduxStore.dispatch(
+								window.parent.reduxAction.setNewTab({
+									url: `qdn/browser/index.html${query}`,
+									id: uid.rnd(),
+									myPlugObj: {
+										url: 'myapp',
+										domain: 'core',
+										page: `qdn/browser/index.html${query}`,
+										title: name,
+										icon:
+											service === 'WEBSITE'
+												? 'vaadin:desktop'
+												: 'vaadin:external-browser',
+										mwcicon:
+											service === 'WEBSITE'
+												? 'desktop_mac'
+												: 'open_in_browser',
+										menus: [],
+										parent: false
+									}
+								})
+							)
+						} catch (error) {
+							console.error({ error })
+						}
+					}
+
 					try {
-						messageVersion2WithLink = processText(messageVersion2)
+						messageVersion2WithLink = processText(messageVersion2, handleLinkClick)
 					} catch (error) {
 						messageVersion2WithLink = messageVersion2
 					}
@@ -1136,24 +1095,15 @@ class MessageTemplate extends LitElement {
 			}
 
 			try {
-				const regexEmbed = /qortal:\/\/use-embed\/[^\s<"]+/i
 				const embedSource = typeof messageVersion2WithLink === 'string' ? messageVersion2WithLink : (typeof messageVersion2 === 'string' ? messageVersion2 : '')
-				const foundEmbed = embedSource ? embedSource.match(regexEmbed) : null
-				if (foundEmbed && foundEmbed[0]) {
-					embedLink = foundEmbed[0]
-					try {
-						const parsed = parseQortalEmbedLink(embedLink)
-						if (parsed.type === 'IMAGE' && parsed.name && parsed.service && parsed.identifier) {
-							embedData = parsed
-							const baseStr = typeof messageVersion2WithLink === 'string' ? messageVersion2WithLink : (typeof messageVersion2 === 'string' ? messageVersion2 : '')
-							const cleanStr = baseStr.replace(embedLink, '')
-							messageVersion2WithLink = cleanStr
-							messageVersion2 = cleanStr
-							messageV2Display = cleanStr
-							messageV2Raw = cleanStr
-							messageVersion2Node = null
-						}
-					} catch (error) { /* ignore invalid embed */ }
+				const { embedData: foundEmbed, cleanText } = extractImageEmbedFromMessage(embedSource)
+				if (foundEmbed) {
+					embedData = foundEmbed
+					messageVersion2WithLink = cleanText
+					messageVersion2 = cleanText
+					messageV2Display = cleanText
+					messageV2Raw = cleanText
+					messageVersion2Node = null
 				}
 			} catch (error) { /* no embed processing */ }
 
