@@ -36,6 +36,9 @@
 - [ ] Add foreign block heights
 - [ ] Avatars/names in address book
 
+- [ ] Other Hub features:
+  - [ ] Group Promotions
+  - [ ] 
 
 ## Needs research
 

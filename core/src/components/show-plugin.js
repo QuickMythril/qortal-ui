@@ -662,7 +662,10 @@ class NavBar extends connect(store)(LitElement) {
 			myFollowedNamesList: { type: Array },
 			searchNameContentString: { type: String },
 			searchNameResources: { type: Array },
-			addressInfo: { type: Object }
+			addressInfo: { type: Object },
+			folderDialogOpen: { type: Boolean },
+			activeFolderId: { type: String },
+			activeFolderName: { type: String }
 		}
 	}
 
@@ -676,7 +679,6 @@ class NavBar extends connect(store)(LitElement) {
 		this.newMenuList = []
 		this.myMenuList = []
 		this.myMenuPlugins = []
-		this._draggingId = null
 		this.pluginName = ''
 		this.pluginType = ''
 		this.pluginPage = ''
@@ -693,6 +695,12 @@ class NavBar extends connect(store)(LitElement) {
 		this.searchContentString = ''
 		this.searchNameResources = []
 		this.addressInfo = store.getState().app.accountInfo.addressInfo
+		this.folderDialogOpen = false
+		this.activeFolderId = ''
+		this.activeFolderName = 'New Folder'
+		this._draggingId = null
+		this._lastHoverTarget = null
+		this._hasDragged = false
 		this._updateMyMenuPlugins = this._updateMyMenuPlugins.bind(this)
 	}
 
@@ -710,7 +718,7 @@ class NavBar extends connect(store)(LitElement) {
 				<div class="app-list">
 					${repeat(this.myMenuList, (plugin) => plugin.pluginNumber || plugin.url, (plugin, index) => html`
 						<div
-							class="app-icon"
+							class="app-icon ${plugin.type === 'folder' ? 'folder-tile' : ''}"
 							draggable="true"
 							data-id=${plugin.pluginNumber}
 							@dragstart=${(e) => this.handleDragStart(e, plugin.pluginNumber)}
@@ -718,11 +726,12 @@ class NavBar extends connect(store)(LitElement) {
 							@dragleave=${this.handleDragLeave}
 							@drop=${(e) => this.handleDrop(e, plugin.pluginNumber)}
 							@dragend=${this.handleDragEnd}
+							@click=${() => this.handleTileClick(plugin)}
 						>
-							<div class="app-icon-box">
-								${this.renderRemoveIcon(plugin.url, plugin.mwcicon, plugin.title, plugin.pluginNumber, plugin)}
+							<div class="app-icon-box ${plugin.type === 'folder' ? 'folder' : ''}">
+								${this.renderRemoveIcon(plugin, () => this.handleTileClick(plugin))}
 							</div>
-							${this.renderTitle(plugin.url, plugin.title)}
+							${this.renderTitle(plugin)}
 						</div>
 					`)}
 					<div class="app-icon" draggable="false" @click="${() => this.openAddNewPlugin()}">
@@ -788,6 +797,37 @@ class NavBar extends connect(store)(LitElement) {
 				</mwc-button>
 				<mwc-button slot="secondaryAction" dialogAction="cancel" class="red">
 					${translate('general.no')}
+				</mwc-button>
+			</mwc-dialog>
+			<mwc-dialog id="folderDialog" ?open=${this.folderDialogOpen} @closed=${() => this.closeFolder()}>
+				<div class="folder-modal-header">
+					<mwc-textfield
+						style="width: 100%; color: var(--black);"
+						outlined
+						label="Folder Name"
+						.value=${this.activeFolderName}
+						?disabled=${!this.folderDialogOpen}
+						@input=${this.handleFolderNameInput}
+					></mwc-textfield>
+				</div>
+				<div class="folder-modal-grid">
+					${this.getActiveFolderChildren().map((child) => html`
+						<div class="folder-child">
+							<div class="app-icon-box">
+								${child.url === 'myapp'
+		? html`<app-avatar appicon=${child.mwcicon} appname=${child.title}></app-avatar>`
+		: html`<mwc-icon class="menuIcon">${child.mwcicon || 'apps'}</mwc-icon>`}
+							</div>
+							<div class="text">${child.title}</div>
+							<div class="folder-child-actions">
+								<button @click=${() => this.removeFromFolder(child.pluginNumber, this.activeFolderId)}>Remove</button>
+							</div>
+						</div>
+					`)}
+					${this.getActiveFolderChildren().length === 0 ? html`<p class="empty-folder">No items</p>` : ''}
+				</div>
+				<mwc-button slot="primaryAction" dialogAction="close">
+					${translate('general.close')}
 				</mwc-button>
 			</mwc-dialog>
 			<paper-dialog id="searchNameDialog" class="searchSettings" vertical-align="top" horizontal-align="center" dynamic-align>
@@ -940,23 +980,33 @@ class NavBar extends connect(store)(LitElement) {
 		const isMinter = addressInfo?.error !== 124 && +addressInfo?.level > 0
 		const isSponsor = +addressInfo?.level >= 5
 
-		if (!isMinter) {
-			this.newMenuList = this.myMenuPlugins.filter((minter) => {
-				return minter.url !== 'minting'
-			})
-		} else {
-			this.newMenuList = this.myMenuPlugins.filter((minter) => {
-				return minter.url !== 'become-minter'
-			})
+		const passesFilter = (item) => {
+			if (!item) return false
+
+			if (!isMinter && item.url === 'minting') return false
+			if (isMinter && item.url === 'become-minter') return false
+			if (!isSponsor && item.url === 'sponsorship-list') return false
+
+			return true
 		}
 
-		if (!isSponsor) {
-			this.myMenuList = this.newMenuList.filter((sponsor) => {
-				return sponsor.url !== 'sponsorship-list'
-			})
-		} else {
-			this.myMenuList = this.newMenuList
-		}
+		const filteredList = []
+
+		this.myMenuPlugins.forEach((item) => {
+			if (item?.type === 'folder') {
+				const children = item.children || []
+				const filteredChildren = children.filter(child => passesFilter(child))
+				filteredList.push({
+					...item,
+					children: filteredChildren
+				})
+			} else if (passesFilter(item)) {
+				filteredList.push(item)
+			}
+		})
+
+		this.newMenuList = filteredList
+		this.myMenuList = filteredList
 
 		this.requestUpdate()
 	}
@@ -1722,8 +1772,13 @@ class NavBar extends connect(store)(LitElement) {
 		this.textFieldDisabled = false
 	}
 
-	renderTitle(theUrl, theName) {
-		if (theUrl === 'overview-page') {
+	renderTitle(plugin) {
+		const theUrl = plugin.url
+		const theName = plugin.title
+
+		if (plugin.type === 'folder') {
+			return html`<span class="text" title="${theName || 'New Folder'}">${theName || 'New Folder'}</span>`
+		} else if (theUrl === 'overview-page') {
 			return html`<span>${translate('tabmenu.tm28')}</span>`
 		} else if (theUrl === 'minting') {
 			return html`<span>${translate('tabmenu.tm1')}</span>`
@@ -1764,9 +1819,39 @@ class NavBar extends connect(store)(LitElement) {
 		}
 	}
 
-	renderRemoveIcon(appurl, appicon, appname, appid, appplugin) {
+	renderRemoveIcon(appplugin, clickHandler) {
+		const appurl = appplugin.url
+		const appicon = appplugin.mwcicon
+		const appname = appplugin.title
+		const appid = appplugin.pluginNumber
+
+		if (this.isFolder(appplugin)) {
+			return html`
+				<div class="menuIconPos" @click="${() => clickHandler()}">
+					<div
+						class="removeIconPos"
+						title="${translate('tabmenu.tm22')}"
+						@click="${(event) => {
+		event.stopPropagation()
+		this.openRemoveApp(appname, appid, appurl)
+	}}"
+					>
+						<mwc-icon class="removeIcon">backspace</mwc-icon>
+					</div>
+					<div class="folder-icon-stack">
+						<mwc-icon class="menuIcon">folder</mwc-icon>
+						<div class="folder-preview">
+							${(appplugin.children || []).slice(0, 4).map(child => html`
+								<mwc-icon class="folder-preview-icon">${child.mwcicon || 'apps'}</mwc-icon>
+							`)}
+						</div>
+					</div>
+				</div>
+			`
+		}
+
 		return html`
-			<div class="menuIconPos" @click="${() => this.changePage(appplugin)}">
+			<div class="menuIconPos" @click="${() => clickHandler()}">
 				<div
 					class="removeIconPos"
 					title="${translate('tabmenu.tm22')}"
@@ -1856,6 +1941,57 @@ class NavBar extends connect(store)(LitElement) {
 		this.closeRemoveApp()
 	}
 
+	handleTileClick(plugin) {
+		if (this._draggingId) {
+			return
+		}
+
+		if (plugin.type === 'folder') {
+			this.openFolder(plugin.pluginNumber)
+		} else {
+			this.changePage(plugin)
+		}
+	}
+
+	openFolder(folderId) {
+		const folder = this.getFolderById(folderId)
+
+		if (!folder) return
+
+		this.activeFolderId = folderId
+		this.activeFolderName = folder.title || 'New Folder'
+		this.folderDialogOpen = true
+	}
+
+	closeFolder() {
+		this.folderDialogOpen = false
+		this.activeFolderId = ''
+		this.activeFolderName = 'New Folder'
+	}
+
+	getActiveFolder() {
+		if (!this.activeFolderId) return null
+
+		return this.getFolderById(this.activeFolderId)
+	}
+
+	getActiveFolderChildren() {
+		const folder = this.getActiveFolder()
+		return folder && Array.isArray(folder.children) ? folder.children : []
+	}
+
+	handleFolderNameInput(event) {
+		const value = event.target.value
+		this.activeFolderName = value
+
+		const folder = this.getFolderById(this.activeFolderId)
+		if (folder) {
+			folder.title = value
+			this.persistMenuPlugins()
+		}
+	}
+
+
 	saveSettingToTemp(data) {
 		const tempSettingsData = JSON.parse(localStorage.getItem('temp-settings-data') || '{}')
 
@@ -1881,6 +2017,8 @@ class NavBar extends connect(store)(LitElement) {
 		if (!pluginNumber) return
 
 		this._draggingId = pluginNumber
+		this._lastHoverTarget = null
+		this._hasDragged = false
 
 		if (event.dataTransfer) {
 			event.dataTransfer.effectAllowed = 'move'
@@ -1895,6 +2033,13 @@ class NavBar extends connect(store)(LitElement) {
 
 		event.preventDefault()
 		event.dataTransfer.dropEffect = 'move'
+
+		if (this._lastHoverTarget !== pluginNumber) {
+			this.reorderMenuList(this._draggingId, pluginNumber, { persist: false })
+			this._hasDragged = true
+			this._lastHoverTarget = pluginNumber
+		}
+
 		event.currentTarget.classList.add('drag-over')
 	}
 
@@ -1909,14 +2054,47 @@ class NavBar extends connect(store)(LitElement) {
 
 		this.clearDragStyles()
 
-		if (!sourceId || !targetPluginNumber || sourceId === targetPluginNumber) return
+		if (!sourceId) {
+			return
+		}
 
-		this.reorderMenuList(sourceId, targetPluginNumber)
+		if (targetPluginNumber && sourceId !== targetPluginNumber) {
+			const targetItem = this.getTopLevelItemById(targetPluginNumber)
+			const sourceItem = this.getTopLevelItemById(sourceId)
+
+			if (targetItem && this.isFolder(targetItem)) {
+				this.moveIntoFolder(sourceId, targetPluginNumber)
+				this.resetDragState()
+				return
+			}
+
+			if (targetItem && sourceItem && !this.isFolder(sourceItem) && !this.isFolder(targetItem)) {
+				this.createFolderFromPair(sourceId, targetPluginNumber)
+				this.resetDragState()
+				return
+			}
+		}
+
+		if (this._hasDragged) {
+			this.persistMenuPlugins()
+		}
+
+		this.resetDragState()
 	}
 
 	handleDragEnd() {
 		this.clearDragStyles()
+		if (this._hasDragged) {
+			this.persistMenuPlugins()
+		}
+
+		this.resetDragState()
+	}
+
+	resetDragState() {
 		this._draggingId = null
+		this._lastHoverTarget = null
+		this._hasDragged = false
 	}
 
 	clearDragStyles() {
@@ -1926,23 +2104,28 @@ class NavBar extends connect(store)(LitElement) {
 		})
 	}
 
-	reorderMenuList(sourceId, targetId) {
-		const updatedList = [...this.myMenuList]
-		const fromIndex = updatedList.findIndex((item) => item.pluginNumber === sourceId)
-		const toIndex = updatedList.findIndex((item) => item.pluginNumber === targetId)
+	reorderMenuList(sourceId, targetId, options = { persist: true }) {
+		const { persist } = options
+
+		if (!sourceId || !targetId || sourceId === targetId) return
+
+		const topLevel = [...this.myMenuPlugins]
+
+		const fromIndex = topLevel.findIndex((item) => item.pluginNumber === sourceId)
+		const toIndex = topLevel.findIndex((item) => item.pluginNumber === targetId)
 
 		if (fromIndex === -1 || toIndex === -1) return
 
-		const [moved] = updatedList.splice(fromIndex, 1)
-		updatedList.splice(toIndex, 0, moved)
+		const [moved] = topLevel.splice(fromIndex, 1)
+		topLevel.splice(toIndex, 0, moved)
 
-		this.myMenuList = updatedList
+		this.myMenuPlugins = topLevel
 
-		const visibleIds = updatedList.map((item) => item.pluginNumber)
-		const hiddenItems = this.myMenuPlugins.filter((item) => !visibleIds.includes(item.pluginNumber))
-		this.myMenuPlugins = [...updatedList, ...hiddenItems]
-
-		this.persistMenuPlugins()
+		if (persist) {
+			this.persistMenuPlugins()
+		} else {
+			this.refreshMenuListsFromPlugins()
+		}
 	}
 
 	persistMenuPlugins() {
@@ -1953,10 +2136,133 @@ class NavBar extends connect(store)(LitElement) {
 		this.refreshMenuListsFromPlugins()
 	}
 
+	detachPluginById(id) {
+		if (!id) return null
+
+		let removed = null
+		const nextTopLevel = []
+
+		this.myMenuPlugins.forEach((item) => {
+			if (removed) {
+				nextTopLevel.push(item)
+				return
+			}
+
+			if (item.pluginNumber === id) {
+				removed = item
+				return
+			}
+
+			if (this.isFolder(item)) {
+				const children = item.children || []
+				const childIndex = children.findIndex((child) => child.pluginNumber === id)
+
+				if (childIndex !== -1) {
+					const [childRemoved] = children.splice(childIndex, 1)
+					removed = childRemoved
+				}
+			}
+
+			nextTopLevel.push(item)
+		})
+
+		if (removed) {
+			this.myMenuPlugins = nextTopLevel
+		}
+
+		return removed
+	}
+
+	moveIntoFolder(sourceId, folderId) {
+		const folder = this.getFolderById(folderId)
+		if (!folder || sourceId === folderId) return
+
+		const sourceItem = this.detachPluginById(sourceId)
+
+		if (!sourceItem || this.isFolder(sourceItem)) return
+
+		folder.children = folder.children || []
+
+		if (!folder.children.find((child) => child.pluginNumber === sourceId)) {
+			folder.children.push(sourceItem)
+		}
+
+		this.persistMenuPlugins()
+	}
+
+	createFolderFromPair(sourceId, targetId) {
+		if (!sourceId || !targetId || sourceId === targetId) return
+
+		const sourceItem = this.getTopLevelItemById(sourceId) || this.detachPluginById(sourceId)
+		const targetItem = this.getTopLevelItemById(targetId)
+
+		if (!sourceItem || !targetItem) return
+		if (this.isFolder(targetItem) || this.isFolder(sourceItem)) return
+
+		const currentOrder = [...this.myMenuPlugins]
+		const targetIndex = currentOrder.findIndex((item) => item.pluginNumber === targetId)
+
+		const cleaned = currentOrder.filter((item) => item.pluginNumber !== sourceId && item.pluginNumber !== targetId)
+
+		const uid = new ShortUniqueId({ length: 10 })
+
+		const folderItem = {
+			type: 'folder',
+			pluginNumber: `folder-${uid.rnd()}`,
+			title: 'New Folder',
+			url: 'folder',
+			icon: 'folder',
+			mwcicon: 'folder',
+			children: [targetItem, sourceItem]
+		}
+
+		if (targetIndex === -1) {
+			cleaned.push(folderItem)
+		} else {
+			cleaned.splice(targetIndex, 0, folderItem)
+		}
+
+		this.myMenuPlugins = cleaned
+		this.persistMenuPlugins()
+	}
+
+	removeFromFolder(childId, folderId) {
+		const folder = this.getFolderById(folderId)
+		if (!folder) return
+
+		folder.children = folder.children || []
+		const idx = folder.children.findIndex((child) => child.pluginNumber === childId)
+		if (idx === -1) return
+
+		const [child] = folder.children.splice(idx, 1)
+
+		const folderIndex = this.myMenuPlugins.findIndex((item) => item.pluginNumber === folderId)
+
+		if (folderIndex === -1) {
+			this.myMenuPlugins.push(child)
+		} else {
+			this.myMenuPlugins.splice(folderIndex + 1, 0, child)
+		}
+
+		this.persistMenuPlugins()
+	}
+
 	closeRemoveApp() {
 		this.shadowRoot.querySelector('#removePlugin').close()
 		this.pluginNameToDelete = ''
 		this.pluginNumberToDelete = ''
+	}
+
+	isFolder(item) {
+		return item && item.type === 'folder'
+	}
+
+	getTopLevelItemById(id) {
+		return this.myMenuPlugins.find((item) => item.pluginNumber === id)
+	}
+
+	getFolderById(id) {
+		return this.myMenuPlugins.find((item) => this.isFolder(item) && item.pluginNumber === id)
 	}
 
 	async extractComponents(url) {

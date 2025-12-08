@@ -2902,6 +2902,10 @@ export const navBarStyles = css`
         transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
 
+    .app-list .app-icon.folder-tile {
+        align-items: stretch;
+    }
+
     .app-list .app-icon.drag-over {
         border-color: var(--mdc-theme-primary);
         box-shadow: 0 0 0 2px var(--mdc-theme-primary);
@@ -2935,6 +2939,79 @@ export const navBarStyles = css`
         border-bottom-left-radius: 20px;
         border-bottom-right-radius: 10px;
         position: relative;
+    }
+
+    .app-icon-box.folder {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 8px;
+    }
+
+    .folder-icon-stack {
+        position: relative;
+        width: 100%;
+    }
+
+    .folder-preview {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 4px;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        padding: 4px;
+    }
+
+    .folder-preview-icon {
+        --mdc-icon-size: 20px;
+        color: var(--black);
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 6px;
+        padding: 2px;
+    }
+
+    .folder-modal-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .folder-modal-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 12px;
+        max-height: 400px;
+        overflow-y: auto;
+        margin-bottom: 12px;
+    }
+
+    .folder-child {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        background: var(--sidetopbar);
+    }
+
+    .folder-child-actions button {
+        cursor: pointer;
+        padding: 4px 8px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background: var(--white);
+        color: var(--black);
+    }
+
+    .empty-folder {
+        text-align: center;
+        color: var(--sectxt);
+        grid-column: 1 / -1;
+        margin: 0;
     }
 
     .app-list .app-icon:hover .removeIcon {
