@@ -30,6 +30,7 @@
 - [ ] Check qortal:// and http(s):// link support
 - [ ] Check Video / Poll / Image / Audio embeds
 - [ ] Add trade fee support to Trade Portal?
+- [ ] Combine Websites & Q-Apps plugins
 
 - [ ] Add foreign block heights
 - [ ] Avatars/names in address book

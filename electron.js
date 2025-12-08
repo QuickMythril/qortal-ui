@@ -7,7 +7,9 @@ const {
 	Tray,
 	dialog,
 	nativeTheme,
-	crashReporter
+	crashReporter,
+	shell,
+	session
 } = require('electron')
 const { autoUpdater } = require('electron-updater')
 const server = require('./server.js')
@@ -36,6 +38,70 @@ crashReporter.start({
 	productName: 'Qortal-UI',
 	uploadToServer: false
 })
+
+const INTERNAL_UI_PORTS = new Set(['12388'])
+
+const isAllowedInternalUrl = (url) => {
+	try {
+		const parsed = new URL(url)
+
+		// Only guard http/https. Everything else (custom schemes, file:) is ignored
+		if (!['http:', 'https:'].includes(parsed.protocol)) {
+			return true
+		}
+
+		// Core UI itself
+		if ((parsed.hostname === 'localhost' || parsed.hostname === '127.0.0.1') && INTERNAL_UI_PORTS.has(parsed.port)) {
+			return true
+		}
+
+		// QDN/Qortal-served resources (keep these in-app)
+		if (/\/render\//i.test(parsed.pathname) || /\/arbitrary\//i.test(parsed.pathname)) {
+			return true
+		}
+
+		return false
+	} catch (_err) {
+		return false
+	}
+}
+
+let externalNavHooksBound = false
+
+const bindExternalNavigationHandlers = (win) => {
+	if (!win || !win.webContents) return
+
+	win.webContents.setWindowOpenHandler(({ url }) => {
+		if ((url.startsWith('http:') || url.startsWith('https:')) && !isAllowedInternalUrl(url)) {
+			shell.openExternal(url)
+			return { action: 'deny' }
+		}
+
+		return { action: 'allow' }
+	})
+
+	win.webContents.on('will-navigate', (event, url) => {
+		if ((url.startsWith('http:') || url.startsWith('https:')) && !isAllowedInternalUrl(url)) {
+			event.preventDefault()
+			shell.openExternal(url)
+		}
+	})
+
+	if (!externalNavHooksBound) {
+		externalNavHooksBound = true
+		const filter = { urls: ['http://*/*', 'https://*/*'] }
+
+		session.defaultSession.webRequest.onBeforeRequest(filter, (details, callback) => {
+			if ((details.resourceType === 'mainFrame' || details.resourceType === 'subFrame')
+				&& !isAllowedInternalUrl(details.url)) {
+				shell.openExternal(details.url)
+				return callback({ cancel: true })
+			}
+
+			return callback({})
+		})
+	}
+}
 
 if (myMemory > 16000000000) {
 	app.commandLine.appendSwitch('js-flags', '--max-old-space-size=8192')
@@ -1130,6 +1196,7 @@ function createWindow() {
 	// Wait until window is ready before showing
 	myWindow.once('ready-to-show', myWindow.show)
 	myWindow.loadURL('http://localhost:12388/app')
+	bindExternalNavigationHandlers(myWindow)
 
 	// Save current window config when closing
 	myWindow.on('close', () => {
@@ -1188,6 +1255,7 @@ function createNewWindow() {
 
 	newWindow.show()
 	newWindow.loadURL('http://localhost:12388/app')
+	bindExternalNavigationHandlers(newWindow)
 
 	newWindow.on('closed', function () {
 		newWindow = null
