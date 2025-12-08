@@ -258,8 +258,22 @@ class ChatWelcomePage extends LitElement {
 				}
 			}))
 
-			const cleaned = mapped.filter(Boolean).sort((a, b) => (b.created || 0) - (a.created || 0))
-			this.promotions = cleaned
+			const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000
+			const recent = mapped
+				.filter((item) => item && (item.created || 0) >= oneWeekAgo)
+				.sort((a, b) => (b.created || 0) - (a.created || 0))
+
+			const seen = new Set()
+			const unique = []
+			for (const promo of recent) {
+				const gid = promo.groupId
+				if (gid && !seen.has(gid)) {
+					seen.add(gid)
+					unique.push(promo)
+				}
+			}
+
+			this.promotions = unique
 		} catch (error) {
 			this.promotionsError = (error && error.message) || (translate('welcomepage.promotionsError') || 'Unable to load promotions')
 		} finally {

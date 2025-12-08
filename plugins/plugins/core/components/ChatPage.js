@@ -249,6 +249,7 @@ class ChatPage extends LitElement {
 	}
 
 	render() {
+		const disableInput = !this.isReceipient && !this.canSendMessages
 		return html`
 			<div class="main-container">
 				<div class="chat-container" style="grid-template-rows: minmax(40px, auto) minmax(6%, 92vh) minmax(40px, auto); flex: 3;">
@@ -329,14 +330,9 @@ class ChatPage extends LitElement {
 		}
 	}}
 							>
-							</vaadin-icon>
-							</div>
-							${(!this.isReceipient && !this.canSendMessages) ? html`
-								<div style="margin:16px 0; padding:12px; background: var(--chat-group, #f3f4f6); border-radius:12px; color: var(--black); text-align:center; font-weight:600;">
-									${translate('chatpage.readOnlyGroup') || 'Join this group to send messages.'}
+								</vaadin-icon>
 								</div>
-							` : html`
-							<div class="typing-area">
+								<div class="typing-area">
 								${this.repliedToMessageObj &&
 									html`
 										<div class="repliedTo-container">
@@ -410,11 +406,11 @@ class ChatPage extends LitElement {
 									.messageQueue=${this.messageQueue}
 								>
 								</chat-text-editor>
-							</div>
+								</div>
 							</div>
 						</div>
 						${(this.isUploadingImage || this.isDeletingImage) ?
-		html`
+			html`
 								<div class="dialogCustom">
 								<div class="dialogCustomInner">
 									<div class="dialog-container-loader">
@@ -492,8 +488,8 @@ class ChatPage extends LitElement {
 										.imageFile=${this.imageFile}
 										.insertFile=${this.insertFile}
 										.editedMessageObj=${this.editedMessageObj}
-										?isLoading=${this.isLoading}
-										?isLoadingMessages=${this.isLoadingMessages}
+										?isLoading=${this.isLoading || disableInput}
+										?isLoadingMessages=${this.isLoadingMessages || disableInput}
 										id="chatTextCaption"
 										.editor=${this.editorImage}
 										.updatePlaceholder=${(editor, value) => this.updatePlaceholder(editor, value)}
@@ -1699,6 +1695,17 @@ class ChatPage extends LitElement {
 			} catch (error) { /* empty */ }
 		}
 
+		if (!isRecipient) {
+			const readOnlyText = translate('chatpage.readOnlyGroup') || 'Join this group to send messages.'
+			const mstringDefault = get('chatpage.cchange114')
+			this.chatEditorPlaceholder = this.canSendMessages ? `${mstringDefault}` : readOnlyText
+		}
+
+		const disableInput = !this.canSendMessages && !isRecipient
+		if (this.editor && this.editor.setEditable) {
+			this.editor.setEditable(!disableInput)
+		}
+
 		if (!isRecipient && groupId.toString() !== '0') {
 			try {
 				const getMembers = await parentEpml.request('apiCall', {
@@ -2866,6 +2873,10 @@ class ChatPage extends LitElement {
 	}
 
 	async _sendMessage(outSideMsg, msg, messageQueue) {
+		if (!this.canSendMessages && !this.isReceipient) {
+			parentEpml.request('showSnackBar', get('chatpage.readOnlyGroup') || 'Join this group to send messages.')
+			return
+		}
 		const _chatId = this._chatId
 		const isReceipient = this.isReceipient
 		const str = 'iVBORw0KGgoAAAANSUhEUgAAAsAAAAGMAQMAAADuk4YmAAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAADlJREFUeF7twDEBAAAAwiD7p7bGDlgYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAGJrAABgPqdWQAAAABJRU5ErkJggg=='
