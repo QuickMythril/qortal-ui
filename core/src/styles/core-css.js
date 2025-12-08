@@ -2942,6 +2942,11 @@ export const navBarStyles = css`
         align-items: center;
         justify-content: center;
         padding: 5px 14px;
+        min-width: 80px;
+        min-height: 80px;
+        width: 80px;
+        height: 80px;
+        position: relative;
     }
 
     .folder-icon-stack {
@@ -2949,6 +2954,7 @@ export const navBarStyles = css`
         width: 100%;
         display: flex;
         justify-content: center;
+        height: 100%;
     }
 
     .folder-preview {
@@ -2956,10 +2962,12 @@ export const navBarStyles = css`
         grid-template-columns: repeat(3, 1fr);
         gap: 2px;
         position: absolute;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        padding: 3px;
+        bottom: 4px;
+        right: 4px;
+        left: 4px;
+        padding: 0;
+        max-width: calc(100% - 8px);
+        max-height: calc(100% - 8px);
         pointer-events: none;
     }
 
@@ -2969,6 +2977,9 @@ export const navBarStyles = css`
         background: rgba(255, 255, 255, 0.7);
         border-radius: 4px;
         padding: 1px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .folder-modal-header {
@@ -2997,6 +3008,9 @@ export const navBarStyles = css`
         gap: 6px;
         background: var(--sidetopbar);
         text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .folder-child-actions button {
