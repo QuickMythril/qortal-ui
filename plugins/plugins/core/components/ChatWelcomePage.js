@@ -261,7 +261,7 @@ class ChatWelcomePage extends LitElement {
 			}))
 
 			const recent = mapped
-				.filter((item) => item && (item.created || 0) >= oneWeekAgo)
+				.filter(Boolean)
 				.sort((a, b) => (b.created || 0) - (a.created || 0))
 
 			const seen = new Set()
