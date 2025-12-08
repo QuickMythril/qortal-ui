@@ -3760,6 +3760,9 @@ export const chatWelcomePageStyles = css`
         border-radius: 16px;
         padding: 16px;
         box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+        max-height: calc(100vh - 220px);
     }
 
     .promotions-header {
@@ -3799,8 +3802,8 @@ export const chatWelcomePageStyles = css`
         flex-direction: column;
         gap: 12px;
         margin-top: 12px;
-        max-height: calc(100vh - 320px);
         overflow: auto;
+        flex: 1;
     }
 
     .promotion-card {
