@@ -1089,6 +1089,8 @@ class MessageTemplate extends LitElement {
 		let isForwarded = false
 		let isEdited = false
 		let isEncrypted = false
+		let messageV2Display = ''
+		let messageV2Raw = ''
 
 		try {
 			const parsedMessageObj = JSON.parse(this.messageObj.decodedMessage)
@@ -1109,29 +1111,41 @@ class MessageTemplate extends LitElement {
 				}
 
 				if (typeof messageVersion2 === 'string') {
-					messageVersion2WithLink = processText(messageVersion2)
+					try {
+						messageVersion2WithLink = processText(messageVersion2)
+					} catch (error) {
+						messageVersion2WithLink = messageVersion2
+					}
+					messageV2Raw = messageVersion2
+					messageV2Display = typeof messageVersion2WithLink === 'string' ? messageVersion2WithLink : messageV2Raw
 				} else {
 					messageVersion2 = ''
 					messageVersion2WithLink = ''
+					messageV2Raw = ''
+					messageV2Display = ''
 				}
 			}
 
-			const regexEmbed = /qortal:\/\/use-embed\/[^\s<"]+/i
-			const embedSource = typeof messageVersion2WithLink === 'string' ? messageVersion2WithLink : (typeof messageVersion2 === 'string' ? messageVersion2 : '')
-			const foundEmbed = embedSource ? embedSource.match(regexEmbed) : null
-			if (foundEmbed && foundEmbed[0]) {
-				embedLink = foundEmbed[0]
-				try {
-					const parsed = parseQortalEmbedLink(embedLink)
-					if (parsed.type === 'IMAGE' && parsed.name && parsed.service && parsed.identifier) {
-						embedData = parsed
-						const baseStr = typeof messageVersion2WithLink === 'string' ? messageVersion2WithLink : (typeof messageVersion2 === 'string' ? messageVersion2 : '')
-						const cleanStr = baseStr.replace(embedLink, '')
-						messageVersion2WithLink = cleanStr
-						messageVersion2 = cleanStr
-					}
-				} catch (error) { /* ignore invalid embed */ }
-			}
+			try {
+				const regexEmbed = /qortal:\/\/use-embed\/[^\s<"]+/i
+				const embedSource = typeof messageVersion2WithLink === 'string' ? messageVersion2WithLink : (typeof messageVersion2 === 'string' ? messageVersion2 : '')
+				const foundEmbed = embedSource ? embedSource.match(regexEmbed) : null
+				if (foundEmbed && foundEmbed[0]) {
+					embedLink = foundEmbed[0]
+					try {
+						const parsed = parseQortalEmbedLink(embedLink)
+						if (parsed.type === 'IMAGE' && parsed.name && parsed.service && parsed.identifier) {
+							embedData = parsed
+							const baseStr = typeof messageVersion2WithLink === 'string' ? messageVersion2WithLink : (typeof messageVersion2 === 'string' ? messageVersion2 : '')
+							const cleanStr = baseStr.replace(embedLink, '')
+							messageVersion2WithLink = cleanStr
+							messageVersion2 = cleanStr
+							messageV2Display = cleanStr
+							messageV2Raw = cleanStr
+						}
+					} catch (error) { /* ignore invalid embed */ }
+				}
+			} catch (error) { /* no embed processing */ }
 
 			message = parsedMessageObj.messageText ? parsedMessageObj.messageText : parsedMessageObj.message
 			repliedToData = this.messageObj.repliedToData
@@ -1682,15 +1696,15 @@ class MessageTemplate extends LitElement {
 		: ''
 }
 								<div id="messageContent" class="message" style=${image && replacedMessage !== '' && 'margin-top: 15px;'}>
-									${+version > 1 ? messageVersion2WithLink ?
+									${+version > 1 ? messageV2Display ?
 		html`
 											<div id="fontsize" style=${this.messageFontSize}>
-												${unsafeHTML(messageVersion2WithLink)}
+												${unsafeHTML(messageV2Display)}
 											<div>
 										`
 		: html`
 											<div id="fontsize" style=${this.messageFontSize}>
-												${unsafeHTML(messageVersion2 || '')}
+												${unsafeHTML(messageV2Raw || '')}
 											<div>
 										`
 		: ''
