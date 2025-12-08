@@ -1758,7 +1758,6 @@ class AppView extends connect(store)(LitElement) {
 		const addressInfo = this.addressInfo
 		const isMinter = addressInfo?.error !== 124 && +addressInfo?.level > 0
 		const isSponsor = +addressInfo?.level >= 5
-		const isGateway = isPublicNode(store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node])
 
 		if (this.nodeType === 'lite') {
 			return html`
@@ -1780,13 +1779,13 @@ class AppView extends connect(store)(LitElement) {
 			return html`
 				<side-menu-item label="${translate('sidemenu.minting')}" expanded>
 					<vaadin-icon icon="vaadin:info-circle" slot="icon"></vaadin-icon>
-					<side-menu-item id="qminter" label="${translate('sidemenu.mintingdetails')}" href="/app/minting" ?hide=${!isMinter || isGateway}>
+					<side-menu-item id="qminter" label="${translate('sidemenu.mintingdetails')}" href="/app/minting" ?hide=${!isMinter}>
 						<vaadin-icon icon="vaadin:info-circle" slot="icon"></vaadin-icon>
 					</side-menu-item>
-					<side-menu-item id="qbminter" label="${translate('sidemenu.becomeAMinter')}" href="/app/become-minter" ?hide=${isMinter || isGateway}>
+					<side-menu-item id="qbminter" label="${translate('sidemenu.becomeAMinter')}" href="/app/become-minter" ?hide=${isMinter}>
 						<vaadin-icon icon="vaadin:thumbs-up" slot="icon"></vaadin-icon>
 					</side-menu-item>
-					<side-menu-item id="qiminter" label="${translate('mintingpage.mchange35')}" href="/app/sponsorship-list" ?hide=${!isSponsor || isGateway}>
+					<side-menu-item id="qiminter" label="${translate('mintingpage.mchange35')}" href="/app/sponsorship-list" ?hide=${!isSponsor}>
 						<vaadin-icon icon="vaadin:list-ol" slot="icon"></vaadin-icon>
 					</side-menu-item>
 				</side-menu-item>

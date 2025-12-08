@@ -46,7 +46,7 @@
 
 ## Issues to fix from manual testing (public node UX)
 
-- [ ] Sidebar menu - don't hide anything
+- [?] Sidebar menu - don't hide anything
 - [ ] Overview page - avatar and minter level elements shift left.
 - [ ] Node manage shows nothing
   - [ ] error says "[publicNode.actionBlocked]"
