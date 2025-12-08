@@ -3623,7 +3623,7 @@ export const chatWelcomePageStyles = css`
         overflow-wrap: break-word;
         word-break: break-word;
         cursor: inherit;
-        margin-top: 2rem;
+        margin-top: 1rem;
     }
 
     .sub-main {
@@ -3631,7 +3631,7 @@ export const chatWelcomePageStyles = css`
         text-align: center;
         display: flex;
         justify-content: center;
-        padding: 1rem 0 2rem 0;
+        padding: 0.5rem 0 1.5rem 0;
     }
 
     .center-box {
@@ -3801,9 +3801,9 @@ export const chatWelcomePageStyles = css`
         flex-direction: column;
         gap: 12px;
         margin-top: 12px;
-        overflow: auto;
-        flex: 1;
-        max-height: calc(100vh - 320px);
+        overflow: visible;
+        flex: 0 0 auto;
+        max-height: none;
     }
 
     .promotion-card {
@@ -3819,6 +3819,21 @@ export const chatWelcomePageStyles = css`
         gap: 12px;
         align-items: flex-start;
         flex-wrap: wrap;
+    }
+
+    .promotion-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .promotion-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 8px;
+        object-fit: cover;
+        flex-shrink: 0;
+        background: #f3f4f6;
     }
 
     .promotion-group {
@@ -7312,7 +7327,7 @@ export const qchatStyles = css`
         width: 20vw;
         float: left;
         height: 100vh;
-        overflow-y: hidden;
+        overflow-y: auto;
         border-right: 2px #ddd solid;
     }
 
@@ -7470,6 +7485,10 @@ export const qchatStyles = css`
         border-bottom-right-radius: 5px;
         color: #434651;
         box-sizing: border-box;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
     }
 
     .chat .new-message-bar {
@@ -7481,8 +7500,8 @@ export const qchatStyles = css`
         font-size: 14px;
         font-weight: 500;
         top: 0;
-        position: absolute;
-        left: 20vw;
+        position: sticky;
+        left: 0;
         right: 0;
         z-index: 5;
         background: var(--tradehead);
@@ -7506,14 +7525,10 @@ export const qchatStyles = css`
     }
 
     .chat .chat-history {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 100%;
-        left: 20vw;
-        border-bottom: 2px solid var(--white);
-        overflow-y: hidden;
-        height: 100vh;
+        position: relative;
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
         box-sizing: border-box;
     }
 

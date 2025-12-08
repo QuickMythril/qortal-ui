@@ -282,30 +282,36 @@ class ChatWelcomePage extends LitElement {
 		}
 	}
 
-	renderPromotionCard(promo) {
-		const safePromo = promo || {}
-		const groupInfo = (safePromo.groupInfo && typeof safePromo.groupInfo === 'object') ? safePromo.groupInfo : {}
-		const groupId = safePromo.groupId
-		const groupName = groupInfo.groupName || safePromo.groupName || translate('welcomepage.unknownGroup') || 'Group'
-		const statusLabel = groupInfo.isOpen === false ? translate('grouppage.gchange17') || 'Private' : translate('grouppage.gchange16') || 'Public'
-		const memberCount = groupInfo.memberCount || 0
-		const description = groupInfo.description || ''
-		const isJoining = this.joiningGroupId === groupId
+		renderPromotionCard(promo) {
+			const safePromo = promo || {}
+			const groupInfo = (safePromo.groupInfo && typeof safePromo.groupInfo === 'object') ? safePromo.groupInfo : {}
+			const groupId = safePromo.groupId
+			const groupName = groupInfo.groupName || safePromo.groupName || translate('welcomepage.unknownGroup') || 'Group'
+			const statusLabel = groupInfo.isOpen === false ? translate('grouppage.gchange17') || 'Private' : translate('grouppage.gchange16') || 'Public'
+			const memberCount = groupInfo.memberCount || 0
+			const description = groupInfo.description || ''
+			const isJoining = this.joiningGroupId === groupId
+			const idLabel = groupId ? `id:${groupId}` : 'id:unknown'
+			const publisherName = safePromo.name || translate('welcomepage.unknownPublisher') || 'Unknown publisher'
+			const avatarUrl = safePromo.name ? this.getPublisherAvatarUrl(safePromo.name) : ''
 
-		return html`
-			<div class="promotion-card">
-				<div class="promotion-header">
-					<div>
-						<p class="promotion-group">${groupName}</p>
-						<p class="promotion-meta">
-							${statusLabel}
-							· ${memberCount} ${translate('grouppage.gchange54') || 'Members'}
-						</p>
-					</div>
-					<div class="promotion-actions">
-						<mwc-button dense outlined @click=${() => this.previewGroup(safePromo)}>
-							${translate('appspage.schange40') || 'Preview'}
-						</mwc-button>
+			return html`
+				<div class="promotion-card">
+					<div class="promotion-header">
+						<div class="promotion-info">
+							${avatarUrl ? html`<img class="promotion-avatar" src="${avatarUrl}" alt="${publisherName}" @error=${(e) => { e.target.style.display = 'none' }} />` : ''}
+							<div>
+								<p class="promotion-group">${groupName}</p>
+								<p class="promotion-meta">
+									${idLabel} (${statusLabel})
+									· ${memberCount} ${translate('grouppage.gchange54') || 'Members'}
+								</p>
+							</div>
+						</div>
+						<div class="promotion-actions">
+							<mwc-button dense outlined @click=${() => this.previewGroup(safePromo)}>
+								${translate('appspage.schange40') || 'Preview'}
+							</mwc-button>
 						<mwc-button
 							dense
 							unelevated
@@ -316,12 +322,21 @@ class ChatWelcomePage extends LitElement {
 						</mwc-button>
 					</div>
 				</div>
-				<p class="promotion-text">${safePromo.data || ''}</p>
+				<p class="promotion-text">${publisherName}: ${safePromo.data || ''}</p>
 				${description ? html`
 					<p class="promotion-description">${description}</p>
 				` : ''}
 			</div>
 		`
+	}
+
+	getPublisherAvatarUrl(publisherName) {
+		try {
+			const baseUrl = this.getNodeBaseUrl()
+			return `${baseUrl}/arbitrary/THUMBNAIL/${publisherName}/qortal_avatar?async=true`
+		} catch (error) {
+			return ''
+		}
 	}
 
 	previewGroup(promo) {
