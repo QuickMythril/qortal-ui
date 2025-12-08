@@ -97,6 +97,7 @@ const extractComponents = async (url) => {
 
 function processText(input) {
 	const linkRegex = /(qortal:\/\/\S+)/g
+	// Build a DOM tree that converts qortal:// links into clickable spans with handlers
 	function processNode(node) {
 		if (node.nodeType === Node.TEXT_NODE) {
 			const parts = node.textContent.split(linkRegex)
@@ -1073,6 +1074,7 @@ class MessageTemplate extends LitElement {
 		let message = ''
 		let messageVersion2 = ''
 		let messageVersion2WithLink = null
+		let messageVersion2Node = null
 		let embedLink = null
 		let embedData = null
 		let reactions = []
@@ -1117,10 +1119,17 @@ class MessageTemplate extends LitElement {
 						messageVersion2WithLink = messageVersion2
 					}
 					messageV2Raw = messageVersion2
-					messageV2Display = typeof messageVersion2WithLink === 'string' ? messageVersion2WithLink : messageV2Raw
+					if (typeof messageVersion2WithLink === 'string') {
+						messageV2Display = messageVersion2WithLink
+						messageVersion2Node = null
+					} else {
+						messageVersion2Node = messageVersion2WithLink
+						messageV2Display = ''
+					}
 				} else {
 					messageVersion2 = ''
 					messageVersion2WithLink = ''
+					messageVersion2Node = null
 					messageV2Raw = ''
 					messageV2Display = ''
 				}
@@ -1142,6 +1151,7 @@ class MessageTemplate extends LitElement {
 							messageVersion2 = cleanStr
 							messageV2Display = cleanStr
 							messageV2Raw = cleanStr
+							messageVersion2Node = null
 						}
 					} catch (error) { /* ignore invalid embed */ }
 				}
@@ -1696,18 +1706,11 @@ class MessageTemplate extends LitElement {
 		: ''
 }
 								<div id="messageContent" class="message" style=${image && replacedMessage !== '' && 'margin-top: 15px;'}>
-									${+version > 1 ? messageV2Display ?
-		html`
+									${+version > 1 ? html`
 											<div id="fontsize" style=${this.messageFontSize}>
-												${unsafeHTML(messageV2Display)}
-											<div>
-										`
-		: html`
-											<div id="fontsize" style=${this.messageFontSize}>
-												${unsafeHTML(messageV2Raw || '')}
-											<div>
-										`
-		: ''
+												${messageVersion2Node ? messageVersion2Node : unsafeHTML(messageV2Display || messageV2Raw || '')}
+											</div>
+										` : ''
 }
 									${version && version.toString() === '1' ?
 		html`
