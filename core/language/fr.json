@@ -106,7 +106,7 @@
         "qora": "Graine d'adresse QORA",
         "backup": "Fichier de Sauvegarde Qortal",
         "decrypt": "Décrypter le fichier de sauvegarde Qortal",
-		"save": "Mémoriser ce compte.",
+        "save": "Mémoriser ce compte.",
         "prepare": "Préparation de votre compte...",
         "areyousure": "Etes-vous sûr de vouloir supprimer ce compte ? (S'il est supprimé et qu'aucune sauvegarde Qortal n'existe, le compte pourrait être perdu à jamais ! Assurez-vous d'avoir un fichier de sauvegarde avant de faire cela !)",
         "error1": "La sauvegarde doit être un JSON valide",
@@ -879,7 +879,8 @@
         "cchange112": "TÉLÉCHARGEMENT DE PIÈCE JOINTE",
         "cchange113": "TÉLÉCHARGEMENT DE FICHIER",
         "cchange114": "Écrivez quelque chose ...",
-        "cchange115": "Sélectionner un groupe par ID"
+        "cchange115": "Sélectionner un groupe par ID",
+        "readOnlyGroup": "Join this group to send messages."
     },
     "welcomepage": {
         "wcchange1": "Bienvenue dans Q-Chat",
@@ -890,7 +891,12 @@
         "wcchange6": "Envoyer",
         "wcchange7": "Nom invalide / Adresse, Vérifier le nom / adresse et réessayer...",
         "wcchange8": "Message envoyé avec succès!",
-        "wcchange9": "Échec de l’envoi, veuillez réessayer..."
+        "wcchange9": "Échec de l’envoi, veuillez réessayer...",
+        "promotionsTitle": "Promotions du groupe",
+        "promotionsSubtitle": "See what groups were promoted this week.",
+        "promotionsEmpty": "No active group promotions.",
+        "promotionsError": "Unable to load group promotions.",
+        "unknownGroup": "Group"
     },
     "blockpage": {
         "bcchange1": "Bloquer un Utilisateur",
@@ -1053,7 +1059,7 @@
         "warningTitle": "Le nœud public limite les fonctions",
         "warningBody": "Installez Qortal Core pour un accès complet et la confidentialité.",
         "fallbackPromptTitle": "Utiliser le nœud public ?",
-		"actionBlocked": "Indisponible sur le nœud public. Connectez-vous à votre propre nœud pour continuer.",
+        "actionBlocked": "Indisponible sur le nœud public. Connectez-vous à votre propre nœud pour continuer.",
         "localLabel": "Nœud local",
         "customLabel": "Nœud personnalisé"
     },

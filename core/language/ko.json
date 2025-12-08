@@ -879,7 +879,8 @@
         "cchange112": "첨부 파일 업로드",
         "cchange113": "파일 업로드",
         "cchange114": "뭔가를 쓰세요 ...",
-        "cchange115": "ID로 그룹 선택"
+        "cchange115": "ID로 그룹 선택",
+        "readOnlyGroup": "Join this group to send messages."
     },
     "welcomepage": {
         "wcchange1": "Q-Chat에 오신 것을 환영합니다.",
@@ -890,7 +891,12 @@
         "wcchange6": "전송",
         "wcchange7": "이름/주소가 잘못되었습니다. 이름/주소를 확인하고 다시 시도하십시오...",
         "wcchange8": "메시지가 성공적으로 전송되었습니다!",
-        "wcchange9": "전송에 실패했습니다. 다시 시도하십시오..."
+        "wcchange9": "전송에 실패했습니다. 다시 시도하십시오...",
+        "promotionsTitle": "Group promotions",
+        "promotionsSubtitle": "See what groups were promoted this week.",
+        "promotionsEmpty": "No active group promotions.",
+        "promotionsError": "Unable to load group promotions.",
+        "unknownGroup": "Group"
     },
     "blockpage": {
         "bcchange1": "사용자 차단",

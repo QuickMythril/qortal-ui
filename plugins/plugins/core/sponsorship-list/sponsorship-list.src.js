@@ -578,9 +578,10 @@ class SponsorshipList extends LitElement {
 
 		// Get Last Ref
 		const getLastRef = async () => {
+			const address = selectedAddress && selectedAddress.address ? selectedAddress.address : ''
 			return await parentEpml.request('apiCall', {
 				type: 'api',
-				url: `/addresses/lastreference/${selectedAddress?.address}`
+				url: `/addresses/lastreference/${address}`
 			})
 		}
 

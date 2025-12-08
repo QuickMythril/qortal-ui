@@ -879,7 +879,8 @@
         "cchange112": "अटैचमेंट अपलोड",
         "cchange113": "फ़ाइल अपलोड करें",
         "cchange114": "कुछ लिखें ...",
-        "cchange115": "आईडी से समूह चुनें"
+        "cchange115": "आईडी से समूह चुनें",
+        "readOnlyGroup": "Join this group to send messages."
     },
     "welcomepage": {
         "wcchange1": "क्यू-चैट में आपका स्वागत है",
@@ -890,7 +891,12 @@
         "wcchange6": "भेजें",
         "wcchange7": "अमान्य नाम/पता, नाम/पता जांचें और पुनः प्रयास करें...",
         "wcchange8": "संदेश सफलतापूर्वक भेजा!",
-        "wcchange9": "भेजना विफल, कृपया पुन: प्रयास करें..."
+        "wcchange9": "भेजना विफल, कृपया पुन: प्रयास करें...",
+        "promotionsTitle": "Group promotions",
+        "promotionsSubtitle": "See what groups were promoted this week.",
+        "promotionsEmpty": "No active group promotions.",
+        "promotionsError": "Unable to load group promotions.",
+        "unknownGroup": "Group"
     },
     "blockpage": {
         "bcchange1": "खंड उपयोगकर्ता",

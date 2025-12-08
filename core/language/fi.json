@@ -106,7 +106,7 @@
         "qora": "QORA osoite siemen",
         "backup": "Qortal lompakon varmuuskopio",
         "decrypt": "Pura varmuuskopion salaus",
-		"save": "Muista tämä tili.",
+        "save": "Muista tämä tili.",
         "prepare": "Tilin valmistelu...",
         "areyousure": "Haluatko varmasti poistaa tämän lompakon tallennetuista lompakoistasi? (Jos se poistetaan, eikä varmuuskopiotiedostoa ole, tili voi kadota lopullisesti! Varmista, että sinulla on varmuuskopiotiedosto ennen kuin teet tämän!)",
         "error1": "Varmuuskopion on oltava oikeassa JSON-muodossa",
@@ -879,7 +879,8 @@
         "cchange112": "LIITTEEN LATAUS",
         "cchange113": "TIEDOSTON LATAUS",
         "cchange114": "Kirjoita jotain ...",
-        "cchange115": "Valitse ryhmä tunnuksella"
+        "cchange115": "Valitse ryhmä tunnuksella",
+        "readOnlyGroup": "Join this group to send messages."
     },
     "welcomepage": {
         "wcchange1": "Tervetuloa Q-Chatiin",
@@ -890,7 +891,12 @@
         "wcchange6": "Lähetä",
         "wcchange7": "Väärä nimi/osoite, tarkista Nimi/osoite ja yritä uudelleen...",
         "wcchange8": "Viesti lähetetty!",
-        "wcchange9": "Lähetys epäonnistui, yritä uudelleen..."
+        "wcchange9": "Lähetys epäonnistui, yritä uudelleen...",
+        "promotionsTitle": "Ryhmän mainokset",
+        "promotionsSubtitle": "See what groups were promoted this week.",
+        "promotionsEmpty": "No active group promotions.",
+        "promotionsError": "Unable to load group promotions.",
+        "unknownGroup": "Group"
     },
     "blockpage": {
         "bcchange1": "Estä käyttäjä",
@@ -1053,7 +1059,7 @@
         "warningTitle": "Julkinen solmu rajoittaa toimintoja",
         "warningBody": "Asenna Qortal Core saadaksesi täyden käytön ja yksityisyyden.",
         "fallbackPromptTitle": "Käytäkö julkista solmua?",
-		"actionBlocked": "Ei käytettävissä julkisella solmulla. Yhdistä omaan solmuusi jatkaaksesi.",
+        "actionBlocked": "Ei käytettävissä julkisella solmulla. Yhdistä omaan solmuusi jatkaaksesi.",
         "localLabel": "Paikallinen solmu",
         "customLabel": "Mukautettu solmu"
     },

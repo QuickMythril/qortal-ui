@@ -302,7 +302,9 @@ class OverviewPage extends LitElement {
 
 	renderMintingStatus() {
 		const addressInfo = window.parent.reduxStore.getState().app.accountInfo.addressInfo
-		const myMintingKey = addressInfo?.error !== 124 && +addressInfo?.level > 0
+		const addressError = addressInfo && addressInfo.error
+		const addressLevel = addressInfo && addressInfo.level !== undefined ? +addressInfo.level : 0
+		const myMintingKey = addressError !== 124 && addressLevel > 0
 
 		if (this.nodeInfo.isMintingPossible === true && this.nodeInfo.isSynchronizing === true && this.check1 === true && this.check2 === true && addressInfo.level > 0) {
 			this.cssStatus = ''
@@ -505,10 +507,12 @@ class StartMintingNow extends LitElement {
 	}
 
 	async changeStatus(value) {
-		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		const storeState = window.parent.reduxStore.getState()
+		const nodeConfig = storeState.app.nodeConfig
+		const myNode = nodeConfig.knownNodes[nodeConfig.node]
 		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
 		this.status = value
-		const address = window.parent.reduxStore.getState().app?.selectedAddress?.address
+		const address = storeState.app && storeState.app.selectedAddress ? storeState.app.selectedAddress.address : undefined
 
 		const findMintingAccountFromOtherUser = this.mintingAccountData.find((ma) => ma.recipientAccount === address && ma.mintingAccount !== address)
 
@@ -528,10 +532,12 @@ class StartMintingNow extends LitElement {
 			})
 		}
 
+		const hasForeignKey = findMintingAccountFromOtherUser && Array.isArray(findMintingAccountFromOtherUser.publicKey) && findMintingAccountFromOtherUser.publicKey[0]
+
 		try {
-			if (findMintingAccountFromOtherUser && findMintingAccountFromOtherUser?.publicKey[0]) {
+			if (hasForeignKey) {
 				await removeMintingAccount(
-					findMintingAccountFromOtherUser?.publicKey[0]
+					findMintingAccountFromOtherUser.publicKey[0]
 				)
 			}
 		} catch (error) {
@@ -570,7 +576,7 @@ class StartMintingNow extends LitElement {
 			if (!stop) {
 				stop = true
 				try {
-					const address = window.parent.reduxStore.getState().app?.selectedAddress?.address
+					const address = storeState.app && storeState.app.selectedAddress ? storeState.app.selectedAddress.address : undefined
 					const myRewardShareArray = await rewardShares(address)
 					if (myRewardShareArray.length > 0) {
 						clearInterval(interval)

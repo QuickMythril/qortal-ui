@@ -106,7 +106,7 @@
         "qora": "QORA aadressi seeme",
         "backup": "Qortal rahakoti varukoopiafail",
         "decrypt": "Krüpti varukoopiafail ",
-		"save": "Jäta see konto meelde.",
+        "save": "Jäta see konto meelde.",
         "prepare": "Konto ettevalmistus...",
         "areyousure": "Kas olete kindel, et soovite selle rahakoti salvestatud rahakottide hulgast eemaldada? (Kui eemaldate ja varukoopiafaili pole, võib konto jäädavalt kaduda! Enne seda veenduge, et teil oleks varukoopiafail!)",
         "error1": "Varukoopiafail peab olema korrektses JSON-formaadis",
@@ -879,7 +879,8 @@
         "cchange112": "MANUSE ÜLESLAADIMINE",
         "cchange113": "FAILI ÜLESLAADIMINE",
         "cchange114": "Kirjutage midagi ...",
-        "cchange115": "Vali grupp ID järgi"
+        "cchange115": "Vali grupp ID järgi",
+        "readOnlyGroup": "Join this group to send messages."
     },
     "welcomepage": {
         "wcchange1": "Tere tulemast Q-Chatti",
@@ -890,7 +891,12 @@
         "wcchange6": "Saada",
         "wcchange7": "Vale Nimi/aadress, kontrolli Nime/aadress üle ja proovi uuesti...",
         "wcchange8": "Sõnum saadetud!",
-        "wcchange9": "Saatmine ebaõnnestus, palun proovi uuesti..."
+        "wcchange9": "Saatmine ebaõnnestus, palun proovi uuesti...",
+        "promotionsTitle": "Uute grupide soovitused",
+        "promotionsSubtitle": "See what groups were promoted this week.",
+        "promotionsEmpty": "No active group promotions.",
+        "promotionsError": "Unable to load group promotions.",
+        "unknownGroup": "Group"
     },
     "blockpage": {
         "bcchange1": "Blokeeri kasutaja",
@@ -1053,7 +1059,7 @@
         "warningTitle": "Avalik sõlm piirab funktsioone",
         "warningBody": "Paigalda Qortal Core, et saada täielik ligipääs ja privaatsus.",
         "fallbackPromptTitle": "Kasuta avalikku sõlme?",
-		"actionBlocked": "Avalikus sõlmes pole saadaval. Ühendu oma sõlmega, et jätkata.",
+        "actionBlocked": "Avalikus sõlmes pole saadaval. Ühendu oma sõlmega, et jätkata.",
         "localLabel": "Kohalik sõlm",
         "customLabel": "Kohandatud sõlm"
     },

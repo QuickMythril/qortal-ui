@@ -52,13 +52,17 @@ class BecomeMinter extends LitElement {
 	}
 
 	render() {
-		const findMintingAccount = this.mintingAccountData?.find((ma) => ma.recipientAccount === window.parent.reduxStore.getState().app?.selectedAddress?.address)
-		const isAlreadySponsored = this.addressInfo?.error !== 124 && this.addressInfo?.level === 0 && this.addressInfo?.blocksMinted > 0 && this.addressInfo?.blocksMinted < 7200
+		const storeState = window.parent.reduxStore.getState()
+		const selectedAddress = storeState.app && storeState.app.selectedAddress ? storeState.app.selectedAddress.address : undefined
+		const mintingAccounts = Array.isArray(this.mintingAccountData) ? this.mintingAccountData : []
+		const findMintingAccount = mintingAccounts.find((ma) => ma.recipientAccount === selectedAddress)
+		const currentAddressInfo = this.addressInfo || {}
+		const isAlreadySponsored = currentAddressInfo.error !== 124 && currentAddressInfo.level === 0 && currentAddressInfo.blocksMinted > 0 && currentAddressInfo.blocksMinted < 7200
 		return html`
 			${this.isPageLoading
 		? html`
-					<div class="loadingContainer">
-						<div class="loading"></div>
+						<div class="loadingContainer">
+							<div class="loading"></div>
 					</div>
 					<div class="backdrop"></div>
 				`
@@ -171,16 +175,19 @@ class BecomeMinter extends LitElement {
 		}
 
 		try {
+			const storeState = window.parent.reduxStore.getState()
+			const selectedAddress = storeState.app && storeState.app.selectedAddress ? storeState.app.selectedAddress.address : ''
 			const [nodeInfo, myRewardShareArray, mintingaccounts] =
-				await Promise.all([
-					this.getNodeInfo(),
-					this.getRewardShareRelationship(
-						window.parent.reduxStore.getState().app?.selectedAddress?.address
-					),
-					this.getMintingAcccounts()
-				])
+					await Promise.all([
+						this.getNodeInfo(),
+						this.getRewardShareRelationship(
+							selectedAddress
+						),
+						this.getMintingAcccounts()
+					])
 			this.nodeInfo = nodeInfo
-			this.rewardSharePublicKey = myRewardShareArray[0]?.rewardSharePublicKey
+			const firstRewardShare = Array.isArray(myRewardShareArray) && myRewardShareArray.length > 0 ? myRewardShareArray[0] : null
+			this.rewardSharePublicKey = firstRewardShare && firstRewardShare.rewardSharePublicKey ? firstRewardShare.rewardSharePublicKey : ''
 			this.isPageLoading = false
 			this.mintingAccountData = mintingaccounts
 			this.addressInfo = window.parent.reduxStore.getState().app.accountInfo.addressInfo
@@ -207,7 +214,9 @@ class BecomeMinter extends LitElement {
 	}
 
 	_levelUpBlocks() {
-		return (blocksNeed(0) - (this.addressInfo?.blocksMinted + this.addressInfo?.blocksMintedAdjustment)).toString()
+		const blocksMinted = this.addressInfo && typeof this.addressInfo.blocksMinted === 'number' ? this.addressInfo.blocksMinted : 0
+		const blocksMintedAdjustment = this.addressInfo && typeof this.addressInfo.blocksMintedAdjustment === 'number' ? this.addressInfo.blocksMintedAdjustment : 0
+		return (blocksNeed(0) - (blocksMinted + blocksMintedAdjustment)).toString()
 	}
 
 	// Standard functions

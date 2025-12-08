@@ -879,7 +879,8 @@
         "cchange112": "LAST OPP VEDLEGG",
         "cchange113": "LAST OPP FIL",
         "cchange114": "Skriv noe ...",
-        "cchange115": "Velg gruppe etter ID"
+        "cchange115": "Velg gruppe etter ID",
+        "readOnlyGroup": "Join this group to send messages."
     },
     "welcomepage": {
         "wcchange1": "Velkommen til Q-Chat",
@@ -890,7 +891,12 @@
         "wcchange6": "Send",
         "wcchange7": "Ugyldig navn / Adresse, Sjekk navnet / adressen og prøv på nytt...",
         "wcchange8": "Melding sendt!",
-        "wcchange9": "Sending mislyktes. Prøv på nytt..."
+        "wcchange9": "Sending mislyktes. Prøv på nytt...",
+        "promotionsTitle": "Group promotions",
+        "promotionsSubtitle": "See what groups were promoted this week.",
+        "promotionsEmpty": "No active group promotions.",
+        "promotionsError": "Unable to load group promotions.",
+        "unknownGroup": "Group"
     },
     "blockpage": {
         "bcchange1": "blokker",

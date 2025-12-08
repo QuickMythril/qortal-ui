@@ -879,7 +879,8 @@
         "cchange112": "ÎNCĂRCARE AATAșAMENT",
         "cchange113": "ÎNCĂRCARE FIȘIER",
         "cchange114": "Scrie ceva ...",
-        "cchange115": "Selectează grupul după ID"
+        "cchange115": "Selectează grupul după ID",
+        "readOnlyGroup": "Join this group to send messages."
     },
     "welcomepage": {
         "wcchange1": "Bine ai venit la Q-Chat",
@@ -890,7 +891,12 @@
         "wcchange6": "Trimite",
         "wcchange7": "Nume / adresa invalida, Verificati numele / adresa si incercati din nou...",
         "wcchange8": "Mesaj trimis cu succes!",
-        "wcchange9": "Trimiterea a esuat, Va rugam sa incercati din nou..."
+        "wcchange9": "Trimiterea a esuat, Va rugam sa incercati din nou...",
+        "promotionsTitle": "Group promotions",
+        "promotionsSubtitle": "See what groups were promoted this week.",
+        "promotionsEmpty": "No active group promotions.",
+        "promotionsError": "Unable to load group promotions.",
+        "unknownGroup": "Group"
     },
     "blockpage": {
         "bcchange1": "Blocheaza utilizator",

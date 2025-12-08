@@ -66,7 +66,7 @@ export const getPrimaryName = async (address) => {
 			type: 'api',
 			url: `/names/primary/${address}`
 		})
-		if (res?.name) {
+		if (res && res.name) {
 			return res.name
 		}
 		return ''
@@ -96,10 +96,14 @@ export const getMyNameFromStore = (opts = {}) => {
 	const allowAddressFallback = opts.allowAddressFallback !== false
 	const allowActiveName = opts.allowActiveName !== false
 	try {
-		const state = window?.parent?.reduxStore?.getState?.()
-		const info = state?.app?.accountInfo || {}
-		const address = info?.addressInfo?.address || ''
-		const name = (allowActiveName ? info?.activeName : '') || info?.primaryName || info?.names?.[0]?.name || ''
+		const hasGetState = window && window.parent && window.parent.reduxStore && typeof window.parent.reduxStore.getState === 'function'
+		const state = hasGetState ? window.parent.reduxStore.getState() : null
+		const info = state && state.app && state.app.accountInfo ? state.app.accountInfo : {}
+		const address = info.addressInfo && info.addressInfo.address ? info.addressInfo.address : ''
+		const namesArray = Array.isArray(info.names) ? info.names : []
+		const firstName = namesArray[0] ? namesArray[0].name : ''
+		const activeName = allowActiveName ? info.activeName : ''
+		const name = activeName || info.primaryName || firstName || ''
 
 		if (name) return name
 		return allowAddressFallback ? address : ''
@@ -237,9 +241,10 @@ export function bytesToMegabytes(bytes) {
 }
 
 export function cropAddress(string = '', range = 5) {
+	const safeString = typeof string === 'string' ? string : ''
 	const [start, end] = [
-		string?.substring(0, range),
-		string?.substring(string?.length - range, string?.length)
+		safeString.substring(0, range),
+		safeString.substring(safeString.length - range, safeString.length)
 	]
 
 	return start + '...' + end

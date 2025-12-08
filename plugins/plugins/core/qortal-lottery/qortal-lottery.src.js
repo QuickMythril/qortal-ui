@@ -409,7 +409,7 @@ class QortalLottery extends LitElement {
 						parentEpml.request('apiCall', {
 							url: `/names/primary/${twinner}`
 						}).then(res => {
-							const winName = res?.name || ''
+							const winName = (res && res.name) || ''
 							const obj = {
 								description: tdescription,
 								startblock: tstartblock,

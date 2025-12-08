@@ -3913,7 +3913,7 @@ class MultiWallet extends LitElement {
 					type: 'api',
 					url: `/names/address/${recipient}`
 				})
-				if (getNames?.length > 0) {
+				if (Array.isArray(getNames) && getNames.length > 0) {
 					return getNames[0].name
 				} else {
 					return ''

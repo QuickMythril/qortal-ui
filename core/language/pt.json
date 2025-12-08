@@ -106,7 +106,7 @@
         "qora": "Endereço seed do QORA",
         "backup": "Arquivo de backup Qortal",
         "decrypt": "Descriptografar arquivo de backup",
-		"save": "Lembrar esta conta.",
+        "save": "Lembrar esta conta.",
         "prepare": "Preparando sua Conta...",
         "areyousure": "Tem certeza de que deseja remover esta conta das contas salvas? (Se for removida e não existir nenhum arquivo de backup, a conta poderá ser perdida para sempre! Certifique-se de ter um arquivo de backup antes de fazer isso!)",
         "error1": "Backup tem que ser um JSON valido",
@@ -879,7 +879,8 @@
         "cchange112": "UPLOAD DE ANEXO",
         "cchange113": "CARREGAR ARQUIVO",
         "cchange114": "Escreva algo ...",
-        "cchange115": "Selecionar grupo por ID"
+        "cchange115": "Selecionar grupo por ID",
+        "readOnlyGroup": "Join this group to send messages."
     },
     "welcomepage": {
         "wcchange1": "Bem-vindo ao Q-Chat",
@@ -890,7 +891,12 @@
         "wcchange6": "Enviar",
         "wcchange7": "Nome / Endereço inválido, verifique o nome / endereço e tente novamente...",
         "wcchange8": "Mensagem enviada com sucesso",
-        "wcchange9": "Envio falhou, por favor tente novamente..."
+        "wcchange9": "Envio falhou, por favor tente novamente...",
+        "promotionsTitle": "Promoções do grupo",
+        "promotionsSubtitle": "See what groups were promoted this week.",
+        "promotionsEmpty": "No active group promotions.",
+        "promotionsError": "Unable to load group promotions.",
+        "unknownGroup": "Group"
     },
     "blockpage": {
         "bcchange1": "Bloquear Usuário",
@@ -1053,7 +1059,7 @@
         "warningTitle": "O nó público limita funcionalidades",
         "warningBody": "Instale o Qortal Core para acesso total e privacidade.",
         "fallbackPromptTitle": "Usar nó público?",
-		"actionBlocked": "Não disponível no nó público. Conecte-se ao seu próprio nó para continuar.",
+        "actionBlocked": "Não disponível no nó público. Conecte-se ao seu próprio nó para continuar.",
         "localLabel": "Nó local",
         "customLabel": "Nó personalizado"
     },

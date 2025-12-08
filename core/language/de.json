@@ -106,7 +106,7 @@
         "qora": "QORA Adresssamen",
         "backup": "Qortal-Sicherungsdatei",
         "decrypt": "Sicherungsdatei entschlüsseln",
-		"save": "Dieses Konto merken.",
+        "save": "Dieses Konto merken.",
         "prepare": "Vorbereiten Ihres Kontos...",
         "areyousure": "Möchten Sie dieses Wallet wirklich aus den gespeicherten Wallets entfernen? (Wenn es entfernt wird und keine Sicherungsdatei vorhanden ist, könnte das Konto für immer verloren gehen! Stellen Sie sicher, dass Sie über eine Sicherungsdatei verfügen, bevor Sie dies tun!)",
         "error1": "Die Sicherungsdatei muss gültiges JSON sein",
@@ -879,7 +879,8 @@
         "cchange112": "ANHANG HOCHLADEN",
         "cchange113": "DATEI HOCHLADEN",
         "cchange114": "Schreibe etwas …",
-        "cchange115": "Gruppe per ID auswählen"
+        "cchange115": "Gruppe per ID auswählen",
+        "readOnlyGroup": "Join this group to send messages."
     },
     "welcomepage": {
         "wcchange1": "Willkommen zu Q-Chat",
@@ -890,7 +891,12 @@
         "wcchange6": "Senden",
         "wcchange7": "Ungültiger Name / Adresse, überprüfen Sie den Namen / die Adresse und versuchen Sie es erneut...",
         "wcchange8": "Nachricht erfolgreich gesendet!",
-        "wcchange9": "Senden fehlgeschlagen, bitte erneut versuchen..."
+        "wcchange9": "Senden fehlgeschlagen, bitte erneut versuchen...",
+		"promotionsTitle": "Gruppen-Promotionen",
+        "promotionsSubtitle": "See what groups were promoted this week.",
+        "promotionsEmpty": "No active group promotions.",
+        "promotionsError": "Unable to load group promotions.",
+        "unknownGroup": "Group"
     },
     "blockpage": {
         "bcchange1": "Benutzer Blockieren",
@@ -1053,7 +1059,7 @@
         "warningTitle": "Öffentlicher Node hat eingeschränkte Funktionen",
         "warningBody": "Installiere Qortal Core für vollen Zugriff und Privatsphäre.",
         "fallbackPromptTitle": "Öffentlichen Node verwenden?",
-		"actionBlocked": "Auf dem öffentlichen Node nicht verfügbar. Verbinde dich mit deinem eigenen Node, um fortzufahren.",
+        "actionBlocked": "Auf dem öffentlichen Node nicht verfügbar. Verbinde dich mit deinem eigenen Node, um fortzufahren.",
         "localLabel": "Lokaler Node",
         "customLabel": "Benutzerdefinierter Node"
     },

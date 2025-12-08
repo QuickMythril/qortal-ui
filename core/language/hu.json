@@ -879,7 +879,8 @@
         "cchange112": "MELLÉKLET FELTÖLTÉSE",
         "cchange113": "FÁJL FELTÖLTÉS",
         "cchange114": "Írj valamit ...",
-        "cchange115": "Csoport kiválasztása azonosító alapján"
+        "cchange115": "Csoport kiválasztása azonosító alapján",
+        "readOnlyGroup": "Join this group to send messages."
     },
     "welcomepage": {
         "wcchange1": "Üdvözöljük a Q-Chathoz",
@@ -890,7 +891,12 @@
         "wcchange6": "Küld",
         "wcchange7": "Érvénytelen Név / Cím, Ellenőrizze a nevet / Cím, és próbálkozzon újra",
         "wcchange8": "Az üzenet elküldése sikeresen megtörtént!",
-        "wcchange9": "A küldés sikertelen, próbálkozzon újra..."
+        "wcchange9": "A küldés sikertelen, próbálkozzon újra...",
+        "promotionsTitle": "Group promotions",
+        "promotionsSubtitle": "See what groups were promoted this week.",
+        "promotionsEmpty": "No active group promotions.",
+        "promotionsError": "Unable to load group promotions.",
+        "unknownGroup": "Group"
     },
     "blockpage": {
         "bcchange1": "Felhasználó Letiltása",

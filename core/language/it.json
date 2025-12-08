@@ -106,7 +106,7 @@
         "qora": "Seed dell'indirizzo Qora",
         "backup": "Backup del portafoglio Qortal",
         "decrypt": "Decifra backup",
-		"save": "Ricorda questo account.",
+        "save": "Ricorda questo account.",
         "prepare": "Preparazione del tuo account",
         "areyousure": "Sei sicuro di voler rimuovere questo portafoglio dai portafogli salvati? (Se rimosso e non esiste alcun file di backup, l'account potrebbe essere perso per sempre! Assicurati di avere un file di backup prima di farlo!)",
         "error1": "Il backup deve essere un JSON valido",
@@ -879,7 +879,8 @@
         "cchange112": "CARICA ALLEGATO",
         "cchange113": "CARICA FILE",
         "cchange114": "Scrivi qualcosa ...",
-        "cchange115": "Seleziona gruppo per ID"
+        "cchange115": "Seleziona gruppo per ID",
+        "readOnlyGroup": "Join this group to send messages."
     },
     "welcomepage": {
         "wcchange1": "Benvenuto in Q-Chat",
@@ -890,7 +891,12 @@
         "wcchange6": "Invia",
         "wcchange7": "Nome/indirizzo non valido, controlla il nome/indirizzo e riprova...",
         "wcchange8": "Messaggio inviato con successo!",
-        "wcchange9": "Invio fallito, riprovare..."
+        "wcchange9": "Invio fallito, riprovare...",
+        "promotionsTitle": "Promozioni di gruppo",
+        "promotionsSubtitle": "See what groups were promoted this week.",
+        "promotionsEmpty": "No active group promotions.",
+        "promotionsError": "Unable to load group promotions.",
+        "unknownGroup": "Group"
     },
     "blockpage": {
         "bcchange1": "Blocca Utente",
@@ -1053,7 +1059,7 @@
         "warningTitle": "Il nodo pubblico limita le funzioni",
         "warningBody": "Installa Qortal Core per pieno accesso e privacy.",
         "fallbackPromptTitle": "Usare il nodo pubblico?",
-		"actionBlocked": "Non disponibile sul nodo pubblico. Connettiti al tuo nodo per continuare.",
+        "actionBlocked": "Non disponibile sul nodo pubblico. Connettiti al tuo nodo per continuare.",
         "localLabel": "Nodo locale",
         "customLabel": "Nodo personalizzato"
     },

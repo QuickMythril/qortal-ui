@@ -704,6 +704,12 @@ class Chat extends LitElement {
 		this.editor.commands.setContent('')
 	}
 
+	openGroupFromPromotion(groupId) {
+		if (!groupId) return
+		const url = `group/${groupId}`
+		this.setActiveChatHeadUrl(url)
+	}
+
 	async getUpdateCompleteTextEditor() {
 		await super.getUpdateComplete()
 		const marginElements = Array.from(this.shadowRoot.querySelectorAll('chat-text-editor'))
@@ -1169,6 +1175,7 @@ class Chat extends LitElement {
 			<chat-welcome-page
 				.myAddress=${this.selectedAddress}
 				.setOpenPrivateMessage=${(val) => this.setOpenPrivateMessage(val)}
+				.openGroupPreview=${(groupId) => this.openGroupFromPromotion(groupId)}
 			>
 			</chat-welcome-page>
 		`

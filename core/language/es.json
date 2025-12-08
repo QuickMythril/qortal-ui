@@ -106,7 +106,7 @@
         "qora": "Frase semilla de la dirección QORA",
         "backup": "Archivo de copia de seguridad Qortal",
         "decrypt": "Descifrar archivo de copia de seguridad",
-		"save": "Recordar esta cuenta.",
+        "save": "Recordar esta cuenta.",
         "prepare": "Preparando tu cuenta...",
         "areyousure": "¿Está seguro de que desea eliminar esta billetera de las billeteras guardadas? (Si se elimina y no existe un archivo de respaldo, la cuenta podría perderse para siempre. ¡Asegúrese de tener un archivo de respaldo antes de hacer esto!)",
         "error1": "La copia de seguridad tiene que ser un JSON válido",
@@ -879,7 +879,8 @@
         "cchange112": "CARGA DE ADJUNTOS",
         "cchange113": "CARGA DE ARCHIVO",
         "cchange114": "Escribe algo ...",
-        "cchange115": "Seleccionar grupo por ID"
+        "cchange115": "Seleccionar grupo por ID",
+        "readOnlyGroup": "Join this group to send messages."
     },
     "welcomepage": {
         "wcchange1": "Bienvenido al Q-Chat",
@@ -890,7 +891,12 @@
         "wcchange6": "Enviar",
         "wcchange7": "Nombre / Dirección inválida, Verifique Nombre / Dirección e intente de nuevo...",
         "wcchange8": "Mensaje enviado con éxito!",
-        "wcchange9": "El envío ha fallado, por favor intente de nuevo..."
+        "wcchange9": "El envío ha fallado, por favor intente de nuevo...",
+        "promotionsTitle": "Promociones del grupo",
+        "promotionsSubtitle": "See what groups were promoted this week.",
+        "promotionsEmpty": "No active group promotions.",
+        "promotionsError": "Unable to load group promotions.",
+        "unknownGroup": "Group"
     },
     "blockpage": {
         "bcchange1": "Bloquear Usuario",
@@ -1053,7 +1059,7 @@
         "warningTitle": "El nodo público limita funciones",
         "warningBody": "Instala Qortal Core para acceso completo y privacidad.",
         "fallbackPromptTitle": "¿Usar nodo público?",
-		"actionBlocked": "No disponible en el nodo público. Conéctate a tu propio nodo para continuar.",
+        "actionBlocked": "No disponible en el nodo público. Conéctate a tu propio nodo para continuar.",
         "localLabel": "Nodo local",
         "customLabel": "Nodo personalizado"
     },

@@ -3741,6 +3741,105 @@ export const chatWelcomePageStyles = css`
         resize: none;
         background: #eee;
     }
+
+    .promotions-section {
+        margin-top: 2rem;
+        background: var(--white);
+        border-radius: 16px;
+        padding: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+
+    .promotions-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .promotions-title {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--black);
+    }
+
+    .promotions-subtitle {
+        margin: 4px 0 0 0;
+        font-size: 14px;
+        color: #6b7280;
+    }
+
+    .promotions-loading,
+    .promotions-empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px 8px;
+        color: #6b7280;
+        font-size: 14px;
+        text-align: center;
+    }
+
+    .promotions-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 12px;
+        max-height: 420px;
+        overflow: auto;
+    }
+
+    .promotion-card {
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 12px;
+        background: var(--white);
+    }
+
+    .promotion-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .promotion-group {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--black);
+    }
+
+    .promotion-meta {
+        margin: 4px 0 0 0;
+        font-size: 13px;
+        color: #6b7280;
+    }
+
+    .promotion-actions {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .promotion-text {
+        margin: 10px 0 0 0;
+        font-size: 14px;
+        color: var(--black);
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    .promotion-description {
+        margin: 6px 0 0 0;
+        font-size: 13px;
+        color: #6b7280;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
 `
 
 export const chatHeadStyles = css`

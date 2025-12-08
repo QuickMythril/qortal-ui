@@ -106,7 +106,7 @@
         "qora": "Qora钱包助记词",
         "backup": "Qortal钱包备份文件",
         "decrypt": "正在解密钱包备份文件",
-		"save": "记住此账户。",
+        "save": "记住此账户。",
         "prepare": "正在加载你的钱包",
         "areyousure": "您确定要从已保存的帐户中删除此帐户吗？ （如果删除并且不存在备份文件，帐户可能会永远丢失！在执行此操作之前确保您有备份文件！",
         "error1": "备份文件必须为有效的JSON格式文件",
@@ -879,7 +879,8 @@
         "cchange112": "附件上传",
         "cchange113": "文件上传",
         "cchange114": "写点东西 ...",
-        "cchange115": "按ID选择群组"
+        "cchange115": "按ID选择群组",
+        "readOnlyGroup": "Join this group to send messages."
     },
     "welcomepage": {
         "wcchange1": "欢迎来到Q-Chat",
@@ -890,7 +891,12 @@
         "wcchange6": "传送",
         "wcchange7": "无效的名称/ 钱包地址, 检查名称/ 钱包地址后再次尝试...",
         "wcchange8": "成功发送信息!",
-        "wcchange9": "发送失败, 请再此尝试..."
+        "wcchange9": "发送失败, 请再此尝试...",
+        "promotionsTitle": "群组推广",
+        "promotionsSubtitle": "See what groups were promoted this week.",
+        "promotionsEmpty": "No active group promotions.",
+        "promotionsError": "Unable to load group promotions.",
+        "unknownGroup": "Group"
     },
     "blockpage": {
         "bcchange1": "封锁用户",
@@ -1053,7 +1059,7 @@
         "warningTitle": "公共节点功能受限",
         "warningBody": "安装 Qortal Core 以获得完整访问和隐私。",
         "fallbackPromptTitle": "使用公共节点？",
-		"actionBlocked": "公共节点不可用。请连接到您自己的节点后继续。",
+        "actionBlocked": "公共节点不可用。请连接到您自己的节点后继续。",
         "localLabel": "本地节点",
         "customLabel": "自定义节点"
     },

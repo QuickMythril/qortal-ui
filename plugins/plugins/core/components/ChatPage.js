@@ -109,6 +109,7 @@ class ChatPage extends LitElement {
 			openForwardOpen: { type: Boolean },
 			groupAdmin: { type: Array },
 			groupMembers: { type: Array },
+			canSendMessages: { type: Boolean },
 			shifted: { type: Boolean },
 			shiftedResources: { type: Boolean },
 			shiftedSettings: { type: Boolean },
@@ -203,6 +204,7 @@ class ChatPage extends LitElement {
 		this.openForwardOpen = false
 		this.groupAdmin = []
 		this.groupMembers = []
+		this.canSendMessages = true
 		this.shifted = false
 		this.shiftedResources = false
 		this.shiftedSettings = false
@@ -328,13 +330,18 @@ class ChatPage extends LitElement {
 	}}
 							>
 							</vaadin-icon>
-						</div>
-						<div class="typing-area">
-							${this.repliedToMessageObj &&
-								html`
-									<div class="repliedTo-container">
-										<div class="repliedTo-subcontainer">
-											<vaadin-icon class="reply-icon" icon="vaadin:reply" slot="icon"></vaadin-icon>
+							</div>
+							${(!this.isReceipient && !this.canSendMessages) ? html`
+								<div style="margin:16px 0; padding:12px; background: var(--chat-group, #f3f4f6); border-radius:12px; color: var(--black); text-align:center; font-weight:600;">
+									${translate('chatpage.readOnlyGroup') || 'Join this group to send messages.'}
+								</div>
+							` : html`
+							<div class="typing-area">
+								${this.repliedToMessageObj &&
+									html`
+										<div class="repliedTo-container">
+											<div class="repliedTo-subcontainer">
+												<vaadin-icon class="reply-icon" icon="vaadin:reply" slot="icon"></vaadin-icon>
 											<div class="repliedTo-message">
 												<p class="senderName">${this.repliedToMessageObj.senderName ? this.repliedToMessageObj.senderName : this.repliedToMessageObj.sender}</p>
 												${this.repliedToMessageObj.version.toString() === '1' ?
@@ -379,11 +386,11 @@ class ChatPage extends LitElement {
 									</div>
 								`
 }
-							<div class="chatbar">
-								<chat-text-editor
-									?hasGlobalEvents=${true}
-									iframeId="_chatEditorDOM"
-									placeholder=${this.chatEditorPlaceholder}
+								<div class="chatbar">
+									<chat-text-editor
+										?hasGlobalEvents=${true}
+										iframeId="_chatEditorDOM"
+										placeholder=${this.chatEditorPlaceholder}
 									._sendMessage=${this._sendMessage}
 									.imageFile=${this.imageFile}
 									.insertFile=${this.insertFile}
@@ -404,11 +411,11 @@ class ChatPage extends LitElement {
 								>
 								</chat-text-editor>
 							</div>
+							</div>
 						</div>
-					</div>
-					${(this.isUploadingImage || this.isDeletingImage) ?
+						${(this.isUploadingImage || this.isDeletingImage) ?
 		html`
-							<div class="dialogCustom">
+								<div class="dialogCustom">
 								<div class="dialogCustomInner">
 									<div class="dialog-container-loader">
 										<div class=${'smallLoading marginLoader'}></div>
@@ -762,17 +769,18 @@ class ChatPage extends LitElement {
 						<tip-user .closeTipUser=${!this.openTipUser} .userName=${this.userName} .setOpenTipUser=${(val) => this.setOpenTipUser(val)}></tip-user>
 					</wrapper-modal>
 					<wrapper-modal .onClickFunc=${() => {this.setOpenUserInfo(false); this.setUserName(''); this.setSelectedHead({})}} style=${this.openUserInfo ? 'display: block' : 'display: none'}>
-						<user-info
-							.setOpenUserInfo=${(val) => this.setOpenUserInfo(val)}
-							.setOpenTipUser=${(val) => this.setOpenTipUser(val)}
-							.setOpenPrivateMessage=${(val) => this.setOpenPrivateMessage(val)}
-							.userName=${this.userName}
-							.selectedHead=${this.selectedHead}
-						>
-						</user-info>
-					</wrapper-modal>
-				</div>
-				<div class="chat-right-panel ${this.shifted ? 'movedin' : 'movedout'}" ${animate()}>
+							<user-info
+								.setOpenUserInfo=${(val) => this.setOpenUserInfo(val)}
+								.setOpenTipUser=${(val) => this.setOpenTipUser(val)}
+								.setOpenPrivateMessage=${(val) => this.setOpenPrivateMessage(val)}
+								.userName=${this.userName}
+								.selectedHead=${this.selectedHead}
+							>
+							</user-info>
+						</wrapper-modal>
+						`}
+					</div>
+					<div class="chat-right-panel ${this.shifted ? 'movedin' : 'movedout'}" ${animate()}>
 					<chat-right-panel
 						.getMoreMembers=${(val) => this.getMoreMembers(val)}
 						.toggle=${(val) => this._toggle(val)}
@@ -1671,6 +1679,25 @@ class ChatPage extends LitElement {
 
 		const isRecipient = this.chatId.includes('direct') === true ? true : false
 		const groupId = this.chatId.split('/')[1]
+
+		if (isRecipient || groupId.toString() === '0') {
+			this.canSendMessages = true
+		} else {
+			this.canSendMessages = false
+			try {
+				const address = this.selectedAddress && this.selectedAddress.address
+				if (address) {
+					const memberGroups = await parentEpml.request('apiCall', {
+						type: 'api',
+						url: `/groups/member/${address}`
+					})
+					if (Array.isArray(memberGroups)) {
+						const isMember = memberGroups.some(group => String(group.groupId) === String(groupId))
+						this.canSendMessages = isMember
+					}
+				}
+			} catch (error) { /* empty */ }
+		}
 
 		if (!isRecipient && groupId.toString() !== '0') {
 			try {

@@ -879,7 +879,8 @@
         "cchange112": "添付ファイルのアップロード",
         "cchange113": "ファイルのアップロード",
         "cchange114": "何か書いてください ...",
-        "cchange115": "IDでグループを選択"
+        "cchange115": "IDでグループを選択",
+        "readOnlyGroup": "Join this group to send messages."
     },
     "welcomepage": {
         "wcchange1": "Q-Chat へようこそ",
@@ -890,7 +891,12 @@
         "wcchange6": "送信",
         "wcchange7": "無効な名前/アドレスです。名前/アドレスを確認して再試行してください...",
         "wcchange8": "正常にメッセージを送信!",
-        "wcchange9": "送信に失敗しました。再試行してください..."
+        "wcchange9": "送信に失敗しました。再試行してください...",
+        "promotionsTitle": "Group promotions",
+        "promotionsSubtitle": "See what groups were promoted this week.",
+        "promotionsEmpty": "No active group promotions.",
+        "promotionsError": "Unable to load group promotions.",
+        "unknownGroup": "Group"
     },
     "blockpage": {
         "bcchange1": "ユーザーをブロック",

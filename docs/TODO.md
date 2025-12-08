@@ -28,6 +28,8 @@
   - [ ] Change icon view sizes
 - [ ] Update welcome info and tutorials
 - [ ] Check qortal:// and http(s):// link support
+  - [?] Allow external links from websites/apps
+  - [ ] Allow external links from chat
 - [ ] Check Video / Poll / Image / Audio embeds
 - [ ] Add trade fee support to Trade Portal?
 - [ ] Combine Websites & Q-Apps plugins
@@ -37,6 +39,8 @@
 
 - [ ] Other Hub features:
   - [ ] Group Promotions
+    - [?] View / Join promoted groups
+    - [ ] Add new group promotions
   - [ ] 
 
 ## Needs research

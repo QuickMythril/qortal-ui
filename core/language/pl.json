@@ -879,7 +879,8 @@
         "cchange112": "PRZESYŁANIE ZAŁĄCZNIKÓW",
         "cchange113": "PRZESYŁANIE PLIKU",
         "cchange114": "Napisz coś ...",
-        "cchange115": "Wybierz grupę według ID"
+        "cchange115": "Wybierz grupę według ID",
+        "readOnlyGroup": "Join this group to send messages."
     },
     "welcomepage": {
         "wcchange1": "Witamy w Q-Chat",
@@ -890,7 +891,12 @@
         "wcchange6": "Wyślij",
         "wcchange7": "Nieprawidłowa nazwa/adres, sprawdź nazwę/adres i spróbuj ponownie...",
         "wcchange8": "Wiadomość wysłana pomyślnie!",
-        "wcchange9": "Wysyłanie nie powiodło się, spróbuj ponownie..."
+        "wcchange9": "Wysyłanie nie powiodło się, spróbuj ponownie...",
+        "promotionsTitle": "Group promotions",
+        "promotionsSubtitle": "See what groups were promoted this week.",
+        "promotionsEmpty": "No active group promotions.",
+        "promotionsError": "Unable to load group promotions.",
+        "unknownGroup": "Group"
     },
     "blockpage": {
         "bcchange1": "Zablokuj Użytkownika",

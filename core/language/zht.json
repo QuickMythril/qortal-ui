@@ -106,7 +106,7 @@
         "qora": "Qora 錢包助記詞",
         "backup": "Qortal 錢包備份文件",
         "decrypt": "正在解密錢包備份文件",
-		"save": "記住此帳戶。",
+        "save": "記住此帳戶。",
         "prepare": "正在加載你的錢包",
         "areyousure": "您確定要從已儲存的帳戶中刪除此帳戶嗎？ （如果刪除並且不存在備份文件，帳戶可能會永遠丟失！在執行此操作之前確保您有備份文件！）",
         "error1": "備份文件必須為有效的JSON格式文件",
@@ -879,7 +879,8 @@
         "cchange112": "附件上傳",
         "cchange113": "檔案上傳",
         "cchange114": "寫點東西 ...",
-        "cchange115": "按ID選擇群組"
+        "cchange115": "按ID選擇群組",
+        "readOnlyGroup": "Join this group to send messages."
     },
     "welcomepage": {
         "wcchange1": "歡迎來到 Q-Chat",
@@ -890,7 +891,12 @@
         "wcchange6": "傳送",
         "wcchange7": "無效的名稱 / 錢包地址, 檢查名稱 / 錢包地址後再次嘗試...",
         "wcchange8": "成功發送信息!",
-        "wcchange9": "發送失敗, 請再此嘗試..."
+        "wcchange9": "發送失敗, 請再此嘗試...",
+        "promotionsTitle": "群组推广",
+        "promotionsSubtitle": "See what groups were promoted this week.",
+        "promotionsEmpty": "No active group promotions.",
+        "promotionsError": "Unable to load group promotions.",
+        "unknownGroup": "Group"
     },
     "blockpage": {
         "bcchange1": "封鎖用戶",
@@ -1053,7 +1059,7 @@
         "warningTitle": "公共節點功能受限",
         "warningBody": "安裝 Qortal Core 以取得完整存取與隱私。",
         "fallbackPromptTitle": "使用公共節點？",
-		"actionBlocked": "公共節點不可用。請連線到您自己的節點後再繼續。",
+        "actionBlocked": "公共節點不可用。請連線到您自己的節點後再繼續。",
         "localLabel": "本機節點",
         "customLabel": "自訂節點"
     },

@@ -60,6 +60,12 @@ class ChatTextEditor extends LitElement {
 	}
 
 	render() {
+		const storeState = (window.parent.reduxStore && typeof window.parent.reduxStore.getState === 'function')
+			? window.parent.reduxStore.getState()
+			: {}
+		const appState = storeState.app || {}
+		const autoLoadImageChats = Array.isArray(appState.autoLoadImageChats) ? appState.autoLoadImageChats : []
+
 		return html`
 			<div class=${['chatbar-container', 'chatbar-buttons', this.iframeId !== '_chatEditorDOM' && 'hide-styling'].join(' ')} style="align-items: center; justify-content:space-between;">
 				<div style="display: flex; align-items: center;">
@@ -110,20 +116,20 @@ class ChatTextEditor extends LitElement {
 								${translate('chatpage.cchange69')}
 							</label>
 							<mwc-checkbox
-								style="margin-right: -15px;"
-								id="qChatShowAutoMsg"
-								@click=${e => {
+									style="margin-right: -15px;"
+									id="qChatShowAutoMsg"
+									@click=${e => {
 		if (e.target.checked) {
 			window.parent.reduxStore.dispatch(window.parent.reduxAction.removeAutoLoadImageChat(this.chatId))
 			return
 		}
 		window.parent.reduxStore.dispatch(window.parent.reduxAction.addAutoLoadImageChat(this.chatId))
 	}}
-								?checked=${(window.parent.reduxStore.getState().app?.autoLoadImageChats || []).includes(this.chatId)}
-							>
-							</mwc-checkbox>
-						</div>
-					`
+									?checked=${autoLoadImageChats.includes(this.chatId)}
+								>
+								</mwc-checkbox>
+							</div>
+						`
 		: ''
 }
 			</div>

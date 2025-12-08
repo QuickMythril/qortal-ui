@@ -879,7 +879,8 @@
 		"cchange112": "ATTACHMENT UPLOAD",
 		"cchange113": "FILE UPLOAD",
 		"cchange114": "Write something ...",
-		"cchange115": "Select group by ID"
+		"cchange115": "Select group by ID",
+		"readOnlyGroup": "Join this group to send messages."
 	},
 	"welcomepage": {
 		"wcchange1": "Welcome to Q-Chat",
@@ -890,7 +891,12 @@
 		"wcchange6": "Send",
 		"wcchange7": "Invalid Name / Address, Check the name / address and retry...",
 		"wcchange8": "Message Sent Successfully!",
-		"wcchange9": "Sending failed, Please retry..."
+		"wcchange9": "Sending failed, Please retry...",
+		"promotionsTitle": "Group promotions",
+		"promotionsSubtitle": "See what groups were promoted this week.",
+		"promotionsEmpty": "No active group promotions.",
+		"promotionsError": "Unable to load group promotions.",
+		"unknownGroup": "Group"
 	},
 	"blockpage": {
 		"bcchange1": "Block User",

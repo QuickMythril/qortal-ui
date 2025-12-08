@@ -879,7 +879,8 @@
         "cchange112": "PRIJENOS PRIVITA",
         "cchange113": "PRIJENOS DATOTEKE",
         "cchange114": "Napiši nešto ...",
-        "cchange115": "Odaberi grupu po ID-u"
+        "cchange115": "Odaberi grupu po ID-u",
+        "readOnlyGroup": "Join this group to send messages."
     },
     "welcomepage": {
         "wcchange1": "Dobrodošli u Q-Čavrljanje",
@@ -890,7 +891,12 @@
         "wcchange6": "Pošalji",
         "wcchange7": "Nevažeće ime / adresa, provjerite ime / adresu i ponovite ...",
         "wcchange8": "Poruka je uspješno poslana!",
-        "wcchange9": "Slanje neuspješno, molimo ponovite..."
+        "wcchange9": "Slanje neuspješno, molimo ponovite...",
+        "promotionsTitle": "Group promotions",
+        "promotionsSubtitle": "See what groups were promoted this week.",
+        "promotionsEmpty": "No active group promotions.",
+        "promotionsError": "Unable to load group promotions.",
+        "unknownGroup": "Group"
     },
     "blockpage": {
         "bcchange1": "Blokirati Korisnika",

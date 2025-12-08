@@ -28,7 +28,8 @@ class ChatWelcomePage extends LitElement {
 			isLoading: { type: Boolean },
 			balance: { type: Number },
 			theme: { type: String, reflect: true },
-			setOpenPrivateMessage: { attribute: false }
+			setOpenPrivateMessage: { attribute: false },
+			openGroupPreview: { attribute: false }
 		}
 	}
 
@@ -38,7 +39,7 @@ class ChatWelcomePage extends LitElement {
 
 	constructor() {
 		super()
-		this.selectedAddress = window.parent.reduxStore.getState().app.selectedAddress.address
+		this.selectedAddress = window.parent.reduxStore.getState().app.selectedAddress || {}
 		this.myAddress = {}
 		this.displayName = translate('general.noRegisteredName')
 		this.balance = 1
@@ -46,6 +47,11 @@ class ChatWelcomePage extends LitElement {
 		this.btnDisable = false
 		this.isLoading = false
 		this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
+		this.promotions = []
+		this.promotionsLoading = false
+		this.promotionsError = ''
+		this.joiningGroupId = null
+		this.promotionsInterval = null
 	}
 
 	render() {
@@ -65,6 +71,37 @@ class ChatWelcomePage extends LitElement {
 							</div>
 						</div>
 					</div>
+
+				<div class="promotions-section">
+					<div class="promotions-header">
+						<div>
+							<p class="promotions-title">${translate('welcomepage.promotionsTitle') || 'Group promotions'}</p>
+							<p class="promotions-subtitle">${translate('welcomepage.promotionsSubtitle') || 'See what groups are sharing this week.'}</p>
+						</div>
+						<mwc-button dense unelevated @click=${() => this.getPromotions(true)} ?disabled=${this.promotionsLoading}>
+							${translate('browserpage.bchange2') || 'Reload'}
+						</mwc-button>
+					</div>
+
+					${this.promotionsLoading ? html`
+						<div class="promotions-loading">
+							<paper-spinner-lite active></paper-spinner-lite>
+						</div>
+					` : this.promotionsError ? html`
+						<div class="promotions-empty">
+							<span>${this.promotionsError}</span>
+						</div>
+					` : this.promotions.length === 0 ? html`
+						<div class="promotions-empty">
+							<span>${translate('welcomepage.promotionsEmpty') || 'No promotions yet.'}</span>
+						</div>
+						` : html`
+							<div class="promotions-list">
+								${this.promotions.map(promo => this.renderPromotionCard(promo))}
+							</div>
+						`}
+				</div>
+
 				<!-- Start Chatting Dialog -->
 				<mwc-dialog id="startSecondChatDialog" scrimClickAction="${this.isLoading ? '' : 'close'}">
 					<div style="text-align:center">
@@ -91,6 +128,7 @@ class ChatWelcomePage extends LitElement {
 		this.changeTheme()
 		this.changeLanguage()
 		this.syncAddressAndName()
+		this.getPromotions()
 
 		const stopKeyEventPropagation = (e) => {
 			e.stopPropagation()
@@ -141,6 +179,17 @@ class ChatWelcomePage extends LitElement {
 		setInterval(() => {
 			this.clearConsole()
 		}, 60000)
+
+		this.promotionsInterval = setInterval(() => {
+			this.getPromotions()
+		}, 30 * 60 * 1000)
+	}
+
+	disconnectedCallback() {
+		super.disconnectedCallback()
+		if (this.promotionsInterval) {
+			clearInterval(this.promotionsInterval)
+		}
 	}
 
 	clearConsole() {
@@ -168,6 +217,152 @@ class ChatWelcomePage extends LitElement {
 			use('us')
 		} else {
 			use(checkLanguage)
+		}
+	}
+
+	getNodeBaseUrl() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return `${myNode.protocol}://${myNode.domain}:${myNode.port}`
+	}
+
+	async getPromotions(force = false) {
+		try {
+			if (this.promotionsLoading && !force) return
+			this.promotionsLoading = true
+			this.promotionsError = ''
+			const baseUrl = this.getNodeBaseUrl()
+			const searchUrl = `${baseUrl}/arbitrary/resources/searchsimple?mode=ALL&service=DOCUMENT&identifier=group-promotions-ui24-&limit=100&includemetadata=false&reverse=true&prefix=true`
+			const response = await fetch(searchUrl)
+			if (!response.ok) throw new Error('Unable to load promotions')
+			const promos = await response.json()
+
+			const mapped = await Promise.all(promos.map(async promo => {
+				const groupMatch = (promo.identifier || '').match(/group-(\d+)-/)
+				const groupId = groupMatch ? groupMatch[1] : null
+				if (!groupId) return null
+				try {
+					const [contentRes, groupRes] = await Promise.all([
+						fetch(`${baseUrl}/arbitrary/${promo.service}/${promo.name}/${promo.identifier}`),
+						fetch(`${baseUrl}/groups/${groupId}`)
+					])
+					const data = await contentRes.text()
+					const groupInfo = groupRes.ok ? await groupRes.json() : {}
+					return {
+						...promo,
+						data,
+						groupId,
+						groupInfo
+					}
+				} catch (e) {
+					return null
+				}
+			}))
+
+			const cleaned = mapped.filter(Boolean).sort((a, b) => (b.created || 0) - (a.created || 0))
+			this.promotions = cleaned
+		} catch (error) {
+			this.promotionsError = (error && error.message) || (translate('welcomepage.promotionsError') || 'Unable to load promotions')
+		} finally {
+			this.promotionsLoading = false
+		}
+	}
+
+	renderPromotionCard(promo) {
+		const safePromo = promo || {}
+		const groupInfo = (safePromo.groupInfo && typeof safePromo.groupInfo === 'object') ? safePromo.groupInfo : {}
+		const groupId = safePromo.groupId
+		const groupName = groupInfo.groupName || safePromo.groupName || translate('welcomepage.unknownGroup') || 'Group'
+		const statusLabel = groupInfo.isOpen === false ? translate('grouppage.gchange17') || 'Private' : translate('grouppage.gchange16') || 'Public'
+		const memberCount = groupInfo.memberCount || 0
+		const description = groupInfo.description || ''
+		const isJoining = this.joiningGroupId === groupId
+
+		return html`
+			<div class="promotion-card">
+				<div class="promotion-header">
+					<div>
+						<p class="promotion-group">${groupName}</p>
+						<p class="promotion-meta">
+							${statusLabel}
+							· ${memberCount} ${translate('grouppage.gchange54') || 'Members'}
+						</p>
+					</div>
+					<div class="promotion-actions">
+						<mwc-button dense outlined @click=${() => this.previewGroup(safePromo)}>
+							${translate('appspage.schange40') || 'Preview'}
+						</mwc-button>
+						<mwc-button
+							dense
+							unelevated
+							?disabled=${isJoining}
+							@click=${() => this.joinGroup(safePromo)}
+						>
+							${isJoining ? html`<paper-spinner-lite active></paper-spinner-lite>` : translate('grouppage.gchange51') || 'Join'}
+						</mwc-button>
+					</div>
+				</div>
+				<p class="promotion-text">${safePromo.data || ''}</p>
+				${description ? html`
+					<p class="promotion-description">${description}</p>
+				` : ''}
+			</div>
+		`
+	}
+
+	previewGroup(promo) {
+		if (typeof this.openGroupPreview === 'function') {
+			this.openGroupPreview(promo.groupId, promo)
+		}
+	}
+
+	async joinGroup(promo) {
+		const safePromo = promo || {}
+		const groupInfo = (safePromo.groupInfo && typeof safePromo.groupInfo === 'object') ? safePromo.groupInfo : {}
+		const groupId = safePromo.groupId
+		const groupName = groupInfo.groupName || safePromo.groupName || ''
+		if (!groupId) return
+		if (!this.selectedAddress || !this.selectedAddress.address) {
+			parentEpml.request('showSnackBar', translate('transactions.erroroccured') || 'Unable to join group')
+			return
+		}
+		try {
+			this.joiningGroupId = groupId
+			const baseUrl = this.getNodeBaseUrl()
+			const feeRes = await fetch(`${baseUrl}/transactions/unitfee?txType=JOIN_GROUP`)
+			const feeJson = await feeRes.json()
+			const fee = (Number(feeJson) / 1e8).toFixed(8)
+			const lastRef = await parentEpml.request('apiCall', {
+				type: 'api',
+				url: `/addresses/lastreference/${this.selectedAddress.address}`
+			})
+
+			const txResponse = await parentEpml.request('transaction', {
+				type: 31,
+				nonce: this.selectedAddress.nonce,
+				params: {
+					fee,
+					registrantAddress: this.selectedAddress.address,
+					rGroupName: groupName,
+					rGroupId: groupId,
+					lastReference: lastRef,
+					groupdialog1: get('transactions.groupdialog1'),
+					groupdialog2: get('transactions.groupdialog2')
+				},
+				apiVersion: 2
+			})
+
+			const hasDataError = txResponse && txResponse.data && txResponse.data.error
+
+			if (txResponse.success === true && !hasDataError) {
+				parentEpml.request('showSnackBar', translate('transactions.transactioncreated') || 'Transaction created')
+			} else {
+				const message = (txResponse && txResponse.message) || (txResponse && txResponse.data && txResponse.data.message) || translate('transactions.erroroccured') || 'Unable to join group'
+				parentEpml.request('showSnackBar', message)
+			}
+		} catch (error) {
+			parentEpml.request('showSnackBar', (error && error.message) || (translate('transactions.erroroccured') || 'Unable to join group'))
+		} finally {
+			this.joiningGroupId = null
 		}
 	}
 

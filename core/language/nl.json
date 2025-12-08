@@ -879,7 +879,8 @@
         "cchange112": "BIJLAGE OPLADEN",
         "cchange113": "BESTAND OPLADEN",
         "cchange114": "Schrijf iets ...",
-        "cchange115": "Groep selecteren op ID"
+        "cchange115": "Groep selecteren op ID",
+        "readOnlyGroup": "Join this group to send messages."
     },
     "welcomepage": {
         "wcchange1": "Welkom bij Q-Chat",
@@ -890,7 +891,12 @@
         "wcchange6": "Versturen",
         "wcchange7": "Ongeldige naam of adres; Kijk na, en probeer opnieuw...",
         "wcchange8": "Bericht werd verzonden!",
-        "wcchange9": "Versturen is mislukt; Gelieve opnieuw te proberen..."
+        "wcchange9": "Versturen is mislukt; Gelieve opnieuw te proberen...",
+        "promotionsTitle": "Group promotions",
+        "promotionsSubtitle": "See what groups were promoted this week.",
+        "promotionsEmpty": "No active group promotions.",
+        "promotionsError": "Unable to load group promotions.",
+        "unknownGroup": "Group"
     },
     "blockpage": {
         "bcchange1": "Gebruiker blokkeren",
