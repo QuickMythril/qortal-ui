@@ -104,6 +104,11 @@ const bindExternalNavigationHandlers = (win) => {
 		const filter = { urls: ['http://*/*', 'https://*/*'] }
 
 		winSession.webRequest.onBeforeRequest(filter, (details, callback) => {
+			// Only intercept navigation requests (frame-level). Let XHR/media/etc. pass through.
+			if (details.resourceType !== 'mainFrame' && details.resourceType !== 'subFrame') {
+				return callback({})
+			}
+
 			const referrerUrl = details.referrer || details.initiator
 
 			if (!isAllowedInternalUrl(details.url, referrerUrl)) {
