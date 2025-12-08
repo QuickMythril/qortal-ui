@@ -8,6 +8,7 @@ import '@material/mwc-button'
 import '@material/mwc-dialog'
 import '@polymer/paper-spinner/paper-spinner-lite.js'
 import '@vaadin/grid'
+import { isGroupMember } from './chat-group-utils'
 
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../core/translate'
@@ -29,7 +30,8 @@ class ChatWelcomePage extends LitElement {
 			balance: { type: Number },
 			theme: { type: String, reflect: true },
 			setOpenPrivateMessage: { attribute: false },
-			openGroupPreview: { attribute: false }
+			openGroupPreview: { attribute: false },
+			memberGroups: { attribute: false }
 		}
 	}
 
@@ -52,6 +54,8 @@ class ChatWelcomePage extends LitElement {
 		this.promotionsError = ''
 		this.joiningGroupId = null
 		this.promotionsInterval = null
+		this.memberGroups = []
+		this.memberGroupIds = new Set()
 	}
 
 	render() {
@@ -169,8 +173,10 @@ class ChatWelcomePage extends LitElement {
 				if (!selectedAddress || Object.entries(selectedAddress).length === 0) return
 				this.selectedAddress = selectedAddress
 				this.syncAddressAndName()
+				this.loadMemberships()
 			})
 
+			this.loadMemberships()
 		})
 
 		parentEpml.imReady()
@@ -224,6 +230,31 @@ class ChatWelcomePage extends LitElement {
 	getNodeBaseUrl() {
 		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		return `${myNode.protocol}://${myNode.domain}:${myNode.port}`
+	}
+
+	async loadMemberships() {
+		if (!this.selectedAddress || !this.selectedAddress.address) {
+			this.memberGroups = []
+			this.memberGroupIds = new Set()
+			return
+		}
+		try {
+			const res = await parentEpml.request('apiCall', {
+				type: 'api',
+				url: `/groups/member/${this.selectedAddress.address}`
+			})
+			const list = Array.isArray(res) ? res : []
+			this.memberGroups = list
+			this.memberGroupIds = new Set(list.map((g) => String(g.groupId)))
+		} catch (error) {
+			this.memberGroups = []
+			this.memberGroupIds = new Set()
+		}
+		this.requestUpdate()
+	}
+
+	isMember(groupId) {
+		return isGroupMember(this.memberGroups, groupId)
 	}
 
 	async getPromotions(force = false) {
@@ -294,6 +325,7 @@ class ChatWelcomePage extends LitElement {
 			const idLabel = groupId ? `id:${groupId}` : 'id:unknown'
 			const publisherName = safePromo.name || translate('welcomepage.unknownPublisher') || 'Unknown publisher'
 			const avatarUrl = safePromo.name ? this.getPublisherAvatarUrl(safePromo.name) : ''
+			const isMember = this.isMember(groupId)
 
 			return html`
 				<div class="promotion-card">
@@ -315,10 +347,10 @@ class ChatWelcomePage extends LitElement {
 						<mwc-button
 							dense
 							unelevated
-							?disabled=${isJoining}
+							?disabled=${isJoining || isMember}
 							@click=${() => this.joinGroup(safePromo)}
 						>
-							${isJoining ? html`<paper-spinner-lite active></paper-spinner-lite>` : translate('grouppage.gchange51') || 'Join'}
+							${isMember ? (translate('grouppage.gchange71') || 'Already joined') : isJoining ? html`<paper-spinner-lite active></paper-spinner-lite>` : translate('grouppage.gchange51') || 'Join'}
 						</mwc-button>
 					</div>
 				</div>
@@ -355,6 +387,10 @@ class ChatWelcomePage extends LitElement {
 			parentEpml.request('showSnackBar', translate('transactions.erroroccured') || 'Unable to join group')
 			return
 		}
+		if (this.isMember(groupId)) {
+			parentEpml.request('showSnackBar', translate('grouppage.gchange71') || 'Already joined')
+			return
+		}
 		try {
 			this.joiningGroupId = groupId
 			const baseUrl = this.getNodeBaseUrl()
@@ -385,6 +421,7 @@ class ChatWelcomePage extends LitElement {
 
 			if (txResponse.success === true && !hasDataError) {
 				parentEpml.request('showSnackBar', translate('transactions.transactioncreated') || 'Transaction created')
+				await this.loadMemberships()
 			} else {
 				const message = (txResponse && txResponse.message) || (txResponse && txResponse.data && txResponse.data.message) || translate('transactions.erroroccured') || 'Unable to join group'
 				parentEpml.request('showSnackBar', message)

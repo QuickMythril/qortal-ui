@@ -957,6 +957,85 @@ class MessageTemplate extends LitElement {
 		this.replyFontSize = ''
 	}
 
+	getNodeBaseUrl() {
+		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+		return `${myNode.protocol}://${myNode.domain}:${myNode.port}`
+	}
+
+	async isGroupMember(groupId, address) {
+		try {
+			const res = await parentEpml.request('apiCall', {
+				type: 'api',
+				url: `/groups/member/${address}`
+			})
+			if (!Array.isArray(res)) return false
+			return res.some((g) => g && String(g.groupId) === String(groupId))
+		} catch (error) {
+			return false
+		}
+	}
+
+	async handleJoinGroup(groupId) {
+		try {
+			const selectedAddress = window.parent.reduxStore.getState().app.selectedAddress || {}
+			if (!selectedAddress || !selectedAddress.address) {
+				parentEpml.request('showSnackBar', translate('transactions.erroroccured') || 'Unable to join group')
+				return
+			}
+
+			const alreadyMember = await this.isGroupMember(groupId, selectedAddress.address)
+			if (alreadyMember) {
+				parentEpml.request('showSnackBar', translate('grouppage.gchange71') || 'Already joined')
+				return
+			}
+
+			let groupName = ''
+			try {
+				const groupInfo = await parentEpml.request('apiCall', {
+					type: 'api',
+					url: `/groups/${groupId}`
+				})
+				groupName = (groupInfo && groupInfo.groupName) || ''
+			} catch (error) { /* ignore missing group name */ }
+
+			const baseUrl = this.getNodeBaseUrl()
+			const feeRes = await fetch(`${baseUrl}/transactions/unitfee?txType=JOIN_GROUP`)
+			const feeJson = await feeRes.json()
+			const fee = (Number(feeJson) / 1e8).toFixed(8)
+
+			const lastRef = await parentEpml.request('apiCall', {
+				type: 'api',
+				url: `/addresses/lastreference/${selectedAddress.address}`
+			})
+
+			const txResponse = await parentEpml.request('transaction', {
+				type: 31,
+				nonce: selectedAddress.nonce,
+				params: {
+					fee,
+					registrantAddress: selectedAddress.address,
+					rGroupName: groupName,
+					rGroupId: groupId,
+					lastReference: lastRef,
+					groupdialog1: get('transactions.groupdialog1'),
+					groupdialog2: get('transactions.groupdialog2')
+				},
+				apiVersion: 2
+			})
+
+			const hasDataError = txResponse && txResponse.data && txResponse.data.error
+
+			if (txResponse.success === true && !hasDataError) {
+				parentEpml.request('showSnackBar', translate('transactions.transactioncreated') || 'Transaction created')
+			} else {
+				const message = (txResponse && txResponse.message) || (txResponse && txResponse.data && txResponse.data.message) || translate('transactions.erroroccured') || 'Unable to join group'
+				parentEpml.request('showSnackBar', message)
+			}
+		} catch (error) {
+			parentEpml.request('showSnackBar', (error && error.message) || (translate('transactions.erroroccured') || 'Unable to join group'))
+		}
+	}
+
 	render() {
 		const hidemsg = this.hideMessages
 
@@ -1008,30 +1087,7 @@ class MessageTemplate extends LitElement {
 							if (!res) return
 
 							if (res.type && res.groupid && res.action === 'join') {
-								window.parent.reduxStore.dispatch(
-									window.parent.reduxAction.setNewTab({
-										url: 'group-management',
-										id: uid.rnd(),
-										myPlugObj: {
-											'url': 'group-management',
-											'domain': 'core',
-											'page': 'group-management/index.html',
-											'title': 'Group Management',
-											'icon': 'vaadin:group',
-											'mwcicon': 'group',
-											'pluginNumber': 'plugin-fJZNpyLGTl',
-											'menus': [],
-											'parent': false
-										},
-										openExisting: true
-									})
-								)
-								window.parent.reduxStore.dispatch(
-									window.parent.reduxAction.setSideEffectAction({
-										type: 'openJoinGroupModal',
-										data: res.groupid
-									})
-								)
+								await this.handleJoinGroup(res.groupid)
 								return
 							}
 							const { service, name, identifier, path } = res
