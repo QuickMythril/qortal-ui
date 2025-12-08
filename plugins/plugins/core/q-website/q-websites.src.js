@@ -102,7 +102,7 @@ class QWebsites extends LitElement {
 						</vaadin-grid>
 						<div id="pages"></div>
 						${this.pageRes === null ? html`
-							<span style="color: var(--black);">${translate("cchange2")}</span>
+							<span style="color: var(--black);">${translate("chatpage.cchange2")}</span>
 						` : ''}
 						${this.pageRes !== null && this.isEmptyArray(this.pageRes) ? html`
 							<span style="color: var(--black);">${translate("websitespage.schange10")}</span>
@@ -135,7 +135,7 @@ class QWebsites extends LitElement {
 							</vaadin-grid-column>
 						</vaadin-grid>
 						${this.followedResources === null ? html`
-							<span style="color: var(--black);">${translate("cchange2")}</span>
+							<span style="color: var(--black);">${translate("chatpage.cchange2")}</span>
 						` : ''}
 						${this.followedResources !== null && this.isEmptyArray(this.followedResources) ? html`
 							<span style="color: var(--black);">${translate("websitespage.schange13")}</span>
@@ -168,7 +168,7 @@ class QWebsites extends LitElement {
 							</vaadin-grid-column>
 						</vaadin-grid>
 						${this.blockedResources === null ? html`
-							<span style="color: var(--black);">${translate("cchange2")}</span>
+							<span style="color: var(--black);">${translate("chatpage.cchange2")}</span>
 						` : ''}
 						${this.blockedResources !== null && this.isEmptyArray(this.blockedResources) ? html`
 							<span style="color: var(--black);">${translate("websitespage.schange16")}</span>
