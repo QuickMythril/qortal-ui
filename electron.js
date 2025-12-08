@@ -52,7 +52,7 @@ const sameHost = (a, b) => {
 	}
 }
 
-const isAllowedInternalUrl = (url, referrerUrl) => {
+const isAllowedInternalUrl = (url, referrerUrl, allowedHosts = null) => {
 	try {
 		const parsed = new URL(url)
 
@@ -61,13 +61,24 @@ const isAllowedInternalUrl = (url, referrerUrl) => {
 			return true
 		}
 
+		const hostKey = `${parsed.protocol}//${parsed.hostname}:${parsed.port || ''}`
+
 		// Core UI itself
 		if ((parsed.hostname === 'localhost' || parsed.hostname === '127.0.0.1') && INTERNAL_UI_PORTS.has(parsed.port)) {
+			if (allowedHosts) allowedHosts.add(hostKey)
 			return true
 		}
 
 		// Allow same-origin navigations (keeps QDN sites on the same node inside the iframe)
-		if (referrerUrl && sameHost(url, referrerUrl)) return true
+		if (referrerUrl && sameHost(url, referrerUrl)) {
+			if (allowedHosts) allowedHosts.add(hostKey)
+			return true
+		}
+
+		// If we've already seen/approved this host within the session, allow it
+		if (allowedHosts && allowedHosts.has(hostKey)) {
+			return true
+		}
 
 		return false
 	} catch (_err) {
@@ -76,12 +87,14 @@ const isAllowedInternalUrl = (url, referrerUrl) => {
 }
 
 const hookedSessions = new WeakSet()
+const allowedHostsBySession = new WeakMap()
 
 const bindExternalNavigationHandlers = (win) => {
 	if (!win || !win.webContents) return
 
 	win.webContents.setWindowOpenHandler(({ url, referrer }) => {
-		if ((url.startsWith('http:') || url.startsWith('https:')) && !isAllowedInternalUrl(url, referrer?.url)) {
+		const allowedHosts = allowedHostsBySession.get(win.webContents.session) || null
+		if ((url.startsWith('http:') || url.startsWith('https:')) && !isAllowedInternalUrl(url, referrer?.url, allowedHosts)) {
 			shell.openExternal(url)
 			return { action: 'deny' }
 		}
@@ -91,7 +104,8 @@ const bindExternalNavigationHandlers = (win) => {
 
 	win.webContents.on('will-navigate', (event, url) => {
 		const referrerUrl = event.sender.getURL()
-		if ((url.startsWith('http:') || url.startsWith('https:')) && !isAllowedInternalUrl(url, referrerUrl)) {
+		const allowedHosts = allowedHostsBySession.get(win.webContents.session) || null
+		if ((url.startsWith('http:') || url.startsWith('https:')) && !isAllowedInternalUrl(url, referrerUrl, allowedHosts)) {
 			event.preventDefault()
 			shell.openExternal(url)
 		}
@@ -101,6 +115,10 @@ const bindExternalNavigationHandlers = (win) => {
 
 	if (winSession && !hookedSessions.has(winSession)) {
 		hookedSessions.add(winSession)
+		if (!allowedHostsBySession.has(winSession)) {
+			allowedHostsBySession.set(winSession, new Set())
+		}
+		const allowedHosts = allowedHostsBySession.get(winSession)
 		const filter = { urls: ['http://*/*', 'https://*/*'] }
 
 		winSession.webRequest.onBeforeRequest(filter, (details, callback) => {
@@ -111,7 +129,7 @@ const bindExternalNavigationHandlers = (win) => {
 
 			const referrerUrl = details.referrer || details.initiator
 
-			if (!isAllowedInternalUrl(details.url, referrerUrl)) {
+			if (!isAllowedInternalUrl(details.url, referrerUrl, allowedHosts)) {
 				shell.openExternal(details.url)
 				return callback({ cancel: true })
 			}
