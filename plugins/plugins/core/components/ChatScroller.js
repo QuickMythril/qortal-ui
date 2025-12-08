@@ -8,6 +8,8 @@ import { chatLimit, totalMsgCount } from './ChatPage'
 import { chatStyles } from './plugins-css'
 import isElectron from 'is-electron'
 import axios from 'axios'
+import TextStyle from '@tiptap/extension-text-style'
+import Color from '@tiptap/extension-color'
 import Highlight from '@tiptap/extension-highlight'
 import Mention from '@tiptap/extension-mention'
 import ShortUniqueId from 'short-unique-id'
@@ -1088,7 +1090,7 @@ class MessageTemplate extends LitElement {
 			const parsedMessageObj = JSON.parse(this.messageObj.decodedMessage)
 
 			if (parsedMessageObj.version > 1 && parsedMessageObj.messageText) {
-				messageVersion2 = generateHTML(parsedMessageObj.messageText, [StarterKit, Underline, Highlight, Mention])
+				messageVersion2 = generateHTML(parsedMessageObj.messageText, [StarterKit, Underline, Highlight, Mention, TextStyle, Color.configure({ types: [TextStyle.name] })])
 				messageVersion2WithLink = processText(messageVersion2)
 			}
 
@@ -1270,7 +1272,7 @@ class MessageTemplate extends LitElement {
 
 		if (repliedToData && repliedToData.decodedMessage && repliedToData.decodedMessage.messageText) {
 			try {
-				repliedToMessageText = generateHTML(repliedToData.decodedMessage.messageText, [StarterKit, Underline, Highlight, Mention])
+				repliedToMessageText = generateHTML(repliedToData.decodedMessage.messageText, [StarterKit, Underline, Highlight, Mention, TextStyle, Color.configure({ types: [TextStyle.name] })])
 			} catch (error) { /* empty */ }
 		} else if (repliedToData && repliedToData.decodedMessage && repliedToData.decodedMessage.message) {
 			try {
@@ -2078,8 +2080,8 @@ class MessageTemplate extends LitElement {
 	}
 
 	convertHubMessageToJson(message) {
-		let newJson = generateJSON(`${message}`, [StarterKit, Underline, Highlight, Mention])
-		return generateHTML(newJson, [StarterKit, Underline, Highlight, Mention])
+		let newJson = generateJSON(`${message}`, [StarterKit, Underline, Highlight, Mention, TextStyle, Color.configure({ types: [TextStyle.name] })])
+		return generateHTML(newJson, [StarterKit, Underline, Highlight, Mention, TextStyle, Color.configure({ types: [TextStyle.name] })])
 	}
 
 	async closeDownloadProgressDialog() {

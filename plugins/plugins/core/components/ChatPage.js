@@ -12,6 +12,8 @@ import { Slice, Fragment, Node } from 'prosemirror-model'
 import { chatpageStyles } from './plugins-css'
 import localForage from 'localforage'
 import StarterKit from '@tiptap/starter-kit'
+import TextStyle from '@tiptap/extension-text-style'
+import Color from '@tiptap/extension-color'
 import Underline from '@tiptap/extension-underline'
 import Placeholder from '@tiptap/extension-placeholder'
 import Highlight from '@tiptap/extension-highlight'
@@ -351,7 +353,7 @@ class ChatPage extends LitElement {
 														<span style="color: var(--black);">
 															${this.repliedToMessageObj.decodedMessage.includes('specialId') ?
 		this.convertHubMessageToJson(this.repliedToMessageObj.message) :
-		unsafeHTML(generateHTML(this.repliedToMessageObj.message, [StarterKit, Underline, Highlight, Mention]))
+		unsafeHTML(generateHTML(this.repliedToMessageObj.message, [StarterKit, Underline, Highlight, Mention, TextStyle, Color.configure({ types: [TextStyle.name] })]))
 }
 														</span>
 													`
@@ -373,7 +375,7 @@ class ChatPage extends LitElement {
 												<span style="color: var(--black);">
 													${this.editedMessageObj.decodedMessage.includes('specialId') && !this.editedMessageObj.decodedMessage.includes('messageText') ?
 		this.convertHubMessageToJson(this.editedMessageObj.message) :
-		unsafeHTML(generateHTML(this.editedMessageObj.message, [StarterKit, Underline, Highlight, Mention]))
+		unsafeHTML(generateHTML(this.editedMessageObj.message, [StarterKit, Underline, Highlight, Mention, TextStyle, Color.configure({ types: [TextStyle.name] })]))
 }
 												</span>
 											</div>
@@ -861,9 +863,9 @@ class ChatPage extends LitElement {
 	}
 
 	convertHubMessageToJson(message) {
-		let newJson = generateJSON(`${message}`, [StarterKit, Underline, Highlight, Mention])
+		let newJson = generateJSON(`${message}`, [StarterKit, Underline, Highlight, Mention, TextStyle, Color.configure({ types: [TextStyle.name] })])
 
-		return unsafeHTML(generateHTML(newJson, [StarterKit, Underline, Highlight, Mention]))
+		return unsafeHTML(generateHTML(newJson, [StarterKit, Underline, Highlight, Mention, TextStyle, Color.configure({ types: [TextStyle.name] })]))
 	}
 
 	getNodeUrl() {
@@ -1090,6 +1092,8 @@ class ChatPage extends LitElement {
 				Underline,
 				Highlight,
 				Mention,
+				TextStyle,
+				Color.configure({ types: [TextStyle.name] }),
 				Placeholder.configure({
 					placeholder: `${placeholderString}`
 				}),
@@ -1129,6 +1133,8 @@ class ChatPage extends LitElement {
 				Underline,
 				Highlight,
 				Mention,
+				TextStyle,
+				Color.configure({ types: [TextStyle.name] }),
 				Placeholder.configure({
 					placeholder: `${placeholderString}`
 				}),
@@ -1165,6 +1171,8 @@ class ChatPage extends LitElement {
 				Underline,
 				Highlight,
 				Mention,
+				TextStyle,
+				Color.configure({ types: [TextStyle.name] }),
 				Placeholder.configure({
 					placeholder: `${placeholderString}`
 				}),
@@ -1201,6 +1209,8 @@ class ChatPage extends LitElement {
 				Underline,
 				Highlight,
 				Mention,
+				TextStyle,
+				Color.configure({ types: [TextStyle.name] }),
 				Placeholder.configure({
 					placeholder: `${placeholderString}`
 				}),
@@ -1237,6 +1247,8 @@ class ChatPage extends LitElement {
 				Underline,
 				Highlight,
 				Mention,
+				TextStyle,
+				Color.configure({ types: [TextStyle.name] }),
 				Placeholder.configure({
 					placeholder: `${placeholderString}`
 				}),
