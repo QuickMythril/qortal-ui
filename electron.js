@@ -7,9 +7,7 @@ const {
 	Tray,
 	dialog,
 	nativeTheme,
-	crashReporter,
-	shell,
-	session
+	crashReporter
 } = require('electron')
 const { autoUpdater } = require('electron-updater')
 const server = require('./server.js')
@@ -38,106 +36,6 @@ crashReporter.start({
 	productName: 'Qortal-UI',
 	uploadToServer: false
 })
-
-const INTERNAL_UI_PORTS = new Set(['12388'])
-
-const sameHost = (a, b) => {
-	if (!a || !b) return false
-	try {
-		const ua = new URL(a)
-		const ub = new URL(b)
-		return ua.hostname === ub.hostname && ua.port === ub.port && ua.protocol === ub.protocol
-	} catch (_err) {
-		return false
-	}
-}
-
-const isAllowedInternalUrl = (url, referrerUrl, allowedHosts = null) => {
-	try {
-		const parsed = new URL(url)
-
-		// Only guard http/https. Everything else (custom schemes, file:) is ignored
-		if (!['http:', 'https:'].includes(parsed.protocol)) {
-			return true
-		}
-
-		const hostKey = `${parsed.protocol}//${parsed.hostname}:${parsed.port || ''}`
-
-		// Core UI itself
-		if ((parsed.hostname === 'localhost' || parsed.hostname === '127.0.0.1') && INTERNAL_UI_PORTS.has(parsed.port)) {
-			if (allowedHosts) allowedHosts.add(hostKey)
-			return true
-		}
-
-		// Allow same-origin navigations (keeps QDN sites on the same node inside the iframe)
-		if (referrerUrl && sameHost(url, referrerUrl)) {
-			if (allowedHosts) allowedHosts.add(hostKey)
-			return true
-		}
-
-		// If we've already seen/approved this host within the session, allow it
-		if (allowedHosts && allowedHosts.has(hostKey)) {
-			return true
-		}
-
-		return false
-	} catch (_err) {
-		return false
-	}
-}
-
-const hookedSessions = new WeakSet()
-const allowedHostsBySession = new WeakMap()
-
-const bindExternalNavigationHandlers = (win) => {
-	if (!win || !win.webContents) return
-
-	win.webContents.setWindowOpenHandler(({ url, referrer }) => {
-		const allowedHosts = allowedHostsBySession.get(win.webContents.session) || null
-		if ((url.startsWith('http:') || url.startsWith('https:')) && !isAllowedInternalUrl(url, referrer?.url, allowedHosts)) {
-			shell.openExternal(url)
-			return { action: 'deny' }
-		}
-
-		return { action: 'allow' }
-	})
-
-	win.webContents.on('will-navigate', (event, url) => {
-		const referrerUrl = event.sender.getURL()
-		const allowedHosts = allowedHostsBySession.get(win.webContents.session) || null
-		if ((url.startsWith('http:') || url.startsWith('https:')) && !isAllowedInternalUrl(url, referrerUrl, allowedHosts)) {
-			event.preventDefault()
-			shell.openExternal(url)
-		}
-	})
-
-	const winSession = win.webContents.session || session.defaultSession
-
-	if (winSession && !hookedSessions.has(winSession)) {
-		hookedSessions.add(winSession)
-		if (!allowedHostsBySession.has(winSession)) {
-			allowedHostsBySession.set(winSession, new Set())
-		}
-		const allowedHosts = allowedHostsBySession.get(winSession)
-		const filter = { urls: ['http://*/*', 'https://*/*'] }
-
-		winSession.webRequest.onBeforeRequest(filter, (details, callback) => {
-			// Only intercept navigation requests (frame-level). Let XHR/media/etc. pass through.
-			if (details.resourceType !== 'mainFrame' && details.resourceType !== 'subFrame') {
-				return callback({})
-			}
-
-			const referrerUrl = details.referrer || details.initiator
-
-			if (!isAllowedInternalUrl(details.url, referrerUrl, allowedHosts)) {
-				shell.openExternal(details.url)
-				return callback({ cancel: true })
-			}
-
-			return callback({})
-		})
-	}
-}
 
 if (myMemory > 16000000000) {
 	app.commandLine.appendSwitch('js-flags', '--max-old-space-size=8192')
@@ -1232,7 +1130,6 @@ function createWindow() {
 	// Wait until window is ready before showing
 	myWindow.once('ready-to-show', myWindow.show)
 	myWindow.loadURL('http://localhost:12388/app')
-	bindExternalNavigationHandlers(myWindow)
 
 	// Save current window config when closing
 	myWindow.on('close', () => {
@@ -1291,7 +1188,6 @@ function createNewWindow() {
 
 	newWindow.show()
 	newWindow.loadURL('http://localhost:12388/app')
-	bindExternalNavigationHandlers(newWindow)
 
 	newWindow.on('closed', function () {
 		newWindow = null
