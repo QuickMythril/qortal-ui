@@ -13,6 +13,7 @@ import '@vaadin/button'
 
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../core/translate'
+import { getPublicNodeBlockedMessage } from '../../../../core/src/utils/i18n'
 import { isSelectedNodePublic } from '../../../../core/src/utils/node'
 registerTranslateConfig({
 	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
@@ -47,6 +48,7 @@ class BecomeMinter extends LitElement {
 		this.rewardSharePublicKey = ''
 		this.mintingAccountData = null
 		this.blocked = false
+		this.blockedMessage = getPublicNodeBlockedMessage()
 	}
 
 	render() {
@@ -72,6 +74,8 @@ class BecomeMinter extends LitElement {
 				? ''
 				: html`
 					<not-sponsored
+						.blocked=${this.blocked}
+						.blockedMessage=${this.blockedMessage}
 						.atMount="${() => this.atMount()}"
 					>
 					</not-sponsored>
@@ -161,11 +165,9 @@ class BecomeMinter extends LitElement {
 		this.changeLanguage()
 		this.isPageLoading = true
 		this.blocked = this.isPublicNode()
-
 		if (this.blocked) {
 			this.isPageLoading = false
-			parentEpml.request('showSnackBar', `${get('publicNode.actionBlocked')}`)
-			return
+			parentEpml.request('showSnackBar', `${this.blockedMessage}`)
 		}
 
 		try {

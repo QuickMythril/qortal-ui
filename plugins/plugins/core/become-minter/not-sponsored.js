@@ -9,6 +9,7 @@ import '@vaadin/button'
 
 // Multi language support
 import { translate } from '../../../../core/translate'
+import { getPublicNodeBlockedMessage } from '../../../../core/src/utils/i18n'
 
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
@@ -17,7 +18,9 @@ class NotSponsored extends LitElement {
 		atMount: { type: Function },
 		isLoadingSponsorshipKeySubmit: { type: Boolean },
 		sponsorshipKeyValue: { type: String },
-		addMintingAccountMessage: { type: String }
+		addMintingAccountMessage: { type: String },
+		blocked: { type: Boolean },
+		blockedMessage: { type: String }
 	}
 
 	static get styles() {
@@ -30,6 +33,8 @@ class NotSponsored extends LitElement {
 		this.sponsorshipKeyValue = ''
 		this.addMintingAccountMessage = ''
 		this.atMount = () => {}
+		this.blocked = false
+		this.blockedMessage = getPublicNodeBlockedMessage()
 	}
 
 	render() {
@@ -51,12 +56,12 @@ class NotSponsored extends LitElement {
 					<p class="description">
 						${translate('mintingpage.mchange37')}
 					</p>
+					${this.blocked ? html`<p class="message warning-text">${this.blockedMessage}</p>` : ''}
 					<p class="message">${this.addMintingAccountMessage}</p>
 					<div class="form-wrapper">
 						<div class="form-item form-item--input">
 							<mwc-textfield
-								?disabled="${this
-								.isLoadingSponsorshipKeySubmit}"
+								?disabled="${this.isLoadingSponsorshipKeySubmit || this.blocked}"
 								label="${translate('becomeMinterPage.bchange8')}"
 								id="addSponsorshipKey"
 								@input="${this.inputHandler}"
@@ -68,7 +73,7 @@ class NotSponsored extends LitElement {
 						<div class="form-item form-item--button">
 							<vaadin-button
 								theme="primary"
-								?disabled="${this.isLoadingSponsorshipKeySubmit}"
+								?disabled="${this.isLoadingSponsorshipKeySubmit || this.blocked}"
 								@click="${this.addMintingAccount}"
 							>
 								${this.isLoadingSponsorshipKeySubmit === false ?
@@ -100,6 +105,10 @@ class NotSponsored extends LitElement {
 	}
 
 	addMintingAccount(e) {
+		if (this.blocked) {
+			parentEpml.request('showSnackBar', `${this.blockedMessage}`)
+			return
+		}
 		this.isLoadingSponsorshipKeySubmit = true
 		this.addMintingAccountMessage = 'Loading...'
 		parentEpml.request('apiCall', {
