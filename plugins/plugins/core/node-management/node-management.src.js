@@ -12,6 +12,7 @@ import '@vaadin/grid'
 
 // Multi language support
 import { get, registerTranslateConfig, translate, use } from '../../../../core/translate'
+import { getPublicNodeBlockedMessage } from '../../../../core/src/utils/i18n'
 import { isSelectedNodePublic } from '../../../../core/src/utils/node'
 import { getUserNameFromAddress } from '../../utils/functions'
 
@@ -77,7 +78,7 @@ class NodeManagement extends LitElement {
 			return html`
 				<div id="node-management-page">
 					<div class="node-card">
-						<h3>${translate('publicNode.actionBlocked')}</h3>
+						<h3>${getPublicNodeBlockedMessage()}</h3>
 					</div>
 				</div>
 			`
@@ -220,7 +221,7 @@ class NodeManagement extends LitElement {
 
 		if (this.isPublicNode()) {
 			this.blocked = true
-			const msg = get('publicNode.actionBlocked')
+			const msg = getPublicNodeBlockedMessage()
 			parentEpml.request('showSnackBar', `${msg}`)
 			return
 		}

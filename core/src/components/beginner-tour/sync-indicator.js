@@ -3,6 +3,7 @@ import { connect } from 'pwa-helpers'
 import { store } from '../../store'
 import { parentEpml } from '../show-plugin'
 import { buildRequestUrl, isSelectedNodePublic } from '../../utils/node'
+import { getPublicNodeBlockedMessage } from '../../utils/i18n'
 import { syncIndicator2Styles } from '../../styles/core-css'
 import '@material/mwc-icon'
 
@@ -148,7 +149,7 @@ class SyncIndicator extends connect(store)(LitElement) {
 
 	async bootstrap() {
 		if (isSelectedNodePublic(store.getState())) {
-			parentEpml.request('showSnackBar', get('publicNode.actionBlocked'))
+			parentEpml.request('showSnackBar', getPublicNodeBlockedMessage())
 			return
 		}
 		try {

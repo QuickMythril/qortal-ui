@@ -5,6 +5,7 @@ import { store } from '../store.js'
 import { routes } from '../plugins/routes'
 import { startMintingStyles } from '../styles/core-css'
 import { buildRequestUrl, isSelectedNodePublic } from '../utils/node'
+import { getPublicNodeBlockedMessage } from '../utils/i18n'
 import '../functional-components/my-button'
 import "@material/mwc-button"
 import '@material/mwc-dialog'
@@ -60,7 +61,7 @@ class StartMinting extends connect(store)(LitElement) {
 		if (!isSelectedNodePublic(store.getState())) {
 			this.getMintingAcccounts()
 		} else {
-			this.errorMsg = translate('publicNode.actionBlocked')
+			this.errorMsg = getPublicNodeBlockedMessage()
 		}
 	}
 
@@ -286,7 +287,7 @@ class StartMinting extends connect(store)(LitElement) {
 
 	const startMinting = async () => {
 			if (isSelectedNodePublic(store.getState())) {
-				this.errorMsg = translate('publicNode.actionBlocked')
+				this.errorMsg = getPublicNodeBlockedMessage()
 				return
 			}
 			this.openDialogRewardShare = true

@@ -22,7 +22,8 @@
 
 - [ ] Add a toggle to pin the left sidebar
 - [ ] Add public node support
-- [ ] Make dashboard apps drag to resort
+- [ ] Make dashboard apps drag to re-sort
+  - [ ] Allow folders / groups
 - [ ] Add a code linter
 - [ ] Update welcome info and tutorials
 

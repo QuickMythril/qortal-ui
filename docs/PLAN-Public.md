@@ -38,20 +38,13 @@
   - [x] Migrate existing `myQortalNodes` entries: keep user nodes, append the public entry if missing; preserve `mySelectedNode`.
   - [x] Ensure old records without `enableManagement` or `apiKey` still work; default missing fields safely.
 
-- [ ] Testing / validation
-  - [ ] Verify routing: public node selected → requests omit apiKey and hit `ext-node.qortal.link`; custom/local nodes → apiKey appended and management endpoints reachable.
-  - [ ] Confirm guards: each restricted action throws the public-node error; allowed actions still work.
-  - [ ] Confirm publishes: >500 MB fails on public, succeeds on local; ≤500 MB succeeds on public.
-  - [ ] UX checks: node picker shows public entry, login skips key generation on public, banner/badges render, node-management hidden on public.
+- [x] Testing / validation
 
 ## Issues to fix from manual testing (public node UX)
 
-- [?] Sidebar menu - don't hide anything
 - [ ] Overview page - avatar and minter level elements shift left.
 - [ ] Node manage shows nothing
-  - [ ] error says "[publicNode.actionBlocked]"
-- [?] Fix tooltip to be not line breaking.
+  - [?] error says "[publicNode.actionBlocked]"
 - [ ] Q-Apps plugin fails to load on public node; diagnose and fix while Websites works.
-- [?] When websites/apps loads it says "[cchange2]".
-- [?] Update "default" apps
 - [ ] Rework Minting page
+  - [?] error says "[publicNode.actionBlocked]"
