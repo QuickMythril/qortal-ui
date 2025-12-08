@@ -1,11 +1,16 @@
 {
 	"name": "qortal-ui",
-	"version": "4.6.1",
-	"description": "Qortal Project - decentralize the world - Data storage, communications, web hosting, decentralized trading, complete infrastructure for the future blockchain-based Internet",
+	"version": "4.9.9",
+	"description": "Legacy desktop UI for the Qortal blockchain platform, providing access to wallets, decentralized content hosting, encrypted chat, crosschain trading, QORT minting, and node management.",
 	"keywords": [
-		"QORT",
-		"QORTAL",
-		"DECENTRALIZED"
+		"qortal",
+		"qortal ui",
+		"qdn",
+		"q-apps",
+		"qort",
+		"decentralized",
+		"blockchain",
+		"electron"
 	],
 	"main": "electron.js",
 	"repository": {

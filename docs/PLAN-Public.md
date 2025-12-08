@@ -46,11 +46,11 @@
 
 ## Issues to fix from manual testing (public node UX)
 
-- [ ] Sidebar menu not rendered and no hamburger hover control when on public node.
-- [?] Check Overview page
+- [ ] Sidebar menu items missing
+- [ ] Overview page - avatar and minter level elements shift left.
 - [ ] Node manage shows nothing
   - [ ] error says "[publicNode.actionBlocked]"
-- [?] Remove the warning banner/message from the Trade Portal page for public node.
-- [?] Add an orange warning background behind the core status icon in the top bar when on public node.
+- [ ] Fix tooltip to be wide enough to fix long URL.
 - [ ] Q-Apps plugin fails to load on public node; diagnose and fix while Websites works.
-- [?] Block saved account lookups on public node
+- [ ] When websites/apps loads it says "no websites/apps found".
+- [ ] Update "default" apps
