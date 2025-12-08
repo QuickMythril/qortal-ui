@@ -74,27 +74,18 @@ class NodeManagement extends LitElement {
 	}
 
 	render() {
-		if (this.blocked) {
-			return html`
-				<div id="node-management-page">
-					<div class="node-card">
-						<h3>${getPublicNodeBlockedMessage()}</h3>
-					</div>
-				</div>
-			`
-		}
-
 		return html`
 			<div id="node-management-page">
 				<div class="node-card">
 					<h2>${translate("nodepage.nchange1")} ${this.nodeDomain}</h2>
+					${this.blocked ? html`<div class="warning-text">${getPublicNodeBlockedMessage()}</div>` : ''}
 					${this.renderButtons()}
 					<span class="sblack"><br>${translate("nodepage.nchange2")} ${this.upTime}</span>
 					<br><br>
 					<div id="minting">
 						<div style="min-height:48px; display: flex; padding-bottom: 6px;">
 							<h3 style="margin: 0; flex: 1; padding-top: 8px; display: inline;">${translate("nodepage.nchange3")}</h3>
-							<mwc-button style="float: right;" @click=${() => this.shadowRoot.getElementById('addMintingAccountDialog').show()}>
+							<mwc-button style="float: right;" ?disabled=${this.blocked} @click=${() => this.shadowRoot.getElementById('addMintingAccountDialog').show()}>
 								<mwc-icon>add</mwc-icon>
 								${translate("nodepage.nchange4")}
 							</mwc-button>
@@ -122,7 +113,7 @@ class NodeManagement extends LitElement {
 								}}></vaadin-grid-column>
 							<vaadin-grid-column width="12em" header="${translate("nodepage.nchange11")}" .renderer=${(root, column, data) => {
 							render(html`
-								<mwc-button class="red" ?disabled=${this.removeMintingAccountLoading} @click=${() => this.removeMintingAccount(data.item.publicKey)}>
+								<mwc-button class="red" ?disabled=${this.removeMintingAccountLoading || this.blocked} @click=${() => this.removeMintingAccount(data.item.publicKey)}>
 									<mwc-icon>create</mwc-icon>
 									&nbsp;${translate("nodepage.nchange12")}
 								</mwc-button>
@@ -138,7 +129,7 @@ class NodeManagement extends LitElement {
 								<span>${translate("nodepage.nchange14")}</span>
 								<span>(${this.peers.length})</span>
 							</h3>
-							<mwc-button @click=${() => this.shadowRoot.getElementById('addPeerDialog').show()}>
+							<mwc-button ?disabled=${this.blocked} @click=${() => this.shadowRoot.getElementById('addPeerDialog').show()}>
 								<mwc-icon>add</mwc-icon>
 								&nbsp;${translate("nodepage.nchange15")}
 							</mwc-button>
@@ -150,11 +141,11 @@ class NodeManagement extends LitElement {
 							<vaadin-grid-column header="${translate("nodepage.nchange21")}" path="age"></vaadin-grid-column>
 							<vaadin-grid-column width="12em" header="${translate("nodepage.nchange22")}" .renderer=${(root, column, data) => {
 							render(html`
-								<mwc-button class="red" @click=${() => this.removePeer(data.item.address, data.index)}>
+								<mwc-button class="red" ?disabled=${this.blocked} @click=${() => this.removePeer(data.item.address, data.index)}>
 									<mwc-icon>delete</mwc-icon>
 									&nbsp;${translate("nodepage.nchange12")}
 								</mwc-button>
-								<mwc-button class="green" @click=${() => this.forceSyncPeer(data.item.address, data.index)}>
+								<mwc-button class="green" ?disabled=${this.blocked} @click=${() => this.forceSyncPeer(data.item.address, data.index)}>
 									&nbsp;${translate("nodepage.nchange23")}
 								</mwc-button>
 							`, root)
@@ -168,13 +159,13 @@ class NodeManagement extends LitElement {
 			<mwc-dialog id="addPeerDialog" scrimClickAction='' escapeKeyAction=''>
 				<div>${translate("nodepage.nchange16")}</div>
 				<br>
-				<mwc-textfield ?disabled="${this.addPeerLoading}" label="${translate("nodepage.nchange17")}" id="addPeerAddress" ></mwc-textfield>
+				<mwc-textfield ?disabled="${this.addPeerLoading || this.blocked}" label="${translate("nodepage.nchange17")}" id="addPeerAddress" ></mwc-textfield>
 				<div style="text-align: center; height: 36px;" ?hidden="${!this.addPeerLoading}">
 					<span>
 						<paper-spinner-lite style="margin-top: 12px;" ?active="${this.addPeerLoading}" alt="Adding new peer"></paper-spinner-lite>
 					</span>
 				</div>
-				<mwc-button ?disabled="${this.addPeerLoading}" @click="${this.addPeer}" slot="primaryAction">
+				<mwc-button ?disabled="${this.addPeerLoading || this.blocked}" @click="${this.addPeer}" slot="primaryAction">
 					${translate("nodepage.nchange8")}
 				</mwc-button>
 				<mwc-button slot="secondaryAction" ?disabled="${this.addPeerLoading}" @click="${() => this.closeAddPeerDialog()}" class="red">
@@ -184,7 +175,7 @@ class NodeManagement extends LitElement {
 			<mwc-dialog id="addMintingAccountDialog" scrimClickAction="${this.addMintingAccountLoading ? '' : "close"}">
 				<div>${translate("nodepage.nchange5")}</div>
 				<br>
-				<mwc-textfield ?disabled="${this.addMintingAccountLoading}" label="${translate("nodepage.nchange6")}" id="addMintingAccountKey"></mwc-textfield>
+				<mwc-textfield ?disabled="${this.addMintingAccountLoading || this.blocked}" label="${translate("nodepage.nchange6")}" id="addMintingAccountKey"></mwc-textfield>
 				<div style="text-align:right; height:36px;" ?hidden=${this.addMintingAccountMessage === ''}>
 					<span ?hidden="${this.addMintingAccountLoading}">
 						${this.addMintingAccountMessage}&nbsp;
@@ -194,7 +185,7 @@ class NodeManagement extends LitElement {
 						<paper-spinner-lite style="margin-top:12px;" ?active="${this.addMintingAccountLoading}" alt="Adding minting account"></paper-spinner-lite>
 					</span>
 				</div>
-				<mwc-button ?disabled="${this.addMintingAccountLoading}" slot="primaryAction" @click=${this.addMintingAccount}>
+				<mwc-button ?disabled="${this.addMintingAccountLoading || this.blocked}" slot="primaryAction" @click=${this.addMintingAccount}>
 					${translate("nodepage.nchange8")}
 				</mwc-button>
 				<mwc-button ?disabled="${this.addMintingAccountLoading}" slot="secondaryAction" dialogAction="cancel" class="red">
@@ -219,11 +210,10 @@ class NodeManagement extends LitElement {
 		this.changeTheme()
 		this.changeLanguage()
 
-		if (this.isPublicNode()) {
-			this.blocked = true
+		this.blocked = this.isPublicNode()
+		if (this.blocked) {
 			const msg = getPublicNodeBlockedMessage()
 			parentEpml.request('showSnackBar', `${msg}`)
-			return
 		}
 
 		this.updateMintingAccounts()
@@ -385,18 +375,18 @@ class NodeManagement extends LitElement {
 	renderButtons() {
 		if (!isElectron()) {
 			return html`
-				<mwc-button style="float:right;" class="red" ?hidden="${(this.upTime === "offline")}" @click=${() => this.stopNode()}><mwc-icon>dangerous</mwc-icon>&nbsp;${translate("nodepage.nchange31")}</mwc-button>
-				<mwc-button style="float:right;" ?hidden="${(this.upTime === "offline")}" @click=${() => this.openBootstrapDialog()}><mwc-icon>restart_alt</mwc-icon>&nbsp;${translate("tour.tour18")}</mwc-button>
-				<mwc-button style="float:right;" ?hidden="${(this.upTime === "offline")}" @click=${() => this.restartNode()}><mwc-icon>360</mwc-icon>&nbsp;${translate("nodepage.nchange33")}</mwc-button>
+				<mwc-button style="float:right;" class="red" ?hidden="${(this.upTime === "offline")}" ?disabled=${this.blocked} @click=${() => this.stopNode()}><mwc-icon>dangerous</mwc-icon>&nbsp;${translate("nodepage.nchange31")}</mwc-button>
+				<mwc-button style="float:right;" ?hidden="${(this.upTime === "offline")}" ?disabled=${this.blocked} @click=${() => this.openBootstrapDialog()}><mwc-icon>restart_alt</mwc-icon>&nbsp;${translate("tour.tour18")}</mwc-button>
+				<mwc-button style="float:right;" ?hidden="${(this.upTime === "offline")}" ?disabled=${this.blocked} @click=${() => this.restartNode()}><mwc-icon>360</mwc-icon>&nbsp;${translate("nodepage.nchange33")}</mwc-button>
 			`
 		} else {
 			if (this.upTime === "offline") {
-				return html`<mwc-button style="float:right;" class="green" @click=${() => this.startNode()}><mwc-icon>play_circle</mwc-icon>&nbsp;${translate("nodepage.nchange35")}</mwc-button>`
+				return html`<mwc-button style="float:right;" class="green" ?disabled=${this.blocked} @click=${() => this.startNode()}><mwc-icon>play_circle</mwc-icon>&nbsp;${translate("nodepage.nchange35")}</mwc-button>`
 			} else {
 				return html`
-					<mwc-button style="float:right;" class="red" @click=${() => this.stopNode()}><mwc-icon>stop_circle</mwc-icon>&nbsp;${translate("nodepage.nchange31")}</mwc-button>
-					<mwc-button style="float:right;" @click=${() => this.openBootstrapDialog()}><mwc-icon>restart_alt</mwc-icon>&nbsp;${translate("tour.tour18")}</mwc-button>
-					<mwc-button style="float:right;" @click=${() => this.restartNode()}><mwc-icon>360</mwc-icon>&nbsp;${translate("nodepage.nchange33")}</mwc-button>
+					<mwc-button style="float:right;" class="red" ?disabled=${this.blocked} @click=${() => this.stopNode()}><mwc-icon>stop_circle</mwc-icon>&nbsp;${translate("nodepage.nchange31")}</mwc-button>
+					<mwc-button style="float:right;" ?disabled=${this.blocked} @click=${() => this.openBootstrapDialog()}><mwc-icon>restart_alt</mwc-icon>&nbsp;${translate("tour.tour18")}</mwc-button>
+					<mwc-button style="float:right;" ?disabled=${this.blocked} @click=${() => this.restartNode()}><mwc-icon>360</mwc-icon>&nbsp;${translate("nodepage.nchange33")}</mwc-button>
 				`
 			}
 		}
