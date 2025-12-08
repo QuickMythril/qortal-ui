@@ -3629,14 +3629,19 @@ export const chatWelcomePageStyles = css`
     .sub-main {
         position: relative;
         text-align: center;
+        display: flex;
+        justify-content: center;
+        padding: 1rem 0 2rem 0;
     }
 
     .center-box {
-        position: absolute;
-        top: 45%;
-        left: 50%;
-        transform: translate(-50%, 0%);
+        position: relative;
+        transform: none;
         text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
     }
 
     .img-icon {
