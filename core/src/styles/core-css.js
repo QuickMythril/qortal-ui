@@ -2275,6 +2275,7 @@ export const themeToggleStyles = css`
 export const walletProfileStyles = css`
     #profileInMenu {
         padding: 12px;
+        padding-left: 56px;
         border-top: var(--border);
         background: var(--sidetopbar);
         color: var(--black);
@@ -2368,6 +2369,39 @@ export const appViewStyles = css`
         border-top: var(--border);
         height: 48px;
         padding: 3px;
+    }
+
+    .menu-toggle-overlay {
+        position: fixed;
+        top: 6px;
+        left: 6px;
+        z-index: 5;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .menu-toggle-button {
+        background: var(--sidetopbar);
+        border-radius: 50%;
+        box-shadow: var(--shadow-2);
+        --paper-icon-button-ink-color: var(--mdc-theme-primary);
+        color: var(--black);
+        transition: box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .menu-toggle-button.locked {
+        box-shadow: 0 0 0 2px var(--mdc-theme-primary);
+        background: var(--nav-color-hover);
+        color: var(--mdc-theme-primary);
+    }
+
+    .menu-toggle-spacer {
+        width: 44px;
+        min-width: 44px;
+        height: 100%;
     }
 
     paper-progress {

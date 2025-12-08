@@ -21,9 +21,12 @@
 
 ## Other ideas
 
-- [ ] Add a toggle to pin the left sidebar
+- [?] Add a toggle to pin the left sidebar
+  - [ ] Make sidebar customizable
 - [ ] Make dashboard apps drag to re-sort
   - [ ] Allow folders / groups
+  - [ ] Add list view to icon view
+  - [ ] Change icon view sizes
 - [ ] Update welcome info and tutorials
 - [ ] Add trade fee support to Trade Portal?
 

@@ -150,7 +150,8 @@ class AppView extends connect(store)(LitElement) {
 			myLockScreenSet: { type: String },
 			helperMessage: { type: String },
 			nodeIndicator: { type: Object },
-			showSyncMessages: { type: Boolean }
+			showSyncMessages: { type: Boolean },
+			menuLocked: { type: Boolean }
 		}
 	}
 
@@ -250,15 +251,32 @@ class AppView extends connect(store)(LitElement) {
 		this.myLockScreenSet = ''
 		this.helperMessage = ''
 		this.nodeIndicator = null
+		this.menuLocked = false
+		this._menuHovering = false
+		this._appDrawer = null
+		this._appSidebar = null
+		this._menuButton = null
+		this._drawerLayout = null
 		this.getTourElements = this.getTourElements.bind(this)
 		this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
 	}
 
 	render() {
 		return html`
-			<app-drawer-layout fullbleed force-narrow>
-				<app-drawer swipe-open slot="drawer" id="appdrawer">
-					<app-header-layout id="appsidebar">
+			<div class="menu-toggle-overlay">
+				<paper-icon-button
+					id="mb"
+					class="menu-toggle-button ${this.menuLocked ? 'locked' : ''}"
+					icon="menu"
+					@click=${this.handleMenuButtonClick}
+					@mouseenter=${this.handleMenuButtonMouseEnter}
+					@mouseleave=${this.handleMenuButtonMouseLeave}
+					aria-pressed=${this.menuLocked ? 'true' : 'false'}
+				></paper-icon-button>
+			</div>
+			<app-drawer-layout id="drawerLayout" fullbleed ?force-narrow=${!this.menuLocked}>
+				<app-drawer swipe-open slot="drawer" id="appdrawer" ?persistent=${this.menuLocked}>
+					<app-header-layout id="appsidebar" @mouseenter=${this.handleSidebarMouseEnter} @mouseleave=${this.handleSidebarMouseLeave}>
 						<div id="sideBar">
 							<wallet-profile></wallet-profile>
 							<div class="sideBarMenu">
@@ -275,7 +293,7 @@ class AppView extends connect(store)(LitElement) {
 				<app-header-layout style="height: var(--window-height);">
 					<app-header id='appHeader' slot="header" fixed>
 						<app-toolbar>
-							<paper-icon-button id="mb" class="menu-toggle-button" drawer-toggle icon="menu"></paper-icon-button>
+							<div class="menu-toggle-spacer" aria-hidden="true"></div>
 							<div main-title>
 								<span class="qora-title">
 								<img src="${this.config.coin.logo}" style="height:32px; padding-left:12px;">
@@ -421,16 +439,10 @@ class AppView extends connect(store)(LitElement) {
 			this.shadowRoot.getElementById('lockScreenActive').open()
 		}
 
-		var drawerTog = this.shadowRoot.getElementById('mb')
-		var drawerOut = this.shadowRoot.getElementById('appsidebar')
-
-		drawerTog.addEventListener('mouseover', function () {
-			drawerTog.click()
-		})
-
-		drawerOut.addEventListener('mouseleave', function () {
-			drawerTog.click()
-		})
+		this._appDrawer = this.shadowRoot.getElementById('appdrawer')
+		this._appSidebar = this.shadowRoot.getElementById('appsidebar')
+		this._menuButton = this.shadowRoot.getElementById('mb')
+		this._drawerLayout = this.shadowRoot.getElementById('drawerLayout')
 
 		await this.getNodeType()
 
@@ -1704,6 +1716,142 @@ class AppView extends connect(store)(LitElement) {
 		setInterval(() => {
 			this.clearTheCache()
 		}, 60000)
+	}
+
+	ensureMenuElements() {
+		if (!this._appDrawer) {
+			this._appDrawer = this.shadowRoot.getElementById('appdrawer')
+		}
+
+		if (!this._appSidebar) {
+			this._appSidebar = this.shadowRoot.getElementById('appsidebar')
+		}
+
+		if (!this._menuButton) {
+			this._menuButton = this.shadowRoot.getElementById('mb')
+		}
+
+		if (!this._drawerLayout) {
+			this._drawerLayout = this.shadowRoot.getElementById('drawerLayout')
+		}
+	}
+
+	openSidebar() {
+		this.ensureMenuElements()
+
+		if (this._appDrawer) {
+			this._appDrawer.opened = true
+		}
+
+		if (this._appDrawer && this.menuLocked) {
+			this._appDrawer.persistent = true
+		}
+
+		if (this._drawerLayout && this.menuLocked) {
+			this._drawerLayout.forceNarrow = false
+		}
+	}
+
+	closeSidebar() {
+		this.ensureMenuElements()
+
+		if (this._appDrawer) {
+			this._appDrawer.opened = false
+			this._appDrawer.persistent = false
+		}
+
+		if (this._drawerLayout) {
+			this._drawerLayout.forceNarrow = true
+		}
+	}
+
+	handleMenuButtonMouseEnter() {
+		this._menuHovering = true
+		this.openSidebar()
+	}
+
+	handleMenuButtonMouseLeave(event) {
+		if (this.isMovingIntoMenuArea(event)) {
+			return
+		}
+
+		this._menuHovering = false
+
+		if (!this.menuLocked) {
+			this.closeSidebar()
+		}
+	}
+
+	handleMenuButtonClick() {
+		this.menuLocked = !this.menuLocked
+
+		if (this.menuLocked) {
+			this.openSidebar()
+		} else if (!this._menuHovering) {
+			this.closeSidebar()
+		}
+	}
+
+	handleSidebarMouseEnter() {
+		this._menuHovering = true
+	}
+
+	handleSidebarMouseLeave(event) {
+		if (this.isMovingToMenuButton(event)) {
+			return
+		}
+
+		this._menuHovering = false
+
+		if (!this.menuLocked) {
+			this.closeSidebar()
+		}
+	}
+
+	isMovingIntoMenuArea(event) {
+		const related = event?.relatedTarget
+
+		if (!related) {
+			return false
+		}
+
+		this.ensureMenuElements()
+
+		return this._appSidebar?.contains(related)
+	}
+
+	isMovingToMenuButton(event) {
+		const related = event?.relatedTarget
+
+		if (!related) {
+			return false
+		}
+
+		this.ensureMenuElements()
+
+		return this._menuButton?.contains(related)
+	}
+
+	updated(changedProperties) {
+		super.updated(changedProperties)
+
+		if (changedProperties.has('menuLocked')) {
+			this.ensureMenuElements()
+
+			if (this._appDrawer) {
+				this._appDrawer.persistent = this.menuLocked
+			}
+
+			if (this._drawerLayout) {
+				this._drawerLayout.forceNarrow = !this.menuLocked
+			}
+
+			if (this.menuLocked) {
+				this.openSidebar()
+			} else if (!this._menuHovering) {
+				this.closeSidebar()
+			}
+		}
 	}
 
 	getTourElements() {
