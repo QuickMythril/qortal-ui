@@ -21,9 +21,9 @@
 
 ## Other ideas
 
-- [?] Persist sidebar lock across sessions
 - [ ] Make sidebar customizable
 - [ ] Make dashboard apps drag to re-sort
+  - [ ] Allow custom buttons
   - [ ] Allow folders / groups
   - [ ] Add list view to icon view
   - [ ] Change icon view sizes

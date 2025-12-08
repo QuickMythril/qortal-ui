@@ -2275,19 +2275,44 @@ export const themeToggleStyles = css`
 export const walletProfileStyles = css`
     #profileInMenu {
         padding: 12px;
-        padding-left: 56px;
         border-top: var(--border);
         background: var(--sidetopbar);
         color: var(--black);
     }
 
-    #accountName {
+    .profile-top-row {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 8px;
+        padding-bottom: 4px;
+    }
+
+    .menu-toggle-placeholder {
+        width: 44px;
+        min-width: 44px;
+        height: 44px;
+        flex-shrink: 0;
+    }
+
+    .avatar-shell {
+        display: flex;
+        justify-content: flex-end;
+        margin-left: auto;
+        min-width: 72px;
+        max-width: 120px;
+    }
+
+    .profile-text {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+    }
+
+    .display-name {
         margin: 0;
         font-size: 18px;
         font-weight: 500;
-        width: 100%;
-        padding-bottom: 8px;
-        display: flex;
     }
 
     #blocksMinted {

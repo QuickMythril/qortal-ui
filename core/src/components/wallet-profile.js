@@ -38,24 +38,22 @@ class WalletProfile extends connect(store)(LitElement) {
 	render() {
 		return html`
 			<div id="profileInMenu">
-				<div style="padding: 8px 0;">
-					<div id="accountName">
-						<div id="child inline-block-child" class="full-info-logo">${this.getAvatar()}</div>
-						&nbsp;&nbsp;&nbsp;
-						<div id="inline-block-child">
-							<div>
-								${this.displayName || translate('general.noRegisteredName')}
-							</div>
-                            				<div>
-								${this.accountInfo.addressInfo ? html`
-									<span style="margin-bottom: 8px; display: inline-block; font-size: 14px;">
-										${translate('walletprofile.minterlevel')} - <span style="color: #03a9f4;">${this.accountInfo.addressInfo.level} ${this.accountInfo.addressInfo.flags === 1 ? html`<strong>(F)</strong>` : ''}
-									</span>
-								` : ''}
-							</div>
-                            				<p id="blocksMinted">${translate('walletprofile.blocksminted')} - ${this.accountInfo.addressInfo.blocksMinted + this.accountInfo.addressInfo.blocksMintedAdjustment}</p>
-						</div>
+				<div class="profile-top-row">
+					<div class="menu-toggle-placeholder" aria-hidden="true"></div>
+					<div class="avatar-shell">${this.getAvatar()}</div>
+				</div>
+				<div class="profile-text">
+					<div class="display-name">
+						${this.displayName || translate('general.noRegisteredName')}
 					</div>
+					<div class="level-line">
+						${this.accountInfo.addressInfo ? html`
+							<span style="font-size: 14px;">
+								${translate('walletprofile.minterlevel')} - <span style="color: #03a9f4;">${this.accountInfo.addressInfo.level} ${this.accountInfo.addressInfo.flags === 1 ? html`<strong>(F)</strong>` : ''}
+							</span>
+						` : ''}
+					</div>
+					<p id="blocksMinted">${translate('walletprofile.blocksminted')} - ${this.accountInfo.addressInfo.blocksMinted + this.accountInfo.addressInfo.blocksMintedAdjustment}</p>
 					<p id="address">${this.wallet.addresses[0].address}</p>
 				</div>
 			</div>
