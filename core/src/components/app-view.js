@@ -257,6 +257,7 @@ class AppView extends connect(store)(LitElement) {
 		this._appSidebar = null
 		this._menuButton = null
 		this._drawerLayout = null
+		this._menuLockKey = 'qortal-menu-locked'
 		this.getTourElements = this.getTourElements.bind(this)
 		this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
 	}
@@ -443,6 +444,8 @@ class AppView extends connect(store)(LitElement) {
 		this._appSidebar = this.shadowRoot.getElementById('appsidebar')
 		this._menuButton = this.shadowRoot.getElementById('mb')
 		this._drawerLayout = this.shadowRoot.getElementById('drawerLayout')
+
+		this.restoreMenuLockState()
 
 		await this.getNodeType()
 
@@ -1784,6 +1787,7 @@ class AppView extends connect(store)(LitElement) {
 
 	handleMenuButtonClick() {
 		this.menuLocked = !this.menuLocked
+		this.saveMenuLockState()
 
 		if (this.menuLocked) {
 			this.openSidebar()
@@ -1851,7 +1855,23 @@ class AppView extends connect(store)(LitElement) {
 			} else if (!this._menuHovering) {
 				this.closeSidebar()
 			}
+
+			this.saveMenuLockState()
 		}
+	}
+
+	restoreMenuLockState() {
+		const storedValue = localStorage.getItem(this._menuLockKey)
+
+		if (storedValue === null) {
+			return
+		}
+
+		this.menuLocked = storedValue === 'true'
+	}
+
+	saveMenuLockState() {
+		localStorage.setItem(this._menuLockKey, `${this.menuLocked}`)
 	}
 
 	getTourElements() {

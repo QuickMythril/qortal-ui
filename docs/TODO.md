@@ -21,13 +21,15 @@
 
 ## Other ideas
 
-- [?] Add a toggle to pin the left sidebar
-  - [ ] Make sidebar customizable
+- [?] Persist sidebar lock across sessions
+- [ ] Make sidebar customizable
 - [ ] Make dashboard apps drag to re-sort
   - [ ] Allow folders / groups
   - [ ] Add list view to icon view
   - [ ] Change icon view sizes
 - [ ] Update welcome info and tutorials
+- [ ] Check qortal:// and http(s):// link support
+- [ ] Check Video / Poll / Image / Audio embeds
 - [ ] Add trade fee support to Trade Portal?
 
 - [ ] Add foreign block heights
