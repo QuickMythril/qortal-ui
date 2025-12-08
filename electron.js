@@ -66,7 +66,7 @@ const isAllowedInternalUrl = (url) => {
 	}
 }
 
-let externalNavHooksBound = false
+const hookedSessions = new WeakSet()
 
 const bindExternalNavigationHandlers = (win) => {
 	if (!win || !win.webContents) return
@@ -87,11 +87,13 @@ const bindExternalNavigationHandlers = (win) => {
 		}
 	})
 
-	if (!externalNavHooksBound) {
-		externalNavHooksBound = true
+	const winSession = win.webContents.session || session.defaultSession
+
+	if (winSession && !hookedSessions.has(winSession)) {
+		hookedSessions.add(winSession)
 		const filter = { urls: ['http://*/*', 'https://*/*'] }
 
-		session.defaultSession.webRequest.onBeforeRequest(filter, (details, callback) => {
+		winSession.webRequest.onBeforeRequest(filter, (details, callback) => {
 			if ((details.resourceType === 'mainFrame' || details.resourceType === 'subFrame')
 				&& !isAllowedInternalUrl(details.url)) {
 				shell.openExternal(details.url)
