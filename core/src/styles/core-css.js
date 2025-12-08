@@ -2902,10 +2902,6 @@ export const navBarStyles = css`
         transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
 
-    .app-list .app-icon.folder-tile {
-        align-items: stretch;
-    }
-
     .app-list .app-icon.drag-over {
         border-color: var(--mdc-theme-primary);
         box-shadow: 0 0 0 2px var(--mdc-theme-primary);
@@ -2943,32 +2939,36 @@ export const navBarStyles = css`
 
     .app-icon-box.folder {
         flex-direction: column;
-        align-items: flex-start;
-        padding: 8px;
+        align-items: center;
+        justify-content: center;
+        padding: 5px 14px;
     }
 
     .folder-icon-stack {
         position: relative;
         width: 100%;
+        display: flex;
+        justify-content: center;
     }
 
     .folder-preview {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 4px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2px;
         position: absolute;
         bottom: 0;
         right: 0;
         left: 0;
-        padding: 4px;
+        padding: 3px;
+        pointer-events: none;
     }
 
     .folder-preview-icon {
-        --mdc-icon-size: 20px;
+        --mdc-icon-size: 14px;
         color: var(--black);
-        background: rgba(255, 255, 255, 0.6);
-        border-radius: 6px;
-        padding: 2px;
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 4px;
+        padding: 1px;
     }
 
     .folder-modal-header {
@@ -2996,6 +2996,7 @@ export const navBarStyles = css`
         align-items: center;
         gap: 6px;
         background: var(--sidetopbar);
+        text-align: center;
     }
 
     .folder-child-actions button {

@@ -812,7 +812,7 @@ class NavBar extends connect(store)(LitElement) {
 				</div>
 				<div class="folder-modal-grid">
 					${this.getActiveFolderChildren().map((child) => html`
-						<div class="folder-child">
+						<div class="folder-child" @click=${() => this.handleFolderChildClick(child)}>
 							<div class="app-icon-box">
 								${child.url === 'myapp'
 		? html`<app-avatar appicon=${child.mwcicon} appname=${child.title}></app-avatar>`
@@ -820,7 +820,7 @@ class NavBar extends connect(store)(LitElement) {
 							</div>
 							<div class="text">${child.title}</div>
 							<div class="folder-child-actions">
-								<button @click=${() => this.removeFromFolder(child.pluginNumber, this.activeFolderId)}>Remove</button>
+								<button @click=${(e) => { e.stopPropagation(); this.removeFromFolder(child.pluginNumber, this.activeFolderId) }}>Remove</button>
 							</div>
 						</div>
 					`)}
@@ -1839,7 +1839,6 @@ class NavBar extends connect(store)(LitElement) {
 						<mwc-icon class="removeIcon">backspace</mwc-icon>
 					</div>
 					<div class="folder-icon-stack">
-						<mwc-icon class="menuIcon">folder</mwc-icon>
 						<div class="folder-preview">
 							${(appplugin.children || []).slice(0, 4).map(child => html`
 								<mwc-icon class="folder-preview-icon">${child.mwcicon || 'apps'}</mwc-icon>
@@ -1989,6 +1988,11 @@ class NavBar extends connect(store)(LitElement) {
 			folder.title = value
 			this.persistMenuPlugins()
 		}
+	}
+
+	handleFolderChildClick(child) {
+		this.changePage(child)
+		this.closeFolder()
 	}
 
 

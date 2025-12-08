@@ -23,9 +23,7 @@
 
 - [ ] Make sidebar customizable
 - [ ] Make dashboard apps:
-  - [?] Allow dragging to re-sort
   - [ ] Allow custom buttons
-  - [ ] Allow folders / groups
   - [ ] Add list view to icon view
   - [ ] Change icon view sizes
 - [ ] Update welcome info and tutorials
