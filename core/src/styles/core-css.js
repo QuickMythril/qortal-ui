@@ -643,7 +643,7 @@ export const coreSyncStatusStyles = css`
 
     .tooltip .bottom {
         min-width: 200px;
-        max-width: 250px;
+        max-width: 400px;
         top: 35px;
         left: 50%;
         transform: translate(-50%, 0);
