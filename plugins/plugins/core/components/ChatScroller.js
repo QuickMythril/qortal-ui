@@ -15,6 +15,7 @@ import Mention from '@tiptap/extension-mention'
 import ShortUniqueId from 'short-unique-id'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
+import { parseQortalEmbedLink } from './qdn-action-constants'
 import './ChatModals'
 import './LevelFounder'
 import './NameMenu'
@@ -22,6 +23,7 @@ import './UserInfo'
 import './WrapperModal'
 import './ChatImage'
 import './ChatImageGif'
+import './ImageEmbed'
 import '@material/mwc-button'
 import '@material/mwc-dialog'
 import '@material/mwc-icon'
@@ -1071,6 +1073,8 @@ class MessageTemplate extends LitElement {
 		let message = ''
 		let messageVersion2 = ''
 		let messageVersion2WithLink = null
+		let embedLink = null
+		let embedData = null
 		let reactions = []
 		let repliedToData = null
 		let image = null
@@ -1089,14 +1093,44 @@ class MessageTemplate extends LitElement {
 		try {
 			const parsedMessageObj = JSON.parse(this.messageObj.decodedMessage)
 
-			if (parsedMessageObj.version > 1 && parsedMessageObj.messageText) {
-				messageVersion2 = generateHTML(parsedMessageObj.messageText, [StarterKit, Underline, Highlight, Mention, TextStyle, Color.configure({ types: [TextStyle.name] })])
-				messageVersion2WithLink = processText(messageVersion2)
+			if (parsedMessageObj.version > 1) {
+				if (parsedMessageObj.messageText) {
+					if (typeof parsedMessageObj.messageText === 'object') {
+						try {
+							messageVersion2 = generateHTML(parsedMessageObj.messageText, [StarterKit, Underline, Highlight, Mention, TextStyle, Color.configure({ types: [TextStyle.name] })])
+						} catch (error) {
+							messageVersion2 = ''
+						}
+					} else if (typeof parsedMessageObj.messageText === 'string') {
+						messageVersion2 = parsedMessageObj.messageText
+					}
+				} else if (parsedMessageObj.message) {
+					messageVersion2 = parsedMessageObj.message
+				}
+
+				if (typeof messageVersion2 === 'string') {
+					messageVersion2WithLink = processText(messageVersion2)
+				} else {
+					messageVersion2 = ''
+					messageVersion2WithLink = ''
+				}
 			}
 
-			if (parsedMessageObj.version > 1 && parsedMessageObj.message && !parsedMessageObj.messageText) {
-				messageVersion2 = parsedMessageObj.message
-				messageVersion2WithLink = processText(messageVersion2)
+			const regexEmbed = /qortal:\/\/use-embed\/[^\s<"]+/i
+			const embedSource = typeof messageVersion2WithLink === 'string' ? messageVersion2WithLink : (typeof messageVersion2 === 'string' ? messageVersion2 : '')
+			const foundEmbed = embedSource ? embedSource.match(regexEmbed) : null
+			if (foundEmbed && foundEmbed[0]) {
+				embedLink = foundEmbed[0]
+				try {
+					const parsed = parseQortalEmbedLink(embedLink)
+					if (parsed.type === 'IMAGE' && parsed.name && parsed.service && parsed.identifier) {
+						embedData = parsed
+						const baseStr = typeof messageVersion2WithLink === 'string' ? messageVersion2WithLink : (typeof messageVersion2 === 'string' ? messageVersion2 : '')
+						const cleanStr = baseStr.replace(embedLink, '')
+						messageVersion2WithLink = cleanStr
+						messageVersion2 = cleanStr
+					}
+				} catch (error) { /* ignore invalid embed */ }
 			}
 
 			message = parsedMessageObj.messageText ? parsedMessageObj.messageText : parsedMessageObj.message
@@ -1637,16 +1671,26 @@ class MessageTemplate extends LitElement {
 										`
 			: html``
 }
+								${embedData ?
+		html`
+										<image-embed
+											.embedData=${embedData}
+											.groupId=${Number(this.messageObj.txGroupId)}
+											.senderName=${this.messageObj.senderName || this.messageObj.sender}
+										></image-embed>
+									`
+		: ''
+}
 								<div id="messageContent" class="message" style=${image && replacedMessage !== '' && 'margin-top: 15px;'}>
 									${+version > 1 ? messageVersion2WithLink ?
 		html`
 											<div id="fontsize" style=${this.messageFontSize}>
-												${messageVersion2WithLink}
+												${unsafeHTML(messageVersion2WithLink)}
 											<div>
 										`
 		: html`
 											<div id="fontsize" style=${this.messageFontSize}>
-												${unsafeHTML(messageVersion2)}
+												${unsafeHTML(messageVersion2 || '')}
 											<div>
 										`
 		: ''
