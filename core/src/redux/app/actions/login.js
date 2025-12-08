@@ -1,8 +1,14 @@
 import { LOG_IN, LOG_OUT, SELECT_ADDRESS } from '../app-action-types'
+import { doUpdateAccountInfo } from './app-core'
 
 export const doSelectAddress = address => {
 	return (dispatch, getState) => {
 		dispatch(selectAddress(address))
+		const addr = (address && address.address) || address
+		const userState = getState().user || {}
+		const stored = (userState.accountInfoByAddress || {})[addr]
+		const emptyInfo = { names: [], allNames: [], primaryName: '', activeName: '', addressInfo: {} }
+		dispatch(doUpdateAccountInfo(stored || emptyInfo))
 	}
 }
 

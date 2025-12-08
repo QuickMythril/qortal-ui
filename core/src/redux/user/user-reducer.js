@@ -16,13 +16,25 @@ const DEFAULT_INITIAL_STATE = {
 		allNames: [],
 		activeName: ''
 	},
+	accountInfoByAddress: {},
 	notifications: {
 		q_chat: {}
 	},
 	loaded: false
 }
 
-export default (state = loadStateFromLocalStorage('user') || DEFAULT_INITIAL_STATE, action) => {
+const persistedState = loadStateFromLocalStorage('user') || {}
+const INITIAL_STATE = {
+	...DEFAULT_INITIAL_STATE,
+	...persistedState,
+	accountInfo: {
+		...DEFAULT_INITIAL_STATE.accountInfo,
+		...(persistedState.accountInfo || {})
+	},
+	accountInfoByAddress: persistedState.accountInfoByAddress || {}
+}
+
+export default (state = INITIAL_STATE, action) => {
 	switch (action.type) {
 		case STORE_WALLET:
 			return {
@@ -47,12 +59,24 @@ export default (state = loadStateFromLocalStorage('user') || DEFAULT_INITIAL_STA
 			}
 
 		case UPDATE_ACCOUNT_INFO: {
+			const { address, ...info } = action.payload || {}
+			const nextAccountInfo = {
+				...state.accountInfo,
+				...info
+			}
+
 			return {
 				...state,
-				accountInfo: {
-					...state.accountInfo,
-					...action.payload
-				}
+				accountInfo: nextAccountInfo,
+				accountInfoByAddress: address
+					? {
+						...(state.accountInfoByAddress || {}),
+						[address]: {
+							...(state.accountInfoByAddress?.[address] || {}),
+							...info
+						}
+					}
+					: state.accountInfoByAddress || {}
 			}
 		}
 

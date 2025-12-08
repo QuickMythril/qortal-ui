@@ -215,7 +215,13 @@ export default (state = INITIAL_STATE, action) => {
 		case SELECT_ADDRESS:
 			return {
 				...state,
-				selectedAddress: action.address
+				selectedAddress: action.address,
+				accountInfo: {
+					...INITIAL_STATE.accountInfo,
+					addressInfo: {
+						address: action?.address?.address || action?.address || ''
+					}
+				}
 			}
 
 		case NETWORK_CONNECTION_STATUS:

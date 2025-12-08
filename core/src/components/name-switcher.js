@@ -169,10 +169,16 @@ class NameSwitcher extends connect(store)(LitElement) {
 	handleSelect(name) {
 		if (!name) return
 
+		const address = pickAddress(this.accountInfo) || (store.getState().app?.selectedAddress?.address || '')
 		const nextAccountInfo = {
 			...this.accountInfo,
 			activeName: name,
-			name
+			name,
+			addressInfo: {
+				...(this.accountInfo?.addressInfo || {}),
+				address
+			},
+			address
 		}
 
 		store.dispatch(doUpdateAppAccountInfo(nextAccountInfo))

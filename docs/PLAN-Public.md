@@ -43,10 +43,11 @@
 ## Issues to fix from manual testing (public node UX)
 
 - [ ] Overview page - avatar and minter level elements shift left.
-- [?] Node manage shows nothing
-  - [?] error says "[publicNode.actionBlocked]"
 - [ ] Q-Apps plugin fails to load on public node; diagnose and fix while Websites works.
 - [ ] Rework Minting page
   - [?] error says "[publicNode.actionBlocked]"
 - [ ] Check Data Management page
 - [ ] Check Auto Buy page
+- [ ] "Not available on the public node. Connect to your own node to continue."
+  - [ ] home page
+- [?] "No name" keeps last active name

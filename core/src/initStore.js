@@ -48,14 +48,19 @@ window.buildApiUrl = (path, options = {}) => {
 	return url
 }
 
-// Rehydrate app.accountInfo from persisted user slice so UI sees saved activeName on startup.
-const persistedUserAccountInfo = (() => {
+// Rehydrate app.accountInfo from persisted user slice for the selected address, if available.
+(() => {
 	const state = store.getState()
-	return state && state.user ? state.user.accountInfo : undefined
+	const selectedAddr = state?.app?.selectedAddress?.address
+	const userSlice = state?.user
+	const perAddress = userSlice?.accountInfoByAddress || {}
+
+	const infoForSelected = selectedAddr ? perAddress[selectedAddr] : undefined
+
+	if (infoForSelected) {
+		store.dispatch(doUpdateAccountInfo(infoForSelected))
+	}
 })()
-if (persistedUserAccountInfo) {
-	store.dispatch(doUpdateAccountInfo(persistedUserAccountInfo))
-}
 
 const workerInitChecker = () => {
 	const state = store.getState()
