@@ -149,6 +149,35 @@ export const encodedToChar = (encodedString) => {
 	return encode17
 }
 
+export const parseQortalEmbedLink = (link) => {
+	const prefix = 'qortal://use-embed/'
+
+	if (!link || typeof link !== 'string' || !link.startsWith(prefix)) {
+		throw new Error('Invalid embed link')
+	}
+
+	// decode html entities if present
+	const decodedLink = encodedToChar(link)
+
+	const [typePart, queryPart = ''] = decodedLink.slice(prefix.length).split('?')
+	const type = (typePart || '').split('/')[0].toUpperCase()
+
+	if (!type) {
+		throw new Error('Invalid embed link type')
+	}
+
+	const params = {}
+	if (queryPart) {
+		const searchParams = new URLSearchParams(queryPart.replace(/\+/g, '%2B'))
+		for (const [key, value] of searchParams.entries()) {
+			if (!value) continue
+			params[key] = decodeURIComponent(value)
+		}
+	}
+
+	return { type, ...params }
+}
+
 export const embedToString = (embed) => {
 	let embedString = ''
 	let embedService = ''
