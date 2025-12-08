@@ -1,0 +1,21 @@
+# Generated plugin bundles (source files are kept as .src.js or explicit exceptions)
+plugins/plugins/core/**/*.js
+!plugins/plugins/core/**/*.src.js
+!plugins/plugins/core/**/*charts.js
+!plugins/plugins/core/**/*css.js
+!plugins/plugins/core/name-registration/name-helpers.test.js
+!plugins/plugins/core/qdn/publish/publish-helpers.src.js
+!plugins/plugins/core/qdn/publish/publish-helpers.test.js
+!plugins/plugins/core/qdn/browser/name-handlers.js
+!plugins/plugins/core/qdn/browser/name-handlers.test.js
+!plugins/plugins/core/components/**/*.js
+
+# Generated version file
+core/src/redux/app/version.js
+
+# Build outputs
+node_modules/
+coverage/
+builtWWW/
+dist/
+watch.pid

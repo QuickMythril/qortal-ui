@@ -23,7 +23,7 @@
 - [ ] Add a toggle to pin the left sidebar
 - [ ] Make dashboard apps drag to re-sort
   - [ ] Allow folders / groups
-- [ ] Add a code linter
+- [.] Add a code linter
 - [ ] Update welcome info and tutorials
 - [ ] Add trade fee support to Trade Portal?
 

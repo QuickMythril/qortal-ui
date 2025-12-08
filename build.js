@@ -6,7 +6,7 @@ const generateBuildConfig = uiCore('generate_build_config')
 const build = uiCore('build')
 const buildDefalutPlugins = pluginsController('build')
 
-srcConfig = {
+const srcConfig = {
 	...config.build,
 	options: {
 		...config.build.options,
@@ -18,6 +18,6 @@ srcConfig = {
 const { buildConfig, inlineConfigs } = generateBuildConfig(srcConfig)
 
 build(buildConfig.options, buildConfig.outputs, buildConfig.outputOptions, buildConfig.inputOptions, inlineConfigs).then(() => {
-	console.log("Building and Bundling Plugins")
+	console.log('Building and Bundling Plugins')
 	buildDefalutPlugins()
 })
