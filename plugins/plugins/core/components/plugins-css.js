@@ -3799,7 +3799,6 @@ export const chatWelcomePageStyles = css`
         flex-direction: column;
         gap: 12px;
         margin-top: 12px;
-        max-height: 420px;
         overflow: auto;
     }
 
