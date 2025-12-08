@@ -10,6 +10,9 @@ plugins/plugins/core/**/*.js
 !plugins/plugins/core/qdn/browser/name-handlers.test.js
 !plugins/plugins/core/components/**/*.js
 
+# Generated static assets
+core/assets/**/*.js
+
 # Generated version file
 core/src/redux/app/version.js
 

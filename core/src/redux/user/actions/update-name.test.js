@@ -77,7 +77,8 @@ describe('doUpdateAccountName', () => {
 			primaryName: 'Name1',
 			allNames: namesRes,
 			names: namesRes,
-			activeName: 'Name3'
+			activeName: 'Name3',
+			address
 		})
 
 		const appAction = dispatched.find(action => action.type === ACCOUNT_INFO)
