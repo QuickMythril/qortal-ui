@@ -50,15 +50,15 @@ class QWebsites extends LitElement {
 		this.identifier = ''
 		this.selectedAddress = {}
 		this.resources = []
-		this.pageRes = []
+		this.pageRes = null
 		this.followedNames = []
 		this.blockedNames = []
 		this.relayMode = false
 		this.isLoading = false
 		this.searchName = ''
 		this.searchResources = []
-		this.followedResources = []
-		this.blockedResources = []
+		this.followedResources = null
+		this.blockedResources = null
 		this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
 	}
 
@@ -101,10 +101,10 @@ class QWebsites extends LitElement {
 							</vaadin-grid-column>
 						</vaadin-grid>
 						<div id="pages"></div>
-						${this.pageRes == null ? html`
-							Loading...
+						${this.pageRes === null ? html`
+							<span style="color: var(--black);">${translate("cchange2")}</span>
 						` : ''}
-						${this.isEmptyArray(this.pageRes) ? html`
+						${this.pageRes !== null && this.isEmptyArray(this.pageRes) ? html`
 							<span style="color: var(--black);">${translate("websitespage.schange10")}</span>
 						` : ''}
 						${this.renderRelayModeText()}
@@ -134,10 +134,10 @@ class QWebsites extends LitElement {
 							}}>
 							</vaadin-grid-column>
 						</vaadin-grid>
-						${this.followedResources == null ? html`
-							Loading...
+						${this.followedResources === null ? html`
+							<span style="color: var(--black);">${translate("cchange2")}</span>
 						` : ''}
-						${this.isEmptyArray(this.followedResources) ? html`
+						${this.followedResources !== null && this.isEmptyArray(this.followedResources) ? html`
 							<span style="color: var(--black);">${translate("websitespage.schange13")}</span>
 						` : ''}
 						${this.renderRelayModeText()}
@@ -167,10 +167,10 @@ class QWebsites extends LitElement {
 							}}>
 							</vaadin-grid-column>
 						</vaadin-grid>
-						${this.blockedResources == null ? html`
-							Loading...
+						${this.blockedResources === null ? html`
+							<span style="color: var(--black);">${translate("cchange2")}</span>
 						` : ''}
-						${this.isEmptyArray(this.blockedResources) ? html`
+						${this.blockedResources !== null && this.isEmptyArray(this.blockedResources) ? html`
 							<span style="color: var(--black);">${translate("websitespage.schange16")}</span>
 						` : ''}
 						${this.renderRelayModeText()}
@@ -375,6 +375,7 @@ class QWebsites extends LitElement {
 	}
 
 	async getFollowedNamesResource() {
+		this.followedResources = null
 		this.followedResources = await parentEpml.request('apiCall', {
 			url: `/arbitrary/resources?service=WEBSITE&default=true&limit=0&reverse=false&includestatus=true&includemetadata=true&namefilter=followedNames`
 		})
@@ -387,6 +388,7 @@ class QWebsites extends LitElement {
 	}
 
 	async getBlockedNamesResource() {
+		this.blockedResources = null
 		this.blockedResources = await parentEpml.request('apiCall', {
 			url: `/arbitrary/resources?service=WEBSITE&default=true&limit=0&reverse=false&includestatus=true&includemetadata=true&namefilter=blockedNames`
 		})
@@ -399,6 +401,7 @@ class QWebsites extends LitElement {
 	}
 
 	async getData(offset) {
+		this.pageRes = null
 		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
 
@@ -498,6 +501,7 @@ class QWebsites extends LitElement {
 	}
 
 	async showWebsites() {
+		this.pageRes = null
 		await this.getData(0)
 		await this.getArbitraryResources()
 		await this.getResourcesGrid()
@@ -505,6 +509,7 @@ class QWebsites extends LitElement {
 	}
 
 	async refreshWebsites() {
+		this.pageRes = null
 		await this.getData(0)
 		await this.getArbitraryResources()
 		await this.updateItemsFromPage(1, true)

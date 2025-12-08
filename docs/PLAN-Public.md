@@ -52,6 +52,6 @@
   - [ ] error says "[publicNode.actionBlocked]"
 - [?] Fix tooltip to be wide enough to fix long URL.
 - [ ] Q-Apps plugin fails to load on public node; diagnose and fix while Websites works.
-- [ ] When websites/apps loads it says "no websites/apps found".
+- [?] When websites/apps loads it says "no websites/apps found".
 - [ ] Update "default" apps
 - [ ] Hide Minting app tile?
