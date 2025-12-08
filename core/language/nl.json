@@ -106,7 +106,7 @@
         "qora": "QORA-adres-memo",
         "backup": "Qortal-backup-bestand",
         "decrypt": "Backup-bestand decoderen",
-        "save": "Bewaren in deze browser.",
+		"save": "Onthoud deze account.",
         "prepare": "Voorbereiding van uw account",
         "areyousure": "Weet U zeker dat U deze portefeuille uit de opgeslagen portefeuilles wilt verwijderen? (Als het wordt verwijderd en er geen backup-bestand bestaat, kan het account voor altijd verloren gaan! Zorg ervoor dat U over een backup-bestand beschikt voor U dit doet!)",
         "error1": "De backup moet een geldig JSON formaat zijn",

@@ -106,7 +106,7 @@
         "qora": "Qora címmag",
         "backup": "Qortal pénztárca biztonsági mentése",
         "decrypt": "Visszafejt biztonsági másolat",
-        "save": "Mentés ebben a böngészőben.",
+		"save": "Jegyezd meg ezt a fiókot.",
         "prepare": "Fiók előkészítése",
         "areyousure": "Biztosan eltávolítja ezt a pénztárcát a mentett pénztárcák közül? (Ha eltávolítja, és nem létezik biztonsági mentési fájl, a fiók végleg elveszhet! Győződjön meg róla, hogy van biztonsági másolata, mielőtt ezt megtenné!)",
         "error1": "A biztonsági másolatnak érvényes JSONnak kell lennie",

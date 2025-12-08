@@ -106,7 +106,7 @@
         "qora": "Graine d'adresse QORA",
         "backup": "Fichier de Sauvegarde Qortal",
         "decrypt": "Décrypter le fichier de sauvegarde Qortal",
-        "save": "Sauvegarder dans ce navigateur.",
+		"save": "Mémoriser ce compte.",
         "prepare": "Préparation de votre compte...",
         "areyousure": "Etes-vous sûr de vouloir supprimer ce compte ? (S'il est supprimé et qu'aucune sauvegarde Qortal n'existe, le compte pourrait être perdu à jamais ! Assurez-vous d'avoir un fichier de sauvegarde avant de faire cela !)",
         "error1": "La sauvegarde doit être un JSON valide",

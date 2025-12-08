@@ -106,7 +106,7 @@
 		"qora": "QORA address seed",
 		"backup": "Qortal backup file",
 		"decrypt": "Decrypt backup file",
-		"save": "Save in this browser.",
+		"save": "Remember this account.",
 		"prepare": "Preparing Your Account...",
 		"areyousure": "Are you sure you want to REMOVE this ACCOUNT from SAVED ACCOUNTS? (If removed and no backup file exists, account could be lost forever! ENSURE YOU HAVE A BACKUP FILE FOR THIS ACCOUNT BEFORE DOING THIS!)",
 		"error1": "Backup file must be valid JSON",

@@ -106,7 +106,7 @@
         "qora": "Qora-adresse seed",
         "backup": "Qortal-lommebok backup",
         "decrypt": "Dekrypter backup",
-        "save": "Lagre i denne nettleseren.",
+		"save": "Husk denne kontoen.",
         "prepare": "Forbereder kontoen din.",
         "areyousure": "Er du sikker på at du vil fjerne denne kontoen fra lagrede kontoer? (Hvis fjernet og ingen sikkerhetskopifil eksisterer, kan kontoen gå tapt for alltid! Sørg for at du har en sikkerhetskopifil før du gjør dette!)",
         "error1": "Backupen må være gyldig JSON",

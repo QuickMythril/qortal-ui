@@ -106,7 +106,7 @@
         "qora": "Ziarno adresu QORA",
         "backup": "Plik kopii zapasowej Qortal",
         "decrypt": "Odszyfruj plik kopii zapasowej",
-        "save": "Zapisz w tej przeglądarce.",
+		"save": "Zapamiętaj to konto.",
         "prepare": "Przygotuj swoje konto",
         "areyousure": "Czy na pewno chcesz usunąć to konto z zapisanych kont? (W przypadku usunięcia i braku pliku kopii zapasowej konto może zostać utracone na zawsze! Zanim to zrobisz, upewnij się, że masz plik kopii zapasowej!)",
         "error1": "Kopia zapasowa musi być poprawnym JSON",

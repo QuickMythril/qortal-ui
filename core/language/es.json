@@ -106,7 +106,7 @@
         "qora": "Frase semilla de la dirección QORA",
         "backup": "Archivo de copia de seguridad Qortal",
         "decrypt": "Descifrar archivo de copia de seguridad",
-        "save": "Guardar en este navegador.",
+		"save": "Recordar esta cuenta.",
         "prepare": "Preparando tu cuenta...",
         "areyousure": "¿Está seguro de que desea eliminar esta billetera de las billeteras guardadas? (Si se elimina y no existe un archivo de respaldo, la cuenta podría perderse para siempre. ¡Asegúrese de tener un archivo de respaldo antes de hacer esto!)",
         "error1": "La copia de seguridad tiene que ser un JSON válido",

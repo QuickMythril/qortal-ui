@@ -27,6 +27,10 @@
 - [ ] Update welcome info and tutorials
 - [ ] Add trade fee support to Trade Portal?
 
+- [ ] Add foreign block heights
+- [ ] Avatars/names in address book
+
+
 ## Needs research
 
 - [ ] Find and reduce polling and other lag

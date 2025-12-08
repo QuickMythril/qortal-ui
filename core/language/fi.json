@@ -106,7 +106,7 @@
         "qora": "QORA osoite siemen",
         "backup": "Qortal lompakon varmuuskopio",
         "decrypt": "Pura varmuuskopion salaus",
-        "save": "Tallenna tässä selaimessa.",
+		"save": "Muista tämä tili.",
         "prepare": "Tilin valmistelu...",
         "areyousure": "Haluatko varmasti poistaa tämän lompakon tallennetuista lompakoistasi? (Jos se poistetaan, eikä varmuuskopiotiedostoa ole, tili voi kadota lopullisesti! Varmista, että sinulla on varmuuskopiotiedosto ennen kuin teet tämän!)",
         "error1": "Varmuuskopion on oltava oikeassa JSON-muodossa",

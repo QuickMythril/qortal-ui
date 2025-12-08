@@ -106,7 +106,7 @@
         "qora": "QORA Adresssamen",
         "backup": "Qortal-Sicherungsdatei",
         "decrypt": "Sicherungsdatei entschlüsseln",
-        "save": "In diesem Browser speichern.",
+		"save": "Dieses Konto merken.",
         "prepare": "Vorbereiten Ihres Kontos...",
         "areyousure": "Möchten Sie dieses Wallet wirklich aus den gespeicherten Wallets entfernen? (Wenn es entfernt wird und keine Sicherungsdatei vorhanden ist, könnte das Konto für immer verloren gehen! Stellen Sie sicher, dass Sie über eine Sicherungsdatei verfügen, bevor Sie dies tun!)",
         "error1": "Die Sicherungsdatei muss gültiges JSON sein",

@@ -106,7 +106,7 @@
         "qora": "Seme QORA adrese",
         "backup": "Rezervna kopija Qortal novčanika",
         "decrypt": "Dešifrovanje rezervne kopije",
-        "save": "Sačuvajte u ovom pretraživaču.",
+		"save": "Zapamti ovaj nalog.",
         "prepare": "Vaš Nalog se priprema",
         "areyousure": "Da li ste sigurni da želite da uklonite ovaj nalog sa sačuvanih naloga? (Ako se ukloni i ne postoji datoteka rezervne kopije, nalog bi mogao biti izgubljen zauvek! Uverite se da imate rezervnu datoteku pre nego što to uradite!)",
         "error1": "Rezervna kopija mora biti ispravan JSON",

@@ -106,7 +106,7 @@
         "qora": "Seed dell'indirizzo Qora",
         "backup": "Backup del portafoglio Qortal",
         "decrypt": "Decifra backup",
-        "save": "Salva in questo browser.",
+		"save": "Ricorda questo account.",
         "prepare": "Preparazione del tuo account",
         "areyousure": "Sei sicuro di voler rimuovere questo portafoglio dai portafogli salvati? (Se rimosso e non esiste alcun file di backup, l'account potrebbe essere perso per sempre! Assicurati di avere un file di backup prima di farlo!)",
         "error1": "Il backup deve essere un JSON valido",

@@ -106,7 +106,7 @@
         "qora": "QORA Adresa Seed",
         "backup": "Qortal backup datoteka",
         "decrypt": "Dešifrirajte datoteku sigurnosne kopije",
-        "save": "Spremite u ovom pregledniku",
+		"save": "Zapamti ovaj račun.",
         "prepare": "Pripremite vaš račun",
         "areyousure": "Jeste li sigurni da želite ukloniti ovaj novčanik iz spremljenih novčanika? (Ako se ukloni, a ne postoji datoteka sigurnosne kopije, račun bi mogao biti zauvijek izgubljen! Provjerite imate li datoteku sigurnosne kopije prije nego to učinite!)",
         "error1": "Sigurnosna kopija mora biti valjan JSON",

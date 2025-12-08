@@ -106,7 +106,7 @@
         "qora": "Endereço seed do QORA",
         "backup": "Arquivo de backup Qortal",
         "decrypt": "Descriptografar arquivo de backup",
-        "save": "Salvar neste Navegador",
+		"save": "Lembrar esta conta.",
         "prepare": "Preparando sua Conta...",
         "areyousure": "Tem certeza de que deseja remover esta conta das contas salvas? (Se for removida e não existir nenhum arquivo de backup, a conta poderá ser perdida para sempre! Certifique-se de ter um arquivo de backup antes de fazer isso!)",
         "error1": "Backup tem que ser um JSON valido",

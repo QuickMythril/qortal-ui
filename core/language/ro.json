@@ -106,7 +106,7 @@
         "qora": "Adresa initiala QORA",
         "backup": "Fișier de rezervă Qortal",
         "decrypt": "Decriptați fișierul de rezervă",
-        "save": "Salveaza in acest browser.",
+		"save": "Tine minte acest cont.",
         "prepare": "Se pregateste Contul tau",
         "areyousure": "Sigur doriți să eliminați acest cont din conturile salvate? (Dacă este eliminat și nu există niciun fișier de rezervă, contul poate fi pierdut pentru totdeauna! Asigurați-vă că aveți un fișier de rezervă înainte de a face acest lucru!)",
         "error1": "Backup-ul trebuie sa fie JSON valid",

@@ -106,7 +106,7 @@
         "qora": "QORA aadressi seeme",
         "backup": "Qortal rahakoti varukoopiafail",
         "decrypt": "Krüpti varukoopiafail ",
-        "save": "Salvesta selles sirvikus.",
+		"save": "Jäta see konto meelde.",
         "prepare": "Konto ettevalmistus...",
         "areyousure": "Kas olete kindel, et soovite selle rahakoti salvestatud rahakottide hulgast eemaldada? (Kui eemaldate ja varukoopiafaili pole, võib konto jäädavalt kaduda! Enne seda veenduge, et teil oleks varukoopiafail!)",
         "error1": "Varukoopiafail peab olema korrektses JSON-formaadis",
