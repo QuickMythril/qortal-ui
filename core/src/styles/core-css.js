@@ -689,6 +689,10 @@ export const coreSyncStatusStyles = css`
         border: 1px solid var(--black);
         box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
     }
+
+    .nodeUrl {
+        white-space: nowrap;
+    }
 `
 
 export const chatSideNavHeadsStyles = css`

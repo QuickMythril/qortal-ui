@@ -47,11 +47,13 @@
 ## Issues to fix from manual testing (public node UX)
 
 - [?] Sidebar menu items missing
+  - don't hide anything
 - [ ] Overview page - avatar and minter level elements shift left.
 - [ ] Node manage shows nothing
   - [ ] error says "[publicNode.actionBlocked]"
 - [?] Fix tooltip to be wide enough to fix long URL.
 - [ ] Q-Apps plugin fails to load on public node; diagnose and fix while Websites works.
 - [?] When websites/apps loads it says "no websites/apps found".
+  - cchange2
 - [ ] Update "default" apps
 - [ ] Hide Minting app tile?

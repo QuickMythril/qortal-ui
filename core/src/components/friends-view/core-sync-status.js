@@ -81,7 +81,7 @@ class CoreSyncStatus extends connect(store)(LitElement) {
 		const nodeInfoSection = html`
 			<hr />
 			<h4 class="lineHeight">${nodeLabel}:</h4>
-			<h4 class="lineHeight">${baseUrl}</h4>
+			<h4 class="lineHeight nodeUrl">${baseUrl}</h4>
 		`
 		const iconStyle = isPublic
 			? 'display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;padding:4px;border-radius:50%;background:rgba(255,152,0,0.18);border:1px solid rgba(255,152,0,0.45);line-height:0;'
