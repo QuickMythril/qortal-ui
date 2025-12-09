@@ -248,6 +248,8 @@ class ChatPage extends LitElement {
 		this.nodeUrl = this.getNodeUrl()
 		this.myNode = this.getMyNode()
 		this.secretKeysWorker = {}
+		this.socketToken = 0
+		this.disposed = false
 	}
 
 	render() {
@@ -1311,6 +1313,8 @@ class ChatPage extends LitElement {
 
 	disconnectedCallback() {
 		super.disconnectedCallback()
+		this.disposed = true
+		this.socketToken += 1
 
 		if (this.webSocket) {
 			this.webSocket.close(1000, 'switch chat')
@@ -2608,6 +2612,9 @@ class ChatPage extends LitElement {
 	}
 
 	async fetchChatMessages(chatId) {
+		const socketRunToken = ++this.socketToken
+		this.disposed = false
+
 		const initDirect = async (cid, noInitial) => {
 			let timeoutId
 			let initial = 0
@@ -2625,14 +2632,15 @@ class ChatPage extends LitElement {
 			}
 
 			this.webSocket = new WebSocket(directSocketLink)
+			const currentSocket = this.webSocket
 
 			// Open Connection
-			this.webSocket.onopen = () => {
+			currentSocket.onopen = () => {
 				setTimeout(pingDirectSocket, 50)
 			}
 
 			// Message Event
-			this.webSocket.onmessage = async (e) => {
+			currentSocket.onmessage = async (e) => {
 				if (e.data === 'pong') {
 					clearTimeout(timeoutId)
 					directSocketTimeout = setTimeout(pingDirectSocket, 45000)
@@ -2702,34 +2710,46 @@ class ChatPage extends LitElement {
 			}
 
 			// Closed Event
-			this.webSocket.onclose = (e) => {
+			currentSocket.onclose = (e) => {
 				clearTimeout(directSocketTimeout)
+				clearTimeout(timeoutId)
+				if (currentSocket !== this.webSocket) return
+				this.webSocket = ''
 
 				if (e.reason === 'switch chat') return
 
+				if (this.disposed || socketRunToken !== this.socketToken) return
 				restartDirectWebSocket()
 			}
 
 			// Error Event
-			this.webSocket.onerror = () => {
+			currentSocket.onerror = () => {
 				clearTimeout(directSocketTimeout)
+				clearTimeout(timeoutId)
+				if (currentSocket !== this.webSocket) return
+				if (this.disposed || socketRunToken !== this.socketToken) return
 			}
 
 			const pingDirectSocket = () => {
-				this.webSocket.send('ping')
+				if (currentSocket !== this.webSocket || currentSocket.readyState !== WebSocket.OPEN) return
+				currentSocket.send('ping')
 				timeoutId = setTimeout(() => {
-					this.webSocket.close()
+					if (currentSocket === this.webSocket) {
+						currentSocket.close()
+					}
 					clearTimeout(directSocketTimeout)
 				}, 5000)
 			}
 		}
 
 		const restartDirectWebSocket = () => {
+			if (this.disposed || socketRunToken !== this.socketToken) return
 			const noInitial = true
 			setTimeout(() => initDirect(chatId, noInitial), 50)
 		}
 
 		const restartGroupWebSocket = () => {
+			if (this.disposed || socketRunToken !== this.socketToken) return
 			const noInitial = true
 			let groupChatId = Number(chatId)
 			setTimeout(() => initGroup(groupChatId, noInitial), 50)
@@ -2754,14 +2774,15 @@ class ChatPage extends LitElement {
 			}
 
 			this.webSocket = new WebSocket(groupSocketLink)
+			const currentSocket = this.webSocket
 
 			// Open Connection
-			this.webSocket.onopen = () => {
+			currentSocket.onopen = () => {
 				setTimeout(pingGroupSocket, 50)
 			}
 
 			// Message Event
-			this.webSocket.onmessage = async (e) => {
+			currentSocket.onmessage = async (e) => {
 				if (e.data === 'pong') {
 					clearTimeout(timeoutId)
 					groupSocketTimeout = setTimeout(pingGroupSocket, 45000)
@@ -2827,22 +2848,32 @@ class ChatPage extends LitElement {
 			}
 
 			// Closed Event
-			this.webSocket.onclose = (e) => {
+			currentSocket.onclose = (e) => {
 				clearTimeout(groupSocketTimeout)
+				clearTimeout(timeoutId)
+				if (currentSocket !== this.webSocket) return
+				this.webSocket = ''
 				if (e.reason === 'switch chat') return
+				if (this.disposed || socketRunToken !== this.socketToken) return
 				restartGroupWebSocket()
 			}
 
 			// Error Event
-			this.webSocket.onerror = () => {
+			currentSocket.onerror = () => {
 				clearTimeout(groupSocketTimeout)
-				this.webSocket.close()
+				clearTimeout(timeoutId)
+				if (currentSocket !== this.webSocket) return
+				if (this.disposed || socketRunToken !== this.socketToken) return
+				currentSocket.close()
 			}
 
 			const pingGroupSocket = () => {
-				this.webSocket.send('ping')
+				if (currentSocket !== this.webSocket || currentSocket.readyState !== WebSocket.OPEN) return
+				currentSocket.send('ping')
 				timeoutId = setTimeout(() => {
-					this.webSocket.close()
+					if (currentSocket === this.webSocket) {
+						currentSocket.close()
+					}
 					clearTimeout(groupSocketTimeout)
 				}, 5000) // Close the WebSocket connection if no pong message is received within 5 seconds.
 			}
