@@ -344,14 +344,16 @@ class ChatWelcomePage extends LitElement {
 							<mwc-button dense outlined @click=${() => this.previewGroup(safePromo)}>
 								${translate('appspage.schange40') || 'Preview'}
 							</mwc-button>
-						<mwc-button
-							dense
-							unelevated
-							?disabled=${isJoining || isMember}
-							@click=${() => this.joinGroup(safePromo)}
-						>
-							${isMember ? (translate('grouppage.gchange71') || 'Already joined') : isJoining ? html`<paper-spinner-lite active></paper-spinner-lite>` : translate('grouppage.gchange51') || 'Join'}
-						</mwc-button>
+						${!isMember ? html`
+							<mwc-button
+								dense
+								unelevated
+								?disabled=${isJoining}
+								@click=${() => this.joinGroup(safePromo)}
+							>
+								${isJoining ? html`<paper-spinner-lite active></paper-spinner-lite>` : translate('grouppage.gchange51') || 'Join'}
+							</mwc-button>
+						` : ''}
 					</div>
 				</div>
 				<p class="promotion-text">${publisherName}: ${safePromo.data || ''}</p>
