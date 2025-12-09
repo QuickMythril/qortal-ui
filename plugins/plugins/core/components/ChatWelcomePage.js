@@ -342,7 +342,9 @@ class ChatWelcomePage extends LitElement {
 						</div>
 						<div class="promotion-actions">
 							<mwc-button dense outlined @click=${() => this.previewGroup(safePromo)}>
-								${translate('appspage.schange40') || 'Preview'}
+								${isMember
+									? translate('general.view') || 'View'
+									: translate('appspage.schange40') || 'Preview'}
 							</mwc-button>
 						${!isMember ? html`
 							<mwc-button
