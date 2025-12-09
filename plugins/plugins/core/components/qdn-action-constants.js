@@ -178,7 +178,7 @@ export const parseQortalEmbedLink = (link) => {
 	return { type, ...params }
 }
 
-export const extractImageEmbedFromMessage = (text) => {
+export const extractEmbedFromMessage = (text) => {
 	if (typeof text !== 'string') {
 		return { cleanText: typeof text === 'string' ? text : '', embedData: null }
 	}
@@ -192,7 +192,7 @@ export const extractImageEmbedFromMessage = (text) => {
 	const embedLink = foundEmbed[0]
 	try {
 		const parsed = parseQortalEmbedLink(embedLink)
-		if (parsed.type === 'IMAGE' && parsed.name && parsed.service && parsed.identifier) {
+		if (['IMAGE', 'VIDEO'].includes(parsed.type) && parsed.name && parsed.service && parsed.identifier) {
 			return {
 				cleanText: text.replace(embedLink, ''),
 				embedData: parsed
@@ -215,6 +215,11 @@ export const embedToString = (embed) => {
 		embedName = embed.name
 		embedIdentifier = embed.identifier
 		embedString = '"images":[{"service":"' + embedService + '","name":"' + embedName + '","identifier":"' + embedIdentifier + '"}],"isImageDeleted":false'
+	} else if (embed.type === 'VIDEO') {
+		embedService = embed.service
+		embedName = embed.name
+		embedIdentifier = embed.identifier
+		embedString = '"videos":[{"service":"' + embedService + '","name":"' + embedName + '","identifier":"' + embedIdentifier + '"' + (embed.mimeType ? ',"mimeType":"' + embed.mimeType + '"' : '') + '}],"isVideoDeleted":false'
 	} else if (embed.type === 'ATTACHMENT') {
 		embedService = embed.service
 		embedName = embed.name

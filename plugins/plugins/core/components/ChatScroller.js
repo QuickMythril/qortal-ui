@@ -15,7 +15,7 @@ import Mention from '@tiptap/extension-mention'
 import ShortUniqueId from 'short-unique-id'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
-import { extractImageEmbedFromMessage } from './qdn-action-constants'
+import { extractEmbedFromMessage } from './qdn-action-constants'
 import { processText } from './chat-link-utils'
 import './ChatModals'
 import './LevelFounder'
@@ -25,6 +25,7 @@ import './WrapperModal'
 import './ChatImage'
 import './ChatImageGif'
 import './ImageEmbed'
+import './VideoEmbed'
 import '@material/mwc-button'
 import '@material/mwc-dialog'
 import '@material/mwc-icon'
@@ -1050,6 +1051,7 @@ class MessageTemplate extends LitElement {
 		let gif = null
 		let attachment = null
 		let file = null
+		let videoEmbed = null
 		let isImageDeleted = false
 		let isGifDeleted = false
 		let isAttachmentDeleted = false
@@ -1152,9 +1154,13 @@ class MessageTemplate extends LitElement {
 
 			try {
 				const embedSource = typeof messageVersion2WithLink === 'string' ? messageVersion2WithLink : (typeof messageVersion2 === 'string' ? messageVersion2 : '')
-				const { embedData: foundEmbed, cleanText } = extractImageEmbedFromMessage(embedSource)
+				const { embedData: foundEmbed, cleanText } = extractEmbedFromMessage(embedSource)
 				if (foundEmbed) {
-					embedData = foundEmbed
+					if (foundEmbed.type === 'IMAGE') {
+						embedData = foundEmbed
+					} else if (foundEmbed.type === 'VIDEO') {
+						videoEmbed = foundEmbed
+					}
 					messageVersion2WithLink = cleanText
 					messageVersion2 = cleanText
 					messageV2Display = cleanText
@@ -1708,6 +1714,16 @@ class MessageTemplate extends LitElement {
 											.groupId=${Number(this.messageObj.txGroupId)}
 											.senderName=${this.messageObj.senderName || this.messageObj.sender}
 										></image-embed>
+									`
+		: ''
+}
+								${videoEmbed ?
+		html`
+										<video-embed
+											.embedData=${videoEmbed}
+											.groupId=${Number(this.messageObj.txGroupId)}
+											.senderName=${this.messageObj.senderName || this.messageObj.sender}
+										></video-embed>
 									`
 		: ''
 }

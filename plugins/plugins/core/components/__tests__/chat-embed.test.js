@@ -1,4 +1,4 @@
-import { parseQortalEmbedLink, embedToString, extractImageEmbedFromMessage } from '../qdn-action-constants'
+import { parseQortalEmbedLink, embedToString, extractEmbedFromMessage } from '../qdn-action-constants'
 import { processText } from '../chat-link-utils'
 
 describe('parseQortalEmbedLink', () => {
@@ -11,6 +11,18 @@ describe('parseQortalEmbedLink', () => {
 			service: 'IMAGE',
 			identifier: 'abc123',
 			mimeType: 'image/png'
+		})
+	})
+
+	test('parses VIDEO embed link with mimeType', () => {
+		const link = 'qortal://use-embed/VIDEO?name=bob&service=VIDEO&identifier=vid123&mimeType=video%2Fmp4'
+		const parsed = parseQortalEmbedLink(link)
+		expect(parsed).toEqual({
+			type: 'VIDEO',
+			name: 'bob',
+			service: 'VIDEO',
+			identifier: 'vid123',
+			mimeType: 'video/mp4'
 		})
 	})
 
@@ -44,6 +56,20 @@ describe('embedToString', () => {
 		expect(str).toContain('"images"')
 	})
 
+	test('creates video embed payload string', () => {
+		const str = embedToString({
+			type: 'VIDEO',
+			service: 'VIDEO',
+			name: 'alice',
+			identifier: 'vid123',
+			mimeType: 'video/mp4'
+		})
+		expect(str).toContain('"videos"')
+		expect(str).toContain('"service":"VIDEO"')
+		expect(str).toContain('"identifier":"vid123"')
+		expect(str).toContain('"mimeType":"video/mp4"')
+	})
+
 	test('creates attachment embed payload string', () => {
 		const str = embedToString({
 			type: 'ATTACHMENT',
@@ -58,10 +84,10 @@ describe('embedToString', () => {
 	})
 })
 
-describe('extractImageEmbedFromMessage', () => {
+describe('extractEmbedFromMessage', () => {
 	test('detects image embed and keeps normal qortal links', () => {
 		const msg = 'Check link qortal://APP/Q-Assets/trade/28 and embed qortal://use-embed/IMAGE?name=alice&service=IMAGE&identifier=abc123'
-		const { cleanText, embedData } = extractImageEmbedFromMessage(msg)
+		const { cleanText, embedData } = extractEmbedFromMessage(msg)
 
 		expect(embedData).toEqual({
 			type: 'IMAGE',
@@ -73,9 +99,22 @@ describe('extractImageEmbedFromMessage', () => {
 		expect(cleanText).not.toContain('qortal://use-embed/IMAGE')
 	})
 
+	test('detects video embed and keeps normal qortal links', () => {
+		const msg = 'Here is vid qortal://use-embed/VIDEO?name=bob&service=VIDEO&identifier=vid123 and link qortal://APP/Q-Shop/item'
+		const { cleanText, embedData } = extractEmbedFromMessage(msg)
+		expect(embedData).toEqual({
+			type: 'VIDEO',
+			name: 'bob',
+			service: 'VIDEO',
+			identifier: 'vid123'
+		})
+		expect(cleanText).toContain('qortal://APP/Q-Shop/item')
+		expect(cleanText).not.toContain('qortal://use-embed/VIDEO')
+	})
+
 	test('returns original text when no valid embed is present', () => {
 		const msg = 'No embeds here, just text'
-		const result = extractImageEmbedFromMessage(msg)
+		const result = extractEmbedFromMessage(msg)
 		expect(result.embedData).toBeNull()
 		expect(result.cleanText).toBe(msg)
 	})
