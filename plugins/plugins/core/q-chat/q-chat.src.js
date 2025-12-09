@@ -486,11 +486,7 @@ class Chat extends LitElement {
 
 		parentEpml.imReady()
 
-		this.clearConsole()
-
-		setInterval(() => {
-			this.clearConsole()
-		}, 60000)
+		// Avoid periodic cache clears on the renderer thread; users can clear via dev tools if needed.
 	}
 
 	async switchChatID() {

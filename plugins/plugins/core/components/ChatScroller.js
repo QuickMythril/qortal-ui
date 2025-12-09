@@ -313,12 +313,6 @@ class ChatScroller extends LitElement {
 		this.upElementObserver()
 		this.downElementObserver()
 		this.bottomObserver()
-
-		this.clearConsole()
-
-		setInterval(() => {
-			this.clearConsole()
-		}, 60000)
 	}
 
 	addSeenMessage(val) {
@@ -2168,12 +2162,6 @@ class MessageTemplate extends LitElement {
 			overlay.shadowRoot.getElementById('content').style.cssText =
 				'background-color: var(--reactions-tooltip-bg); color: var(--chat-bubble-msg-color); text-align: center; padding: 20px 10px; border-radius: 8px; font-family: Roboto, sans-serif; letter-spacing: 0.3px; font-weight: 300; font-size: 13.5px; transition: all 0.3s ease-in-out;'
 		})
-
-		this.clearConsole()
-
-		setInterval(() => {
-			this.clearConsole()
-		}, 60000)
 	}
 
 	convertHubMessageToJson(message) {

@@ -46,7 +46,7 @@ export class ChatSearchResults extends LitElement {
 				: (html`
 									${this.searchResults.map((result) => {
 						return (html`
-											<div class="chat-result-card" @click=${() => {this.shadowRoot.querySelector('.chat-result-card').classList.add('active'); this.onClickFunc(result)}}>
+											<div class="chat-result-card" @click=${() => { this.onClickFunc(result) }}>
 												<p class="chat-result">${result.name}</p>
 											</div>
 										`)
