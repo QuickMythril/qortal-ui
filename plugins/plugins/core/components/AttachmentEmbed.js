@@ -36,18 +36,21 @@ class AttachmentEmbed extends LitElement {
 				display: flex;
 				flex-direction: column;
 				gap: 6px;
+				color: var(--mdc-theme-on-surface, var(--black));
 			}
 			.header {
 				display: flex;
 				justify-content: flex-start;
 				align-items: center;
 				font-weight: 600;
+				color: var(--mdc-theme-on-surface, var(--black));
 			}
 			.button-row {
 				display: flex;
 				justify-content: flex-start;
 			}
 			.error { color: var(--red-color, #c62828); font-size: 13px; }
+			.filename { color: var(--mdc-theme-on-surface, var(--black)); }
 			.info { color: var(--text-muted, #8a8a8a); font-size: 12px; }
 		`
 	}
@@ -183,7 +186,7 @@ class AttachmentEmbed extends LitElement {
 					</mwc-button>
 				</div>
 				${this.error ? html`<div class="error">${this.error}</div>` : ''}
-				${this.embedData.fileName ? html`<div>${decodeURIComponent(this.embedData.fileName)}</div>` : ''}
+				${this.embedData.fileName ? html`<div class="filename">${decodeURIComponent(this.embedData.fileName)}</div>` : ''}
 				${this.embedData.mimeType ? html`<div class="info">${this.embedData.mimeType}</div>` : ''}
 				${this.embedData.encryptionType ? html`<div class="info">${this.embedData.encryptionType === 'group' ? 'Group encrypted' : 'Encrypted'}</div>` : ''}
 			</div>
