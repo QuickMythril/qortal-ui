@@ -26,6 +26,18 @@ describe('parseQortalEmbedLink', () => {
 		})
 	})
 
+	test('parses ATTACHMENT embed link with filename', () => {
+		const link = 'qortal://use-embed/ATTACHMENT?name=carol&service=FILE&identifier=file123&fileName=doc.pdf'
+		const parsed = parseQortalEmbedLink(link)
+		expect(parsed).toEqual({
+			type: 'ATTACHMENT',
+			name: 'carol',
+			service: 'FILE',
+			identifier: 'file123',
+			fileName: 'doc.pdf'
+		})
+	})
+
 	test('decodes html entities and ignores empty params', () => {
 		const link = 'qortal://use-embed/IMAGE?name=bob&amp;service=IMAGE&amp;identifier=id%2B123&amp;mimeType='
 		const parsed = parseQortalEmbedLink(link)
@@ -110,6 +122,20 @@ describe('extractEmbedFromMessage', () => {
 		})
 		expect(cleanText).toContain('qortal://APP/Q-Shop/item')
 		expect(cleanText).not.toContain('qortal://use-embed/VIDEO')
+	})
+
+	test('detects attachment embed and keeps normal qortal links', () => {
+		const msg = 'See doc qortal://use-embed/ATTACHMENT?name=carol&service=FILE&identifier=file123&fileName=doc.pdf and link qortal://APP/Q-Shop/2r0y'
+		const { cleanText, embedData } = extractEmbedFromMessage(msg)
+		expect(embedData).toEqual({
+			type: 'ATTACHMENT',
+			name: 'carol',
+			service: 'FILE',
+			identifier: 'file123',
+			fileName: 'doc.pdf'
+		})
+		expect(cleanText).toContain('qortal://APP/Q-Shop/2r0y')
+		expect(cleanText).not.toContain('qortal://use-embed/ATTACHMENT')
 	})
 
 	test('returns original text when no valid embed is present', () => {

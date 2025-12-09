@@ -192,7 +192,7 @@ export const extractEmbedFromMessage = (text) => {
 	const embedLink = foundEmbed[0]
 	try {
 		const parsed = parseQortalEmbedLink(embedLink)
-		if (['IMAGE', 'VIDEO'].includes(parsed.type) && parsed.name && parsed.service && parsed.identifier) {
+	if (['IMAGE', 'VIDEO', 'ATTACHMENT'].includes(parsed.type) && parsed.name && parsed.service && parsed.identifier) {
 			return {
 				cleanText: text.replace(embedLink, ''),
 				embedData: parsed

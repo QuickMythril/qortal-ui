@@ -33,6 +33,7 @@
 - [ ] Check Video / Poll / Image / Audio embeds
 - [ ] Add trade fee support to Trade Portal?
 - [ ] Combine Websites & Q-Apps plugins
+- [ ] Embed app links into chat
 
 - [ ] Add foreign block heights
 - [ ] Avatars/names in address book

@@ -26,6 +26,7 @@ import './ChatImage'
 import './ChatImageGif'
 import './ImageEmbed'
 import './VideoEmbed'
+import './AttachmentEmbed'
 import '@material/mwc-button'
 import '@material/mwc-dialog'
 import '@material/mwc-icon'
@@ -1045,6 +1046,7 @@ class MessageTemplate extends LitElement {
 		let messageVersion2WithLink = null
 		let messageVersion2Node = null
 		let embedData = null
+		let attachmentEmbed = null
 		let reactions = []
 		let repliedToData = null
 		let image = null
@@ -1160,6 +1162,8 @@ class MessageTemplate extends LitElement {
 						embedData = foundEmbed
 					} else if (foundEmbed.type === 'VIDEO') {
 						videoEmbed = foundEmbed
+					} else if (foundEmbed.type === 'ATTACHMENT') {
+						attachmentEmbed = foundEmbed
 					}
 					messageVersion2WithLink = cleanText
 					messageVersion2 = cleanText
@@ -1724,6 +1728,16 @@ class MessageTemplate extends LitElement {
 											.groupId=${Number(this.messageObj.txGroupId)}
 											.senderName=${this.messageObj.senderName || this.messageObj.sender}
 										></video-embed>
+									`
+		: ''
+}
+								${attachmentEmbed ?
+		html`
+										<attachment-embed
+											.embedData=${attachmentEmbed}
+											.groupId=${Number(this.messageObj.txGroupId)}
+											.senderName=${this.messageObj.senderName || this.messageObj.sender}
+										></attachment-embed>
 									`
 		: ''
 }

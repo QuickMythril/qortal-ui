@@ -148,6 +148,25 @@ const macjavaaarch64binfile = homePath + '/jdk-17.0.2/Contents/Home/bin/java'
 
 let win = BrowserWindow.getFocusedWindow()
 
+ipcMain.handle('save-blob-to-disk', async (event, { data, fileName }) => {
+	try {
+		const browserWindow = BrowserWindow.getFocusedWindow()
+		const { canceled, filePath } = await dialog.showSaveDialog(browserWindow, {
+			defaultPath: fileName || 'attachment',
+			buttonLabel: 'Save'
+		})
+		if (canceled || !filePath) {
+			return { canceled: true }
+		}
+		const buffer = Buffer.from(data, 'base64')
+		fs.writeFileSync(filePath, buffer)
+		return { canceled: false, filePath }
+	} catch (error) {
+		log.error('Failed to save blob', error)
+		return { canceled: true, error: error.message }
+	}
+})
+
 const isRunning = (query, cb) => {
 	let platform = process.platform
 	let cmd = ''
