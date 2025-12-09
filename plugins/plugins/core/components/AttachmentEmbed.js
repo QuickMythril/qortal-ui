@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit'
 import { base64ToBlobUrl } from './qdn-action-encryption'
 import FileSaver from 'file-saver'
 import { translate } from '../../../../core/translate'
+import '@material/mwc-button'
 
 class AttachmentEmbed extends LitElement {
 	static get properties() {
@@ -38,16 +39,13 @@ class AttachmentEmbed extends LitElement {
 			}
 			.header {
 				display: flex;
-				justify-content: space-between;
+				justify-content: flex-start;
 				align-items: center;
 				font-weight: 600;
 			}
-			button {
-				padding: 6px 10px;
-				border-radius: 6px;
-				border: 1px solid var(--chat-border, #e0e0e0);
-				background: var(--button-bg, #f5f5f5);
-				cursor: pointer;
+			.button-row {
+				display: flex;
+				justify-content: flex-start;
 			}
 			.error { color: var(--red-color, #c62828); font-size: 13px; }
 			.info { color: var(--text-muted, #8a8a8a); font-size: 12px; }
@@ -173,9 +171,16 @@ class AttachmentEmbed extends LitElement {
 			<div class="embed-card">
 				<div class="header">
 					<span>${owner ? `${owner} sent an attachment` : 'Attachment'}</span>
-					<button @click=${() => this.downloadAttachment()} ?disabled=${this.loading}>
+				</div>
+				<div class="button-row">
+					<mwc-button
+						dense
+						unelevated
+						@click=${() => this.downloadAttachment()}
+						?disabled=${this.loading}
+					>
 						${this.loading ? loadingLabel : downloadLabel}
-					</button>
+					</mwc-button>
 				</div>
 				${this.error ? html`<div class="error">${this.error}</div>` : ''}
 				${this.embedData.fileName ? html`<div>${decodeURIComponent(this.embedData.fileName)}</div>` : ''}
