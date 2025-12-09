@@ -31,6 +31,9 @@
   - [?] Allow external links from websites/apps
   - [ ] Allow external links from chat
 - [ ] Check Video / Poll / Image / Audio embeds
+- [ ] Check emoji reactions
+- [ ] Check sent message format
+- [ ] Show message count and users on promotions
 - [ ] Add trade fee support to Trade Portal?
 - [ ] Combine Websites & Q-Apps plugins
 - [ ] Embed app links into chat

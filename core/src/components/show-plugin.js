@@ -1826,6 +1826,11 @@ class NavBar extends connect(store)(LitElement) {
 		const appid = appplugin.pluginNumber
 
 		if (this.isFolder(appplugin)) {
+			const previewChildren = (appplugin.children || []).slice(0, 9)
+			const previewClass = previewChildren.length < 5 ? 'folder-preview small-grid' : 'folder-preview'
+			const previewSize = previewChildren.length < 5 ? 26 : 18
+			const overflowCount = (appplugin.children || []).length - previewChildren.length
+
 			return html`
 				<div class="menuIconPos" @click="${() => clickHandler()}">
 					<div
@@ -1839,9 +1844,10 @@ class NavBar extends connect(store)(LitElement) {
 						<mwc-icon class="removeIcon">backspace</mwc-icon>
 					</div>
 					<div class="folder-icon-stack">
-						<div class="folder-preview">
-							${(appplugin.children || []).slice(0, 4).map(child => this.renderFolderPreviewIcon(child))}
+						<div class="${previewClass}">
+							${previewChildren.map(child => this.renderFolderPreviewIcon(child, previewSize))}
 						</div>
+						${overflowCount > 0 ? html`<div class="folder-preview-badge">+${overflowCount}</div>` : ''}
 					</div>
 				</div>
 			`
@@ -2259,11 +2265,11 @@ class NavBar extends connect(store)(LitElement) {
 		return item && item.type === 'folder'
 	}
 
-	renderFolderPreviewIcon(child) {
+	renderFolderPreviewIcon(child, size = 18) {
 		const isQapp = child?.url === 'myapp'
 
 		if (isQapp) {
-			return html`<app-avatar class="folder-preview-avatar" appicon=${child.mwcicon || 'apps'} appname=${child.title}></app-avatar>`
+			return html`<app-avatar preview class="folder-preview-avatar" size=${size} appicon=${child.mwcicon || 'apps'} appname=${child.title}></app-avatar>`
 		}
 
 		return html`<mwc-icon class="folder-preview-icon">${child?.mwcicon || 'apps'}</mwc-icon>`
@@ -2419,7 +2425,8 @@ class AppAvatar extends connect(store)(LitElement) {
 			hasAvatar: { type: Boolean },
 			isImageLoaded: { type: Boolean },
 			appicon: { type: String },
-			appname: { type: String }
+			appname: { type: String },
+			size: { type: Number }
 		}
 	}
 
@@ -2432,6 +2439,7 @@ class AppAvatar extends connect(store)(LitElement) {
 		this.hasAvatar = false
 		this.isImageLoaded = false
 		this.imageFetches = 0
+		this.size = 60
 	}
 
 	render() {
@@ -2461,10 +2469,13 @@ class AppAvatar extends connect(store)(LitElement) {
 	}
 
 	createImage(imageUrl) {
+		const size = this.size || 60
+		const radius = Math.max(4, Math.round(size / 6))
+
 		const imageHTMLRes = new Image()
 
 		imageHTMLRes.src = imageUrl
-		imageHTMLRes.style = 'border-radius:10px; font-size:14px; object-fit: fill;height:60px;width:60px;'
+		imageHTMLRes.style = `border-radius:${radius}px; font-size:14px; object-fit: cover; height:${size}px; width:${size}px;`
 
 		imageHTMLRes.onload = () => {
 			this.isImageLoaded = true

@@ -2962,13 +2962,53 @@ export const navBarStyles = css`
         grid-template-columns: repeat(3, 1fr);
         gap: 2px;
         position: absolute;
-        bottom: 4px;
-        right: 4px;
-        left: 4px;
-        padding: 0;
-        max-width: calc(100% - 8px);
-        max-height: calc(100% - 8px);
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        padding: 8px;
+        justify-content: center;
+        align-content: center;
+        place-items: center;
         pointer-events: none;
+    }
+
+    .folder-preview.small-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .folder-preview.small-grid .folder-preview-avatar {
+        width: 26px;
+        height: 26px;
+    }
+
+    .folder-preview.small-grid app-avatar img {
+        width: 26px !important;
+        height: 26px !important;
+        border-radius: 6px !important;
+    }
+
+    .folder-preview.small-grid app-avatar .menuIcon {
+        --mdc-icon-size: 20px;
+    }
+
+    .folder-preview.small-grid .folder-preview-icon {
+        --mdc-icon-size: 20px;
+        padding: 2px;
+    }
+
+    .folder-preview-badge {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        padding: 2px 6px;
+        border-radius: 8px;
+        background: var(--app-icon);
+        color: var(--app-background-1);
+        font-size: 10px;
+        font-weight: 700;
+        line-height: 1;
+        pointer-events: none;
+        box-shadow: 0 0 0 1px var(--app-background-1);
     }
 
     .folder-preview-avatar {
@@ -3225,6 +3265,17 @@ export const appAvatarStyles = css`
         top: 50%;
         transform: translate(-50%, -50%);
         cursor: pointer;
+    }
+
+    :host([preview]) {
+        position: static;
+        left: auto;
+        top: auto;
+        transform: none;
+        cursor: default;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .menuIcon {
