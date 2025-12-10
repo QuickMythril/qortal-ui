@@ -1940,6 +1940,7 @@ addToQueue(outSideMsg, messageQueue) {
 				.messageQueue=${this.messageQueue}
 				loggedInUserName=${this.loggedInUserName}
 				loggedInUserAddress=${this.loggedInUserAddress}
+				.reactionsMap=${Object.fromEntries(reactionsByRef)}
 			>
 			</chat-scroller>
 		`

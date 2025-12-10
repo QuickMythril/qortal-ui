@@ -1627,6 +1627,11 @@ export const chatStyles = css`
         flex-flow: row wrap;
         justify-content: left;
         gap: 8px;
+        transition: opacity 0.2s ease;
+    }
+
+    .message-reactions.updating {
+        opacity: 0.6;
     }
 
     .original-message {

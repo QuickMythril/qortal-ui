@@ -13,14 +13,14 @@
 - [x] Reconcile queued reactions via `specialId` in `processWithNewMessages`, clearing pending queue entries on receipt.
 
 ### UI rendering & interaction
-- [ ] Update `message-template` rendering to consume the reactions map (not embedded arrays) for counts and user lists.
-- [ ] Keep reaction pills/tooltip UX; optionally add a reactor list popover to match Hub.
-- [ ] Mark rows as “updating” when a queued reaction/edit exists for that `chatReference`.
-- [ ] On picker/pill click, decide add vs remove by checking current user in the reactions map and send with the correct `contentState`.
+- [x] Update `message-template` rendering to consume the reactions map (not embedded arrays) for counts and user lists.
+- [x] Keep reaction pills/tooltip UX (popover optional; deferred for now).
+- [x] Mark rows as “updating” when a queued reaction/edit exists for that `chatReference`.
+- [x] On picker/pill click, decide add vs remove by checking current user in the reactions map and send with the correct `contentState`.
 
 ### Compatibility & cleanup
-- [ ] Maintain legacy display of embedded `reactions` for historical messages until all clients migrate.
-- [ ] Add the shared constant for reaction type number if missing; ensure encryption helpers accept it.
+- [x] Maintain legacy display of embedded `reactions` for historical messages until all clients migrate.
+- [x] Add the shared constant for reaction type number if missing; ensure encryption helpers accept it.
 
 ### Validation
 - [ ] Test Hub → UI: reactions display (add/remove), counts, tooltips, popover.

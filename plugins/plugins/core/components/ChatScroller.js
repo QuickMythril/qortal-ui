@@ -138,7 +138,9 @@ class ChatScroller extends LitElement {
 			isLoadingAfter: { type: Boolean },
 			messageQueue: { type: Array },
 			loggedInUserName: { type: String },
-			loggedInUserAddress: { type: String }		}
+			loggedInUserAddress: { type: String },
+			reactionsMap: { type: Object }
+		}
 	}
 
 	static get styles() {
@@ -177,6 +179,11 @@ class ChatScroller extends LitElement {
 	render() {
 		let formattedMessages = this.messagesToRender
 		const inProgressMessages = this.messageQueue.filter((item) => this.chatId.includes(item._chatId))
+		const pendingReactionRefs = new Set(
+			this.messageQueue
+				.filter((item) => item._queueKey === 'chat-reaction' && item.chatReference)
+				.map((item) => item.chatReference)
+		)
 
 		return html`
 			${this.isLoadingBefore
@@ -217,6 +224,8 @@ class ChatScroller extends LitElement {
 									.addSeenMessage=${(val) => this.addSeenMessage(val)}
 									.listSeenMessages=${this.listSeenMessages}
 									chatId=${this.chatId}
+									.reactionsMap=${this.reactionsMap}
+									?isUpdatingReaction=${pendingReactionRefs.has(message.chatReference || message.signature)}
 								>
 								</message-template>
 								${message.isDivider ?
@@ -297,10 +306,27 @@ class ChatScroller extends LitElement {
 		window.addEventListener('storage', this.handleStorage)
 
 		this.emojiPicker.on('emoji', (selection) => {
+			if (!toggledMessage) return
+
+			const chatRef = toggledMessage.chatReference || toggledMessage.signature
+			const mapForMessage = chatRef && this.reactionsMap ? this.reactionsMap[chatRef] : null
+			const mapList = mapForMessage && mapForMessage[selection.emoji]
+			let userHasReacted = Array.isArray(mapList)
+				? mapList.some((r) => r.sender === this.myAddress)
+				: false
+
+			if (!userHasReacted && Array.isArray(toggledMessage.reactions)) {
+				const match = toggledMessage.reactions.find((r) => r.type === selection.emoji)
+				if (match && Array.isArray(match.users)) {
+					userHasReacted = match.users.some((u) => u.address === this.myAddress)
+				}
+			}
+
 			this.sendMessage({
 				type: 'reaction',
 				editedMessageObj: toggledMessage,
-				reaction: selection.emoji
+				reaction: selection.emoji,
+				contentState: !userHasReacted
 			})
 		})
 
@@ -706,7 +732,8 @@ class ChatScroller extends LitElement {
 			changedProperties.has('isLoadingBefore') ||
 			changedProperties.has('isLoadingAfter') ||
 			changedProperties.has('updateMessageHash') ||
-			changedProperties.has('messages')
+			changedProperties.has('messages') ||
+			changedProperties.has('reactionsMap')
 		)
 	}
 
@@ -909,7 +936,9 @@ class MessageTemplate extends LitElement {
 			isBoth: { type: Boolean },
 			fontSize: { type: String },
 			messageFontSize: { type: String },
-			replyFontSize: { type: String }
+			replyFontSize: { type: String },
+			reactionsMap: { type: Object },
+			isUpdatingReaction: { type: Boolean }
 		}
 	}
 
@@ -1037,6 +1066,7 @@ class MessageTemplate extends LitElement {
 		let embedData = null
 		let attachmentEmbed = null
 		let reactions = []
+		let reactionsFromMap = []
 		let repliedToData = null
 		let image = null
 		let gif = null
@@ -1047,14 +1077,14 @@ class MessageTemplate extends LitElement {
 		let isGifDeleted = false
 		let isAttachmentDeleted = false
 		let isFileDeleted = false
-		let version = 0
-		let isForwarded = false
-		let isEdited = false
-		let isEncrypted = false
-		let messageV2Display = ''
-		let messageV2Raw = ''
+			let version = 0
+			let isForwarded = false
+			let isEdited = false
+			let isEncrypted = false
+			let messageV2Display = ''
+			let messageV2Raw = ''
 		const hasMessageReactions = Array.isArray(this.messageObj.reactions)
-		let cachedReactions = []
+			let cachedReactions = []
 
 		// Rebuild cache when decodedMessage changes; keep lightweight live fields (repliedToData, reactions from messageObj) fresh.
 		const cacheKey = this.messageObj.decodedMessage
@@ -1266,6 +1296,18 @@ class MessageTemplate extends LitElement {
 			}
 		}
 
+		// Prefer reactions map when available
+		const chatRef = this.messageObj.chatReference || this.messageObj.signature
+		if (this.reactionsMap && chatRef && this.reactionsMap[chatRef]) {
+			reactionsFromMap = Object.entries(this.reactionsMap[chatRef]).map(([emoji, list]) => {
+				const users = list.map((r) => ({
+					address: r.sender,
+					name: r.senderName
+				}))
+				return { type: emoji, qty: users.length, users }
+			})
+		}
+
 		let avatarImg = ''
 		let imageHTML = ''
 		let imageUrl = ''
@@ -1423,6 +1465,22 @@ class MessageTemplate extends LitElement {
 			if (escapedMessage) {
 				replacedMessage = escapedMessage.replace(new RegExp('\r?\n', 'g'), '<br />')
 			}
+		}
+
+		const displayedReactions = reactionsFromMap.length > 0 ? reactionsFromMap : reactions
+		const hasReactions = displayedReactions.length > 0
+		const formatReactorNames = (users) => {
+			if (!Array.isArray(users) || users.length === 0) return ''
+			const names = users.map((u) => u.name || u.nameMessageTemplate || cropAddress(u.address)).filter(Boolean)
+			const extra = Math.max(names.length - 3, 0)
+			const visible = names.slice(0, 3)
+			return extra > 0 ? `${visible.join(', ')} (+${extra})` : visible.join(', ')
+		}
+		const formatReactionTooltip = (users, emoji) => {
+			const namesText = formatReactorNames(users)
+			const reactedText = translate('chatpage.cchange74') || 'reacted with'
+			if (namesText) return `${namesText} ${reactedText} ${emoji}`
+			return `${reactedText} ${emoji}`
 		}
 
 		return hideit ? html`<li class="clearfix"></li>` : html`
@@ -1911,61 +1969,37 @@ class MessageTemplate extends LitElement {
 							`
 }
 					</div>
-					<div class="message-reactions" style="${reactions.length > 0 && 'margin-top: 10px; margin-bottom: 5px;'}">
-						${reactions.map((reaction, index) => {
-		return html`
+					<div class="message-reactions ${this.isUpdatingReaction ? 'updating' : ''}" style="${hasReactions ? 'margin-top: 10px; margin-bottom: 5px;' : ''}">
+						${displayedReactions.map((reaction, index) => {
+							const reactionUsers = Array.isArray(reaction.users) ? reaction.users : []
+							const qty = typeof reaction.qty === 'number' ? reaction.qty : reactionUsers.length
+							const userHasReacted = reactionUsers.some((u) => u.address === this.myAddress)
+							const tooltipText = formatReactionTooltip(reactionUsers, reaction.type)
+							return html`
 								<span
-									@click=${() => this.sendMessage({type: 'reaction', editedMessageObj: this.messageObj, reaction: reaction.type,})}
+									@click=${() => {
+										this.sendMessage({
+											type: 'reaction',
+											editedMessageObj: this.messageObj,
+											reaction: reaction.type,
+											contentState: !userHasReacted
+										})
+									}}
 									id=${`reactions-${index}`}
 									class="reactions-bg"
 								>
-									${reaction.type} ${reaction.qty}
+									${reaction.type} ${qty}
 									<vaadin-tooltip
 										for=${`reactions-${index}`}
 										position="top"
 										hover-delay=${400}
 										hide-delay=${1}
-										text=${
-	reaction.users.length > 3 ?
-		`
-													${reaction.users[0].name ? reaction.users[0].nameMessageTemplate : cropAddress(reaction.users[0].address)},
-													${reaction.users[1].name ? reaction.users[1].name : cropAddress(reaction.users[1].address)},
-													${reaction.users[2].name ? reaction.users[2].name : cropAddress(reaction.users[2].address)} ${get('chatpage.cchange71')}
-													${reaction.users.length - 3} ${get('chatpage.cchange72')}
-													${reaction.users.length - 3 > 1 ? html`${get('chatpage.cchange73')}` : ''}
-													${get('chatpage.cchange74')}
-													${reaction.type}
-												`
-		: reaction.users.length === 3 ?
-			`
-													${reaction.users[0].name ? reaction.users[0].name : cropAddress(reaction.users[0].address)},
-													${reaction.users[1].name ? reaction.users[1].name : cropAddress(reaction.users[1].address)}
-													${get('chatpage.cchange71')}
-													${reaction.users[2].name ? reaction.users[2].name : cropAddress(reaction.users[2].address)}
-													${get('chatpage.cchange74')}
-													${reaction.type}
-												`
-			: reaction.users.length === 2 ?
-				`
-													${reaction.users[0].name ? reaction.users[0].name : cropAddress(reaction.users[0].address)}
-													${get('chatpage.cchange71')}
-													${reaction.users[1].name ? reaction.users[1].namMessageTemplatee : cropAddress(reaction.users[1].address)}
-													${get('chatpage.cchange74')}
-													${reaction.type}
-												`
-				: reaction.users.length === 1 ?
-					`
-													${reaction.users[0].name ? reaction.users[0].name : cropAddress(reaction.users[0].address)}
-													${get('chatpage.cchange74')}
-													${reaction.type}
-												`
-					: ''
-}
+										text=${tooltipText}
 									>
 									</vaadin-tooltip>
 								</span>
 							`
-	})}
+						})}
 					</div>
 				</div>
 			</li>
