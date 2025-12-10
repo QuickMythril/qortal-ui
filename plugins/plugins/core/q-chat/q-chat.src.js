@@ -17,6 +17,7 @@ import { getMyNameFromStore } from '../../utils/functions'
 import Base58 from '../../../../crypto/api/deps/Base58'
 import isElectron from 'is-electron'
 import WebWorker from 'web-worker:./computePowWorker'
+import GroupKeyWorker from 'web-worker:../components/groupKeyWorker.js'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
 import Placeholder from '@tiptap/extension-placeholder'
@@ -657,92 +658,56 @@ class Chat extends LitElement {
 		} else {
 			parentEpml.request('showSnackBar', `${locateString}`)
 
-			supArray.forEach(item => {
-				const symInfoObj = {
-					name: item.name,
-					identifier: item.identifier,
-					timestamp: item.updated ? item.updated : item.created
-				}
-				allSymKeys.push(symInfoObj)
-			})
+			const worker = new GroupKeyWorker()
+			const privateKeyBase58 = Base58.encode(window.parent.reduxStore.getState().app.wallet._addresses[0].keyPair.privateKey)
 
-			let allSymKeysSorted = allSymKeys.sort(function(a, b) {
-				return b.timestamp - a.timestamp
-			})
+			const workerPromise = new Promise((resolve, reject) => {
+				const timeoutId = setTimeout(() => {
+					worker.terminate()
+					reject(new Error('Group key worker timeout'))
+				}, 20000)
 
-			gAdmin = allSymKeysSorted[0].name
-
-			const addressUrl = `${nodeUrl}/names/${gAdmin}`
-
-			let addressObject = await fetch(addressUrl).then(response => {
-				return response.json()
-			})
-
-			gAddress = addressObject.owner
-
-			let adminRes = await fetch(getAdminUrl).then(response => {
-				return response.json()
-			})
-
-			this.groupAdmins = adminRes.members
-
-			const adminExists = (adminAddress) => {
-				return this.groupAdmins.some(function(checkAdmin) {
-					return checkAdmin.member === adminAddress
-				})
-			}
-
-			if (adminExists(gAddress)) {
-				const sleep = (t) => new Promise(r => setTimeout(r, t))
-				const dataUrl = `${nodeUrl}/arbitrary/DOCUMENT_PRIVATE/${gAdmin}/${symIdentifier}?encoding=base64`
-				const res = await fetch(dataUrl)
-
-				do {
-					counter++
-
-					if (!res.ok) {
-						parentEpml.request('showSnackBar', `${retryDownload}`)
-						await sleep(5000)
+				worker.onmessage = (e) => {
+					clearTimeout(timeoutId)
+					if (e.data && e.data.error) {
+						reject(new Error(e.data.error))
 					} else {
-						data = await res.text()
-						all_ok = true
+						resolve(e.data)
 					}
+					worker.terminate()
+				}
 
-					if (counter > 10) {
-						parentEpml.request('showSnackBar', `${failDownload}`)
-						this.activeChatHeadUrl = url
-						this.requestUpdate()
-						return
-					}
-				} while (!all_ok)
+				worker.onerror = (err) => {
+					clearTimeout(timeoutId)
+					worker.terminate()
+					reject(err)
+				}
+			})
 
-				const decryptedKey = await this.decryptGroupEncryption(data)
+			try {
+				worker.postMessage({ groupId: currentGroupId, nodeUrl, privateKeyBase58 })
+				const result = await workerPromise
 
-				if (decryptedKey === undefined) {
+				if (!result || !result.secretKeyObject) {
 					parentEpml.request('showSnackBar', `${keysToOld}`)
 					this.activeChatHeadUrl = url
 					this.requestUpdate()
-				} else {
-					const dataint8Array = base64ToUint8Array(decryptedKey.data)
-					const decryptedKeyToObject = uint8ArrayToObject(dataint8Array)
-
-					if (!validateSecretKey(decryptedKeyToObject)) {
-						throw new Error('SecretKey is not valid')
-					}
-
-					localStorage.removeItem('symKeysCurrent')
-					localStorage.setItem('symKeysCurrent', '')
-					let oldSymIdentifier = JSON.parse(localStorage.getItem('symKeysCurrent') || '[]')
-					oldSymIdentifier.push(decryptedKeyToObject)
-					localStorage.setItem('symKeysCurrent', JSON.stringify(oldSymIdentifier))
-
-					let arraySecretKeys = JSON.parse(localStorage.getItem('symKeysCurrent') || '[]')
-
-					this.secretKeys = arraySecretKeys[0]
-					this.activeChatHeadUrl = url
-					this.requestUpdate()
+					return
 				}
-			} else {
+
+				localStorage.removeItem('symKeysCurrent')
+				localStorage.setItem('symKeysCurrent', '')
+				let oldSymIdentifier = JSON.parse(localStorage.getItem('symKeysCurrent') || '[]')
+				oldSymIdentifier.push(result.secretKeyObject)
+				localStorage.setItem('symKeysCurrent', JSON.stringify(oldSymIdentifier))
+
+				let arraySecretKeys = JSON.parse(localStorage.getItem('symKeysCurrent') || '[]')
+
+				this.secretKeys = arraySecretKeys[0]
+				this.activeChatHeadUrl = url
+				this.requestUpdate()
+			} catch (error) {
+				parentEpml.request('showSnackBar', `${failDownload}`)
 				this.activeChatHeadUrl = url
 				this.requestUpdate()
 			}
