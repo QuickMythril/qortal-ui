@@ -1368,20 +1368,22 @@ class Chat extends LitElement {
 		// TODO: DONE: Do the above in the ChatPage
 
 		return html`
-			<chat-page
-				.chatHeads=${this.chatHeads}
-				.hideNewMessageBar=${this.hideNewMessageBar}
-				.showNewMessageBar=${this.showNewMessageBar}
-				myAddress=${window.parent.reduxStore.getState().app.selectedAddress.address}
-				chatId=${this.activeChatHeadUrl}
-				.setOpenPrivateMessage=${(val) => this.setOpenPrivateMessage(val)}
-				.setActiveChatHeadUrl=${(val) => this.setActiveChatHeadUrl(val)}
-				balance=${this.balance}
-				loggedInUserName=${this.loggedInUserName}
-				loggedInUserAddress=${this.loggedInUserAddress}
-				?privateMessageOpen=${this.openPrivateMessage}
-			>
-			</chat-page>
+			<chat-error-boundary>
+				<chat-page
+					.chatHeads=${this.chatHeads}
+					.hideNewMessageBar=${this.hideNewMessageBar}
+					.showNewMessageBar=${this.showNewMessageBar}
+					myAddress=${window.parent.reduxStore.getState().app.selectedAddress.address}
+					chatId=${this.activeChatHeadUrl}
+					.setOpenPrivateMessage=${(val) => this.setOpenPrivateMessage(val)}
+					.setActiveChatHeadUrl=${(val) => this.setActiveChatHeadUrl(val)}
+					balance=${this.balance}
+					loggedInUserName=${this.loggedInUserName}
+					loggedInUserAddress=${this.loggedInUserAddress}
+					?privateMessageOpen=${this.openPrivateMessage}
+				>
+				</chat-page>
+			</chat-error-boundary>
 		`
 	}
 
