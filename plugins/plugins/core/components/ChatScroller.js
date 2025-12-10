@@ -176,6 +176,7 @@ class ChatScroller extends LitElement {
 
 	render() {
 		let formattedMessages = this.messagesToRender
+		const inProgressMessages = this.messageQueue.filter((item) => this.chatId.includes(item._chatId))
 
 		return html`
 			${this.isLoadingBefore
@@ -242,8 +243,8 @@ class ChatScroller extends LitElement {
 }
 				${!this.disableAddingNewMessages ?
 		repeat(
-			this.messageQueue.filter((item) => this.chatId.includes(item._chatId)),
-			(message) => message.messageText,
+			inProgressMessages,
+			(message) => message.signature || message.messageText,
 			(message) => html`
 							<message-template
 								.emojiPicker=${this.emojiPicker}
@@ -359,24 +360,23 @@ class ChatScroller extends LitElement {
 	}
 
 	async newListMessages(newMessages, count) {
-		let data = []
-
 		const copy = [...newMessages]
+		const grouped = []
 
 		copy.forEach((newMessage) => {
-			const lastGroupedMessage = data[data.length - 1]
+			const lastGroupedMessage = grouped[grouped.length - 1]
 
 			if (this.shouldGroupWithLastMessage(newMessage, lastGroupedMessage)) {
 				lastGroupedMessage.messages.push(newMessage)
 			} else {
-				data.push({
+				grouped.push({
 					messages: [newMessage],
 					...newMessage
 				})
 			}
 		})
 
-		this.messagesToRender = data
+		this.messagesToRender = grouped
 
 		if (count > 0) {
 			this.disableAddingNewMessages = true
@@ -697,40 +697,14 @@ class ChatScroller extends LitElement {
 			return true
 		}
 
-		if (changedProperties.has('openUserInfo')) {
-			return true
-		}
-
-		if (changedProperties.has('userName')) {
-			return true
-		}
-
-		if (changedProperties.has('loggedInUserName')) {
-			return true
-		}
-
-		if (changedProperties.has('updateMessageHash')) {
-			return true
-		}
-
-		if (changedProperties.has('messagesToRender')) {
-			return true
-		}
-
-		if (changedProperties.has('isLoadingBefore')) {
-			return true
-		}
-
-		if (changedProperties.has('isLoadingAfter')) {
-			return true
-		}
-
-		if (changedProperties.has('messageQueue')) {
-			return true
-		}
-
-		// Only update element if prop1 changed.
-		return changedProperties.has('messages')
+		// Only update when render-relevant props change
+		return (
+			changedProperties.has('messagesToRender') ||
+			changedProperties.has('messageQueue') ||
+			changedProperties.has('isLoadingBefore') ||
+			changedProperties.has('isLoadingAfter') ||
+			changedProperties.has('messages')
+		)
 	}
 
 	async getUpdateComplete() {
