@@ -768,6 +768,47 @@ class Chat extends LitElement {
 		}
 	}
 
+	async ensurePrivateMessageEditor() {
+		if (this.editor) return
+
+		await this.getUpdateCompleteTextEditor()
+		const messageBox = this.shadowRoot && this.shadowRoot.getElementById('messageBox')
+		const elementChatId = messageBox && messageBox.shadowRoot && messageBox.shadowRoot.getElementById('privateMessage')
+		if (!elementChatId) return
+
+		this.editor = new Editor({
+			onUpdate: () => {
+				const box = this.shadowRoot && this.shadowRoot.getElementById('messageBox')
+				if (box && box.getMessageSize) {
+					box.getMessageSize(this.editor.getJSON())
+				}
+			},
+			element: elementChatId,
+			extensions: [
+				StarterKit,
+				Underline,
+				Highlight,
+				Mention,
+				Placeholder.configure({
+					placeholder: 'Write something …'
+				}),
+				Extension.create({
+					addKeyboardShortcuts: () => {
+						return {
+							'Enter': () => {
+								const chatTextEditor = this.shadowRoot && this.shadowRoot.getElementById('messageBox')
+								if (chatTextEditor && chatTextEditor.sendMessageFunc) {
+									chatTextEditor.sendMessageFunc({ })
+								}
+								return true
+							}
+						}
+					}
+				})
+			]
+		})
+	}
+
 	openGroupFromPromotion(groupId) {
 		if (!groupId) return
 		const url = `group/${groupId}`
@@ -785,36 +826,6 @@ class Chat extends LitElement {
 
 	async connectedCallback() {
 		super.connectedCallback()
-
-		await this.getUpdateCompleteTextEditor()
-
-		const elementChatId = this.shadowRoot.getElementById('messageBox').shadowRoot.getElementById('privateMessage')
-		this.editor = new Editor({
-			onUpdate: () => {
-				this.shadowRoot.getElementById('messageBox').getMessageSize(this.editor.getJSON())
-			},
-			element: elementChatId,
-			extensions: [
-				StarterKit,
-				Underline,
-				Highlight,
-				Mention,
-				Placeholder.configure({
-					placeholder: 'Write something …'
-				}),
-				Extension.create({
-					addKeyboardShortcuts: () => {
-						return {
-							'Enter': () => {
-								const chatTextEditor = this.shadowRoot.getElementById('messageBox')
-								chatTextEditor.sendMessageFunc({ })
-								return true
-							}
-						}
-					}
-				})
-			]
-		})
 
 		this.unsubscribeStore = window.parent.reduxStore.subscribe(() => {
 			try {
@@ -911,6 +922,33 @@ class Chat extends LitElement {
 	setOpenPrivateMessage(props) {
 		this.openPrivateMessage = props.open
 		this.pendingSendToName = props.name || ''
+	}
+
+	async updated(changedProperties) {
+		if (changedProperties.has('openPrivateMessage') && this.openPrivateMessage) {
+			await this.updateComplete
+			const sendToInput = this.shadowRoot && this.shadowRoot.getElementById('sendTo')
+			if (sendToInput && this.pendingSendToName !== null && this.pendingSendToName !== undefined) {
+				sendToInput.value = this.pendingSendToName
+				this.pendingSendToName = ''
+			}
+
+			const stopKeyEventPropagation = (e) => {
+				e.stopPropagation()
+				return false
+			}
+
+			if (sendToInput) {
+				sendToInput.addEventListener('keydown', stopKeyEventPropagation)
+			}
+
+			await this.ensurePrivateMessageEditor()
+
+			const messageBoxElement = this.shadowRoot && this.shadowRoot.getElementById('messageBox')
+			if (messageBoxElement) {
+				messageBoxElement.addEventListener('keydown', stopKeyEventPropagation)
+			}
+		}
 	}
 
 	async userSearch() {
