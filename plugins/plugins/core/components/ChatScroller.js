@@ -1058,144 +1058,208 @@ class MessageTemplate extends LitElement {
 		let isEncrypted = false
 		let messageV2Display = ''
 		let messageV2Raw = ''
+		const hasMessageReactions = Array.isArray(this.messageObj.reactions)
+		let cachedReactions = []
 
-		try {
-			const parsedMessageObj = JSON.parse(this.messageObj.decodedMessage)
+		const cached = this.messageObj.__renderCache
 
-			if (parsedMessageObj.version > 1) {
-				if (parsedMessageObj.messageText) {
-					if (typeof parsedMessageObj.messageText === 'object') {
-						try {
-							messageVersion2 = generateHTML(parsedMessageObj.messageText, [StarterKit, Underline, Highlight, Mention, TextStyle, Color.configure({ types: [TextStyle.name] })])
-						} catch (error) {
-							messageVersion2 = ''
+		if (cached) {
+			({
+				message,
+				messageVersion2,
+				messageVersion2WithLink,
+				messageVersion2Node,
+				embedData,
+				attachmentEmbed,
+				videoEmbed,
+				repliedToData,
+				image,
+				gif,
+				attachment,
+				file,
+				isImageDeleted,
+				isGifDeleted,
+				isAttachmentDeleted,
+				isFileDeleted,
+				version,
+				isForwarded,
+				isEdited,
+				isEncrypted,
+				messageV2Display,
+				messageV2Raw,
+				reactions: cachedReactions = []
+			} = cached)
+
+			if (!hasMessageReactions) {
+				reactions = cachedReactions
+			}
+		} else {
+			try {
+				const parsedMessageObj = JSON.parse(this.messageObj.decodedMessage)
+
+				if (parsedMessageObj.version > 1) {
+					if (parsedMessageObj.messageText) {
+						if (typeof parsedMessageObj.messageText === 'object') {
+							try {
+								messageVersion2 = generateHTML(parsedMessageObj.messageText, [StarterKit, Underline, Highlight, Mention, TextStyle, Color.configure({ types: [TextStyle.name] })])
+							} catch (error) {
+								messageVersion2 = ''
+							}
+						} else if (typeof parsedMessageObj.messageText === 'string') {
+							messageVersion2 = parsedMessageObj.messageText
 						}
-					} else if (typeof parsedMessageObj.messageText === 'string') {
-						messageVersion2 = parsedMessageObj.messageText
+					} else if (parsedMessageObj.message) {
+						messageVersion2 = parsedMessageObj.message
 					}
-				} else if (parsedMessageObj.message) {
-					messageVersion2 = parsedMessageObj.message
-				}
 
-				if (typeof messageVersion2 === 'string') {
-					const handleLinkClick = async (part) => {
-						try {
-							const res = await extractComponents(part)
+					if (typeof messageVersion2 === 'string') {
+						const handleLinkClick = async (part) => {
+							try {
+								const res = await extractComponents(part)
 
-							if (!res) return
+								if (!res) return
 
-							if (res.type && res.groupid && res.action === 'join') {
-								await this.handleJoinGroup(res.groupid)
-								return
+								if (res.type && res.groupid && res.action === 'join') {
+									await this.handleJoinGroup(res.groupid)
+									return
+								}
+								const { service, name, identifier, path } = res
+								let query = `?service=${service}`
+								if (name) {
+									query = query + `&name=${name}`
+								}
+								if (identifier) {
+									query = query + `&identifier=${identifier}`
+								}
+								if (path) {
+									query = query + `&path=${path}`
+								}
+								window.parent.reduxStore.dispatch(
+									window.parent.reduxAction.setNewTab({
+										url: `qdn/browser/index.html${query}`,
+										id: uid.rnd(),
+										myPlugObj: {
+											url: 'myapp',
+											domain: 'core',
+											page: `qdn/browser/index.html${query}`,
+											title: name,
+											icon:
+												service === 'WEBSITE'
+													? 'vaadin:desktop'
+													: 'vaadin:external-browser',
+											mwcicon:
+												service === 'WEBSITE'
+													? 'desktop_mac'
+													: 'open_in_browser',
+											menus: [],
+											parent: false
+										}
+									})
+								)
+							} catch (error) {
+								console.error({ error })
 							}
-							const { service, name, identifier, path } = res
-							let query = `?service=${service}`
-							if (name) {
-								query = query + `&name=${name}`
-							}
-							if (identifier) {
-								query = query + `&identifier=${identifier}`
-							}
-							if (path) {
-								query = query + `&path=${path}`
-							}
-							window.parent.reduxStore.dispatch(
-								window.parent.reduxAction.setNewTab({
-									url: `qdn/browser/index.html${query}`,
-									id: uid.rnd(),
-									myPlugObj: {
-										url: 'myapp',
-										domain: 'core',
-										page: `qdn/browser/index.html${query}`,
-										title: name,
-										icon:
-											service === 'WEBSITE'
-												? 'vaadin:desktop'
-												: 'vaadin:external-browser',
-										mwcicon:
-											service === 'WEBSITE'
-												? 'desktop_mac'
-												: 'open_in_browser',
-										menus: [],
-										parent: false
-									}
-								})
-							)
-						} catch (error) {
-							console.error({ error })
 						}
-					}
 
-					try {
-						messageVersion2WithLink = processText(messageVersion2, handleLinkClick)
-					} catch (error) {
-						messageVersion2WithLink = messageVersion2
-					}
-					messageV2Raw = messageVersion2
-					if (typeof messageVersion2WithLink === 'string') {
-						messageV2Display = messageVersion2WithLink
-						messageVersion2Node = null
+						try {
+							messageVersion2WithLink = processText(messageVersion2, handleLinkClick)
+						} catch (error) {
+							messageVersion2WithLink = messageVersion2
+						}
+						messageV2Raw = messageVersion2
+						if (typeof messageVersion2WithLink === 'string') {
+							messageV2Display = messageVersion2WithLink
+							messageVersion2Node = null
+						} else {
+							messageVersion2Node = messageVersion2WithLink
+							messageV2Display = ''
+						}
 					} else {
-						messageVersion2Node = messageVersion2WithLink
+						messageVersion2 = ''
+						messageVersion2WithLink = ''
+						messageVersion2Node = null
+						messageV2Raw = ''
 						messageV2Display = ''
 					}
-				} else {
-					messageVersion2 = ''
-					messageVersion2WithLink = ''
-					messageVersion2Node = null
-					messageV2Raw = ''
-					messageV2Display = ''
 				}
-			}
 
-			try {
-				const embedSource = typeof messageVersion2WithLink === 'string' ? messageVersion2WithLink : (typeof messageVersion2 === 'string' ? messageVersion2 : '')
-				const { embedData: foundEmbed, cleanText } = extractEmbedFromMessage(embedSource)
-				if (foundEmbed) {
-					if (foundEmbed.type === 'IMAGE') {
-						embedData = foundEmbed
-					} else if (foundEmbed.type === 'VIDEO') {
-						videoEmbed = foundEmbed
-					} else if (foundEmbed.type === 'ATTACHMENT') {
-						attachmentEmbed = foundEmbed
+				try {
+					const embedSource = typeof messageVersion2WithLink === 'string' ? messageVersion2WithLink : (typeof messageVersion2 === 'string' ? messageVersion2 : '')
+					const { embedData: foundEmbed, cleanText } = extractEmbedFromMessage(embedSource)
+					if (foundEmbed) {
+						if (foundEmbed.type === 'IMAGE') {
+							embedData = foundEmbed
+						} else if (foundEmbed.type === 'VIDEO') {
+							videoEmbed = foundEmbed
+						} else if (foundEmbed.type === 'ATTACHMENT') {
+							attachmentEmbed = foundEmbed
+						}
+						messageVersion2WithLink = cleanText
+						messageVersion2 = cleanText
+						messageV2Display = cleanText
+						messageV2Raw = cleanText
+						messageVersion2Node = null
 					}
-					messageVersion2WithLink = cleanText
-					messageVersion2 = cleanText
-					messageV2Display = cleanText
-					messageV2Raw = cleanText
-					messageVersion2Node = null
+				} catch (error) { /* no embed processing */ }
+
+				message = parsedMessageObj.messageText ? parsedMessageObj.messageText : parsedMessageObj.message
+				repliedToData = this.messageObj.repliedToData
+				isImageDeleted = parsedMessageObj.isImageDeleted
+				isGifDeleted = parsedMessageObj.isGifDeleted
+				isAttachmentDeleted = parsedMessageObj.isAttachmentDeleted
+				isFileDeleted = parsedMessageObj.isFileDeleted
+				if (!hasMessageReactions) {
+					reactions = parsedMessageObj.reactions || []
 				}
-			} catch (error) { /* no embed processing */ }
+				version = parsedMessageObj.version
+				isForwarded = parsedMessageObj.type === 'forward'
+				isEdited = parsedMessageObj.isEdited && true
+				isEncrypted = parsedMessageObj.isFromHub || parsedMessageObj.isPrivate || parsedMessageObj.message ? true : false
 
-			message = parsedMessageObj.messageText ? parsedMessageObj.messageText : parsedMessageObj.message
-			repliedToData = this.messageObj.repliedToData
-			isImageDeleted = parsedMessageObj.isImageDeleted
-			isGifDeleted = parsedMessageObj.isGifDeleted
-			isAttachmentDeleted = parsedMessageObj.isAttachmentDeleted
-			isFileDeleted = parsedMessageObj.isFileDeleted
-			// reactions = parsedMessageObj.reactions || []
-			version = parsedMessageObj.version
-			isForwarded = parsedMessageObj.type === 'forward'
-			isEdited = parsedMessageObj.isEdited && true
-			isEncrypted = parsedMessageObj.isFromHub || parsedMessageObj.isPrivate || parsedMessageObj.message ? true : false
+				if (parsedMessageObj.images && Array.isArray(parsedMessageObj.images) && parsedMessageObj.images.length > 0) {
+					image = parsedMessageObj.images[0]
+				}
 
-			if (parsedMessageObj.images && Array.isArray(parsedMessageObj.images) && parsedMessageObj.images.length > 0) {
-				image = parsedMessageObj.images[0]
+				if (parsedMessageObj.gifs && Array.isArray(parsedMessageObj.gifs) && parsedMessageObj.gifs.length > 0) {
+					gif = parsedMessageObj.gifs[0]
+				}
+
+				if (parsedMessageObj.attachments && Array.isArray(parsedMessageObj.attachments) && parsedMessageObj.attachments.length > 0) {
+					attachment = parsedMessageObj.attachments[0]
+				}
+
+				if (parsedMessageObj.files && Array.isArray(parsedMessageObj.files) && parsedMessageObj.files.length > 0) {
+					file = parsedMessageObj.files[0]
+				}
+
+				this.messageObj.__renderCache = {
+					message,
+					messageVersion2,
+					messageVersion2WithLink,
+					messageVersion2Node,
+					embedData,
+					attachmentEmbed,
+					videoEmbed,
+					repliedToData,
+					image,
+					gif,
+					attachment,
+					file,
+					isImageDeleted,
+					isGifDeleted,
+					isAttachmentDeleted,
+					isFileDeleted,
+					version,
+					isForwarded,
+					isEdited,
+					isEncrypted,
+					messageV2Display,
+					messageV2Raw,
+					reactions
+				}
+			} catch (error) {
+				message = this.messageObj.decodedMessage
 			}
-
-			if (parsedMessageObj.gifs && Array.isArray(parsedMessageObj.gifs) && parsedMessageObj.gifs.length > 0) {
-				gif = parsedMessageObj.gifs[0]
-			}
-
-			if (parsedMessageObj.attachments && Array.isArray(parsedMessageObj.attachments) && parsedMessageObj.attachments.length > 0) {
-				attachment = parsedMessageObj.attachments[0]
-			}
-
-			if (parsedMessageObj.files && Array.isArray(parsedMessageObj.files) && parsedMessageObj.files.length > 0) {
-				file = parsedMessageObj.files[0]
-			}
-		} catch (error) {
-			message = this.messageObj.decodedMessage
 		}
 
 		let avatarImg = ''
