@@ -25,7 +25,8 @@ class ChatHead extends LitElement {
 			isImageLoaded: { type: Boolean },
 			setActiveChatHeadUrl: { attribute: false },
 			lastReadMessageTimestamp: { type: Number },
-			avatarImg: { type: String }
+			avatarImg: { type: String },
+			isSelectingChat: { type: Boolean }
 		}
 	}
 
@@ -50,6 +51,7 @@ class ChatHead extends LitElement {
 		this.avatarImg = ''
 		this.loggedInAddress = window.parent.reduxStore.getState().app.selectedAddress.address
 		this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
+		this.isSelectingChat = false
 	}
 
 	render() {
@@ -274,6 +276,7 @@ class ChatHead extends LitElement {
 	}
 
 	getUrl(chatUrl) {
+		if (this.isSelectingChat) return
 		this.setActiveChatHeadUrl(chatUrl)
 	}
 

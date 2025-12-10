@@ -7323,6 +7323,22 @@ export const qchatStyles = css`
         background: var(--white);
     }
 
+    .chat-loading-inline {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 24px 12px;
+        color: var(--black);
+        font-size: 16px;
+        letter-spacing: 0.2px;
+    }
+
+    .chat-loading-text {
+        margin: 0;
+        font-weight: 500;
+    }
+
     .people-list {
         width: 20vw;
         float: left;

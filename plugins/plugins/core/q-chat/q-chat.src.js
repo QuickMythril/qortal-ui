@@ -82,7 +82,9 @@ class Chat extends LitElement {
 			groupInvites: { type: Array },
 			loggedInUserName: { type: String },
 			loggedInUserAddress: { type: String },
-			openDialogGroupsModal: { type: Boolean }
+			openDialogGroupsModal: { type: Boolean },
+			isSelectingChat: { type: Boolean },
+			pendingChatUrl: { type: String }
 		}
 	}
 
@@ -131,6 +133,8 @@ class Chat extends LitElement {
 		this.chatHeadMetaCache = new Map()
 		this.handleSearchResultSelect = this.handleSearchResultSelect.bind(this)
 		this.handleSearchResultsClose = this.handleSearchResultsClose.bind(this)
+		this.isSelectingChat = false
+		this.pendingChatUrl = ''
 	}
 
 	render() {
@@ -206,10 +210,13 @@ class Chat extends LitElement {
 						<span>${translate('chatpage.cchange5')} <mwc-icon style="font-size: 16px; vertical-align: bottom;">keyboard_arrow_down</mwc-icon></span>
 					</div>
 					<div class="chat-history">
-						${this.activeChatHeadUrl ?
-		html`${this.renderChatPage()}`
-		: this.isViewOpen ? html`${this.renderChatViewPage()}`
-			: html`${this.renderChatWelcomePage()}`
+						${this.isSelectingChat
+		? html`${this.renderChatLoading()}`
+		: this.activeChatHeadUrl
+			? html`${this.renderChatPage()}`
+			: this.isViewOpen
+				? html`${this.renderChatViewPage()}`
+				: html`${this.renderChatWelcomePage()}`
 }
 					</div>
 				</div>
@@ -557,11 +564,47 @@ class Chat extends LitElement {
 	}
 
 	async setActiveChatHeadUrl(url) {
-		await this.getSymKeyFile(url)
+		const targetUrl = url || ''
+		const isGroupUrl = typeof targetUrl === 'string' && targetUrl.startsWith('group/')
+
+		if (this.isSelectingChat) return
+
+		if (targetUrl === this.activeChatHeadUrl && !this.isViewOpen) {
+			return
+		}
+
+		if (!isGroupUrl) {
+			this.isSelectingChat = false
+			this.pendingChatUrl = ''
+			this.activeChatHeadUrl = targetUrl
+			this.isViewOpen = false
+			return
+		}
+
+		this.isSelectingChat = true
+		this.pendingChatUrl = targetUrl
 		this.isViewOpen = false
+		this.requestUpdate()
+
+		try {
+			await this.getSymKeyFile(targetUrl)
+			this.activeChatHeadUrl = targetUrl
+		} catch (error) {
+			this.activeChatHeadUrl = targetUrl
+			parentEpml.request('showSnackBar', get('chatpage.cchange22') || 'Loading messages...')
+		} finally {
+			this.isSelectingChat = false
+			this.pendingChatUrl = ''
+			this.requestUpdate()
+		}
 	}
 
 	async getSymKeyFile(url) {
+		if (!url || !url.startsWith('group/')) {
+			this.activeChatHeadUrl = url || ''
+			return
+		}
+
 		this.secretKeys = {}
 		this.groupAdmins = {}
 
@@ -1197,6 +1240,15 @@ class Chat extends LitElement {
 				<div></div>
 				<div></div>
 				<div></div>
+			</div>
+		`
+	}
+
+	renderChatLoading() {
+		return html`
+			<div class="chat-loading-inline">
+				<div class="smallLoading marginLoader"></div>
+				<p class="chat-loading-text">${get('chatpage.cchange22') || 'Loading messages...'}</p>
 			</div>
 		`
 	}
