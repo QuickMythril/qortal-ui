@@ -1,7 +1,7 @@
 ## Plan – Emoji Reactions Parity (UI ↔ Hub)
 
 ### Wire format & send path
-- [ ] Add a dedicated reaction send path (no message rewrite): emit `{type:'reaction', content:emoji, contentState:bool, specialId, message:''}` with `chatReference` of the target message.
+- [x] Add a dedicated reaction send path (no message rewrite): emit `{type:'reaction', content:emoji, contentState:bool, specialId, message:''}` with `chatReference` of the target message.
 - [ ] For private groups, encrypt reaction payloads using type number `102` (RESOURCE_TYPE_NUMBER_GROUP_CHAT_REACTIONS); keep plaintext JSON for public/direct.
 - [ ] Route reactions through the message queue with a distinct key (e.g., `chat-reaction`) and set `contentState` false when toggling off.
 

@@ -3841,7 +3841,7 @@ class ChatPage extends LitElement {
 			} else if (outSideMsg && outSideMsg.type === 'reaction') {
 				const userName = await getName(this.selectedAddress.address)
 
-				typeMessage = 'edit'
+				typeMessage = 'reaction'
 
 				let chatReference = outSideMsg.editedMessageObj.signature
 
@@ -3849,60 +3849,30 @@ class ChatPage extends LitElement {
 					chatReference = outSideMsg.editedMessageObj.chatReference
 				}
 
-				let message = ''
+				let contentState = true
 
 				try {
 					const parsedMessageObj = JSON.parse(outSideMsg.editedMessageObj.decodedMessage)
-					message = parsedMessageObj
-				} catch (error) {
-					message = outSideMsg.editedMessageObj.decodedMessage
+					const reactions = parsedMessageObj.reactions || []
+					const findEmojiIndex = reactions.findIndex((reaction) => reaction.type === outSideMsg.reaction)
+					if (findEmojiIndex !== -1) {
+						const users = reactions[findEmojiIndex].users || []
+						const findUserIndex = users.findIndex((user) => user.address === this.selectedAddress.address)
+						if (findUserIndex !== -1) {
+							contentState = false
+						}
+					}
+				} catch (error) { /* ignore parse */ }
+
+				const reactionPayload = {
+					type: 'reaction',
+					content: outSideMsg.reaction,
+					contentState,
+					specialId: this.uid.rnd(),
+					senderName: userName
 				}
 
-				let reactions = message.reactions || []
-
-				const findEmojiIndex = reactions.findIndex((reaction) => reaction.type === outSideMsg.reaction)
-
-				if (findEmojiIndex !== -1) {
-					let users = reactions[findEmojiIndex].users || []
-					const findUserIndex = users.findIndex((user) => user.address === this.selectedAddress.address)
-
-					if (findUserIndex !== -1) {
-						users.splice(findUserIndex, 1)
-					} else {
-						users.push({
-							address: this.selectedAddress.address,
-							name: userName
-						})
-					}
-
-					reactions[findEmojiIndex] = {
-						...reactions[findEmojiIndex],
-						qty: users.length,
-						users
-					}
-
-					if (users.length === 0) {
-						reactions.splice(findEmojiIndex, 1)
-					}
-				} else {
-					reactions = [...reactions, {
-						type: outSideMsg.reaction,
-						qty: 1,
-						users: [{
-							address: this.selectedAddress.address,
-							name: userName
-						}]
-					}]
-				}
-
-				const messageObject = {
-					...message,
-					reactions
-				}
-
-				const stringifyMessageObject = JSON.stringify(messageObject)
-
-				return this.sendMessage({ messageText: stringifyMessageObject, typeMessage, chatReference, isForward: false, isReceipient, _chatId, _publicKey, messageQueue })
+				return this.sendMessage({ messageText: JSON.stringify(reactionPayload), typeMessage, chatReference, isForward: false, isReceipient, _chatId, _publicKey, messageQueue })
 			} else if (/^\s*$/.test(trimmedMessage)) {
 				this.isLoading = false
 			} else if (this.repliedToMessageObj) {
@@ -4006,7 +3976,7 @@ class ChatPage extends LitElement {
 						timestamp: Date.now(),
 						recipient: _chatId,
 						recipientPublicKey: _publicKey.key,
-						hasChatReference: typeMessage === 'edit' ? 1 : 0,
+						hasChatReference: (typeMessage === 'edit' || typeMessage === 'reaction') ? 1 : 0,
 						chatReference: chatReference,
 						message: messageText,
 						lastReference: reference,
@@ -4024,7 +3994,7 @@ class ChatPage extends LitElement {
 						timestamp: Date.now(),
 						groupID: Number(_chatId),
 						hasReceipient: 0,
-						hasChatReference: typeMessage === 'edit' ? 1 : 0,
+						hasChatReference: (typeMessage === 'edit' || typeMessage === 'reaction') ? 1 : 0,
 						chatReference: chatReference,
 						message: messageText,
 						lastReference: reference,
