@@ -1374,6 +1374,7 @@ class Chat extends LitElement {
 				balance=${this.balance}
 				loggedInUserName=${this.loggedInUserName}
 				loggedInUserAddress=${this.loggedInUserAddress}
+				?privateMessageOpen=${this.openPrivateMessage}
 			>
 			</chat-page>
 		`

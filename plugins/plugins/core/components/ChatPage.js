@@ -139,7 +139,8 @@ class ChatPage extends LitElement {
 			isInProcessQueue: { type: Boolean },
 			loggedInUserName: { type: String },
 			loggedInUserAddress: { type: String },
-			secretKeysWorker: { type: Object }
+			secretKeysWorker: { type: Object },
+			privateMessageOpen: { type: Boolean }
 		}
 	}
 
@@ -219,6 +220,7 @@ class ChatPage extends LitElement {
 			name: '',
 			selected: false
 		}
+		this.privateMessageOpen = false
 		this.webWorker = null
 		this.webWorkerFile = null
 		this.webWorkerSortMessages = null
@@ -1364,6 +1366,8 @@ class ChatPage extends LitElement {
 	}
 
 	initialChat(e) {
+		if (this.privateMessageOpen) return
+
 		if (this.editor && !this.editor.isFocused && this.currentEditor === '_chatEditorDOM' && !this.openForwardOpen && !this.openTipUser && !this.openGifModal) {
 			// WARNING: Deprecated methods from KeyBoard Event
 			if (e.code === 'Space' || e.keyCode === 32 || e.which === 32) { /* empty */ } else if (inputKeyCodes.includes(e.keyCode)) {
