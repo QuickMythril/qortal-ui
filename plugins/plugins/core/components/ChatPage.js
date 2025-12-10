@@ -59,6 +59,7 @@ export const queue = new RequestQueue()
 export const chatLimit = 20
 export const chatLimitHalf = 10
 export const totalMsgCount = 60
+export const REACTION_TYPE_NUMBER = 102
 
 class ChatPage extends LitElement {
 	static get properties() {
@@ -3999,8 +4000,9 @@ class ChatPage extends LitElement {
 						message: messageText,
 						lastReference: reference,
 						proofOfWorkNonce: 0,
-						isEncrypted: 0, // Set default to not encrypted for groups
-						isText: 1
+						isEncrypted: typeMessage === 'reaction' ? 1 : 0,
+						isText: 1,
+						typeNumber: typeMessage === 'reaction' ? REACTION_TYPE_NUMBER : undefined
 					}
 				})
 				return _computePow(groupResponse)
