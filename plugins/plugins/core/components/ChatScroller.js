@@ -1061,7 +1061,11 @@ class MessageTemplate extends LitElement {
 		const hasMessageReactions = Array.isArray(this.messageObj.reactions)
 		let cachedReactions = []
 
-		const cached = this.messageObj.__renderCache
+		// Rebuild cache when decodedMessage changes; keep lightweight live fields (repliedToData, reactions from messageObj) fresh.
+		const cacheKey = this.messageObj.decodedMessage
+		const cached = this.messageObj.__renderCache && this.messageObj.__renderCache.cacheKey === cacheKey
+			? this.messageObj.__renderCache
+			: null
 
 		if (cached) {
 			({
@@ -1090,7 +1094,11 @@ class MessageTemplate extends LitElement {
 				reactions: cachedReactions = []
 			} = cached)
 
-			if (!hasMessageReactions) {
+			// Always prefer live repliedToData/reactions from messageObj when present
+			repliedToData = this.messageObj.repliedToData || repliedToData
+			if (hasMessageReactions) {
+				reactions = this.messageObj.reactions
+			} else if (cachedReactions) {
 				reactions = cachedReactions
 			}
 		} else {
@@ -1233,6 +1241,7 @@ class MessageTemplate extends LitElement {
 				}
 
 				this.messageObj.__renderCache = {
+					cacheKey,
 					message,
 					messageVersion2,
 					messageVersion2WithLink,
