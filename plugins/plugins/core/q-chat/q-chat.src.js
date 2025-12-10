@@ -84,7 +84,8 @@ class Chat extends LitElement {
 			loggedInUserAddress: { type: String },
 			openDialogGroupsModal: { type: Boolean },
 			isSelectingChat: { type: Boolean },
-			pendingChatUrl: { type: String }
+			pendingChatUrl: { type: String },
+			openBlockedUserDialog: { type: Boolean }
 		}
 	}
 
@@ -135,6 +136,8 @@ class Chat extends LitElement {
 		this.handleSearchResultsClose = this.handleSearchResultsClose.bind(this)
 		this.isSelectingChat = false
 		this.pendingChatUrl = ''
+		this.openBlockedUserDialog = false
+		this.pendingSendToName = ''
 	}
 
 	render() {
@@ -176,7 +179,7 @@ class Chat extends LitElement {
 								>
 								</vaadin-tooltip>
 							</div>
-							<div id="blockedUsers" class="create-chat" @click=${() => { this.shadowRoot.querySelector('#blockedUserDialog').show() }}>
+							<div id="blockedUsers" class="create-chat" @click=${() => { this.openBlockedUserDialog = true }}>
 								<mwc-icon style="color: var(--black);">person_off</mwc-icon>
 								<vaadin-tooltip
 									for="blockedUsers"
@@ -285,6 +288,7 @@ class Chat extends LitElement {
 										@click=${() => {
 		this.resetChatEditor()
 		this.openPrivateMessage = false
+		this.pendingSendToName = ''
 	}}
 										?disabled="${this.isLoading}"
 									>
@@ -759,7 +763,9 @@ class Chat extends LitElement {
 	}
 
 	resetChatEditor() {
-		this.editor.commands.setContent('')
+		if (this.editor && this.editor.commands) {
+			this.editor.commands.setContent('')
+		}
 	}
 
 	openGroupFromPromotion(groupId) {
@@ -840,8 +846,23 @@ class Chat extends LitElement {
 
 	disconnectedCallback() {
 		super.disconnectedCallback()
-		this.editor.destroy()
-		this.unsubscribeStore()
+		if (this.editor && this.editor.destroy) {
+			this.editor.destroy()
+		}
+		if (this.unsubscribeStore) {
+			this.unsubscribeStore()
+		}
+	}
+
+	async updated(changedProperties) {
+		if (changedProperties.has('openPrivateMessage') && this.openPrivateMessage) {
+			await this.updateComplete
+			const sendToInput = this.shadowRoot && this.shadowRoot.getElementById('sendTo')
+			if (sendToInput && this.pendingSendToName !== null && this.pendingSendToName !== undefined) {
+				sendToInput.value = this.pendingSendToName
+				this.pendingSendToName = ''
+			}
+		}
 	}
 
 	updatePlaceholder(editor, text) {
@@ -889,10 +910,7 @@ class Chat extends LitElement {
 
 	setOpenPrivateMessage(props) {
 		this.openPrivateMessage = props.open
-		const sendToInput = this.shadowRoot && this.shadowRoot.getElementById('sendTo')
-		if (sendToInput) {
-			sendToInput.value = props.name
-		}
+		this.pendingSendToName = props.name || ''
 	}
 
 	async userSearch() {
