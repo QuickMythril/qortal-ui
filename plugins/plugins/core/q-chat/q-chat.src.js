@@ -955,6 +955,11 @@ class Chat extends LitElement {
 
 		if (changedProperties.has('openPrivateMessage') && !this.openPrivateMessage) {
 			window.removeEventListener('keydown', this.stopModalKeydown, true)
+			if (this.editor && this.editor.destroy) {
+				this.editor.destroy()
+			}
+			this.editor = null
+			this.pendingSendToName = ''
 		}
 	}
 
