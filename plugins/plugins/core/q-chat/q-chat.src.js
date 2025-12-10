@@ -912,11 +912,11 @@ class Chat extends LitElement {
 	}
 
 	clearConsole() {
-		if (!isElectron()) {
-			// ...
-		} else {
+		if (isElectron() && window.parent && window.parent.electronAPI && typeof window.parent.electronAPI.clearCache === 'function') {
 			console.clear()
 			window.parent.electronAPI.clearCache()
+		} else {
+			console.clear()
 		}
 	}
 
