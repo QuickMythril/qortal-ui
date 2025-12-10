@@ -221,85 +221,89 @@ class Chat extends LitElement {
 					</div>
 				</div>
 				<!-- Start Chatting Dialog -->
-				<wrapper-modal
-					.onClickFunc=${() => {
+				${this.openPrivateMessage ? html`
+					<wrapper-modal
+						.onClickFunc=${() => {
 		this.resetChatEditor()
 		this.openPrivateMessage = false
-		this.shadowRoot.getElementById('sendTo').value = ''
+		const sendToInput = this.shadowRoot.getElementById('sendTo')
+		if (sendToInput) sendToInput.value = ''
 		this.userFoundModalOpen = false
 		this.userFound = []
 	}}
-					style=${this.openPrivateMessage ? 'visibility:visible;z-index:50' : 'visibility: hidden;z-index:-100;position: relative'}
-				>
-					<div style=${'position: relative'}>
-						<div class="dialog-container">
-							<div class="dialog-header" style="text-align: center">
-								<h1>${translate('chatpage.cchange1')}</h1>
-								<hr>
-							</div>
-							<p class="dialog-subheader">${translate('chatpage.cchange6')}</p>
-							<div class="search-field">
-								<input
-									type="text"
-									class="name-input"
-									?disabled=${this.isLoading}
-									id="sendTo"
-									placeholder="${translate('chatpage.cchange7')}"
-									value=${this.userSelected.name ? this.userSelected.name : ''}
-									@keypress=${() => {
+						style=${'visibility:visible;z-index:50'}
+					>
+						<div style=${'position: relative'}>
+							<div class="dialog-container">
+								<div class="dialog-header" style="text-align: center">
+									<h1>${translate('chatpage.cchange1')}</h1>
+									<hr>
+								</div>
+								<p class="dialog-subheader">${translate('chatpage.cchange6')}</p>
+								<div class="search-field">
+									<input
+										type="text"
+										class="name-input"
+										?disabled=${this.isLoading}
+										id="sendTo"
+										placeholder="${translate('chatpage.cchange7')}"
+										value=${this.userSelected.name ? this.userSelected.name : ''}
+										@keypress=${() => {
 		this.userSelected = {}
 		this.requestUpdate()
 	}}
-								/>
-								${this.userSelected.name ?
+									/>
+									${this.userSelected.name ?
 		(html`
-										<div class="user-verified">
-											<p>${translate('chatpage.cchange38')}</p>
-											<vaadin-icon icon="vaadin:check-circle-o" slot="icon"></vaadin-icon>
-										</div>
-									`)
+											<div class="user-verified">
+												<p>${translate('chatpage.cchange38')}</p>
+												<vaadin-icon icon="vaadin:check-circle-o" slot="icon"></vaadin-icon>
+											</div>
+										`)
 		: (html`
-										<vaadin-icon @click=${this.userSearch} slot="icon" icon="vaadin:open-book" class="search-icon"></vaadin-icon>
-									`)
+											<vaadin-icon @click=${this.userSearch} slot="icon" icon="vaadin:open-book" class="search-icon"></vaadin-icon>
+										`)
 }
-							</div>
-							<chat-text-editor
-								iframeId="privateMessage"
-								?hasGlobalEvents=${false}
-								placeholder="${translate('chatpage.cchange8')}"
-								.imageFile=${this.imageFile}
-								._sendMessage=${this._sendMessage}
-								.insertImage=${this.insertImage}
-								?isLoading=${this.isLoading}
-								.isLoadingMessages=${false}
-								id="messageBox"
-								.editor=${this.editor}
-								.updatePlaceholder=${(editor, value) => this.updatePlaceholder(editor, value)}
-							>
-							</chat-text-editor>
-							<div class="modal-button-row">
-								<button
-									class="modal-button-red"
-									@click=${() => {
+								</div>
+								<chat-text-editor
+									iframeId="privateMessage"
+									?hasGlobalEvents=${false}
+									placeholder="${translate('chatpage.cchange8')}"
+									.imageFile=${this.imageFile}
+									._sendMessage=${this._sendMessage}
+									.insertImage=${this.insertImage}
+									?isLoading=${this.isLoading}
+									.isLoadingMessages=${false}
+									id="messageBox"
+									.editor=${this.editor}
+									.updatePlaceholder=${(editor, value) => this.updatePlaceholder(editor, value)}
+								>
+								</chat-text-editor>
+								<div class="modal-button-row">
+									<button
+										class="modal-button-red"
+										@click=${() => {
 		this.resetChatEditor()
 		this.openPrivateMessage = false
 	}}
-									?disabled="${this.isLoading}"
-								>
-									${translate('chatpage.cchange33')}
-								</button>
-								<button
-									class="modal-button"
-									@click=${() => {
-		const chatTextEditor = this.shadowRoot.getElementById('messageBox')
-		chatTextEditor.sendMessageFunc({ })
+										?disabled="${this.isLoading}"
+									>
+										${translate('chatpage.cchange33')}
+									</button>
+									<button
+										class="modal-button"
+										@click=${() => {
+		const chatTextEditor = this.shadowRoot && this.shadowRoot.getElementById('messageBox')
+		if (chatTextEditor && chatTextEditor.sendMessageFunc) {
+			chatTextEditor.sendMessageFunc({ })
+		}
 	}}
-									?disabled="${this.isLoading}"
-								>
-									${this.isLoading === false ? this.renderSendText() : html`<paper-spinner-lite active></paper-spinner-lite>`}
-								</button>
+										?disabled="${this.isLoading}"
+									>
+										${this.isLoading === false ? this.renderSendText() : html`<paper-spinner-lite active></paper-spinner-lite>`}
+									</button>
+								</div>
 							</div>
-						</div>
 							<div class="search-results-div">
 								<chat-search-results
 									.onClickFunc=${this.handleSearchResultSelect}
@@ -309,56 +313,61 @@ class Chat extends LitElement {
 									?loading=${this.isLoading}
 								>
 								</chat-search-results>
+							</div>
 						</div>
-					</div>
-				</wrapper-modal>
+					</wrapper-modal>
+				` : ''}
 				<!-- Blocked User Dialog -->
-				<mwc-dialog id="blockedUserDialog">
-					<div style="text-align:center">
-						<h1>${translate('chatpage.cchange10')}</h1>
-						<hr>
-						<br>
-					</div>
-					<vaadin-grid theme="compact" id="blockedGrid" ?hidden="${this.isEmptyArray(this.blockedUserList)}" aria-label="Blocked List" .items="${this.blockedUserList}" all-rows-visible>
-						<vaadin-grid-column auto-width header="${translate('chatpage.cchange11')}" .renderer=${(root, column, data) => {
+				${this.openBlockedUserDialog ? html`
+					<mwc-dialog id="blockedUserDialog" open @closed=${() => { this.openBlockedUserDialog = false }}>
+						<div style="text-align:center">
+							<h1>${translate('chatpage.cchange10')}</h1>
+							<hr>
+							<br>
+						</div>
+						<vaadin-grid theme="compact" id="blockedGrid" ?hidden="${this.isEmptyArray(this.blockedUserList)}" aria-label="Blocked List" .items="${this.blockedUserList}" all-rows-visible>
+							<vaadin-grid-column auto-width header="${translate('chatpage.cchange11')}" .renderer=${(root, column, data) => {
 	if (data.item.name === translate('general.noRegisteredName')) {
 		render(html`${translate('general.noRegisteredName')}`, root)
 	} else {
 		render(html`${data.item.name}`, root)
 	}
 }}>
-						</vaadin-grid-column>
-						<vaadin-grid-column auto-width header="${translate('chatpage.cchange12')}" path="owner"></vaadin-grid-column>
-						<vaadin-grid-column width="10rem" flex-grow="0" header="${translate('chatpage.cchange13')}" .renderer=${(root, column, data) => {
+							</vaadin-grid-column>
+							<vaadin-grid-column auto-width header="${translate('chatpage.cchange12')}" path="owner"></vaadin-grid-column>
+							<vaadin-grid-column width="10rem" flex-grow="0" header="${translate('chatpage.cchange13')}" .renderer=${(root, column, data) => {
 	render(html`${this.renderUnblockButton(data.item)}`, root)
 }}>
-						</vaadin-grid-column>
-					</vaadin-grid>
-					${this.isEmptyArray(this.blockedUserList) ? html`<span style="color: var(--black); text-align: center;">${translate('chatpage.cchange14')}</span>`: ''}
-					<mwc-button slot="primaryAction" dialogAction="cancel" class="red">
-						${translate('general.close')}
-					</mwc-button>
-				</mwc-dialog>
+							</vaadin-grid-column>
+						</vaadin-grid>
+						${this.isEmptyArray(this.blockedUserList) ? html`<span style="color: var(--black); text-align: center;">${translate('chatpage.cchange14')}</span>`: ''}
+						<mwc-button slot="primaryAction" dialogAction="cancel" class="red" @click=${() => { this.openBlockedUserDialog = false }}>
+							${translate('general.close')}
+						</mwc-button>
+					</mwc-dialog>
+				` : ''}
 				<!-- View Chat Over ID -->
-				<paper-dialog id="viewChatDialog" class="viewSettings" modal>
-					<div style="display: inline;">
-						<div class="view">
-							<vaadin-text-field
-								style="width: 350px"
-								id="groupIdInput"
-								required
-								allowed-char-pattern="[0-9]"
-								placeholder="${translate('modals.mpchange87')}"
-								value=""
-								@keydown="${this.viewKeyListener}"
-								clear-button-visible
-							>
-							</vaadin-text-field>
-							<paper-icon-button icon="icons:visibility" @click="${() => this.switchChatID()}" title="${translate('general.view')}"></paper-icon-button>
-							<paper-icon-button icon="icons:close" @click="${() => this.closeView()}" title="${translate('general.close')}"></paper-icon-button>
+				${this.isViewOpen ? html`
+					<paper-dialog id="viewChatDialog" class="viewSettings" modal opened>
+						<div style="display: inline;">
+							<div class="view">
+								<vaadin-text-field
+									style="width: 350px"
+									id="groupIdInput"
+									required
+									allowed-char-pattern="[0-9]"
+									placeholder="${translate('modals.mpchange87')}"
+									value=""
+									@keydown="${this.viewKeyListener}"
+									clear-button-visible
+								>
+								</vaadin-text-field>
+								<paper-icon-button icon="icons:visibility" @click="${() => this.switchChatID()}" title="${translate('general.view')}"></paper-icon-button>
+								<paper-icon-button icon="icons:close" @click="${() => this.closeView()}" title="${translate('general.close')}"></paper-icon-button>
+							</div>
 						</div>
-					</div>
-				</paper-dialog>
+					</paper-dialog>
+				` : ''}
 			</div>
 		`
 	}
@@ -384,10 +393,14 @@ class Chat extends LitElement {
 		}
 
 		const nameInput = this.shadowRoot.getElementById('sendTo')
+		if (nameInput) {
+			nameInput.addEventListener('keydown', stopKeyEventPropagation)
+		}
 
-		nameInput.addEventListener('keydown', stopKeyEventPropagation)
-
-		this.shadowRoot.getElementById('messageBox').addEventListener('keydown', stopKeyEventPropagation)
+		const messageBoxElement = this.shadowRoot.getElementById('messageBox')
+		if (messageBoxElement) {
+			messageBoxElement.addEventListener('keydown', stopKeyEventPropagation)
+		}
 
 		const runFunctionsAfterPageLoad = async () => {
 			// Functions to exec after render while waiting for page info...
@@ -537,14 +550,12 @@ class Chat extends LitElement {
 		this.switchChatHeadUrl = currentUrl
 		this.activeChatHeadUrl = ''
 		this.isViewOpen = true
-		this.shadowRoot.getElementById('viewChatDialog').open()
-		this.shadowRoot.getElementById('groupIdInput').value = ''
 		this.resetChatEditor()
 	}
 
 	closeView() {
-		this.shadowRoot.getElementById('viewChatDialog').close()
-		this.shadowRoot.getElementById('groupIdInput').value = ''
+		const input = this.shadowRoot && this.shadowRoot.getElementById('groupIdInput')
+		if (input) input.value = ''
 		this.isViewOpen = false
 		this.activeChatHeadUrl = this.switchChatHeadUrl
 		this.switchChatHeadUrl = ''
@@ -878,7 +889,10 @@ class Chat extends LitElement {
 
 	setOpenPrivateMessage(props) {
 		this.openPrivateMessage = props.open
-		this.shadowRoot.getElementById('sendTo').value = props.name
+		const sendToInput = this.shadowRoot && this.shadowRoot.getElementById('sendTo')
+		if (sendToInput) {
+			sendToInput.value = props.name
+		}
 	}
 
 	async userSearch() {

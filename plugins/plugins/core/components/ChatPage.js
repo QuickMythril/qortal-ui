@@ -658,15 +658,17 @@ class ChatPage extends LitElement {
 							</div>
 						</div>
 					</wrapper-modal>
-					<paper-dialog class="warning" id="confirmDialog" modal>
-						<h2 style="color: var(--black);">${translate('chatpage.cchange41')}</h2>
-						<hr>
-						<br>
-						<h3 style="color: var(--black);">${translate('chatpage.cchange42')}</h3>
-						<div class="buttons">
-							<mwc-button @click=${() => {this.sendMessage(this.myMessageUnder4Qort)}} dialog-confirm>${translate('transpage.tchange3')}</mwc-button>
-						</div>
-					</paper-dialog>
+					${this.myMessageUnder4Qort ? html`
+						<paper-dialog class="warning" id="confirmDialog" modal>
+							<h2 style="color: var(--black);">${translate('chatpage.cchange41')}</h2>
+							<hr>
+							<br>
+							<h3 style="color: var(--black);">${translate('chatpage.cchange42')}</h3>
+							<div class="buttons">
+								<mwc-button @click=${() => {this.sendMessage(this.myMessageUnder4Qort)}} dialog-confirm>${translate('transpage.tchange3')}</mwc-button>
+							</div>
+						</paper-dialog>
+					` : ''}
 					<wrapper-modal .onClickFunc=${() => {this.openForwardOpen = false; this.forwardActiveChatHeadUrl = {}; this.requestUpdate()}} style=${this.openForwardOpen ? 'display: block' : 'display: none'}>
 						<div>
 							<div class="dialog-container">
