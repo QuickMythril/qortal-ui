@@ -3,7 +3,7 @@
 ### Wire format & send path
 - [x] Add a dedicated reaction send path (no message rewrite): emit `{type:'reaction', content:emoji, contentState:bool, specialId, message:''}` with `chatReference` of the target message.
 - [x] For private groups, encrypt reaction payloads using type number `102` (RESOURCE_TYPE_NUMBER_GROUP_CHAT_REACTIONS); keep plaintext JSON for public/direct.
-- [ ] Route reactions through the message queue with a distinct key (e.g., `chat-reaction`) and set `contentState` false when toggling off.
+- [x] Route reactions through the message queue with a distinct key (e.g., `chat-reaction`) and set `contentState` false when toggling off.
 
 ### State model & ingestion
 - [ ] Introduce a per-message reactions map (e.g., `chatReferences[ref].reactions[emoji] = ReactionItem[]`), separate from message text.

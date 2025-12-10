@@ -939,9 +939,10 @@ class ChatPage extends LitElement {
 		this.gifsLoading = props
 	}
 
-	addToQueue(outSideMsg, messageQueue) {
-		// Push the new message object to the queue
-		this.messageQueue = [...messageQueue, { ...outSideMsg, timestamp: Date.now() }]
+addToQueue(outSideMsg, messageQueue) {
+	const key = outSideMsg.typeMessage === 'reaction' ? 'chat-reaction' : 'chat-message'
+	// Push the new message object to the queue
+	this.messageQueue = [...messageQueue, { ...outSideMsg, timestamp: Date.now(), _queueKey: key }]
 
 		// Start processing the queue only if the message we just added is the only one in the queue
 		// This ensures that the queue processing starts only once, even if this method is called multiple times
