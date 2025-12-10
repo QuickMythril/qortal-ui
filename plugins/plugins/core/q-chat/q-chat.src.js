@@ -138,6 +138,7 @@ class Chat extends LitElement {
 		this.pendingChatUrl = ''
 		this.openBlockedUserDialog = false
 		this.pendingSendToName = ''
+		this.stopModalKeydown = this.stopModalKeydown.bind(this)
 	}
 
 	render() {
@@ -948,6 +949,25 @@ class Chat extends LitElement {
 			if (messageBoxElement) {
 				messageBoxElement.addEventListener('keydown', stopKeyEventPropagation)
 			}
+
+			window.addEventListener('keydown', this.stopModalKeydown, true)
+		}
+
+		if (changedProperties.has('openPrivateMessage') && !this.openPrivateMessage) {
+			window.removeEventListener('keydown', this.stopModalKeydown, true)
+		}
+	}
+
+	stopModalKeydown(e) {
+		// If the event originated inside the private message modal/editor, prevent global handlers.
+		const path = e.composedPath ? e.composedPath() : []
+		const inModal = path.some(
+			(node) =>
+				node && node.id && (node.id === 'messageBox' || node.id === 'privateMessage' || node.id === 'sendTo')
+		)
+		if (inModal) {
+			e.stopPropagation()
+			// Do not preventDefault to allow typing; just stop bubbling to global handlers.
 		}
 	}
 
