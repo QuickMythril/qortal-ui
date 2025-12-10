@@ -226,11 +226,28 @@ export const replaceMessagesEdited = async ({ decodedMessages, parentEpml, isRec
 		return msgItem
 	}
 
+	const isReactionMsg = (msg) => {
+		if (msg && msg.isReaction) return true
+		const dm = msg ? msg.decodedMessage : null
+		if (typeof dm === 'string' && dm.includes('"isReaction"')) return true
+		try {
+			const parsed = typeof dm === 'string' ? JSON.parse(dm) : dm
+			if (parsed && parsed.type === 'reaction') return true
+		} catch (error) { /* ignore parse errors */ }
+		return false
+	}
+
 	const sortedMessages = decodedMessages.sort((a, b) => b.timestamp - a.timestamp)
-	const withoutHubReactions = sortedMessages.filter(({decodedMessage}) => !decodedMessage.includes('isReaction'))
+	const reactionMessages = sortedMessages.filter(isReactionMsg)
+	const nonReactionMessages = sortedMessages.filter((msg) => !isReactionMsg(msg))
+
+	// Ship reactions straight to the consumer so they can be aggregated, but skip edit/reply lookups for them.
+	if (reactionMessages.length > 0) {
+		addToUpdateMessageHashmap(reactionMessages)
+	}
 
 	// Execute the functions with concurrency limit
-	const updatedMessages = await executeWithConcurrencyLimit(withoutHubReactions, findUpdatedMessage)
+	const updatedMessages = await executeWithConcurrencyLimit(nonReactionMessages, findUpdatedMessage)
 	addToUpdateMessageHashmap(updatedMessages)
 
 	return updatedMessages
