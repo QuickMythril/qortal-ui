@@ -257,6 +257,7 @@ class ChatPage extends LitElement {
 		this.secretKeysWorker = {}
 		this.socketToken = 0
 		this.disposed = false
+		this.refWebSocket = ''
 	}
 
 	render() {
@@ -990,15 +991,11 @@ addToQueue(outSideMsg, messageQueue) {
 			let getInitialMessages = []
 
 			if (this.isReceipient) {
-				getInitialMessages = await parentEpml.request('apiCall', {
-					type: 'api',
-					url: `/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${this._chatId}&limit=${chatLimit}&reverse=true&haschatreference=false&encoding=BASE64`
-				})
+				const baseUrl = `/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${this._chatId}&limit=${chatLimit}&reverse=true&encoding=BASE64`
+				getInitialMessages = await this.fetchMessagesWithReferences(baseUrl)
 			} else {
-				getInitialMessages = await parentEpml.request('apiCall', {
-					type: 'api',
-					url: `/chat/messages?txGroupId=${Number(this._chatId)}&limit=${chatLimit}&reverse=true&haschatreference=false&encoding=BASE64`
-				})
+				const baseUrl = `/chat/messages?txGroupId=${Number(this._chatId)}&limit=${chatLimit}&reverse=true&encoding=BASE64`
+				getInitialMessages = await this.fetchMessagesWithReferences(baseUrl)
 			}
 
 			this.processMessages(getInitialMessages, true, false)
@@ -1668,6 +1665,10 @@ addToQueue(outSideMsg, messageQueue) {
 			this.webSocket.close(1000, 'switch chat')
 			this.webSocket = ''
 		}
+		if (this.refWebSocket) {
+			this.refWebSocket.close(1000, 'switch chat')
+			this.refWebSocket = ''
+		}
 
 		this.pageNumber = 1
 
@@ -1991,14 +1992,8 @@ addToQueue(outSideMsg, messageQueue) {
 		if (!findMsg) return null
 
 		if (this.isReceipient) {
-			const getInitialMessagesBefore = await parentEpml.request('apiCall', {
-				type: 'api',
-				url: `/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${this._chatId}&limit=${20}&reverse=true&before=${findMsg.timestamp}&haschatreference=false&encoding=BASE64`
-			})
-			const getInitialMessagesAfter = await parentEpml.request('apiCall', {
-				type: 'api',
-				url: `/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${this._chatId}&limit=${20}&reverse=false&after=${findMsg.timestamp - 1000}&haschatreference=false&encoding=BASE64`
-			})
+			const getInitialMessagesBefore = await this.fetchMessagesWithReferences(`/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${this._chatId}&limit=${20}&reverse=true&before=${findMsg.timestamp}&encoding=BASE64`)
+			const getInitialMessagesAfter = await this.fetchMessagesWithReferences(`/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${this._chatId}&limit=${20}&reverse=false&after=${findMsg.timestamp - 1000}&encoding=BASE64`)
 			const getInitialMessages = [...getInitialMessagesBefore, ...getInitialMessagesAfter]
 			let decodeMsgs = []
 			await new Promise((res, rej) => {
@@ -2051,15 +2046,9 @@ addToQueue(outSideMsg, messageQueue) {
 			this.isLoadingOldMessages = false
 
 		} else {
-			const getInitialMessagesBefore = await parentEpml.request('apiCall', {
-				type: 'api',
-				url: `/chat/messages?txGroupId=${Number(this._chatId)}&limit=${20}&reverse=true&before=${findMsg.timestamp}&haschatreference=false&encoding=BASE64`
-			})
+			const getInitialMessagesBefore = await this.fetchMessagesWithReferences(`/chat/messages?txGroupId=${Number(this._chatId)}&limit=${20}&reverse=true&before=${findMsg.timestamp}&encoding=BASE64`)
 
-			const getInitialMessagesAfter = await parentEpml.request('apiCall', {
-				type: 'api',
-				url: `/chat/messages?txGroupId=${Number(this._chatId)}&limit=${20}&reverse=false&after=${findMsg.timestamp - 1000}&haschatreference=false&encoding=BASE64`
-			})
+			const getInitialMessagesAfter = await this.fetchMessagesWithReferences(`/chat/messages?txGroupId=${Number(this._chatId)}&limit=${20}&reverse=false&after=${findMsg.timestamp - 1000}&encoding=BASE64`)
 
 			const getInitialMessages = [...getInitialMessagesBefore, ...getInitialMessagesAfter]
 
@@ -2129,10 +2118,7 @@ addToQueue(outSideMsg, messageQueue) {
 		}
 
 		if (this.isReceipient) {
-			const getInitialMessages = await parentEpml.request('apiCall', {
-				type: 'api',
-				url: `/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${this._chatId}&limit=${chatLimit}&reverse=true&before=${scrollElement.messageObj.timestamp}&haschatreference=false&encoding=BASE64`
-			})
+			const getInitialMessages = await this.fetchMessagesWithReferences(`/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${this._chatId}&limit=${chatLimit}&reverse=true&before=${scrollElement.messageObj.timestamp}&encoding=BASE64`)
 			let decodeMsgs = []
 			await new Promise((res, rej) => {
 				this.webWorkerDecodeMessages.postMessage({ messages: getInitialMessages, isReceipient: this.isReceipient, _publicKey: this._publicKey, privateKey: window.parent.reduxStore.getState().app.selectedAddress.keyPair.privateKey, secretKeys: this.secretKeysWorker })
@@ -2175,10 +2161,7 @@ addToQueue(outSideMsg, messageQueue) {
 				findElement.scrollIntoView({ behavior: 'auto', block: 'center' })
 			}
 		} else {
-			const getInitialMessages = await parentEpml.request('apiCall', {
-				type: 'api',
-				url: `/chat/messages?txGroupId=${Number(this._chatId)}&limit=${chatLimit}&reverse=true&before=${scrollElement.messageObj.timestamp}&haschatreference=false&encoding=BASE64`
-			})
+			const getInitialMessages = await this.fetchMessagesWithReferences(`/chat/messages?txGroupId=${Number(this._chatId)}&limit=${chatLimit}&reverse=true&before=${scrollElement.messageObj.timestamp}&encoding=BASE64`)
 
 			let decodeMsgs = []
 
@@ -2235,10 +2218,7 @@ addToQueue(outSideMsg, messageQueue) {
 		const timestamp = scrollElement.messageObj.timestamp
 
 		if (this.isReceipient) {
-			const getInitialMessages = await parentEpml.request('apiCall', {
-				type: 'api',
-				url: `/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${this._chatId}&limit=${chatLimit}&reverse=false&after=${timestamp}&haschatreference=false&encoding=BASE64`
-			})
+			const getInitialMessages = await this.fetchMessagesWithReferences(`/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${this._chatId}&limit=${chatLimit}&reverse=false&after=${timestamp}&encoding=BASE64`)
 
 			let decodeMsgs = []
 			await new Promise((res, rej) => {
@@ -2290,10 +2270,7 @@ addToQueue(outSideMsg, messageQueue) {
 				findElement.scrollIntoView({ behavior: 'auto', block: 'center' })
 			}
 		} else {
-			const getInitialMessages = await parentEpml.request('apiCall', {
-				type: 'api',
-				url: `/chat/messages?txGroupId=${Number(this._chatId)}&limit=${chatLimit}&reverse=false&after=${timestamp}&haschatreference=false&encoding=BASE64`
-			})
+			const getInitialMessages = await this.fetchMessagesWithReferences(`/chat/messages?txGroupId=${Number(this._chatId)}&limit=${chatLimit}&reverse=false&after=${timestamp}&encoding=BASE64`)
 			let decodeMsgs = []
 			await new Promise((res, rej) => {
 				this.webWorkerDecodeMessages.postMessage({ messages: getInitialMessages, isReceipient: this.isReceipient, _publicKey: this._publicKey, privateKey: window.parent.reduxStore.getState().app.selectedAddress.keyPair.privateKey, secretKeys: this.secretKeysWorker })
@@ -2478,6 +2455,15 @@ async addToUpdateMessageHashmap(array) {
 			}
 		})
 
+		const isReactionMessage = (msg) => {
+			if (!msg) return false
+			if (msg.isReaction) return true
+			const dm = msg.decodedMessage
+			return typeof dm === 'string' && dm.includes('"isReaction"')
+		}
+
+		const renderableMessages = decodedMessages.filter((msg) => !isReactionMessage(msg))
+
 		if (isInitial) {
 			this.chatEditorPlaceholder = await this.renderPlaceholder()
 
@@ -2495,7 +2481,7 @@ async addToUpdateMessageHashmap(array) {
 				console.log({ error })
 			}
 
-			let list = decodedMessages
+			let list = renderableMessages
 
 			await new Promise((res) => {
 				this.webWorkerSortMessages.postMessage({ list })
@@ -2545,7 +2531,7 @@ async addToUpdateMessageHashmap(array) {
 				addToUpdateMessageHashmap: this.addToUpdateMessageHashmap
 			}))
 
-			const renderEachMessage = decodedMessages.map(async (msg) => {
+			const renderEachMessage = renderableMessages.map(async (msg) => {
 				await this.renderNewMessage(msg)
 			})
 
@@ -2694,6 +2680,17 @@ async addToUpdateMessageHashmap(array) {
 		return decodedMessageObj
 	}
 
+	async fetchMessagesWithReferences(baseUrl) {
+		const makeUrl = (hasRef) => `${baseUrl}&haschatreference=${hasRef}`
+		const [normal, referenced] = await Promise.all([
+			parentEpml.request('apiCall', { type: 'api', url: makeUrl(false) }),
+			parentEpml.request('apiCall', { type: 'api', url: makeUrl(true) })
+		])
+		const safeNormal = Array.isArray(normal) ? normal : []
+		const safeReferenced = Array.isArray(referenced) ? referenced : []
+		return [...safeNormal, ...safeReferenced]
+	}
+
 	async fetchChatMessages(chatId) {
 		const socketRunToken = ++this.socketToken
 		this.disposed = false
@@ -2754,14 +2751,8 @@ async addToUpdateMessageHashmap(array) {
 						}
 					}
 					if (isUnread) {
-						const getInitialMessagesBefore = await parentEpml.request('apiCall', {
-							type: 'api',
-							url: `/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${cid}&limit=${chatLimitHalf}&reverse=true&before=${lastReadMessageTimestamp}&haschatreference=false&encoding=BASE64`
-						})
-						const getInitialMessagesAfter = await parentEpml.request('apiCall', {
-							type: 'api',
-							url: `/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${cid}&limit=${chatLimitHalf}&reverse=false&after=${lastReadMessageTimestamp - 1000}&haschatreference=false&encoding=BASE64`
-						})
+						const getInitialMessagesBefore = await this.fetchMessagesWithReferences(`/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${cid}&limit=${chatLimitHalf}&reverse=true&before=${lastReadMessageTimestamp}&encoding=BASE64`)
+						const getInitialMessagesAfter = await this.fetchMessagesWithReferences(`/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${cid}&limit=${chatLimitHalf}&reverse=false&after=${lastReadMessageTimestamp - 1000}&encoding=BASE64`)
 						getInitialMessages = [...getInitialMessagesBefore, ...getInitialMessagesAfter]
 						const lastMessage = getInitialMessagesAfter.at(-1)
 						if (lastMessage) {
@@ -2771,10 +2762,7 @@ async addToUpdateMessageHashmap(array) {
 							})
 						}
 					} else {
-						getInitialMessages = await parentEpml.request('apiCall', {
-							type: 'api',
-							url: `/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${cid}&limit=${chatLimit}&reverse=true&haschatreference=false&encoding=BASE64`
-						})
+						getInitialMessages = await this.fetchMessagesWithReferences(`/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${cid}&limit=${chatLimit}&reverse=true&encoding=BASE64`)
 					}
 
 
@@ -2831,11 +2819,152 @@ async addToUpdateMessageHashmap(array) {
 			setTimeout(() => initDirect(chatId, noInitial), 50)
 		}
 
+		const restartDirectReferenceSocket = () => {
+			if (this.disposed || socketRunToken !== this.socketToken) return
+			setTimeout(() => initDirectReference(chatId), 50)
+		}
+
+		const initDirectReference = (cid) => {
+			let timeoutId
+			let refSocketTimeout
+			let myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+			let nodeUrl = myNode.domain + ':' + myNode.port
+			let nodeProtocol = myNode.protocol
+			let directRefLink
+
+			if (nodeProtocol === 'https') {
+				directRefLink = `wss://${nodeUrl}/websockets/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${cid}&encoding=BASE64&limit=1&haschatreference=true`
+			} else {
+				directRefLink = `ws://${nodeUrl}/websockets/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${cid}&encoding=BASE64&limit=1&haschatreference=true`
+			}
+
+			this.refWebSocket = new WebSocket(directRefLink)
+			const currentRefSocket = this.refWebSocket
+
+			currentRefSocket.onopen = () => {
+				setTimeout(pingDirectRefSocket, 50)
+			}
+
+			currentRefSocket.onmessage = async (e) => {
+				if (e.data === 'pong') {
+					clearTimeout(timeoutId)
+					refSocketTimeout = setTimeout(pingDirectRefSocket, 45000)
+					return
+				}
+				try {
+					if (e.data) {
+						this.processMessages(JSON.parse(e.data), false)
+					}
+				} catch (error) { /* empty */ }
+			}
+
+			currentRefSocket.onclose = (e) => {
+				clearTimeout(refSocketTimeout)
+				clearTimeout(timeoutId)
+				if (currentRefSocket !== this.refWebSocket) return
+				this.refWebSocket = ''
+
+				if (e.reason === 'switch chat') return
+				if (this.disposed || socketRunToken !== this.socketToken) return
+				restartDirectReferenceSocket()
+			}
+
+			currentRefSocket.onerror = () => {
+				clearTimeout(refSocketTimeout)
+				clearTimeout(timeoutId)
+				if (currentRefSocket !== this.refWebSocket) return
+				if (this.disposed || socketRunToken !== this.socketToken) return
+				currentRefSocket.close()
+			}
+
+			const pingDirectRefSocket = () => {
+				if (currentRefSocket !== this.refWebSocket || currentRefSocket.readyState !== WebSocket.OPEN) return
+				currentRefSocket.send('ping')
+				timeoutId = setTimeout(() => {
+					if (currentRefSocket === this.refWebSocket) {
+						currentRefSocket.close()
+					}
+					clearTimeout(refSocketTimeout)
+				}, 5000)
+			}
+		}
+
 		const restartGroupWebSocket = () => {
 			if (this.disposed || socketRunToken !== this.socketToken) return
 			const noInitial = true
 			let groupChatId = Number(chatId)
 			setTimeout(() => initGroup(groupChatId, noInitial), 50)
+		}
+
+		const restartGroupReferenceSocket = () => {
+			if (this.disposed || socketRunToken !== this.socketToken) return
+			let groupChatId = Number(chatId)
+			setTimeout(() => initGroupReference(groupChatId), 50)
+		}
+
+		const initGroupReference = (gId) => {
+			let timeoutId
+			let groupId = Number(gId)
+			let refSocketTimeout
+			let myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
+			let nodeUrl = myNode.domain + ':' + myNode.port
+			let nodeProtocol = myNode.protocol
+			let groupRefLink
+
+			if (nodeProtocol === 'https') {
+				groupRefLink = `wss://${nodeUrl}/websockets/chat/messages?txGroupId=${groupId}&encoding=BASE64&limit=1&haschatreference=true`
+			} else {
+				groupRefLink = `ws://${nodeUrl}/websockets/chat/messages?txGroupId=${groupId}&encoding=BASE64&limit=1&haschatreference=true`
+			}
+
+			this.refWebSocket = new WebSocket(groupRefLink)
+			const currentRefSocket = this.refWebSocket
+
+			currentRefSocket.onopen = () => {
+				setTimeout(pingGroupRefSocket, 50)
+			}
+
+			currentRefSocket.onmessage = async (e) => {
+				if (e.data === 'pong') {
+					clearTimeout(timeoutId)
+					refSocketTimeout = setTimeout(pingGroupRefSocket, 45000)
+					return
+				}
+				try {
+					if (e.data) {
+						this.processMessages(JSON.parse(e.data), false)
+					}
+				} catch (error) { /* empty */ }
+			}
+
+			currentRefSocket.onclose = (e) => {
+				clearTimeout(refSocketTimeout)
+				clearTimeout(timeoutId)
+				if (currentRefSocket !== this.refWebSocket) return
+				this.refWebSocket = ''
+				if (e.reason === 'switch chat') return
+				if (this.disposed || socketRunToken !== this.socketToken) return
+				restartGroupReferenceSocket()
+			}
+
+			currentRefSocket.onerror = () => {
+				clearTimeout(refSocketTimeout)
+				clearTimeout(timeoutId)
+				if (currentRefSocket !== this.refWebSocket) return
+				if (this.disposed || socketRunToken !== this.socketToken) return
+				currentRefSocket.close()
+			}
+
+			const pingGroupRefSocket = () => {
+				if (currentRefSocket !== this.refWebSocket || currentRefSocket.readyState !== WebSocket.OPEN) return
+				currentRefSocket.send('ping')
+				timeoutId = setTimeout(() => {
+					if (currentRefSocket === this.refWebSocket) {
+						currentRefSocket.close()
+					}
+					clearTimeout(refSocketTimeout)
+				}, 5000)
+			}
 		}
 
 		const initGroup = (gId, noInitial) => {
@@ -2894,14 +3023,8 @@ async addToUpdateMessageHashmap(array) {
 						}
 					}
 					if (isUnread) {
-						const getInitialMessagesBefore = await parentEpml.request('apiCall', {
-							type: 'api',
-							url: `/chat/messages?txGroupId=${groupId}&limit=${chatLimitHalf}&reverse=true&before=${lastReadMessageTimestamp}&haschatreference=false&encoding=BASE64`
-						})
-						const getInitialMessagesAfter = await parentEpml.request('apiCall', {
-							type: 'api',
-							url: `/chat/messages?txGroupId=${groupId}&limit=${chatLimitHalf}&reverse=false&after=${lastReadMessageTimestamp - 1000}&haschatreference=false&encoding=BASE64`
-						})
+						const getInitialMessagesBefore = await this.fetchMessagesWithReferences(`/chat/messages?txGroupId=${groupId}&limit=${chatLimitHalf}&reverse=true&before=${lastReadMessageTimestamp}&encoding=BASE64`)
+						const getInitialMessagesAfter = await this.fetchMessagesWithReferences(`/chat/messages?txGroupId=${groupId}&limit=${chatLimitHalf}&reverse=false&after=${lastReadMessageTimestamp - 1000}&encoding=BASE64`)
 						getInitialMessages = [...getInitialMessagesBefore, ...getInitialMessagesAfter]
 						const lastMessage = getInitialMessagesAfter.at(-1)
 						if (lastMessage) {
@@ -2909,13 +3032,10 @@ async addToUpdateMessageHashmap(array) {
 								type: 'api',
 								url: `/chat/messages/count?after=${lastMessage.timestamp}&txGroupId=${groupId}&limit=20&reverse=false`
 							})
-						}
+							}
 
 					} else {
-						getInitialMessages = await parentEpml.request('apiCall', {
-							type: 'api',
-							url: `/chat/messages?txGroupId=${groupId}&limit=${chatLimit}&reverse=true&haschatreference=false&encoding=BASE64`
-						})
+						getInitialMessages = await this.fetchMessagesWithReferences(`/chat/messages?txGroupId=${groupId}&limit=${chatLimit}&reverse=true&encoding=BASE64`)
 					}
 
 					this.processMessages(getInitialMessages, true, isUnread, count)
@@ -2965,9 +3085,11 @@ async addToUpdateMessageHashmap(array) {
 		if (chatId !== undefined) {
 			if (this.isReceipient) {
 				initDirect(chatId)
+				initDirectReference(chatId)
 			} else {
 				let groupChatId = Number(chatId)
 				initGroup(groupChatId)
+				initGroupReference(groupChatId)
 			}
 		} else {
 			// ... Render a nice "Error, Go Back" component.
