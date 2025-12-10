@@ -1,5 +1,6 @@
 import { html, LitElement } from 'lit'
 import { render } from 'lit/html.js'
+import { repeat } from 'lit/directives/repeat.js'
 import { Epml } from '../../../epml'
 import { passiveSupport } from 'passive-events-support/src/utils'
 import { Editor, Extension } from '@tiptap/core'
@@ -127,6 +128,9 @@ class Chat extends LitElement {
 		this.loggedInUserName = ''
 		this.openDialogGroupsModal = false
 		this.uid = new ShortUniqueId()
+		this.chatHeadMetaCache = new Map()
+		this.handleSearchResultSelect = this.handleSearchResultSelect.bind(this)
+		this.handleSearchResultsClose = this.handleSearchResultsClose.bind(this)
 	}
 
 	render() {
@@ -289,22 +293,15 @@ class Chat extends LitElement {
 								</button>
 							</div>
 						</div>
-						<div class="search-results-div">
-							<chat-search-results
-								.onClickFunc=${(result) => {
-		this.userSelected = result
-		this.userFound = []
-		this.userFoundModalOpen = false
-	}}
-								.closeFunc=${() => {
-		this.userFoundModalOpen = false
-		this.userFound = []
-	}}
-								.searchResults=${this.userFound}
-								?isOpen=${this.userFoundModalOpen}
-								?loading=${this.isLoading}
-							>
-							</chat-search-results>
+							<div class="search-results-div">
+								<chat-search-results
+									.onClickFunc=${this.handleSearchResultSelect}
+									.closeFunc=${this.handleSearchResultsClose}
+									.searchResults=${this.userFound}
+									?isOpen=${this.userFoundModalOpen}
+									?loading=${this.isLoading}
+								>
+								</chat-search-results>
 						</div>
 					</div>
 				</wrapper-modal>
@@ -1205,9 +1202,17 @@ class Chat extends LitElement {
 	}
 
 	renderChatHead(chatHeadArr) {
-		return chatHeadArr.map(eachChatHead => {
-			return html`<chat-head activeChatHeadUrl=${this.activeChatHeadUrl} .setActiveChatHeadUrl=${(val) => this.setActiveChatHeadUrl(val)} chatInfo=${JSON.stringify(eachChatHead)}></chat-head>`
-		})
+		return repeat(
+			chatHeadArr,
+			head => head.url,
+			head => html`
+				<chat-head
+					activeChatHeadUrl=${this.activeChatHeadUrl}
+					.setActiveChatHeadUrl=${(val) => this.setActiveChatHeadUrl(val)}
+					.chatInfo=${head}
+				></chat-head>
+			`
+		)
 	}
 
 	renderChatPage() {
@@ -1276,19 +1281,27 @@ class Chat extends LitElement {
 		const chatObjGroups = Array.isArray(chatObj.groups) ? chatObj.groups : []
 		const chatObjDirect = Array.isArray(chatObj.direct) ? chatObj.direct : []
 
-		let groupList = await Promise.all(chatObjGroups.map(async group => group.groupId === 0 ? {
-			groupId: group.groupId,
-			url: `group/${group.groupId}`,
-			groupName: 'Qortal General Chat',
-			timestamp: group.timestamp === undefined ? 2 : group.timestamp,
-			sender: group.sender,
-			isOpen: true
-		} : {
-			...group,
-			timestamp: group.timestamp === undefined ? 1 : group.timestamp,
-			url: `group/${group.groupId}`,
-			ownerName: group.ownerName === undefined ? await this.getOwnerName(group.groupId) : 'undefined',
-			isOpen: group.isOpen === undefined ? await this.getGroupType(group.groupId) : true
+		let groupList = await Promise.all(chatObjGroups.map(async group => {
+			if (group.groupId === 0) {
+				return {
+					groupId: group.groupId,
+					url: `group/${group.groupId}`,
+					groupName: 'Qortal General Chat',
+					timestamp: group.timestamp === undefined ? 2 : group.timestamp,
+					sender: group.sender,
+					isOpen: true
+				}
+			}
+
+			const { ownerName, isOpen } = await this.getGroupMeta(group)
+
+			return {
+				...group,
+				timestamp: group.timestamp === undefined ? 1 : group.timestamp,
+				url: `group/${group.groupId}`,
+				ownerName,
+				isOpen
+			}
 		}))
 
 		let directList = chatObjDirect.map(dc => {
@@ -1317,6 +1330,30 @@ class Chat extends LitElement {
 			this.chatHeadsObj = chatObj
 			await this.setChatHeads(chatObj)
 		}
+	}
+
+	async getGroupMeta(group) {
+		const cached = this.chatHeadMetaCache.get(group.groupId)
+		if (cached && cached.ownerName !== undefined && cached.isOpen !== undefined) {
+			return cached
+		}
+
+		const ownerName = group.ownerName !== undefined ? group.ownerName : await this.getOwnerName(group.groupId)
+		const isOpen = group.isOpen !== undefined ? group.isOpen : await this.getGroupType(group.groupId)
+		const meta = { ownerName, isOpen }
+		this.chatHeadMetaCache.set(group.groupId, meta)
+		return meta
+	}
+
+	handleSearchResultSelect(result) {
+		this.userSelected = result
+		this.userFound = []
+		this.userFoundModalOpen = false
+	}
+
+	handleSearchResultsClose() {
+		this.userFoundModalOpen = false
+		this.userFound = []
 	}
 
 	_textArea(e) {
