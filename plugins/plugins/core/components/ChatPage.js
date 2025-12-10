@@ -61,6 +61,9 @@ export const chatLimitHalf = 10
 export const totalMsgCount = 60
 export const REACTION_TYPE_NUMBER = 102
 
+// In-memory reactions map keyed by chatReference => { [emoji]: [ReactionItem] }
+const reactionsByRef = new Map()
+
 class ChatPage extends LitElement {
 	static get properties() {
 		return {
@@ -2334,22 +2337,30 @@ addToQueue(outSideMsg, messageQueue) {
 		}
 	}
 
-	async addToUpdateMessageHashmap(array) {
-		const withoutHubReactions = array.filter(({decodedMessage}) => !decodedMessage.includes('isReaction'))
+async addToUpdateMessageHashmap(array) {
 		const newObj = {}
 
-		withoutHubReactions.forEach((item) => {
+		array.forEach((item) => {
 			const signature = item.originalSignature || item.signature
+
+			// Hub-style reaction messages
+			if (item.isReaction || (item.decodedMessage && item.decodedMessage.includes('"isReaction"'))) {
+				this.ingestReactionMessage(item)
+				return
+			}
+
 			newObj[signature] = item
 		})
 
-		this.updateMessageHash = {
-			...this.updateMessageHash,
-			...newObj
-		}
+		if (Object.keys(newObj).length > 0) {
+			this.updateMessageHash = {
+				...this.updateMessageHash,
+				...newObj
+			}
 
-		this.requestUpdate()
-		await this.getUpdateComplete()
+			this.requestUpdate()
+			await this.getUpdateComplete()
+		}
 	}
 
 	async clearUpdateMessageHashmap() {
@@ -2375,6 +2386,57 @@ addToQueue(outSideMsg, messageQueue) {
 		}
 
 		return null
+	}
+
+	ingestReactionMessage(item) {
+		let parsed
+		try {
+			parsed = typeof item.decodedMessage === 'string' ? JSON.parse(item.decodedMessage) : item.decodedMessage
+		} catch (e) {
+			return
+		}
+
+		const content = parsed.content || parsed.message
+		const sender = item.sender || parsed.sender
+		const timestamp = item.timestamp || parsed.timestamp
+		const chatReference = item.chatReference || item.repliedTo || parsed.repliedTo
+		if (!content || !sender || !timestamp || !chatReference) return
+
+		const contentState = parsed.contentState !== false
+		const specialId = parsed.specialId || item.specialId
+		const senderName = parsed.senderName || item.senderName
+
+		const key = chatReference
+		const bucket = reactionsByRef.get(key) || {}
+		const list = bucket[content] ? [...bucket[content]] : []
+
+		const existingIdx = list.findIndex(r => r.sender === sender)
+		if (existingIdx !== -1) {
+			if (timestamp < (list[existingIdx].timestamp || 0)) {
+				reactionsByRef.set(key, bucket)
+				return
+			}
+			list.splice(existingIdx, 1)
+		}
+
+		if (contentState) {
+			list.push({ sender, senderName, timestamp, specialId })
+			bucket[content] = list
+		} else {
+			const filtered = list.filter(r => r.sender !== sender)
+			if (filtered.length > 0) {
+				bucket[content] = filtered
+			} else {
+				delete bucket[content]
+			}
+		}
+
+		if (Object.keys(bucket).length > 0) {
+			reactionsByRef.set(key, bucket)
+		} else {
+			reactionsByRef.delete(key)
+		}
+		this.requestUpdate()
 	}
 
 	async processMessages(messages, isInitial, isUnread, count) {

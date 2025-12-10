@@ -6,10 +6,10 @@
 - [x] Route reactions through the message queue with a distinct key (e.g., `chat-reaction`) and set `contentState` false when toggling off.
 
 ### State model & ingestion
-- [ ] Introduce a per-message reactions map (e.g., `chatReferences[ref].reactions[emoji] = ReactionItem[]`), separate from message text.
-- [ ] Parse inbound `type === 'reaction'` payloads into the map; skip invalid records (missing content/sender/timestamp).
-- [ ] Apply Hub-style dedup/out-of-order handling: per sender per emoji, drop older timestamps; remove on `contentState === false`, delete empty buckets.
-- [ ] Remove the current filter that drops `isReaction` messages and replace it with reaction aggregation; continue to render embedded `reactions` arrays only as a legacy fallback.
+- [x] Introduce a per-message reactions map (e.g., `chatReferences[ref].reactions[emoji] = ReactionItem[]`), separate from message text.
+- [x] Parse inbound `type === 'reaction'` payloads into the map; skip invalid records (missing content/sender/timestamp).
+- [x] Apply Hub-style dedup/out-of-order handling: per sender per emoji, drop older timestamps; remove on `contentState === false`, delete empty buckets.
+- [x] Remove the current filter that drops `isReaction` messages and replace it with reaction aggregation; continue to render embedded `reactions` arrays only as a legacy fallback.
 - [ ] Reconcile queued reactions via `specialId` in `processWithNewMessages`, clearing pending queue entries on receipt.
 
 ### UI rendering & interaction
