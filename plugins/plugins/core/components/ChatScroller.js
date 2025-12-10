@@ -283,7 +283,7 @@ class ChatScroller extends LitElement {
 	async firstUpdated() {
 		this.changeTheme()
 
-		window.addEventListener('storage', () => {
+		this.handleStorage = () => {
 			const checkTheme = localStorage.getItem('qortalTheme')
 
 			if (checkTheme === 'dark') {
@@ -292,7 +292,9 @@ class ChatScroller extends LitElement {
 				this.theme = 'light'
 			}
 			document.querySelector('html').setAttribute('theme', this.theme)
-		})
+		}
+
+		window.addEventListener('storage', this.handleStorage)
 
 		this.emojiPicker.on('emoji', (selection) => {
 			this.sendMessage({
@@ -786,11 +788,11 @@ class ChatScroller extends LitElement {
 			rootMargin: '0px',
 			threshold: 1
 		}
-		const observer = new IntersectionObserver(
+		this.upObserverInstance = new IntersectionObserver(
 			this._upObserverhandler,
 			options
 		)
-		observer.observe(this.upObserverElement)
+		this.upObserverInstance.observe(this.upObserverElement)
 	}
 
 	downElementObserver() {
@@ -800,14 +802,14 @@ class ChatScroller extends LitElement {
 		const elementToObserve = this.downObserverElement
 
 		// passing it a callback function
-		const observer = new IntersectionObserver(
+		this.downObserverInstance = new IntersectionObserver(
 			this._downObserverHandler,
 			options
 		)
 
 		// call `observe()` on that MutationObserver instance,
 		// passing it the element to observe, and the options object
-		observer.observe(elementToObserve)
+		this.downObserverInstance.observe(elementToObserve)
 	}
 
 	bottomObserver() {
@@ -817,14 +819,30 @@ class ChatScroller extends LitElement {
 		const elementToObserve = this.bottomObserverForFetchingMessages
 
 		// passing it a callback function
-		const observer = new IntersectionObserver(
+		this.bottomObserverInstance = new IntersectionObserver(
 			this.__bottomObserverForFetchingMessagesHandler,
 			options
 		)
 
 		// call `observe()` on that MutationObserver instance,
 		// passing it the element to observe, and the options object
-		observer.observe(elementToObserve)
+		this.bottomObserverInstance.observe(elementToObserve)
+	}
+
+	disconnectedCallback() {
+		if (this.handleStorage) {
+			window.removeEventListener('storage', this.handleStorage)
+		}
+		if (this.upObserverInstance) {
+			this.upObserverInstance.disconnect()
+		}
+		if (this.downObserverInstance) {
+			this.downObserverInstance.disconnect()
+		}
+		if (this.bottomObserverInstance) {
+			this.bottomObserverInstance.disconnect()
+		}
+		super.disconnectedCallback()
 	}
 
 	// Standard functions

@@ -398,14 +398,16 @@ class Chat extends LitElement {
 			return false
 		}
 
+		this.nameInputKeyHandler = stopKeyEventPropagation
+
 		const nameInput = this.shadowRoot.getElementById('sendTo')
 		if (nameInput) {
-			nameInput.addEventListener('keydown', stopKeyEventPropagation)
+			nameInput.addEventListener('keydown', this.nameInputKeyHandler)
 		}
 
 		const messageBoxElement = this.shadowRoot.getElementById('messageBox')
 		if (messageBoxElement) {
-			messageBoxElement.addEventListener('keydown', stopKeyEventPropagation)
+			messageBoxElement.addEventListener('keydown', this.nameInputKeyHandler)
 		}
 
 		const runFunctionsAfterPageLoad = async () => {
@@ -443,7 +445,7 @@ class Chat extends LitElement {
 		if (!isElectron()) {
 			// ...
 		} else {
-			window.addEventListener('contextmenu', (event) => {
+			this.handleContextMenu = (event) => {
 				// Check if the clicked element has the class
 				let target = event.target
 
@@ -459,7 +461,8 @@ class Chat extends LitElement {
 				// If it doesn't, show the default Electron context menu
 				event.preventDefault()
 				window.parent.electronAPI.showMyMenu()
-			})
+			}
+			window.addEventListener('contextmenu', this.handleContextMenu)
 		}
 
 		let configLoaded = false
@@ -828,6 +831,21 @@ class Chat extends LitElement {
 		}
 		if (this.unsubscribeStore) {
 			this.unsubscribeStore()
+		}
+
+		if (this.nameInputKeyHandler) {
+			const nameInput = this.shadowRoot && this.shadowRoot.getElementById('sendTo')
+			if (nameInput) nameInput.removeEventListener('keydown', this.nameInputKeyHandler)
+			const messageBoxElement = this.shadowRoot && this.shadowRoot.getElementById('messageBox')
+			if (messageBoxElement) messageBoxElement.removeEventListener('keydown', this.nameInputKeyHandler)
+		}
+
+		if (this.handleContextMenu) {
+			window.removeEventListener('contextmenu', this.handleContextMenu)
+		}
+
+		if (this.handleStorage) {
+			window.removeEventListener('storage', this.handleStorage)
 		}
 	}
 
