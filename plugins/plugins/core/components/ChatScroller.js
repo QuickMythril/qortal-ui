@@ -705,6 +705,7 @@ class ChatScroller extends LitElement {
 			changedProperties.has('messageQueue') ||
 			changedProperties.has('isLoadingBefore') ||
 			changedProperties.has('isLoadingAfter') ||
+			changedProperties.has('updateMessageHash') ||
 			changedProperties.has('messages')
 		)
 	}
