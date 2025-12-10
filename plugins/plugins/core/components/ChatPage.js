@@ -63,6 +63,7 @@ export const REACTION_TYPE_NUMBER = 102
 
 // In-memory reactions map keyed by chatReference => { [emoji]: [ReactionItem] }
 const reactionsByRef = new Map()
+const pendingReactionsById = new Map()
 
 class ChatPage extends LitElement {
 	static get properties() {
@@ -945,7 +946,11 @@ class ChatPage extends LitElement {
 addToQueue(outSideMsg, messageQueue) {
 	const key = outSideMsg.typeMessage === 'reaction' ? 'chat-reaction' : 'chat-message'
 	// Push the new message object to the queue
-	this.messageQueue = [...messageQueue, { ...outSideMsg, timestamp: Date.now(), _queueKey: key }]
+	const queued = { ...outSideMsg, timestamp: Date.now(), _queueKey: key }
+	if (queued.typeMessage === 'reaction' && queued.specialId) {
+		pendingReactionsById.set(queued.specialId, queued.chatReference)
+	}
+	this.messageQueue = [...messageQueue, queued]
 
 		// Start processing the queue only if the message we just added is the only one in the queue
 		// This ensures that the queue processing starts only once, even if this method is called multiple times
@@ -2436,6 +2441,13 @@ async addToUpdateMessageHashmap(array) {
 		} else {
 			reactionsByRef.delete(key)
 		}
+
+		// Clear matching pending reaction (by specialId) from the queue
+		if (specialId && pendingReactionsById.has(specialId)) {
+			this.messageQueue = this.messageQueue.filter(msg => msg.specialId !== specialId)
+			pendingReactionsById.delete(specialId)
+		}
+
 		this.requestUpdate()
 	}
 

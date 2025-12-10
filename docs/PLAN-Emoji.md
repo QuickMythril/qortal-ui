@@ -10,7 +10,7 @@
 - [x] Parse inbound `type === 'reaction'` payloads into the map; skip invalid records (missing content/sender/timestamp).
 - [x] Apply Hub-style dedup/out-of-order handling: per sender per emoji, drop older timestamps; remove on `contentState === false`, delete empty buckets.
 - [x] Remove the current filter that drops `isReaction` messages and replace it with reaction aggregation; continue to render embedded `reactions` arrays only as a legacy fallback.
-- [ ] Reconcile queued reactions via `specialId` in `processWithNewMessages`, clearing pending queue entries on receipt.
+- [x] Reconcile queued reactions via `specialId` in `processWithNewMessages`, clearing pending queue entries on receipt.
 
 ### UI rendering & interaction
 - [ ] Update `message-template` rendering to consume the reactions map (not embedded arrays) for counts and user lists.
