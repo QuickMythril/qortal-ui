@@ -72,11 +72,24 @@ const mapByKey = (list = [], key) => {
 	}, {})
 }
 
+const looksLikeReactionOrEdit = (item) => {
+	if (!item) return false
+	if (item.isReaction || item.isEdited) return true
+	if (item.type === 'reaction' || item.type === 'edit') return true
+	const dm = item.decodedMessage
+	if (typeof dm === 'string' && dm.includes('"isReaction"')) return true
+	try {
+		const parsed = typeof dm === 'string' ? JSON.parse(dm) : dm
+		if (parsed && (parsed.isReaction || parsed.type === 'reaction')) return true
+	} catch (e) { /* ignore parse errors */ }
+	return false
+}
+
 const filterBaseEntries = (list = [], prevMap = {}, key) => {
 	return (list || []).map(item => {
 		const hasRef = item && (item.chatReference || item.hasChatReference)
-		const isNonBaseType = item && (item.type === 'reaction' || item.type === 'edit' || item.isEdited)
-		if (!hasRef && !isNonBaseType) return item
+		const isNonBaseType = hasRef || looksLikeReactionOrEdit(item)
+		if (!isNonBaseType) return item
 		const previous = item && prevMap[item[key]]
 		return previous ? previous : null
 	}).filter(Boolean)

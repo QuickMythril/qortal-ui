@@ -4,6 +4,12 @@ global.CSSStyleSheet = class {
 	replaceSync() { }
 }
 document.adoptedStyleSheets = []
+const parentEpmlMock = {
+	subscribe: () => {},
+	request: () => Promise.resolve()
+}
+global.parentEpml = parentEpmlMock
+window.parentEpml = parentEpmlMock
 jest.mock('web-worker:./computePowWorker.js', () => {
 	return class {
 		postMessage() {}
@@ -49,3 +55,8 @@ window.parent.Base64Message = {
 }
 window.parent.decryptChatMessageBase64 = () => ({})
 window.parent.Epml = function () { return { request: () => Promise.resolve() } }
+window.parent.parentEpml = {
+	subscribe: () => {},
+	request: () => Promise.resolve()
+}
+global.parentEpml = window.parent.parentEpml
