@@ -3,6 +3,7 @@ import { connect } from 'pwa-helpers'
 import { store } from '../store'
 import { installRouter } from 'pwa-helpers/router'
 import { doNavigate } from '../redux/app/app-actions'
+import { UI_VERSION } from '../redux/app/version'
 import { loadPlugins } from '../plugins/load-plugins'
 import isElectron from 'is-electron'
 import './login-view/login-view'
@@ -59,7 +60,8 @@ class MainApp extends connect(store)(LitElement) {
 			this.initial = this.initial + 1
 			this._loadPlugins()
 		}
-		document.title = state.config.coin.name
+		const uiVersion = state?.app?.nodeConfig?.version || UI_VERSION
+		document.title = uiVersion ? `Qortal UI v${uiVersion}` : 'Qortal UI'
 	}
 }
 
