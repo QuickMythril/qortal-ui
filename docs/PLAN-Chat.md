@@ -7,7 +7,7 @@
   - [x] "Enforce chat payload limits": Ensure serialized chat payload is <= 4000 bytes and timestamp not >5 minutes in future; surface Core errors.
 
 - Decryption and group key handling (make inbound readable)
-  - [ ] "Add group secret-key workflow": Port Hub’s group symmetric key fetch/decrypt (`groupSecretkeys`, admin publishes, `decryptSingle` paths) into UI so private group messages can be decrypted.
+  - [x] "Add group secret-key workflow": Port Hub’s group symmetric key fetch/decrypt (`groupSecretkeys`, admin publishes, `decryptSingle` paths) into UI so private group messages can be decrypted.
   - [ ] "Honor isEncrypted semantics": Ensure group chat decrypt uses secret keys; keep send path `isEncrypted:0` consistent with Hub and rely on key-based privacy.
   - [ ] "Align direct decrypt": Ensure direct message decryption matches Hub’s `decryptDirectFunc` (proper use of sender public key and message JSON parsing).
   - [ ] "Handle Core errors/rate limits": Surface Core rejections for blocklists, too many recent messages, or group membership failures during send.
