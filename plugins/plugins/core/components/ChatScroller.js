@@ -324,25 +324,27 @@ class ChatScroller extends LitElement {
 					}
 				}
 
-				if (typeof this.sendMessage === 'function') {
-					// Optimistic update via ChatPage helper when available
+					if (typeof this.sendMessage === 'function') {
+						// Optimistic update via ChatPage helper when available
+						this.sendMessage({
+							type: 'reaction',
+							editedMessageObj: toggledMessage,
+							reaction: selection.emoji,
+							contentState: !userHasReacted,
+							optimistic: true,
+							messageQueue: this.messageQueue
+						})
+						return
+					}
+
 					this.sendMessage({
 						type: 'reaction',
 						editedMessageObj: toggledMessage,
 						reaction: selection.emoji,
 						contentState: !userHasReacted,
-						optimistic: true
-					})
-					return
-				}
-
-				this.sendMessage({
-					type: 'reaction',
-					editedMessageObj: toggledMessage,
-					reaction: selection.emoji,
-					contentState: !userHasReacted
+						messageQueue: this.messageQueue
+				})
 			})
-		})
 
 		this.viewElement = this.shadowRoot.getElementById('viewElement')
 		this.upObserverElement = this.shadowRoot.getElementById('upObserver')
@@ -2023,7 +2025,8 @@ class MessageTemplate extends LitElement {
 									editedMessageObj: this.messageObj,
 									reaction: reaction.type,
 									contentState: !userHasReacted,
-									optimistic: true
+									optimistic: true,
+									messageQueue: this.messageQueue
 								})
 							}}
 									id=${`reactions-${index}`}

@@ -4173,7 +4173,8 @@ addToQueue(outSideMsg, messageQueue) {
 					this.applyReactionOptimistic(chatReference, outSideMsg.reaction, shouldAdd)
 				}
 
-				return this.sendMessage({ messageText: JSON.stringify(reactionPayload), typeMessage, chatReference, isForward: false, isReceipient, _chatId, _publicKey, messageQueue })
+				const queueToUse = messageQueue || this.messageQueue
+				return this.sendMessage({ messageText: JSON.stringify(reactionPayload), typeMessage, chatReference, isForward: false, isReceipient, _chatId, _publicKey, messageQueue: queueToUse })
 			} else if (/^\s*$/.test(trimmedMessage)) {
 				this.isLoading = false
 			} else if (this.repliedToMessageObj) {
