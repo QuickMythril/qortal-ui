@@ -85,6 +85,8 @@ const resetReactionsState = (ctx) => {
 	}
 }
 
+// In-memory update buffer keyed by chatReference to apply when base arrives
+const pendingUpdatesByRef = new Map()
 class ChatPage extends LitElement {
 	static get properties() {
 		return {
@@ -2384,12 +2386,12 @@ addToQueue(outSideMsg, messageQueue) {
 		}
 	}
 
-	async addToUpdateMessageHashmap(array) {
-		const newObj = {}
+async addToUpdateMessageHashmap(array) {
+	const newObj = {}
 
-		array.forEach((item) => {
-			const signature = item.originalSignature || item.signature
-			const chatRefKey = item.chatReference || signature
+	array.forEach((item) => {
+		const signature = item.originalSignature || item.signature
+		const chatRefKey = item.chatReference || signature
 
 			const dm = item.decodedMessage
 			let isReaction = false
@@ -2408,24 +2410,24 @@ addToQueue(outSideMsg, messageQueue) {
 				isReaction = true
 			}
 
-			if (isReaction) {
-				this.ingestReactionMessage(item)
-				return
-			}
-
-			newObj[signature] = { ...item, chatReference: chatRefKey }
-		})
-
-		if (Object.keys(newObj).length > 0) {
-			this.updateMessageHash = {
-				...this.updateMessageHash,
-				...newObj
-			}
-
-			this.requestUpdate()
-			await this.getUpdateComplete()
+		if (isReaction) {
+			this.ingestReactionMessage(item)
+			return
 		}
+
+		newObj[signature] = { ...item, chatReference: chatRefKey }
+	})
+
+	if (Object.keys(newObj).length > 0) {
+		this.updateMessageHash = {
+			...this.updateMessageHash,
+			...newObj
+		}
+
+		this.requestUpdate()
+		await this.getUpdateComplete()
 	}
+}
 
 	async clearUpdateMessageHashmap() {
 		this.updateMessageHash = {}
@@ -2580,9 +2582,28 @@ addToQueue(outSideMsg, messageQueue) {
 			return false
 		}
 
+		const applyPendingUpdates = (baseMessages) => {
+			const bySig = new Map()
+			baseMessages.forEach((m) => {
+				bySig.set(m.signature, m)
+				if (m.chatReference) bySig.set(m.chatReference, m)
+			})
+			baseMessages.forEach((m) => {
+				const ref = m.signature || m.chatReference
+				if (pendingUpdatesByRef.has(ref)) {
+					const updates = pendingUpdatesByRef.get(ref)
+					updates.forEach((u) => {
+						Object.assign(m, u)
+					})
+					pendingUpdatesByRef.delete(ref)
+				}
+			})
+		}
+
 		const renderableMessages = filteredMessages.filter((msg) => !isReactionMessage(msg) && !isUpdateOnly(msg))
 
 		if (isInitial) {
+			applyPendingUpdates(renderableMessages)
 			this.chatEditorPlaceholder = await this.renderPlaceholder()
 
 			try {
@@ -2638,6 +2659,14 @@ addToQueue(outSideMsg, messageQueue) {
 
 			setTimeout(() => this.downElementObserver(), 500)
 		} else {
+			const updatesOnly = filteredMessages.filter((msg) => isUpdateOnly(msg))
+			if (updatesOnly.length > 0) {
+				updatesOnly.forEach((u) => {
+					const ref = u.chatReference || u.signature
+					if (!ref) return
+					pendingUpdatesByRef.set(ref, [...(pendingUpdatesByRef.get(ref) || []), u])
+				})
+			}
 			queue.push(() => replaceMessagesEdited({
 				decodedMessages: filteredMessages,
 				parentEpml,

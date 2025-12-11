@@ -24,7 +24,7 @@
 
 - UI integration / state
   - [x] "Blocklist filtering": Port Hub’s blocklist filtering before decrypt/display.
-  - [ ] "Threading support": Ensure `chatReference` is used in fetch/render similar to Hub (thread detection, reply lookups).
+  - [x] "Threading support": Ensure `chatReference` is used in fetch/render similar to Hub (thread detection, reply lookups).
 
 - Message ingestion / rendering robustness (prevent dupes/missing)
   - [ ] "Deduplicate edits/updates": Collapse render output by signature/chatReference so only the latest version shows; treat update transactions (edits/reactions) as updates, not standalone rows.
