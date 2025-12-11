@@ -121,6 +121,7 @@ export const mapNameErrorMessage = (msg) => {
 
 export const replaceMessagesEdited = async ({ decodedMessages, parentEpml, isReceipient, decodeMessageFunc, _publicKey, symKeys, addToUpdateMessageHashmap }) => {
 	const MAX_CONCURRENT_REQUESTS = 5 // Maximum number of concurrent requests
+	const baseSignatures = new Set((decodedMessages || []).map((m) => m.signature).filter(Boolean))
 
 	const executeWithConcurrencyLimit = async (array, asyncFn) => {
 		const results = []
@@ -156,6 +157,19 @@ export const replaceMessagesEdited = async ({ decodedMessages, parentEpml, isRec
 				type: 'api',
 				url: `/chat/messages?chatreference=${msg.signature}&reverse=true${msgQuery}&limit=1&sender=${msg.sender}&encoding=BASE64`
 			})
+
+			// If this is an orphan edit (no base present), synthesize a base entry so UI can render edited content
+			if ((!newMsgResponse || newMsgResponse.length === 0) && msg.chatReference && !baseSignatures.has(msg.chatReference)) {
+				const synthetic = {
+					...msg,
+					signature: msg.chatReference,
+					originalSignature: msg.chatReference,
+					editSignature: msg.signature,
+					editedTimestamp: msg.timestamp,
+					syntheticBase: true
+				}
+				return synthetic
+			}
 
 			if (Array.isArray(newMsgResponse) && newMsgResponse.length > 0) {
 				const decodeResponseItem = await decodeMessageFunc(newMsgResponse[0], isReceipient, _publicKey, symKeys)
