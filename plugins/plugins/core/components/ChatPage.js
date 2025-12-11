@@ -66,6 +66,16 @@ export const REACTION_TYPE_NUMBER = 102
 const reactionsByRef = new Map()
 const pendingReactionsById = new Map()
 let warnedMissingReactionFields = false
+const mapChatValidationError = (res) => {
+	const msg = (res && (res.message || res.error)) || ''
+	if (msg.includes('TOO_MANY_UNCONFIRMED')) return 'Too many recent chat messages; wait and retry.'
+	if (msg.includes('TIMESTAMP_TOO_NEW')) return 'Message timestamp too far in the future.'
+	if (msg.includes('INVALID_ADDRESS')) return 'Recipient address is invalid.'
+	if (msg.includes('INVALID_DATA_LENGTH')) return 'Chat payload must be between 1 and 4000 bytes.'
+	if (msg.includes('ADDRESS_BLOCKED') || msg.includes('NAME_BLOCKED')) return 'Send rejected: address or name is blocked.'
+	if (msg) return msg
+	return 'Unable to send message.'
+}
 const resetReactionsState = (ctx) => {
 	reactionsByRef.clear()
 	pendingReactionsById.clear()
@@ -4391,6 +4401,11 @@ addToQueue(outSideMsg, messageQueue) {
 						isText: 1
 					}
 				})
+				if (chatResponse && chatResponse.error) {
+					const mapped = mapChatValidationError(chatResponse)
+					parentEpml.request('showSnackBar', mapped)
+					throw new Error(mapped)
+				}
 				return _computePow(chatResponse)
 			} else {
 				let groupResponse = await parentEpml.request('chat', {
@@ -4410,6 +4425,11 @@ addToQueue(outSideMsg, messageQueue) {
 						typeNumber: shouldEncryptReaction ? REACTION_TYPE_NUMBER : undefined
 					}
 				})
+				if (groupResponse && groupResponse.error) {
+					const mapped = mapChatValidationError(groupResponse)
+					parentEpml.request('showSnackBar', mapped)
+					throw new Error(mapped)
+				}
 				return _computePow(groupResponse)
 			}
 		}
@@ -4617,7 +4637,8 @@ addToQueue(outSideMsg, messageQueue) {
 					this.isLoading = false
 				}
 			} else if (response.error) {
-				// parentEpml.request('showSnackBar', response.message)
+				const mapped = mapChatValidationError(response)
+				parentEpml.request('showSnackBar', mapped)
 			} else {
 				// let err2string = get("chatpage.cchange21")
 				// parentEpml.request('showSnackBar', `${customErrorMessage || err2string}`)

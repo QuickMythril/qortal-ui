@@ -64,6 +64,17 @@ registerTranslateConfig({
 	loader: lang => fetch(`/language/${lang}.json`).then(res => res.json())
 })
 
+const mapChatValidationError = (res) => {
+	const msg = (res && (res.message || res.error)) || ''
+	if (msg.includes('TOO_MANY_UNCONFIRMED')) return 'Too many recent chat messages; wait and retry.'
+	if (msg.includes('TIMESTAMP_TOO_NEW')) return 'Message timestamp too far in the future.'
+	if (msg.includes('INVALID_ADDRESS')) return 'Recipient address is invalid.'
+	if (msg.includes('INVALID_DATA_LENGTH')) return 'Chat payload must be between 1 and 4000 bytes.'
+	if (msg.includes('ADDRESS_BLOCKED') || msg.includes('NAME_BLOCKED')) return 'Send rejected: address or name is blocked.'
+	if (msg) return msg
+	return 'Unable to send message.'
+}
+
 const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
 const sellerForeignFee = {
@@ -2111,6 +2122,9 @@ class WebBrowser extends LitElement {
 										isText: 1
 									}
 								})
+								if (chatResponse && chatResponse.error) {
+									throw new Error(mapChatValidationError(chatResponse))
+								}
 							}
 							if (!isRecipient) {
 								chatResponse = await parentEpml.request('chat', {
@@ -2129,6 +2143,9 @@ class WebBrowser extends LitElement {
 										isText: 1
 									}
 								})
+								if (chatResponse && chatResponse.error) {
+									throw new Error(mapChatValidationError(chatResponse))
+								}
 							}
 							return await _computePow(chatResponse)
 						}
@@ -2167,10 +2184,11 @@ class WebBrowser extends LitElement {
 							if (res.signature) {
 								return res
 							} else if (res.error) {
-								let myMsg1 = res.message
+								const mapped = mapChatValidationError(res)
+								let myMsg1 = mapped
 								let myMsg2 = get('walletpage.wchange44')
 								showErrorAndWait('ACTION_FAILED', { id1: myMsg1, id2: myMsg2 })
-								throw new Error(res.message)
+								throw new Error(mapped)
 							} else {
 								let myMsg1 = get('modals.mpchange36')
 								let myMsg2 = get('walletpage.wchange44')
