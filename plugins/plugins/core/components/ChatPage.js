@@ -2389,6 +2389,7 @@ addToQueue(outSideMsg, messageQueue) {
 
 		array.forEach((item) => {
 			const signature = item.originalSignature || item.signature
+			const chatRefKey = item.chatReference || signature
 
 			const dm = item.decodedMessage
 			let isReaction = false
@@ -2412,7 +2413,7 @@ addToQueue(outSideMsg, messageQueue) {
 				return
 			}
 
-			newObj[signature] = item
+			newObj[signature] = { ...item, chatReference: chatRefKey }
 		})
 
 		if (Object.keys(newObj).length > 0) {
@@ -2572,14 +2573,21 @@ addToQueue(outSideMsg, messageQueue) {
 
 		const filteredMessages = decodedMessages.filter((msg) => !isBlocked(msg))
 
-		const renderableMessages = filteredMessages.filter((msg) => !isReactionMessage(msg))
+		const isUpdateOnly = (msg) => {
+			if (!msg) return false
+			if (msg.chatReference && msg.chatReference !== msg.signature) return true
+			if (msg.typeMessage === 'edit') return true
+			return false
+		}
+
+		const renderableMessages = filteredMessages.filter((msg) => !isReactionMessage(msg) && !isUpdateOnly(msg))
 
 		if (isInitial) {
 			this.chatEditorPlaceholder = await this.renderPlaceholder()
 
 			try {
 				queue.push(() => replaceMessagesEdited({
-					decodedMessages: decodedMessages,
+					decodedMessages: filteredMessages,
 					parentEpml,
 					isReceipient: isReceipient,
 					decodeMessageFunc: this.decodeMessage,
@@ -2631,7 +2639,7 @@ addToQueue(outSideMsg, messageQueue) {
 			setTimeout(() => this.downElementObserver(), 500)
 		} else {
 			queue.push(() => replaceMessagesEdited({
-				decodedMessages: decodedMessages,
+				decodedMessages: filteredMessages,
 				parentEpml,
 				isReceipient: isReceipient,
 				decodeMessageFunc: this.decodeMessage,
