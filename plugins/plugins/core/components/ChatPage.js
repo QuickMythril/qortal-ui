@@ -880,10 +880,14 @@ class ChatPage extends LitElement {
 
 			const checkLanguage = localStorage.getItem('qortalLanguage')
 			const checkTheme = localStorage.getItem('qortalTheme')
-			const arraySecretKeysWorkerNew = JSON.parse(localStorage.getItem('symKeysCurrent') || '[]')
+			const symKeyMap = JSON.parse(localStorage.getItem(SYM_KEYS_STORAGE_KEY) || '{}')
 
 			this.userLanguage = checkLanguage
-			this.secretKeysWorker = arraySecretKeysWorkerNew[0]
+			if (this._chatId && symKeyMap[this._chatId]) {
+				this.secretKeysWorker = symKeyMap[this._chatId]
+			} else {
+				this.secretKeysWorker = {}
+			}
 
 			if (checkTheme === 'dark') {
 				this.theme = 'dark'
@@ -905,8 +909,12 @@ class ChatPage extends LitElement {
 		}
 
 		// Attempt to hydrate group secret keys on load
-		const arraySecretKeysWorkerNew = JSON.parse(localStorage.getItem('symKeysCurrent') || '[]')
-		this.secretKeysWorker = arraySecretKeysWorkerNew[0] || {}
+		const symKeyMap = JSON.parse(localStorage.getItem(SYM_KEYS_STORAGE_KEY) || '{}')
+		if (this._chatId && symKeyMap[this._chatId]) {
+			this.secretKeysWorker = symKeyMap[this._chatId]
+		} else {
+			this.secretKeysWorker = {}
+		}
 
 		await this.refreshBlocklists()
 	}
@@ -2975,17 +2983,42 @@ async addToUpdateMessageHashmap(array) {
 				const symIdentifier = `symmetric-qchat-group-${groupId}`
 				const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 				const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-				const resourcesRes = await fetch(`${nodeUrl}/arbitrary/resources?service=DOCUMENT_PRIVATE&identifier=${symIdentifier}&limit=0&reverse=true`)
-				const resources = await resourcesRes.json()
+				const groupAdmins = await fetch(`${nodeUrl}/groups/members/${groupId}?onlyAdmins=true&limit=0`).then(r => r.json())
+				const adminList = Array.isArray(groupAdmins.members) ? groupAdmins.members : []
+				const adminAddresses = adminList.map((m) => m.member).filter(Boolean)
+
+				let adminNames = []
+				if (adminAddresses.length > 0) {
+					const namesRes = await Promise.all(adminAddresses.map(async (addr) => {
+						try {
+							const res = await fetch(`${nodeUrl}/names/address/${addr}`)
+							const names = await res.json()
+							if (Array.isArray(names) && names.length > 0 && names[0].name) return names[0].name
+						} catch (e) { /* ignore name lookup errors */ }
+						return null
+					}))
+					adminNames = namesRes.filter(Boolean)
+				}
+
+				let resources = []
+				if (adminNames.length > 0) {
+					const queryString = adminNames.map((n) => `name=${encodeURIComponent(n)}`).join('&')
+					const url = `${nodeUrl}/arbitrary/resources?mode=ALL&service=DOCUMENT_PRIVATE&identifier=${symIdentifier}&exactmatchnames=true&limit=0&reverse=true&prefix=true&${queryString}`
+					const resourcesRes = await fetch(url)
+					resources = await resourcesRes.json()
+				} else {
+					const resourcesRes = await fetch(`${nodeUrl}/arbitrary/resources?service=DOCUMENT_PRIVATE&identifier=${symIdentifier}&limit=0&reverse=true`)
+					resources = await resourcesRes.json()
+				}
+
 				if (!Array.isArray(resources) || resources.length === 0) return
 
 				const latest = [...resources].sort((a, b) => (b.updated || b.created) - (a.updated || a.created))[0]
-				const groupAdmins = await fetch(`${nodeUrl}/groups/members/${groupId}?onlyAdmins=true&limit=0`).then(r => r.json())
-				const adminList = Array.isArray(groupAdmins.members) ? groupAdmins.members : []
 				const adminExists = adminList.some((m) => m.member === latest.owner)
 				if (!adminExists) return
 
-				const dataUrl = `${nodeUrl}/arbitrary/DOCUMENT_PRIVATE/${latest.owner}/${symIdentifier}?encoding=base64`
+				const publisherNameOrOwner = latest.name || latest.owner
+				const dataUrl = `${nodeUrl}/arbitrary/DOCUMENT_PRIVATE/${publisherNameOrOwner}/${symIdentifier}?encoding=base64&rebuild=true`
 				const res = await fetch(dataUrl)
 				if (!res.ok) throw new Error('Failed to download group key')
 				const encryptedData = await res.text()
