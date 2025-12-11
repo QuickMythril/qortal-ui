@@ -2901,7 +2901,6 @@ addToQueue(outSideMsg, messageQueue) {
 
 			this.webSocket = new WebSocket(directSocketLink)
 			const currentSocket = this.webSocket
-
 			// Open Connection
 			currentSocket.onopen = () => {
 				setTimeout(pingDirectSocket, 50)
@@ -3269,6 +3268,15 @@ addToQueue(outSideMsg, messageQueue) {
 				}, 5000) // Close the WebSocket connection if no pong message is received within 5 seconds.
 			}
 		}
+
+		const closeExistingSockets = () => {
+			if (this.webSocket) this.webSocket.close(1000, 'switch chat')
+			if (this.refWebSocket) this.refWebSocket.close(1000, 'switch chat')
+			this.webSocket = null
+			this.refWebSocket = null
+		}
+
+		closeExistingSockets()
 
 		if (chatId !== undefined) {
 			if (this.isReceipient) {
