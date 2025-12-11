@@ -2082,11 +2082,13 @@ class WebBrowser extends LitElement {
 					break
 
 				case actions.SEND_CHAT_MESSAGE: {
-					const message = data.message
 					const recipient = data.destinationAddress
 					const groupId = data.groupId
+					const chatReference = data.chatReference
 					const isRecipient = !groupId
-					const sendMessage = async (messageText, chatReference) => {
+					const sendMessage = async (messageText) => {
+						const sendTimestamp = Date.now()
+
 						let _reference = new Uint8Array(64)
 						window.crypto.getRandomValues(_reference)
 						let reference = window.parent.Base58.encode(_reference)
@@ -2097,10 +2099,10 @@ class WebBrowser extends LitElement {
 									type: 18,
 									nonce: this.selectedAddress.nonce,
 									params: {
-										timestamp: Date.now(),
+										timestamp: sendTimestamp,
 										recipient: recipient,
 										recipientPublicKey: this._publicKey.key,
-										hasChatReference: 0,
+										hasChatReference: chatReference ? 1 : 0,
 										chatReference: chatReference,
 										message: messageText,
 										lastReference: reference,
@@ -2115,10 +2117,10 @@ class WebBrowser extends LitElement {
 									type: 181,
 									nonce: this.selectedAddress.nonce,
 									params: {
-										timestamp: Date.now(),
+										timestamp: sendTimestamp,
 										groupID: Number(groupId),
 										hasReceipient: 0,
-										hasChatReference: 0,
+										hasChatReference: chatReference ? 1 : 0,
 										chatReference: chatReference,
 										message: messageText,
 										lastReference: reference,
@@ -2131,7 +2133,16 @@ class WebBrowser extends LitElement {
 							return await _computePow(chatResponse)
 						}
 						const _computePow = async (chatBytes) => {
-							const difficulty = 8
+							let difficulty = 8
+							try {
+								const balance = await parentEpml.request('apiCall', {
+									type: 'api',
+									url: `/addresses/balance/${this.selectedAddress.address}`
+								})
+								if (typeof balance === 'number' && balance < 4) {
+									difficulty = 18
+								}
+							} catch (error) { /* default to 8 */ }
 							const path = window.parent.location.origin + '/memory-pow/memory-pow.wasm.full'
 							const worker = new WebWorkerChat()
 							let nonce = null
@@ -2202,23 +2213,38 @@ class WebBrowser extends LitElement {
 							response = '{"error": "Cannot send an encrypted message to this user since they do not have their publickey on chain."}'
 							break
 						}
-						const tiptapJson = {
-							type: 'doc',
-							content: [{
-								type: 'paragraph',
+						const fullMessageObject = data.fullMessageObject || data.fullContent
+						let stringifyMessageObject = ''
+						if (fullMessageObject) {
+							if (typeof fullMessageObject === 'string') {
+								stringifyMessageObject = fullMessageObject
+							} else {
+								stringifyMessageObject = JSON.stringify(fullMessageObject)
+							}
+						} else {
+							const tiptapJson = {
+								type: 'doc',
 								content: [{
-									type: 'text',
-									text: message
+									type: 'paragraph',
+									content: [{
+										type: 'text',
+										text: data.message
+									}]
 								}]
-							}]
+							}
+							const messageObject = {
+								messageText: tiptapJson,
+								images: [],
+								repliedTo: '',
+								version: 3
+							}
+							stringifyMessageObject = JSON.stringify(messageObject)
 						}
-						const messageObject = {
-							messageText: tiptapJson,
-							images: [''],
-							repliedTo: '',
-							version: 3
+						const sizeBytes = new Blob([stringifyMessageObject]).size
+						if (sizeBytes > 4000) {
+							response = '{"error": "Chat payload exceeds 4000 bytes."}'
+							break
 						}
-						const stringifyMessageObject = JSON.stringify(messageObject)
 						try {
 							this.loader.show()
 							response = await sendMessage(stringifyMessageObject)

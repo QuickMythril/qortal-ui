@@ -52,6 +52,3 @@
 - [x] Reset and rebuild `reactionsMapSnapshot` when switching chats (clear shared map), and continue to pass fresh objects to `chat-scroller` so Lit propagates updates.
 - [x] Verify inbound reaction payloads always include `timestamp`, `sender`, and `chatReference` to avoid `ingestReactionMessage` early-return.
 - [x] Align reaction queue/pending indicator logic: pass reaction sends through the queue (`_queueKey: 'chat-reaction'`/`messageQueue`) so “updating” works and pending entries clear on ACK.
-- [ ] Message edits are not de-duplicated: render list should collapse by signature/chatReference so only the latest version shows.
-- [ ] Intermittent missing messages/replies on load causing stale reactions to appear (newer removal edits not applied); sometimes messages appear out of order (e.g., 23h-old after recent ones).
-- [ ] Private/closed groups with existing messages fail to load (regression during reaction changes; blocks private groups with history).
