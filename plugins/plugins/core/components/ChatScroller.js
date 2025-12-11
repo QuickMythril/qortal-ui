@@ -2493,6 +2493,14 @@ class MessageTemplate extends LitElement {
 			return true
 		}
 
+		if (changedProperties.has('reactionsMap')) {
+			return true
+		}
+
+		if (changedProperties.has('isUpdatingReaction')) {
+			return true
+		}
+
 		return false
 	}
 
