@@ -284,6 +284,7 @@ class ChatPage extends LitElement {
 		this.blockedAddresses = new Set()
 		this.blockedNames = new Set()
 		this.socketToken = 0
+		this.initialLoadCompleted = false
 		this.disposed = false
 		this.refWebSocket = ''
 	}
@@ -906,6 +907,33 @@ class ChatPage extends LitElement {
 		this.secretKeysWorker = arraySecretKeysWorkerNew[0] || {}
 
 		await this.refreshBlocklists()
+	}
+
+	async refreshBlocklists() {
+		// Populate in-memory blocklists used for filtering messages
+		const apiKey = this.getApiKey ? this.getApiKey() : ''
+		const apiKeySuffix = apiKey ? `?apiKey=${apiKey}` : ''
+
+		const [blockedAddressesRes, blockedNamesRes] = await Promise.allSettled([
+			parentEpml.request('apiCall', { url: `/lists/blockedAddresses${apiKeySuffix}` }),
+			parentEpml.request('apiCall', { url: `/lists/blockedNames${apiKeySuffix}` })
+		])
+
+		const addresses = (blockedAddressesRes.status === 'fulfilled' && Array.isArray(blockedAddressesRes.value)) ? blockedAddressesRes.value : []
+		const namesRaw = (blockedNamesRes.status === 'fulfilled' && Array.isArray(blockedNamesRes.value)) ? blockedNamesRes.value : []
+
+		this.blockedAddresses = new Set(addresses.filter(Boolean))
+
+		const names = new Set()
+		namesRaw.forEach((entry) => {
+			if (!entry) return
+			if (typeof entry === 'string') {
+				names.add(entry)
+				return
+			}
+			if (entry.name) names.add(entry.name)
+		})
+		this.blockedNames = names
 	}
 
 	convertHubMessageToJson(message) {
@@ -2910,6 +2938,7 @@ async addToUpdateMessageHashmap(array) {
 	async fetchChatMessages(chatId) {
 		const socketRunToken = ++this.socketToken
 		this.disposed = false
+		this.initialLoadCompleted = false
 
 		const loadGroupKeys = async (groupId) => {
 			try {
@@ -2978,7 +3007,8 @@ async addToUpdateMessageHashmap(array) {
 						if (initialFetched || this.disposed || socketRunToken !== this.socketToken) return
 						initialFetched = true
 						const getInitialMessages = await this.fetchMessagesWithReferences(`/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${cid}&limit=${chatLimit}&reverse=true`)
-						this.processMessages(getInitialMessages, true, false, 0)
+						await this.processMessages(getInitialMessages, true, false, 0)
+						this.initialLoadCompleted = true
 					}, 300)
 				}
 			}
@@ -3032,9 +3062,10 @@ async addToUpdateMessageHashmap(array) {
 
 
 
-					this.processMessages(getInitialMessages, true, isUnread, count)
+					await this.processMessages(getInitialMessages, true, isUnread, count)
 
 					initial = initial + 1
+					this.initialLoadCompleted = true
 
 				} else {
 					try {
@@ -3074,13 +3105,13 @@ async addToUpdateMessageHashmap(array) {
 						currentSocket.close()
 					}
 					clearTimeout(directSocketTimeout)
-				}, 5000)
+				}, 15000)
 			}
 		}
 
 		const restartDirectWebSocket = () => {
 			if (this.disposed || socketRunToken !== this.socketToken) return
-			const noInitial = true
+			const noInitial = this.initialLoadCompleted
 			setTimeout(() => initDirect(chatId, noInitial), 50)
 		}
 
@@ -3150,13 +3181,13 @@ async addToUpdateMessageHashmap(array) {
 						currentRefSocket.close()
 					}
 					clearTimeout(refSocketTimeout)
-				}, 5000)
+				}, 15000)
 			}
 		}
 
 		const restartGroupWebSocket = () => {
 			if (this.disposed || socketRunToken !== this.socketToken) return
-			const noInitial = true
+			const noInitial = this.initialLoadCompleted
 			let groupChatId = Number(chatId)
 			setTimeout(() => initGroup(groupChatId, noInitial), 50)
 		}
@@ -3228,7 +3259,7 @@ async addToUpdateMessageHashmap(array) {
 						currentRefSocket.close()
 					}
 					clearTimeout(refSocketTimeout)
-				}, 5000)
+				}, 15000)
 			}
 		}
 
@@ -3270,7 +3301,8 @@ async addToUpdateMessageHashmap(array) {
 						initialFetched = true
 						try {
 							const getInitialMessages = await this.fetchMessagesWithReferences(`/chat/messages?txGroupId=${groupId}&limit=${chatLimit}&reverse=true&encoding=BASE64`)
-							this.processMessages(getInitialMessages, true, false, 0)
+							await this.processMessages(getInitialMessages, true, false, 0)
+							this.initialLoadCompleted = true
 						} catch (error) {
 							this.isLoadingMessages = false
 							this.requestUpdate()
@@ -3326,9 +3358,10 @@ async addToUpdateMessageHashmap(array) {
 						getInitialMessages = await this.fetchMessagesWithReferences(`/chat/messages?txGroupId=${groupId}&limit=${chatLimit}&reverse=true&encoding=BASE64`)
 					}
 
-					this.processMessages(getInitialMessages, true, isUnread, count)
+					await this.processMessages(getInitialMessages, true, isUnread, count)
 
 					initial = initial + 1
+					this.initialLoadCompleted = true
 				} else {
 					try {
 						if (e.data) {
@@ -3368,7 +3401,7 @@ async addToUpdateMessageHashmap(array) {
 						currentSocket.close()
 					}
 					clearTimeout(groupSocketTimeout)
-				}, 5000) // Close the WebSocket connection if no pong message is received within 5 seconds.
+				}, 15000) // Close the WebSocket connection if no pong message is received within 15 seconds.
 			}
 		}
 
