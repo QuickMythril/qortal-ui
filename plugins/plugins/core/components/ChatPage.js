@@ -88,6 +88,7 @@ const resetReactionsState = (ctx) => {
 // In-memory update buffer keyed by chatReference to apply when base arrives
 const pendingUpdatesByRef = new Map()
 const messageBySignature = new Map()
+const syntheticBaseByRef = new Map()
 class ChatPage extends LitElement {
 	static get properties() {
 		return {
@@ -1046,6 +1047,10 @@ class ChatPage extends LitElement {
 	applyPendingUpdatesToMessage(msg) {
 		const key = this.getMessageKey(msg)
 		if (!key) return msg
+		if (syntheticBaseByRef.has(key)) {
+			const synthetic = syntheticBaseByRef.get(key)
+			msg = { ...synthetic, ...msg }
+		}
 		if (pendingUpdatesByRef.has(key)) {
 			const updates = pendingUpdatesByRef.get(key)
 			updates.forEach((u) => this.mergeUpdateIntoMessage(msg, u))
@@ -2670,8 +2675,29 @@ async addToUpdateMessageHashmap(array) {
 			updatesOnly.forEach((u) => this.stashUpdateMessage(u))
 		}
 
+		// If only an edit exists (base expired), synthesize a renderable base from the edit so the latest content is visible.
+		const orphanEdits = updatesOnly.filter((u) => {
+			const ref = u.originalSignature || u.chatReference || u.signature
+			return ref && !messageBySignature.has(ref)
+		})
+		const syntheticBases = orphanEdits.map((edit) => {
+			const ref = edit.originalSignature || edit.chatReference || edit.signature
+			const baseTimestamp = edit.timestamp || edit.editedTimestamp || Date.now()
+			const synthetic = {
+				...edit,
+				signature: ref, // use the reference as the base key
+				chatReference: ref,
+				typeMessage: edit.typeMessage || 'edit',
+				editedTimestamp: baseTimestamp,
+				timestamp: baseTimestamp,
+				syntheticBase: true
+			}
+			syntheticBaseByRef.set(ref, synthetic)
+			return synthetic
+		})
+
 		const renderableMessages = filteredMessages.filter((msg) => !this.isReactionMessage(msg) && !this.isUpdateOnlyMessage(msg))
-		const baseResults = renderableMessages.map((msg) => this.upsertBaseMessage(msg))
+		const baseResults = [...renderableMessages, ...syntheticBases].map((msg) => this.upsertBaseMessage(msg))
 
 		if (isInitial) {
 			this.chatEditorPlaceholder = await this.renderPlaceholder()
