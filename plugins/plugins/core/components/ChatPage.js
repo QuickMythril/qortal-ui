@@ -145,7 +145,8 @@ class ChatPage extends LitElement {
 			loggedInUserName: { type: String },
 			loggedInUserAddress: { type: String },
 			secretKeysWorker: { type: Object },
-			privateMessageOpen: { type: Boolean }
+			privateMessageOpen: { type: Boolean },
+			reactionsMapSnapshot: { type: Object }
 		}
 	}
 
@@ -235,12 +236,13 @@ class ChatPage extends LitElement {
 		this.setOpenGifModal = this.setOpenGifModal.bind(this)
 		this.isEnabledChatEnter = true
 		this.openGifModal = false
-		this.isLoadingGoToRepliedMessage = {
-			isLoading: false,
-			top: 0,
-			left: 0,
-			offsetHeight: 0
-		}
+			this.isLoadingGoToRepliedMessage = {
+				isLoading: false,
+				top: 0,
+				left: 0,
+				offsetHeight: 0
+			}
+			this.reactionsMapSnapshot = {}
 		this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
 		this.updateMessageHash = {}
 		this.addToUpdateMessageHashmap = this.addToUpdateMessageHashmap.bind(this)
@@ -950,6 +952,7 @@ class ChatPage extends LitElement {
 		} else {
 			reactionsByRef.delete(chatReference)
 		}
+		this.reactionsMapSnapshot = Object.fromEntries(reactionsByRef)
 		this.requestUpdate()
 	}
 
@@ -1971,7 +1974,7 @@ addToQueue(outSideMsg, messageQueue) {
 				.messageQueue=${this.messageQueue}
 				loggedInUserName=${this.loggedInUserName}
 				loggedInUserAddress=${this.loggedInUserAddress}
-				.reactionsMap=${Object.fromEntries(reactionsByRef)}
+				.reactionsMap=${this.reactionsMapSnapshot || Object.fromEntries(reactionsByRef)}
 			>
 			</chat-scroller>
 		`
@@ -2465,6 +2468,9 @@ addToQueue(outSideMsg, messageQueue) {
 		} else {
 			reactionsByRef.delete(key)
 		}
+
+		// Update reactive snapshot so UI refreshes
+		this.reactionsMapSnapshot = Object.fromEntries(reactionsByRef)
 
 		// Clear matching pending reaction (by specialId) from the queue
 		if (specialId && pendingReactionsById.has(specialId)) {
