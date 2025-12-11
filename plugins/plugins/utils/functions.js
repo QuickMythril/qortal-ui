@@ -197,12 +197,15 @@ export const replaceMessagesEdited = async ({ decodedMessages, parentEpml, isRec
 					})
 				}
 
-				const originalReplyMessage = originalReply.timestamp ? originalReply : originalReply.length > 0 ? originalReply[0] : null
+				const originalReplyMessage = originalReply && originalReply.timestamp ? originalReply : (Array.isArray(originalReply) && originalReply.length > 0 ? originalReply[0] : null)
 
-				const replyResponse = await parentEpml.request('apiCall', {
-					type: 'api',
-					url: `/chat/messages?chatreference=${parsedMessageObj.repliedTo}&reverse=true${msgQuery}&limit=1&sender=${originalReplyMessage.sender}&encoding=BASE64`
-				})
+				let replyResponse = []
+				if (originalReplyMessage && originalReplyMessage.sender) {
+					replyResponse = await parentEpml.request('apiCall', {
+						type: 'api',
+						url: `/chat/messages?chatreference=${parsedMessageObj.repliedTo}&reverse=true${msgQuery}&limit=1&sender=${originalReplyMessage.sender}&encoding=BASE64`
+					})
+				}
 
 				if (originalReplyMessage && Array.isArray(replyResponse) && replyResponse.length !== 0) {
 					const decodeOriginalReply = await decodeMessageFunc(originalReplyMessage, isReceipient, _publicKey, symKeys)
@@ -215,6 +218,14 @@ export const replaceMessagesEdited = async ({ decodedMessages, parentEpml, isRec
 					}
 				} else if (originalReplyMessage) {
 					msgItem.repliedToData = await decodeMessageFunc(originalReplyMessage, isReceipient, _publicKey, symKeys)
+				} else {
+					// Original message is unavailable (expired/missing). Provide minimal metadata so UI can show a fallback.
+					msgItem.repliedToData = {
+						missing: true,
+						sender: msg.sender,
+						senderName: msg.senderName,
+						decodedMessage: {}
+					}
 				}
 			}
 

@@ -1474,23 +1474,29 @@ class MessageTemplate extends LitElement {
 
 		decrypted = html`&nbsp;&nbsp;&nbsp;<mwc-icon style="font-size:16px; color: var(--chat-group);">key_off</mwc-icon>&nbsp;&nbsp;&nbsp;`
 
-		if (repliedToData) {
+		let repliedToDecoded = repliedToData && repliedToData.decodedMessage ? repliedToData.decodedMessage : null
+		if (repliedToDecoded && typeof repliedToDecoded === 'string') {
 			try {
-				repliedToData.decodedMessage = JSON.parse(repliedToData.decodedMessage)
+				repliedToDecoded = JSON.parse(repliedToDecoded)
 			} catch (error) { /* empty */ }
 		}
 
 		let repliedToMessageText = ''
 
-		if (repliedToData && repliedToData.decodedMessage && repliedToData.decodedMessage.messageText) {
+		if (repliedToDecoded && repliedToDecoded.messageText) {
 			try {
-				repliedToMessageText = generateHTML(repliedToData.decodedMessage.messageText, [StarterKit, Underline, Highlight, Mention, TextStyle, Color.configure({ types: [TextStyle.name] })])
+				repliedToMessageText = generateHTML(repliedToDecoded.messageText, [StarterKit, Underline, Highlight, Mention, TextStyle, Color.configure({ types: [TextStyle.name] })])
 			} catch (error) { /* empty */ }
-		} else if (repliedToData && repliedToData.decodedMessage && repliedToData.decodedMessage.message) {
+		} else if (repliedToDecoded && repliedToDecoded.message) {
 			try {
-				repliedToMessageText = this.convertHubMessageToJson(repliedToData.decodedMessage.message)
+				repliedToMessageText = this.convertHubMessageToJson(repliedToDecoded.message)
 			} catch (error) { /* empty */ }
 		}
+		const repliedToVersion = repliedToDecoded && repliedToDecoded.version ? repliedToDecoded.version : version
+		const replySenderDisplay = repliedToData && (repliedToData.senderName || (repliedToData.sender ? cropAddress(repliedToData.sender) : ''))
+		const replyMissingLabel = translate('chatpage.cchange66') || 'Original message unavailable'
+		const replyHeaderText = replySenderDisplay || replyMissingLabel
+		const canGoToReplied = repliedToData && !repliedToData.missing && (repliedToData.signature || repliedToData.chatReference || this.messageObj.repliedTo)
 
 		let replacedMessage = ''
 
@@ -1622,30 +1628,42 @@ class MessageTemplate extends LitElement {
 											id="replyNameSize"
 											class="original-message"
 											style=${this.replyFontSize}
-											@click=${() => {this.goToRepliedMessage(repliedToData, this.messageObj)}}
+											@click=${() => {
+		if (canGoToReplied) {
+			this.goToRepliedMessage(repliedToData, this.messageObj)
+		}
+	}}
 										>
 											<p
-												style=${'cursor: pointer; margin: 0 0 5px 0;'}
+												style=${`${canGoToReplied ? 'cursor: pointer;' : 'cursor: default;'} margin: 0 0 5px 0;`}
 												class=${
 	this.myAddress !== repliedToData.sender ?
 		'original-message-sender' : 'message-data-my-name'
 }
 											>
-												${repliedToData.senderName ? repliedToData.senderName : cropAddress(repliedToData.sender)}
+												${replyHeaderText}
 											</p>
 											<p class="replied-message">
-												${version && version.toString() === '1' ?
+												${repliedToVersion && repliedToVersion.toString() === '1' && repliedToDecoded && repliedToDecoded.messageText ?
 		html`
 														<div id="replyFontSize" style=${this.replyFontSize}>
-															${repliedToData.decodedMessage.messageText}
+															${repliedToDecoded.messageText}
 														</div>
 													`
 		: ''
 }
-												${+version > 1 && repliedToMessageText ?
+												${+repliedToVersion > 1 && repliedToMessageText ?
 		html`
 														<div id="replyFontSize" style=${this.replyFontSize}>
 															${unsafeHTML(repliedToMessageText)}
+														</div>
+													`
+		: ''
+}
+												${!repliedToMessageText && !(repliedToDecoded && repliedToDecoded.messageText) ?
+		html`
+														<div id="replyFontSize" style=${this.replyFontSize}>
+															${replyMissingLabel}
 														</div>
 													`
 		: ''
