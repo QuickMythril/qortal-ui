@@ -24,7 +24,7 @@ import WebWorkerSortMessages from 'web-worker:./webworkerSortMessages.js'
 import WebWorkerDecodeMessages from 'web-worker:./webworkerDecodeMessages.js'
 import ShortUniqueId from 'short-unique-id'
 import Compressor from 'compressorjs'
-import GroupKeyWorker from 'web-worker:./groupKeyWorker.js'
+import { decryptGroupData, validateSecretKey } from './GroupEncryption'
 import './ChatScroller'
 import './LevelFounder'
 import './NameMenu'
@@ -2916,53 +2916,36 @@ async addToUpdateMessageHashmap(array) {
 				const symIdentifier = `symmetric-qchat-group-${groupId}`
 				const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 				const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-				const getNameUrl = `${nodeUrl}/arbitrary/resources?service=DOCUMENT_PRIVATE&identifier=${symIdentifier}&limit=0&reverse=true`
+				const resourcesRes = await fetch(`${nodeUrl}/arbitrary/resources?service=DOCUMENT_PRIVATE&identifier=${symIdentifier}&limit=0&reverse=true`)
+				const resources = await resourcesRes.json()
+				if (!Array.isArray(resources) || resources.length === 0) return
 
-				const response = await fetch(getNameUrl)
-				const resources = await response.json()
-				if (!Array.isArray(resources) || resources.length === 0) {
-					return
-				}
+				const latest = [...resources].sort((a, b) => (b.updated || b.created) - (a.updated || a.created))[0]
+				const gAdmin = latest.name
+				const groupAdmins = await fetch(`${nodeUrl}/groups/members/${groupId}?onlyAdmins=true&limit=0`).then(r => r.json())
+				const adminList = Array.isArray(groupAdmins.members) ? groupAdmins.members : []
+				const adminExists = adminList.some((m) => m.member === gAdmin || m.member === latest.owner)
+				if (!adminExists) return
 
-				const worker = new GroupKeyWorker()
+				const dataUrl = `${nodeUrl}/arbitrary/DOCUMENT_PRIVATE/${gAdmin}/${symIdentifier}?encoding=base64`
+				const res = await fetch(dataUrl)
+				if (!res.ok) throw new Error('Failed to download group key')
+				const encryptedData = await res.text()
+
 				const privateKeyBase58 = window.parent.Base58.encode(window.parent.reduxStore.getState().app.wallet._addresses[0].keyPair.privateKey)
+				const decrypted = decryptGroupData(encryptedData, privateKeyBase58)
+				const secretKeyObject = JSON.parse(new TextDecoder().decode(decrypted.decryptedData))
 
-				const workerPromise = new Promise((resolve, reject) => {
-					const timeoutId = setTimeout(() => {
-						worker.terminate()
-						reject(new Error('Group key worker timeout'))
-					}, 20000)
+				if (!validateSecretKey(secretKeyObject)) throw new Error('SecretKey is not valid')
 
-					worker.onmessage = (e) => {
-						clearTimeout(timeoutId)
-						if (e.data && e.data.error) {
-							reject(new Error(e.data.error))
-						} else {
-							resolve(e.data)
-						}
-						worker.terminate()
-					}
+				localStorage.removeItem('symKeysCurrent')
+				localStorage.setItem('symKeysCurrent', '')
+				let oldSymIdentifier = JSON.parse(localStorage.getItem('symKeysCurrent') || '[]')
+				oldSymIdentifier.push(secretKeyObject)
+				localStorage.setItem('symKeysCurrent', JSON.stringify(oldSymIdentifier))
 
-					worker.onerror = (err) => {
-						clearTimeout(timeoutId)
-						worker.terminate()
-						reject(err)
-					}
-				})
-
-				worker.postMessage({ groupId, nodeUrl, privateKeyBase58 })
-				const result = await workerPromise
-
-				if (result && result.secretKeyObject) {
-					localStorage.removeItem('symKeysCurrent')
-					localStorage.setItem('symKeysCurrent', '')
-					let oldSymIdentifier = JSON.parse(localStorage.getItem('symKeysCurrent') || '[]')
-					oldSymIdentifier.push(result.secretKeyObject)
-					localStorage.setItem('symKeysCurrent', JSON.stringify(oldSymIdentifier))
-
-					let arraySecretKeys = JSON.parse(localStorage.getItem('symKeysCurrent') || '[]')
-					this.secretKeysWorker = arraySecretKeys[0] || {}
-				}
+				let arraySecretKeys = JSON.parse(localStorage.getItem('symKeysCurrent') || '[]')
+				this.secretKeysWorker = arraySecretKeys[0] || {}
 			} catch (error) {
 				parentEpml.request('showSnackBar', get('chatpage.cchange22') || 'Unable to load group keys; only unencrypted messages will be shown.')
 			}
