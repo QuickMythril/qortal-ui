@@ -2137,6 +2137,21 @@ class WebBrowser extends LitElement {
 					const groupId = data.groupId
 					const chatReference = data.chatReference
 					const isRecipient = !groupId
+					if (!isRecipient && groupId && Number(groupId) !== 0) {
+						try {
+							const membership = await parentEpml.request('apiCall', {
+								type: 'api',
+								url: `/groups/membership/${groupId}/${this.selectedAddress.address}`
+							})
+							if (!membership || membership.error) {
+								response = '{"error": "Join this group to send messages."}'
+								break
+							}
+						} catch (error) {
+							response = '{"error": "Unable to verify group membership."}'
+							break
+						}
+					}
 					const sendMessage = async (messageText) => {
 						const sendTimestamp = Date.now()
 

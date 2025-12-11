@@ -16,7 +16,7 @@
   - [x] "Add websocket chat listeners": Introduce WebSocket support for `/websockets/chat/messages` (direct/group) with base64 decode and decrypt pipeline, reducing reliance on polling.
   - [x] "Handle chat/messages parameters": Match Hub query patterns (`encoding=BASE64`, `haschatreference`, pagination) and reuse decode/decrypt utilities.
   - [x] "Expose SEARCH_CHAT_MESSAGES handler": Add handler if needed to match Hub’s allowlist (even if proxied to the existing search endpoint).
-  - [ ] "Respect Core group membership constraints": Ensure group fetch/send honor membership and handle errors from Core accordingly.
+  - [x] "Respect Core group membership constraints": On send, check membership (skip for group 0/open preview) and block with clear error if not a member; do not block fetching/viewing.
 
 - Message format and embeds
   - [ ] "Preserve rich message objects": Ensure sent messages keep the provided structure (replies, images, embeds) and that display logic can render the same fields as Hub’s `MessageDisplay`.

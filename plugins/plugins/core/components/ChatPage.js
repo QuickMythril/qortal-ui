@@ -4416,6 +4416,22 @@ addToQueue(outSideMsg, messageQueue) {
 				}
 				return _computePow(chatResponse)
 			} else {
+				const groupIdNumber = Number(_chatId)
+				if (groupIdNumber !== 0) {
+					try {
+						const membership = await parentEpml.request('apiCall', {
+							type: 'api',
+							url: `/groups/membership/${groupIdNumber}/${this.selectedAddress.address}`
+						})
+						if (!membership || membership.error) {
+							parentEpml.request('showSnackBar', get('chatpage.readOnlyGroup') || 'Join this group to send messages.')
+							throw new Error('Not a group member')
+						}
+					} catch (error) {
+						throw error
+					}
+				}
+
 				let groupResponse = await parentEpml.request('chat', {
 					type: 181,
 					nonce: this.selectedAddress.nonce,
