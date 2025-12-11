@@ -8,7 +8,7 @@ Tracking planned additions to strengthen chat handling and node integration test
 - [x] Out-of-order arrival: update/reaction before base, then base arrives; final render keeps base with updates/reactions intact.
 - [x] Group key cache hydrate: use localStorage `symKeysCurrent` entry for a groupId without network.
 - [x] Private vs group decode: direct (txGroupId 0) and group (>0) paths don’t cross flags.
-- [ ] Cannot decrypt fallback: encrypted-like payload with missing key shows placeholder, no crash.
+- [x] Cannot decrypt fallback: encrypted-like payload with missing key shows placeholder, no crash.
 - [ ] Hub-format payload: version 3 / messageText parsed same as standard.
 - [ ] Embed parsing: encoded embed link is stripped and structured embed info returned.
 
