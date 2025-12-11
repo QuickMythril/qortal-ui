@@ -1973,6 +1973,28 @@ class MessageTemplate extends LitElement {
 							return html`
 								<span
 									@click=${() => {
+										// Optimistic toggle: update the reactions map immediately for responsiveness
+										const chatRef = this.messageObj.chatReference || this.messageObj.signature
+										const map = this.reactionsMap || {}
+										const bucket = map[chatRef] ? { ...map[chatRef] } : {}
+										const list = bucket[reaction.type] ? [...bucket[reaction.type]] : []
+										const myIdx = list.findIndex((u) => u.sender === this.myAddress)
+										if (userHasReacted && myIdx !== -1) {
+											list.splice(myIdx, 1)
+										} else if (!userHasReacted) {
+											list.push({
+												sender: this.myAddress,
+												senderName: this.loggedInUserName
+											})
+										}
+										if (list.length > 0) {
+											bucket[reaction.type] = list
+										} else {
+											delete bucket[reaction.type]
+										}
+										const updated = { ...map, [chatRef]: bucket }
+										this.reactionsMap = updated
+
 										this.sendMessage({
 											type: 'reaction',
 											editedMessageObj: this.messageObj,

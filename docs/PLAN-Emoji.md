@@ -28,7 +28,7 @@
 - [x] Normalize reaction toggle logic in `sendMessage`: honor the incoming `contentState` and, when absent, derive it from `reactionsMap` (fallback to embedded `reactions`) so removals work.
 - [x] Add a visible reaction button per message (e.g., in `chat-menu`) that calls `setToggledMessage` and opens the emoji picker, enabling first reactions (no existing chips required).
 - [x] Align encryption rules: send reactions plaintext for public groups, encrypted with type number 102 for private groups, and ensure Hub can read UI reactions (and vice versa).
-- [ ] Ensure reaction messages carry timestamp/sender/chatReference through ingestion so `reactionsMap` counts/tooltips stay accurate and clear queued `specialId` entries when acknowledged.
+- [x] Ensure reaction messages carry timestamp/sender/chatReference through ingestion so `reactionsMap` counts/tooltips stay accurate and clear queued `specialId` entries when acknowledged.
 
 ### Validation
 - [ ] Test Hub → UI: reactions display (add/remove), counts, tooltips, popover.
@@ -40,7 +40,10 @@
 ### Field issues to fix from live testing
 - [x] Replies show “Edited now” placeholder before data loads; change placeholder to “Edited” until the time resolves.
 - [x] Reaction tooltip shows “name, [object Object] emoji” on one line; should list only reactor names in order, one per line.
-- [ ] Clicking an existing reaction chip does nothing; should add (if other user) or remove (if current user) using the same emoji.
+- [x] Clicking an existing reaction chip does nothing; should add (if other user) or remove (if current user) using the same emoji.
+- [ ] Block reaction transactions from rendering as message rows: in `ChatPage.processMessages`, detect reactions by parsing `decodedMessage` (`type === 'reaction'`) in addition to `isReaction`/string checks, and exclude them from `renderableMessages`.
+- [ ] Route all reactions through ingestion: in `ChatPage.addToUpdateMessageHashmap`, apply the same parsed `type === 'reaction'` detection before deciding to call `ingestReactionMessage`.
+- [ ] Add renderer guard: in `message-template` rendering, short-circuit if the decoded payload is a reaction to prevent any stray reaction rows from rendering.
 - [ ] Newly sent reactions don’t render until the chat is reloaded.
 - [ ] Reaction chips don’t auto-refresh when a new reaction message arrives (needs live update without chat switch/reload).
 - [ ] Intermittent missing messages/replies on load causing stale reactions to appear (newer removal edits not applied); sometimes messages appear out of order (e.g., 23h-old after recent ones).
