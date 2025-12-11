@@ -7,7 +7,7 @@ Tracking planned additions to strengthen chat handling and node integration test
 - [x] Reaction without base: keep reactions visible without hiding other messages.
 - [x] Reply to missing base: render reply with safe fallback preview.
 - [x] Out-of-order arrival: update/reaction before base, then base arrives; final render keeps base with updates/reactions intact.
-- [ ] Group key cache hydrate: use localStorage `symKeysCurrent` entry for a groupId without network.
+- [x] Group key cache hydrate: use localStorage `symKeysCurrent` entry for a groupId without network.
 - [ ] Private vs group decode: direct (txGroupId 0) and group (>0) paths don’t cross flags.
 - [ ] Cannot decrypt fallback: encrypted-like payload with missing key shows placeholder, no crash.
 - [ ] Hub-format payload: version 3 / messageText parsed same as standard.
