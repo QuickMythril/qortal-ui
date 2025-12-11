@@ -41,9 +41,9 @@
 - [x] Replies show “Edited now” placeholder before data loads; change placeholder to “Edited” until the time resolves.
 - [x] Reaction tooltip shows “name, [object Object] emoji” on one line; should list only reactor names in order, one per line.
 - [x] Clicking an existing reaction chip does nothing; should add (if other user) or remove (if current user) using the same emoji.
-- [ ] Block reaction transactions from rendering as message rows: in `ChatPage.processMessages`, detect reactions by parsing `decodedMessage` (`type === 'reaction'`) in addition to `isReaction`/string checks, and exclude them from `renderableMessages`.
-- [ ] Route all reactions through ingestion: in `ChatPage.addToUpdateMessageHashmap`, apply the same parsed `type === 'reaction'` detection before deciding to call `ingestReactionMessage`.
-- [ ] Add renderer guard: in `message-template` rendering, short-circuit if the decoded payload is a reaction to prevent any stray reaction rows from rendering.
+- [x] Block reaction transactions from rendering as message rows: in `ChatPage.processMessages`, detect reactions by parsing `decodedMessage` (`type === 'reaction'`) in addition to `isReaction`/string checks, and exclude them from `renderableMessages`.
+- [x] Route all reactions through ingestion: in `ChatPage.addToUpdateMessageHashmap`, apply the same parsed `type === 'reaction'` detection before deciding to call `ingestReactionMessage`.
+- [x] Add renderer guard: in `message-template` rendering, short-circuit if the decoded payload is a reaction to prevent any stray reaction rows from rendering.
 - [ ] Newly sent reactions don’t render until the chat is reloaded.
 - [ ] Reaction chips don’t auto-refresh when a new reaction message arrives (needs live update without chat switch/reload).
 - [ ] Intermittent missing messages/replies on load causing stale reactions to appear (newer removal edits not applied); sometimes messages appear out of order (e.g., 23h-old after recent ones).

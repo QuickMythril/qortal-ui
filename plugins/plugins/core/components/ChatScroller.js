@@ -1081,10 +1081,11 @@ class MessageTemplate extends LitElement {
 			let isForwarded = false
 			let isEdited = false
 			let isEncrypted = false
-			let messageV2Display = ''
-			let messageV2Raw = ''
-		const hasMessageReactions = Array.isArray(this.messageObj.reactions)
-			let cachedReactions = []
+		let messageV2Display = ''
+		let messageV2Raw = ''
+	const hasMessageReactions = Array.isArray(this.messageObj.reactions)
+		let cachedReactions = []
+		let isReactionPayload = false
 
 		// Rebuild cache when decodedMessage changes; keep lightweight live fields (repliedToData, reactions from messageObj) fresh.
 		const cacheKey = this.messageObj.decodedMessage
@@ -1244,6 +1245,9 @@ class MessageTemplate extends LitElement {
 				if (!hasMessageReactions) {
 					reactions = parsedMessageObj.reactions || []
 				}
+				if (parsedMessageObj && parsedMessageObj.type === 'reaction') {
+					isReactionPayload = true
+				}
 				version = parsedMessageObj.version
 				isForwarded = parsedMessageObj.type === 'forward'
 				isEdited = parsedMessageObj.isEdited && true
@@ -1289,11 +1293,16 @@ class MessageTemplate extends LitElement {
 					isEncrypted,
 					messageV2Display,
 					messageV2Raw,
-					reactions
+						reactions
 				}
 			} catch (error) {
 				message = this.messageObj.decodedMessage
 			}
+		}
+
+		// Skip rendering if this is a reaction payload (should be handled upstream, but guard just in case)
+		if (isReactionPayload) {
+			return html`<li class="clearfix"></li>`
 		}
 
 		// Prefer reactions map when available

@@ -2320,14 +2320,30 @@ addToQueue(outSideMsg, messageQueue) {
 		}
 	}
 
-async addToUpdateMessageHashmap(array) {
+	async addToUpdateMessageHashmap(array) {
 		const newObj = {}
 
 		array.forEach((item) => {
 			const signature = item.originalSignature || item.signature
 
-			// Hub-style reaction messages
-			if (item.isReaction || (item.decodedMessage && item.decodedMessage.includes('"isReaction"'))) {
+			const dm = item.decodedMessage
+			let isReaction = false
+			if (item.isReaction) {
+				isReaction = true
+			} else if (typeof dm === 'string') {
+				if (dm.includes('"isReaction"')) {
+					isReaction = true
+				} else {
+					try {
+						const parsed = JSON.parse(dm)
+						if (parsed && parsed.type === 'reaction') isReaction = true
+					} catch (error) { /* ignore */ }
+				}
+			} else if (dm && typeof dm === 'object' && dm.type === 'reaction') {
+				isReaction = true
+			}
+
+			if (isReaction) {
 				this.ingestReactionMessage(item)
 				return
 			}
@@ -2455,12 +2471,21 @@ async addToUpdateMessageHashmap(array) {
 			}
 		})
 
-		const isReactionMessage = (msg) => {
-			if (!msg) return false
-			if (msg.isReaction) return true
-			const dm = msg.decodedMessage
-			return typeof dm === 'string' && dm.includes('"isReaction"')
-		}
+			const isReactionMessage = (msg) => {
+				if (!msg) return false
+				if (msg.isReaction) return true
+				const dm = msg.decodedMessage
+				if (typeof dm === 'string') {
+					if (dm.includes('"isReaction"')) return true
+					try {
+						const parsed = JSON.parse(dm)
+						if (parsed && parsed.type === 'reaction') return true
+					} catch (error) { /* ignore parse */ }
+				} else if (dm && typeof dm === 'object' && dm.type === 'reaction') {
+					return true
+				}
+				return false
+			}
 
 		const renderableMessages = decodedMessages.filter((msg) => !isReactionMessage(msg))
 
