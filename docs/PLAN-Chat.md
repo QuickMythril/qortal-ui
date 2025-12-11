@@ -23,7 +23,7 @@
   - [x] "Handle UI/extension message mix": Decode extension vs UI messages consistently (mirror Hub’s `decodeBase64ForUIChatMessages` vs ext handling).
 
 - UI integration / state
-  - [ ] "Blocklist filtering": Port Hub’s blocklist filtering before decrypt/display.
+  - [x] "Blocklist filtering": Port Hub’s blocklist filtering before decrypt/display.
   - [ ] "Threading support": Ensure `chatReference` is used in fetch/render similar to Hub (thread detection, reply lookups).
 
 - Message ingestion / rendering robustness (prevent dupes/missing)

@@ -262,7 +262,7 @@ class ChatPage extends LitElement {
 				left: 0,
 				offsetHeight: 0
 			}
-			this.reactionsMapSnapshot = {}
+		this.reactionsMapSnapshot = {}
 		this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
 		this.updateMessageHash = {}
 		this.addToUpdateMessageHashmap = this.addToUpdateMessageHashmap.bind(this)
@@ -278,6 +278,8 @@ class ChatPage extends LitElement {
 		this.myNode = this.getMyNode()
 		this.secretKeysWorker = {}
 		this.senderPubKeyCache = new Map()
+		this.blockedAddresses = new Set()
+		this.blockedNames = new Set()
 		this.socketToken = 0
 		this.disposed = false
 		this.refWebSocket = ''
@@ -899,6 +901,8 @@ class ChatPage extends LitElement {
 		// Attempt to hydrate group secret keys on load
 		const arraySecretKeysWorkerNew = JSON.parse(localStorage.getItem('symKeysCurrent') || '[]')
 		this.secretKeysWorker = arraySecretKeysWorkerNew[0] || {}
+
+		await this.refreshBlocklists()
 	}
 
 	convertHubMessageToJson(message) {
@@ -2557,7 +2561,18 @@ addToQueue(outSideMsg, messageQueue) {
 				return false
 			}
 
-		const renderableMessages = decodedMessages.filter((msg) => !isReactionMessage(msg))
+		const isBlocked = (msg) => {
+			if (!msg) return false
+			const sender = msg.sender || (msg.decodedMessage && msg.decodedMessage.sender)
+			const senderName = msg.senderName || (msg.decodedMessage && msg.decodedMessage.senderName)
+			if (sender && this.blockedAddresses.has(sender)) return true
+			if (senderName && this.blockedNames.has(senderName)) return true
+			return false
+		}
+
+		const filteredMessages = decodedMessages.filter((msg) => !isBlocked(msg))
+
+		const renderableMessages = filteredMessages.filter((msg) => !isReactionMessage(msg))
 
 		if (isInitial) {
 			this.chatEditorPlaceholder = await this.renderPlaceholder()
@@ -3285,6 +3300,7 @@ addToQueue(outSideMsg, messageQueue) {
 			} else {
 				let groupChatId = Number(chatId)
 				await loadGroupKeys(groupChatId)
+				await this.refreshBlocklists()
 				initGroup(groupChatId)
 				initGroupReference(groupChatId)
 			}
