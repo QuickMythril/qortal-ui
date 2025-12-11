@@ -25,7 +25,20 @@ const srcConfig = {
 
 const { buildConfig, inlineConfigs } = generateBuildConfig(srcConfig)
 
-const formatMs = (start) => (Number(process.hrtime.bigint() - start) / 1e6).toFixed(2)
+const formatDuration = (start) => {
+	const ms = Number(process.hrtime.bigint() - start) / 1e6
+	const totalSeconds = ms / 1000
+	const hours = Math.floor(totalSeconds / 3600)
+	const minutes = Math.floor((totalSeconds % 3600) / 60)
+	const seconds = (totalSeconds % 60).toFixed(2)
+	const parts = []
+
+	if (hours) parts.push(`${hours}h`)
+	if (minutes) parts.push(`${minutes}m`)
+	parts.push(`${seconds}s`)
+
+	return `${parts.join(' ')} (${ms.toFixed(2)} ms)`
+}
 
 async function runBuild() {
 	if (isDevBuild) {
@@ -39,17 +52,17 @@ async function runBuild() {
 		buildConfig.outputs,
 		buildConfig.outputOptions,
 		buildConfig.inputOptions,
-		inlineConfigs
-	)
+			inlineConfigs
+		)
 
-	console.log(`Core build completed in ${formatMs(coreStart)} ms`)
+	console.log(`Core build completed in ${formatDuration(coreStart)}`)
 	console.log('Building and Bundling Plugins')
 
 	const pluginsStart = process.hrtime.bigint()
 	await buildDefalutPlugins()
 
-	console.log(`Plugins build completed in ${formatMs(pluginsStart)} ms`)
-	console.log(`Total build completed in ${formatMs(startTime)} ms`)
+	console.log(`Plugins build completed in ${formatDuration(pluginsStart)}`)
+	console.log(`Total build completed in ${formatDuration(startTime)}`)
 }
 
 runBuild().catch(err => {
