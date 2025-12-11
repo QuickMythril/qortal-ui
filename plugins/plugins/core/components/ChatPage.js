@@ -1060,6 +1060,7 @@ class ChatPage extends LitElement {
 	}
 
 	stashUpdateMessage(update) {
+		if (this.isReactionMessage(update)) return
 		const ref = update.originalSignature || update.chatReference || update.signature
 		if (!ref) return
 		if (messageBySignature.has(ref)) {
@@ -2670,7 +2671,7 @@ async addToUpdateMessageHashmap(array) {
 		})
 
 		const filteredMessages = decodedMessages.filter((msg) => !this.isBlockedMessage(msg))
-		const updatesOnly = filteredMessages.filter((msg) => this.isUpdateOnlyMessage(msg))
+		const updatesOnly = filteredMessages.filter((msg) => this.isUpdateOnlyMessage(msg) && !this.isReactionMessage(msg))
 		if (updatesOnly.length > 0) {
 			updatesOnly.forEach((u) => this.stashUpdateMessage(u))
 		}
