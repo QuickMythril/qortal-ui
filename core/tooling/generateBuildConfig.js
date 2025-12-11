@@ -19,7 +19,7 @@ const generateInputs = (tree, inputs = {}) => {
 	return inputs
 }
 
-const generateBuildConfig = ({ elementComponents, functionalComponents, otherOutputs, apiComponents, aliases, options, inlineComponents }) => {
+const generateBuildConfig = ({ elementComponents, functionalComponents, otherOutputs, apiComponents, aliases, options, inlineComponents, minify = true }) => {
 	const buildConfig = {
 		outputs: [
 			{
@@ -40,37 +40,44 @@ const generateBuildConfig = ({ elementComponents, functionalComponents, otherOut
 				main: options.inputFile,
 				...generateInputs(elementComponents)
 			},
-			plugins: [
-				alias({
-					entries: Object.keys(aliases).map(find => {
-						return {
-							find,
-							replacement: aliases[find]
-						}
+			plugins: (() => {
+				const plugins = [
+					alias({
+						entries: Object.keys(aliases).map(find => {
+							return {
+								find,
+								replacement: aliases[find]
+							}
+						})
+					}),
+					nodeResolve({
+						preferBuiltins: false,
+						mainFields: ['module', 'browser']
+					}),
+					replace({
+						preventAssignment: true,
+						'process.env.NODE_ENV': JSON.stringify('production'),
+					}),
+					commonjs(),
+					globals(),
+					progress(),
+					webWorkerLoader(),
+					scss({
+						output: options.sassOutputDir
 					})
-				}),
-				nodeResolve({
-					preferBuiltins: false,
-					mainFields: ['module', 'browser']
-				}),
-				replace({
-					preventAssignment: true,
-					'process.env.NODE_ENV': JSON.stringify('production'),
-				}),
-				commonjs(),
-				globals(),
-				progress(),
-				webWorkerLoader(),
-				scss({
-					output: options.sassOutputDir
-				}),
-				terser({
-					compress: true,
-					output: {
-						comments: false
-					}
-				})
-			],
+				]
+
+				if (minify) {
+					plugins.push(terser({
+						compress: true,
+						output: {
+							comments: false
+						}
+					}))
+				}
+
+				return plugins
+			})(),
 			preserveEntrySignatures: false,
 			external: ['crypto'],
 			context: 'window'
@@ -86,7 +93,8 @@ const generateBuildConfig = ({ elementComponents, functionalComponents, otherOut
 
 	const inlineConfigs = generateES5BuildConfig(inlineComponents, {
 		outputDir: options.outputDir,
-		aliases
+		aliases,
+		minify
 	})
 
 	return {

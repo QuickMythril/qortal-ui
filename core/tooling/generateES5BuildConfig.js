@@ -8,7 +8,7 @@ const alias = require('@rollup/plugin-alias')
 const webWorkerLoader = require('@qortal/rollup-plugin-web-worker-loader')
 const { nodeResolve } = require('@rollup/plugin-node-resolve')
 
-const generateRollupConfig = (file, { outputDir, aliases }) => {
+const generateRollupConfig = (file, { outputDir, aliases, minify = true }) => {
 	return {
 		inputOptions: {
 			input: file.input,
@@ -17,37 +17,44 @@ const generateRollupConfig = (file, { outputDir, aliases }) => {
 					rollupWarn(warning)
 				}
 			},
-			plugins: [
-				nodeResolve({
-					preferBuiltins: false,
-					mainFields: ['module', 'browser']
-				}),
-				replace({
-					preventAssignment: true,
-					'process.env.NODE_ENV': JSON.stringify('production'),
-				}),
-				alias({
-					entries: Object.keys(aliases).map(find => {
-						return {
-							find,
-							replacement: aliases[find]
-						}
+			plugins: (() => {
+				const plugins = [
+					nodeResolve({
+						preferBuiltins: false,
+						mainFields: ['module', 'browser']
+					}),
+					replace({
+						preventAssignment: true,
+						'process.env.NODE_ENV': JSON.stringify('production'),
+					}),
+					alias({
+						entries: Object.keys(aliases).map(find => {
+							return {
+								find,
+								replacement: aliases[find]
+							}
+						})
+					}),
+					commonjs(),
+					progress(),
+					webWorkerLoader(),
+					babel.babel({
+						babelHelpers: 'bundled',
+						exclude: 'node_modules/**'
 					})
-				}),
-				commonjs(),
-				progress(),
-				webWorkerLoader(),
-				babel.babel({
-					babelHelpers: 'bundled',
-					exclude: 'node_modules/**'
-				}),
-				terser({
-					compress: true,
-					output: {
-						comments: false,
-					},
-				})
-			],
+				]
+
+				if (minify) {
+					plugins.push(terser({
+						compress: true,
+						output: {
+							comments: false,
+						},
+					}))
+				}
+
+				return plugins
+			})(),
 			preserveEntrySignatures: false,
 			external: ['crypto']
 		},

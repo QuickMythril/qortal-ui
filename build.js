@@ -6,9 +6,16 @@ const generateBuildConfig = uiCore('generate_build_config')
 const build = uiCore('build')
 const buildDefalutPlugins = pluginsController('build')
 const startTime = process.hrtime.bigint()
+const lifecycleEvent = process.env.npm_lifecycle_event
+const isDevBuild = lifecycleEvent === 'build-dev' || process.env.BUILD_DEV === '1'
+
+if (isDevBuild) {
+	process.env.BUILD_DEV = '1'
+}
 
 const srcConfig = {
 	...config.build,
+	minify: !isDevBuild,
 	options: {
 		...config.build.options,
 		outputDir: path.join(__dirname, '/builtWWW'),
@@ -21,6 +28,10 @@ const { buildConfig, inlineConfigs } = generateBuildConfig(srcConfig)
 const formatMs = (start) => (Number(process.hrtime.bigint() - start) / 1e6).toFixed(2)
 
 async function runBuild() {
+	if (isDevBuild) {
+		console.log('Dev build: minification disabled for faster builds')
+	}
+
 	const coreStart = process.hrtime.bigint()
 
 	await build(

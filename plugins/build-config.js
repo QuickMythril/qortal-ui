@@ -11,6 +11,7 @@ const babel = require('@rollup/plugin-babel')
 const webWorkerLoader = require('@qortal/rollup-plugin-web-worker-loader')
 const { nodeResolve } = require('@rollup/plugin-node-resolve')
 
+const isDevBuild = process.env.BUILD_DEV === '1' || process.env.npm_lifecycle_event === 'build-dev'
 const aliases = {}
 
 const generateRollupConfig = (inputFile, outputFile) => {
@@ -22,38 +23,45 @@ const generateRollupConfig = (inputFile, outputFile) => {
 				}
 			},
 			input: inputFile,
-			plugins: [
-				alias({
-					entries: Object.keys(aliases).map((find) => {
-						return {
-							find,
-							replacement: aliases[find]
-						}
+			plugins: (() => {
+				const plugins = [
+					alias({
+						entries: Object.keys(aliases).map((find) => {
+							return {
+								find,
+								replacement: aliases[find]
+							}
+						}),
 					}),
-				}),
-				nodeResolve({
-					preferBuiltins: false,
-					mainFields: ['module', 'browser']
-				}),
-				replace({
-					preventAssignment: true,
-					'process.env.NODE_ENV': JSON.stringify('production')
-				}),
-				commonjs(),
-				globals(),
-				progress(),
-				webWorkerLoader(),
-				babel.babel({
-					babelHelpers: 'bundled',
-					exclude: 'node_modules/**'
-				}),
-				terser({
-					compress: true,
-					output: {
-						comments: false
-					},
-				}),
-			],
+					nodeResolve({
+						preferBuiltins: false,
+						mainFields: ['module', 'browser']
+					}),
+					replace({
+						preventAssignment: true,
+						'process.env.NODE_ENV': JSON.stringify('production')
+					}),
+					commonjs(),
+					globals(),
+					progress(),
+					webWorkerLoader(),
+					babel.babel({
+						babelHelpers: 'bundled',
+						exclude: 'node_modules/**'
+					})
+				]
+
+				if (!isDevBuild) {
+					plugins.push(terser({
+						compress: true,
+						output: {
+							comments: false
+						},
+					}))
+				}
+
+				return plugins
+			})(),
 		},
 		outputOptions: {
 			file: outputFile,
