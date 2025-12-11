@@ -4050,18 +4050,34 @@ async addToUpdateMessageHashmap(array) {
 
 				let contentState = true
 
-				try {
-					const parsedMessageObj = JSON.parse(outSideMsg.editedMessageObj.decodedMessage)
-					const reactions = parsedMessageObj.reactions || []
-					const findEmojiIndex = reactions.findIndex((reaction) => reaction.type === outSideMsg.reaction)
-					if (findEmojiIndex !== -1) {
-						const users = reactions[findEmojiIndex].users || []
-						const findUserIndex = users.findIndex((user) => user.address === this.selectedAddress.address)
-						if (findUserIndex !== -1) {
-							contentState = false
-						}
+				if (typeof outSideMsg.contentState === 'boolean') {
+					contentState = outSideMsg.contentState
+				} else {
+					// Prefer live reactions map when deciding toggle state; fallback to embedded reactions for legacy messages
+					const reactionsRef = chatReference
+					const mapForMessage = reactionsByRef.get(reactionsRef)
+					const listForEmoji = mapForMessage ? mapForMessage[outSideMsg.reaction] : null
+					const userHasReactedMap = Array.isArray(listForEmoji)
+						? listForEmoji.some((r) => r.sender === this.selectedAddress.address)
+						: false
+
+					if (userHasReactedMap) {
+						contentState = false
+					} else {
+						try {
+							const parsedMessageObj = JSON.parse(outSideMsg.editedMessageObj.decodedMessage)
+							const reactions = parsedMessageObj.reactions || []
+							const findEmojiIndex = reactions.findIndex((reaction) => reaction.type === outSideMsg.reaction)
+							if (findEmojiIndex !== -1) {
+								const users = reactions[findEmojiIndex].users || []
+								const findUserIndex = users.findIndex((user) => user.address === this.selectedAddress.address)
+								if (findUserIndex !== -1) {
+									contentState = false
+								}
+							}
+						} catch (error) { /* ignore parse */ }
 					}
-				} catch (error) { /* ignore parse */ }
+				}
 
 				const reactionPayload = {
 					type: 'reaction',
@@ -4167,6 +4183,9 @@ async addToUpdateMessageHashmap(array) {
 		let reference = window.parent.Base58.encode(_reference)
 
 		const sendMessageRequest = async () => {
+			const isOpenGroup = this.groupInfo && typeof this.groupInfo.isOpen === 'boolean' ? this.groupInfo.isOpen : false
+			const shouldEncryptReaction = typeMessage === 'reaction' && !isReceipient && !isOpenGroup
+
 			if (isReceipient === true) {
 				let chatResponse = await parentEpml.request('chat', {
 					type: 18,
@@ -4198,9 +4217,9 @@ async addToUpdateMessageHashmap(array) {
 						message: messageText,
 						lastReference: reference,
 						proofOfWorkNonce: 0,
-						isEncrypted: typeMessage === 'reaction' ? 1 : 0,
+						isEncrypted: shouldEncryptReaction ? 1 : 0,
 						isText: 1,
-						typeNumber: typeMessage === 'reaction' ? REACTION_TYPE_NUMBER : undefined
+						typeNumber: shouldEncryptReaction ? REACTION_TYPE_NUMBER : undefined
 					}
 				})
 				return _computePow(groupResponse)

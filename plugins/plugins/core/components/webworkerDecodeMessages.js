@@ -2787,6 +2787,15 @@ const decode = (string, keys, ref) => {
 	const decoder = new TextDecoder()
 	const decodedString = decoder.decode(bytes)
 
+	// Handle plaintext Hub-style reaction payloads before attempting decrypt
+	try {
+		const parsedPlain = JSON.parse(decodedString)
+		if (parsedPlain && parsedPlain.type === 'reaction') {
+			const reactedRef = parsedPlain.repliedTo || ref || ''
+			return JSON.stringify({ ...parsedPlain, repliedTo: reactedRef, isReaction: true })
+		}
+	} catch (error) { /* fall through to decrypt */ }
+
 	if (decodedString.includes('messageText') || decodedString === '4001') {
 		if (decodedString === '4001') {
 			const firstString = 'First group key created.'
@@ -2820,9 +2829,8 @@ const decode = (string, keys, ref) => {
 		if (responseData.type === 'notification') {
 			hubMessageStr = responseData.data.message
 		} else if (ref !== 'noref' && responseData.type === 'reaction') {
-			reactionStr = '"isReaction":true,'
-			repliedToStr = ref
-			hubMessageStr = responseData.content
+			const reactedRef = responseData.repliedTo || ref
+			return JSON.stringify({ ...responseData, repliedTo: reactedRef, isReaction: true })
 		} else if (responseData.message.includes('qortal://use-embed/')) {
 			const useEmbed1 = extensionToPointer(responseData.message)
 			const useEmbed2 = /<newpointer>(.*?)<\/newpointer>/g.exec(useEmbed1)

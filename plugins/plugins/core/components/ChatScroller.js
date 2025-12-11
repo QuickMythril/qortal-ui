@@ -2542,18 +2542,31 @@ class ChatMenu extends LitElement {
 				>
 					<vaadin-icon icon="vaadin:copy" slot="icon"></vaadin-icon>
 				</div>
-				<div
-					class=${`menu-icon ${!this.firstMessageInChat ? 'tooltip' : ''}`}
-					data-text="${translate('blockpage.bcchange11')}"
-					@click="${() => {if (this.version === '0') {this.versionErrorSnack(); return} this.setRepliedToMessageObj({...this.originalMessage, version: this.version,})}}"
-				>
-					<vaadin-icon icon="vaadin:reply" slot="icon"></vaadin-icon>
-				</div>
-				${this.myAddress === this.originalMessage.sender && !this.gif ?
+					<div
+						class=${`menu-icon ${!this.firstMessageInChat ? 'tooltip' : ''}`}
+						data-text="${translate('blockpage.bcchange11')}"
+						@click="${() => {if (this.version === '0') {this.versionErrorSnack(); return} this.setRepliedToMessageObj({...this.originalMessage, version: this.version,})}}"
+					>
+						<vaadin-icon icon="vaadin:reply" slot="icon"></vaadin-icon>
+					</div>
+					<div
+						class=${`menu-icon ${!this.firstMessageInChat ? 'tooltip' : ''}`}
+						data-text="${translate('chatpage.cchange74') || 'React'}"
+						@click=${(e) => {
+							if (!this.emojiPicker || !this.setToggledMessage) return
+							this.setToggledMessage(this.originalMessage)
+							if (typeof this.emojiPicker.togglePicker === 'function') {
+								this.emojiPicker.togglePicker(e.currentTarget)
+							}
+						}}
+					>
+						<vaadin-icon icon="vaadin:smiley-o" slot="icon"></vaadin-icon>
+					</div>
+					${this.myAddress === this.originalMessage.sender && !this.gif ?
 		html`
-						<div
-							class=${`menu-icon ${!this.firstMessageInChat ? 'tooltip' : ''}`}
-							data-text="${translate('blockpage.bcchange12')}"
+							<div
+								class=${`menu-icon ${!this.firstMessageInChat ? 'tooltip' : ''}`}
+								data-text="${translate('blockpage.bcchange12')}"
 							@click=${() => {
 		if (this.version === '0') {
 			this.versionErrorSnack() 
