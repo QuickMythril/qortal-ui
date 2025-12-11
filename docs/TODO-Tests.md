@@ -4,7 +4,7 @@ Tracking planned additions to strengthen chat handling and node integration test
 
 ## Chat parsing (offline/unit)
 - [x] Orphan edit: only edit present, synthesize base and render edited content.
-- [ ] Reaction without base: keep reactions visible without hiding other messages.
+- [x] Reaction without base: keep reactions visible without hiding other messages.
 - [ ] Reply to missing base: render reply with safe fallback preview.
 - [ ] Out-of-order arrival: update/reaction before base, then base arrives; final render keeps base with updates/reactions intact.
 - [ ] Group key cache hydrate: use localStorage `symKeysCurrent` entry for a groupId without network.
