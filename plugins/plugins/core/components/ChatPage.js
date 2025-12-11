@@ -2817,7 +2817,7 @@ async addToUpdateMessageHashmap(array) {
 	 * @param {Object} encodedMessageObj
 	 *
 	 */
-	decodeMessage(encodedMessageObj, isReceipient, _publicKey, symKeys) {
+	async decodeMessage(encodedMessageObj, isReceipient, _publicKey, symKeys) {
 		let isReceipientVar
 		let _publicKeyVar
 

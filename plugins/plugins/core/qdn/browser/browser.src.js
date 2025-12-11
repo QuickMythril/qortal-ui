@@ -370,7 +370,8 @@ class WebBrowser extends LitElement {
 						const res = await parentEpml.request('apiCall', { type: 'api', url })
 						response = JSON.stringify(res)
 					} catch (error) {
-						response = JSON.stringify({ error: error?.message || 'Failed to search chat messages' })
+						const message = (error && error.message) ? error.message : 'Failed to search chat messages'
+						response = JSON.stringify({ error: message })
 					}
 				}
 					break

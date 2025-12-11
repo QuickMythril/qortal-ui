@@ -158,7 +158,7 @@ export const replaceMessagesEdited = async ({ decodedMessages, parentEpml, isRec
 			})
 
 			if (Array.isArray(newMsgResponse) && newMsgResponse.length > 0) {
-				const decodeResponseItem = decodeMessageFunc(newMsgResponse[0], isReceipient, _publicKey, symKeys)
+				const decodeResponseItem = await decodeMessageFunc(newMsgResponse[0], isReceipient, _publicKey, symKeys)
 
 				delete decodeResponseItem.timestamp
 
@@ -205,8 +205,8 @@ export const replaceMessagesEdited = async ({ decodedMessages, parentEpml, isRec
 				})
 
 				if (originalReplyMessage && Array.isArray(replyResponse) && replyResponse.length !== 0) {
-					const decodeOriginalReply = decodeMessageFunc(originalReplyMessage, isReceipient, _publicKey, symKeys)
-					const decodeUpdatedReply = decodeMessageFunc(replyResponse[0], isReceipient, _publicKey, symKeys)
+					const decodeOriginalReply = await decodeMessageFunc(originalReplyMessage, isReceipient, _publicKey, symKeys)
+					const decodeUpdatedReply = await decodeMessageFunc(replyResponse[0], isReceipient, _publicKey, symKeys)
 
 					msgItem.repliedToData = {
 						...decodeUpdatedReply,
@@ -214,7 +214,7 @@ export const replaceMessagesEdited = async ({ decodedMessages, parentEpml, isRec
 						sender: decodeOriginalReply.sender
 					}
 				} else if (originalReplyMessage) {
-					msgItem.repliedToData = decodeMessageFunc(originalReplyMessage, isReceipient, _publicKey, symKeys)
+					msgItem.repliedToData = await decodeMessageFunc(originalReplyMessage, isReceipient, _publicKey, symKeys)
 				}
 			}
 
