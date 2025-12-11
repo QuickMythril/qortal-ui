@@ -63,34 +63,61 @@ const sortActiveChat = (activeChatObject, localChatHeads) => {
 
 let initialChatWatch = 0
 
+const mapByKey = (list = [], key) => {
+	return (list || []).reduce((acc, item) => {
+		if (item && item[key] !== undefined) {
+			acc[item[key]] = item
+		}
+		return acc
+	}, {})
+}
+
+const filterBaseEntries = (list = [], prevMap = {}, key) => {
+	return (list || []).map(item => {
+		const hasRef = item && (item.chatReference || item.hasChatReference)
+		const isNonBaseType = item && (item.type === 'reaction' || item.type === 'edit' || item.isEdited)
+		if (!hasRef && !isNonBaseType) return item
+		const previous = item && prevMap[item[key]]
+		return previous ? previous : null
+	}).filter(Boolean)
+}
+
 const chatHeadWatcher = (activeChats) => {
 	let addr = window.parent.reduxStore.getState().app.selectedAddress.address
 	let key = `${addr.substr(0, 10)}_chat-heads`
 
 	try {
 		let localChatHeads = localStorage.getItem(key)
+		const previousChatHeads = localChatHeads ? JSON.parse(localChatHeads) : null
+		const prevGroupsMap = mapByKey(previousChatHeads && previousChatHeads.groups, 'groupId')
+		const prevDirectMap = mapByKey(previousChatHeads && previousChatHeads.direct, 'address')
+		const sanitizedActiveChats = {
+			...activeChats,
+			groups: filterBaseEntries(activeChats && activeChats.groups, prevGroupsMap, 'groupId'),
+			direct: filterBaseEntries(activeChats && activeChats.direct, prevDirectMap, 'address')
+		}
 
 		if (localChatHeads === null) {
 			parentEpml.request('setLocalStorage', {
 				key: key,
-				dataObj: activeChats
+				dataObj: sanitizedActiveChats
 			}).then(ms => {
-				parentEpml.request('setChatHeads', activeChats).then(ret => {
+				parentEpml.request('setChatHeads', sanitizedActiveChats).then(ret => {
 					// ...
 				})
 			})
 		} else {
 			parentEpml.request('setLocalStorage', {
 				key: key,
-				dataObj: activeChats
+				dataObj: sanitizedActiveChats
 			}).then(ms => {
-				parentEpml.request('setChatHeads', activeChats).then(ret => {
+				parentEpml.request('setChatHeads', sanitizedActiveChats).then(ret => {
 					// ...
 				})
 			})
 
 			if (initialChatWatch >= 1) {
-				sortActiveChat(activeChats, localChatHeads)
+				sortActiveChat(sanitizedActiveChats, localChatHeads)
 			} else {
 				initialChatWatch = initialChatWatch + 1
 			}
@@ -116,9 +143,9 @@ parentEpml.subscribe('logged_in', async isLoggedIn => {
 		let activeChatSocketLink
 
 		if (nodeProtocol === "https") {
-			activeChatSocketLink = `wss://${nodeUrl}/websockets/chat/active/${window.parent.reduxStore.getState().app.selectedAddress.address}?encoding=BASE64`
+			activeChatSocketLink = `wss://${nodeUrl}/websockets/chat/active/${window.parent.reduxStore.getState().app.selectedAddress.address}?encoding=BASE64&haschatreference=false`
 		} else {
-			activeChatSocketLink = `ws://${nodeUrl}/websockets/chat/active/${window.parent.reduxStore.getState().app.selectedAddress.address}?encoding=BASE64`
+			activeChatSocketLink = `ws://${nodeUrl}/websockets/chat/active/${window.parent.reduxStore.getState().app.selectedAddress.address}?encoding=BASE64&haschatreference=false`
 		}
 
 		const activeChatSocket = new WebSocket(activeChatSocketLink)
