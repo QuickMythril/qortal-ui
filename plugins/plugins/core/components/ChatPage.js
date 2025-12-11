@@ -2959,6 +2959,7 @@ async addToUpdateMessageHashmap(array) {
 			let nodeUrl = myNode.domain + ':' + myNode.port
 			let nodeProtocol = myNode.protocol
 			let directSocketLink
+			let initialFetched = false
 
 			if (nodeProtocol === 'https') {
 				directSocketLink = `wss://${nodeUrl}/websockets/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${cid}&encoding=BASE64&limit=1`
@@ -2972,6 +2973,14 @@ async addToUpdateMessageHashmap(array) {
 			// Open Connection
 			currentSocket.onopen = () => {
 				setTimeout(pingDirectSocket, 50)
+				if (!noInitial) {
+					setTimeout(async () => {
+						if (initialFetched || this.disposed || socketRunToken !== this.socketToken) return
+						initialFetched = true
+						const getInitialMessages = await this.fetchMessagesWithReferences(`/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${cid}&limit=${chatLimit}&reverse=true`)
+						this.processMessages(getInitialMessages, true, false, 0)
+					}, 300)
+				}
 			}
 
 			// Message Event
@@ -2983,6 +2992,7 @@ async addToUpdateMessageHashmap(array) {
 				}
 
 				if (initial === 0) {
+					initialFetched = true
 					this.lastReadMessageTimestamp = await chatLastSeen.getItem(this.chatId) || 0
 					if (noInitial) return
 					let getInitialMessages = []
@@ -3232,6 +3242,8 @@ async addToUpdateMessageHashmap(array) {
 			let nodeUrl = myNode.domain + ':' + myNode.port
 			let nodeProtocol = myNode.protocol
 			let groupSocketLink
+			let initialFetched = false
+			let loadingTimeout
 
 			if (nodeProtocol === 'https') {
 				groupSocketLink = `wss://${nodeUrl}/websockets/chat/messages?txGroupId=${groupId}&encoding=BASE64&limit=1`
@@ -3246,6 +3258,25 @@ async addToUpdateMessageHashmap(array) {
 			// Open Connection
 			currentSocket.onopen = () => {
 				setTimeout(pingGroupSocket, 50)
+				if (!noInitial) {
+					loadingTimeout = setTimeout(() => {
+						if (this.isLoadingMessages && currentSocket === this.webSocket) {
+							this.isLoadingMessages = false
+							this.requestUpdate()
+						}
+					}, 10000)
+					setTimeout(async () => {
+						if (initialFetched || this.disposed || socketRunToken !== this.socketToken) return
+						initialFetched = true
+						try {
+							const getInitialMessages = await this.fetchMessagesWithReferences(`/chat/messages?txGroupId=${groupId}&limit=${chatLimit}&reverse=true&encoding=BASE64`)
+							this.processMessages(getInitialMessages, true, false, 0)
+						} catch (error) {
+							this.isLoadingMessages = false
+							this.requestUpdate()
+						}
+					}, 300)
+				}
 			}
 
 			// Message Event
@@ -3256,6 +3287,8 @@ async addToUpdateMessageHashmap(array) {
 					return
 				}
 				if (initial === 0) {
+					clearTimeout(loadingTimeout)
+					initialFetched = true
 					this.lastReadMessageTimestamp = await chatLastSeen.getItem(this.chatId) || 0
 					if (noInitial) return
 					let getInitialMessages = []
@@ -3309,6 +3342,7 @@ async addToUpdateMessageHashmap(array) {
 			currentSocket.onclose = (e) => {
 				clearTimeout(groupSocketTimeout)
 				clearTimeout(timeoutId)
+				clearTimeout(loadingTimeout)
 				if (currentSocket !== this.webSocket) return
 				this.webSocket = ''
 				if (e.reason === 'switch chat') return
@@ -3320,6 +3354,7 @@ async addToUpdateMessageHashmap(array) {
 			currentSocket.onerror = () => {
 				clearTimeout(groupSocketTimeout)
 				clearTimeout(timeoutId)
+				clearTimeout(loadingTimeout)
 				if (currentSocket !== this.webSocket) return
 				if (this.disposed || socketRunToken !== this.socketToken) return
 				currentSocket.close()
@@ -3352,7 +3387,9 @@ async addToUpdateMessageHashmap(array) {
 				initDirectReference(chatId)
 			} else {
 				let groupChatId = Number(chatId)
-				await loadGroupKeys(groupChatId)
+				if (groupChatId !== 0) {
+					loadGroupKeys(groupChatId).catch(() => { /* non-blocking */ })
+				}
 				await this.refreshBlocklists()
 				initGroup(groupChatId)
 				initGroupReference(groupChatId)
