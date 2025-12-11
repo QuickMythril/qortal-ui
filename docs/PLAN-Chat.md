@@ -19,8 +19,8 @@
   - [x] "Respect Core group membership constraints": On send, check membership (skip for group 0/open preview) and block with clear error if not a member; do not block fetching/viewing.
 
 - Message format and embeds
-  - [ ] "Preserve rich message objects": Ensure sent messages keep the provided structure (replies, images, embeds) and that display logic can render the same fields as Hub’s `MessageDisplay`.
-  - [ ] "Handle UI/extension message mix": Decode extension vs UI messages consistently (mirror Hub’s `decodeBase64ForUIChatMessages` vs ext handling).
+  - [x] "Preserve rich message objects": Ensure sent messages keep the provided structure (replies, images, embeds) and that display logic can render the same fields as Hub’s `MessageDisplay`.
+  - [x] "Handle UI/extension message mix": Decode extension vs UI messages consistently (mirror Hub’s `decodeBase64ForUIChatMessages` vs ext handling).
 
 - UI integration / state
   - [ ] "Blocklist filtering": Port Hub’s blocklist filtering before decrypt/display.
