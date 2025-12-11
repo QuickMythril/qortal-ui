@@ -2444,6 +2444,7 @@ class AppAvatar extends connect(store)(LitElement) {
 
 	render() {
 		let appAvatarImg = ''
+		const iconSize = Number(this.size) || 60
 
 		if (this.appname) {
 			const appAvatarNode = store.getState().app.nodeConfig.knownNodes[store.getState().app.nodeConfig.node]
@@ -2458,7 +2459,7 @@ class AppAvatar extends connect(store)(LitElement) {
 		html`
 					${appAvatarImg}
 				` : html`
-					<mwc-icon class="menuIcon">${this.appicon}</mwc-icon>
+					<mwc-icon class="menuIcon" style="--mdc-icon-size:${iconSize}px;">${this.appicon}</mwc-icon>
 				`
 }
 		`

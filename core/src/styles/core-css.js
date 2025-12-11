@@ -2938,10 +2938,11 @@ export const navBarStyles = css`
     }
 
     .app-icon-box.folder {
+        box-sizing: border-box;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 5px 14px;
+        padding: 8px;
         min-width: 80px;
         min-height: 80px;
         width: 80px;
@@ -2958,6 +2959,7 @@ export const navBarStyles = css`
     }
 
     .folder-preview {
+        box-sizing: border-box;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 2px;
