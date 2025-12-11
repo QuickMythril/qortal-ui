@@ -305,28 +305,40 @@ class ChatScroller extends LitElement {
 
 		window.addEventListener('storage', this.handleStorage)
 
-		this.emojiPicker.on('emoji', (selection) => {
-			if (!toggledMessage) return
+			this.emojiPicker.on('emoji', (selection) => {
+				if (!toggledMessage) return
 
-			const chatRef = toggledMessage.chatReference || toggledMessage.signature
-			const mapForMessage = chatRef && this.reactionsMap ? this.reactionsMap[chatRef] : null
-			const mapList = mapForMessage && mapForMessage[selection.emoji]
-			let userHasReacted = Array.isArray(mapList)
-				? mapList.some((r) => r.sender === this.myAddress)
-				: false
+				const chatRef = toggledMessage.chatReference || toggledMessage.signature
+				const mapForMessage = chatRef && this.reactionsMap ? this.reactionsMap[chatRef] : null
+				const mapList = mapForMessage && mapForMessage[selection.emoji]
+				let userHasReacted = Array.isArray(mapList)
+					? mapList.some((r) => r.sender === this.myAddress)
+					: false
 
-			if (!userHasReacted && Array.isArray(toggledMessage.reactions)) {
-				const match = toggledMessage.reactions.find((r) => r.type === selection.emoji)
-				if (match && Array.isArray(match.users)) {
-					userHasReacted = match.users.some((u) => u.address === this.myAddress)
+				if (!userHasReacted && Array.isArray(toggledMessage.reactions)) {
+					const match = toggledMessage.reactions.find((r) => r.type === selection.emoji)
+					if (match && Array.isArray(match.users)) {
+						userHasReacted = match.users.some((u) => u.address === this.myAddress)
+					}
 				}
-			}
 
-			this.sendMessage({
-				type: 'reaction',
-				editedMessageObj: toggledMessage,
-				reaction: selection.emoji,
-				contentState: !userHasReacted
+				if (typeof this.sendMessage === 'function') {
+					// Optimistic update via ChatPage helper when available
+					this.sendMessage({
+						type: 'reaction',
+						editedMessageObj: toggledMessage,
+						reaction: selection.emoji,
+						contentState: !userHasReacted,
+						optimistic: true
+					})
+					return
+				}
+
+				this.sendMessage({
+					type: 'reaction',
+					editedMessageObj: toggledMessage,
+					reaction: selection.emoji,
+					contentState: !userHasReacted
 			})
 		})
 
@@ -1982,35 +1994,36 @@ class MessageTemplate extends LitElement {
 							return html`
 								<span
 									@click=${() => {
-										// Optimistic toggle: update the reactions map immediately for responsiveness
-										const chatRef = this.messageObj.chatReference || this.messageObj.signature
-										const map = this.reactionsMap || {}
-										const bucket = map[chatRef] ? { ...map[chatRef] } : {}
-										const list = bucket[reaction.type] ? [...bucket[reaction.type]] : []
-										const myIdx = list.findIndex((u) => u.sender === this.myAddress)
-										if (userHasReacted && myIdx !== -1) {
-											list.splice(myIdx, 1)
-										} else if (!userHasReacted) {
-											list.push({
-												sender: this.myAddress,
-												senderName: this.loggedInUserName
-											})
-										}
-										if (list.length > 0) {
-											bucket[reaction.type] = list
-										} else {
-											delete bucket[reaction.type]
-										}
-										const updated = { ...map, [chatRef]: bucket }
-										this.reactionsMap = updated
+								// Optimistic toggle: update the reactions map immediately for responsiveness
+								const chatRef = this.messageObj.chatReference || this.messageObj.signature
+								const map = this.reactionsMap || {}
+								const bucket = map[chatRef] ? { ...map[chatRef] } : {}
+								const list = bucket[reaction.type] ? [...bucket[reaction.type]] : []
+								const myIdx = list.findIndex((u) => u.sender === this.myAddress)
+								if (userHasReacted && myIdx !== -1) {
+									list.splice(myIdx, 1)
+								} else if (!userHasReacted) {
+									list.push({
+										sender: this.myAddress,
+										senderName: this.loggedInUserName
+									})
+								}
+								if (list.length > 0) {
+									bucket[reaction.type] = list
+								} else {
+									delete bucket[reaction.type]
+								}
+								const updated = { ...map, [chatRef]: bucket }
+								this.reactionsMap = updated
 
-										this.sendMessage({
-											type: 'reaction',
-											editedMessageObj: this.messageObj,
-											reaction: reaction.type,
-											contentState: !userHasReacted
-										})
-									}}
+								this.sendMessage({
+									type: 'reaction',
+									editedMessageObj: this.messageObj,
+									reaction: reaction.type,
+									contentState: !userHasReacted,
+									optimistic: true
+								})
+							}}
 									id=${`reactions-${index}`}
 									class="reactions-bg"
 								>

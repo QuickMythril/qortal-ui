@@ -923,6 +923,36 @@ class ChatPage extends LitElement {
 		this.setSelectedHead(props)
 	}
 
+	applyReactionOptimistic(chatReference, emoji, add) {
+		if (!chatReference || !emoji) return
+		const bucket = reactionsByRef.get(chatReference) || {}
+		const list = bucket[emoji] ? [...bucket[emoji]] : []
+		const myAddr = this.loggedInUserAddress || (this.selectedAddress && this.selectedAddress.address)
+		const myName = this.loggedInUserName || ''
+		const existingIdx = list.findIndex((r) => r.sender === myAddr)
+		if (add) {
+			if (existingIdx === -1) {
+				list.push({ sender: myAddr, senderName: myName, timestamp: Date.now() })
+			}
+			bucket[emoji] = list
+		} else {
+			if (existingIdx !== -1) {
+				list.splice(existingIdx, 1)
+			}
+			if (list.length > 0) {
+				bucket[emoji] = list
+			} else {
+				delete bucket[emoji]
+			}
+		}
+		if (Object.keys(bucket).length > 0) {
+			reactionsByRef.set(chatReference, bucket)
+		} else {
+			reactionsByRef.delete(chatReference)
+		}
+		this.requestUpdate()
+	}
+
 	setSelectedHead(props) {
 		this.selectedHead = {
 			...this.selectedHead,
@@ -4075,7 +4105,8 @@ addToQueue(outSideMsg, messageQueue) {
 
 				let contentState = true
 
-				if (typeof outSideMsg.contentState === 'boolean') {
+				const hasContentState = typeof outSideMsg.contentState === 'boolean'
+				if (hasContentState) {
 					contentState = outSideMsg.contentState
 				} else {
 					// Prefer live reactions map when deciding toggle state; fallback to embedded reactions for legacy messages
@@ -4110,6 +4141,12 @@ addToQueue(outSideMsg, messageQueue) {
 					contentState,
 					specialId: this.uid.rnd(),
 					senderName: userName
+				}
+
+				// Optimistic update for immediate UI feedback
+				if (typeof outSideMsg.optimistic === 'boolean') {
+					const shouldAdd = contentState === true
+					this.applyReactionOptimistic(chatReference, outSideMsg.reaction, shouldAdd)
 				}
 
 				return this.sendMessage({ messageText: JSON.stringify(reactionPayload), typeMessage, chatReference, isForward: false, isReceipient, _chatId, _publicKey, messageQueue })
