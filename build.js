@@ -5,6 +5,7 @@ const pluginsController = require('./plugins/default-plugins.js')
 const generateBuildConfig = uiCore('generate_build_config')
 const build = uiCore('build')
 const buildDefalutPlugins = pluginsController('build')
+const startTime = process.hrtime.bigint()
 
 const srcConfig = {
 	...config.build,
@@ -17,7 +18,30 @@ const srcConfig = {
 
 const { buildConfig, inlineConfigs } = generateBuildConfig(srcConfig)
 
-build(buildConfig.options, buildConfig.outputs, buildConfig.outputOptions, buildConfig.inputOptions, inlineConfigs).then(() => {
+const formatMs = (start) => (Number(process.hrtime.bigint() - start) / 1e6).toFixed(2)
+
+async function runBuild() {
+	const coreStart = process.hrtime.bigint()
+
+	await build(
+		buildConfig.options,
+		buildConfig.outputs,
+		buildConfig.outputOptions,
+		buildConfig.inputOptions,
+		inlineConfigs
+	)
+
+	console.log(`Core build completed in ${formatMs(coreStart)} ms`)
 	console.log('Building and Bundling Plugins')
-	buildDefalutPlugins()
+
+	const pluginsStart = process.hrtime.bigint()
+	await buildDefalutPlugins()
+
+	console.log(`Plugins build completed in ${formatMs(pluginsStart)} ms`)
+	console.log(`Total build completed in ${formatMs(startTime)} ms`)
+}
+
+runBuild().catch(err => {
+	console.error(err)
+	process.exit(1)
 })

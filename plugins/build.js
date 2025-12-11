@@ -2,8 +2,8 @@ const rollup = require('rollup')
 
 const configs = require('./build-config.js')()
 
-const build = () => {
-	configs.forEach(async file => {
+const build = async () => {
+	await Promise.all(configs.map(async file => {
 		const bundle = await rollup.rollup(file.inputOptions)
 		const { output } = await bundle.generate(file.outputOptions)
 
@@ -16,7 +16,7 @@ const build = () => {
 		}
 
 		await bundle.write(file.outputOptions)
-	})
+	}))
 
 	console.log('BUILD PLUGINS ==> Bundling Done 🎉')
 }
