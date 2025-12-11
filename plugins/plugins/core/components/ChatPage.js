@@ -2988,7 +2988,7 @@ async addToUpdateMessageHashmap(array) {
 			let nodeUrl = myNode.domain + ':' + myNode.port
 			let nodeProtocol = myNode.protocol
 			let directSocketLink
-			let initialFetched = false
+			let httpInitialRequested = false
 
 			if (nodeProtocol === 'https') {
 				directSocketLink = `wss://${nodeUrl}/websockets/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${cid}&encoding=BASE64&limit=1`
@@ -3002,10 +3002,10 @@ async addToUpdateMessageHashmap(array) {
 			// Open Connection
 			currentSocket.onopen = () => {
 				setTimeout(pingDirectSocket, 50)
-				if (!noInitial) {
+				if (!noInitial && !httpInitialRequested) {
+					httpInitialRequested = true
 					setTimeout(async () => {
-						if (initialFetched || this.disposed || socketRunToken !== this.socketToken) return
-						initialFetched = true
+						if (this.disposed || socketRunToken !== this.socketToken) return
 						const getInitialMessages = await this.fetchMessagesWithReferences(`/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${cid}&limit=${chatLimit}&reverse=true`)
 						await this.processMessages(getInitialMessages, true, false, 0)
 						this.initialLoadCompleted = true
@@ -3022,7 +3022,6 @@ async addToUpdateMessageHashmap(array) {
 				}
 
 				if (initial === 0) {
-					initialFetched = true
 					this.lastReadMessageTimestamp = await chatLastSeen.getItem(this.chatId) || 0
 					if (noInitial) return
 					let getInitialMessages = []
@@ -3273,7 +3272,7 @@ async addToUpdateMessageHashmap(array) {
 			let nodeUrl = myNode.domain + ':' + myNode.port
 			let nodeProtocol = myNode.protocol
 			let groupSocketLink
-			let initialFetched = false
+			let httpInitialRequested = false
 			let loadingTimeout
 
 			if (nodeProtocol === 'https') {
@@ -3289,7 +3288,8 @@ async addToUpdateMessageHashmap(array) {
 			// Open Connection
 			currentSocket.onopen = () => {
 				setTimeout(pingGroupSocket, 50)
-				if (!noInitial) {
+				if (!noInitial && !httpInitialRequested) {
+					httpInitialRequested = true
 					loadingTimeout = setTimeout(() => {
 						if (this.isLoadingMessages && currentSocket === this.webSocket) {
 							this.isLoadingMessages = false
@@ -3297,8 +3297,7 @@ async addToUpdateMessageHashmap(array) {
 						}
 					}, 10000)
 					setTimeout(async () => {
-						if (initialFetched || this.disposed || socketRunToken !== this.socketToken) return
-						initialFetched = true
+						if (this.disposed || socketRunToken !== this.socketToken) return
 						try {
 							const getInitialMessages = await this.fetchMessagesWithReferences(`/chat/messages?txGroupId=${groupId}&limit=${chatLimit}&reverse=true&encoding=BASE64`)
 							await this.processMessages(getInitialMessages, true, false, 0)
@@ -3320,7 +3319,6 @@ async addToUpdateMessageHashmap(array) {
 				}
 				if (initial === 0) {
 					clearTimeout(loadingTimeout)
-					initialFetched = true
 					this.lastReadMessageTimestamp = await chatLastSeen.getItem(this.chatId) || 0
 					if (noInitial) return
 					let getInitialMessages = []
