@@ -4099,15 +4099,16 @@ addToQueue(outSideMsg, messageQueue) {
 
 				return this.sendMessage({ messageText: stringifyMessageObject, typeMessage, chatReference: undefined, isForward: false, isReceipient, _chatId, _publicKey, messageQueue })
 			} else if (outSideMsg && outSideMsg.type === 'reaction') {
+				const targetMessage = outSideMsg.editedMessageObj || {}
+				const chatReference = targetMessage.chatReference || targetMessage.signature
+				if (!chatReference) {
+					parentEpml.request('showSnackBar', get('chatpage.cchange74') || 'Select a message to react to first.')
+					return
+				}
+
 				const userName = await getName(this.selectedAddress.address)
 
 				typeMessage = 'reaction'
-
-				let chatReference = outSideMsg.editedMessageObj.signature
-
-				if (outSideMsg.editedMessageObj.chatReference) {
-					chatReference = outSideMsg.editedMessageObj.chatReference
-				}
 
 				let contentState = true
 
@@ -4127,7 +4128,7 @@ addToQueue(outSideMsg, messageQueue) {
 						contentState = false
 					} else {
 						try {
-							const parsedMessageObj = JSON.parse(outSideMsg.editedMessageObj.decodedMessage)
+							const parsedMessageObj = targetMessage.decodedMessage ? JSON.parse(targetMessage.decodedMessage) : {}
 							const reactions = parsedMessageObj.reactions || []
 							const findEmojiIndex = reactions.findIndex((reaction) => reaction.type === outSideMsg.reaction)
 							if (findEmojiIndex !== -1) {

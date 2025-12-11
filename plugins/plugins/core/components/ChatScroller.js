@@ -44,7 +44,7 @@ const parentEpml = new Epml({ type: 'WINDOW', source: window.parent })
 
 const uid = new ShortUniqueId()
 
-let toggledMessage = {}
+let toggledMessage = null
 
 const extractComponents = async (url) => {
 	if (!url.startsWith('qortal://')) {
@@ -309,6 +309,8 @@ class ChatScroller extends LitElement {
 				if (!toggledMessage) return
 
 				const chatRef = toggledMessage.chatReference || toggledMessage.signature
+				if (!chatRef) return
+
 				const mapForMessage = chatRef && this.reactionsMap ? this.reactionsMap[chatRef] : null
 				const mapList = mapForMessage && mapForMessage[selection.emoji]
 				let userHasReacted = Array.isArray(mapList)
