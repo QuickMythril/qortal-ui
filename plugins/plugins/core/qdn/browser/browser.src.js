@@ -335,6 +335,46 @@ class WebBrowser extends LitElement {
 				}
 					break
 
+				case actions.SEARCH_CHAT_MESSAGES: {
+					const {
+						involving,
+						txGroupId,
+						reference,
+						chatReference,
+						before,
+						after,
+						limit,
+						offset,
+						reverse,
+						hasChatReference,
+						encoding,
+					} = data || {}
+					const params = new URLSearchParams()
+					if (Array.isArray(involving)) {
+						involving.forEach((v) => params.append('involving', v))
+					} else if (involving) {
+						params.append('involving', involving)
+					}
+					if (txGroupId) params.append('txGroupId', txGroupId)
+					if (reference) params.append('reference', reference)
+					if (chatReference) params.append('chatReference', chatReference)
+					if (before) params.append('before', before)
+					if (after) params.append('after', after)
+					if (limit) params.append('limit', limit)
+					if (offset) params.append('offset', offset)
+					if (reverse !== undefined) params.append('reverse', reverse)
+					if (hasChatReference !== undefined) params.append('haschatreference', hasChatReference)
+					params.append('encoding', encoding || 'BASE64')
+					try {
+						const url = `/chat/messages?${params.toString()}`
+						const res = await parentEpml.request('apiCall', { type: 'api', url })
+						response = JSON.stringify(res)
+					} catch (error) {
+						response = JSON.stringify({ error: error?.message || 'Failed to search chat messages' })
+					}
+				}
+					break
+
 				case actions.GET_ARRR_SYNC_STATUS: {
 					response = await getArrrSyncStatus()
 				}
