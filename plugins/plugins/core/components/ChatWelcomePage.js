@@ -56,6 +56,7 @@ class ChatWelcomePage extends LitElement {
 		this.promotionsInterval = null
 		this.memberGroups = []
 		this.memberGroupIds = new Set()
+		this.promotionsCacheKey = 'chatPromotionsCache'
 	}
 
 	render() {
@@ -133,6 +134,7 @@ class ChatWelcomePage extends LitElement {
 		this.changeTheme()
 		this.changeLanguage()
 		this.syncAddressAndName()
+		this.loadPromotionsFromCache()
 		this.getPromotions()
 
 		const stopKeyEventPropagation = (e) => {
@@ -181,12 +183,6 @@ class ChatWelcomePage extends LitElement {
 
 		parentEpml.imReady()
 
-		this.clearConsole()
-
-		setInterval(() => {
-			this.clearConsole()
-		}, 60000)
-
 		this.promotionsInterval = setInterval(() => {
 			this.getPromotions()
 		}, 30 * 60 * 1000)
@@ -196,14 +192,6 @@ class ChatWelcomePage extends LitElement {
 		super.disconnectedCallback()
 		if (this.promotionsInterval) {
 			clearInterval(this.promotionsInterval)
-		}
-	}
-
-	clearConsole() {
-		if (!isElectron()) {
-		} else {
-			console.clear()
-			window.parent.electronAPI.clearCache()
 		}
 	}
 
@@ -257,10 +245,27 @@ class ChatWelcomePage extends LitElement {
 		return isGroupMember(this.memberGroups, groupId)
 	}
 
+	loadPromotionsFromCache() {
+		try {
+			const raw = localStorage.getItem(this.promotionsCacheKey)
+			if (!raw) return
+			const parsed = JSON.parse(raw)
+			if (!parsed || !Array.isArray(parsed.items) || !parsed.fetchedAt) return
+			this.promotions = parsed.items
+		} catch (e) { /* ignore cache errors */ }
+	}
+
+	savePromotionsToCache() {
+		try {
+			const payload = { items: this.promotions, fetchedAt: Date.now() }
+			localStorage.setItem(this.promotionsCacheKey, JSON.stringify(payload))
+		} catch (e) { /* ignore cache errors */ }
+	}
+
 	async getPromotions(force = false) {
 		try {
 			if (this.promotionsLoading && !force) return
-			this.promotionsLoading = true
+			this.promotionsLoading = this.promotions.length === 0
 			this.promotionsError = ''
 			const baseUrl = this.getNodeBaseUrl()
 			const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000
@@ -306,6 +311,7 @@ class ChatWelcomePage extends LitElement {
 			}
 
 			this.promotions = unique
+			this.savePromotionsToCache()
 		} catch (error) {
 			this.promotionsError = (error && error.message) || (translate('welcomepage.promotionsError') || 'Unable to load promotions')
 		} finally {
