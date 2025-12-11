@@ -2910,7 +2910,7 @@ export const decryptChatMessageBase64 = (encryptedMessage, privateKey, recipient
 			return JSON.stringify({ ...parsed, isReaction: true })
 		}
 
-		if (parsed && parsed.messageText) {
+		if (parsed && (parsed.messageText || parsed.message)) {
 			let decrypted3 = Object.assign(parsed, { isPrivate: true })
 			return JSON.stringify(decrypted3)
 		}

@@ -1145,7 +1145,9 @@ class MessageTemplate extends LitElement {
 			}
 		} else {
 			try {
-				const parsedMessageObj = JSON.parse(this.messageObj.decodedMessage)
+				const parsedMessageObj = typeof this.messageObj.decodedMessage === 'string'
+					? JSON.parse(this.messageObj.decodedMessage)
+					: this.messageObj.decodedMessage
 
 				if (parsedMessageObj.version > 1) {
 					if (parsedMessageObj.messageText) {
@@ -1252,7 +1254,11 @@ class MessageTemplate extends LitElement {
 					}
 				} catch (error) { /* no embed processing */ }
 
-				message = parsedMessageObj.messageText ? parsedMessageObj.messageText : parsedMessageObj.message
+				if (parsedMessageObj.messageText !== undefined) {
+					message = parsedMessageObj.messageText
+				} else {
+					message = parsedMessageObj.message
+				}
 				repliedToData = this.messageObj.repliedToData
 				isImageDeleted = parsedMessageObj.isImageDeleted
 				isGifDeleted = parsedMessageObj.isGifDeleted
