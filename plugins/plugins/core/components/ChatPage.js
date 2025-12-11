@@ -2987,7 +2987,10 @@ async addToUpdateMessageHashmap(array) {
 				if (!res.ok) throw new Error('Failed to download group key')
 				const encryptedData = await res.text()
 
-				const privateKeyBase58 = window.parent.Base58.encode(window.parent.reduxStore.getState().app.wallet._addresses[0].keyPair.privateKey)
+				const selected = window.parent.reduxStore.getState().app.selectedAddress
+				const privateKeyBytes = selected && selected.keyPair && selected.keyPair.privateKey
+				if (!privateKeyBytes) throw new Error('Missing private key')
+				const privateKeyBase58 = window.parent.Base58.encode(privateKeyBytes)
 				const decrypted = decryptGroupData(encryptedData, privateKeyBase58)
 				const secretKeyObject = JSON.parse(new TextDecoder().decode(decrypted.decryptedData))
 
