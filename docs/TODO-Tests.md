@@ -10,7 +10,7 @@ Tracking planned additions to strengthen chat handling and node integration test
 - [x] Private vs group decode: direct (txGroupId 0) and group (>0) paths don’t cross flags.
 - [x] Cannot decrypt fallback: encrypted-like payload with missing key shows placeholder, no crash.
 - [x] Hub-format payload: version 3 / messageText parsed same as standard.
-- [ ] Embed parsing: encoded embed link is stripped and structured embed info returned.
+- [x] Embed parsing: encoded embed link is stripped and structured embed info returned.
 
 ## Node-backed integration (already present)
 - [x] Admin status reachable.
