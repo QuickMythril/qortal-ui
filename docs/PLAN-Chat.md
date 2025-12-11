@@ -27,8 +27,8 @@
   - [x] "Threading support": Ensure `chatReference` is used in fetch/render similar to Hub (thread detection, reply lookups).
 
 - Message ingestion / rendering robustness (prevent dupes/missing)
-  - [ ] "Deduplicate edits/updates": Collapse render output by signature/chatReference so only the latest version shows; treat update transactions (edits/reactions) as updates, not standalone rows.
-  - [ ] "Handle out-of-order/missing updates": Apply updates only after the base message exists; merge late-arriving messages/updates so loads are consistent across reloads and reaction removals apply.
+  - [x] "Deduplicate edits/updates": Collapse render output by signature/chatReference so only the latest version shows; treat update transactions (edits/reactions) as updates, not standalone rows.
+  - [x] "Handle out-of-order/missing updates": Apply updates only after the base message exists; merge late-arriving messages/updates so loads are consistent across reloads and reaction removals apply.
 
 - Testing / validation
   - [ ] "Cross-app readability": Verify messages/attachments sent from UI render in Hub and vice versa (direct and group).

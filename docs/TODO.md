@@ -18,6 +18,15 @@
 - [ ] Issues to fix
   - [ ] PLAN-Public.md
 - [ ] Fix spacing at bottom of chat page list (group and direct chats)
+- [ ] Expand tx notification bell coverage
+  - [ ] Add shared helper to push `setNewNotification` with type/status/signature/timestamp
+  - [ ] Wallet: dispatch notification after successful QORT send
+  - [ ] Names: register, update, buy, sell, and cancel-sell flows dispatch notifications
+  - [ ] QDN publish: Websites/Apps ARBITRARY publish adds notification
+  - [ ] Trade Portal: create offer, buy trade, and cancel trade dispatch notifications
+  - [ ] Auto Buy: dispatch notification on auto-buy initiation/cancel actions
+  - [ ] Chat: dispatch notification after sending a Tip
+  - [ ] Q-App `qortalRequest`: mirror notifications for the same tx types (payment, names, publish, trade actions, tip, group joins, etc.)
 
 ## Other ideas
 

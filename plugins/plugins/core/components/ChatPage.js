@@ -87,6 +87,7 @@ const resetReactionsState = (ctx) => {
 
 // In-memory update buffer keyed by chatReference to apply when base arrives
 const pendingUpdatesByRef = new Map()
+const messageBySignature = new Map()
 class ChatPage extends LitElement {
 	static get properties() {
 		return {
@@ -956,6 +957,142 @@ class ChatPage extends LitElement {
 		this.setSelectedHead(props)
 	}
 
+	isReactionMessage(msg) {
+		if (!msg) return false
+		if (msg.isReaction) return true
+		const dm = msg.decodedMessage
+		if (typeof dm === 'string') {
+			if (dm.includes('"isReaction"')) return true
+			try {
+				const parsed = JSON.parse(dm)
+				if (parsed && parsed.type === 'reaction') return true
+			} catch (error) { /* ignore */ }
+		} else if (dm && typeof dm === 'object' && dm.type === 'reaction') {
+			return true
+		}
+		return false
+	}
+
+	isUpdateOnlyMessage(msg) {
+		if (!msg) return false
+		if (msg.typeMessage === 'edit') return true
+		if (msg.chatReference && msg.chatReference !== msg.signature) return true
+		return false
+	}
+
+	isBlockedMessage(msg) {
+		if (!msg) return false
+		const sender = msg.sender || (msg.decodedMessage && msg.decodedMessage.sender)
+		const senderName = msg.senderName || (msg.decodedMessage && msg.decodedMessage.senderName)
+		if (sender && this.blockedAddresses.has(sender)) return true
+		if (senderName && this.blockedNames.has(senderName)) return true
+		return false
+	}
+
+	getMessageKey(msg) {
+		if (!msg) return ''
+		if (msg.originalSignature) return msg.originalSignature
+		if (msg.typeMessage === 'edit' && msg.chatReference) return msg.chatReference
+		return msg.signature || msg.chatReference || ''
+	}
+
+	getMessageTimestamp(msg) {
+		if (!msg) return 0
+		return msg.editedTimestamp || msg.timestamp || 0
+	}
+
+	mergeUpdateIntoMessage(target, update) {
+		if (!target || !update) return target
+		const { signature, chatReference, originalSignature, timestamp, ...rest } = update
+		Object.assign(target, rest)
+		if (timestamp) {
+			const currentTs = target.editedTimestamp || target.timestamp || 0
+			target.editedTimestamp = Math.max(timestamp, currentTs)
+		}
+		if (originalSignature && !target.originalSignature) {
+			target.originalSignature = originalSignature
+		}
+		return target
+	}
+
+	applyPendingUpdatesToMessage(msg) {
+		const key = this.getMessageKey(msg)
+		if (!key) return msg
+		if (pendingUpdatesByRef.has(key)) {
+			const updates = pendingUpdatesByRef.get(key)
+			updates.forEach((u) => this.mergeUpdateIntoMessage(msg, u))
+			pendingUpdatesByRef.delete(key)
+		}
+		return msg
+	}
+
+	stashUpdateMessage(update) {
+		const ref = update.originalSignature || update.chatReference || update.signature
+		if (!ref) return
+		if (messageBySignature.has(ref)) {
+			const existing = messageBySignature.get(ref)
+			this.mergeUpdateIntoMessage(existing, update)
+			messageBySignature.set(ref, existing)
+			return
+		}
+		pendingUpdatesByRef.set(ref, [...(pendingUpdatesByRef.get(ref) || []), update])
+	}
+
+	upsertBaseMessage(msg) {
+		const key = this.getMessageKey(msg)
+		if (!key) return { added: false, updated: false, message: msg }
+		const candidate = this.applyPendingUpdatesToMessage({ ...msg })
+		const existing = messageBySignature.get(key)
+		if (existing) {
+			const incomingTs = this.getMessageTimestamp(candidate)
+			const existingTs = this.getMessageTimestamp(existing)
+			if (incomingTs > existingTs) {
+				const merged = { ...existing, ...candidate }
+				messageBySignature.set(key, merged)
+				return { added: false, updated: true, message: merged }
+			}
+			return { added: false, updated: false, message: existing }
+		}
+		messageBySignature.set(key, candidate)
+		return { added: true, updated: false, message: candidate }
+	}
+
+	prepareRenderableChunk(messages, { skipExisting = false } = {}) {
+		const renderable = messages.filter((msg) => !this.isReactionMessage(msg) && !this.isUpdateOnlyMessage(msg) && !this.isBlockedMessage(msg))
+		const seen = new Set()
+		const result = []
+		renderable.forEach((msg) => {
+			const key = this.getMessageKey(msg)
+			if (!key || seen.has(key)) return
+			const incoming = this.applyPendingUpdatesToMessage({ ...msg })
+			const existing = messageBySignature.get(key)
+			let chosen = incoming
+			if (existing) {
+				const existingTs = this.getMessageTimestamp(existing)
+				const incomingTs = this.getMessageTimestamp(incoming)
+				chosen = incomingTs > existingTs ? { ...existing, ...incoming } : existing
+			}
+			messageBySignature.set(key, chosen)
+			seen.add(key)
+			if (skipExisting && existing) return
+			result.push(chosen)
+		})
+		return result
+	}
+
+	async sortMessagesList(list) {
+		const sortable = Array.isArray(list) ? [...list] : []
+		if (!this.webWorkerSortMessages) {
+			return sortable.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0))
+		}
+		return await new Promise((res) => {
+			this.webWorkerSortMessages.postMessage({ list: sortable })
+			this.webWorkerSortMessages.onmessage = e => {
+				res(e.data)
+			}
+		})
+	}
+
 	applyReactionOptimistic(chatReference, emoji, add) {
 		if (!chatReference || !emoji) return
 		const bucket = reactionsByRef.get(chatReference) || {}
@@ -1724,6 +1861,8 @@ addToQueue(outSideMsg, messageQueue) {
 		this.secretKeysWorker = {}
 		let arraySecretKeysWorkerInit = JSON.parse(localStorage.getItem('symKeysCurrent') || '[]')
 		this.secretKeysWorker = arraySecretKeysWorkerInit[0]
+		pendingUpdatesByRef.clear()
+		messageBySignature.clear()
 
 		if (this.webSocket) {
 			this.webSocket.close(1000, 'switch chat')
@@ -2086,16 +2225,7 @@ addToQueue(outSideMsg, messageQueue) {
 			}))
 
 
-			let list = [...decodeMsgs]
-
-			await new Promise((res) => {
-				this.webWorkerSortMessages.postMessage({ list })
-
-				this.webWorkerSortMessages.onmessage = e => {
-					list = e.data
-					res()
-				}
-			})
+			const list = await this.sortMessagesList(this.prepareRenderableChunk(decodeMsgs, { skipExisting: false }))
 			const lastMsg = list.at(-1)
 			if (lastMsg) {
 				const count = await parentEpml.request('apiCall', {
@@ -2143,16 +2273,7 @@ addToQueue(outSideMsg, messageQueue) {
 				addToUpdateMessageHashmap: this.addToUpdateMessageHashmap
 			}))
 
-			let list = [...decodeMsgs]
-
-			await new Promise((res) => {
-				this.webWorkerSortMessages.postMessage({ list })
-
-				this.webWorkerSortMessages.onmessage = e => {
-					list = e.data
-					res()
-				}
-			})
+			const list = await this.sortMessagesList(this.prepareRenderableChunk(decodeMsgs, { skipExisting: false }))
 
 			const lastMsg = list.at(-1)
 
@@ -2209,7 +2330,7 @@ addToQueue(outSideMsg, messageQueue) {
 				addToUpdateMessageHashmap: this.addToUpdateMessageHashmap
 			}))
 
-			let list = [...decodeMsgs]
+			const list = this.prepareRenderableChunk(decodeMsgs, { skipExisting: true })
 
 			this.messagesRendered = {
 				messages: list,
@@ -2254,7 +2375,7 @@ addToQueue(outSideMsg, messageQueue) {
 				addToUpdateMessageHashmap: this.addToUpdateMessageHashmap
 			}))
 
-			let list = [...decodeMsgs]
+			const list = this.prepareRenderableChunk(decodeMsgs, { skipExisting: true })
 
 			this.messagesRendered = {
 				messages: list,
@@ -2310,15 +2431,7 @@ addToQueue(outSideMsg, messageQueue) {
 				addToUpdateMessageHashmap: this.addToUpdateMessageHashmap
 			}))
 
-			let list = [...decodeMsgs]
-
-			await new Promise((res) => {
-				this.webWorkerSortMessages.postMessage({ list })
-				this.webWorkerSortMessages.onmessage = e => {
-					list = e.data
-					res()
-				}
-			})
+			const list = await this.sortMessagesList(this.prepareRenderableChunk(decodeMsgs, { skipExisting: true }))
 
 			this.messagesRendered = {
 				messages: list,
@@ -2361,15 +2474,7 @@ addToQueue(outSideMsg, messageQueue) {
 				addToUpdateMessageHashmap: this.addToUpdateMessageHashmap
 			}))
 
-			let list = [...decodeMsgs]
-
-			await new Promise((res) => {
-				this.webWorkerSortMessages.postMessage({ list })
-				this.webWorkerSortMessages.onmessage = e => {
-					list = e.data
-					res()
-				}
-			})
+			const list = await this.sortMessagesList(this.prepareRenderableChunk(decodeMsgs, { skipExisting: true }))
 
 			this.messagesRendered = {
 				messages: list,
@@ -2393,24 +2498,7 @@ async addToUpdateMessageHashmap(array) {
 		const signature = item.originalSignature || item.signature
 		const chatRefKey = item.chatReference || signature
 
-			const dm = item.decodedMessage
-			let isReaction = false
-			if (item.isReaction) {
-				isReaction = true
-			} else if (typeof dm === 'string') {
-				if (dm.includes('"isReaction"')) {
-					isReaction = true
-				} else {
-					try {
-						const parsed = JSON.parse(dm)
-						if (parsed && parsed.type === 'reaction') isReaction = true
-					} catch (error) { /* ignore */ }
-				}
-			} else if (dm && typeof dm === 'object' && dm.type === 'reaction') {
-				isReaction = true
-			}
-
-		if (isReaction) {
+		if (this.isReactionMessage(item)) {
 			this.ingestReactionMessage(item)
 			return
 		}
@@ -2548,62 +2636,16 @@ async addToUpdateMessageHashmap(array) {
 			}
 		})
 
-			const isReactionMessage = (msg) => {
-				if (!msg) return false
-				if (msg.isReaction) return true
-				const dm = msg.decodedMessage
-				if (typeof dm === 'string') {
-					if (dm.includes('"isReaction"')) return true
-					try {
-						const parsed = JSON.parse(dm)
-						if (parsed && parsed.type === 'reaction') return true
-					} catch (error) { /* ignore parse */ }
-				} else if (dm && typeof dm === 'object' && dm.type === 'reaction') {
-					return true
-				}
-				return false
-			}
-
-		const isBlocked = (msg) => {
-			if (!msg) return false
-			const sender = msg.sender || (msg.decodedMessage && msg.decodedMessage.sender)
-			const senderName = msg.senderName || (msg.decodedMessage && msg.decodedMessage.senderName)
-			if (sender && this.blockedAddresses.has(sender)) return true
-			if (senderName && this.blockedNames.has(senderName)) return true
-			return false
+		const filteredMessages = decodedMessages.filter((msg) => !this.isBlockedMessage(msg))
+		const updatesOnly = filteredMessages.filter((msg) => this.isUpdateOnlyMessage(msg))
+		if (updatesOnly.length > 0) {
+			updatesOnly.forEach((u) => this.stashUpdateMessage(u))
 		}
 
-		const filteredMessages = decodedMessages.filter((msg) => !isBlocked(msg))
-
-		const isUpdateOnly = (msg) => {
-			if (!msg) return false
-			if (msg.chatReference && msg.chatReference !== msg.signature) return true
-			if (msg.typeMessage === 'edit') return true
-			return false
-		}
-
-		const applyPendingUpdates = (baseMessages) => {
-			const bySig = new Map()
-			baseMessages.forEach((m) => {
-				bySig.set(m.signature, m)
-				if (m.chatReference) bySig.set(m.chatReference, m)
-			})
-			baseMessages.forEach((m) => {
-				const ref = m.signature || m.chatReference
-				if (pendingUpdatesByRef.has(ref)) {
-					const updates = pendingUpdatesByRef.get(ref)
-					updates.forEach((u) => {
-						Object.assign(m, u)
-					})
-					pendingUpdatesByRef.delete(ref)
-				}
-			})
-		}
-
-		const renderableMessages = filteredMessages.filter((msg) => !isReactionMessage(msg) && !isUpdateOnly(msg))
+		const renderableMessages = filteredMessages.filter((msg) => !this.isReactionMessage(msg) && !this.isUpdateOnlyMessage(msg))
+		const baseResults = renderableMessages.map((msg) => this.upsertBaseMessage(msg))
 
 		if (isInitial) {
-			applyPendingUpdates(renderableMessages)
 			this.chatEditorPlaceholder = await this.renderPlaceholder()
 
 			try {
@@ -2620,15 +2662,7 @@ async addToUpdateMessageHashmap(array) {
 				console.log({ error })
 			}
 
-			let list = renderableMessages
-
-			await new Promise((res) => {
-				this.webWorkerSortMessages.postMessage({ list })
-				this.webWorkerSortMessages.onmessage = e => {
-					list = e.data
-					res()
-				}
-			})
+			let list = await this.sortMessagesList(Array.from(messageBySignature.values()))
 
 			this._messages = list
 
@@ -2659,14 +2693,6 @@ async addToUpdateMessageHashmap(array) {
 
 			setTimeout(() => this.downElementObserver(), 500)
 		} else {
-			const updatesOnly = filteredMessages.filter((msg) => isUpdateOnly(msg))
-			if (updatesOnly.length > 0) {
-				updatesOnly.forEach((u) => {
-					const ref = u.chatReference || u.signature
-					if (!ref) return
-					pendingUpdatesByRef.set(ref, [...(pendingUpdatesByRef.get(ref) || []), u])
-				})
-			}
 			queue.push(() => replaceMessagesEdited({
 				decodedMessages: filteredMessages,
 				parentEpml,
@@ -2678,11 +2704,18 @@ async addToUpdateMessageHashmap(array) {
 				addToUpdateMessageHashmap: this.addToUpdateMessageHashmap
 			}))
 
-			const renderEachMessage = renderableMessages.map(async (msg) => {
+			const newMessages = baseResults.filter((res) => res.added).map((res) => res.message)
+			const renderEachMessage = newMessages.map(async (msg) => {
 				await this.renderNewMessage(msg)
 			})
 
 			await Promise.all(renderEachMessage)
+			baseResults.filter((res) => !res.added && res.updated).forEach((res) => {
+				this.messagesRendered = {
+					messages: [res.message],
+					type: 'update'
+				}
+			})
 
 			if (this.chatId && this.isPageVisible) {
 				window.parent.reduxStore.dispatch(window.parent.reduxAction.addChatLastSeen({
