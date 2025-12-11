@@ -3,7 +3,7 @@ import { connect } from 'pwa-helpers'
 import { store } from '../../store'
 import { checkApiKey } from '../../apiKeyUtils'
 import { doLogin, doSelectAddress } from '../../redux/app/app-actions'
-import { doRemoveWallet, doStoreWallet } from '../../redux/user/user-actions'
+import { doRemoveWallet, doSetWalletOrder, doStoreWallet } from '../../redux/user/user-actions'
 import { createWallet } from '../../../../crypto/api/createWallet'
 import { createAccountSectionStyles } from '../../styles/core-css'
 import ripple from '../../functional-components/loading-ripple'
@@ -52,6 +52,8 @@ class LoginSection extends connect(store)(LitElement) {
 			names: { type: Array },
 			namesAvatar: { type: String },
 			walletAvatars: { type: Object },
+			walletOrder: { type: Array },
+			showReorderControls: { type: Boolean },
 			theme: { type: String, reflect: true }
 		}
 	}
@@ -73,6 +75,8 @@ class LoginSection extends connect(store)(LitElement) {
 		this.names = []
 		this.namesAvatar = ''
 		this.walletAvatars = {}
+		this.walletOrder = []
+		this.showReorderControls = false
 		this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
 
 		this.loginOptions = [
@@ -202,6 +206,46 @@ class LoginSection extends connect(store)(LitElement) {
 					--mdc-icon-size: 30px;
 				}
 
+				.wallets-header {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					margin: 0 2vh;
+					padding: 0 0 8px 0;
+					gap: 12px;
+				}
+
+				.wallets-header .wallets-header-text {
+					text-align: left;
+				}
+
+				.wallets-header .wallets-header-text h1 {
+					padding: 0;
+				}
+
+				.wallets-header-actions {
+					display: flex;
+					gap: 8px;
+					align-items: center;
+				}
+
+				.wallet-actions {
+					position: absolute;
+					right: 48px;
+					top: 12px;
+					display: flex;
+					flex-direction: column;
+					gap: 4px;
+				}
+
+				.wallet-actions[hidden] {
+					display: none !important;
+				}
+
+				.wallet-actions mwc-icon-button {
+					--mdc-icon-size: 22px;
+				}
+
 				.login-option {
 					max-width: 300px;
 					position: relative;
@@ -288,29 +332,58 @@ class LoginSection extends connect(store)(LitElement) {
 							`)}
 						</div>
 						<div page="storedWallet" id="walletsPage">
-							<div style="text-align: center; padding-left:0;">
-								<h1 style="padding:0; color: var(--black);">${translate('login.youraccounts')}</h1>
-								<p style="margin:0; padding: 0 0 12px 0; color: var(--black);">${translate('login.clickto')}</p>
+							<div class="wallets-header">
+								<div class="wallets-header-text">
+									<h1 style="padding:0; color: var(--black);">${translate('login.youraccounts')}</h1>
+									<p style="margin:0; padding: 0 0 12px 0; color: var(--black);">${translate('login.clickto')}</p>
+								</div>
+								${this.getOrderedWalletAddresses().length > 1 ? html`
+									<div class="wallets-header-actions">
+										<mwc-button outlined @click=${() => this.toggleReorderControls()}>
+											<mwc-icon>${this.showReorderControls ? 'done' : 'swap_vert'}</mwc-icon>
+											${this.showReorderControls ? translate('login.done') : translate('login.editorder')}
+										</mwc-button>
+									</div>
+								` : ''}
 							</div>
 							<div id="wallets">
 								${(Object.entries(this.wallets || {}).length < 1) ? html`
 									<p style="color: var(--black); padding: 0 0 6px 0;">${translate('login.needcreate')}</p>
 								` : ''}
-								${Object.entries(this.wallets || {}).map(wallet => html`
+								${this.getOrderedWalletAddresses().map((address, index, arr) => {
+		const wallet = (this.wallets || {})[address]
+		if (!wallet) { return '' }
+		const isFirst = index === 0
+		const isLast = index === arr.length - 1
+		return html`
 									<div class="wallet">
-										<div class="selectWallet" @click=${() => this.selectWallet(wallet[1])}>
+										<div class="selectWallet" @click=${() => this.selectWallet(wallet)}>
 											<paper-ripple></paper-ripple>
 											<div class='wallet-details'>
 												<div class="wallet-name-row">
 													<div class="wallet-avatar">
-														${this.getWalletAvatarTemplate(wallet[1].address0)}
+														${this.getWalletAvatarTemplate(wallet.address0)}
 													</div>
-													<p class='walletName'><span style="color: var(--black);">${translate('login.name')}</span>${wallet[1].name || 'No saved name'}</p>
+													<p class='walletName'><span style="color: var(--black);">${translate('login.name')}</span>${wallet.name || 'No saved name'}</p>
 												</div>
-												<p class="walletAddress"><span style="color: var(--black);">${translate('login.address')}</span>${wallet[1].address0}</p>
+												<p class="walletAddress"><span style="color: var(--black);">${translate('login.address')}</span>${wallet.address0}</p>
 											</div>
 										</div>
-										<mwc-icon-button class="removeWallet" @click="${(e) => this.toDeleteWallet(wallet[1].address0)}" icon="clear"></mwc-icon-button>
+										<div class="wallet-actions" ?hidden=${!this.showReorderControls}>
+											<mwc-icon-button
+												class="reorder-button"
+												icon="arrow_upward"
+												@click=${(e) => this.moveWallet(address, 'up', e)}
+												?disabled=${isFirst}
+											></mwc-icon-button>
+											<mwc-icon-button
+												class="reorder-button"
+												icon="arrow_downward"
+												@click=${(e) => this.moveWallet(address, 'down', e)}
+												?disabled=${isLast}
+											></mwc-icon-button>
+										</div>
+										<mwc-icon-button class="removeWallet" @click="${(e) => { e.stopPropagation(); this.toDeleteWallet(wallet.address0) }}" icon="clear"></mwc-icon-button>
 										<mwc-dialog id="deleteWalletDialog">
 											<div style="text-align: center;">
 												<h2>Qortal UI</h2>
@@ -326,7 +399,8 @@ class LoginSection extends connect(store)(LitElement) {
 											</mwc-button>
 										</mwc-dialog>
 									</div>
-								`)}
+								`
+	})}
 							</div>
 						</div>
 						<div page="phrase" id="phrasePage">
@@ -504,6 +578,14 @@ class LoginSection extends connect(store)(LitElement) {
 		})
 	}
 
+	getOrderedWalletAddresses() {
+		const wallets = this.wallets || {}
+		const currentOrder = this.walletOrder || []
+		const filteredOrder = currentOrder.filter(address => wallets[address])
+		const missingAddresses = Object.keys(wallets).filter(address => !filteredOrder.includes(address))
+		return [...filteredOrder, ...missingAddresses]
+	}
+
 	getWalletAvatarTemplate(address) {
 		if (!address) {
 			return html`<mwc-icon class="wallet-avatar-icon">account_circle</mwc-icon>`
@@ -576,6 +658,30 @@ class LoginSection extends connect(store)(LitElement) {
 		this.renderLoginAvatar(this.selectedWallet.address0)
 	}
 
+	toggleReorderControls() {
+		this.showReorderControls = !this.showReorderControls
+	}
+
+	moveWallet(address, direction, event) {
+		if (event && typeof event.stopPropagation === 'function') {
+			event.stopPropagation()
+		}
+		const orderedAddresses = this.getOrderedWalletAddresses()
+		const currentIndex = orderedAddresses.indexOf(address)
+		const delta = direction === 'up' ? -1 : 1
+		const nextIndex = currentIndex + delta
+
+		if (currentIndex === -1 || nextIndex < 0 || nextIndex >= orderedAddresses.length) {
+			return
+		}
+
+		const updatedOrder = [...orderedAddresses]
+		;[updatedOrder[currentIndex], updatedOrder[nextIndex]] = [updatedOrder[nextIndex], updatedOrder[currentIndex]]
+
+		this.walletOrder = updatedOrder
+		store.dispatch(doSetWalletOrder(updatedOrder))
+	}
+
 	toDeleteWallet(deleteAddress) {
 		this.myToDeleteWallet = deleteAddress
 		this.shadowRoot.querySelector('#deleteWalletDialog').show()
@@ -596,7 +702,11 @@ class LoginSection extends connect(store)(LitElement) {
 	stateChanged(state) {
 		this.loggedIn = state.app.loggedIn
 		this.wallets = state.user.storedWallets
+		this.walletOrder = state.user.storedWalletOrder || Object.keys(this.wallets || {})
 		this.hasStoredWallets = Object.keys(this.wallets || {}).length > 0
+		if (this.getOrderedWalletAddresses().length <= 1 && this.showReorderControls) {
+			this.showReorderControls = false
+		}
 		this.nodeConfig = state.app.nodeConfig
 		this.preloadWalletAvatars()
 	}
@@ -819,7 +929,10 @@ class LoginSection extends connect(store)(LitElement) {
 		this.wallet = {}
 		this.shadowRoot.querySelector('#nameInput').value = ''
 		this.shadowRoot.querySelector('#password').value = ''
-		this.hasStoredWallets = Object.keys(store.getState().user.storedWallets).length > 0
+		const storedWallets = store.getState().user.storedWallets
+		this.walletOrder = store.getState().user.storedWalletOrder || Object.keys(storedWallets || {})
+		this.hasStoredWallets = Object.keys(storedWallets).length > 0
+		this.showReorderControls = false
 		this.selectedPage = this.hasStoredWallets ? 'storedWallet' : 'loginOptions'
 		this.shadowRoot.querySelector('#deleteWalletDialog').close()
 	}

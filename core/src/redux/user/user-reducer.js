@@ -4,12 +4,14 @@ import {
 	LOAD_NOTIFICATION_CONFIG,
 	REMOVE_WALLET,
 	SET_QCHAT_NOTIFICATION_CONFIG,
+	SET_WALLET_ORDER,
 	STORE_WALLET,
 	UPDATE_ACCOUNT_INFO
 } from './user-action-types'
 
 const DEFAULT_INITIAL_STATE = {
 	storedWallets: {},
+	storedWalletOrder: [],
 	hasClaimedAirdrop: false,
 	accountInfo: {
 		primaryName: '',
@@ -25,9 +27,16 @@ const DEFAULT_INITIAL_STATE = {
 
 const getInitialState = () => {
 	const persistedState = loadStateFromLocalStorage('user') || {}
+	const persistedWallets = persistedState.storedWallets || {}
+	const persistedOrder = persistedState.storedWalletOrder || Object.keys(persistedWallets)
+	const filteredOrder = (persistedOrder || []).filter(address => persistedWallets[address])
+	const missingAddresses = Object.keys(persistedWallets).filter(address => !filteredOrder.includes(address))
+	const normalizedOrder = [...filteredOrder, ...missingAddresses]
+
 	return {
 		...DEFAULT_INITIAL_STATE,
 		...persistedState,
+		storedWalletOrder: normalizedOrder,
 		accountInfo: {
 			...DEFAULT_INITIAL_STATE.accountInfo,
 			...(persistedState.accountInfo || {})
@@ -38,21 +47,33 @@ const getInitialState = () => {
 
 export default (state = getInitialState(), action) => {
 	switch (action.type) {
-		case STORE_WALLET:
-			return {
-				...state,
-				storedWallets: {
-					...(state.storedWallets || {}),
-					[action.payload.address0]: action.payload
-				}
+		case STORE_WALLET: {
+			const nextWallets = {
+				...(state.storedWallets || {}),
+				[action.payload.address0]: action.payload
 			}
+			const existingOrder = state.storedWalletOrder || Object.keys(state.storedWallets || {})
+			const filteredOrder = existingOrder.filter(address => nextWallets[address])
+			const hasAddress = filteredOrder.includes(action.payload.address0)
+			const nextOrder = hasAddress ? filteredOrder : [...filteredOrder, action.payload.address0]
 
-		case REMOVE_WALLET:
-			delete state.storedWallets[action.payload.address]
 			return {
 				...state,
-				storedWallets: state.storedWallets
+				storedWallets: nextWallets,
+				storedWalletOrder: nextOrder
 			}
+		}
+
+		case REMOVE_WALLET: {
+			const { [action.payload.address]: removed, ...remainingWallets } = state.storedWallets || {}
+			const nextOrder = (state.storedWalletOrder || []).filter(address => address !== action.payload.address)
+
+			return {
+				...state,
+				storedWallets: remainingWallets,
+				storedWalletOrder: nextOrder
+			}
+		}
 
 		case CLAIM_AIRDROP:
 			return {
@@ -97,6 +118,17 @@ export default (state = getInitialState(), action) => {
 					q_chat: action.payload
 				}
 			}
+
+		case SET_WALLET_ORDER: {
+			const storedWallets = state.storedWallets || {}
+			const requestedOrder = action.payload?.order || []
+			const filteredOrder = requestedOrder.filter(address => storedWallets[address])
+			const missing = Object.keys(storedWallets).filter(address => !filteredOrder.includes(address))
+			return {
+				...state,
+				storedWalletOrder: [...filteredOrder, ...missing]
+			}
+		}
 
 		default:
 			return state

@@ -1,4 +1,4 @@
-import { REMOVE_WALLET, STORE_WALLET, UPDATE_STORED_WALLET_NAME } from '../user-action-types'
+import { REMOVE_WALLET, SET_WALLET_ORDER, STORE_WALLET, UPDATE_STORED_WALLET_NAME } from '../user-action-types'
 
 export const doStoreWallet = (wallet, password, name, statusUpdateFn = () => { }) => {
 	return (dispatch, getState) => {
@@ -43,6 +43,19 @@ export const doUpdateStoredWalletName = (address, name) => {
 const updateStoredWalletName = payload => {
 	return {
 		type: UPDATE_STORED_WALLET_NAME,
+		payload
+	}
+}
+
+export const doSetWalletOrder = (order) => {
+	return (dispatch, getState) => {
+		return dispatch(setWalletOrder({ order }))
+	}
+}
+
+const setWalletOrder = payload => {
+	return {
+		type: SET_WALLET_ORDER,
 		payload
 	}
 }

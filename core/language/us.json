@@ -97,6 +97,8 @@
 		"password": "Password",
 		"youraccounts": "Your accounts",
 		"clickto": "Click account to login",
+		"editorder": "Edit order",
+		"done": "Done",
 		"needcreate": "You need to create or save an account before you can log in!",
 		"upload": "Import your Qortal backup file",
 		"howlogin": "How would you like to log in?",
