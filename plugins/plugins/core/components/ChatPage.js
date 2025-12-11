@@ -64,6 +64,7 @@ export const REACTION_TYPE_NUMBER = 102
 // In-memory reactions map keyed by chatReference => { [emoji]: [ReactionItem] }
 const reactionsByRef = new Map()
 const pendingReactionsById = new Map()
+let warnedMissingReactionFields = false
 const resetReactionsState = (ctx) => {
 	reactionsByRef.clear()
 	pendingReactionsById.clear()
@@ -2441,7 +2442,14 @@ addToQueue(outSideMsg, messageQueue) {
 		const sender = item.sender || parsed.sender
 		const timestamp = item.timestamp || parsed.timestamp
 		const chatReference = item.chatReference || item.repliedTo || parsed.repliedTo
-		if (!content || !sender || !timestamp || !chatReference) return
+
+		if (!content || !sender || !timestamp || !chatReference) {
+			if (!warnedMissingReactionFields) {
+				console.warn('Skipped reaction with missing required fields', { hasContent: !!content, hasSender: !!sender, hasTimestamp: !!timestamp, hasChatRef: !!chatReference })
+				warnedMissingReactionFields = true
+			}
+			return
+		}
 
 		const contentState = parsed.contentState !== false
 		const specialId = parsed.specialId || item.specialId

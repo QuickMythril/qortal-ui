@@ -50,7 +50,7 @@
 - [x] Harden the emoji picker guard: require a `toggledMessage` with `chatReference`/`signature` before sending a reaction.
 - [x] Allow `message-template` to update when `reactionsMap` or `isUpdatingReaction` changes so chips and dimming react to new reactions.
 - [x] Reset and rebuild `reactionsMapSnapshot` when switching chats (clear shared map), and continue to pass fresh objects to `chat-scroller` so Lit propagates updates.
-- [ ] Verify inbound reaction payloads always include `timestamp`, `sender`, and `chatReference` to avoid `ingestReactionMessage` early-return.
+- [x] Verify inbound reaction payloads always include `timestamp`, `sender`, and `chatReference` to avoid `ingestReactionMessage` early-return.
 - [ ] Align reaction queue/pending indicator logic: either pass reaction sends through the queue (`_queueKey: 'chat-reaction'`/`messageQueue`) so “updating” works, or remove the dead pending-reaction code.
 - [ ] Message edits are not de-duplicated: render list should collapse by signature/chatReference so only the latest version shows.
 - [ ] Intermittent missing messages/replies on load causing stale reactions to appear (newer removal edits not applied); sometimes messages appear out of order (e.g., 23h-old after recent ones).
