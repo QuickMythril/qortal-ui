@@ -1497,6 +1497,9 @@ class MessageTemplate extends LitElement {
 		const replyMissingLabel = translate('chatpage.cchange66') || 'Original message unavailable'
 		const replyHeaderText = replySenderDisplay || replyMissingLabel
 		const canGoToReplied = repliedToData && !repliedToData.missing && (repliedToData.signature || repliedToData.chatReference || this.messageObj.repliedTo)
+		const isReplyMissing = (repliedToData && repliedToData.missing) || (!repliedToMessageText && !(repliedToDecoded && repliedToDecoded.messageText))
+		const replyAccent = isReplyMissing ? 'var(--mdc-theme-error)' : 'var(--mdc-theme-primary)'
+		const replyContainerStyle = `${this.replyFontSize}; --reply-accent: ${replyAccent};`
 
 		let replacedMessage = ''
 
@@ -1627,7 +1630,7 @@ class MessageTemplate extends LitElement {
 										<div
 											id="replyNameSize"
 											class="original-message"
-											style=${this.replyFontSize}
+											style=${replyContainerStyle}
 											@click=${() => {
 		if (canGoToReplied) {
 			this.goToRepliedMessage(repliedToData, this.messageObj)

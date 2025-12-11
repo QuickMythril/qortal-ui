@@ -1647,6 +1647,7 @@ export const chatStyles = css`
         padding: 8px 5px 8px 25px;
         margin-bottom: 10px;
         cursor: pointer;
+        --reply-accent: var(--mdc-theme-primary);
     }
 
     .original-message:before {
@@ -1656,11 +1657,15 @@ export const chatStyles = css`
         left: 10px;
         height: 85%;
         width: 2.6px;
-        background-color: var(--mdc-theme-primary);
+        background-color: var(--reply-accent, var(--mdc-theme-primary));
     }
 
     .original-message-sender {
-        color: var(--mdc-theme-primary);
+        color: var(--reply-accent, var(--mdc-theme-primary));
+    }
+
+    .original-message .message-data-my-name {
+        color: var(--reply-accent, var(--qchat-my-name));
     }
 
     .replied-message {
@@ -8676,6 +8681,7 @@ export const groupManagementStyles = css`
         padding: 8px 5px 8px 25px;
         margin-bottom: 10px;
         cursor: pointer;
+        --reply-accent: var(--mdc-theme-primary);
     }
 
     .original-message:before {
@@ -8685,15 +8691,19 @@ export const groupManagementStyles = css`
         left: 10px;
         height: 85%;
         width: 2.6px;
-        background-color: var(--mdc-theme-primary);
+        background-color: var(--reply-accent, var(--mdc-theme-primary));
     }
 
     .original-message-sender {
-        color: var(--mdc-theme-primary);
+        color: var(--reply-accent, var(--mdc-theme-primary));
     }
 
     .original-message-sender-wasme {
         color: var(--qchat-my-name);
+    }
+
+    .original-message .message-data-my-name {
+        color: var(--reply-accent, var(--qchat-my-name));
     }
 
     .replied-message {
