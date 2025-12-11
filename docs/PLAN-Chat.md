@@ -14,7 +14,7 @@
 
 - Message fetch parity (live + HTTP)
   - [x] "Add websocket chat listeners": Introduce WebSocket support for `/websockets/chat/messages` (direct/group) with base64 decode and decrypt pipeline, reducing reliance on polling.
-  - [ ] "Handle chat/messages parameters": Match Hub query patterns (`encoding=BASE64`, `haschatreference`, pagination) and reuse decode/decrypt utilities.
+  - [x] "Handle chat/messages parameters": Match Hub query patterns (`encoding=BASE64`, `haschatreference`, pagination) and reuse decode/decrypt utilities.
   - [ ] "Expose SEARCH_CHAT_MESSAGES handler": Add handler if needed to match Hub’s allowlist (even if proxied to the existing search endpoint).
   - [ ] "Respect Core group membership constraints": Ensure group fetch/send honor membership and handle errors from Core accordingly.
 

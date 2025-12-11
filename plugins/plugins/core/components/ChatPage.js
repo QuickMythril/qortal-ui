@@ -2812,7 +2812,7 @@ addToQueue(outSideMsg, messageQueue) {
 	}
 
 	async fetchMessagesWithReferences(baseUrl) {
-		const makeUrl = (hasRef) => `${baseUrl}&haschatreference=${hasRef}`
+		const makeUrl = (hasRef) => `${baseUrl}&haschatreference=${hasRef}&encoding=BASE64`
 		const [normal, referenced] = await Promise.all([
 			parentEpml.request('apiCall', { type: 'api', url: makeUrl(false) }),
 			parentEpml.request('apiCall', { type: 'api', url: makeUrl(true) })
@@ -2938,8 +2938,8 @@ addToQueue(outSideMsg, messageQueue) {
 						}
 					}
 					if (isUnread) {
-						const getInitialMessagesBefore = await this.fetchMessagesWithReferences(`/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${cid}&limit=${chatLimitHalf}&reverse=true&before=${lastReadMessageTimestamp}&encoding=BASE64`)
-						const getInitialMessagesAfter = await this.fetchMessagesWithReferences(`/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${cid}&limit=${chatLimitHalf}&reverse=false&after=${lastReadMessageTimestamp - 1000}&encoding=BASE64`)
+						const getInitialMessagesBefore = await this.fetchMessagesWithReferences(`/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${cid}&limit=${chatLimitHalf}&reverse=true&before=${lastReadMessageTimestamp}`)
+						const getInitialMessagesAfter = await this.fetchMessagesWithReferences(`/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${cid}&limit=${chatLimitHalf}&reverse=false&after=${lastReadMessageTimestamp - 1000}`)
 						getInitialMessages = [...getInitialMessagesBefore, ...getInitialMessagesAfter]
 						const lastMessage = getInitialMessagesAfter.at(-1)
 						if (lastMessage) {
@@ -2949,7 +2949,7 @@ addToQueue(outSideMsg, messageQueue) {
 							})
 						}
 					} else {
-						getInitialMessages = await this.fetchMessagesWithReferences(`/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${cid}&limit=${chatLimit}&reverse=true&encoding=BASE64`)
+						getInitialMessages = await this.fetchMessagesWithReferences(`/chat/messages?involving=${window.parent.reduxStore.getState().app.selectedAddress.address}&involving=${cid}&limit=${chatLimit}&reverse=true`)
 					}
 
 

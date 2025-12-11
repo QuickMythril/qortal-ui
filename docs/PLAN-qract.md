@@ -13,13 +13,12 @@
   - [ ] Update docs and any dependent UI code consuming the old string array shape.
 
 - Chat parity adjustments
-  - [ ] Add the 4-QORT minimum balance gate (or configurable toggle) so low-balance sends fail fast instead of trying PoW; keep PoW difficulty logic in sync with Core.
+  - [ ] Do NOT add the 4-QORT minimum balance gate. Low-balance sends should be of trying PoW at the higher difficulty; keep PoW difficulty logic in sync with Core.
   - [ ] Verify `chatReference` passthrough and 4KB limit enforcement with unit/e2e tests.
 
 - Payments / misc Hub-only actions
   - [ ] Port `MULTI_ASSET_PAYMENT_WITH_PRIVATE_DATA`, `TRANSFER_ASSET`, and `SIGN_FOREIGN_FEES` handlers to the UI listener using Hub’s implementations as a template.
   - [ ] Confirm foreign-server helpers and `SAVE_FILE` support remote attachment downloads (parity with Hub’s location-based path).
 
-- Validation & docs
+- Validation
   - [ ] Add targeted tests or manual checklists for new handlers (happy/error paths, public-node guard).
-  - [ ] Update `docs/UI-qract.md`/`DIFF-qract.md` after implementation.
