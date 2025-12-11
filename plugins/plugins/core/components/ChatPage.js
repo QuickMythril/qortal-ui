@@ -89,6 +89,7 @@ const resetReactionsState = (ctx) => {
 const pendingUpdatesByRef = new Map()
 const messageBySignature = new Map()
 const syntheticBaseByRef = new Map()
+const SYM_KEYS_STORAGE_KEY = 'symKeysCurrent'
 class ChatPage extends LitElement {
 	static get properties() {
 		return {
@@ -1893,8 +1894,10 @@ addToQueue(outSideMsg, messageQueue) {
 
 	async initUpdate() {
 		this.secretKeysWorker = {}
-		let arraySecretKeysWorkerInit = JSON.parse(localStorage.getItem('symKeysCurrent') || '[]')
-		this.secretKeysWorker = arraySecretKeysWorkerInit[0]
+		const symKeyMap = JSON.parse(localStorage.getItem(SYM_KEYS_STORAGE_KEY) || '{}')
+		if (!this.isReceipient && this._chatId && symKeyMap[this._chatId]) {
+			this.secretKeysWorker = symKeyMap[this._chatId]
+		}
 		pendingUpdatesByRef.clear()
 		messageBySignature.clear()
 
@@ -2977,13 +2980,12 @@ async addToUpdateMessageHashmap(array) {
 				if (!Array.isArray(resources) || resources.length === 0) return
 
 				const latest = [...resources].sort((a, b) => (b.updated || b.created) - (a.updated || a.created))[0]
-				const gAdmin = latest.name
 				const groupAdmins = await fetch(`${nodeUrl}/groups/members/${groupId}?onlyAdmins=true&limit=0`).then(r => r.json())
 				const adminList = Array.isArray(groupAdmins.members) ? groupAdmins.members : []
-				const adminExists = adminList.some((m) => m.member === gAdmin || m.member === latest.owner)
+				const adminExists = adminList.some((m) => m.member === latest.owner)
 				if (!adminExists) return
 
-				const dataUrl = `${nodeUrl}/arbitrary/DOCUMENT_PRIVATE/${gAdmin}/${symIdentifier}?encoding=base64`
+				const dataUrl = `${nodeUrl}/arbitrary/DOCUMENT_PRIVATE/${latest.owner}/${symIdentifier}?encoding=base64`
 				const res = await fetch(dataUrl)
 				if (!res.ok) throw new Error('Failed to download group key')
 				const encryptedData = await res.text()
@@ -2997,14 +2999,11 @@ async addToUpdateMessageHashmap(array) {
 
 				if (!validateSecretKey(secretKeyObject)) throw new Error('SecretKey is not valid')
 
-				localStorage.removeItem('symKeysCurrent')
-				localStorage.setItem('symKeysCurrent', '')
-				let oldSymIdentifier = JSON.parse(localStorage.getItem('symKeysCurrent') || '[]')
-				oldSymIdentifier.push(secretKeyObject)
-				localStorage.setItem('symKeysCurrent', JSON.stringify(oldSymIdentifier))
+				const symKeyMap = JSON.parse(localStorage.getItem(SYM_KEYS_STORAGE_KEY) || '{}')
+				symKeyMap[groupId] = secretKeyObject
+				localStorage.setItem(SYM_KEYS_STORAGE_KEY, JSON.stringify(symKeyMap))
 
-				let arraySecretKeys = JSON.parse(localStorage.getItem('symKeysCurrent') || '[]')
-				this.secretKeysWorker = arraySecretKeys[0] || {}
+				this.secretKeysWorker = symKeyMap[groupId] || {}
 			} catch (error) {
 				parentEpml.request('showSnackBar', get('chatpage.cchange22') || 'Unable to load group keys; only unencrypted messages will be shown.')
 			}
