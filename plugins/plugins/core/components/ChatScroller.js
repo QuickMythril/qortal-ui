@@ -1472,18 +1472,10 @@ class MessageTemplate extends LitElement {
 
 		const displayedReactions = reactionsFromMap.length > 0 ? reactionsFromMap : reactions
 		const hasReactions = displayedReactions.length > 0
-		const formatReactorNames = (users) => {
+		const formatReactionTooltip = (users) => {
 			if (!Array.isArray(users) || users.length === 0) return ''
 			const names = users.map((u) => u.name || u.nameMessageTemplate || cropAddress(u.address)).filter(Boolean)
-			const extra = Math.max(names.length - 3, 0)
-			const visible = names.slice(0, 3)
-			return extra > 0 ? `${visible.join(', ')} (+${extra})` : visible.join(', ')
-		}
-		const formatReactionTooltip = (users, emoji) => {
-			const namesText = formatReactorNames(users)
-			const reactedText = translate('chatpage.cchange74') || 'reacted with'
-			if (namesText) return `${namesText} ${reactedText} ${emoji}`
-			return `${reactedText} ${emoji}`
+			return names.join('\n')
 		}
 
 		return hideit ? html`<li class="clearfix"></li>` : html`

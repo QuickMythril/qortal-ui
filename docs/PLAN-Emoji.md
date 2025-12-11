@@ -39,7 +39,7 @@
 
 ### Field issues to fix from live testing
 - [x] Replies show “Edited now” placeholder before data loads; change placeholder to “Edited” until the time resolves.
-- [ ] Reaction tooltip shows “name, [object Object] emoji” on one line; should list only reactor names in order, one per line.
+- [x] Reaction tooltip shows “name, [object Object] emoji” on one line; should list only reactor names in order, one per line.
 - [ ] Clicking an existing reaction chip does nothing; should add (if other user) or remove (if current user) using the same emoji.
 - [ ] Newly sent reactions don’t render until the chat is reloaded.
 - [ ] Reaction chips don’t auto-refresh when a new reaction message arrives (needs live update without chat switch/reload).
