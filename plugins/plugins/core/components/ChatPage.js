@@ -267,6 +267,7 @@ class ChatPage extends LitElement {
 		this.nodeUrl = this.getNodeUrl()
 		this.myNode = this.getMyNode()
 		this.secretKeysWorker = {}
+		this.senderPubKeyCache = new Map()
 		this.socketToken = 0
 		this.disposed = false
 		this.refWebSocket = ''
@@ -2733,32 +2734,68 @@ addToQueue(outSideMsg, messageQueue) {
 			_publicKeyVar = _publicKey
 		}
 
-		let decodedMessageObj = {}
+			let decodedMessageObj = {}
 
-		if (isReceipientVar === true) {
-			// direct chat
-			if (encodedMessageObj.isEncrypted === true && _publicKeyVar.hasPubKey === true && encodedMessageObj.data) {
-				let decodedMessage = window.parent.decryptChatMessageBase64(encodedMessageObj.data, window.parent.reduxStore.getState().app.selectedAddress.keyPair.privateKey, _publicKeyVar.key, encodedMessageObj.reference)
-				decodedMessageObj = { ...encodedMessageObj, decodedMessage }
-			} else if (encodedMessageObj.isEncrypted === false && encodedMessageObj.data) {
-				let decodedMessage = window.parent.Base64Message.decode(encodedMessageObj.data, symKeys)
-				decodedMessageObj = { ...encodedMessageObj, decodedMessage }
+			if (isReceipientVar === true) {
+				// direct chat
+				if (encodedMessageObj.isEncrypted === true && encodedMessageObj.data) {
+					let senderPubKey = _publicKeyVar && _publicKeyVar.key
+					try {
+						if (!senderPubKey) {
+							const cached = this.senderPubKeyCache.get(encodedMessageObj.sender)
+							if (cached) {
+								senderPubKey = cached
+							} else if (encodedMessageObj.sender) {
+								const res = await parentEpml.request('apiCall', {
+									type: 'api',
+									url: `/addresses/publickey/${encodedMessageObj.sender}`
+								})
+								if (res && !res.error) {
+									senderPubKey = res
+									this.senderPubKeyCache.set(encodedMessageObj.sender, res)
+								}
+							}
+						}
+					} catch (error) { /* ignore */ }
+
+					if (senderPubKey) {
+						let decodedMessage = window.parent.decryptChatMessageBase64(
+							encodedMessageObj.data,
+							window.parent.reduxStore.getState().app.selectedAddress.keyPair.privateKey,
+							senderPubKey,
+							encodedMessageObj.reference
+						)
+						decodedMessageObj = { ...encodedMessageObj, decodedMessage }
+					} else {
+						decodedMessageObj = { ...encodedMessageObj, decodedMessage: 'Cannot Decrypt Message!' }
+					}
+				} else if (encodedMessageObj.isEncrypted === false && encodedMessageObj.data) {
+					let decodedMessage = window.parent.Base64Message.decode(encodedMessageObj.data, symKeys)
+					decodedMessageObj = { ...encodedMessageObj, decodedMessage }
+				} else {
+					decodedMessageObj = { ...encodedMessageObj, decodedMessage: 'Cannot Decrypt Message!' }
+				}
 			} else {
-				decodedMessageObj = { ...encodedMessageObj, decodedMessage: 'Cannot Decrypt Message!' }
-			}
-		} else {
-			// group chat
-			let decodedMessage
+				// group chat
+				let decodedMessage
+				const noRef = 'noref'
 
-			const noRef = 'noref'
+				if (encodedMessageObj.isEncrypted === true) {
+					if (encodedMessageObj.chatReference) {
+						decodedMessage = window.parent.Base64Message.decode(encodedMessageObj.data, symKeys, encodedMessageObj.chatReference)
+					} else {
+						decodedMessage = window.parent.Base64Message.decode(encodedMessageObj.data, symKeys, noRef)
+					}
+					if (!decodedMessage) {
+						decodedMessage = 'Cannot Decrypt Message!'
+					}
+				} else if (encodedMessageObj.chatReference) {
+					decodedMessage = window.parent.Base64Message.decode(encodedMessageObj.data, symKeys, encodedMessageObj.chatReference)
+				} else {
+					decodedMessage = window.parent.Base64Message.decode(encodedMessageObj.data, symKeys, noRef)
+				}
 
-			if (encodedMessageObj.chatReference) {
-				decodedMessage = window.parent.Base64Message.decode(encodedMessageObj.data, symKeys, encodedMessageObj.chatReference)
-			} else {
-				decodedMessage = window.parent.Base64Message.decode(encodedMessageObj.data, symKeys, noRef)
-			}
-
-			decodedMessageObj = { ...encodedMessageObj, decodedMessage }
+				decodedMessageObj = { ...encodedMessageObj, decodedMessage }
 		}
 
 		return decodedMessageObj
