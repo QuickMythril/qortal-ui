@@ -9,7 +9,7 @@ const TEST_ENTROPY = '1111111111111111'
 const TEST_PRIVATE_KEY = '4inFLgHhbhcTkGgXJTy5rH9a5z31G3S2BZZuUgPSf2Ee'
 const TEST_PUBLIC_KEY = 'DuQKTVP4HYvCLaAnFEp7rTf1UFR3Zu4ccyxGEVNraYNt'
 const TEST_ADDRESS = 'QMU73pUQhrjojxn5ZEMsaZv2b25xxhvmJj'
-const NAMED_ADDRESS = process.env.QORTAL_NAME_ADDRESS || 'QWvqcCDBUVeX7RZAgBqHHAQKR2i9qMXjKN'
+const TEST_NAME = 'qortal-ui-test'
 
 let nodeAvailable = true
 let cachedStatus = null
@@ -67,21 +67,34 @@ describe('address and name reads', () => {
 	test('returns account info for known address', async () => {
 		if (!requireNode()) return
 
-		const info = await fetchJson(`/addresses/${NAMED_ADDRESS}`)
-		expect(info).toHaveProperty('address', NAMED_ADDRESS)
+		const info = await fetchJson(`/addresses/${TEST_ADDRESS}`)
+		expect(info).toHaveProperty('address', TEST_ADDRESS)
 		expect(info).toHaveProperty('publicKey')
 	})
 
 	test('returns primary name and names list for known address', async () => {
 		if (!requireNode()) return
 
-		const primary = await fetchJson(`/names/primary/${NAMED_ADDRESS}`)
-		expect(primary).toHaveProperty('name')
+		const primary = await fetchJson(`/names/primary/${TEST_ADDRESS}`)
+		expect(primary).toHaveProperty('name', TEST_NAME)
 
-		const names = await fetchJson(`/names/address/${NAMED_ADDRESS}?limit=0&reverse=false`)
+		const names = await fetchJson(`/names/address/${TEST_ADDRESS}?limit=0&reverse=false`)
 		expect(Array.isArray(names)).toBe(true)
-		if (names.length > 0) {
-			expect(names[0]).toHaveProperty('name')
-		}
+		expect(names.map(n => n.name)).toContain(TEST_NAME)
+	})
+
+	test('public key and balance available for test address', async () => {
+		if (!requireNode()) return
+
+		const pk = await fetchText(`/addresses/publickey/${TEST_ADDRESS}`)
+		expect(pk).toBe(TEST_PUBLIC_KEY)
+
+		const balance = await fetchText(`/addresses/balance/${TEST_ADDRESS}`)
+		const bal = parseFloat(balance)
+		expect(isNaN(bal)).toBe(false)
+		expect(bal).toBeGreaterThan(0)
+
+		const lastRef = await fetchText(`/addresses/lastreference/${TEST_ADDRESS}`)
+		expect(lastRef).not.toBe('false')
 	})
 })
