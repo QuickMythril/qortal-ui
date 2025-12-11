@@ -2895,6 +2895,19 @@ export const decryptChatMessageBase64 = (encryptedMessage, privateKey, recipient
 
 	let decrypted1 = new TextDecoder('utf-8').decode(_decryptedMessage)
 
+	try {
+		const parsed = JSON.parse(decrypted1)
+
+		if (parsed && parsed.type === 'reaction') {
+			return JSON.stringify({ ...parsed, isReaction: true })
+		}
+
+		if (parsed && parsed.messageText) {
+			let decrypted3 = Object.assign(parsed, { isPrivate: true })
+			return JSON.stringify(decrypted3)
+		}
+	} catch (error) { /* fall through to raw string handling */ }
+
 	if (decrypted1.includes('messageText')) {
 		let decrypted2 = JSON.parse(decrypted1)
 		let decrypted3 = Object.assign(decrypted2, {isPrivate: true})

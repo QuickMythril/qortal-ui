@@ -22,6 +22,14 @@
 - [x] Maintain legacy display of embedded `reactions` for historical messages until all clients migrate.
 - [x] Add the shared constant for reaction type number if missing; ensure encryption helpers accept it.
 
+### Fix parity gaps found
+- [x] Mark direct/private decrypted reaction payloads as `isReaction` when using `decryptChatMessageBase64` so they feed the reaction map instead of rendering as stray text.
+- [ ] Handle plaintext Hub-style reactions in group chats: treat `{type:'reaction', content, contentState, repliedTo}` payloads without `messageText` as reactions (don’t fall back to the “cannot decrypt” stub).
+- [ ] Normalize reaction toggle logic in `sendMessage`: honor the incoming `contentState` and, when absent, derive it from `reactionsMap` (fallback to embedded `reactions`) so removals work.
+- [ ] Add a visible reaction button per message (e.g., in `chat-menu`) that calls `setToggledMessage` and opens the emoji picker, enabling first reactions (no existing chips required).
+- [ ] Align encryption rules: send reactions plaintext for public groups, encrypted with type number 102 for private groups, and ensure Hub can read UI reactions (and vice versa).
+- [ ] Ensure reaction messages carry timestamp/sender/chatReference through ingestion so `reactionsMap` counts/tooltips stay accurate and clear queued `specialId` entries when acknowledged.
+
 ### Validation
 - [ ] Test Hub → UI: reactions display (add/remove), counts, tooltips, popover.
 - [ ] Test UI → Hub: reactions arrive and render correctly (add/remove) in Hub.
