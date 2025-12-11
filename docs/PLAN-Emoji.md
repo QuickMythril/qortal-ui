@@ -49,7 +49,7 @@
 - [x] Ensure reaction websocket payloads invoke `replaceMessagesEdited`/`addToUpdateMessageHashmap` so inbound reactions hit `ingestReactionMessage` (no silent skip).
 - [x] Harden the emoji picker guard: require a `toggledMessage` with `chatReference`/`signature` before sending a reaction.
 - [ ] Allow `message-template` to update when `reactionsMap` or `isUpdatingReaction` changes so chips and dimming react to new reactions.
-- [ ] Reset and rebuild `reactionsMapSnapshot` when switching chats (clear shared map), and continue to pass fresh objects to `chat-scroller` so Lit propagates updates.
+- [x] Reset and rebuild `reactionsMapSnapshot` when switching chats (clear shared map), and continue to pass fresh objects to `chat-scroller` so Lit propagates updates.
 - [ ] Verify inbound reaction payloads always include `timestamp`, `sender`, and `chatReference` to avoid `ingestReactionMessage` early-return.
 - [ ] Align reaction queue/pending indicator logic: either pass reaction sends through the queue (`_queueKey: 'chat-reaction'`/`messageQueue`) so “updating” works, or remove the dead pending-reaction code.
 - [ ] Message edits are not de-duplicated: render list should collapse by signature/chatReference so only the latest version shows.

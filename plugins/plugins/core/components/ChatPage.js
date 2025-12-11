@@ -64,6 +64,14 @@ export const REACTION_TYPE_NUMBER = 102
 // In-memory reactions map keyed by chatReference => { [emoji]: [ReactionItem] }
 const reactionsByRef = new Map()
 const pendingReactionsById = new Map()
+const resetReactionsState = (ctx) => {
+	reactionsByRef.clear()
+	pendingReactionsById.clear()
+	if (ctx) {
+		ctx.reactionsMapSnapshot = {}
+		ctx.requestUpdate()
+	}
+}
 
 class ChatPage extends LitElement {
 	static get properties() {
@@ -1869,6 +1877,7 @@ addToQueue(outSideMsg, messageQueue) {
 
 	shouldUpdate(changedProperties) {
 		if (changedProperties.has('chatId')) {
+			resetReactionsState(this)
 			if (this.repliedToMessageObj) {
 				this.closeRepliedToContainer()
 				return true
