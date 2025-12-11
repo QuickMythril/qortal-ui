@@ -1429,10 +1429,13 @@ class MessageTemplate extends LitElement {
 			this.replyFontSize = 'font-size: 20px'
 		}
 
+		const hasEditedTimestamp = typeof this.messageObj.editedTimestamp === 'number'
 		edited = html`
 			<span class="edited-message-style">
 				${translate('chatpage.cchange68')}
-				<message-time timestamp=${(this.messageObj.editedTimestamp === undefined ? Date.now() : this.messageObj.editedTimestamp)}></message-time>
+				${hasEditedTimestamp ? html`
+					<message-time timestamp=${this.messageObj.editedTimestamp}></message-time>
+				` : ''}
 			</span>
 		`
 

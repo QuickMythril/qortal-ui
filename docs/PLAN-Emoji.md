@@ -36,3 +36,12 @@
 - [ ] Test private groups: encrypted reactions tagged with type number 102.
 - [ ] Test concurrent/out-of-order reactions: older sender entries ignored; removals clear buckets.
 - [ ] Test queue/optimistic UI: pending reaction shows “updating,” clears on acknowledgment.
+
+### Field issues to fix from live testing
+- [x] Replies show “Edited now” placeholder before data loads; change placeholder to “Edited” until the time resolves.
+- [ ] Reaction tooltip shows “name, [object Object] emoji” on one line; should list only reactor names in order, one per line.
+- [ ] Clicking an existing reaction chip does nothing; should add (if other user) or remove (if current user) using the same emoji.
+- [ ] Newly sent reactions don’t render until the chat is reloaded.
+- [ ] Reaction chips don’t auto-refresh when a new reaction message arrives (needs live update without chat switch/reload).
+- [ ] Intermittent missing messages/replies on load causing stale reactions to appear (newer removal edits not applied); sometimes messages appear out of order (e.g., 23h-old after recent ones).
+- [ ] Private/closed groups with existing messages fail to load (regression during reaction changes; blocks private groups with history).
