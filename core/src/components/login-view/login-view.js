@@ -34,6 +34,7 @@ import '@material/mwc-icon'
 import '@material/mwc-fab'
 import '@polymer/iron-pages'
 import '@polymer/paper-icon-button/paper-icon-button.js'
+import { applyBackgroundPreference } from '../../utils/background-preference'
 
 // Multi language support
 import { get } from '../../../translate'
@@ -105,6 +106,7 @@ class LoginView extends connect(store)(LitElement) {
 
 				.login-page {
 					background: var(--background);
+					background-color: var(--plugback);
 					background-repeat: no-repeat;
 					background-attachment: fixed;
 					background-position: center;
@@ -338,6 +340,8 @@ class LoginView extends connect(store)(LitElement) {
 		stateAwait(state => {
 			return 'primary' in state.config.styles.theme.colors
 		}).catch(e => console.error(e))
+
+		applyBackgroundPreference()
 
 		const loginContainerPages = this.shadowRoot.querySelector('#loginContainerPages')
 		const loginCard = this.shadowRoot.querySelector('#login-card')

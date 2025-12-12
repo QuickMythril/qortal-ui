@@ -3,6 +3,7 @@ import { connect } from 'pwa-helpers'
 import { store } from '../../store'
 import { userSettingsStyles } from '../../styles/core-css'
 import './account-view'
+import './display-view'
 import './export-keys'
 import './notifications-view'
 import './qr-login-view'
@@ -45,6 +46,7 @@ class UserSettings extends connect(store)(LitElement) {
 						<div class="leftBar" style="display: table; width: 100%;">
 							<div class="slug">Qortal UI ${translate('settings.settings')}</div>
 							<ul>
+								<li @click=${() => this.setSettingsView('display')} ><a class=${this.selectedView.id === 'display' ? 'active' : ''} href="javascript:void(0)">Display</a></li>
 								<li @click=${() => this.setSettingsView('info')} ><a class=${this.selectedView.id === 'info' ? 'active' : ''} href="javascript:void(0)">${translate('settings.account')}</a></li>
 								<li @click=${() => this.setSettingsView('security')} ><a class=${this.selectedView.id === 'security' ? 'active' : ''} href="javascript:void(0)">${translate('settings.security')}</a></li>
 								<li @click=${() => this.setSettingsView('export')} ><a class=${this.selectedView.id === 'export' ? 'active' : ''} href="javascript:void(0)">${translate('settings.exp1')}</a></li>
@@ -68,7 +70,9 @@ class UserSettings extends connect(store)(LitElement) {
 	}
 
 	renderSettingViews(selectedView) {
-		if (selectedView.id === 'info') {
+		if (selectedView.id === 'display') {
+			return html`<display-view></display-view>`
+		} else if (selectedView.id === 'info') {
 			return html`<account-view></account-view>`
 		} else if (selectedView.id === 'security') {
 			return html`<security-view .closeSettings=${() => this.closeSettings()}></security-view>`
@@ -82,7 +86,9 @@ class UserSettings extends connect(store)(LitElement) {
 	}
 
 	renderHeaderViews() {
-		if (this.selectedView.id === 'info') {
+		if (this.selectedView.id === 'display') {
+			return html`Display`
+		} else if (this.selectedView.id === 'info') {
 			return html`${translate('settings.generalinfo')}`
 		} else if (this.selectedView.id === 'security') {
 			return html`${translate('settings.accountsecurity')}`
@@ -96,7 +102,9 @@ class UserSettings extends connect(store)(LitElement) {
 	}
 
 	setSettingsView(pageId) {
-		if (pageId === 'info') {
+		if (pageId === 'display') {
+			return this.selectedView = { id: 'display', name: 'Display' }
+		} else if (pageId === 'info') {
 			return this.selectedView = { id: 'info', name: 'General Account Info' }
 		} else if (pageId === 'security') {
 			return this.selectedView = { id: 'security', name: 'Account Security' }
