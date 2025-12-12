@@ -113,6 +113,7 @@ class ChatRightPanelResources extends LitElement {
 	}
 
 	async getMoreImages(reset) {
+		if (!this._chatId && this._chatId !== 0 && this._chatId !== '0') return
 		try {
 			this.myName = getMyNameFromStore({ allowActiveName: false })
 			if (reset) {
@@ -150,8 +151,10 @@ class ChatRightPanelResources extends LitElement {
 
 	async updated(changedProperties) {
 		if (changedProperties && changedProperties.has('_chatId')) {
-			this.images = []
-			await this.getMoreImages(true)
+			if (this._chatId || this._chatId === 0 || this._chatId === '0') {
+				this.images = []
+				await this.getMoreImages(true)
+			}
 		}
 
 		if (changedProperties && changedProperties.has('onlyMyImages')) {
