@@ -25,7 +25,8 @@ class ChatHead extends LitElement {
 			isImageLoaded: { type: Boolean },
 			setActiveChatHeadUrl: { attribute: false },
 			lastReadMessageTimestamp: { type: Number },
-			avatarImg: { type: String },
+			avatarImg: { type: Object },
+			avatarUrl: { type: String },
 			isSelectingChat: { type: Boolean }
 		}
 	}
@@ -49,6 +50,7 @@ class ChatHead extends LitElement {
 		this.imageFetches = 0
 		this.lastReadMessageTimestamp = 0
 		this.avatarImg = ''
+		this.avatarUrl = ''
 		this.loggedInAddress = window.parent.reduxStore.getState().app.selectedAddress.address
 		this.theme = localStorage.getItem('qortalTheme') ? localStorage.getItem('qortalTheme') : 'light'
 		this.isSelectingChat = false
@@ -56,32 +58,6 @@ class ChatHead extends LitElement {
 
 	render() {
 		let isUnread = false
-		let groupString = 'Group_' + this.chatInfo.groupId
-		let groupAvatarString = 'qortal_group_avatar_' + this.chatInfo.groupId
-
-		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-
-		if (groupString === 'Group_0') {
-			const avatarUrl = '/img/qgcgroup.png'
-			this.avatarImg = this.createImage(avatarUrl)
-		} else if (groupString === 'Group_1') {
-			const avatarUrl = '/img/qdcgroup.png'
-			this.avatarImg = this.createImage(avatarUrl)
-		} else if (groupString === 'Group_694') {
-			const avatarUrl = '/img/minter.png'
-			this.avatarImg = this.createImage(avatarUrl)
-		} else if (this.chatInfo.name) {
-			const avatarUrl = `${nodeUrl}/arbitrary/THUMBNAIL/${this.chatInfo.name}/qortal_avatar?async=true`
-			this.avatarImg = this.createImage(avatarUrl)
-		} else if (this.chatInfo.ownerName) {
-			if (this.chatInfo.ownerName === undefined) {
-				// Nothing to do
-			} else {
-				const avatarUrl = `${nodeUrl}/arbitrary/THUMBNAIL/${this.chatInfo.ownerName}/${groupAvatarString}?async=true`
-				this.avatarImg = this.createImage(avatarUrl)
-			}
-		}
 
 		if (this.lastReadMessageTimestamp && this.chatInfo.timestamp) {
 			if (this.lastReadMessageTimestamp < this.chatInfo.timestamp) {
@@ -164,6 +140,12 @@ class ChatHead extends LitElement {
 		`
 	}
 
+	willUpdate(changedProperties) {
+		if (changedProperties.has('chatInfo') || changedProperties.has('config')) {
+			this.updateAvatar()
+		}
+	}
+
 	async firstUpdated() {
 		this.changeTheme()
 
@@ -216,7 +198,6 @@ class ChatHead extends LitElement {
 	createImage(imageUrl) {
 		const imageHTMLRes = new Image()
 
-		imageHTMLRes.src = imageUrl
 		imageHTMLRes.style = 'width: 40px; height: 40px; float: left; border-radius: 50%;'
 
 		imageHTMLRes.onclick = () => {
@@ -237,6 +218,8 @@ class ChatHead extends LitElement {
 				this.isImageLoaded = false
 			}
 		}
+
+		imageHTMLRes.src = imageUrl
 
 		return imageHTMLRes
 	}
@@ -285,9 +268,64 @@ class ChatHead extends LitElement {
 	}
 
 	// Standard functions
+	getNodeUrl() {
+		const nodeState = window.parent.reduxStore.getState().app.nodeConfig
+		const myNode = nodeState.knownNodes[nodeState.node]
+		return `${myNode.protocol}://${myNode.domain}:${myNode.port}`
+	}
+
 	getApiKey() {
 		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		return myNode.apiKey
+	}
+
+	updateAvatar() {
+		const newAvatarUrl = this.computeAvatarUrl()
+
+		if (!newAvatarUrl) {
+			this.avatarUrl = ''
+			this.avatarImg = ''
+			this.isImageLoaded = false
+			return
+		}
+
+		if (newAvatarUrl === this.avatarUrl && this.avatarImg) {
+			return
+		}
+
+		this.avatarUrl = newAvatarUrl
+		this.imageFetches = 0
+		this.isImageLoaded = false
+		this.avatarImg = this.createImage(newAvatarUrl)
+	}
+
+	computeAvatarUrl() {
+		const groupString = 'Group_' + this.chatInfo.groupId
+		const groupAvatarString = 'qortal_group_avatar_' + this.chatInfo.groupId
+
+		if (groupString === 'Group_0') {
+			return '/img/qgcgroup.png'
+		}
+
+		if (groupString === 'Group_1') {
+			return '/img/qdcgroup.png'
+		}
+
+		if (groupString === 'Group_694') {
+			return '/img/minter.png'
+		}
+
+		if (this.chatInfo.name) {
+			const encodedName = encodeURIComponent(this.chatInfo.name)
+			return `${this.getNodeUrl()}/arbitrary/THUMBNAIL/${encodedName}/qortal_avatar?async=true`
+		}
+
+		if (this.chatInfo.ownerName) {
+			const encodedOwnerName = encodeURIComponent(this.chatInfo.ownerName)
+			return `${this.getNodeUrl()}/arbitrary/THUMBNAIL/${encodedOwnerName}/${groupAvatarString}?async=true`
+		}
+
+		return ''
 	}
 
 	isEmptyArray(arr) {

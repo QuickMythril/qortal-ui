@@ -15,7 +15,8 @@ class ChatSelect extends LitElement {
 			activeChatHeadUrl: { type: String },
 			isImageLoaded: { type: Boolean },
 			setActiveChatHeadUrl: { attribute: false },
-			avatarImg: { type: String }
+			avatarImg: { type: Object },
+			avatarUrl: { type: String }
 
 		}
 	}
@@ -38,33 +39,10 @@ class ChatSelect extends LitElement {
 		this.isImageLoaded = false
 		this.imageFetches = 0
 		this.avatarImg = ''
+		this.avatarUrl = ''
 	}
 
 	render() {
-		let groupString = 'Group_' + this.chatInfo.groupId
-		let groupAvatarString = 'qortal_group_avatar_' + this.chatInfo.groupId
-
-		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
-		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
-
-		if (groupString === 'Group_0') {
-			const avatarUrl = '/img/qgcgroup.png'
-			this.avatarImg = this.createImage(avatarUrl)
-		} else if (groupString === 'Group_1') {
-			const avatarUrl = '/img/qdcgroup.png'
-			this.avatarImg = this.createImage(avatarUrl)
-		} else if (this.chatInfo.name) {
-			const avatarUrl = `${nodeUrl}/arbitrary/THUMBNAIL/${this.chatInfo.name}/qortal_avatar?async=true`
-			this.avatarImg = this.createImage(avatarUrl)
-		} else if (this.chatInfo.ownerName) {
-			if (this.chatInfo.ownerName === undefined) {
-				// Nothing to do
-			} else {
-				const avatarUrl = `${nodeUrl}/arbitrary/THUMBNAIL/${this.chatInfo.ownerName}/${groupAvatarString}?async=true`
-				this.avatarImg = this.createImage(avatarUrl)
-			}
-		}
-
 		return html`
 			<li @click=${() => this.getUrl(this.chatInfo.url)} class="clearfix ${this.activeChatHeadUrl === this.chatInfo.url ? 'active' : ''}">
 				${this.isImageLoaded ? html`${this.avatarImg}` : html``}
@@ -104,6 +82,12 @@ class ChatSelect extends LitElement {
 		`
 	}
 
+	willUpdate(changedProperties) {
+		if (changedProperties.has('chatInfo') || changedProperties.has('config')) {
+			this.updateAvatar()
+		}
+	}
+
 	firstUpdated() {
 		let configLoaded = false
 
@@ -129,7 +113,6 @@ class ChatSelect extends LitElement {
 	createImage(imageUrl) {
 		const imageHTMLRes = new Image()
 
-		imageHTMLRes.src = imageUrl
 		imageHTMLRes.style = 'width:40px; height:40px; float: left; border-radius:50%'
 
 		imageHTMLRes.onclick = () => {
@@ -150,6 +133,8 @@ class ChatSelect extends LitElement {
 				this.isImageLoaded = false
 			}
 		}
+
+		imageHTMLRes.src = imageUrl
 
 		return imageHTMLRes
 	}
@@ -178,6 +163,57 @@ class ChatSelect extends LitElement {
 	getApiKey() {
 		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		return myNode.apiKey
+	}
+
+	getNodeUrl() {
+		const nodeState = window.parent.reduxStore.getState().app.nodeConfig
+		const myNode = nodeState.knownNodes[nodeState.node]
+		return `${myNode.protocol}://${myNode.domain}:${myNode.port}`
+	}
+
+	updateAvatar() {
+		const newAvatarUrl = this.computeAvatarUrl()
+
+		if (!newAvatarUrl) {
+			this.avatarUrl = ''
+			this.avatarImg = ''
+			this.isImageLoaded = false
+			return
+		}
+
+		if (newAvatarUrl === this.avatarUrl && this.avatarImg) {
+			return
+		}
+
+		this.avatarUrl = newAvatarUrl
+		this.imageFetches = 0
+		this.isImageLoaded = false
+		this.avatarImg = this.createImage(newAvatarUrl)
+	}
+
+	computeAvatarUrl() {
+		const groupString = 'Group_' + this.chatInfo.groupId
+		const groupAvatarString = 'qortal_group_avatar_' + this.chatInfo.groupId
+
+		if (groupString === 'Group_0') {
+			return '/img/qgcgroup.png'
+		}
+
+		if (groupString === 'Group_1') {
+			return '/img/qdcgroup.png'
+		}
+
+		if (this.chatInfo.name) {
+			const encodedName = encodeURIComponent(this.chatInfo.name)
+			return `${this.getNodeUrl()}/arbitrary/THUMBNAIL/${encodedName}/qortal_avatar?async=true`
+		}
+
+		if (this.chatInfo.ownerName) {
+			const encodedOwnerName = encodeURIComponent(this.chatInfo.ownerName)
+			return `${this.getNodeUrl()}/arbitrary/THUMBNAIL/${encodedOwnerName}/${groupAvatarString}?async=true`
+		}
+
+		return ''
 	}
 
 	isEmptyArray(arr) {
