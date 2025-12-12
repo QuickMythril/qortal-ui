@@ -2285,7 +2285,7 @@ export const walletProfileStyles = css`
         align-items: center;
         justify-content: flex-start;
         gap: 8px;
-        padding-bottom: 4px;
+        padding-bottom: 0;
     }
 
     .menu-toggle-placeholder {
@@ -2300,7 +2300,7 @@ export const walletProfileStyles = css`
         justify-content: flex-end;
         margin-left: auto;
         min-width: 72px;
-        max-width: 120px;
+        max-width: 72px;
     }
 
     .profile-text {
@@ -2333,14 +2333,14 @@ export const walletProfileStyles = css`
 
     .round-fullinfo {
         position: relative;
-        width: 68px;
-        height: 68px;
+        width: 72px;
+        height: 72px;
         border-radius: 50%;
     }
 
     .full-info-logo {
-        width: 68px;
-        height: 68px;
+        width: 72px;
+        height: 72px;
         border-radius: 50%;
     }
 

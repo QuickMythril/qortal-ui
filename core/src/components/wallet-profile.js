@@ -75,7 +75,7 @@ class WalletProfile extends connect(store)(LitElement) {
 		const url = this.displayName ? `${avatarUrl}/arbitrary/THUMBNAIL/${this.displayName}/qortal_avatar?async=true` : ''
 
 		return html`
-			<div style="position: relative; width: 120px; height: 120px;">
+			<div style="position: relative; width: 72px; height: 72px;">
 				${this.displayName ? html`
 					<img class="round-fullinfo" src="${url}" ?hidden=${this.avatarError} @error=${() => { this.avatarError = true }} />
 				` : null}
