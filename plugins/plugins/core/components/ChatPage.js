@@ -2708,7 +2708,7 @@ async addToUpdateMessageHashmap(array) {
 			this.webWorkerDecodeMessages.postMessage({ messages: messages, isReceipient: this.isReceipient, _publicKey: this._publicKey, privateKey: window.parent.reduxStore.getState().app.selectedAddress.keyPair.privateKey, secretKeys: this.secretKeysWorker })
 
 			this.webWorkerDecodeMessages.onmessage = e => {
-				decodedMessages = e.data
+				decodedMessages = Array.isArray(e.data) ? e.data : []
 				res()
 			}
 
