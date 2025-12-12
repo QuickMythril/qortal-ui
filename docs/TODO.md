@@ -17,7 +17,6 @@
   - [x] PLAN-Themes.md
 - [ ] Issues to fix
   - [ ] PLAN-Public.md
-- [ ] Fix spacing at bottom of chat page list (group and direct chats)
 - [ ] Expand tx notification bell coverage
   - [ ] Add shared helper to push `setNewNotification` with type/status/signature/timestamp
   - [ ] Wallet: dispatch notification after successful QORT send
