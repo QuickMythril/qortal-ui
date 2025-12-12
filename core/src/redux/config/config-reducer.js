@@ -3,6 +3,16 @@
 import { loadStateFromLocalStorage } from '../../localStorageHelpers'
 import { LOAD_CONFIG_FROM_API } from './config-actions'
 import { loadConfigFromAPI } from './reducers/load-config-from-api'
+import defaultCoinConfig from '../../../config/default.coin.config.js'
+
+const pruneCachedConfig = cached => {
+	if (!cached || typeof cached !== 'object') return undefined
+
+	// Drop coin block so updated assets (e.g., logo paths) are refreshed from /getConfig
+	const { coin, ...rest } = cached
+
+	return rest
+}
 
 const DEFAULT_INITIAL_STATE = {
 	styles: {
@@ -12,9 +22,7 @@ const DEFAULT_INITIAL_STATE = {
 			colors: {}
 		}
 	},
-	coin: {
-		name: ''
-	},
+	coin: defaultCoinConfig,
 	user: {
 		language: 'english',
 		server: {},
@@ -25,7 +33,10 @@ const DEFAULT_INITIAL_STATE = {
 	loaded: false
 }
 
-export default (state = loadStateFromLocalStorage('config') || DEFAULT_INITIAL_STATE, action) => {
+const cachedConfig = pruneCachedConfig(loadStateFromLocalStorage('config'))
+const INITIAL_STATE = cachedConfig ? { ...DEFAULT_INITIAL_STATE, ...cachedConfig } : DEFAULT_INITIAL_STATE
+
+export default (state = INITIAL_STATE, action) => {
 	switch (action.type) {
 		case LOAD_CONFIG_FROM_API:
 			return loadConfigFromAPI(state, action)
