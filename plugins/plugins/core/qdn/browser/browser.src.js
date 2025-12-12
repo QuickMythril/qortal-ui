@@ -55,6 +55,7 @@ import nacl from '../../../../../crypto/api/deps/nacl-fast'
 import '@material/mwc-button'
 import '@material/mwc-icon'
 import '@material/mwc-checkbox'
+import {sendChatMessageInternal} from './chat-send-helper'
 
 // Multi language support
 import {get, registerTranslateConfig, translate, use} from '../../../../../core/translate'
@@ -2134,88 +2135,14 @@ class WebBrowser extends LitElement {
 					break
 
 				case actions.SEND_CHAT_MESSAGE: {
-					const recipient = data.destinationAddress
-					const groupId = data.groupId
-					const chatReference = data.chatReference
-					const isRecipient = !groupId
-					if (!isRecipient && groupId && Number(groupId) !== 0) {
-						try {
-							const membership = await parentEpml.request('apiCall', {
-								type: 'api',
-								url: `/groups/membership/${groupId}/${this.selectedAddress.address}`
-							})
-							if (!membership || membership.error) {
-								response = '{"error": "Join this group to send messages."}'
-								break
-							}
-						} catch (error) {
-							response = '{"error": "Unable to verify group membership."}'
-							break
+					const result = await showModalAndWait(
+						actions.SEND_CHAT_MESSAGE,
+						{
+							message: data.message
 						}
-					}
-					const sendMessage = async (messageText) => {
-						const sendTimestamp = Date.now()
-
-						let _reference = new Uint8Array(64)
-						window.crypto.getRandomValues(_reference)
-						let reference = window.parent.Base58.encode(_reference)
-						const sendMessageRequest = async () => {
-							let chatResponse
-							if (isRecipient) {
-								chatResponse = await parentEpml.request('chat', {
-									type: 18,
-									nonce: this.selectedAddress.nonce,
-									params: {
-										timestamp: sendTimestamp,
-										recipient: recipient,
-										recipientPublicKey: this._publicKey.key,
-										hasChatReference: chatReference ? 1 : 0,
-										chatReference: chatReference,
-										message: messageText,
-										lastReference: reference,
-										proofOfWorkNonce: 0,
-										isEncrypted: 1,
-										isText: 1
-									}
-								})
-								if (chatResponse && chatResponse.error) {
-									throw new Error(mapChatValidationError(chatResponse))
-								}
-							}
-							if (!isRecipient) {
-								chatResponse = await parentEpml.request('chat', {
-									type: 181,
-									nonce: this.selectedAddress.nonce,
-									params: {
-										timestamp: sendTimestamp,
-										groupID: Number(groupId),
-										hasReceipient: 0,
-										hasChatReference: chatReference ? 1 : 0,
-										chatReference: chatReference,
-										message: messageText,
-										lastReference: reference,
-										proofOfWorkNonce: 0,
-										isEncrypted: 0,
-										isText: 1
-									}
-								})
-								if (chatResponse && chatResponse.error) {
-									throw new Error(mapChatValidationError(chatResponse))
-								}
-							}
-							return await _computePow(chatResponse)
-						}
-						const _computePow = async (chatBytes) => {
-							let difficulty = 8
-							try {
-								const balance = await parentEpml.request('apiCall', {
-									type: 'api',
-									url: `/addresses/balance/${this.selectedAddress.address}`
-								})
-								if (typeof balance === 'number' && balance < 4) {
-									difficulty = 18
-								}
-							} catch (error) { /* default to 8 */ }
+					)
+					if (result.action === 'accept') {
+						const computePow = async (chatBytes, difficulty) => {
 							const path = window.parent.location.origin + '/memory-pow/memory-pow.wasm.full'
 							const worker = new WebWorkerChat()
 							let nonce = null
@@ -2228,111 +2155,44 @@ class WebBrowser extends LitElement {
 									res()
 								}
 							})
-							let _response = await parentEpml.request('sign_chat', {
-								nonce: this.selectedAddress.nonce,
-								chatBytesArray: chatBytesArray,
-								chatNonce: nonce,
-								apiVersion: 2
-							})
-							return getSendChatResponse(_response)
+							return { nonce, chatBytesArray }
 						}
-						const getSendChatResponse = (res) => {
-							if (res.signature) {
-								return res
-							} else if (res.error) {
-								const mapped = mapChatValidationError(res)
-								let myMsg1 = mapped
-								let myMsg2 = get('walletpage.wchange44')
-								showErrorAndWait('ACTION_FAILED', { id1: myMsg1, id2: myMsg2 })
-								throw new Error(mapped)
-							} else {
-								let myMsg1 = get('modals.mpchange36')
-								let myMsg2 = get('walletpage.wchange44')
-								showErrorAndWait('ACTION_FAILED', { id1: myMsg1, id2: myMsg2 })
-								throw new Error('ERROR: Could not send message.')
-							}
-						}
-						return await sendMessageRequest()
-					}
-					const result = await showModalAndWait(
-						actions.SEND_CHAT_MESSAGE,
-						{
-							message: data.message
-						}
-					)
-					if (result.action === 'accept') {
-						let hasPublicKey = true
-						if (isRecipient) {
-							const res = await parentEpml.request('apiCall', {
-								type: 'api',
-								url: `/addresses/publickey/${recipient}`
-							})
-							if (res.error === 102) {
-								this._publicKey.key = ''
-								this._publicKey.hasPubKey = false
-								hasPublicKey = false
-							} else if (res !== false) {
-								this._publicKey.key = res
-								this._publicKey.hasPubKey = true
-							} else {
-								this._publicKey.key = ''
-								this._publicKey.hasPubKey = false
-								hasPublicKey = false
-							}
-						}
-						if (!hasPublicKey && isRecipient) {
-							let myMsg1 = get('modals.mpchange37')
-							let myMsg2 = get('walletpage.wchange44')
-							await showErrorAndWait('ACTION_FAILED', { id1: myMsg1, id2: myMsg2 })
-							response = '{"error": "Cannot send an encrypted message to this user since they do not have their publickey on chain."}'
-							break
-						}
-						const fullMessageObject = data.fullMessageObject || data.fullContent
-						let stringifyMessageObject = ''
-						if (fullMessageObject) {
-							if (typeof fullMessageObject === 'string') {
-								stringifyMessageObject = fullMessageObject
-							} else {
-								stringifyMessageObject = JSON.stringify(fullMessageObject)
-							}
-						} else {
-							const tiptapJson = {
-								type: 'doc',
-								content: [{
-									type: 'paragraph',
-									content: [{
-										type: 'text',
-										text: data.message
-									}]
-								}]
-							}
-							const messageObject = {
-								messageText: tiptapJson,
-								images: [],
-								repliedTo: '',
-								version: 3
-							}
-							stringifyMessageObject = JSON.stringify(messageObject)
-						}
-						const sizeBytes = new Blob([stringifyMessageObject]).size
-						if (sizeBytes > 4000) {
-							response = '{"error": "Chat payload exceeds 4000 bytes."}'
-							break
-						}
+
 						try {
 							this.loader.show()
-							response = await sendMessage(stringifyMessageObject)
+							const chatResponse = await sendChatMessageInternal(data, {
+								parentEpml,
+								selectedAddress: this.selectedAddress,
+								mapChatValidationError,
+								computePow,
+								showModalAndWait
+							})
+
+							if (typeof chatResponse === 'string' && chatResponse.includes('{"error"')) {
+								response = chatResponse
+								if (chatResponse.includes('User declined request')) {
+									let myMsg1 = get('transactions.declined')
+									let myMsg2 = get('walletpage.wchange44')
+									await showErrorAndWait('DECLINED_REQUEST', { id1: myMsg1, id2: myMsg2 })
+								}
+							} else if (chatResponse && chatResponse.signature) {
+								response = chatResponse
+							} else {
+								const mapped = mapChatValidationError(chatResponse)
+								let myMsg1 = mapped
+								let myMsg2 = get('walletpage.wchange44')
+								await showErrorAndWait('ACTION_FAILED', { id1: myMsg1, id2: myMsg2 })
+								response = JSON.stringify({ error: mapped })
+							}
 						} catch (error) {
 							let myMsg1 = get('modals.mpchange38')
 							let myMsg2 = get('walletpage.wchange44')
 							await showErrorAndWait('ACTION_FAILED', { id1: myMsg1, id2: myMsg2 })
-							if (error.message) {
-								let data = {}
-								data['error'] = error.message
-								response = JSON.stringify(data)
-								break
+							if (error && error.message) {
+								response = JSON.stringify({ error: error.message })
+							} else {
+								response = '{"error": "Request could not be fulfilled."}'
 							}
-							response = '{"error": "Request could not be fulfilled."}'
 						} finally {
 							this.loader.hide()
 						}
@@ -2342,11 +2202,6 @@ class WebBrowser extends LitElement {
 						await showErrorAndWait('DECLINED_REQUEST', { id1: myMsg1, id2: myMsg2 })
 						response = '{"error": "User declined request"}'
 					}
-					// this.loader.show()
-					// Params: data.groupId, data.destinationAddress, data.message
-					// TODO: prompt user to send chat message. If they confirm, sign+process a CHAT transaction
-					// then set the response string from the core to the `response` variable (defined above)
-					// If they decline, send back JSON that includes an `error` key, such as `{"error": "User declined request"}`
 				}
 					break
 
@@ -5472,6 +5327,14 @@ async function showModalAndWait(type, data) {
 								<p style="font-size: 16px;overflow-wrap: anywhere;" class="modal-paragraph"><span style="font-weight: bold">${get('walletpage.wchange10')}:</span> ${data.recipient}</p>
 								<p style="font-size: 16px;overflow-wrap: anywhere;" class="modal-paragraph"><span style="font-weight: bold">${get('walletpage.wchange11')}:</span> ${data.amount} ${data.coin}</p>
 								<p style="font-size: 16px;overflow-wrap: anywhere;" class="modal-paragraph"><span style="font-weight: bold">${get('walletpage.wchange36')}:</span> ~${data.fee} ${data.coin}</p>
+							</div>
+						` : ''}
+
+						${type === 'LOW_BALANCE_CHAT' ? `
+							<div class="modal-subcontainer">
+								<p class="modal-paragraph">${get('chatpage.cchange41')}</p>
+								<p class="modal-paragraph">${get('chatpage.cchange42')}</p>
+								<p class="modal-paragraph"><span style="font-weight: bold">${get('walletpage.wchange19')}:</span> ${data.balance || 0} QORT</p>
 							</div>
 						` : ''}
 
