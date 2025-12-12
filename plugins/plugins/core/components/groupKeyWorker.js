@@ -31,17 +31,27 @@ self.onmessage = async (event) => {
 		}
 
 		const latest = [...resources].sort((a, b) => (b.updated || b.created) - (a.updated || a.created))[0]
-		const gAdmin = latest.name
+		const gAdminName = latest.name
+		if (!gAdminName) {
+			self.postMessage({ error: 'No publisher name for group key' })
+			return
+		}
 		const groupAdmins = await fetchJson(`${nodeUrl}/groups/members/${groupId}?onlyAdmins=true&limit=0`)
 		const adminList = Array.isArray(groupAdmins.members) ? groupAdmins.members : []
-		const adminExists = adminList.some((m) => m.member === gAdmin || m.member === latest.owner)
+		let publisherOwner = null
+		try {
+			const nameRes = await fetchJson(`${nodeUrl}/names/${gAdminName}`)
+			publisherOwner = nameRes && nameRes.owner
+		} catch (e) { /* ignore */ }
+
+		const adminExists = publisherOwner && adminList.some((m) => m.member === publisherOwner)
 
 		if (!adminExists) {
 			self.postMessage({ error: 'No valid admin for group key' })
 			return
 		}
 
-		const dataUrl = `${nodeUrl}/arbitrary/DOCUMENT_PRIVATE/${gAdmin}/${symIdentifier}?encoding=base64`
+		const dataUrl = `${nodeUrl}/arbitrary/DOCUMENT_PRIVATE/${gAdminName}/${symIdentifier}?encoding=base64`
 		const res = await fetch(dataUrl)
 		if (!res.ok) {
 			self.postMessage({ error: 'Failed to download group key' })
