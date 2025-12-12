@@ -7353,22 +7353,10 @@ export const qchatStyles = css`
         width: 20vw;
         float: left;
         height: 100vh;
-        overflow-y: auto;
-        border-right: 2px #ddd solid;
-    }
-
-    .people-list .blockedusers {
-        z-index: 1;
-        position: absolute;
-        bottom: 0;
-        width: 20vw;
-        background: var(--white);
-        border-right: 3px #ddd solid;
         display: flex;
-        justify-content: space-between;
-        gap: 15px;
         flex-direction: column;
-        padding: 5px 30px 0 30px;
+        overflow: hidden;
+        border-right: 2px #ddd solid;
     }
 
     .groups-button-container {
@@ -7496,8 +7484,8 @@ export const qchatStyles = css`
     }
 
     .people-list ul {
-        padding: 0 0 60px 0;
-        height: 85vh;
+        padding: 0;
+        flex: 1;
         overflow-y: auto;
         overflow-x: hidden;
     }
