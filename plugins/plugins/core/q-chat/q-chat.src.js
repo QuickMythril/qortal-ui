@@ -139,6 +139,7 @@ class Chat extends LitElement {
 		this.isSelectingChat = false
 		this.pendingChatUrl = ''
 		this.boundSetActiveChatHeadUrl = this.setActiveChatHeadUrl.bind(this)
+		this.boundSetOpenPrivateMessage = this.setOpenPrivateMessage.bind(this)
 		this.chatSelectionNonce = 0
 		this.openBlockedUserDialog = false
 		this.pendingSendToName = ''
@@ -1358,7 +1359,7 @@ class Chat extends LitElement {
 					myAddress=${window.parent.reduxStore.getState().app.selectedAddress.address}
 					.chatId=${this.activeChatHeadUrl}
 					.selectionNonce=${this.chatSelectionNonce}
-					.setOpenPrivateMessage=${(val) => this.setOpenPrivateMessage(val)}
+					.setOpenPrivateMessage=${this.boundSetOpenPrivateMessage}
 					.setActiveChatHeadUrl=${this.boundSetActiveChatHeadUrl}
 					balance=${this.balance}
 					loggedInUserName=${this.loggedInUserName}
