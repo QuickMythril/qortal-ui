@@ -2827,6 +2827,10 @@ async addToUpdateMessageHashmap(array) {
 						const parsed = JSON.parse(decoded)
 						if (parsed && typeof parsed.messageText === 'object') {
 							tiptapDoc = parsed.messageText
+							if (hasSpecialId) {
+								// Prefer rendering the actual messageText doc for specialId payloads
+								previewHtml = generateHTML(tiptapDoc, [StarterKit, Underline, Highlight, Mention, TextStyle, Color.configure({ types: [TextStyle.name] })])
+							}
 						} else if (parsed && typeof parsed.messageText === 'string') {
 							previewHtml = parsed.messageText
 						} else if (parsed && typeof parsed.message === 'string') {
@@ -2838,7 +2842,10 @@ async addToUpdateMessageHashmap(array) {
 				}
 
 				if (!previewHtml && hasSpecialId) {
-					const base = typeof messageObj.message === 'string' ? messageObj.message : (decoded || '')
+					// If we didn't render from messageText, fall back to string content
+					const base = typeof messageObj.message === 'string'
+						? messageObj.message
+						: (tiptapDoc ? '' : (decoded || ''))
 					previewHtml = this.convertHubMessageToJson(base)
 				}
 
