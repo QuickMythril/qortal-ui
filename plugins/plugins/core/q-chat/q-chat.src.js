@@ -86,6 +86,7 @@ class Chat extends LitElement {
 			openDialogGroupsModal: { type: Boolean },
 			isSelectingChat: { type: Boolean },
 			pendingChatUrl: { type: String },
+			chatSelectionNonce: { type: Number },
 			openBlockedUserDialog: { type: Boolean }
 		}
 	}
@@ -137,6 +138,7 @@ class Chat extends LitElement {
 		this.handleSearchResultsClose = this.handleSearchResultsClose.bind(this)
 		this.isSelectingChat = false
 		this.pendingChatUrl = ''
+		this.chatSelectionNonce = 0
 		this.openBlockedUserDialog = false
 		this.pendingSendToName = ''
 		this.stopModalKeydown = this.stopModalKeydown.bind(this)
@@ -589,28 +591,23 @@ class Chat extends LitElement {
 
 		if (this.isSelectingChat) return
 
-		if (targetUrl === this.activeChatHeadUrl && !this.isViewOpen) {
-			return
-		}
+		this.activeChatHeadUrl = targetUrl
+		this.chatSelectionNonce++
+		this.isViewOpen = false
 
 		if (!isGroupUrl) {
 			this.isSelectingChat = false
 			this.pendingChatUrl = ''
-			this.activeChatHeadUrl = targetUrl
-			this.isViewOpen = false
 			return
 		}
 
 		this.isSelectingChat = true
 		this.pendingChatUrl = targetUrl
-		this.isViewOpen = false
 		this.requestUpdate()
 
 		try {
 			await this.getSymKeyFile(targetUrl)
-			this.activeChatHeadUrl = targetUrl
 		} catch (error) {
-			this.activeChatHeadUrl = targetUrl
 			parentEpml.request('showSnackBar', get('chatpage.cchange22') || 'Loading messages...')
 		} finally {
 			this.isSelectingChat = false
@@ -1358,6 +1355,7 @@ class Chat extends LitElement {
 					.showNewMessageBar=${this.showNewMessageBar}
 					myAddress=${window.parent.reduxStore.getState().app.selectedAddress.address}
 					chatId=${this.activeChatHeadUrl}
+					selectionNonce=${this.chatSelectionNonce}
 					.setOpenPrivateMessage=${(val) => this.setOpenPrivateMessage(val)}
 					.setActiveChatHeadUrl=${(val) => this.setActiveChatHeadUrl(val)}
 					balance=${this.balance}

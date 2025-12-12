@@ -171,7 +171,8 @@ class ChatPage extends LitElement {
 			loggedInUserAddress: { type: String },
 			secretKeysWorker: { type: Object },
 			privateMessageOpen: { type: Boolean },
-			reactionsMapSnapshot: { type: Object }
+			reactionsMapSnapshot: { type: Object },
+			selectionNonce: { type: Number }
 		}
 	}
 
@@ -224,6 +225,7 @@ class ChatPage extends LitElement {
 		this.appFile = null
 		this.uid = new ShortUniqueId()
 		this.userLanguage = ''
+		this.selectionNonce = 0
 		this.lastMessageRefVisible = false
 		this.isEditMessageOpen = false
 		this.emojiPicker = new EmojiPicker({
@@ -2078,6 +2080,13 @@ addToQueue(outSideMsg, messageQueue) {
 					key: previousChatId,
 					timestamp: Date.now()
 				}))
+			}
+		}
+
+		if (changedProperties && changedProperties.has('selectionNonce')) {
+			if (!changedProperties.has('chatId') && this.chatId) {
+				this.isLoadingMessages = true
+				this.initUpdate()
 			}
 		}
 	}
