@@ -598,24 +598,24 @@ class Chat extends LitElement {
 		this.isSelectingChat = true
 		this.pendingChatUrl = targetUrl
 
+		this.requestUpdate()
+
 		if (!isGroupUrl) {
-			this.requestUpdate()
 			this.isSelectingChat = false
 			this.pendingChatUrl = ''
 			return
 		}
-		this.requestUpdate()
 
 		try {
 			await this.getSymKeyFile(targetUrl)
 		} catch (error) {
 			parentEpml.request('showSnackBar', get('chatpage.cchange22') || 'Loading messages...')
-		} finally {
-			this.isSelectingChat = false
-			this.pendingChatUrl = ''
-			this.requestUpdate()
+			} finally {
+				this.isSelectingChat = false
+				this.pendingChatUrl = ''
+				this.requestUpdate()
+			}
 		}
-	}
 
 	async getSymKeyFile(url) {
 		if (!url || !url.startsWith('group/')) {
@@ -1355,7 +1355,7 @@ class Chat extends LitElement {
 					.hideNewMessageBar=${this.hideNewMessageBar}
 					.showNewMessageBar=${this.showNewMessageBar}
 					myAddress=${window.parent.reduxStore.getState().app.selectedAddress.address}
-					chatId=${this.activeChatHeadUrl}
+					.chatId=${this.activeChatHeadUrl}
 					.selectionNonce=${this.chatSelectionNonce}
 					.setOpenPrivateMessage=${(val) => this.setOpenPrivateMessage(val)}
 					.setActiveChatHeadUrl=${(val) => this.setActiveChatHeadUrl(val)}
