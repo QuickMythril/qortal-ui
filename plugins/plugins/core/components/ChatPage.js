@@ -24,7 +24,12 @@ import WebWorkerSortMessages from 'web-worker:./webworkerSortMessages.js'
 import WebWorkerDecodeMessages from 'web-worker:./webworkerDecodeMessages.js'
 import ShortUniqueId from 'short-unique-id'
 import Compressor from 'compressorjs'
-import { decryptGroupData, validateSecretKey } from './GroupEncryption'
+import {
+	decryptGroupData,
+	validateSecretKey,
+	objectToBase64,
+	encryptSingle
+} from './GroupEncryption'
 import './ChatScroller'
 import './LevelFounder'
 import './NameMenu'
@@ -4710,7 +4715,55 @@ async addToUpdateMessageHashmap(array) {
 
 		const sendMessageRequest = async () => {
 			const isOpenGroup = this.groupInfo && typeof this.groupInfo.isOpen === 'boolean' ? this.groupInfo.isOpen : false
-			const shouldEncryptReaction = typeMessage === 'reaction' && !isReceipient && !isOpenGroup
+			const isClosedGroup = !isReceipient && !isOpenGroup && Number(_chatId) !== 0
+			const shouldEncryptReaction = typeMessage === 'reaction' && isClosedGroup
+			const shouldEncryptMessage = isClosedGroup
+			const parsedPayloadObject = (() => {
+				if (typeof messageText === 'string') {
+					try {
+						return JSON.parse(messageText)
+					} catch (e) {
+						return messageText
+					}
+				}
+				return messageText
+			})()
+
+			let finalMessagePayload = messageText
+			let skipSend = false
+			let isUnencryptedPrivate = false
+
+			if (shouldEncryptMessage) {
+				const hasSecretKey = this.secretKeysWorker && Object.keys(this.secretKeysWorker || {}).length > 0
+				if (hasSecretKey) {
+					try {
+						const typeNumber = shouldEncryptReaction ? REACTION_TYPE_NUMBER : undefined
+						const base64Message = await objectToBase64(parsedPayloadObject)
+						finalMessagePayload = await encryptSingle(base64Message, this.secretKeysWorker, typeNumber)
+					} catch (error) {
+						parentEpml.request('showSnackBar', get('chatpage.cchange22') || 'Unable to encrypt message; try again.')
+						skipSend = true
+					}
+				} else {
+					// No group key available: warn and allow opt-in plaintext send
+					const warnMsg = get('chatpage.cchange22') || 'No group key published; send unencrypted? Messages will be readable by the network.'
+					const confirmed = window.confirm(warnMsg)
+					if (!confirmed) {
+						skipSend = true
+					} else {
+						isUnencryptedPrivate = true
+						try {
+							const payloadWithFlag = { ...(typeof parsedPayloadObject === 'object' ? parsedPayloadObject : {}), isPrivateUnencrypted: true }
+							finalMessagePayload = JSON.stringify(payloadWithFlag)
+						} catch (e) {
+							// fall back to original payload if stringify fails
+							finalMessagePayload = messageText
+						}
+					}
+				}
+			}
+
+			if (skipSend) return { error: 'skip' }
 
 			if (isReceipient === true) {
 				let chatResponse = await parentEpml.request('chat', {
@@ -4722,7 +4775,7 @@ async addToUpdateMessageHashmap(array) {
 						recipientPublicKey: _publicKey.key,
 						hasChatReference: (typeMessage === 'edit' || typeMessage === 'reaction') ? 1 : 0,
 						chatReference: chatReference,
-						message: messageText,
+						message: finalMessagePayload,
 						lastReference: reference,
 						proofOfWorkNonce: 0,
 						isEncrypted: 1,
@@ -4761,7 +4814,7 @@ async addToUpdateMessageHashmap(array) {
 						hasReceipient: 0,
 						hasChatReference: (typeMessage === 'edit' || typeMessage === 'reaction') ? 1 : 0,
 						chatReference: chatReference,
-						message: messageText,
+						message: finalMessagePayload,
 						lastReference: reference,
 						proofOfWorkNonce: 0,
 						isEncrypted: shouldEncryptReaction ? 1 : 0,
@@ -4930,6 +4983,7 @@ async addToUpdateMessageHashmap(array) {
 		}
 
 		const _computePow = async (chatBytes, isForward) => {
+			if (chatBytes && chatBytes.error === 'skip') return true
 			const difficulty = this.balance < 4 ? 18 : 8
 			const path = window.parent.location.origin + '/memory-pow/memory-pow.wasm.full'
 
