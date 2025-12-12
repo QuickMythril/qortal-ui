@@ -385,21 +385,8 @@ class ChatPage extends LitElement {
 												<vaadin-icon class="reply-icon" icon="vaadin:reply" slot="icon"></vaadin-icon>
 											<div class="repliedTo-message">
 												<p class="senderName">${this.repliedToMessageObj.senderName ? this.repliedToMessageObj.senderName : this.repliedToMessageObj.sender}</p>
-												${this.repliedToMessageObj.version.toString() === '1' ?
-		html`
-														<span style="color: var(--black);">${this.repliedToMessageObj.message}</span>
-													`
-		: ''
-}
-												${+this.repliedToMessageObj.version > 1 ?
-		html`
-														<span style="color: var(--black);">
-															${this.repliedToMessageObj.decodedMessage.includes('specialId') ?
-		this.convertHubMessageToJson(this.repliedToMessageObj.message) :
-		unsafeHTML(generateHTML(this.repliedToMessageObj.message, [StarterKit, Underline, Highlight, Mention, TextStyle, Color.configure({ types: [TextStyle.name] })]))
-}
-														</span>
-													`
+												${this.repliedToMessageObj.previewHtml
+		? html`<span style="color: var(--black);">${unsafeHTML(this.repliedToMessageObj.previewHtml)}</span>`
 		: ''
 }
 											</div>
@@ -2804,8 +2791,41 @@ async addToUpdateMessageHashmap(array) {
 
 	// set replied to message in chat editor
 	setRepliedToMessageObj(messageObj) {
-		this.editor.commands.focus('end')
-		this.repliedToMessageObj = { ...messageObj }
+		if (this.editor && this.editor.commands && typeof this.editor.commands.focus === 'function') {
+			this.editor.commands.focus('end')
+		}
+
+		const safeVersion = (messageObj && messageObj.version !== undefined && messageObj.version !== null)
+			? messageObj.version.toString()
+			: '3'
+
+		let decoded = messageObj && messageObj.decodedMessage
+		if (decoded && typeof decoded === 'object') {
+			try {
+				decoded = JSON.stringify(decoded)
+			} catch (e) { decoded = '' }
+		}
+
+		let previewHtml = ''
+		try {
+			if (safeVersion === '1') {
+				previewHtml = typeof messageObj.message === 'string' ? messageObj.message : ''
+			} else {
+				if (decoded && typeof decoded === 'string' && decoded.includes('specialId')) {
+					previewHtml = this.convertHubMessageToJson(messageObj.message)
+				} else {
+					const baseContent = messageObj.message || decoded || ''
+					previewHtml = generateHTML(baseContent, [StarterKit, Underline, Highlight, Mention, TextStyle, Color.configure({ types: [TextStyle.name] })])
+				}
+			}
+		} catch (e) { previewHtml = '' }
+
+		this.repliedToMessageObj = {
+			...messageObj,
+			version: safeVersion,
+			decodedMessage: decoded || '',
+			previewHtml
+		}
 		this.editedMessageObj = null
 		this.requestUpdate()
 	}
