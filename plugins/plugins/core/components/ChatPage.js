@@ -4732,6 +4732,7 @@ async addToUpdateMessageHashmap(array) {
 			let finalMessagePayload = messageText
 			let skipSend = false
 			let isUnencryptedPrivate = false
+			let shouldMarkEncrypted = false
 
 			if (shouldEncryptMessage) {
 				const numericKeys = this.secretKeysWorker
@@ -4743,6 +4744,12 @@ async addToUpdateMessageHashmap(array) {
 						const typeNumber = shouldEncryptReaction ? REACTION_TYPE_NUMBER : undefined
 						const base64Message = await objectToBase64(parsedPayloadObject)
 						finalMessagePayload = await encryptSingle(base64Message, this.secretKeysWorker, typeNumber)
+						// Self-verify decryption to avoid sending undecryptable payloads
+						const selfDecrypt = decryptSingle(finalMessagePayload, this.secretKeysWorker, true)
+						if (selfDecrypt === 'noKey' || selfDecrypt === 'decryptionFailed') {
+							throw new Error('Local decrypt failed')
+						}
+						shouldMarkEncrypted = true
 					} catch (error) {
 						parentEpml.request('showSnackBar', get('chatpage.cchange22') || 'Unable to encrypt message; try again.')
 						skipSend = true
@@ -4820,7 +4827,7 @@ async addToUpdateMessageHashmap(array) {
 						message: finalMessagePayload,
 						lastReference: reference,
 						proofOfWorkNonce: 0,
-						isEncrypted: shouldEncryptReaction ? 1 : 0,
+						isEncrypted: shouldMarkEncrypted ? 1 : 0,
 						isText: 1,
 						typeNumber: shouldEncryptReaction ? REACTION_TYPE_NUMBER : undefined
 					}
