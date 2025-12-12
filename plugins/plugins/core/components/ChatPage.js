@@ -3535,7 +3535,12 @@ async addToUpdateMessageHashmap(array) {
 				let groupChatId = Number(chatId)
 				if (groupChatId !== 0) {
 					try {
-						await loadGroupKeys(groupChatId)
+						const isOpenGroup = this.groupInfo && this.groupInfo.groupId === groupChatId
+							? this.groupInfo.isOpen === true
+							: false
+						if (!isOpenGroup) {
+							await loadGroupKeys(groupChatId)
+						}
 					} catch (e) { /* fall through; will still show unencrypted */ }
 				}
 				await this.refreshBlocklists()
