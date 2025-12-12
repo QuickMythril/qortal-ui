@@ -110,6 +110,7 @@ class LoginView extends connect(store)(LitElement) {
 					background-repeat: no-repeat;
 					background-attachment: fixed;
 					background-position: center;
+					background-size: cover;
 					height: var(--window-height);
 					width: 100vw;
 					max-width: 100vw;
