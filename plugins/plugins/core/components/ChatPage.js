@@ -2811,14 +2811,35 @@ async addToUpdateMessageHashmap(array) {
 			if (safeVersion === '1') {
 				previewHtml = typeof messageObj.message === 'string' ? messageObj.message : ''
 			} else {
-				const baseContent = (messageObj && typeof messageObj.message === 'string')
-					? messageObj.message
-					: (decoded || (messageObj && messageObj.message))
-
-				if (decoded && typeof decoded === 'string' && decoded.includes('specialId')) {
-					previewHtml = this.convertHubMessageToJson(baseContent)
+				const hasSpecialId = decoded && typeof decoded === 'string' && decoded.includes('specialId')
+				if (hasSpecialId) {
+					previewHtml = this.convertHubMessageToJson(messageObj.message || decoded || '')
 				} else {
-					previewHtml = generateHTML(baseContent, [StarterKit, Underline, Highlight, Mention, TextStyle, Color.configure({ types: [TextStyle.name] })])
+					let tiptapDoc = null
+					if (messageObj && typeof messageObj.message === 'object') {
+						tiptapDoc = messageObj.message
+					} else if (decoded && typeof decoded === 'string') {
+						try {
+							const parsed = JSON.parse(decoded)
+							if (parsed && typeof parsed.messageText === 'object') {
+								tiptapDoc = parsed.messageText
+							} else if (parsed && typeof parsed.messageText === 'string') {
+								previewHtml = parsed.messageText
+							} else if (parsed && typeof parsed.message === 'string') {
+								previewHtml = parsed.message
+							}
+						} catch (e) {
+							/* ignore parse and fall back */
+						}
+					}
+
+					if (!previewHtml && tiptapDoc) {
+						previewHtml = generateHTML(tiptapDoc, [StarterKit, Underline, Highlight, Mention, TextStyle, Color.configure({ types: [TextStyle.name] })])
+					}
+
+					if (!previewHtml && typeof messageObj.message === 'string') {
+						previewHtml = messageObj.message
+					}
 				}
 			}
 		} catch (e) { previewHtml = '' }
