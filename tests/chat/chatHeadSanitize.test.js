@@ -12,7 +12,8 @@ jest.mock('../../plugins/plugins/core/streams/onNewBlock', () => ({
 }), { virtual: true })
 
 import './test-shim.js'
-const { looksLikeReactionOrEdit, filterBaseEntries, mapByKey } = require('../../plugins/plugins/core/streams/streams')
+const { looksLikeReactionOrEdit, filterBaseEntries, mapByKey, fetchLatestBaseTimestampForDirect } = require('../../plugins/plugins/core/streams/streams')
+const { parentEpml } = require('../../plugins/plugins/core/connect')
 
 describe('chat head sanitization', () => {
 	test('filters reaction entries and retains previous base timestamps', () => {
@@ -50,5 +51,15 @@ describe('chat head sanitization', () => {
 		expect(looksLikeReactionOrEdit({ decodedMessage: JSON.stringify({ isReaction: true }) })).toBe(true)
 		expect(looksLikeReactionOrEdit({ decodedMessage: JSON.stringify({ type: 'reaction' }) })).toBe(true)
 		expect(looksLikeReactionOrEdit({})).toBe(false)
+	})
+
+	test('fetchLatestBaseTimestampForDirect pulls base-only timestamp', async () => {
+		const selected = 'QMU73pUQhrjojxn5ZEMsaZv2b25xxhvmJj'
+		parentEpml.request.mockResolvedValueOnce([{ timestamp: 1234 }])
+		const ts = await fetchLatestBaseTimestampForDirect('QTarget')
+		expect(ts).toBe(1234)
+		expect(parentEpml.request).toHaveBeenCalledWith('apiCall', {
+			url: `/chat/messages?involving=${selected}&involving=QTarget&limit=1&reverse=true&haschatreference=false`
+		})
 	})
 })

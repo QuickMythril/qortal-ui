@@ -63,6 +63,10 @@ const sortActiveChat = (activeChatObject, localChatHeads) => {
 
 let initialChatWatch = 0
 
+const getSelectedAddress = () => {
+	return window.parent.reduxStore.getState().app.selectedAddress.address
+}
+
 const mapByKey = (list = [], key) => {
 	return (list || []).reduce((acc, item) => {
 		if (item && item[key] !== undefined) {
@@ -95,8 +99,38 @@ const filterBaseEntries = (list = [], prevMap = {}, key) => {
 	}).filter(Boolean)
 }
 
-const chatHeadWatcher = (activeChats) => {
-	let addr = window.parent.reduxStore.getState().app.selectedAddress.address
+const fetchLatestBaseTimestampForDirect = async (otherAddress) => {
+	try {
+		const myAddr = getSelectedAddress()
+		const res = await parentEpml.request('apiCall', {
+			url: `/chat/messages?involving=${myAddr}&involving=${otherAddress}&limit=1&reverse=true&haschatreference=false`
+		})
+		if (Array.isArray(res) && res[0] && typeof res[0].timestamp === 'number') {
+			return res[0].timestamp
+		}
+	} catch (e) { /* ignore errors and fall back */ }
+	return null
+}
+
+const applyBaseTimestamps = async (activeChats) => {
+	const directList = Array.isArray(activeChats?.direct) ? activeChats.direct : []
+	const groupsList = Array.isArray(activeChats?.groups) ? activeChats.groups : []
+
+	const directWithBaseTs = await Promise.all(directList.map(async (dc) => {
+		const baseTs = await fetchLatestBaseTimestampForDirect(dc.address)
+		return baseTs ? { ...dc, timestamp: baseTs } : dc
+	}))
+
+	return {
+		...activeChats,
+		groups: groupsList,
+		direct: directWithBaseTs
+	}
+}
+
+const chatHeadWatcher = async (activeChatsRaw) => {
+	const activeChats = await applyBaseTimestamps(activeChatsRaw)
+	let addr = getSelectedAddress()
 	let key = `${addr.substr(0, 10)}_chat-heads`
 
 	try {
@@ -254,5 +288,6 @@ startConfigWatcher()
 export {
 	looksLikeReactionOrEdit,
 	filterBaseEntries,
-	mapByKey
+	mapByKey,
+	fetchLatestBaseTimestampForDirect
 }
