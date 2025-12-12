@@ -2812,34 +2812,39 @@ async addToUpdateMessageHashmap(array) {
 				previewHtml = typeof messageObj.message === 'string' ? messageObj.message : ''
 			} else {
 				const hasSpecialId = decoded && typeof decoded === 'string' && decoded.includes('specialId')
-				if (hasSpecialId) {
-					previewHtml = this.convertHubMessageToJson(messageObj.message || decoded || '')
-				} else {
-					let tiptapDoc = null
-					if (messageObj && typeof messageObj.message === 'object') {
-						tiptapDoc = messageObj.message
-					} else if (decoded && typeof decoded === 'string') {
-						try {
-							const parsed = JSON.parse(decoded)
-							if (parsed && typeof parsed.messageText === 'object') {
-								tiptapDoc = parsed.messageText
-							} else if (parsed && typeof parsed.messageText === 'string') {
-								previewHtml = parsed.messageText
-							} else if (parsed && typeof parsed.message === 'string') {
-								previewHtml = parsed.message
-							}
-						} catch (e) {
-							/* ignore parse and fall back */
-						}
-					}
+				let tiptapDoc = null
 
-					if (!previewHtml && tiptapDoc) {
+				if (decoded && typeof decoded === 'string') {
+					try {
+						const parsed = JSON.parse(decoded)
+						if (parsed && typeof parsed.messageText === 'object') {
+							tiptapDoc = parsed.messageText
+						} else if (parsed && typeof parsed.messageText === 'string') {
+							previewHtml = parsed.messageText
+						} else if (parsed && typeof parsed.message === 'string') {
+							previewHtml = parsed.message
+						}
+					} catch (e) {
+						/* ignore parse and fall back */
+					}
+				}
+
+				if (!previewHtml && hasSpecialId) {
+					const base = typeof messageObj.message === 'string' ? messageObj.message : (decoded || '')
+					previewHtml = this.convertHubMessageToJson(base)
+				}
+
+				if (!previewHtml && !hasSpecialId) {
+					if (!tiptapDoc && messageObj && typeof messageObj.message === 'object') {
+						tiptapDoc = messageObj.message
+					}
+					if (tiptapDoc) {
 						previewHtml = generateHTML(tiptapDoc, [StarterKit, Underline, Highlight, Mention, TextStyle, Color.configure({ types: [TextStyle.name] })])
 					}
+				}
 
-					if (!previewHtml && typeof messageObj.message === 'string') {
-						previewHtml = messageObj.message
-					}
+				if (!previewHtml && typeof messageObj.message === 'string') {
+					previewHtml = messageObj.message
 				}
 			}
 		} catch (e) { previewHtml = '' }
