@@ -3113,7 +3113,22 @@ async addToUpdateMessageHashmap(array) {
 				if (!Array.isArray(resources) || resources.length === 0) return
 
 				const latest = [...resources].sort((a, b) => (b.updated || b.created) - (a.updated || a.created))[0]
-				const adminExists = adminList.some((m) => m.member === latest.owner)
+
+				// Resolve owner if the search response omitted it (searchsimple often only returns name/identifier).
+				let resourceOwner = latest.owner
+				if (!resourceOwner && latest.name) {
+					try {
+						const nameRes = await fetch(`${nodeUrl}/names/${latest.name}`)
+						if (nameRes.ok) {
+							const nameData = await nameRes.json()
+							resourceOwner = nameData && nameData.owner
+						}
+					} catch (e) { /* ignore owner lookup errors */ }
+				}
+
+				const adminExists = resourceOwner
+					? adminList.some((m) => m.member === resourceOwner)
+					: false
 				if (!adminExists) return
 
 				const publisherNameOrOwner = latest.name || latest.owner
