@@ -3054,9 +3054,16 @@ export const navBarStyles = css`
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         gap: 12px;
-        max-height: 400px;
+        max-height: 70vh;
         overflow-y: auto;
         margin-bottom: 12px;
+    }
+
+    mwc-dialog#folderDialog {
+        --mdc-dialog-min-width: 560px;
+        --mdc-dialog-max-width: 900px;
+        --mdc-dialog-max-height: 80vh;
+        width: 80vw;
     }
 
     .folder-child {
