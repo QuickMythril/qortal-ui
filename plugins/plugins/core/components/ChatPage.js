@@ -4734,7 +4734,10 @@ async addToUpdateMessageHashmap(array) {
 			let isUnencryptedPrivate = false
 
 			if (shouldEncryptMessage) {
-				const hasSecretKey = this.secretKeysWorker && Object.keys(this.secretKeysWorker || {}).length > 0
+				const numericKeys = this.secretKeysWorker
+					? Object.keys(this.secretKeysWorker).filter((k) => !isNaN(+k))
+					: []
+				const hasSecretKey = numericKeys.length > 0
 				if (hasSecretKey) {
 					try {
 						const typeNumber = shouldEncryptReaction ? REACTION_TYPE_NUMBER : undefined
