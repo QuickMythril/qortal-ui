@@ -2814,6 +2814,10 @@ const decode = (string, keys, ref) => {
 		const decryptToUnit8Array = base64ToUint8Array(res)
 		const responseData = uint8ArrayToObject(decryptToUnit8Array)
 
+		if (!responseData || typeof responseData !== 'object') {
+			return '{"specialId":"","message":"<p>This message could not be decrypted</p>","repliedTo":"","isEdited":false,"isFromHub":true,"version": 3}'
+		}
+
 		if (responseData.type === 'edit') {
 			editStr = true
 		}
@@ -2827,11 +2831,11 @@ const decode = (string, keys, ref) => {
 		}
 
 		if (responseData.type === 'notification') {
-			hubMessageStr = responseData.data.message
+			hubMessageStr = responseData.data && responseData.data.message ? responseData.data.message : ''
 		} else if (ref !== 'noref' && responseData.type === 'reaction') {
 			const reactedRef = responseData.repliedTo || ref
 			return JSON.stringify({ ...responseData, repliedTo: reactedRef, isReaction: true })
-		} else if (responseData.message.includes('qortal://use-embed/')) {
+		} else if (typeof responseData.message === 'string' && responseData.message.includes('qortal://use-embed/')) {
 			const useEmbed1 = extensionToPointer(responseData.message)
 			const useEmbed2 = /<newpointer>(.*?)<\/newpointer>/g.exec(useEmbed1)
 			const useEmbed3 = encodedToChar(useEmbed2[1])
@@ -2839,7 +2843,7 @@ const decode = (string, keys, ref) => {
 			embedFileStr = embedToString(messageUseEmbed)
 			hubMessageStr = responseData.message.split(useEmbed2[1]).join('')
 		} else {
-			hubMessageStr = responseData.message
+			hubMessageStr = typeof responseData.message === 'string' ? responseData.message : ''
 		}
 
 		const hubMessageFinal = hubMessageStr.split('"').join('&quot;')
