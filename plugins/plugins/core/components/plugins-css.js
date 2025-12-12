@@ -1658,6 +1658,7 @@ export const chatStyles = css`
         height: 85%;
         width: 2.6px;
         background-color: var(--reply-accent, var(--mdc-theme-primary));
+        color: var(--reply-accent, var(--mdc-theme-primary));
     }
 
     .original-message-sender {
