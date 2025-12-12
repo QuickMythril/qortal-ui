@@ -231,11 +231,12 @@ class LoginSection extends connect(store)(LitElement) {
 
 				.wallet-actions {
 					position: absolute;
-					right: 48px;
-					top: 12px;
+					right: 5px;
+					top: 8px;
 					display: flex;
 					flex-direction: column;
 					gap: 4px;
+					align-items: center;
 				}
 
 				.wallet-actions[hidden] {
@@ -383,7 +384,7 @@ class LoginSection extends connect(store)(LitElement) {
 												?disabled=${isLast}
 											></mwc-icon-button>
 										</div>
-										<mwc-icon-button class="removeWallet" @click="${(e) => { e.stopPropagation(); this.toDeleteWallet(wallet.address0) }}" icon="clear"></mwc-icon-button>
+										<mwc-icon-button class="removeWallet" ?hidden=${this.showReorderControls} @click="${(e) => { e.stopPropagation(); this.toDeleteWallet(wallet.address0) }}" icon="clear"></mwc-icon-button>
 										<mwc-dialog id="deleteWalletDialog">
 											<div style="text-align: center;">
 												<h2>Qortal UI</h2>
