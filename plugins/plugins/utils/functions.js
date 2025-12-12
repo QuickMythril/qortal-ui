@@ -273,9 +273,15 @@ export const replaceMessagesEdited = async ({ decodedMessages, parentEpml, isRec
 
 	// Execute the functions with concurrency limit
 	const updatedMessages = await executeWithConcurrencyLimit(nonReactionMessages, findUpdatedMessage)
-	addToUpdateMessageHashmap(updatedMessages)
+	const normalizedUpdates = updatedMessages.map((msg) => {
+		if (msg && msg.syntheticBase) return msg
+		// Avoid clobbering original timestamps when applying edits; the edit time lives in editedTimestamp.
+		const { timestamp, ...rest } = msg || {}
+		return rest
+	})
+	addToUpdateMessageHashmap(normalizedUpdates)
 
-	return updatedMessages
+	return normalizedUpdates
 }
 
 export function bytesToMegabytes(bytes) {

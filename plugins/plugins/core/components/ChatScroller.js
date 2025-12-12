@@ -613,9 +613,18 @@ class ChatScroller extends LitElement {
 		const newMessagesToRender = this.messagesToRender.map((group) => {
 			// For each message, return the updated message if it exists, otherwise return the original message
 			const updatedGroupMessages = group.messages.map((message) => {
-				return updatedMessages[message.signature]
-					? { ...message, ...updatedMessages[message.signature] }
-					: message
+				const update = updatedMessages[message.signature]
+				if (!update) return message
+
+				const { timestamp: updateTimestamp, ...restUpdate } = update
+				const originalTimestamp = message.timestamp
+
+				return {
+					...message,
+					...restUpdate,
+					// Preserve the original message timestamp; only fall back if it was missing.
+					timestamp: originalTimestamp || updateTimestamp || message.timestamp
+				}
 			})
 
 			// Return a new group object with updated messages
@@ -662,7 +671,13 @@ class ChatScroller extends LitElement {
 						group.messages[i].chatReference
 				)
 				if (update) {
-					Object.assign(group.messages[i], update)
+					const { timestamp: updateTimestamp, ...restUpdate } = update
+					const originalTimestamp = group.messages[i].timestamp
+					group.messages[i] = {
+						...group.messages[i],
+						...restUpdate,
+						timestamp: originalTimestamp || updateTimestamp || group.messages[i].timestamp
+					}
 				}
 			}
 		}
