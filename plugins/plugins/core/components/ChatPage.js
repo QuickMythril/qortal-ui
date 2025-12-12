@@ -693,7 +693,26 @@ class ChatPage extends LitElement {
 							<br>
 							<h3 style="color: var(--black);">${translate('chatpage.cchange42')}</h3>
 							<div class="buttons">
-								<mwc-button @click=${() => {this.sendMessage(this.myMessageUnder4Qort)}} dialog-confirm>${translate('transpage.tchange3')}</mwc-button>
+								<mwc-button
+									@click=${() => {
+		this.myMessageUnder4Qort = null
+		const dlg = this.shadowRoot.getElementById('confirmDialog')
+		if (dlg) dlg.close()
+	}}
+									dialog-dismiss
+								>
+									${translate('chatpage.cchange33')}
+								</mwc-button>
+								<mwc-button
+									@click=${() => {
+		this.sendMessage(this.myMessageUnder4Qort)
+		const dlg = this.shadowRoot.getElementById('confirmDialog')
+		if (dlg) dlg.close()
+	}}
+									dialog-confirm
+								>
+									${translate('transpage.tchange3')}
+								</mwc-button>
 							</div>
 						</paper-dialog>
 					` : ''}
