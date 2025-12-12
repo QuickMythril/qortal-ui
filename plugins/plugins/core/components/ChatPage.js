@@ -1230,6 +1230,10 @@ addToQueue(outSideMsg, messageQueue) {
 
 			if (res === true) {
 				this.messageQueue = this.messageQueue.slice(1)
+			} else if (res && res.error === 'missing-group-key') {
+				// Drop this message to avoid infinite retries
+				this.messageQueue = this.messageQueue.slice(1)
+				return
 			} else {
 				throw new Error('failed')
 			}
@@ -4755,21 +4759,10 @@ async addToUpdateMessageHashmap(array) {
 						}
 					}
 				} else {
-					// No group key available: warn and allow opt-in plaintext send
-					const warnMsg = get('chatpage.cchange22') || 'No group key published; send unencrypted? Messages will be readable by the network.'
-					const confirmed = window.confirm(warnMsg)
-					if (!confirmed) {
-						skipSend = true
-					} else {
-						isUnencryptedPrivate = true
-						try {
-							const payloadWithFlag = { ...(typeof parsedPayloadObject === 'object' ? parsedPayloadObject : {}), isPrivateUnencrypted: true }
-							finalMessagePayload = JSON.stringify(payloadWithFlag)
-						} catch (e) {
-							// fall back to original payload if stringify fails
-							finalMessagePayload = messageText
-						}
-					}
+					// No group key available: block send and inform user to fetch latest key
+					const warnMsg = get('chatpage.cchange22') || 'No group key published; refresh group key before sending.'
+					parentEpml.request('showSnackBar', warnMsg)
+					return { error: 'missing-group-key', fatal: true }
 				}
 			}
 
@@ -5063,7 +5056,7 @@ async addToUpdateMessageHashmap(array) {
 			sendForwardRequest()
 			return
 		}
-		return sendMessageRequest()
+			return sendMessageRequest()
 	}
 
 	/**
