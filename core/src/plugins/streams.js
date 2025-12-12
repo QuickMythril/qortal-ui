@@ -20,7 +20,7 @@ export const chatHeadsStateStream = new EpmlStream(CHAT_HEADS_STREAM_NAME, () =>
 export const nodeConfigStream = new EpmlStream(NODE_CONFIG_STREAM_NAME, () => store.getState().app.nodeConfig)
 export const chatLastSeenStream = new EpmlStream(CHAT_LAST_SEEN, () => store.getState().app.chatLastSeen)
 export const sideEffectActionStream = new EpmlStream(SIDE_EFFECT_ACTION, () => store.getState().app.sideEffectAction)
-export const profileDataActionStream = new EpmlStream(SIDE_EFFECT_ACTION, () => store.getState().app.profileData)
+export const profileDataActionStream = new EpmlStream(PROFILE_DATA_ACTION, () => store.getState().app.profileData)
 export const coinBalancesActionStream = new EpmlStream(COIN_BALANCES_ACTION, () => store.getState().app.coinBalances)
 
 let oldState = {
@@ -65,7 +65,7 @@ store.subscribe(() => {
 	if (oldState.app.sideEffectAction !== state.app.sideEffectAction) {
 		sideEffectActionStream.emit(state.app.sideEffectAction)
 	}
-	if (oldState.app.profileDataActionStream !== state.app.profileDataActionStream) {
+	if (oldState.app.profileData !== state.app.profileData) {
 		profileDataActionStream.emit(state.app.profileData)
 	}
 	if (oldState.app.coinBalances !== state.app.coinBalances) {
