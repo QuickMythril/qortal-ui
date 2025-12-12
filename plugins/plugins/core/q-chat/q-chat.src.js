@@ -676,7 +676,14 @@ class Chat extends LitElement {
 			parentEpml.request('showSnackBar', `${locateString}`)
 
 			const worker = new GroupKeyWorker()
-			const privateKeyBase58 = Base58.encode(window.parent.reduxStore.getState().app.wallet._addresses[0].keyPair.privateKey)
+			const selectedAddr = window.parent.reduxStore.getState().app.selectedAddress
+			const privateKeyBytes = selectedAddr && selectedAddr.keyPair && selectedAddr.keyPair.privateKey
+			const privateKeyBase58 = privateKeyBytes ? Base58.encode(privateKeyBytes) : ''
+			if (!privateKeyBase58) {
+				this.activeChatHeadUrl = url
+				this.requestUpdate()
+				return
+			}
 
 			const workerPromise = new Promise((resolve, reject) => {
 				const timeoutId = setTimeout(() => {
