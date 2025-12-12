@@ -3696,7 +3696,32 @@ async addToUpdateMessageHashmap(array) {
 
 			let typeMessage = 'regular'
 
-			const trimmedMessage = msg
+			let trimmedMessage = msg
+
+			const isClosedGroupSend =
+				!this.isReceipient &&
+				Number(this._chatId) !== 0 &&
+				!(this.groupInfo && this.groupInfo.isOpen === true)
+
+			if (
+				isClosedGroupSend &&
+				trimmedMessage &&
+				typeof trimmedMessage === 'object' &&
+				trimmedMessage.type === 'doc'
+			) {
+				try {
+					trimmedMessage = generateHTML(trimmedMessage, [
+						StarterKit,
+						Underline,
+						Highlight,
+						Mention,
+						TextStyle,
+						Color.configure({ types: [TextStyle.name] })
+					])
+				} catch (error) {
+					trimmedMessage = JSON.stringify(trimmedMessage)
+				}
+			}
 
 			const getName = async (recipient) => {
 				try {
