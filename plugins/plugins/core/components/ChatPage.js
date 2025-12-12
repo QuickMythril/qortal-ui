@@ -28,7 +28,8 @@ import {
 	decryptGroupData,
 	validateSecretKey,
 	objectToBase64,
-	encryptSingle
+	encryptSingle,
+	decryptSingle
 } from './GroupEncryption'
 import './ChatScroller'
 import './LevelFounder'
@@ -4718,16 +4719,15 @@ async addToUpdateMessageHashmap(array) {
 			const isClosedGroup = !isReceipient && !isOpenGroup && Number(_chatId) !== 0
 			const shouldEncryptReaction = typeMessage === 'reaction' && isClosedGroup
 			const shouldEncryptMessage = isClosedGroup
-			const parsedPayloadObject = (() => {
-				if (typeof messageText === 'string') {
-					try {
-						return JSON.parse(messageText)
-					} catch (e) {
-						return messageText
-					}
+			let parsedPayloadObject = messageText
+			let parsedOk = true
+			if (typeof messageText === 'string') {
+				try {
+					parsedPayloadObject = JSON.parse(messageText)
+				} catch (e) {
+					parsedOk = false
 				}
-				return messageText
-			})()
+			}
 
 			let finalMessagePayload = messageText
 			let skipSend = false
@@ -4740,19 +4740,24 @@ async addToUpdateMessageHashmap(array) {
 					: []
 				const hasSecretKey = numericKeys.length > 0
 				if (hasSecretKey) {
-					try {
-						const typeNumber = shouldEncryptReaction ? REACTION_TYPE_NUMBER : undefined
-						const base64Message = await objectToBase64(parsedPayloadObject)
-						finalMessagePayload = await encryptSingle(base64Message, this.secretKeysWorker, typeNumber)
-						// Self-verify decryption to avoid sending undecryptable payloads
-						const selfDecrypt = decryptSingle(finalMessagePayload, this.secretKeysWorker, true)
-						if (selfDecrypt === 'noKey' || selfDecrypt === 'decryptionFailed') {
-							throw new Error('Local decrypt failed')
-						}
-						shouldMarkEncrypted = true
-					} catch (error) {
+					if (!parsedOk) {
 						parentEpml.request('showSnackBar', get('chatpage.cchange22') || 'Unable to encrypt message; try again.')
 						skipSend = true
+					} else {
+						try {
+							const typeNumber = shouldEncryptReaction ? REACTION_TYPE_NUMBER : undefined
+							const base64Message = await objectToBase64(parsedPayloadObject)
+							finalMessagePayload = await encryptSingle(base64Message, this.secretKeysWorker, typeNumber)
+							// Self-verify decryption to avoid sending undecryptable payloads
+							const selfDecrypt = decryptSingle(finalMessagePayload, this.secretKeysWorker, true)
+							if (selfDecrypt === 'noKey' || selfDecrypt === 'decryptionFailed') {
+								throw new Error('Local decrypt failed')
+							}
+							shouldMarkEncrypted = true
+						} catch (error) {
+							parentEpml.request('showSnackBar', get('chatpage.cchange22') || 'Unable to encrypt message; try again.')
+							skipSend = true
+						}
 					}
 				} else {
 					// No group key available: warn and allow opt-in plaintext send
