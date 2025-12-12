@@ -1939,7 +1939,9 @@ addToQueue(outSideMsg, messageQueue) {
 			const placeholder = isRecipient === true ? `Message ${this._chatId}` : `${mstring}`
 			this.chatEditorPlaceholder = placeholder
 
-			isRecipient ? getAddressPublicKey() : this.fetchChatMessages(this._chatId)
+			if (isRecipient) {
+				getAddressPublicKey()
+			}
 		}, 100)
 
 		const isRecipient = this.chatId.includes('direct') === true ? true : false
@@ -2023,7 +2025,13 @@ addToQueue(outSideMsg, messageQueue) {
 				this.groupAdmin = membersAdminsWithName
 				this.groupMembers = membersWithName
 				this.groupInfo = getGroupInfo
+
+				// Now that we have groupInfo, proceed to load messages
+				this.fetchChatMessages(this._chatId)
 			} catch (error) { /* empty */ }
+		} else {
+			// Directs and group 0 can load immediately
+			this.fetchChatMessages(this._chatId)
 		}
 	}
 
