@@ -3100,11 +3100,13 @@ async addToUpdateMessageHashmap(array) {
 				let resources = []
 				if (adminNames.length > 0) {
 					const queryString = adminNames.map((n) => `name=${encodeURIComponent(n)}`).join('&')
-					const url = `${nodeUrl}/arbitrary/resources?mode=ALL&service=DOCUMENT_PRIVATE&identifier=${symIdentifier}&exactmatchnames=true&limit=0&reverse=true&prefix=true&${queryString}`
+					const url = `${nodeUrl}/arbitrary/resources/searchsimple?mode=ALL&service=DOCUMENT_PRIVATE&identifier=${symIdentifier}&exactmatchnames=true&limit=0&reverse=true&prefix=true&${queryString}`
 					const resourcesRes = await fetch(url)
 					resources = await resourcesRes.json()
 				} else {
-					const resourcesRes = await fetch(`${nodeUrl}/arbitrary/resources?service=DOCUMENT_PRIVATE&identifier=${symIdentifier}&limit=0&reverse=true`)
+					const resourcesRes = await fetch(
+						`${nodeUrl}/arbitrary/resources/searchsimple?mode=ALL&service=DOCUMENT_PRIVATE&identifier=${symIdentifier}&exactmatchnames=true&limit=0&reverse=true&prefix=true`
+					)
 					resources = await resourcesRes.json()
 				}
 

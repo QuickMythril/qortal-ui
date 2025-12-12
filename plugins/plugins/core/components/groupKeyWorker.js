@@ -23,7 +23,9 @@ self.onmessage = async (event) => {
 	const symIdentifier = `symmetric-qchat-group-${groupId}`
 
 	try {
-		const resources = await fetchJson(`${nodeUrl}/arbitrary/resources?service=DOCUMENT_PRIVATE&identifier=${symIdentifier}&limit=0&reverse=true`)
+		const resources = await fetchJson(
+			`${nodeUrl}/arbitrary/resources/searchsimple?mode=ALL&service=DOCUMENT_PRIVATE&identifier=${symIdentifier}&exactmatchnames=true&limit=0&reverse=true&prefix=true`
+		)
 
 		if (!Array.isArray(resources) || resources.length === 0) {
 			self.postMessage({ error: 'No group keys found' })
@@ -51,7 +53,7 @@ self.onmessage = async (event) => {
 			return
 		}
 
-		const dataUrl = `${nodeUrl}/arbitrary/DOCUMENT_PRIVATE/${gAdminName}/${symIdentifier}?encoding=base64`
+		const dataUrl = `${nodeUrl}/arbitrary/DOCUMENT_PRIVATE/${gAdminName}/${symIdentifier}?encoding=base64&rebuild=true`
 		const res = await fetch(dataUrl)
 		if (!res.ok) {
 			self.postMessage({ error: 'Failed to download group key' })

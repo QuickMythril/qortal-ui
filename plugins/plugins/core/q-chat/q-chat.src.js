@@ -658,7 +658,7 @@ class Chat extends LitElement {
 			}
 		} catch (e) { /* ignore and continue only if closed */ }
 
-		const getNameUrl = `${nodeUrl}/arbitrary/resources?service=DOCUMENT_PRIVATE&identifier=${symIdentifier}&limit=0&reverse=true`
+		const getNameUrl = `${nodeUrl}/arbitrary/resources/searchsimple?mode=ALL&service=DOCUMENT_PRIVATE&identifier=${symIdentifier}&exactmatchnames=true&limit=0&reverse=true&prefix=true`
 		const getAdminUrl = `${nodeUrl}/groups/members/${currentGroupId}?onlyAdmins=true&limit=0`
 
 		if (localStorage.getItem('symKeysCurrent') === null) {
