@@ -232,7 +232,8 @@ class LoginSection extends connect(store)(LitElement) {
 				.wallet-actions {
 					position: absolute;
 					right: 5px;
-					top: 8px;
+					top: 50%;
+					transform: translateY(-50%);
 					display: flex;
 					flex-direction: column;
 					gap: 4px;
