@@ -595,14 +595,15 @@ class Chat extends LitElement {
 		this.chatSelectionNonce++
 		this.isViewOpen = false
 
+		this.isSelectingChat = true
+		this.pendingChatUrl = targetUrl
+
 		if (!isGroupUrl) {
+			this.requestUpdate()
 			this.isSelectingChat = false
 			this.pendingChatUrl = ''
 			return
 		}
-
-		this.isSelectingChat = true
-		this.pendingChatUrl = targetUrl
 		this.requestUpdate()
 
 		try {
@@ -1355,7 +1356,7 @@ class Chat extends LitElement {
 					.showNewMessageBar=${this.showNewMessageBar}
 					myAddress=${window.parent.reduxStore.getState().app.selectedAddress.address}
 					chatId=${this.activeChatHeadUrl}
-					selectionNonce=${this.chatSelectionNonce}
+					.selectionNonce=${this.chatSelectionNonce}
 					.setOpenPrivateMessage=${(val) => this.setOpenPrivateMessage(val)}
 					.setActiveChatHeadUrl=${(val) => this.setActiveChatHeadUrl(val)}
 					balance=${this.balance}
