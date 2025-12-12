@@ -4750,6 +4750,13 @@ async addToUpdateMessageHashmap(array) {
 						}
 					}
 					delete payloadForEncryption.messageText
+					if (typeof payloadForEncryption.message !== 'string') {
+						try {
+							payloadForEncryption.message = JSON.stringify(payloadForEncryption.message)
+						} catch (e) {
+							payloadForEncryption.message = ''
+						}
+					}
 
 					const typeNumber = shouldEncryptReaction ? REACTION_TYPE_NUMBER : undefined
 					const base64Message = await objectToBase64(payloadForEncryption)
