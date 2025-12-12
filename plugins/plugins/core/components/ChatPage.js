@@ -2811,10 +2811,13 @@ async addToUpdateMessageHashmap(array) {
 			if (safeVersion === '1') {
 				previewHtml = typeof messageObj.message === 'string' ? messageObj.message : ''
 			} else {
+				const baseContent = (messageObj && typeof messageObj.message === 'string')
+					? messageObj.message
+					: (decoded || (messageObj && messageObj.message))
+
 				if (decoded && typeof decoded === 'string' && decoded.includes('specialId')) {
-					previewHtml = this.convertHubMessageToJson(messageObj.message)
+					previewHtml = this.convertHubMessageToJson(baseContent)
 				} else {
-					const baseContent = messageObj.message || decoded || ''
 					previewHtml = generateHTML(baseContent, [StarterKit, Underline, Highlight, Mention, TextStyle, Color.configure({ types: [TextStyle.name] })])
 				}
 			}
