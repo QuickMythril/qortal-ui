@@ -1130,7 +1130,6 @@ class ChatPage extends LitElement {
 			}
 			messageBySignature.set(key, chosen)
 			seen.add(key)
-			if (skipExisting && existing) return
 			result.push(chosen)
 		})
 		return result
