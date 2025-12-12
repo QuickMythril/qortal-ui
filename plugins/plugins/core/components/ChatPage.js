@@ -2087,6 +2087,14 @@ addToQueue(outSideMsg, messageQueue) {
 		if (changedProperties.has('chatId')) {
 			resetReactionsState(this)
 			this.secretKeysWorker = {}
+			this.messagesRendered = { messages: [], type: '' }
+			this._messages = []
+			this.messages = []
+			this.oldMessages = []
+			this.newMessages = []
+			this.isLoadingMessages = true
+			this.isLoadingOldMessages = false
+			this.initialLoadCompleted = false
 			if (this.repliedToMessageObj) {
 				this.closeRepliedToContainer()
 				return true
