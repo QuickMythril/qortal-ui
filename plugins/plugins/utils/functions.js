@@ -123,6 +123,20 @@ export const replaceMessagesEdited = async ({ decodedMessages, parentEpml, isRec
 	const MAX_CONCURRENT_REQUESTS = 5 // Maximum number of concurrent requests
 	const baseSignatures = new Set((decodedMessages || []).map((m) => m.signature).filter(Boolean))
 
+	const isLikelySignature = (sig) => typeof sig === 'string' && sig.length >= 43 && sig.length <= 120 && /^[A-Za-z0-9]+$/.test(sig)
+
+	const safeApiCall = async (options) => {
+		try {
+			return await parentEpml.request('apiCall', options)
+		} catch (error) {
+			// Swallow expected 4xx errors (e.g., missing/pruned references) to avoid console noise.
+			if (error && error.status && error.status >= 400 && error.status < 500) {
+				return null
+			}
+			return null
+		}
+	}
+
 	const executeWithConcurrencyLimit = async (array, asyncFn) => {
 		const results = []
 		const concurrencyPool = []
@@ -197,15 +211,19 @@ export const replaceMessagesEdited = async ({ decodedMessages, parentEpml, isRec
 			}
 
 			if (parsedMessageObj.repliedTo) {
+				if (!isLikelySignature(parsedMessageObj.repliedTo)) {
+					return msgItem
+				}
+
 				let originalReply
 
 				if (+parsedMessageObj.version > 2) {
-					originalReply = await parentEpml.request('apiCall', {
+					originalReply = await safeApiCall({
 						type: 'api',
 						url: `/chat/message/${parsedMessageObj.repliedTo}?encoding=BASE64`
 					})
 				} else {
-					originalReply = await parentEpml.request('apiCall', {
+					originalReply = await safeApiCall({
 						type: 'api',
 						url: `/chat/messages?reference=${parsedMessageObj.repliedTo}&reverse=true${msgQuery}&encoding=BASE64`
 					})
@@ -215,7 +233,7 @@ export const replaceMessagesEdited = async ({ decodedMessages, parentEpml, isRec
 
 				let replyResponse = []
 				if (originalReplyMessage && originalReplyMessage.sender) {
-					replyResponse = await parentEpml.request('apiCall', {
+					replyResponse = await safeApiCall({
 						type: 'api',
 						url: `/chat/messages?chatreference=${parsedMessageObj.repliedTo}&reverse=true${msgQuery}&limit=1&sender=${originalReplyMessage.sender}&encoding=BASE64`
 					})

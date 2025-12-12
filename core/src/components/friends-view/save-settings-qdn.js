@@ -348,7 +348,7 @@ class SaveSettingsQdn extends connect(store)(LitElement) {
 			if (!nameObject) {
 				this.name = null
 				this.error = 'no name'
-				throw new Error('no name')
+				return false
 			}
 
 			const name = nameObject.name
