@@ -4741,8 +4741,18 @@ async addToUpdateMessageHashmap(array) {
 					return { error: 'encrypt-failed', fatal: true }
 				}
 				try {
+					const payloadForEncryption = { ...parsedPayloadObject }
+					if (payloadForEncryption.message === undefined) {
+						if (payloadForEncryption.messageText !== undefined) {
+							payloadForEncryption.message = payloadForEncryption.messageText
+						} else {
+							payloadForEncryption.message = ''
+						}
+					}
+					delete payloadForEncryption.messageText
+
 					const typeNumber = shouldEncryptReaction ? REACTION_TYPE_NUMBER : undefined
-					const base64Message = await objectToBase64(parsedPayloadObject)
+					const base64Message = await objectToBase64(payloadForEncryption)
 					finalMessagePayload = await encryptSingle(base64Message, this.secretKeysWorker, typeNumber)
 					// For group messages we follow Hub and leave isEncrypted=0; payload is already ciphertext.
 					shouldMarkEncrypted = false
