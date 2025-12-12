@@ -45,12 +45,12 @@ mac:
   asarUnpack: "**/*.node"
   target:
     - { target: dmg }
-    - { target: pkg }
+    # { target: pkg }
 
 # Config for OSX dmg
 dmg:
   sign: false
-  artifactName: "Qortal-Setup-macOS.${ext}"
+  artifactName: "Qortal-UI.${ext}"
   icon: "./img/icons/icns/256x256.icns"
   iconSize: 100
   contents:
@@ -63,7 +63,7 @@ dmg:
 
 # Config for OSX pkg
 pkg:
-  artifactName: "Qortal-Setup-macOS.${ext}"
+  artifactName: "Qortal-UI.${ext}"
   installLocation: "/Applications"
   background: {
     file: "./build/logo.png",
@@ -82,12 +82,12 @@ win:
   legalTrademarks: "QORTAL.ORG"
   icon: "./img/icons/ico/256x256.ico"
   target:
-    - "nsis"
+    # "nsis"
     - "portable"
 
 # Config for the windows installer
 nsis:
-  artifactName: "Qortal-Setup-win64.${ext}"
+  artifactName: "Qortal-UI.${ext}"
   oneClick: false
   perMachine: true
   installerSidebar: "./img/win-installer-sidebar.bmp"
@@ -107,27 +107,27 @@ linux:
   executableArgs:
     - --no-sandbox
   target:
-    - "deb"
+    # "deb"
     - "AppImage"
-    - "snap"
-    - "rpm"
+    # "snap"
+    # "rpm"
   asar: true
 
 deb:
-  artifactName: "Qortal-Setup-amd64.${ext}"
+  artifactName: "Qortal-UI.${ext}"
   synopsis: "Qortal UI for Linux"
   afterInstall: "./scripts/add-debian-apt-repo.sh"
   afterRemove: "./scripts/uninstall-debian-conf.sh"
 
 appImage:
-  artifactName: "Qortal-Setup-amd64.${ext}"
+  artifactName: "Qortal-UI.${ext}"
 
 snap:
-  artifactName: "Qortal-Setup-amd64.${ext}"
+  artifactName: "Qortal-UI.${ext}"
   synopsis: "Qortal UI for Linux"
 
 rpm:
-  artifactName: "Qortal-Setup-amd64.${ext}"
+  artifactName: "Qortal-UI.${ext}"
 
 directories:
   output: dist

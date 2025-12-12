@@ -8,6 +8,11 @@ exports.default = async function notarizing(context) {
 		return
 	}
 
+	// Disable macOS signing
+	if (electronPlatformName === 'darwin') {
+		return
+	}
+
 	const appName = context.packager.appInfo.productFilename
 
 	return await notarize({

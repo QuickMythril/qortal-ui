@@ -1,0 +1,407 @@
+# Commits grouped by feature
+
+## Names & Registration
+- ad10eed7 2025-12-05 19:30:09 -0500 Add research and planning docs for names, chat, and themes
+- 9b194659 2025-12-05 19:32:41 -0500 Add name qortalRequest action constants
+- 316aff9e 2025-12-05 19:35:36 -0500 Add name lookup handlers to qdn browser
+- e38efe62 2025-12-05 19:41:57 -0500 Add primary and account name helpers
+- c5465cd4 2025-12-05 19:45:59 -0500 Prefer primary name when resolving user names
+- 5214f091 2025-12-05 20:13:04 -0500 Add client-side name validation to registration
+- b20f3a20 2025-12-05 20:21:55 -0500 Track primary/all names in account info
+- 47e3497d 2025-12-05 20:34:03 -0500 Update name polling to set primary/all names
+- ce4806e0 2025-12-05 20:41:59 -0500 Order primary name first in legacy names array
+- 3ccb0638 2025-12-05 20:44:42 -0500 Add activeName field to account info
+- 38a95843 2025-12-05 21:00:28 -0500 Use active/primary name fallback in chat UI
+- 729b829b 2025-12-05 21:20:25 -0500 Update profile avatars to use active name and letter fallback
+- 4189cd4c 2025-12-05 21:20:44 -0500 Add shared name helper utilities
+- 448eb38a 2025-12-05 21:39:13 -0500 Use active/primary name for trade, tip, and info views
+- 45bbb5d6 2025-12-05 21:54:20 -0500 Adjust login avatar to use resolved display name
+- 448320b9 2025-12-05 21:56:14 -0500 Resolve login avatar name via primary fallback
+- 5b8758f6 2025-12-05 22:04:25 -0500 Populate publish name dropdown with active/primary/all names
+- ca4c292d 2025-12-05 22:07:43 -0500 Validate publish name selection against owned names
+- c7f27ad3 2025-12-05 22:19:15 -0500 Enforce owned-name selection in publish flows
+- 13964a80 2025-12-05 22:22:46 -0500 Use primary name first in lookup helpers
+- 672520e2 2025-12-05 22:25:48 -0500 Preserve name fallbacks when profile lookup has no name
+- e223629e 2025-12-05 22:39:51 -0500 Poll primary and ordered names in name registration
+- de6dbe8e 2025-12-05 22:43:57 -0500 Surface name errors and primary fetch during registration
+- 79d402f0 2025-12-05 22:44:26 -0500 Add primary vs active name note to registration
+- e8f4e5a3 2025-12-06 00:06:15 -0500 Show minting account names in Node Management
+- 21494273 2025-12-06 00:14:15 -0500 Show active name on chat welcome page
+- 26fc893e 2025-12-06 00:55:45 -0500 Add name/address toggle to QORT transactions
+- 774f72a2 2025-12-06 01:08:26 -0500 Add name/address toggle to Trade Portal open orders
+- 2c1f0078 2025-12-06 01:21:22 -0500 Highlight primary name and guard selling rules
+- 8591d21d 2025-12-06 01:34:33 -0500 Fix primary name detection and sell guard on name registration
+- 5752fa98 2025-12-06 01:50:55 -0500 Fix wallet name toggle and add rows-per-page selector
+- d9f7d1bb 2025-12-06 02:06:58 -0500 Prevent trade portal name fetch flood and render from cache
+- 64a40cd3 2025-12-06 02:46:06 -0500 Align trade portal name toggle with price chart button
+- 19d403e0 2025-12-06 02:53:30 -0500 Fix wallet page size selector and initial name loading
+- 9f793e7f 2025-12-06 04:08:10 -0500 Refresh wallet transactions on name toggle
+- 81728d73 2025-12-06 04:11:57 -0500 Prefill publish metadata when selecting name
+- b8267d9f 2025-12-06 06:23:03 -0500 Align name/metadata inputs with core limits and add counters
+- 30d53ebc 2025-12-06 14:35:32 -0500 Add active name switcher UI and update plans
+- 8a021b54 2025-12-06 15:38:41 -0500 Align name handling and name switcher styling
+- dca10ae3 2025-12-06 16:15:15 -0500 Fix name ordering and switcher menu anchoring
+- 8d3952dd 2025-12-06 16:57:49 -0500 Improve name switcher dropdown UX
+- eda68ba2 2025-12-06 17:07:07 -0500 Finalize name switcher UX and update plan
+- 0d99ce5f 2025-12-06 18:25:51 -0500 Override qortalRequest name responses with active name
+- c5a3508f 2025-12-06 19:01:24 -0500 Align qortalRequest name responses and publish name selection
+- 846aec54 2025-12-06 19:13:21 -0500 Prevent double metadata fetch on publish name load
+- f54baacb 2025-12-06 19:48:45 -0500 Add Jest harness and first name polling test
+- 0ea34ba9 2025-12-06 19:53:21 -0500 Add qortalRequest name parity tests and helpers
+- ab5eff3e 2025-12-06 19:59:16 -0500 Test active name persistence and mark checklist
+- e17f90ba 2025-12-06 20:07:02 -0500 Add name switcher UX Jest test
+- d0a3bae6 2025-12-06 20:10:47 -0500 Test name registration ordering helper
+- ea0542da 2025-12-06 20:33:02 -0500 Validate publish name selection defaults and dedupe metadata fetch
+- 736981c6 2025-12-06 20:35:11 -0500 Add name utility tests for chat/avatar display
+- 8fcee12c 2025-12-06 20:37:07 -0500 Expand qortalRequest name action tests and mark checklist
+- 26b1bce5 2025-12-07 01:23:21 -0500 Restore active name from persisted user state
+- 2c6f440e 2025-12-07 02:01:30 -0500 Unify no-name fallback under general.noRegisteredName
+- d6ef0e71 2025-12-07 02:11:12 -0500 Simplify name registration layout, remove heading strings
+- 1bf6e89b 2025-12-07 02:31:27 -0500 Add i18n key for address-like names and translations
+- ffca8fa4 2025-12-07 02:37:36 -0500 Add i18n key for primary/active name note
+- cf807c33 2025-12-07 02:40:05 -0500 Localize primary-name sell restriction tooltip
+- 5292ee76 2025-12-07 05:08:19 -0500 Route followed-names calls through request helper
+- f4610145 2025-12-07 18:37:57 -0500 Hide prelogin name/avatar fetch on public node
+- 23c310c3 2025-12-07 20:41:10 -0500 Reset active name per address and persist it by account
+- 68eb96d1 2025-12-07 20:46:03 -0500 Fix active-name persistence after reload
+- 1d21bb6a 2025-12-11 16:48:49 -0500 Align group key fetch with admin names and cache map
+- 139d9322 2025-12-11 17:06:45 -0500 Assert test account name/address details in node tests
+- 5c942bec 2025-12-11 20:42:58 -0500 Fix reaction tooltip whitespace for multiline names
+- 2c2e5d7a 2025-12-11 22:33:48 -0500 Resolve group key publisher name to admin address before decrypt
+
+## Public Node & Request Helper
+- fb0aae36 2025-12-06 00:17:15 -0500 Swap chat lock colors for public vs private
+- 091c5694 2025-12-06 00:24:28 -0500 Fix node management helper import path
+- 5b9282bd 2025-12-07 04:26:01 -0500 Add public node reviews and plan
+- 2f245857 2025-12-07 04:27:53 -0500 Add public node constants and helper
+- 1ab7b98f 2025-12-07 04:31:42 -0500 Add public node default config and hydration
+- 3a78a66e 2025-12-07 04:38:00 -0500 Add node helper utilities and base URLs
+- 4552d0c2 2025-12-07 04:40:13 -0500 Add request URL helpers and public node template
+- bffde4b1 2025-12-07 04:43:38 -0500 Use node request helper for balance endpoints
+- b6dca77b 2025-12-07 04:51:58 -0500 Expose selected node context globally
+- c9bdc54e 2025-12-07 04:55:23 -0500 Route app-view requests through node helper
+- c629cf82 2025-12-07 04:57:59 -0500 Wire plugins to selected node context
+- 0b784362 2025-12-07 05:01:35 -0500 Use selected node context in plugin tx processing
+- b28705bf 2025-12-07 05:03:19 -0500 Add selected node public selector
+- aa820f0e 2025-12-07 05:06:16 -0500 Route sync indicator bootstrap via request helper
+- 41d24247 2025-12-07 05:09:29 -0500 Route plugin search calls through request helper
+- eb71267d 2025-12-07 05:10:33 -0500 Use baseUrl for plugin avatar endpoints
+- 20604be0 2025-12-07 05:11:40 -0500 Route core sync status calls through request helper
+- c51e957f 2025-12-07 05:13:25 -0500 Use selected node baseUrl for account avatar
+- 58fe5e03 2025-12-07 05:13:57 -0500 Use baseUrl for user info lookups
+- 871c382c 2025-12-07 05:15:05 -0500 Use baseUrl for login avatars and node display
+- a5e35396 2025-12-07 05:16:30 -0500 Route export-keys ARRR endpoints through helper
+- 6ece6903 2025-12-07 05:17:21 -0500 Use baseUrl for user info details and balances
+- e28877a2 2025-12-07 05:19:18 -0500 Route app-info status calls through request helper
+- f6c3f6e4 2025-12-07 05:22:07 -0500 Use baseUrl for chat side nav avatars
+- 7355733b 2025-12-07 05:24:02 -0500 Use baseUrl/request helper for avatar components
+- d6b3f86e 2025-12-07 11:37:46 -0500 Use request helper across remaining node calls
+- ddb6ea04 2025-12-07 11:57:01 -0500 Fix node-config import path and hydrate order
+- ae3ea4fb 2025-12-07 12:18:12 -0500 Add public node warning in settings picker
+- af80a0c7 2025-12-07 12:20:13 -0500 Skip API key generation on public node
+- f1bd33c4 2025-12-07 12:23:54 -0500 Add node selection indicator in header
+- 75d77111 2025-12-07 12:50:24 -0500 Add public node i18n strings
+- 300c7b39 2025-12-07 12:52:13 -0500 Use public node i18n in picker and header
+- 0da29bc2 2025-12-07 12:58:57 -0500 Add local/custom node labels to i18n and header
+- ceb4dbcf 2025-12-07 13:03:45 -0500 Add public node i18n placeholders to all locales
+- 1557610d 2025-12-07 13:06:47 -0500 Translate public node strings across locales
+- 737ab705 2025-12-07 13:39:41 -0500 Enforce publish size limits per node
+- 21ff0adc 2025-12-07 14:22:23 -0500 Block public-node list and hosted data actions
+- 1ac17cb0 2025-12-07 14:25:22 -0500 Translate public-node action blocked message
+- 8eb2f214 2025-12-07 14:29:55 -0500 Guard list actions on public node
+- a8c861a9 2025-12-07 14:36:44 -0500 Skip crosschain balance fetch on public node
+- e9d07282 2025-12-07 14:40:01 -0500 Block minting actions on public node
+- a1810b01 2025-12-07 14:42:58 -0500 Block ARRR wallet access and repairs on public node
+- 5c6df7bc 2025-12-07 14:46:00 -0500 Block crosschain trade/send requests on public node
+- d5d019a6 2025-12-07 15:02:10 -0500 Allow trade and balance flows on public node
+- d2496992 2025-12-07 15:13:28 -0500 Guard admin panels on public node
+- 6551fdfd 2025-12-07 15:23:09 -0500 Hide admin-only UI on public node
+- 2c246fb8 2025-12-07 15:25:34 -0500 Block admin actions in QDN browser on public node
+- f1330ff0 2025-12-07 15:45:09 -0500 Add public-node badge in trade portal
+- 0c98a295 2025-12-07 15:48:48 -0500 Update plan after public-node badge
+- b2d95494 2025-12-07 15:52:15 -0500 Mark public-node UI affordances done
+- f71be05c 2025-12-07 16:32:30 -0500 Log public-node UX issues for follow-up
+- b7b573b0 2025-12-07 16:36:28 -0500 Fix public node label text in node picker
+- f0d6bc49 2025-12-07 16:40:45 -0500 Show public-node warning title/body in settings
+- 11e78420 2025-12-07 16:42:24 -0500 Remove red public-node pill; simplify indicator
+- 4fc70592 2025-12-07 17:03:12 -0500 Fix public-node tag rendering in node dropdown
+- 6118bbfe 2025-12-07 17:06:34 -0500 Remove top-bar node pill
+- 049992e8 2025-12-07 17:10:36 -0500 Allow admin status/info on public node
+- a6d2c501 2025-12-07 17:21:19 -0500 Reenable admin status/info on public for status UIs
+- ad7e42d1 2025-12-07 17:23:19 -0500 Load locale before public-node block in node management
+- 8d519abd 2025-12-07 17:30:36 -0500 Show public node info in core status tooltip
+- e24d2fbc 2025-12-07 17:45:12 -0500 Show node URL/label in core status tooltip for all nodes
+- 23b81874 2025-12-07 17:46:41 -0500 Add public-node highlight and always show node info in status tooltip
+- f0517ec0 2025-12-07 18:05:56 -0500 Fix core status icon display and always show node info
+- 306d9140 2025-12-07 18:12:20 -0500 Hide minting status on overview for public node
+- b47e695a 2025-12-07 18:29:27 -0500 Ensure account info loads on overview
+- 76c1aa35 2025-12-07 18:34:49 -0500 Remove public-node badge from trade portal
+- 971ceb67 2025-12-07 19:09:13 -0500 Show full menu on public node except minting
+- 4d31f9ca 2025-12-07 19:11:40 -0500 Widen core status tooltip
+- 4ed90fcd 2025-12-07 19:42:43 -0500 Keep node URL on one line in status tooltip
+- 98a59e83 2025-12-07 19:46:51 -0500 Show minting menu on public node
+- f6e6d643 2025-12-07 20:11:17 -0500 Translate public-node block message reliably
+- a7455ee5 2025-12-07 20:18:37 -0500 Allow read-only node info on public node
+- 8646cf8d 2025-12-07 20:30:29 -0500 Let Become Minter show read-only info on public node
+- eb4b8d7e 2025-12-08 04:35:50 -0500 Track allowed hosts per session to keep node pages in-app
+- c09b0ec2 2025-12-11 16:36:36 -0500 Add node integration tests for core and chat
+- 724900c1 2025-12-11 23:01:21 -0500 Guard API key generation on remote nodes
+
+## Sidebar, Tiles, Promotions
+- 72589a9f 2025-12-06 00:20:29 -0500 Fix optional chaining in chat welcome page
+- cc60ea39 2025-12-06 00:34:38 -0500 Fix chat welcome helper import path
+- 6825a6ce 2025-12-06 03:12:37 -0500 Use selected page size when switching wallet tabs
+- 69b609d4 2025-12-06 03:45:54 -0500 Remove remaining dynamic page size references
+- fb2e254e 2025-12-07 19:18:46 -0500 Show loading state while fetching websites
+- c9c37800 2025-12-07 19:44:44 -0500 Use existing loading translation on Websites page
+- 81a671c2 2025-12-07 19:53:43 -0500 Add missing default Q-Apps to home layout
+- ae8aa2e2 2025-12-08 00:22:25 -0500 Add persistent sidebar toggle
+- d251eea1 2025-12-08 00:38:31 -0500 Persist sidebar lock state
+- d22f2c7e 2025-12-08 00:56:28 -0500 Reorganize sidebar top layout
+- fe3e145f 2025-12-08 01:13:09 -0500 Add drag-and-drop to pinned tiles
+- cefc66c8 2025-12-08 01:32:30 -0500 Add live drag reorder and folders for pinned tiles
+- 0ddcbacb 2025-12-08 01:54:12 -0500 Fix folder tile sizing and modal behavior
+- 830fafa4 2025-12-08 01:58:37 -0500 Route external links to system browser
+- 8bb0a3f6 2025-12-08 03:10:36 -0500 Initial group promotions
+- 6eaa42b6 2025-12-08 03:16:47 -0500 Hook external navigation on session partition
+- 70c695b0 2025-12-08 03:18:19 -0500 Show recent group promotions and gate chat input when not a member
+- 540c3c00 2025-12-08 03:27:59 -0500 Fix chat welcome layout overlap with promotions
+- 6d0cc96d 2025-12-08 03:29:21 -0500 Tighten folder tile sizing
+- dd61ca5e 2025-12-08 03:47:34 -0500 Allow popups in QDN iframe to open external links
+- 2bcd499c 2025-12-08 03:48:07 -0500 Add sidebar button to reopen group promotions
+- 59261f97 2025-12-08 04:05:58 -0500 Tighten chat welcome hero layout
+- 68388a0c 2025-12-08 04:06:08 -0500 Treat cross-origin iframe nav as external
+- 6936b6a9 2025-12-08 04:11:19 -0500 Show avatars in folder previews
+- 10d1b707 2025-12-08 04:21:02 -0500 Limit external redirect hook to frame navigations
+- 7ca818a5 2025-12-08 04:35:42 -0500 Let promotions list use full height on welcome view
+- 070eb83f 2025-12-08 04:47:48 -0500 Restore scrollable promotions list with viewport cap
+- 2e74578f 2025-12-08 05:05:09 -0500 Cap promotions section height and let list flex
+- 19753b96 2025-12-08 05:17:04 -0500 Adjust promotions section cap and hide overflow
+- 3e3a995e 2025-12-08 05:28:19 -0500 Let promotions section flow; cap list height for scrolling
+- 0f304e87 2025-12-08 05:33:16 -0500 Use 'after' filter for promotions search
+- 4b3ec7ef 2025-12-08 05:34:34 -0500 Rely on API 'after' filtering for promotions
+- 2b1f96b1 2025-12-08 14:01:49 -0500 Improve chat welcome layout and promotion cards
+- 709d5bf0 2025-12-08 18:29:59 -0500 Inline join flow for chat links and disable promo join when already member
+- 01054a91 2025-12-09 01:42:25 -0500 Adjust folder tile previews
+- 27b8d4b5 2025-12-09 17:55:11 -0500 Hide promotion join button for members
+- 49db2ea1 2025-12-09 17:56:05 -0500 Adjust promotion actions for members
+- cabf3fe5 2025-12-11 03:22:33 -0500 Expose SEARCH_CHAT_MESSAGES action for qdn browser
+- 7f7f9ed5 2025-12-11 15:59:50 -0500 Cache promotions and keep showing previous list during refresh
+- 80791d6c 2025-12-11 18:16:24 -0500 Fix folder tile previews
+- 39ef9012 2025-12-11 19:01:50 -0500 Clean up chat sidebar spacing
+- 53f89ba0 2025-12-11 23:19:10 -0500 Load bundled Q-Apps script instead of module source
+- dfb1c92c 2025-12-12 04:32:39 -0500 Remove chat window trimming and increase page size
+- 23bcf718 2025-12-12 15:42:08 -0500 Increase folder dialog size
+- a4145045 2025-12-12 16:33:23 -0500 Adjust sidebar avatar layout
+
+## Chat Embeds & Links
+- 581ba356 2025-12-08 15:57:30 -0500 Add embed link parser helper tests
+- 8163d35c 2025-12-08 16:15:58 -0500 Adjust Jest config and add Epml mock for embed helper tests
+- f97c33ba 2025-12-08 16:17:49 -0500 Reintroduce image embed parsing and component
+- 3b544695 2025-12-08 16:57:16 -0500 Guard chat rendering against non-string embed/text values
+- ecd4bb06 2025-12-08 17:10:48 -0500 Fix qortal link detection in chat messages
+- 5c26cce4 2025-12-08 17:46:50 -0500 Render qortal links from processText DOM to keep them clickable
+- f2dc1b54 2025-12-08 18:07:34 -0500 Add embed/link helpers and tests for qortal chat
+- 2b66ff12 2025-12-08 21:28:18 -0500 Add VIDEO embed support with retry and parsing updates
+- c7db9d17 2025-12-08 23:27:57 -0500 Improve attachment embed saving via native dialog
+- 808ae7ce 2025-12-09 17:40:36 -0500 Use mwc button for chat embeds
+- 02039b49 2025-12-09 17:50:50 -0500 Use theme text color for attachment embed
+- 5a3810e7 2025-12-11 17:49:52 -0500 Add embed parsing test for chat messages
+
+## Chat Reactions
+- a2dffb68 2025-12-09 17:24:36 -0500 Add reaction parity docs
+- 31a8cf1f 2025-12-10 00:15:07 -0500 Cache message render data and guard reactions
+- 884f6a6b 2025-12-10 01:04:28 -0500 Refresh reply/reaction data while caching renders
+- e047727f 2025-12-10 04:21:56 -0500 Add dedicated reaction send path
+- c8de2854 2025-12-10 04:25:49 -0500 Encrypt group reactions with type number 102
+- 7346a69b 2025-12-10 04:27:44 -0500 Route reactions through distinct queue key
+- 76e6584c 2025-12-10 04:31:36 -0500 Implement reaction ingestion map and update plan
+- b4beecaa 2025-12-10 04:37:41 -0500 Clear pending reaction queue entries on receipt
+- 7756b5f6 2025-12-10 05:08:07 -0500 Render reactions from map and toggle add/remove
+- 89805a98 2025-12-10 05:35:49 -0500 Ingest reactions into map
+- 3926d274 2025-12-10 06:04:41 -0500 Fetch reference chat transactions for reactions
+- 95395d8b 2025-12-10 19:33:39 -0500 Flag reactions during direct decryption
+- 8e25965a 2025-12-10 19:38:26 -0500 Fix reaction ingestion and toggle flow
+- 37f8fce1 2025-12-10 21:35:20 -0500 Fix reaction tooltip contents
+- 3f852235 2025-12-10 21:44:26 -0500 Add optimistic toggle on reaction chips
+- d478b60e 2025-12-10 22:14:45 -0500 Filter reaction payloads from render path
+- 6b2764dd 2025-12-10 22:39:22 -0500 Show reactions immediately when sent
+- 8766896d 2025-12-11 00:33:48 -0500 Refresh reactions map on ingestion
+- 49ceb77c 2025-12-11 00:55:58 -0500 Harden reaction picker guard
+- ec3a6611 2025-12-11 00:58:45 -0500 Reset reactions map on chat switch
+- c94ebd47 2025-12-11 01:00:13 -0500 Refresh reactions map in message-template updates
+- ba5a1c84 2025-12-11 01:02:19 -0500 Guard reaction ingestion for missing fields
+- 85b6dbe7 2025-12-11 01:04:44 -0500 Queue reactions for pending UI
+- e26be791 2025-12-11 16:15:06 -0500 Ignore reaction payloads when merging updates so bases stay visible
+- 9ba44cdb 2025-12-11 17:27:45 -0500 Add reaction handling unit test without base
+- 988f229a 2025-12-11 17:56:25 -0500 Ignore reactions/edits in chat head timestamps
+- b1501270 2025-12-11 18:54:40 -0500 Harden chat head filtering for reactions/edits
+- ccc4ec92 2025-12-11 19:49:38 -0500 Fix chat head timestamps for reactions
+
+## Chat Keys/Encryption
+- c64a6fd1 2025-12-10 02:54:14 -0500 Offload group key fetch/decrypt to worker
+- 2b826518 2025-12-11 01:52:49 -0500 Add private group key fetch/decrypt flow
+- 77b3b4e4 2025-12-11 02:01:15 -0500 Align direct/group decrypt with isEncrypted semantics
+- 8caaa37d 2025-12-11 03:44:32 -0500 Inline group key fetch to avoid worker loader error
+- b1d0b71b 2025-12-11 04:59:10 -0500 Make group chat load resilient without blocking on key fetch
+- ebe49c97 2025-12-11 15:43:03 -0500 Use selected address key for group decryption
+- 2282322f 2025-12-11 16:07:21 -0500 Wait for group key before starting private chat sockets
+- 28d500b4 2025-12-11 16:36:52 -0500 Store group symmetric keys per group and validate admin by owner address
+- 8a0ad50e 2025-12-11 17:39:10 -0500 Add group key cache hydrate test
+- 7770615b 2025-12-11 17:44:07 -0500 Add decrypt fallback tests for direct and group
+- c7175118 2025-12-11 20:41:04 -0500 Skip loading group keys for open groups
+- bad9cdd0 2025-12-11 20:55:36 -0500 Gate group key load until group info is available
+- c33bc79d 2025-12-11 21:24:37 -0500 Skip group key fetch for general and open groups
+- 8569f7eb 2025-12-11 22:12:10 -0500 Use selected address key to decrypt group keys
+- 695db260 2025-12-12 00:05:46 -0500 Use hub-style lookup for private group keys
+- b31d2a1f 2025-12-12 00:20:53 -0500 Fix admin ownership lookup for group key fetch
+- 140087ad 2025-12-12 00:37:24 -0500 Encrypt closed-group sends with key and allow fallback
+- 0d89b344 2025-12-12 00:50:39 -0500 Guard encryption when no numeric group keys
+- 729155ba 2025-12-12 01:05:05 -0500 Mark encrypted sends correctly and self-verify
+- a2133329 2025-12-12 01:13:28 -0500 Parse payload before encrypting and self-check
+- 829b9603 2025-12-12 01:25:25 -0500 Align private send payload with Hub format
+- 2bf58bc4 2025-12-12 01:51:41 -0500 Block private sends when group key missing
+- 02a457bd 2025-12-12 02:07:18 -0500 Simplify private send to match hub encryption
+- 6ef05db3 2025-12-12 03:08:46 -0500 Guard worker decrypt against missing message fields
+- 95ace4a2 2025-12-12 03:35:06 -0500 Align private group send payload with Hub
+- 25bb3f29 2025-12-12 03:44:07 -0500 Ensure private group payload uses string message
+- 1744d345 2025-12-12 03:52:30 -0500 Send private group text as HTML string like Hub
+
+## Chat Fetch/Decode/Perf
+- de43b005 2025-12-07 02:52:26 -0500 Add chat tooltip i18n key for switching by ID
+- 9746988f 2025-12-07 02:55:28 -0500 Translate chat group-by-ID tooltip (cchange115)
+- 37cffe22 2025-12-08 03:23:28 -0500 Fix chat preview read-only composer build error
+- 9770664c 2025-12-08 14:47:01 -0500 Add text style and color support in chat UI
+- e6114752 2025-12-09 17:41:14 -0500 Guard chat sockets against stale restarts
+- 193e95e5 2025-12-09 23:59:04 -0500 Stabilize chat head rendering and metadata
+- 7dbba306 2025-12-10 00:26:17 -0500 Add inline chat loading state and gate selection clicks
+- 8f00b3c1 2025-12-10 01:21:59 -0500 Render chat modals only when open and guard low-balance dialog
+- 8e92a151 2025-12-10 01:38:08 -0500 Fix chat modals gating and pending recipient fill
+- 4a80e92e 2025-12-10 01:53:52 -0500 Lazy-init private message editor and guard modal focus
+- f38b7c62 2025-12-10 02:08:28 -0500 Stop main chat key handler from hijacking PM modal input
+- 6fd2558d 2025-12-10 02:20:57 -0500 Guard main chat key handler when PM modal is open
+- ef5e6ac0 2025-12-10 02:29:52 -0500 Recreate PM editor on reopen and clean modal handlers
+- f089aa57 2025-12-10 02:41:56 -0500 Wrap chat page with error boundary
+- b5d3b8df 2025-12-10 03:16:20 -0500 Reduce ChatScroller rerenders and stabilize message queue render
+- 8744e20e 2025-12-10 03:33:29 -0500 Clean up listeners and observers on teardown
+- 2f5c1222 2025-12-10 04:01:16 -0500 Allow updateMessageHash to trigger ChatScroller updates
+- d5ebc108 2025-12-10 21:32:45 -0500 Tweak edited placeholder
+- 67f602de 2025-12-11 01:48:07 -0500 Align chat send payload with Hub format
+- 7718258a 2025-12-11 02:09:37 -0500 Surface Core chat validation errors
+- 4d979e70 2025-12-11 02:15:01 -0500 Tidy chat websockets and mark fetch parity item
+- b55914e6 2025-12-11 02:19:09 -0500 Align chat fetch params with Hub
+- ea8c17b4 2025-12-11 02:22:00 -0500 Add qortalRequest handler for SEARCH_CHAT_MESSAGES
+- e3e36204 2025-12-11 02:26:52 -0500 Enforce group membership on send (skip group 0)
+- 52170e2c 2025-12-11 02:29:28 -0500 Preserve rich chat payloads in decode/render
+- a27c9c6a 2025-12-11 02:29:45 -0500 Update chat plan status for rich payload handling
+- 3da2b9d6 2025-12-11 02:35:09 -0500 Filter chat messages using blocklists
+- 19c5c423 2025-12-11 02:37:52 -0500 Treat edits as updates and filter blocked senders
+- 1b433c18 2025-12-11 02:40:28 -0500 Honor chatReference threading and stash updates
+- 43e06c5f 2025-12-11 02:56:57 -0500 Improve chat message deduping
+- c584eb1d 2025-12-11 03:04:28 -0500 Fix async decode path for chat decode
+- 485d63eb 2025-12-11 15:01:17 -0500 Fix chat websocket initial load reliability
+- 476c3346 2025-12-11 15:08:55 -0500 Always run initial chat fetch even when socket delivers first
+- 2b9e24ab 2025-12-11 15:24:55 -0500 Gracefully render replies when original message is missing
+- c030dad6 2025-12-11 15:31:40 -0500 Render orphan edit messages when originals expired
+- 08d4fc73 2025-12-11 17:19:59 -0500 Handle orphan chat edits and add unit test
+- be8aa89e 2025-12-11 17:24:04 -0500 Add test shims for chat components
+- 1933c2d0 2025-12-11 17:31:07 -0500 Add reply fallback test for missing base
+- cd7480ef 2025-12-11 17:32:57 -0500 Add out-of-order chat handling tests
+- 9d73782f 2025-12-11 17:40:52 -0500 Add decode path tests for direct vs group chat
+- 979f792d 2025-12-11 17:45:55 -0500 Use error accent for missing reply previews
+- 08cd725d 2025-12-11 17:46:35 -0500 Add hub-format payload decode test
+- 6a0971c0 2025-12-11 19:01:02 -0500 Export chat head helpers for testing
+- 02841937 2025-12-11 19:24:57 -0500 Improve chat selection responsiveness
+- 553611e8 2025-12-11 19:37:21 -0500 Handle direct chat reselection loading
+- acb5100b 2025-12-11 19:54:08 -0500 Allow refreshing active direct chats
+- 5b79575e 2025-12-11 20:05:35 -0500 Normalize reply preview content to avoid object output
+- 186210ef 2025-12-11 20:10:23 -0500 Stabilize chat selection handler reference
+- 002263a1 2025-12-11 20:14:21 -0500 Fix reply preview when message payload is tiptap JSON
+- 3a1646b8 2025-12-11 20:24:15 -0500 Fix reply preview fallback for plain text and tiptap docs
+- 4998568f 2025-12-11 20:25:23 -0500 Stabilize openPrivateMessage handler
+- 90c33d26 2025-12-11 20:43:15 -0500 Fix reply preview for specialId/tiptap messages
+- b6f3bcf4 2025-12-11 21:00:51 -0500 Render specialId reply previews from messageText doc
+- e008530b 2025-12-11 21:07:51 -0500 Preserve original message timestamps on edits
+- b290bbcf 2025-12-11 21:28:48 -0500 Avoid QCHAT_IMAGE fetch with undefined chat id
+- 9c748702 2025-12-11 22:01:39 -0500 Set chat id before loading messages to fix general chat
+- c59c50ec 2025-12-11 22:06:01 -0500 Clear message state on chat switch to avoid carry-over
+- c51c1221 2025-12-11 22:58:57 -0500 Fix profile data stream channel
+- dd1288e6 2025-12-11 23:07:10 -0500 Handle missing reply signatures without noisy requests
+- 78b9f592 2025-12-11 23:35:20 -0500 Add low-balance confirmation to qortalRequest chat
+- 6bda4297 2025-12-11 23:38:01 -0500 Add cancel option to low-balance chat modal
+- 5b6269dd 2025-12-11 23:40:04 -0500 Fix chat helper import path for build
+- 9e2b8f77 2025-12-11 23:42:25 -0500 Fix chat helper import relative path
+- 51137a25 2025-12-12 02:49:27 -0500 Harden decode path to skip malformed messages
+- b5ccb87b 2025-12-12 03:13:22 -0500 Optimize chat avatar loading
+- 96959dc4 2025-12-12 04:21:27 -0500 Allow refetched pages to render instead of skipping cached messages
+- 2b84ea3e 2025-12-12 05:16:17 -0500 Add error accent to reply previews with no message
+
+## Wallet & Transactions
+- 2b9725e0 2025-12-06 03:32:21 -0500 Revert wallet pagination to fixed 25 rows
+- fe2d9dea 2025-12-06 03:43:48 -0500 Remove rows selector from wallet pagination
+- 3beb35de 2025-12-11 15:45:08 -0500 Add reorder controls for saved wallets
+- 02a3023b 2025-12-11 21:35:25 -0500 Tidy wallet reorder controls alignment
+- 79922c0e 2025-12-11 21:44:38 -0500 Center wallet reorder arrows vertically
+
+## UI Polish & Branding
+- 4abd2a12 2025-12-05 21:58:05 -0500 Make login avatar lookup async and primary-first
+- ba8f3e2f 2025-12-06 08:11:47 -0500 Add avatars to saved accounts list
+- 2bed4538 2025-12-06 08:20:01 -0500 Update profile icons to person
+- ed873dca 2025-12-10 19:22:37 -0500 Show UI version in window title
+- 42629baa 2025-12-12 05:31:44 -0500 Add display settings for login background
+- 74ac1875 2025-12-12 05:41:02 -0500 Tweak display settings ordering and preview
+- 4f02671d 2025-12-12 05:50:45 -0500 Adjust login background sizing
+- 7038a9dd 2025-12-12 07:36:20 -0500 Update Qortal UI v5 logo
+- 7a54a4c4 2025-12-12 07:36:24 -0500 Ignore cached coin config so logo updates
+
+## Docs & Localization
+- e6a092c9 2025-12-07 02:45:53 -0500 Translate nchange50/51 for all locales
+- c7e44ed4 2025-12-07 03:16:55 -0500 Replace hardcoded remove/close strings with i18n keys
+- bbd30ac4 2025-12-07 03:51:34 -0500 Add fallback strings for missing locales
+- 81cd1bcf 2025-12-07 19:41:49 -0500 Update repo location and documentation
+- 4faf2ef7 2025-12-07 21:15:05 -0500 Rephrase login save copy across languages
+
+## Testing & Tooling
+- 12b5417b 2025-12-05 23:55:02 -0500 Fix build compatibility and add npm install notes
+- a38e7f7f 2025-12-06 20:27:03 -0500 Prevent duplicate publish metadata fetch and add tests
+- fa6b56c1 2025-12-07 01:00:37 -0500 Remove package-lock.json from .gitignore
+- 8879b967 2025-12-07 05:05:01 -0500 Expose buildApiUrl helper for Epml consumers
+- 1d0af3b4 2025-12-07 11:48:47 -0500 Finalize routing item and fix initStore syntax
+- d1b8c562 2025-12-07 11:53:43 -0500 Avoid optional chaining in plugin utils
+- 714a70aa 2025-12-07 15:53:41 -0500 Mark storage migration complete
+- 0f5ab29e 2025-12-07 21:34:26 -0500 Add ESLint and config
+- c0baa51b 2025-12-07 21:37:05 -0500 Fix test and lint ignore files
+- 5ee1189d 2025-12-07 21:45:03 -0500 Linting first pass
+- 68e61393 2025-12-07 23:29:21 -0500 Fix build error
+- 42c5fdd0 2025-12-08 05:03:48 -0500 Revert electron changes
+- e13439b5 2025-12-09 02:41:11 -0500 Remove periodic cache clears and add CDP trace helper
+- e102ac6b 2025-12-10 02:51:39 -0500 Gate clearCache helpers to Electron only
+- 4e9179cb 2025-12-11 03:14:51 -0500 Add timing logs for build and plugin steps
+- 7ea19309 2025-12-11 04:02:08 -0500 Speed up build-dev by skipping minification
+- 74b59733 2025-12-11 04:07:22 -0500 Make build timing logs human readable
+- 2a3b24c4 2025-12-11 23:04:12 -0500 Reduce console noise in login/profile flows
+
+## qortalRequest
+- 5e75fae2 2025-12-11 02:10:58 -0500 Add qortalRequest review docs
+
+## Timeline (87.5 work hours across 8 days / 192h span - 45.6%)
+- Day 1 (12.8h) — 2025-12-05 19:30–2025-12-06 08:20
+  - Names & Registration (37), Sidebar/Tiles/Promotions (4), UI Polish & Branding (3)
+- Day 2a (6.0h) — 2025-12-06 14:35–2025-12-06 20:37
+  - Names & Registration (16), Testing & Tooling (1)
+- Day 2b (4.4h) — 2025-12-07 01:00–2025-12-07 05:24
+  - Public Node & Request Helper (23), Names & Registration (7), Docs & Localization (3)
+- Day 3 (17.9h) — 2025-12-07 11:37–2025-12-08 05:34
+  - Public Node & Request Helper (49), Sidebar/Tiles/Promotions (28), Testing & Tooling (8)
+- Day 4 (12.7h) — 2025-12-08 14:01–2025-12-09 02:41
+  - Chat Embeds & Links (9), Sidebar/Tiles/Promotions (3), Chat Fetch/Decode/Perf (1)
+- Day 5a (0.5h) — 2025-12-09 17:24–2025-12-09 17:56
+  - Chat Embeds & Links (2), Sidebar/Tiles/Promotions (2), Chat Fetch/Decode/Perf (1)
+- Day 5b (6.1h) — 2025-12-09 23:59–2025-12-10 06:04
+  - Chat Fetch/Decode/Perf (12), Chat Reactions (10), Chat Keys/Encryption (1)
+- Day 6 (9.6h) — 2025-12-10 19:22–2025-12-11 04:59
+  - Chat Fetch/Decode/Perf (14), Chat Reactions (12), Chat Keys/Encryption (4)
+- Day 7 (16.6h) — 2025-12-11 15:01–2025-12-12 07:36
+  - Chat Fetch/Decode/Perf (36), Chat Keys/Encryption (22), Chat Reactions (5)
+- Day 8 (0.9h) — 2025-12-12 15:42–2025-12-12 16:33
+  - Sidebar/Tiles/Promotions (2)
