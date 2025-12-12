@@ -507,31 +507,6 @@ class ChatScroller extends LitElement {
 			}
 		}
 
-		// Ensure that the total number of individual messages doesn't exceed totalMsgCount
-		let totalMessagesCount = copy.reduce(
-			(acc, group) => acc + group.messages.length,
-			0
-		)
-
-		while (totalMessagesCount > totalMsgCount && copy.length) {
-			if (newMessages.length < chatLimit && type !== 'newComingInAuto' && type !== 'initial') {
-				this.disableAddingNewMessages = false
-			}
-
-			const firstGroup = copy[0]
-
-			if (firstGroup.messages.length <= totalMessagesCount - totalMsgCount) {
-				// If removing the whole first group achieves the goal, remove it
-				totalMessagesCount -= firstGroup.messages.length
-				copy.shift()
-			} else {
-				// Otherwise, trim individual messages from the first group
-				const messagesToRemove = totalMessagesCount - totalMsgCount
-				firstGroup.messages.splice(0, messagesToRemove)
-				totalMessagesCount = totalMsgCount
-			}
-		}
-
 		this.messagesToRender = copy
 		this.requestUpdate()
 
@@ -572,27 +547,6 @@ class ChatScroller extends LitElement {
 		// After processing all old messages, add the last group
 		if (currentMessageGroup) {
 			this.messagesToRender.unshift(currentMessageGroup)
-		}
-
-		// Ensure that the total number of individual messages doesn't exceed totalMsgCount
-		let totalMessagesCount = this.messagesToRender.reduce(
-			(acc, group) => acc + group.messages.length,
-			0
-		)
-		while (totalMessagesCount > totalMsgCount && this.messagesToRender.length) {
-			this.disableAddingNewMessages = true
-			const lastGroup = this.messagesToRender[this.messagesToRender.length - 1]
-
-			if (lastGroup.messages.length <= totalMessagesCount - totalMsgCount) {
-				// If removing the whole last group achieves the goal, remove it
-				totalMessagesCount -= lastGroup.messages.length
-				this.messagesToRender.pop()
-			} else {
-				// Otherwise, trim individual messages from the last group
-				const messagesToRemove = totalMessagesCount - totalMsgCount
-				lastGroup.messages.splice(-messagesToRemove, messagesToRemove)
-				totalMessagesCount = totalMsgCount
-			}
 		}
 
 		this.clearLoaders()

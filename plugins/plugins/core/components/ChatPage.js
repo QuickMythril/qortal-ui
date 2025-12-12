@@ -62,8 +62,9 @@ const chatLastSeen = localForage.createInstance({
 })
 
 export const queue = new RequestQueue()
-export const chatLimit = 20
-export const chatLimitHalf = 10
+export const chatLimit = 50
+export const chatLimitHalf = 25
+// Kept for compatibility with older imports; no longer used for trimming
 export const totalMsgCount = 60
 export const REACTION_TYPE_NUMBER = 102
 
