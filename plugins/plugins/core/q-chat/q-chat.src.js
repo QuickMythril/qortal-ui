@@ -138,6 +138,7 @@ class Chat extends LitElement {
 		this.handleSearchResultsClose = this.handleSearchResultsClose.bind(this)
 		this.isSelectingChat = false
 		this.pendingChatUrl = ''
+		this.boundSetActiveChatHeadUrl = this.setActiveChatHeadUrl.bind(this)
 		this.chatSelectionNonce = 0
 		this.openBlockedUserDialog = false
 		this.pendingSendToName = ''
@@ -1358,7 +1359,7 @@ class Chat extends LitElement {
 					.chatId=${this.activeChatHeadUrl}
 					.selectionNonce=${this.chatSelectionNonce}
 					.setOpenPrivateMessage=${(val) => this.setOpenPrivateMessage(val)}
-					.setActiveChatHeadUrl=${(val) => this.setActiveChatHeadUrl(val)}
+					.setActiveChatHeadUrl=${this.boundSetActiveChatHeadUrl}
 					balance=${this.balance}
 					loggedInUserName=${this.loggedInUserName}
 					loggedInUserAddress=${this.loggedInUserAddress}
