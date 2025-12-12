@@ -28,8 +28,7 @@ import {
 	decryptGroupData,
 	validateSecretKey,
 	objectToBase64,
-	encryptSingle,
-	decryptSingle
+	encryptSingle
 } from './GroupEncryption'
 import './ChatScroller'
 import './LevelFounder'
@@ -4748,12 +4747,8 @@ async addToUpdateMessageHashmap(array) {
 							const typeNumber = shouldEncryptReaction ? REACTION_TYPE_NUMBER : undefined
 							const base64Message = await objectToBase64(parsedPayloadObject)
 							finalMessagePayload = await encryptSingle(base64Message, this.secretKeysWorker, typeNumber)
-							// Self-verify decryption to avoid sending undecryptable payloads
-							const selfDecrypt = decryptSingle(finalMessagePayload, this.secretKeysWorker, true)
-							if (selfDecrypt === 'noKey' || selfDecrypt === 'decryptionFailed') {
-								throw new Error('Local decrypt failed')
-							}
-							shouldMarkEncrypted = true
+							// For group messages we follow Hub and leave isEncrypted=0; payload is already ciphertext.
+							shouldMarkEncrypted = false
 						} catch (error) {
 							parentEpml.request('showSnackBar', get('chatpage.cchange22') || 'Unable to encrypt message; try again.')
 							skipSend = true
@@ -4832,7 +4827,7 @@ async addToUpdateMessageHashmap(array) {
 						message: finalMessagePayload,
 						lastReference: reference,
 						proofOfWorkNonce: 0,
-						isEncrypted: shouldMarkEncrypted ? 1 : 0,
+						isEncrypted: 0, // keep aligned with Hub; ciphertext is in payload
 						isText: 1,
 						typeNumber: shouldEncryptReaction ? REACTION_TYPE_NUMBER : undefined
 					}
