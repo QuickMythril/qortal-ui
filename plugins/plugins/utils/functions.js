@@ -212,6 +212,12 @@ export const replaceMessagesEdited = async ({ decodedMessages, parentEpml, isRec
 
 			if (parsedMessageObj.repliedTo) {
 				if (!isLikelySignature(parsedMessageObj.repliedTo)) {
+					msgItem.repliedToData = {
+						missing: true,
+						sender: msg.sender,
+						senderName: msg.senderName,
+						decodedMessage: {}
+					}
 					return msgItem
 				}
 
