@@ -46,8 +46,8 @@ class UserSettings extends connect(store)(LitElement) {
 						<div class="leftBar" style="display: table; width: 100%;">
 							<div class="slug">Qortal UI ${translate('settings.settings')}</div>
 							<ul>
-								<li @click=${() => this.setSettingsView('display')} ><a class=${this.selectedView.id === 'display' ? 'active' : ''} href="javascript:void(0)">Display</a></li>
 								<li @click=${() => this.setSettingsView('info')} ><a class=${this.selectedView.id === 'info' ? 'active' : ''} href="javascript:void(0)">${translate('settings.account')}</a></li>
+								<li @click=${() => this.setSettingsView('display')} ><a class=${this.selectedView.id === 'display' ? 'active' : ''} href="javascript:void(0)">Display</a></li>
 								<li @click=${() => this.setSettingsView('security')} ><a class=${this.selectedView.id === 'security' ? 'active' : ''} href="javascript:void(0)">${translate('settings.security')}</a></li>
 								<li @click=${() => this.setSettingsView('export')} ><a class=${this.selectedView.id === 'export' ? 'active' : ''} href="javascript:void(0)">${translate('settings.exp1')}</a></li>
 								<li @click=${() => this.setSettingsView('qr-login')} ><a class=${this.selectedView.id === 'qr-login' ? 'active' : ''} href="javascript:void(0)">${translate('settings.qr_login_menu_item')}</a></li>
