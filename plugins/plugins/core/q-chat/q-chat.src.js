@@ -634,6 +634,11 @@ class Chat extends LitElement {
 		let gAdmin = ''
 		let gAddress = ''
 		let currentGroupId = url.substring(6)
+		if (currentGroupId === '0') {
+			this.activeChatHeadUrl = url
+			this.requestUpdate()
+			return
+		}
 		let symIdentifier = 'symmetric-qchat-group-' + currentGroupId
 		let locateString = 'Downloading and decrypt keys! Please wait...'
 		let keysToOld = 'Wait until an admin re-encrypts the keys. Only unencrypted messages will be displayed.'
@@ -644,6 +649,15 @@ class Chat extends LitElement {
 
 		const myNode = window.parent.reduxStore.getState().app.nodeConfig.knownNodes[window.parent.reduxStore.getState().app.nodeConfig.node]
 		const nodeUrl = myNode.protocol + '://' + myNode.domain + ':' + myNode.port
+		try {
+			const groupInfoRes = await fetch(`${nodeUrl}/groups/${currentGroupId}`).then(r => r.json())
+			if (groupInfoRes && groupInfoRes.isOpen === true) {
+				this.activeChatHeadUrl = url
+				this.requestUpdate()
+				return
+			}
+		} catch (e) { /* ignore and continue only if closed */ }
+
 		const getNameUrl = `${nodeUrl}/arbitrary/resources?service=DOCUMENT_PRIVATE&identifier=${symIdentifier}&limit=0&reverse=true`
 		const getAdminUrl = `${nodeUrl}/groups/members/${currentGroupId}?onlyAdmins=true&limit=0`
 
