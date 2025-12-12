@@ -249,3 +249,10 @@ parentEpml.subscribe('logged_in', async isLoggedIn => {
 })
 
 startConfigWatcher()
+
+// Exports for testing
+export {
+	looksLikeReactionOrEdit,
+	filterBaseEntries,
+	mapByKey
+}

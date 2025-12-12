@@ -1,5 +1,16 @@
 /** @jest-environment jsdom */
 
+jest.mock('../../plugins/plugins/core/connect', () => ({
+	parentEpml: {
+		subscribe: jest.fn(),
+		request: jest.fn().mockResolvedValue(undefined)
+	}
+}), { virtual: true })
+
+jest.mock('../../plugins/plugins/core/streams/onNewBlock', () => ({
+	startConfigWatcher: jest.fn()
+}), { virtual: true })
+
 import './test-shim.js'
 const { looksLikeReactionOrEdit, filterBaseEntries, mapByKey } = require('../../plugins/plugins/core/streams/streams')
 
