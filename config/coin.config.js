@@ -4,5 +4,5 @@ module.exports = {
 	name: 'Qortal',
 	symbol: 'Qort',
 	addressVersion: 58, // Q for Qortal
-	logo: '/img/QORT_LOGO.svg'
+	logo: '/img/QORT_LOGO_5.png'
 }
