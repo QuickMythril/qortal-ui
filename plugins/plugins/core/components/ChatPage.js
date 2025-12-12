@@ -1930,21 +1930,18 @@ addToQueue(outSideMsg, messageQueue) {
 			})
 		}
 
-		setTimeout(() => {
-			const isRecipient = this.chatId.includes('direct') === true ? true : false
-			this.chatId.includes('direct') === true ? this.isReceipient = true : this.isReceipient = false
-			this._chatId = this.chatId.split('/')[1]
-
-			const mstring = get('chatpage.cchange114')
-			const placeholder = isRecipient === true ? `Message ${this._chatId}` : `${mstring}`
-			this.chatEditorPlaceholder = placeholder
-
-			if (isRecipient) {
-				getAddressPublicKey()
-			}
-		}, 100)
-
 		const isRecipient = this.chatId.includes('direct') === true ? true : false
+		this.isReceipient = isRecipient
+		this._chatId = this.chatId.split('/')[1]
+
+		const mstring = get('chatpage.cchange114')
+		const placeholder = isRecipient === true ? `Message ${this._chatId}` : `${mstring}`
+		this.chatEditorPlaceholder = placeholder
+
+		if (isRecipient) {
+			getAddressPublicKey()
+		}
+
 		const groupId = this.chatId.split('/')[1]
 
 		if (isRecipient || groupId.toString() === '0') {
