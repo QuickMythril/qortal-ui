@@ -1230,10 +1230,9 @@ addToQueue(outSideMsg, messageQueue) {
 
 			if (res === true) {
 				this.messageQueue = this.messageQueue.slice(1)
-			} else if (res && res.error === 'missing-group-key') {
-				// Drop this message to avoid infinite retries
+			} else if (res && res.error === 'encrypt-failed') {
+				// Drop this message to avoid infinite retries; user was notified
 				this.messageQueue = this.messageQueue.slice(1)
-				return
 			} else {
 				throw new Error('failed')
 			}
@@ -4734,35 +4733,22 @@ async addToUpdateMessageHashmap(array) {
 
 			let finalMessagePayload = messageText
 			let skipSend = false
-			let isUnencryptedPrivate = false
 			let shouldMarkEncrypted = false
 
 			if (shouldEncryptMessage) {
-				const numericKeys = this.secretKeysWorker
-					? Object.keys(this.secretKeysWorker).filter((k) => !isNaN(+k))
-					: []
-				const hasSecretKey = numericKeys.length > 0
-				if (hasSecretKey) {
-					if (!parsedOk) {
-						parentEpml.request('showSnackBar', get('chatpage.cchange22') || 'Unable to encrypt message; try again.')
-						skipSend = true
-					} else {
-						try {
-							const typeNumber = shouldEncryptReaction ? REACTION_TYPE_NUMBER : undefined
-							const base64Message = await objectToBase64(parsedPayloadObject)
-							finalMessagePayload = await encryptSingle(base64Message, this.secretKeysWorker, typeNumber)
-							// For group messages we follow Hub and leave isEncrypted=0; payload is already ciphertext.
-							shouldMarkEncrypted = false
-						} catch (error) {
-							parentEpml.request('showSnackBar', get('chatpage.cchange22') || 'Unable to encrypt message; try again.')
-							skipSend = true
-						}
-					}
-				} else {
-					// No group key available: block send and inform user to fetch latest key
-					const warnMsg = get('chatpage.cchange22') || 'No group key published; refresh group key before sending.'
-					parentEpml.request('showSnackBar', warnMsg)
-					return { error: 'missing-group-key', fatal: true }
+				if (!parsedOk) {
+					parentEpml.request('showSnackBar', get('chatpage.cchange22') || 'Unable to encrypt message; try again.')
+					return { error: 'encrypt-failed', fatal: true }
+				}
+				try {
+					const typeNumber = shouldEncryptReaction ? REACTION_TYPE_NUMBER : undefined
+					const base64Message = await objectToBase64(parsedPayloadObject)
+					finalMessagePayload = await encryptSingle(base64Message, this.secretKeysWorker, typeNumber)
+					// For group messages we follow Hub and leave isEncrypted=0; payload is already ciphertext.
+					shouldMarkEncrypted = false
+				} catch (error) {
+					parentEpml.request('showSnackBar', get('chatpage.cchange22') || 'Unable to encrypt message; try again.')
+					return { error: 'encrypt-failed', fatal: true }
 				}
 			}
 
