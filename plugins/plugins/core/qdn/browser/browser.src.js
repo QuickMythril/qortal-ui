@@ -55,7 +55,7 @@ import nacl from '../../../../../crypto/api/deps/nacl-fast'
 import '@material/mwc-button'
 import '@material/mwc-icon'
 import '@material/mwc-checkbox'
-import {sendChatMessageInternal} from './chat-send-helper.js'
+import {sendChatMessageInternal} from '../chat-send-helper.js'
 
 // Multi language support
 import {get, registerTranslateConfig, translate, use} from '../../../../../core/translate'
